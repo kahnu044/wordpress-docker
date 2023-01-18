@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.5
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  app:
+    user: "${APP_UID}:${APP_GID}"
+    build: 
+      context: .
+      dockerfile: ./docker-deps/wordpress/Dockerfile
+      args:
+        APP_UID: ${APP_UID}
+        APP_GID: ${APP_GID}
+        APP_USRNAME: ${USRNAME}
+    restart: always
+    ports:
+      - "${WORDPRESS_PORT}:8000"
+    volumes:
+      - ./WebSite:/home/${USRNAME}_dev/app
+      - ~/.ssh:/home/${USRNAME}_dev/.ssh:ro
+    working_dir: /home/${USRNAME}_dev/app
+    command:
+      - /bin/bash
+      - -c
+      - |
+        sudo chown -R ${APP_UID}.${APP_GID} /home/${USRNAME}_dev/app
+        source /home/${USRNAME}_dev/.profile
+        if [ ! -f /home/${USRNAME}_dev/app/wp-login.php ]; then
+          cd /home/${USRNAME}_dev/app
+          wp core download
+          wp core config --dbhost=db --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD}
+        fi
+        if [ -f /home/${USRNAME}_dev/app/pMa/config.inc.php ]; then
+          echo "phpMyAdmin Already Setup"
+        else
+          echo "Setting Up phpMyAdmin ..."
+          wget -c https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-english.tar.gz
+          tar xf phpMyAdmin-5.1.0-english.tar.gz
+          rm phpMyAdmin-5.1.0-english.tar.gz
+          mv phpMyAdmin-5.1.0-english /home/${USRNAME}_dev/app/pMa
+          cp /home/${USRNAME}_dev/app/pMa/config.sample.inc.php /home/${USRNAME}_dev/app/pMa/config.inc.php
+          perl -pi -e "s/\['host'\] = 'localhost';/\['host'\] = 'db';/g" /home/${USRNAME}_dev/app/pMa/config.inc.php
+          echo "phpMyAdmin Setup completed."
+        fi
+        echo "Application booted ..."
+        cd /home/${USRNAME}_dev/app
+        php -S 0.0.0.0:8000
+    depends_on:
+      - db
