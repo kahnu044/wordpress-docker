@@ -3,7 +3,7 @@
 Plugin Name: 	SVG Support
 Plugin URI:		http://wordpress.org/plugins/svg-support/
 Description: 	Upload SVG files to the Media Library and render SVG files inline for direct styling/animation of an SVG's internal elements using CSS/JS.
-Version: 		2.5.4
+Version: 		2.5.5
 Author: 		Benbodhi
 Author URI: 	https://benbodhi.com
 Text Domain: 	svg-support
@@ -22,26 +22,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Global variables
  */
-$svgs_plugin_version = '2.5.3';										// for use on admin pages
+global $bodhi_svgs_options;
+$bodhi_svgs_options = array();										// Defining global array
+$svgs_plugin_version = '2.5.5';										// for use on admin pages
 $plugin_file = plugin_basename(__FILE__);							// plugin file for reference
 define( 'BODHI_SVGS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );	// define the absolute plugin path for includes
 define( 'BODHI_SVGS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );		// define the plugin url for use in enqueue
 $bodhi_svgs_options = get_option('bodhi_svgs_settings');			// retrieve our plugin settings from the options table
 
+/*
+ * SVG Sanitizer class
+ */
 use enshrined\svgSanitize\Sanitizer;								// init svg sanitizer for usage
 
 if ( ( !empty($bodhi_svgs_options['sanitize_svg']) && $bodhi_svgs_options['sanitize_svg'] === 'on' ) || ( !empty($bodhi_svgs_options['minify_svg']) && $bodhi_svgs_options['minify_svg'] === 'on' ) ) {
 
-	/*
-	*	SVG Sanitizer class
-	*/
-	include( BODHI_SVGS_PLUGIN_PATH . 'vendor/autoload.php' );			// svg sanitizer
+	include( BODHI_SVGS_PLUGIN_PATH . 'vendor/autoload.php' );		// svg sanitizer
 
 	// interfaces to enable custom whitelisting of svg tags and attributes
 	include( BODHI_SVGS_PLUGIN_PATH . 'includes/svg-tags.php' );
 	include( BODHI_SVGS_PLUGIN_PATH . 'includes/svg-attributes.php' );
 
-	$sanitizer = new Sanitizer();										// initialize if enabled
+	$sanitizer = new Sanitizer();									// initialize if enabled
 
 }
 
@@ -81,36 +83,36 @@ if ( empty( $svgs_plugin_version_stored ) ) {
 }
 
 /**
- * Defaults for better security
+ * Defaults for better security in versions >= 2.5
  */
-// For version >= 2.5. | Enable 'sanitize_svg_front_end' by default
+// Enable 'sanitize_svg_front_end' by default
 if ( !isset($bodhi_svgs_options['sanitize_svg_front_end']) ) {
-    $bodhi_svgs_options['sanitize_svg_front_end'] = 'on';
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	$bodhi_svgs_options['sanitize_svg_front_end'] = 'on';
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }
 
-// For version >= 2.5. | Allow only admins to upload SVGs by default
+// Allow only admins to upload SVGs by default
 if ( !isset($bodhi_svgs_options['restrict']) || $bodhi_svgs_options['restrict'] == "on" ) {
-    $bodhi_svgs_options['restrict'] = array('administrator');
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	$bodhi_svgs_options['restrict'] = array('administrator');
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }
 elseif (isset($bodhi_svgs_options['restrict']) && $bodhi_svgs_options['restrict'] == "none" ) {
 	$bodhi_svgs_options['restrict'] = array("none");
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }
 
-// For version >= 2.5. | By default turn on "Sanitize SVG while uploading" option
+// By default turn on "Sanitize SVG while uploading" option
 if ( !isset($bodhi_svgs_options['sanitize_svg']) ) {
-    $bodhi_svgs_options['sanitize_svg'] = "on";
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	$bodhi_svgs_options['sanitize_svg'] = "on";
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }
 
-// For version >= 2.5. | By default sanitize on upload for everyone expet for administrator and editor roles
+// By default sanitize on upload for everyone except administrator and editor roles
 if ( !isset($bodhi_svgs_options['sanitize_on_upload_roles']) ) {
-    $bodhi_svgs_options['sanitize_on_upload_roles'] = array('administrator', 'editor');
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	$bodhi_svgs_options['sanitize_on_upload_roles'] = array('administrator', 'editor');
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }
 elseif ( isset($bodhi_svgs_options['sanitize_on_upload_roles']) && $bodhi_svgs_options['sanitize_on_upload_roles'] == "none") {
 	$bodhi_svgs_options['sanitize_on_upload_roles'] = array("none");
-    update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
+	update_option( 'bodhi_svgs_settings', $bodhi_svgs_options );
 }

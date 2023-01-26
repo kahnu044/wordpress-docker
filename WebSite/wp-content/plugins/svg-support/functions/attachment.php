@@ -199,7 +199,7 @@ function bodhi_svgs_sanitize( $file ){
 
 }
 
-function bodhi_svgs_minify( ) {
+function bodhi_svgs_minify() {
 
 	global $bodhi_svgs_options;
 	global $sanitizer;
@@ -220,32 +220,31 @@ function bodhi_svgs_is_gzipped( $contents ) {
 
 }
 
-function bodhi_svgs_sanitize_svg( $file ){
+function bodhi_svgs_sanitize_svg( $file ) {
 
 	global $bodhi_svgs_options;
 
-	if ( !empty($bodhi_svgs_options['sanitize_svg']) && $bodhi_svgs_options['sanitize_svg'] === 'on' ) {
+	if ( !empty($bodhi_svgs_options['sanitize_svg']) && $bodhi_svgs_options['sanitize_svg'] === 'on' && $bodhi_svgs_options['sanitize_on_upload_roles'][0] != "none" ) {
 
 		if ( $file['type'] === 'image/svg+xml' ) {
-	
+
 			$sanitize_on_upload_roles_array = array();
 
 			$should_sanitize_svg = array();
-			
+
 			$sanitize_on_upload_roles_array = (array) $bodhi_svgs_options['sanitize_on_upload_roles'];
-			
+
 			$user = wp_get_current_user();
-		 
-		    $current_user_roles = ( array ) $user->roles;
-		    
-		    $should_sanitize_svg = array_intersect($sanitize_on_upload_roles_array, $current_user_roles);
-		    
-		    if( empty($should_sanitize_svg) ) {
-			    $file['error'] = __( "Sorry, this file couldn't be sanitized so for security reasons and wasn't uploaded.",
-					'safe-svg' );
+
+			$current_user_roles = ( array ) $user->roles;
+
+			$should_sanitize_svg = array_intersect($sanitize_on_upload_roles_array, $current_user_roles);
+
+			if( empty($should_sanitize_svg) ) {
+				// Do nothing Here
 			}
 			elseif ( ! bodhi_svgs_sanitize( $file['tmp_name'] ) ) {
-				$file['error'] = __( "Sorry, this file couldn't be sanitized so for security reasons and wasn't uploaded",
+				$file['error'] = __( "Sorry, this file couldn't be sanitized for security reasons and wasn't uploaded",
 					'safe-svg' );
 			}
 

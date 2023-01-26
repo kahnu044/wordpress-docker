@@ -6,6 +6,10 @@ Compiles .scss files on your wordpress install using [scssphp](https://github.co
 
 The plugin only compiles when changes have been made to the scss files. Compiles are made to the matching css file, so disabling this plugin will not take down your stylesheets. In the instance where a matching css file does not exist yet, the plugin will create the appropriate css file in the css directory.
 
+## Looking for new maintainer
+
+If you are interested in giving back to the open source plugin respond [here](https://github.com/ConnectThink/WP-SCSS/issues/242) with your interest
+
 ## Settings
 
 #### Directories
@@ -29,15 +33,9 @@ Compiling comes in two modes:
 - Compressed - More compressed css. Entire rule block on one line. No indentation.
 - Expanded - Full open css. One line per property. Brackets close on their own line.
 
-**Removed** compiling modes. If you used these in the past you will need to update your settings.
-
-- Nested - Lightly compressed css. Brackets close with css block. Indents to match scss nesting.
-- Compact - Removes all line breaks, unnecessary whitespace, and single-line comments.
-- Crunched - Same as Compressed, but also removes multi-line comments.
-
 See examples of each in [ScssPHP's documentation](http://scssphp.github.io/scssphp)
 
-- Current version of ScssPHP is 1.10.0
+- Current version of ScssPHP is 1.11.0
 
 #### Source Map Mode
 
@@ -61,7 +59,7 @@ Also keep in mind, that if you disable this plugin it can no longer enqueue file
 
 ## Directions
 
-_This plugin requires at least php 5.6 to work._ . Tested up to php 7.4
+_This plugin requires at least php 7.2 to work._ . Tested up to php 7.4
 
 #### Importing Subfiles
 
@@ -112,6 +110,11 @@ This plugin will only work with .scss format.
 
 ## Changelog
 
+- 4.0.2
+  - Full SVN commit to Wordpress
+  - With version bump
+- 4.0.0
+  - Updates ScssPHP to version [1.11.0](https://github.com/scssphp/scssphp/releases/tag/v1.11.0) thanks to [fabarea](https://github.com/ConnectThink/WP-SCSS/issues/240)
 - 3.0.0
   - Updates ScssPHP to version [1.10.0](https://github.com/scssphp/scssphp/releases/tag/v1.10.0) thanks to [fabarea](https://github.com/ConnectThink/WP-SCSS/issues/228)
 - 2.4.0
