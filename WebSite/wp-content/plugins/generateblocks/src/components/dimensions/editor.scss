@@ -1,0 +1,66 @@
+.components-gblocks-dimensions-control {
+	&__inputs {
+		display: flex;
+
+		& > div {
+			width: calc(25% - 5px);
+		}
+
+		input[type="number"] {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			height: 30px;
+			margin: 0;
+			padding: 5px;
+			-moz-appearance: textfield;
+			width: 100%;
+			border-right: 0;
+		}
+
+		div:nth-child(1) input {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		div:not(:nth-child(1)) input {
+			border-radius: 0;
+		}
+	}
+}
+
+.gblocks-dimensions-control__label {
+    font-size: 10px;
+    opacity: 0.5;
+    line-height: 1;
+}
+
+.components-gblocks-dimensions-control_sync {
+	&.components-button {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		box-shadow: none;
+		justify-content: center;
+		padding: 0;
+		text-align: center;
+		text-shadow: none;
+		width: 30px;
+		height: 30px;
+
+		&:not(.is-primary) {
+			background: #fff;
+			border: 1px solid #8d96a0;
+			color: #555d66;
+		}
+
+		svg {
+			width: 18px;
+			height: 18px;
+			fill: currentColor;
+		}
+
+		&:hover,
+		&:focus {
+			box-shadow: none !important;
+		}
+	}
+}

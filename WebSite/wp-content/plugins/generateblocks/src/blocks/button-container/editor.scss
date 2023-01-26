@@ -1,0 +1,21 @@
+.gb-button-wrapper {
+	margin: 0;
+
+	> .block-editor-inner-blocks > .block-editor-block-list__layout {
+        // we need to use inline-flex because of bug with selecting wrapper block in editor.
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-right: 0;
+
+        > div {
+            width: auto;
+        }
+    }
+}
+
+.gblocks-add-new-button svg {
+	margin-right: 0 !important;
+	margin-left: 0 !important;
+}

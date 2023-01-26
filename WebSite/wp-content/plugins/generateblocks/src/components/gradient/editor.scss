@@ -1,0 +1,24 @@
+.gblocks-component-gradient-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+	flex-wrap: wrap;
+	margin-top: 8px;
+
+	.components-base-control {
+	    margin-bottom: 0 !important;
+
+		.components-base-control__field {
+			margin-bottom: 0;
+		}
+	}
+
+	.gblocks-component-color-picker-wrapper .components-base-control__field {
+    	margin-top: 0;
+	}
+}
+
+.gblocks-component-gradient-stop-value {
+	flex-grow: 1;
+	padding-left: 10px;
+}

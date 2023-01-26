@@ -1,0 +1,124 @@
+.gb-grid-wrapper {
+	margin: 0;
+
+	.gb-grid-column {
+		box-sizing: border-box;
+	}
+
+    > .block-editor-inner-blocks > .block-editor-block-list__layout {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
+
+.wp-block.gb-col {
+    margin-top: 29px;
+}
+
+// Layouts selector.
+.components-placeholder.components-placeholder.gb-select-layout {
+    padding: 25px;
+	background: #fff;
+	color: #000;
+
+	.components-placeholder__label {
+		margin: 0 auto;
+	}
+
+	.components-placeholder__instructions {
+		margin: 0 auto 25px;
+	}
+
+	iframe {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.gb-grid-wrapper-layout-preview {
+		max-width: 500px;
+	}
+
+    .components-placeholder__fieldset {
+		display: flex;
+		justify-content: center;
+
+		& > em {
+        	margin-bottom: 25px;
+		}
+    }
+
+    .gb-grid-wrapper-layout-preview {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-right: -7px;
+        margin-left: -7px;
+
+        .gb-grid-wrapper-layout-preview-btn {
+            display: flex;
+            flex-wrap: nowrap;
+            width: 85px;
+            padding: 0;
+            margin-right: 7px;
+            margin-bottom: 14px;
+            margin-left: 7px;
+            overflow: hidden;
+            cursor: pointer;
+            background: none;
+            border-radius: 0;
+			border: 0;
+
+            .gb-col {
+				background: #fff;
+				border: 1px solid #000;
+				margin: 1px;
+                height: 40px;
+            }
+        }
+    }
+}
+
+.gb-col {
+	&.gb-col-100 {
+		width: 100%;
+	}
+
+	&.gb-col-20 {
+		flex-basis: 20%;
+	}
+
+	&.gb-col-25 {
+		flex-basis: 25%;
+	}
+
+	&.gb-col-75 {
+		flex-basis: 75%;
+	}
+
+	&.gb-col-66-66 {
+		flex-basis: 66.66%;
+	}
+
+	&.gb-col-50 {
+		flex-basis: 50%;
+	}
+
+	&.gb-col-60 {
+		flex-basis: 60%;
+	}
+
+	&.gb-col-33-33 {
+		flex-basis: 33.33%;
+	}
+
+	&.gb-col-20 {
+		flex-basis: 20%;
+	}
+
+	&.gb-col-16 {
+		flex-basis: 16.6%;
+	}
+}
