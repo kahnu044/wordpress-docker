@@ -1,24 +1,15 @@
-# TryOuts
+# LocalGoogle
 
-TryOuts WordPress WebSite.
-
-## Setup Steps (Without Docker)
-
-0. Presetup LAMP / XAMP / MAMP as required
-1. Go to WebSite root directory `cd <repo>/WebSite`
-2. Install php dependencies `composer install`
-3. Install Node Modules `npm install`
-4. Copy `<repo>/WebSite/.env.example` to `<repo>/WebSite/.env`
-5. Update `<repo>/WebSite/.env` as per requirements
+LocalGoogle WordPress WebSite.
 
 ## Setup Steps (Using Docker) - _the correct way_
 
 0. Install `Docker`, `git` and `Visual Studio Code` on your OS (`macOS`, `Windows` or `Linux`)
 1. Go to Repository directory
     ```bash
-    cd <repo>
+    cd wordpress-docker
     ```
-2. Copy `<repo>/.env.example` to `<repo>/.env` and update as required
+2. Copy `wordpress-docker/.env.example` to `wordpress-docker/.env` and update as required
     ```bash
     cp .env.example .env
     ```
@@ -36,10 +27,6 @@ TryOuts WordPress WebSite.
         ```
     #### For macOS and Windows:
     - Change the `APP_UID` and `APP_GID` in `.env` file to `1000` each
-3. Copy `<repo>/WebSite/.env.example` to `<repo>/WebSite/.env` and update as required
-    ```bash
-    cp WebSite/.env.example WebSite/.env
-    ```
 4. Build Docker Images
     ```bash
     docker-compose build
@@ -59,21 +46,22 @@ TryOuts WordPress WebSite.
       ```bash
       deactivate
       ```
-8. Update local hostfile to serve `wp.tryouts.com`:
+8. Update local hostfile to serve `wp.localgoogle.com`:
     ```bash
-    echo "0.0.0.0  wp.tryouts.com"  | sudo tee -a /etc/hosts
+    echo "0.0.0.0   wp.localgoogle.com"  | sudo tee -a /etc/hosts
     ```
-9. Open http://wp.tryouts.com:8012 and complete setup using information as per `.env` file
+9. Open http://wp.localgoogle.com:8012 and complete setup using information as per `.env` file
 10. Once setup is complete run the following to restore database:
     ```bash
-    cp dump/tryouts.sql WebSite
-    apprun 'wp db import tryouts.sql; rm tryouts.sql'
+    cp dump/localgoogle.sql WebSite
+    apprun 'wp db import localgoogle.sql'
+    rm localgoogle.sql'
     ```
     Export DB:
     ```bash
-    apprun 'wp db export tryouts.sql; mv WebSite/tryouts.sql dump/tryouts.sql'
+    apprun 'wp db export localgoogle.sql; mv WebSite/localgoogle.sql dump/localgoogle.sql'
     ```
-11. All `docker-compose` commands must be run from within `<repo>` directory.
+11. All `docker-compose` commands must be run from within `wordpress-docker` directory.
 12. SMTP Settings at `/wp-admin/options-general.php?page=swpsmtp_settings#smtp`:
     1.  SMTP Host: `mailhog`
     2.  Type of Encryption: `None`
