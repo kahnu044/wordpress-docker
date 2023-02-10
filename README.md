@@ -51,6 +51,13 @@ LocalGoogle WordPress WebSite.
    echo "0.0.0.0   wp.localgoogle.com"  | sudo tee -a /etc/hosts
    ```
 7. Open http://wp.localgoogle.com:8012 and complete setup using information as per `.env` file
+    ```bash
+    Database Name : local_google_db
+    Username : local_google_db_usr
+    Password : local_google_db_pass
+    Database Host : db
+    Table Prefix : wp_
+    ```
 8. Once setup is complete run the following to restore database:
    ```bash
    cp dump/localgoogle.sql WebSite
