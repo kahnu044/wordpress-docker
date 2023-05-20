@@ -1,0 +1,21 @@
+.mfcf7-premium-notice-btn a {
+  background: #009FCE;
+  color: #fff;
+  padding: 7px 10px;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.mfcf7-premium-notice-btn {
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
+}
+ul.mfcf7-premium-notice-features-list {
+  padding: 2px;
+  margin: 13px 0 13px 20px;
+  list-style: disc;
+}
+span.mfcf7-notice-image a img {
+  float: right;
+  border: 1px solid #bebebe;
+  padding: 3px;
+}

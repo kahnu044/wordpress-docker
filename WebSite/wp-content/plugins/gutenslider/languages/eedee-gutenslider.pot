@@ -1,0 +1,949 @@
+# Copyright (C) 2021 eedee
+# This file is distributed under the GPL2+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gutenslider — The last WordPress slider you will ever need. 5.2.3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eedee-gutenslider\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-09-11T22:28:15+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: gutenslider\n"
+
+#. Plugin Name of the plugin
+msgid "Gutenslider — The last WordPress slider you will ever need."
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://gutenslider.org"
+msgstr ""
+
+#. Description of the plugin
+msgid "WordPress slider plugin for Gutenberg. Create an image slider, video slider, fullscreen slider with this powerful slider block and add any block on top. Slide anything!"
+msgstr ""
+
+#. Author of the plugin
+msgid "eedee"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://eedee.net"
+msgstr ""
+
+#: eedee-gutenslider.php:83
+msgid "You did it"
+msgstr ""
+
+#: eedee-gutenslider.php:139
+#: eedee-gutenslider.php:151
+msgid "Cheating huh?"
+msgstr ""
+
+#. translators: example text for slide 1.
+#: includes/admin/class-gutenslider-admin-start-page.php:65
+#: includes/admin/class-gutenslider-admin-start-page.php:66
+#: src/init.php:160
+#: build/gutenslider-pro.js:1757
+#: build/gutenslider.js:1757
+#: build/gutenslider.js:1533
+msgid "Gutenslider"
+msgstr ""
+
+#: includes/admin/class-gutenslider-admin-start-page.php:161
+msgid "Get started with Gutenslider here:"
+msgstr ""
+
+#: src/blocks/gutenslider/attributes.php:440
+msgid "No Divider"
+msgstr ""
+
+#: src/init.php:145
+msgid "Review Gutenslider on WordPress.org"
+msgstr ""
+
+#: src/init.php:145
+msgid "Rate Gutenslider&nbsp;★★★★★"
+msgstr ""
+
+#: src/init.php:172
+msgid "Testimonial Slider"
+msgstr ""
+
+#: src/init.php:175
+msgctxt "Block pattern description"
+msgid "Slider block that can be used for user reviews that rated your service or product or company."
+msgstr ""
+
+#. translators: example text for slide 2.
+#: build/gutenslider-pro.js:1777
+#: build/gutenslider.js:1777
+#: build/gutenslider.js:1556
+msgid "is"
+msgstr ""
+
+#: build/gutenslider-pro.js:1911
+#: build/gutenslider-pro.js:4378
+#: build/gutenslider.js:1911
+#: build/gutenslider.js:3550
+#: build/gutenslider.js:1678
+#: build/gutenslider.js:3443
+msgid "No Automatic Captions"
+msgstr ""
+
+#: build/gutenslider-pro.js:1914
+#: build/gutenslider-pro.js:4381
+#: build/gutenslider.js:1914
+#: build/gutenslider.js:3553
+#: build/gutenslider.js:1679
+#: build/gutenslider.js:3444
+msgid "Caption Only"
+msgstr ""
+
+#: build/gutenslider-pro.js:1917
+#: build/gutenslider-pro.js:4384
+#: build/gutenslider.js:1917
+#: build/gutenslider.js:3556
+#: build/gutenslider.js:1680
+#: build/gutenslider.js:3445
+msgid "Title - Caption"
+msgstr ""
+
+#: build/gutenslider-pro.js:1920
+#: build/gutenslider-pro.js:4387
+#: build/gutenslider.js:1920
+#: build/gutenslider.js:3559
+#: build/gutenslider.js:1681
+#: build/gutenslider.js:3446
+msgid "Title - Caption - Description"
+msgstr ""
+
+#: build/gutenslider-pro.js:2252
+#: build/gutenslider.js:2238
+#: build/gutenslider.js:1994
+msgid "Add slide content here…"
+msgstr ""
+
+#: build/gutenslider-pro.js:2345
+#: build/gutenslider-pro.js:2351
+#: build/gutenslider.js:2323
+#: build/gutenslider.js:2329
+#: build/gutenslider.js:2095
+#: build/gutenslider.js:2104
+msgid "Change content position"
+msgstr ""
+
+#: build/gutenslider-pro.js:2452
+#: build/gutenslider.js:2430
+#: build/gutenslider.js:2205
+msgid "Slide Settings"
+msgstr ""
+
+#: build/gutenslider-pro.js:2455
+#: build/gutenslider.js:2433
+#: build/gutenslider.js:2209
+msgid "Slide Link"
+msgstr ""
+
+#: build/gutenslider-pro.js:2456
+#: build/gutenslider.js:2434
+#: build/gutenslider.js:2210
+msgid "Set an url that opens, when the user clicks the slide"
+msgstr ""
+
+#: build/gutenslider-pro.js:2470
+#: build/gutenslider-pro.js:4428
+#: build/gutenslider.js:2448
+#: build/gutenslider.js:2227
+msgid "Automatic Captions"
+msgstr ""
+
+#: build/gutenslider-pro.js:2804
+msgid "↓ top to bottom"
+msgstr ""
+
+#: build/gutenslider-pro.js:2807
+msgid "↑ bottom to top"
+msgstr ""
+
+#: build/gutenslider-pro.js:2810
+msgid "→ left to right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2813
+msgid "← right to left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2816
+msgid "↙ top right to bottom left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2819
+msgid "↘ top left to bottom right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2822
+msgid "↖ bottom right to top left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2825
+msgid "↗ bottom left to top right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2829
+#: build/gutenslider-pro.js:2912
+#: build/gutenslider.js:3691
+#: build/gutenslider.js:3571
+msgid "Style 1"
+msgstr ""
+
+#: build/gutenslider-pro.js:2832
+#: build/gutenslider-pro.js:2915
+#: build/gutenslider.js:3694
+#: build/gutenslider.js:3572
+msgid "Style 2"
+msgstr ""
+
+#: build/gutenslider-pro.js:2835
+#: build/gutenslider-pro.js:2918
+msgid "Style 3"
+msgstr ""
+
+#: build/gutenslider-pro.js:2838
+#: build/gutenslider-pro.js:2921
+msgid "Style 4"
+msgstr ""
+
+#: build/gutenslider-pro.js:2841
+msgid "Style 5"
+msgstr ""
+
+#: build/gutenslider-pro.js:2844
+msgid "Style 6"
+msgstr ""
+
+#: build/gutenslider-pro.js:2847
+msgid "Style 7"
+msgstr ""
+
+#: build/gutenslider-pro.js:2850
+msgid "Style 8"
+msgstr ""
+
+#: build/gutenslider-pro.js:2853
+msgid "Style 9"
+msgstr ""
+
+#: build/gutenslider-pro.js:2856
+msgid "Style 10"
+msgstr ""
+
+#: build/gutenslider-pro.js:2860
+#: build/gutenslider-pro.js:4884
+#: build/gutenslider-pro.js:4893
+#: build/gutenslider-pro.js:4902
+#: build/gutenslider-pro.js:4940
+#: build/gutenslider-pro.js:4949
+#: build/gutenslider-pro.js:4958
+#: build/gutenslider.js:4279
+#: build/gutenslider.js:4325
+#: build/gutenslider.js:4086
+#: build/gutenslider.js:4109
+msgid "Left + Right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2863
+#: build/gutenslider-pro.js:2895
+msgid "Top Left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2866
+#: build/gutenslider-pro.js:2899
+msgid "Top Right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2869
+#: build/gutenslider-pro.js:2903
+msgid "Bottom Left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2872
+#: build/gutenslider-pro.js:2907
+msgid "Bottom Right"
+msgstr ""
+
+#: build/gutenslider-pro.js:2875
+#: build/gutenslider-pro.js:4912
+#: build/gutenslider-pro.js:4921
+#: build/gutenslider-pro.js:4930
+#: build/gutenslider-pro.js:4968
+#: build/gutenslider-pro.js:4977
+#: build/gutenslider-pro.js:4986
+#: build/gutenslider.js:4302
+#: build/gutenslider.js:4348
+#: build/gutenslider.js:4097
+#: build/gutenslider.js:4120
+msgid "Top + Bottom"
+msgstr ""
+
+#: build/gutenslider-pro.js:2879
+msgid "Top"
+msgstr ""
+
+#: build/gutenslider-pro.js:2883
+msgid "Bottom"
+msgstr ""
+
+#: build/gutenslider-pro.js:2887
+msgid "Left"
+msgstr ""
+
+#: build/gutenslider-pro.js:2891
+msgid "Right"
+msgstr ""
+
+#: build/gutenslider-pro.js:3278
+#: build/gutenslider.js:2542
+#: build/gutenslider.js:2316
+msgid "Edit Slides"
+msgstr ""
+
+#: build/gutenslider-pro.js:4067
+#: build/gutenslider.js:3284
+#: build/gutenslider.js:3188
+msgid "Select background media from your library or add an empty slide."
+msgstr ""
+
+#: build/gutenslider-pro.js:4432
+msgid "Changing this will eventually add a paragraph block to all slides, that contains the selected content"
+msgstr ""
+
+#: build/gutenslider-pro.js:4439
+#: build/gutenslider.js:3605
+#: build/gutenslider.js:3492
+msgid "Slider is shown on large screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4439
+#: build/gutenslider.js:3605
+#: build/gutenslider.js:3492
+msgid "Slider is hidden on large screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4446
+#: build/gutenslider.js:3612
+#: build/gutenslider.js:3498
+msgid "Slider is shown on medium screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4446
+#: build/gutenslider.js:3612
+#: build/gutenslider.js:3498
+msgid "Slider is hidden on medium screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4453
+#: build/gutenslider.js:3619
+#: build/gutenslider.js:3504
+msgid "Slider is shown on small screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4453
+#: build/gutenslider.js:3619
+#: build/gutenslider.js:3504
+msgid "Slider is hidden on small screens."
+msgstr ""
+
+#: build/gutenslider-pro.js:4665
+#: build/gutenslider.js:3809
+#: build/gutenslider.js:3678
+msgid "Top Divider"
+msgstr ""
+
+#: build/gutenslider-pro.js:4668
+#: build/gutenslider.js:3812
+#: build/gutenslider.js:3682
+msgid "Select a top divider"
+msgstr ""
+
+#: build/gutenslider-pro.js:4704
+#: build/gutenslider-pro.js:4788
+#: build/gutenslider.js:3848
+#: build/gutenslider.js:3907
+#: build/gutenslider.js:3705
+#: build/gutenslider.js:3744
+msgid "Background Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:4717
+msgid "Top Divider Height"
+msgstr ""
+
+#: build/gutenslider-pro.js:4730
+#: build/gutenslider-pro.js:4814
+msgid "Invert"
+msgstr ""
+
+#: build/gutenslider-pro.js:4740
+#: build/gutenslider-pro.js:4824
+#: build/gutenslider.js:3861
+#: build/gutenslider.js:3920
+#: build/gutenslider.js:3713
+#: build/gutenslider.js:3752
+msgid "Flip Vertical"
+msgstr ""
+
+#: build/gutenslider-pro.js:4749
+#: build/gutenslider.js:3870
+#: build/gutenslider.js:3717
+msgid "Bottom Divider"
+msgstr ""
+
+#: build/gutenslider-pro.js:4752
+#: build/gutenslider.js:3873
+#: build/gutenslider.js:3721
+msgid "Select a bottom divider"
+msgstr ""
+
+#: build/gutenslider-pro.js:4801
+msgid "Bottom Divider Height"
+msgstr ""
+
+#: build/gutenslider-pro.js:4841
+#: build/gutenslider-pro.js:4856
+#: build/gutenslider-pro.js:4871
+msgid "Min Slider Height"
+msgstr ""
+
+#: build/gutenslider-pro.js:4995
+#: build/gutenslider-pro.js:5004
+#: build/gutenslider-pro.js:5013
+msgid "Space Between"
+msgstr ""
+
+#: build/gutenslider-pro.js:5023
+#: build/gutenslider-pro.js:5034
+#: build/gutenslider-pro.js:5045
+#: build/gutenslider.js:4067
+#: build/gutenslider.js:3905
+msgid "Slides to Show"
+msgstr ""
+
+#: build/gutenslider-pro.js:5029
+#: build/gutenslider-pro.js:5040
+#: build/gutenslider-pro.js:5051
+#: build/gutenslider.js:4075
+#: build/gutenslider.js:3914
+msgid "Auto Slides per view will set the slider to the height you set in the \"Min Slider Height\" setting, and disable automatic height recognition. So check yourself that the content does not overflow the slides."
+msgstr ""
+
+#: build/gutenslider-pro.js:5057
+#: build/gutenslider-pro.js:5066
+#: build/gutenslider-pro.js:5075
+msgid "Slides to Scroll"
+msgstr ""
+
+#: build/gutenslider-pro.js:5086
+#: build/gutenslider-pro.js:5095
+#: build/gutenslider-pro.js:5104
+msgid "Show Progress"
+msgstr ""
+
+#: build/gutenslider-pro.js:5114
+#: build/gutenslider-pro.js:5123
+#: build/gutenslider-pro.js:5132
+#: build/gutenslider.js:4211
+#: build/gutenslider.js:4032
+msgid "Progress Size"
+msgstr ""
+
+#: build/gutenslider-pro.js:5142
+#: build/gutenslider-pro.js:5151
+#: build/gutenslider-pro.js:5160
+#: build/gutenslider.js:4094
+#: build/gutenslider.js:3937
+msgid "Show Arrows"
+msgstr ""
+
+#: build/gutenslider-pro.js:5170
+#: build/gutenslider-pro.js:5179
+#: build/gutenslider-pro.js:5188
+#: build/gutenslider.js:4174
+#: build/gutenslider.js:3999
+msgid "Arrow Size"
+msgstr ""
+
+#: build/gutenslider-pro.js:5198
+#: build/gutenslider-pro.js:5207
+#: build/gutenslider-pro.js:5216
+msgid "Arrow X Offset"
+msgstr ""
+
+#: build/gutenslider-pro.js:5226
+#: build/gutenslider-pro.js:5235
+#: build/gutenslider-pro.js:5244
+msgid "Arrow Y Offset"
+msgstr ""
+
+#: build/gutenslider-pro.js:5254
+#: build/gutenslider-pro.js:5263
+#: build/gutenslider-pro.js:5272
+#: build/gutenslider.js:4240
+#: build/gutenslider.js:4052
+msgid "Progress Offset"
+msgstr ""
+
+#: build/gutenslider-pro.js:5280
+#: build/gutenslider.js:3978
+#: build/gutenslider.js:3800
+msgid "Arrows"
+msgstr ""
+
+#: build/gutenslider-pro.js:5286
+#: build/gutenslider.js:3984
+#: build/gutenslider.js:3810
+msgid "Progress"
+msgstr ""
+
+#: build/gutenslider-pro.js:5291
+#: build/gutenslider.js:3989
+#: build/gutenslider.js:3820
+msgid "General"
+msgstr ""
+
+#: build/gutenslider-pro.js:5298
+#: build/gutenslider.js:3996
+#: build/gutenslider.js:3824
+msgid "Choose the transition between slides"
+msgstr ""
+
+#: build/gutenslider-pro.js:5299
+#: build/gutenslider.js:3997
+#: build/gutenslider.js:3825
+msgid "Animation"
+msgstr ""
+
+#: build/gutenslider-pro.js:5300
+#: build/gutenslider.js:3998
+#: build/gutenslider.js:3826
+msgid "Fade Mode"
+msgstr ""
+
+#: build/gutenslider-pro.js:5311
+#: build/gutenslider.js:4009
+#: build/gutenslider.js:3835
+msgid "slide"
+msgstr ""
+
+#: build/gutenslider-pro.js:5320
+#: build/gutenslider.js:4018
+#: build/gutenslider.js:3845
+msgid "fade"
+msgstr ""
+
+#: build/gutenslider-pro.js:5329
+#: build/gutenslider.js:4027
+#: build/gutenslider.js:3855
+msgid "flip"
+msgstr ""
+
+#: build/gutenslider-pro.js:5338
+msgid "coverflow"
+msgstr ""
+
+#: build/gutenslider-pro.js:5347
+msgid "cube"
+msgstr ""
+
+#: build/gutenslider-pro.js:5348
+#: build/gutenslider.js:4028
+#: build/gutenslider.js:3859
+msgid "Can each slide have its own content or are child blocks fixed on top of all slides?"
+msgstr ""
+
+#: build/gutenslider-pro.js:5349
+#: build/gutenslider-pro.js:5350
+#: build/gutenslider.js:4029
+#: build/gutenslider.js:4030
+#: build/gutenslider.js:3860
+#: build/gutenslider.js:3861
+msgid "Slide Mode"
+msgstr ""
+
+#: build/gutenslider-pro.js:5361
+#: build/gutenslider.js:4041
+#: build/gutenslider.js:3870
+msgid "fixed"
+msgstr ""
+
+#: build/gutenslider-pro.js:5370
+#: build/gutenslider.js:4050
+#: build/gutenslider.js:3880
+msgid "changing"
+msgstr ""
+
+#: build/gutenslider-pro.js:5400
+#: build/gutenslider.js:4081
+#: build/gutenslider.js:3921
+msgid "auto"
+msgstr ""
+
+#: build/gutenslider-pro.js:5477
+msgid "0px"
+msgstr ""
+
+#: build/gutenslider-pro.js:5480
+msgid "200px"
+msgstr ""
+
+#: build/gutenslider-pro.js:5483
+msgid "Animation Speed (sec)"
+msgstr ""
+
+#: build/gutenslider-pro.js:5493
+msgid "0sec"
+msgstr ""
+
+#: build/gutenslider-pro.js:5496
+msgid "10sec"
+msgstr ""
+
+#: build/gutenslider-pro.js:5499
+#: build/gutenslider-pro.js:5541
+#: build/gutenslider.js:4087
+#: build/gutenslider.js:4129
+#: build/gutenslider.js:3931
+#: build/gutenslider.js:3969
+msgid "Autoplay"
+msgstr ""
+
+#: build/gutenslider-pro.js:5521
+#: build/gutenslider.js:4109
+#: build/gutenslider.js:3946
+msgid "Loop"
+msgstr ""
+
+#: build/gutenslider-pro.js:5528
+#: build/gutenslider.js:4116
+#: build/gutenslider.js:3952
+msgid "Centered Slides"
+msgstr ""
+
+#: build/gutenslider-pro.js:5534
+#: build/gutenslider.js:4122
+#: build/gutenslider.js:3962
+msgid "Fullscreen Background Slider"
+msgstr ""
+
+#: build/gutenslider-pro.js:5536
+#: build/gutenslider.js:4124
+#: build/gutenslider.js:3964
+msgid "Full Screen Background Slider preview is not available in the editor, check the live site to see it in action."
+msgstr ""
+
+#: build/gutenslider-pro.js:5561
+#: build/gutenslider.js:4149
+#: build/gutenslider.js:3977
+msgid "Pause on Hover"
+msgstr ""
+
+#: build/gutenslider-pro.js:5567
+msgid "Slide Duration (sec)"
+msgstr ""
+
+#: build/gutenslider-pro.js:5584
+#: build/gutenslider.js:4163
+#: build/gutenslider.js:3989
+msgid "Arrow Style"
+msgstr ""
+
+#: build/gutenslider-pro.js:5591
+msgid "Arrow Position"
+msgstr ""
+
+#: build/gutenslider-pro.js:5634
+msgid "Arrow Horizontal Spacing"
+msgstr ""
+
+#: build/gutenslider-pro.js:5642
+#: build/gutenslider.js:4180
+#: build/gutenslider.js:4003
+msgid "Arrow Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:5652
+msgid "Arrow Background Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:5659
+msgid "Arrow Hover Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:5666
+msgid "Arrow Hover Background Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:5674
+msgid "Arrow Mix Blend Mode"
+msgstr ""
+
+#: build/gutenslider-pro.js:5705
+#: build/gutenslider-pro.js:5706
+msgid "Progress Style"
+msgstr ""
+
+#: build/gutenslider-pro.js:5727
+msgid "bullets"
+msgstr ""
+
+#: build/gutenslider-pro.js:5746
+msgid "dynamic"
+msgstr ""
+
+#: build/gutenslider-pro.js:5763
+msgid "fraction"
+msgstr ""
+
+#: build/gutenslider-pro.js:5782
+msgid "bar"
+msgstr ""
+
+#: build/gutenslider-pro.js:5783
+msgid "Progress Position"
+msgstr ""
+
+#: build/gutenslider-pro.js:5816
+#: build/gutenslider.js:4221
+#: build/gutenslider.js:4039
+msgid "Dot Color"
+msgstr ""
+
+#: build/gutenslider-pro.js:5824
+msgid "Effects"
+msgstr ""
+
+#: build/gutenslider-pro.js:5832
+msgid "Parallax"
+msgstr ""
+
+#: build/gutenslider-pro.js:5837
+msgid "Parallax is only enabled in the frontend. Check out the live results there."
+msgstr ""
+
+#: build/gutenslider-pro.js:5846
+msgid "Parallax Amount"
+msgstr ""
+
+#: build/gutenslider-pro.js:5855
+#: build/gutenslider.js:4250
+#: build/gutenslider.js:4060
+msgid "Dividers"
+msgstr ""
+
+#: build/gutenslider-pro.js:5859
+#: build/gutenslider.js:4254
+#: build/gutenslider.js:4066
+msgid "Dividers are disabled if animation is set to flip."
+msgstr ""
+
+#: build/gutenslider-pro.js:5859
+#: build/gutenslider.js:4254
+#: build/gutenslider.js:4070
+msgid "Dividers are disabled if animation is set to cube."
+msgstr ""
+
+#: build/gutenslider-pro.js:5860
+#: build/gutenslider.js:4255
+#: build/gutenslider.js:4078
+msgid "Spacing"
+msgstr ""
+
+#: build/gutenslider-pro.js:5882
+#: build/gutenslider.js:4277
+#: build/gutenslider.js:4083
+msgid "Padding"
+msgstr ""
+
+#: build/gutenslider-pro.js:5930
+#: build/gutenslider.js:4323
+#: build/gutenslider.js:4106
+msgid "Margin"
+msgstr ""
+
+#: build/gutenslider-pro.js:6039
+#: build/gutenslider.js:4430
+#: build/gutenslider.js:4170
+msgid "Slider Height"
+msgstr ""
+
+#: build/gutenslider-pro.js:6042
+#: build/gutenslider-pro.js:6055
+#: build/gutenslider-pro.js:6068
+#: build/gutenslider.js:4433
+#: build/gutenslider.js:4446
+#: build/gutenslider.js:4459
+#: build/gutenslider.js:4175
+#: build/gutenslider.js:4201
+#: build/gutenslider.js:4224
+msgid "Adaptive Height"
+msgstr ""
+
+#: build/gutenslider-pro.js:6048
+#: build/gutenslider-pro.js:6061
+#: build/gutenslider-pro.js:6077
+#: build/gutenslider.js:4439
+#: build/gutenslider.js:4452
+#: build/gutenslider.js:4468
+#: build/gutenslider.js:4184
+#: build/gutenslider.js:4209
+#: build/gutenslider.js:4233
+msgid "fixed height"
+msgstr ""
+
+#: build/gutenslider-pro.js:6052
+#: build/gutenslider-pro.js:6065
+#: build/gutenslider-pro.js:6084
+#: build/gutenslider.js:4443
+#: build/gutenslider.js:4456
+#: build/gutenslider.js:4475
+#: build/gutenslider.js:4191
+#: build/gutenslider.js:4216
+#: build/gutenslider.js:4243
+msgid "adaptive height"
+msgstr ""
+
+#: build/gutenslider-pro.js:6066
+#: build/gutenslider.js:4457
+#: build/gutenslider.js:4223
+msgid "Slides adapt their height to the background media"
+msgstr ""
+
+#: build/gutenslider-pro.js:6066
+#: build/gutenslider.js:4457
+#: build/gutenslider.js:4223
+msgid "All slides have the height you set below, unless the slide content is higher."
+msgstr ""
+
+#: build/gutenslider-pro.js:7435
+#: build/gutenslider.js:5826
+#: build/gutenslider.js:5375
+msgid "Background Settings"
+msgstr ""
+
+#: build/gutenslider-pro.js:7438
+#: build/gutenslider.js:5829
+#: build/gutenslider.js:5379
+msgid "Background Type"
+msgstr ""
+
+#: build/gutenslider-pro.js:7439
+#: build/gutenslider.js:5830
+#: build/gutenslider.js:5381
+msgid "Background Options"
+msgstr ""
+
+#: build/gutenslider-pro.js:7514
+#: build/gutenslider-pro.js:7584
+#: build/gutenslider.js:5905
+#: build/gutenslider.js:5975
+#: build/gutenslider.js:5479
+#: build/gutenslider.js:5554
+msgid "Overlay Opacity"
+msgstr ""
+
+#: build/gutenslider-pro.js:7599
+#: build/gutenslider.js:5990
+#: build/gutenslider.js:5572
+msgid "Minimum Slide Width"
+msgstr ""
+
+#: build/gutenslider-pro.js:27497
+msgid "Gutenslider Pro"
+msgstr ""
+
+#: build/gutenslider-pro.js:27498
+#: build/gutenslider.js:26172
+#: build/gutenslider.js:23255
+msgid "Slider Block for Gutenberg that slides images and videos with arbitrary blocks on top."
+msgstr ""
+
+#: build/gutenslider-pro.js:27500
+#: build/gutenslider.js:26174
+#: build/gutenslider.js:23258
+msgid "Slider"
+msgstr ""
+
+#: build/gutenslider-pro.js:27500
+#: build/gutenslider-pro.js:27519
+#: build/gutenslider.js:26174
+#: build/gutenslider.js:23259
+msgid "Image"
+msgstr ""
+
+#: build/gutenslider-pro.js:27500
+#: build/gutenslider-pro.js:27519
+#: build/gutenslider.js:26174
+#: build/gutenslider.js:26193
+#: build/gutenslider.js:23260
+#: build/gutenslider.js:23284
+msgid "Carousel"
+msgstr ""
+
+#: build/gutenslider-pro.js:27515
+#: build/gutenslider.js:26189
+#: build/gutenslider.js:23277
+msgid "Gutenslide"
+msgstr ""
+
+#: build/gutenslider-pro.js:27516
+#: build/gutenslider.js:26190
+#: build/gutenslider.js:23278
+msgid "Single Slide for Gutenslider."
+msgstr ""
+
+#: build/gutenslider-pro.js:27519
+#: build/gutenslider.js:26193
+#: build/gutenslider.js:23282
+msgid "Slide"
+msgstr ""
+
+#: build/gutenslider.js:3937
+#: build/gutenslider.js:3952
+#: build/gutenslider.js:3967
+#: build/gutenslider.js:3767
+#: build/gutenslider.js:3779
+#: build/gutenslider.js:3791
+msgid "Minimum Slider Height"
+msgstr ""
+
+#: build/gutenslider.js:3937
+#: build/gutenslider.js:3767
+msgid "Desktop"
+msgstr ""
+
+#: build/gutenslider.js:3952
+#: build/gutenslider.js:3779
+msgid "Tablet"
+msgstr ""
+
+#: build/gutenslider.js:3967
+#: build/gutenslider.js:3791
+msgid "Mobile"
+msgstr ""
+
+#: build/gutenslider.js:4102
+#: build/gutenslider.js:3942
+msgid "Show Dots"
+msgstr ""
+
+#: build/gutenslider.js:26193
+#: build/gutenslider.js:23283
+msgid "Swipe"
+msgstr ""
+
+#: build/gutenslider.js:3957
+msgid "Zoom"
+msgstr ""

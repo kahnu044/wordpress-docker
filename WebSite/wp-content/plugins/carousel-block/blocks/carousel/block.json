@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "cb/carousel",
+	"title": "Carousel Slider",
+	"category": "design",
+	"description": "Display a carousel with any blocks in the slides.",
+	"version": "1.0.0",
+	"keywords": [  "slide", "carousel", "slider", "slideshow" ],
+	"textdomain": "carousel-block",
+	"attributes": {
+		"slides": {
+			"type": "number"
+		},
+		"slidesToShow": {
+	    "type": "number",
+	    "default": 3
+	  },
+	  "scrollGroup": {
+	    "type": "boolean",
+	    "default": false
+	  },
+		"slidesToScroll": {
+	    "type": "number",
+	    "default": 1
+	  },
+	  "speed": {
+	    "type": "number",
+	    "default": 300
+	  },
+	  "slidePadding": {
+	    "type": "boolean"
+	  },
+		"arrows": {
+	    "type": "boolean",
+	    "default": true
+	  },
+	  "dots": {
+	    "type": "boolean",
+	    "default": true
+	  },
+	  "autoplay": {
+	    "type": "boolean",
+	    "default": false
+	  },
+	  "autoplaySpeed": {
+	    "type": "number",
+	    "default": 3000
+	  },
+		"infinite": {
+	    "type": "boolean",
+	    "default": false
+	  },
+	  "rtl": {
+	    "type": "boolean"
+	  },
+	  "responsiveWidth": {
+	    "type": "number",
+	    "default": 768
+	  },
+	  "responsiveSlides": {
+	    "type": "number",
+	    "default": 1
+	  },
+		"responsiveSlidesToScroll": {
+	    "type": "number",
+	    "default": 1
+	  }
+	},
+	"supports": {
+		"align": [ "wide", "full" ],
+		"html": false,
+		"anchor": true
+	}
+}

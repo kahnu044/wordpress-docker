@@ -1,0 +1,259 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MultiLine files for Contact Form 7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-06 19:09+0000\n"
+"PO-Revision-Date: 2019-04-12 12:44+0530\n"
+"Last-Translator: user <user@example.com>\n"
+"Language-Team: Español\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Loco-Version: 2.2.2; wp-5.1.1\n"
+
+#: multiline-admin.php:148
+msgid "Ability to add more than one upload button in same form or page"
+msgstr ""
+"Posibilidad de agregar más de un botón de carga en la misma forma o página"
+
+#: multiline-admin.php:66
+msgid "Add  accept wildcard"
+msgstr "Añadir aceptar comodín"
+
+#: multiline-admin.php:62
+msgid "Add input attribute"
+msgstr "Añadir atributo de entrada"
+
+#: multiline-admin.php:56
+msgid "Allowed file types"
+msgstr "Tipos de archivo permitidos"
+
+#: multiline-admin.php:186
+msgid "Already Rated"
+msgstr "Ya calificado"
+
+#: multiline-admin.php:48
+msgid "Button Label"
+msgstr "Etiqueta de botón"
+
+#: multiline-admin.php:147
+msgid "Change placement of selected files list"
+msgstr "Cambiar la ubicación de la lista de archivos seleccionados"
+
+#: multiline-admin.php:78
+msgid "Class attribute"
+msgstr "Atributo de clase"
+
+#: multiline-admin.php:35 multiline-admin.php:38
+msgid "Field type"
+msgstr "Tipo de campo"
+
+#: multiline-admin.php:52
+msgid "File size limit (bytes)"
+msgstr "Límite de tamaño de archivo (bytes)"
+
+#: multiline-admin.php:26
+msgid "File Uploading and Attachment"
+msgstr "Carga de archivos y archivos adjuntos"
+
+#: multiline-admin.php:143
+msgid "For more advanced feature, please try our premium plugin."
+msgstr ""
+"Para una característica más avanzada, prueba nuestro complemento premium."
+
+#: multiline-admin.php:25
+#, php-format
+msgid ""
+"Generate a form-tag for a multiple file uploading field. For more details, "
+"see %s."
+msgstr ""
+"Genera una etiqueta de formulario para un campo de carga de múltiples "
+"archivos. Para más detalles, vea% s."
+
+#: multiline-admin.php:159
+msgid "Get Pro version"
+msgstr "Obtén la versión Pro"
+
+#: multiline-admin.php:206
+msgid "How to install/enable ZIPArchive?"
+msgstr "¿Cómo instalar/habilitar ZIPArchive?"
+
+#: multiline-admin.php:26
+msgid "http://contactform7.com/file-uploading-and-attachment/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://profiles.wordpress.org/zluck"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wordpress.org/plugins/multiline-files-for-contact-form-7/"
+msgstr ""
+
+#: multiline-admin.php:74
+msgid "Id attribute"
+msgstr "Atributo de identificación"
+
+#: multiline-admin.php:88
+msgid "Insert Tag"
+msgstr "Insertar etiqueta"
+
+#: multiline-admin.php:206
+msgid ""
+"It seems ZIPArchived extension is not installed or not enabled. We need "
+"ZIPArchive extension available for multline file upload plugin to work."
+msgstr ""
+"Parece que la extensión ZIPArchived no está instalada o no está habilitada. "
+"Necesitamos la extensión ZIPArchive disponible para que funcione el "
+"complemento de carga de archivos de varias líneas."
+
+#: multiline-admin.php:171
+msgid ""
+"Love using <strong>Multiline files upload for contact form 7</strong> "
+"plugin, why don’t appreciate us?"
+msgstr ""
+"¿Encantado de usar <strong> Multiline files upload for contact form 7 </"
+"strong>?, ¿por que no nos das tu apreciacion?"
+
+#: multiline-admin.php:185
+msgid "Maybe Later"
+msgstr "Quizas despues"
+
+#. Name of the plugin
+msgid "MultiLine files for Contact Form 7"
+msgstr "MultiLine files for Contact Form 7"
+
+#: multiline-admin.php:142
+msgid "Multiline files upload for contact form 7"
+msgstr "Multiline files upload for contact form 7"
+
+#: multiline-admin.php:16
+msgid "multilinefile"
+msgstr "multicampo de archivos"
+
+#: multiline-admin.php:44
+msgid "Name"
+msgstr "Nombre"
+
+#: multiline-admin.php:159
+msgid "No Thanks"
+msgstr "No, gracias"
+
+#: multiline-admin.php:142
+msgid "plugin."
+msgstr "plugin."
+
+#: multiline-admin.php:144
+msgid "Premium plugin includes:"
+msgstr "El plugin premium incluye:"
+
+#: multiline-admin.php:149
+msgid "Priority Support"
+msgstr "Soporte prioritario"
+
+#: multiline-admin.php:175
+msgid "Rate it Now"
+msgstr "Califícalo ahora"
+
+#: multiline-admin.php:146
+msgid "Remove files one by one even if selected together"
+msgstr "Eliminar archivos uno por uno, incluso si se seleccionan juntos"
+
+#: multiline-admin.php:39
+msgid "Required field"
+msgstr "Campo requerido"
+
+#: multiline-admin.php:142
+msgid "Thank you for choosing"
+msgstr "Gracias tu eleccion"
+
+#: multiline-files-upload-for-contact-form-7.php:487
+msgid "There was an error in zippng the files."
+msgstr "Se produjo un error al comprimir los archivos."
+
+#: multiline-files-upload-for-contact-form-7.php:480
+msgid "There was an error uploading the file to the server."
+msgstr "Se produjo un error al cargar el archivo en el servidor."
+
+#: multiline-files-upload-for-contact-form-7.php:508
+msgid "There was an error uploading the file."
+msgstr "Se produjo un error al subir el archivo."
+
+#: multiline-admin.php:114
+#, php-format
+msgid ""
+"This contact form contains file uploading fields, but the temporary folder "
+"for the files (%s) does not exist or is not writable by wordpress. You can "
+"create the folder or change its permission manually."
+msgstr ""
+"Este formulario de contacto contiene campos de carga de archivos, pero la "
+"carpeta temporal para los archivos (% s) no existe o no tiene permisos de "
+"escritura en wordpress. Puedes crear la carpeta o cambiar su permiso "
+"manualmente."
+
+#: multiline-admin.php:91
+#, php-format
+msgid ""
+"To attach the file uploaded through this field to mail, you need to insert "
+"the corresponding mail-tag (%s) into the File Attachments field on the Mail "
+"tab."
+msgstr ""
+"Para adjuntar el archivo cargado a través de este campo al correo, debes "
+"insertar la etiqueta de correo correspondiente (% s) en el campo Archivos "
+"adjuntos en la pestaña Correo."
+
+#: multiline-files-upload-for-contact-form-7.php:91
+msgid "Upload"
+msgstr "Subir"
+
+#. Description of the plugin
+msgid "Upload unlimited files one by one to contact form 7"
+msgstr ""
+"Subir archivos ilimitados uno por uno para contactar con el formulario 7"
+
+#: multiline-files-upload-for-contact-form-7.php:492
+msgid "Uploaded file is not allowed for file type"
+msgstr "El el tipo archivo que subiste no está permitido"
+
+#: multiline-files-upload-for-contact-form-7.php:501
+msgid "Uploaded file is too big."
+msgstr "El archivo subido es demasiado grande."
+
+#: multiline-files-upload-for-contact-form-7.php:499
+msgid "Uploaded file is too large"
+msgstr "El archivo subido es demasiado grande"
+
+#: multiline-files-upload-for-contact-form-7.php:478
+msgid "Uploading a file fails for any reason"
+msgstr "La subida del archivo falla por algun motivo"
+
+#: multiline-files-upload-for-contact-form-7.php:506
+msgid "Uploading a file fails for PHP error"
+msgstr "La subida del archivo falla por error de PHP"
+
+#: multiline-admin.php:172
+msgid ""
+"We love and care about you. Our team is putting our maximum efforts to "
+"provide you the best functionalities.<br> We would really appreciate if you "
+"could spend a couple of seconds to give a Nice Review to the plugin for "
+"motivating us!"
+msgstr ""
+"Te queremos y nos preocupamos por ti. Nuestro equipo está esforzándose al "
+"máximo para brindarte las mejores funcionalidades. ¡Te agradeceríamos que "
+"pudieras dedicar un par de segundos a darle una agradable revisión al plugin "
+"para motivarnos!"
+
+#: multiline-files-upload-for-contact-form-7.php:494
+msgid "You are not allowed to upload files of this type."
+msgstr "No se te permite subir archivos de este tipo."
+
+#: multiline-files-upload-for-contact-form-7.php:485
+msgid "Zipping files fails for any reason"
+msgstr "La compresión de los archivos falla por alguna razón"
+
+#. Author of the plugin
+msgid "Zluck Solutions"
+msgstr "Soluciones Zluck "

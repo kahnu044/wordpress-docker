@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-12-22 11:47+0530\n"
+"PO-Revision-Date: 2018-12-22 12:01+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: multiline-admin.php:16
+msgid "multilinefile"
+msgstr ""
+
+#: multiline-admin.php:25
+#, php-format
+msgid ""
+"Generate a form-tag for a multiple file uploading field. For more details, "
+"see %s."
+msgstr ""
+
+#: multiline-admin.php:26
+msgid "http://contactform7.com/file-uploading-and-attachment/"
+msgstr ""
+
+#: multiline-admin.php:26
+msgid "File Uploading and Attachment"
+msgstr ""
+
+#: multiline-admin.php:35 multiline-admin.php:38
+msgid "Field type"
+msgstr ""
+
+#: multiline-admin.php:39
+msgid "Required field"
+msgstr ""
+
+#: multiline-admin.php:44
+msgid "Name"
+msgstr ""
+
+#: multiline-admin.php:48
+msgid "Button Label"
+msgstr ""
+
+#: multiline-admin.php:52
+msgid "File size limit (bytes)"
+msgstr ""
+
+#: multiline-admin.php:56
+msgid "Allowed file types"
+msgstr ""
+
+#: multiline-admin.php:62
+msgid "Add input attribute"
+msgstr ""
+
+#: multiline-admin.php:66
+msgid "Add  accept wildcard"
+msgstr ""
+
+#: multiline-admin.php:69
+msgid "Type \"yes\" to add wildcard"
+msgstr ""
+
+#: multiline-admin.php:74
+msgid "Id attribute"
+msgstr ""
+
+#: multiline-admin.php:78
+msgid "Class attribute"
+msgstr ""
+
+#: multiline-admin.php:88
+msgid "Insert Tag"
+msgstr ""
+
+#: multiline-admin.php:91
+#, php-format
+msgid ""
+"To attach the file uploaded through this field to mail, you need to insert "
+"the corresponding mail-tag (%s) into the File Attachments field on the Mail "
+"tab."
+msgstr ""
+
+#: multiline-admin.php:114
+#, php-format
+msgid ""
+"This contact form contains file uploading fields, but the temporary folder "
+"for the files (%s) does not exist or is not writable by wordpress. You can "
+"create the folder or change its permission manually."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:89
+msgid "Upload"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:476
+msgid "Uploading a file fails for any reason"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:478
+msgid "There was an error uploading the file to the server."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:483
+msgid "Zipping files fails for any reason"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:485
+msgid "There was an error in zippng the files."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:490
+msgid "Uploaded file is not allowed for file type"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:492
+msgid "You are not allowed to upload files of this type."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:497
+msgid "Uploaded file is too large"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:499
+msgid "Uploaded file is too big."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:504
+msgid "Uploading a file fails for PHP error"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:506
+msgid "There was an error uploading the file."
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:583
+msgid "Upgrade multiline file upload plugin into pro version"
+msgstr ""
+
+#: multiline-files-upload-for-contact-form-7.php:583
+msgid "Upgrade to Pro"
+msgstr ""

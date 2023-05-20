@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "cb/slide",
+	"title": "Slide",
+	"parent": [ "cb/carousel-block" ],
+	"category": "design",
+	"description": "A single slide within the carousel.",
+	"version": "1.0.0",
+	"textdomain": "carousel-block",
+	"supports": {
+		"html": false
+	}
+}

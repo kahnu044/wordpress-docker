@@ -1,0 +1,1 @@
+export default __webpack_public_path__ + "images/gutenslider_logo-300x300.png";
