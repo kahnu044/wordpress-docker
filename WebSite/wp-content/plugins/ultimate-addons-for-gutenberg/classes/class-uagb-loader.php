@@ -70,6 +70,8 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 
 			$this->loader();
 
+			add_action( 'after_setup_theme', array( $this, 'load_compatibility' ) );
+
 			add_action( 'plugins_loaded', array( $this, 'load_plugin' ) );
 
 			add_action( 'init', array( $this, 'init_actions' ) );
@@ -84,7 +86,7 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			define( 'UAGB_BASE', plugin_basename( UAGB_FILE ) );
 			define( 'UAGB_DIR', plugin_dir_path( UAGB_FILE ) );
 			define( 'UAGB_URL', plugins_url( '/', UAGB_FILE ) );
-			define( 'UAGB_VER', '2.3.5' );
+			define( 'UAGB_VER', '2.6.1' );
 			define( 'UAGB_MODULES_DIR', UAGB_DIR . 'modules/' );
 			define( 'UAGB_MODULES_URL', UAGB_URL . 'modules/' );
 			define( 'UAGB_SLUG', 'spectra' );
@@ -187,6 +189,16 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 		}
 
 		/**
+		 * Loads theme compatibility files.
+		 *
+		 * @since 2.5.1
+		 *
+		 * @return void
+		 */
+		public function load_compatibility() {
+			require_once UAGB_DIR . 'classes/class-uagb-fse-fonts-compatibility.php';
+		}
+		/**
 		 * Fix REST API issue with blocks registered via PHP register_block_type.
 		 *
 		 * @since 1.25.2
@@ -239,12 +251,36 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 					unset( $attributes['UAGLoggedOut'] );
 				}
 
+				if ( isset( $attributes['UAGDay'] ) ) {
+					unset( $attributes['UAGDay'] );
+				}
+
 				if ( isset( $attributes['zIndex'] ) ) {
 					unset( $attributes['zIndex'] );
 				}
 
 				if ( isset( $attributes['UAGResponsiveConditions'] ) ) {
 					unset( $attributes['UAGResponsiveConditions'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationType'] ) ) {
+					unset( $attributes['UAGAnimationType'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationTime'] ) ) {
+					unset( $attributes['UAGAnimationTime'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationDelay'] ) ) {
+					unset( $attributes['UAGAnimationDelay'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationEasing'] ) ) {
+					unset( $attributes['UAGAnimationEasing'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationRepeat'] ) ) {
+					unset( $attributes['UAGAnimationRepeat'] );
 				}
 
 					$request['attributes'] = $attributes;
@@ -350,18 +386,73 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 				require_once UAGB_DIR . 'compatibility/class-uagb-astra-compatibility.php';
 			}
 
-			register_meta(
-				'post',
-				'_uag_custom_page_level_css',
+				register_meta(
+					'post',
+					'_uag_custom_page_level_css',
+					array(
+						'show_in_rest'  => true,
+						'type'          => 'string',
+						'single'        => true,
+						'auth_callback' => function() {
+							return current_user_can( 'edit_posts' );
+						},
+					)
+				);
+
+			// This class is loaded from blocks config.
+			UAGB_Popup_Builder::generate_scripts();
+
+			// Adds filters to modify the blocks allowed in excerpts.
+			add_filter( 'excerpt_allowed_blocks', array( $this, 'add_blocks_to_excerpt' ), 20 );
+			add_filter( 'excerpt_allowed_wrapper_blocks', array( $this, 'add_wrapper_blocks_to_excerpt' ), 20 );
+			add_filter( 'uagb_blocks_allowed_in_excerpt', array( $this, 'add_uagb_blocks_to_excerpt' ), 20, 2 );
+		}
+
+		/**
+		 * Adds specified blocks to the list of allowed blocks in excerpts.
+		 *
+		 * @param array $allowed    List of allowed blocks in excerpts.
+		 * @since 2.6.0
+		 * @return array            Modified list of allowed blocks in excerpts.
+		 */
+		public function add_blocks_to_excerpt( $allowed ) {
+			return apply_filters( 'uagb_blocks_allowed_in_excerpt', $allowed, array( 'uagb/advanced-heading' ) );
+		}
+
+		/**
+		 * Adds specified wrapper blocks to the list of allowed blocks in excerpts.
+		 *
+		 * @param array $allowed    List of allowed blocks in excerpts.
+		 * @since 2.6.0
+		 * @return array            Modified list of allowed blocks in excerpts.
+		 */
+		public function add_wrapper_blocks_to_excerpt( $allowed ) {
+			return apply_filters(
+				'uagb_blocks_allowed_in_excerpt',
+				$allowed,
 				array(
-					'show_in_rest'  => true,
-					'type'          => 'string',
-					'single'        => true,
-					'auth_callback' => function() {
-						return current_user_can( 'edit_posts' );
-					},
+					'uagb/container',
+					'uagb/columns',
+					'uagb/column',
 				)
 			);
+		}
+
+		/**
+		 * Adds specified UAGB blocks to the list of allowed blocks in excerpts.
+		 *
+		 * @param array $excerpt_blocks     List of allowed blocks in excerpts.
+		 * @param array $blocks_to_add      Blocks to add to the list of allowed blocks in excerpts.
+		 * @since 2.6.0
+		 * @return array                    The merged excerpt blocks array if both parameters are arrays, or the original excerpt blocks if either parameter is not an array.
+		 */
+		public function add_uagb_blocks_to_excerpt( $excerpt_blocks, $blocks_to_add ) {
+			if ( is_array( $excerpt_blocks ) && is_array( $blocks_to_add ) ) {
+				return array_merge( $excerpt_blocks, $blocks_to_add );
+			}
+
+			// If either parameter is not an array, return the original excerpt blocks.
+			return $excerpt_blocks;
 		}
 	}
 }

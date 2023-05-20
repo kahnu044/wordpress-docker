@@ -78,6 +78,8 @@ function generateblocks_do_block_editor_assets() {
 				'standard' => GENERATEBLOCKS_DIR_URL . 'assets/images/image-placeholder.png',
 				'square' => GENERATEBLOCKS_DIR_URL . 'assets/images/square-image-placeholder.png',
 			),
+			'globalContainerWidth' => generateblocks_get_global_container_width(),
+			'queryLoopEditorPostsCap' => apply_filters( 'generateblocks_query_loop_editor_posts_cap', 50 ), // phpcs:ignore -- Core filter.
 		)
 	);
 
@@ -326,4 +328,95 @@ function generateblocks_set_inline_background_style( $attributes, $settings ) {
 	}
 
 	return $attributes;
+}
+
+add_filter( 'generateblocks_block_css_selector', 'generateblocks_set_block_css_selectors', 10, 3 );
+/**
+ * Change our block selectors if needed.
+ *
+ * @param string $selector Existing selector.
+ * @param string $name The block name.
+ * @param array  $attributes The block attributes.
+ */
+function generateblocks_set_block_css_selectors( $selector, $name, $attributes ) {
+	$blockVersion = ! empty( $attributes['blockVersion'] ) ? $attributes['blockVersion'] : 1;
+	$defaults = generateblocks_get_block_defaults();
+
+	if ( 'button' === $name ) {
+		$settings = wp_parse_args(
+			$attributes,
+			$defaults['button']
+		);
+
+		if ( $blockVersion < 3 ) {
+			// Old versions of the this block used this backwards logic
+			// to determine whether to remove the "a" to the selector.
+			$clean_selector = $selector;
+			$selector = 'a' . $selector;
+
+			if ( isset( $attributes['hasUrl'] ) && ! $attributes['hasUrl'] ) {
+				$selector = $clean_selector;
+			}
+		} else {
+			$is_link = (
+				! empty( $settings['hasUrl'] ) ||
+				! empty( $settings['dynamicLinkType'] )
+			) && 'link' === $settings['buttonType'];
+
+			if ( $is_link ) {
+				$selector = 'a' . $selector;
+			}
+
+			if ( 'button' === $settings['buttonType'] ) {
+				$selector = 'button' . $selector;
+			}
+		}
+
+		if ( $settings['hasButtonContainer'] || $blockVersion < 3 ) {
+			$selector = '.gb-button-wrapper ' . $selector;
+		} elseif ( isset( $settings['isPagination'] ) && $settings['isPagination'] ) {
+			$selector = '.gb-query-loop-pagination ' . $selector;
+		}
+	}
+
+	if ( 'headline' === $name ) {
+		$settings = wp_parse_args(
+			$attributes,
+			$defaults['headline']
+		);
+
+		if ( apply_filters( 'generateblocks_headline_selector_tagname', true, $attributes ) ) {
+			$selector = $settings['element'] . $selector;
+		}
+	}
+
+	return $selector;
+}
+
+add_action( 'init', 'generateblocks_register_user_meta' );
+/**
+ * Register GenerateBlocks custom user meta fields.
+ *
+ * @return void
+ */
+function generateblocks_register_user_meta() {
+	register_meta(
+		'user',
+		GenerateBlocks_Rest::ONBOARDING_META_KEY,
+		array(
+			'type' => 'object',
+			'single' => true,
+			'show_in_rest' => array(
+				'schema' => array(
+					'type'  => 'object',
+					'properties' => array(
+						'insert_inner_container' => array( 'type' => 'boolean' ),
+					),
+					'additionalProperties' => array(
+						'type' => 'boolean',
+					),
+				),
+			),
+		)
+	);
 }

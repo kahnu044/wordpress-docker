@@ -6,7 +6,6 @@ use Exception;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Data\DataSource;
 use WPGraphQL\Data\MediaItemMutation;
 use WPGraphQL\Utils\Utils;
 
@@ -15,7 +14,7 @@ class MediaItemCreate {
 	 * Registers the MediaItemCreate mutation.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
@@ -108,7 +107,8 @@ class MediaItemCreate {
 					if ( empty( $payload['postObjectId'] ) || ! absint( $payload['postObjectId'] ) ) {
 						return null;
 					}
-					return DataSource::resolve_post_object( $payload['postObjectId'], $context );
+
+					return $context->get_loader( 'post' )->load_deferred( $payload['postObjectId'] );
 				},
 			],
 		];

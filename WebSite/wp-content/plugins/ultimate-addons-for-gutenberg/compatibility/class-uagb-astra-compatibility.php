@@ -65,20 +65,28 @@ class UAGB_Astra_Compatibility {
 	 * @param array $astra_fonts Astra Fonts Object.
 	 *
 	 * @since 2.0.0
+	 * @return array
 	 */
 	public function add_google_fonts_in_astra( $astra_fonts ) {
 
 		global $post;
 
 		if ( $post ) {
+			$post_id = $post->ID;
+		}
 
-			$google_fonts = uagb_get_post_assets( $post->ID )->get_fonts();
+		if ( is_404() ) {
+			$post_id = get_queried_object_id();
+		}
+
+		if ( isset( $post_id ) ) {
+
+			$google_fonts = uagb_get_post_assets( $post_id )->get_fonts();
 
 			if ( is_array( $google_fonts ) && ! empty( $google_fonts ) ) {
 
 				foreach ( $google_fonts as $key => $gfont_values ) {
-
-					if ( isset( $gfont_values['fontfamily'] ) && isset( $gfont_values['fontvariants'] ) ) {
+					if ( ! empty( $gfont_values['fontfamily'] ) && is_string( $gfont_values['fontfamily'] ) && isset( $gfont_values['fontvariants'] ) ) {
 
 						$astra_fonts[ $gfont_values['fontfamily'] ] = $gfont_values['fontvariants'];
 

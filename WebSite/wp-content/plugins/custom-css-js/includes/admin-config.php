@@ -25,8 +25,8 @@ class CustomCSSandJS_AdminConfig {
         $settings_default = apply_filters( 'ccj_settings_default', array() );
 
         // Get the saved settings
-        $settings = get_option('ccj_settings');
-        if ( $settings == false ) {
+        $settings = get_option('ccj_settings', array());
+        if ( ! is_array( $settings ) || count( $settings ) === 0 ) {
             $settings = $settings_default;
         } else {
             foreach( $settings_default as $_key => $_value ) {
@@ -94,7 +94,7 @@ class CustomCSSandJS_AdminConfig {
 
             $data = apply_filters( 'ccj_settings_save', array() );
 
-            $settings = get_option('ccj_settings');
+            $settings = get_option('ccj_settings', array());
             if ( !isset($settings['add_role'] ) ) $settings['add_role'] = false;
             if ( !isset($settings['remove_comments'] ) ) $settings['remove_comments'] = false;
 
@@ -190,7 +190,7 @@ class CustomCSSandJS_AdminConfig {
     function general_extra_form() {
 
         // Get the setting
-        $settings = get_option('ccj_settings');
+        $settings = get_option('ccj_settings', array());
         $defaults = $this->general_extra_default();
 
         foreach( $defaults as $_key => $_value ) {

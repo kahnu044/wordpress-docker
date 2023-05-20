@@ -87,7 +87,7 @@ class Admin_Menu {
 	 */
 	public function add_action_links( $links ) {
 
-		$default_url = admin_url( 'options-general.php?page=' . $this->menu_slug );
+		$default_url = admin_url( 'admin.php?page=' . $this->menu_slug );
 
 		$mylinks = array(
 			'<a href="' . $default_url . '">' . __( 'Settings', 'ultimate-addons-for-gutenberg' ) . '</a>',
@@ -108,6 +108,7 @@ class Admin_Menu {
 
 			add_filter( 'admin_footer_text', array( $this, 'add_footer_link' ), 99 );
 		}
+
 	}
 
 	/**
@@ -123,15 +124,30 @@ class Admin_Menu {
 		$menu_slug  = $this->menu_slug;
 		$capability = 'manage_options';
 
-		add_submenu_page(
-			'options-general.php',
-			'Spectra',
-			'Spectra',
+		$icon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDcwIDcwIiBmaWxsPSJub25lIiBjbGFzcz0ic3BlY3RyYS1wYWdlLXNldHRpbmdzLWJ1dHRvbiIgYXJpYS1oaWRkZW49InRydWUiIGZvY3VzYWJsZT0iZmFsc2UiPiA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTM1IDcwQzU0LjMzIDcwIDcwIDU0LjMzIDcwIDM1QzcwIDE1LjY3IDU0LjMzIDAgMzUgMEMxNS42NyAwIDAgMTUuNjcgMCAzNUMwIDU0LjMzIDE1LjY3IDcwIDM1IDcwWk0yNC40NDcxIDIzLjUxMTJDMTguOTcyMiAyNi43NDAzIDIwLjI4NTIgMzUuMzc1OSAyNi41MDMyIDM3LjAzNTFMMzYuODg3NSAzOS44MDZDMzcuNzUzMyA0MC4wMzcgMzcuOTEgNDEuMjI0IDM3LjEzNSA0MS42ODExTDI3LjA5NzIgNDcuNTc5OUwyNi4wMzYgNThMNDUuNTUyOSA0Ni40ODg4QzUxLjAyNzggNDMuMjU5NyA0OS43MTQ4IDM0LjYyNDEgNDMuNDk2OCAzMi45NjQ5TDMzLjExMjUgMzAuMTk0MUMzMi4yNDY3IDI5Ljk2MyAzMi4wOSAyOC43NzYgMzIuODY1IDI4LjMxODlMNDIuOTAyOCAyMi40MjAyTDQzLjk2NCAxMkwyNC40NDcxIDIzLjUxMTJaIj48L3BhdGg+IDwvc3ZnPg==';
+
+		add_menu_page(
+			__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
+			__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
 			$capability,
 			$menu_slug,
 			array( $this, 'render' ),
-			10
+			$icon,
+			3
 		);
+
+		add_submenu_page(
+			$menu_slug,
+			__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
+			__( 'Dashboard', 'ultimate-addons-for-gutenberg' ),
+			$capability,
+			$menu_slug,
+			array( $this, 'render' )
+		);
+
+		// Use this action hook to add sub menu to above menu.
+		do_action( 'spectra_after_menu_register' );
+
 	}
 
 	/**
@@ -183,13 +199,18 @@ class Admin_Menu {
 
 		wp_enqueue_style( 'wp-components' );
 
-		$theme    = wp_get_theme();
+		$theme = wp_get_theme();
+
+		$theme_data          = \WP_Theme_JSON_Resolver::get_theme_data();
+		$theme_settings      = $theme_data->get_settings();
+		$theme_font_families = isset( $theme_settings['typography']['fontFamilies']['theme'] ) && is_array( $theme_settings['typography']['fontFamilies']['theme'] ) ? $theme_settings['typography']['fontFamilies']['theme'] : array();
+
 		$localize = apply_filters(
 			'uag_react_admin_localize',
 			array(
 				'current_user'             => ! empty( wp_get_current_user()->user_firstname ) ? wp_get_current_user()->user_firstname : wp_get_current_user()->display_name,
 				'admin_base_url'           => admin_url(),
-				'uag_base_url'             => admin_url( 'options-general.php?page=' . $this->menu_slug ),
+				'uag_base_url'             => admin_url( 'admin.php?page=' . $this->menu_slug ),
 				'plugin_dir'               => UAGB_URL,
 				'plugin_ver'               => UAGB_VER,
 				'logo_url'                 => UAGB_URL . 'admin-core/assets/images/dashboard-uag-logo.svg',
@@ -207,6 +228,7 @@ class Admin_Menu {
 				'spectra_pro_ver'          => defined( 'SPECTRA_PRO_VER' ) ? SPECTRA_PRO_VER : null,
 				'spectra_custom_fonts'     => apply_filters( 'spectra_system_fonts', array() ),
 				'is_allow_registration'    => (bool) get_option( 'users_can_register' ),
+				'theme_fonts'              => $theme_font_families,
 			)
 		);
 
@@ -276,6 +298,9 @@ class Admin_Menu {
 					'tabs-child',
 					'how-to-step',
 					'slider-child',
+					'slider-pro',
+					'image-gallery-pro',
+					'loop-wrapper',
 				);
 
 				if ( ( 'cf7-styler' === $addon && 'active' !== $cf7_status ) || ( 'gf-styler' === $addon && 'active' !== $gf_status ) ) {
@@ -390,7 +415,7 @@ class Admin_Menu {
 	 */
 	public function add_footer_link() {
 		// translators: HTML entities.
-		return '<span id="footer-thankyou">' . sprintf( __( 'Thank you for using %1$sSpectra.%2$s' ), '<a href="https://wpspectra.com/" class="focus:text-spectra-hover active:text-spectra-hover hover:text-spectra-hover">', '</a>' ) . '</span>';
+		return '<span id="footer-thankyou">' . sprintf( __( 'Thank you for using %1$sSpectra.%2$s', 'ultimate-addons-for-gutenberg' ), '<a href="https://wpspectra.com/" class="focus:text-spectra-hover active:text-spectra-hover hover:text-spectra-hover">', '</a>' ) . '</span>';
 	}
 
 }

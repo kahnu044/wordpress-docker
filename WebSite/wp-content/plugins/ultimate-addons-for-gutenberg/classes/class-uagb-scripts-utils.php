@@ -59,9 +59,7 @@ final class UAGB_Scripts_Utils {
 							if ( is_admin() && false === $skip_editor ) {
 								wp_enqueue_script( $handle );
 							}
-						}
-
-						if ( 'css' === $asset['type'] ) {
+						} elseif ( 'css' === $asset['type'] ) {
 
 							// Styles.
 							wp_register_style(
@@ -109,6 +107,14 @@ final class UAGB_Scripts_Utils {
 				'ajax_url'                              => admin_url( 'admin-ajax.php' ),
 				'uagb_image_gallery_masonry_ajax_nonce' => $uagb_image_gallery_masonry_ajax_nonce,
 				'uagb_image_gallery_grid_pagination_ajax_nonce' => $uagb_image_gallery_grid_pagination_ajax_nonce,
+			)
+		);
+
+		wp_localize_script(
+			'uagb-countdown-js',
+			'uagb_countdown_data',
+			array(
+				'site_name_slug' => sanitize_title( get_bloginfo( 'name' ) ),
 			)
 		);
 

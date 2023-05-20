@@ -214,7 +214,7 @@ class CustomCSSandJS_Admin {
 	 */
 	public function cm_localize() {
 
-		$settings = get_option( 'ccj_settings' );
+		$settings = get_option( 'ccj_settings', array() );
 
 		$vars = array(
 			'autocomplete'   => isset( $settings['ccj_autocomplete'] ) && ! $settings['ccj_autocomplete'] ? false : true,
@@ -693,7 +693,7 @@ class CustomCSSandJS_Admin {
 			return false;
 		}
 
-		if ( empty( $post->title ) && empty( $post->post_content ) ) {
+		if ( empty( $post->post_title ) && empty( $post->post_content ) ) {
 			$new_post = true;
 			$post_id  = false;
 		} else {
@@ -1522,7 +1522,7 @@ endif;
 			$slug    = get_post_meta( $post->ID, '_slug', true );
 			$options = get_post_meta( $post->ID, 'options', true );
 
-			if ( isset( $options['language'] ) ) {
+			if ( is_array( $options ) && isset( $options['language'] ) ) {
 				$filetype = $options['language'];
 			}
 			if ( $filetype === 'html' ) {
@@ -1624,7 +1624,11 @@ endif;
 			return;
 		}
 
-		$options             = get_post_meta( $postid, 'options', true );
+		$options = get_post_meta( $postid, 'options', true );
+		if ( ! is_array( $options ) ) {
+			return;
+		}
+
 		$options['language'] = ( isset( $options['language'] ) ) ? strtolower( $options['language'] ) : 'css';
 		$options['language'] = in_array( $options['language'], array( 'html', 'js', 'css' ), true ) ? $options['language'] : 'css';
 

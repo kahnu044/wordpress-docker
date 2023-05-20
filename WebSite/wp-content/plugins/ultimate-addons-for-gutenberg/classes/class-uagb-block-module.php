@@ -62,7 +62,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		 *
 		 * @since 2.0.0
 		 *
-		 * @param string $block_assets Block Assets.
+		 * @param array $block_assets Block Assets.
 		 * @return array
 		 */
 		public static function uag_register_block_static_dependencies( $block_assets ) {
@@ -70,19 +70,21 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 			$blocks = self::get_blocks_info();
 
 			foreach ( $blocks as $block ) {
-				if ( isset( $block['static_dependencies'] ) ) {
+				if ( ! isset( $block['static_dependencies'] ) ) {
+					continue;
+				}
 
-					foreach ( $block['static_dependencies'] as $key => $static_dependencies ) {
-						if ( isset( $static_dependencies ) && is_array( $static_dependencies ) && isset( $static_dependencies['src'] ) ) {
-							$block_assets[ $key ] = $static_dependencies;
-						}
+				foreach ( $block['static_dependencies'] as $key => $static_dependencies ) {
+					if ( ! isset( $static_dependencies['src'] ) ) {
+						continue;
 					}
+					$block_assets[ $key ] = $static_dependencies;
 				}
 			}
 
 			return $block_assets;
 		}
-
+		
 		/**
 		 * Get frontend CSS.
 		 *
@@ -244,6 +246,16 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 					),
 					'uagb-swiper-css'   => array(
 						'src'  => UAGB_URL . 'assets/css/swiper-bundle.min.css',
+						'dep'  => array(),
+						'type' => 'css',
+					),
+					'uagb-aos-js'       => array(
+						'src'  => UAGB_URL . 'assets/js/aos.min.js',
+						'dep'  => array(),
+						'type' => 'js',
+					),
+					'uagb-aos-css'      => array(
+						'src'  => UAGB_URL . 'assets/css/aos.min.css',
 						'dep'  => array(),
 						'type' => 'css',
 					),

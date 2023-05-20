@@ -32,6 +32,14 @@ class GenerateBlocks_Enqueue_CSS {
 	private static $has_made_css = false;
 
 	/**
+	 * Check to see if we've enqueued our CSS.
+	 *
+	 * @access private
+	 * @var boolean
+	 */
+	private static $has_enqueued_css = false;
+
+	/**
 	 * Initiator.
 	 *
 	 * @since 0.1
@@ -59,10 +67,24 @@ class GenerateBlocks_Enqueue_CSS {
 	}
 
 	/**
+	 * Tell our system it's ok to generate CSS.
+	 */
+	private function enable_enqueue() {
+		self::$has_enqueued_css = true;
+	}
+
+	/**
+	 * Check to see if we can generate CSS.
+	 */
+	public static function can_enqueue() {
+		return self::$has_enqueued_css || ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() );
+	}
+
+	/**
 	 * Enqueue our front-end assets.
 	 */
 	public function enqueue_assets() {
-		$dynamic_css_priority = apply_filters( 'generateblocks_dynamic_css_priority', 10 );
+		$dynamic_css_priority = apply_filters( 'generateblocks_dynamic_css_priority', 25 );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_dynamic_css' ), $dynamic_css_priority );
 		add_action( 'wp_enqueue_scripts', array( $this, 'print_inline_css' ), $dynamic_css_priority );
@@ -125,6 +147,7 @@ class GenerateBlocks_Enqueue_CSS {
 	 * Enqueue the dynamic CSS.
 	 */
 	public function enqueue_dynamic_css() {
+		$this->enable_enqueue();
 		$page_id = $this->page_id();
 
 		if ( ! $page_id ) {
@@ -151,6 +174,8 @@ class GenerateBlocks_Enqueue_CSS {
 	 * Print our inline CSS.
 	 */
 	public function print_inline_css() {
+		$this->enable_enqueue();
+
 		if ( 'inline' === $this->mode() || ! wp_style_is( 'generateblocks', 'enqueued' ) ) {
 			// Build our CSS based on the content we find.
 			generateblocks_get_dynamic_css();
@@ -204,12 +229,10 @@ class GenerateBlocks_Enqueue_CSS {
 			return false;
 		}
 
-		global $wp_filesystem;
+		$filesystem = generateblocks_get_wp_filesystem();
 
-		// Initialize the WordPress filesystem.
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . '/wp-admin/includes/file.php';
-			WP_Filesystem();
+		if ( ! $filesystem ) {
+			return false;
 		}
 
 		// Take care of domain mapping.
@@ -229,7 +252,7 @@ class GenerateBlocks_Enqueue_CSS {
 				$chmod_file = FS_CHMOD_FILE;
 			}
 
-			if ( ! $wp_filesystem->put_contents( $this->file( 'path' ), wp_strip_all_tags( $content ), $chmod_file ) ) {
+			if ( ! $filesystem->put_contents( $this->file( 'path' ), wp_strip_all_tags( $content ), $chmod_file ) ) {
 
 				// Fail!
 				return false;

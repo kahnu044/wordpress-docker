@@ -28,7 +28,7 @@ class PostObjects {
 	 * Registers the various connections from other Types to PostObjects
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	public static function register_connections() {
 
@@ -159,6 +159,7 @@ class PostObjects {
 				}
 				$resolver = new PostObjectConnectionResolver( $post, $args, $context, $info );
 				$resolver->set_query_arg( 'post__in', $ancestors );
+				$resolver->set_query_arg( 'orderby', 'post__in' );
 
 				return $resolver->get_connection();
 			},
@@ -224,8 +225,8 @@ class PostObjects {
 	 * Given the Post Type Object and an array of args, this returns an array of args for use in
 	 * registering a connection.
 	 *
-	 * @param mixed|WP_Post_Type|WP_Taxonomy $graphql_object The post type object for the post_type having a
-	 *                                        connection registered to it
+	 * @param mixed|\WP_Post_Type|\WP_Taxonomy $graphql_object The post type object for the post_type having a
+ * connection registered to it
 	 * @param array                          $args           The custom args to modify the connection registration
 	 *
 	 * @return array
@@ -258,7 +259,7 @@ class PostObjects {
 	 * Given an optional array of args, this returns the args to be used in the connection
 	 *
 	 * @param array         $args             The args to modify the defaults
-	 * @param mixed|WP_Post_Type|WP_Taxonomy $post_type_object The post type the connection is going to
+	 * @param mixed|\WP_Post_Type|\WP_Taxonomy $post_type_object The post type the connection is going to
 	 *
 	 * @return array
 	 */
