@@ -58,7 +58,9 @@ LocalGoogle WordPress WebSite.
     Database Host : db
     Table Prefix : wp_
     ```
-8. Once setup is complete run the following to restore database:
+8. Once setup is complete run the following to restore database
+   (If this is your first time install then no need to do the following steps)
+:
    ```bash
    cp dump/localgoogle.sql WebSite
    apprun 'wp db import localgoogle.sql'
