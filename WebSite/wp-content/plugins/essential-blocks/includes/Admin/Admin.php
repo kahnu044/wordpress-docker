@@ -37,17 +37,18 @@ class Admin {
         add_action( 'wp_ajax_get_eb_admin_options', [$this, 'get'] );
         add_action( 'wp_ajax_get_eb_admin_templates', [$this, 'templates'] );
         add_action( 'wp_ajax_get_eb_admin_template_count', [$this, 'template_count'] );
+        add_action( 'plugin_action_links', [$this, 'eb_menu_action_links'], 10, 2 );
 
         //Redirect after Plugin is updated
         add_action( 'admin_init', [$this, 'maybe_redirect'] );
     }
 
-    public function maybe_redirect(){
-        if ( wp_doing_ajax()) {
+    public function maybe_redirect() {
+        if ( wp_doing_ajax() ) {
             return;
         }
 
-        if( get_transient('essential_block_maybe_whatsnew_redirect') == true ) {
+        if ( get_transient( 'essential_block_maybe_whatsnew_redirect' ) == true ) {
             delete_transient( 'essential_block_maybe_whatsnew_redirect' );
 
             if ( ! is_multisite() ) {
@@ -84,6 +85,30 @@ class Admin {
 
     public function welcome_page() {
         Helper::views( 'welcome', [] );
+    }
+
+    /**
+     * Menu Action Links
+     * @since 4.1.0
+     */
+    public function eb_menu_action_links( $links, $file ) {
+        if ( $file === ESSENTIAL_BLOCKS_PLUGIN_BASENAME ) {
+            $settings_links = sprintf(
+                __( '<a href="%1$s">Settings</a>' ),
+                admin_url( "admin.php?page=essential-blocks" )
+            );
+            array_unshift( $links, $settings_links );
+
+            if ( ! class_exists( 'EssentialBlocks\Pro\Plugin' ) ) {
+                $go_pro_link = sprintf(
+                    __( '<a target="_blank" href="%1$s"><strong style="color:#5e2eff;display: inline-block;">Go Pro</strong></a>' ),
+                    ESSENTIAL_BLOCKS_UPGRADE_PRO_URL
+                );
+                array_push( $links, $go_pro_link );
+            }
+        }
+
+        return $links;
     }
 
     public function register_category( $categories, $post ) {
@@ -233,7 +258,8 @@ class Admin {
                     'classes'     => 'updated put-dismiss-notice',
                     'start'       => $notices->time(),
                     'dismissible' => true,
-                    'do_action'   => 'wpdeveloper_notice_clicked_for_essential-blocks'
+                    'do_action'   => 'wpdeveloper_notice_clicked_for_essential-blocks',
+                    'display_if'  => !ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
                 ]
             );
         }
@@ -271,10 +297,10 @@ class Admin {
      * AJAX Save function
      */
     public function save() {
-        if ( !isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
         }
-        if (!current_user_can('activate_plugins')) {
+        if ( ! current_user_can( 'activate_plugins' ) ) {
             wp_send_json_error( __( 'You are not authorized to save this!', 'essential-blocks' ) );
         }
 
@@ -314,7 +340,7 @@ class Admin {
      * AJAX Get function
      */
     public function get() {
-        if ( !isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
         }
 
@@ -337,7 +363,7 @@ class Admin {
      * AJAX Get Templately Templates
      */
     public function templates() {
-        if ( !isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
         }
         $headers = [
@@ -372,7 +398,7 @@ class Admin {
      * AJAX Get Templately Templates
      */
     public function template_count() {
-        if ( !isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
         }
         $headers = [

@@ -93,6 +93,12 @@ class WooProductGrid extends Block {
             $args[$key] = ! empty( $args[$key] ) ? implode( ',', $this->get_array_column( $args[$key], 'value' ) ) : $value;
         }
 
+        //Set Orderby to Default if Pro Orderby is selected and Pro isn't active
+        $proOrderby = ['rand'];
+        if ( isset( $args['orderby'] ) && ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE && in_array( $args['orderby'], $proOrderby ) ) {
+            $args['orderby'] = 'date';
+        }
+
         $args = wp_parse_args( $args, [
             'per_page' => 10,
             'offset'   => 0

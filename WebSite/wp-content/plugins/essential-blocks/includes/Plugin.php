@@ -9,6 +9,7 @@ use EssentialBlocks\Core\PostMeta;
 use EssentialBlocks\Utils\Enqueue;
 use EssentialBlocks\Utils\Settings;
 use EssentialBlocks\Core\FontLoader;
+use EssentialBlocks\Core\ModifyWPCore;
 use EssentialBlocks\Core\Maintenance;
 use EssentialBlocks\Integrations\NFT;
 use EssentialBlocks\Core\PageTemplates;
@@ -24,7 +25,7 @@ use EssentialBlocks\Integrations\PluginInstaller;
 final class Plugin {
     use HasSingletone;
 
-    public $version = '4.0.8';
+    public $version = '4.1.3';
 
     public $admin;
     /**
@@ -113,6 +114,8 @@ final class Plugin {
         GlobalStyles::get_instance();
 
         add_action( 'plugins_loaded', [$this, 'plugins_loaded'] );
+
+        add_action( 'wp_loaded', [$this, 'wp_loaded'] );
         /**
          * Initialize.
          */
@@ -149,6 +152,15 @@ final class Plugin {
     }
 
     /**
+     * Initializing Things on WP Loaded
+     * @return void
+     */
+    public function wp_loaded() {
+
+        ModifyWPCore::get_instance();
+    }
+
+    /**
      * Define CONSTANTS
      *
      * @since 2.0.0
@@ -164,7 +176,9 @@ final class Plugin {
         $this->define( 'ESSENTIAL_BLOCKS_ADMIN_URL', plugin_dir_url( ESSENTIAL_BLOCKS_FILE ) );
         $this->define( 'ESSENTIAL_BLOCKS_PLUGIN_BASENAME', plugin_basename( ESSENTIAL_BLOCKS_FILE ) );
         $this->define( 'ESSENTIAL_BLOCKS_VERSION', $this->version );
+        $this->define( 'ESSENTIAL_BLOCKS_IS_PRO_ACTIVE', class_exists( 'EssentialBlocks\Pro\Plugin' ) ? true : false );
         $this->define( 'ESSENTIAL_BLOCKS_SITE_URL', 'https://essential-blocks.com/' );
+        $this->define( 'ESSENTIAL_BLOCKS_UPGRADE_PRO_URL', 'https://essential-blocks.com/upgrade' );
     }
 
     /**

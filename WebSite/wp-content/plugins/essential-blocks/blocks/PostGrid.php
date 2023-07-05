@@ -5,6 +5,7 @@ use EssentialBlocks\Utils\Helper;
 
 class PostGrid extends PostBlock {
     protected $frontend_scripts = ['essential-blocks-post-grid-frontend'];
+
     protected $frontend_styles  = ['essential-blocks-frontend-style'];
 
     protected static $default_attributes = [

@@ -147,11 +147,14 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 
 			$xpath = new DOMXPath( $doc );
 
-			// Delete div.uagb-toc-hide-heading from doc.
-			foreach ( $xpath->query( '//div[contains(attribute::class, "uagb-toc-hide-heading")]' ) as $e ) {
-				// Delete this node from doc.
-				$e->parentNode->removeChild( $e );
+			$tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div' );
+			// Delete $tags[$s].uagb-toc-hide-heading from doc.
+			foreach ( $tags as $tag ) {
+				$query = sprintf( '//%s[contains(attribute::class, "uagb-toc-hide-heading")]', $tag );
 
+				foreach ( $xpath->query( $query ) as $e ) {
+					$e->parentNode->removeChild( $e );
+				}
 			}
 
 			// Get all non-empty heading elements in the post content.
@@ -292,10 +295,9 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 
 			foreach ( $nested_heading_list as $anchor => $heading ) {
 
-				$level    = $heading['heading']['level'];
-				$title    = $heading['heading']['content'];
-				$id       = $heading['heading']['id'];
-				$li_added = false;
+				$level = $heading['heading']['level'];
+				$title = $heading['heading']['content'];
+				$id    = $heading['heading']['id'];
 
 				if ( 0 === $anchor ) {
 					$first_level = $level;
@@ -321,7 +323,6 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 
 						$toc                  .= '<li class="uagb-toc__list">';
 						$depth_array[ $level ] = $current_depth;
-						$li_added              = true;
 
 					} elseif ( $level < $last_level ) {
 
@@ -340,11 +341,7 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 					}
 				}
 
-				if ( $li_added ) {
-					$toc .= sprintf( '<a href="#%s">%s</a></li>', esc_attr( $id ), esc_html( $title ) );
-				} else {
-					$toc .= sprintf( '<li class="uagb-toc__list"><a href="#%s">%s</a></li>', esc_attr( $id ), esc_html( $title ) );
-				}
+				$toc .= sprintf( '<li class="uagb-toc__list"><a href="#%s">%s</a>', esc_attr( $id ), esc_html( $title ) );
 
 				$last_level = $level;
 			}

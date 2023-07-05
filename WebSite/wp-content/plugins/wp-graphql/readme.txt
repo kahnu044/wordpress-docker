@@ -1,10 +1,10 @@
 === WPGraphQL ===
 Contributors: jasonbahl, tylerbarnes1, ryankanner, hughdevore, chopinbach, kidunot89
-Tags: GraphQL, API, Gatsby, Headless, Decoupled, React, Nextjs, Vue, Apollo, REST, JSON,  HTTP, Remote, Query Language
+Tags: GraphQL, JSON, API, Gatsby, Faust, Headless, Decoupled, Svelte, React, Nextjs, Vue, Apollo, REST, JSON, HTTP, Remote, Query Language
 Requires at least: 5.0
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 1.14.3
+Stable tag: 1.14.6
 License: GPL-3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -86,6 +86,14 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Upgrade Notice ==
+
+= 1.14.6 =
+
+This release includes a security patch. It's recommended to update as soon as possible.
+
+If you're unable to update to the latest version, we have a snippet you can add to your site.
+
+You can read more about it here: https://github.com/wp-graphql/wp-graphql/security/advisories/GHSA-cfh4-7wq9-6pgg
 
 = 1.13.0 =
 
@@ -231,6 +239,37 @@ The `uri` field was non-null on some Types in the Schema but has been changed to
 Composer dependencies are no longer versioned in Github. Recommended install source is WordPress.org or using Composer to get the code from Packagist.org or WPackagist.org.
 
 == Changelog ==
+
+= 1.14.6 =
+
+**Chores / Bugfixes**
+
+- [#2841](https://github.com/wp-graphql/wp-graphql/pull/2841): ci: support STEP_DEBUG in Code Quality workflow. Thanks @justlevine!
+- [#2840](https://github.com/wp-graphql/wp-graphql/pull/2840): fix: update createMediaItem mutation to have better validation of input.
+- [#2838](https://github.com/wp-graphql/wp-graphql/pull/2838): chore: update security.md
+
+
+= 1.14.5 =
+
+**Chores / Bugfixes**
+
+- [#2834](https://github.com/wp-graphql/wp-graphql/pull/2834): fix: improve how the Query Analyzer tracks list types, only tracking lists from the RootType and not nested lists.
+- [#2828](https://github.com/wp-graphql/wp-graphql/pull/2828): chore: update composer dev-deps to latest. Thanks @justlevine!
+- [#2835](https://github.com/wp-graphql/wp-graphql/pull/2835): ci: update docker deploy workflow to use latest docker actions.
+- [#2836](https://github.com/wp-graphql/wp-graphql/pull/2836): ci: update schema upload workflow to pin mariadb to 10.8.2
+
+
+= 1.14.4 =
+
+**New Features**
+
+- [#2826](https://github.com/wp-graphql/wp-graphql/pull/2826): feat: pass connection config to connection field
+
+**Chores / Bugfixes**
+
+- [#2818](https://github.com/wp-graphql/wp-graphql/pull/2818): chore: update webonyx/graphql-php to v14.11.9. Thanks @justlevine!
+- [#2813](https://github.com/wp-graphql/wp-graphql/pull/2813): fix: replace double negation with true. Thanks @cesarkohl!
+
 
 = 1.14.3 =
 

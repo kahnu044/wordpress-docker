@@ -27,6 +27,32 @@
             return $time;
         }
 
+        /**
+         * Remove HTML Tags with Inner Contents
+         * @param string $content
+         * @param mixed $tags
+         * @return string
+         */
+        public static function removeHtmlTagWithInnerContents($contant, $tags) {
+            if (is_array($tags)) {
+                foreach($tags as $tag) {
+                    $contant = preg_replace(
+                        sprintf(
+                            '/<%1$s\b[^>]*>(.*?)<\/%1$s>/is',
+                            $tag
+                        ),
+                        '',
+                        $contant
+                    );
+                }
+            }
+            else {
+                $contant = preg_replace('/<figure\b[^>]*>(.*?)<\/figure>/is', '', $contant);
+            }
+
+            return $contant;
+        }
+
         public static function is_isset( $value, $default = '' ) {
             return isset( $_POST[$value] ) ? $_POST[$value] : $default;
         }
@@ -41,6 +67,16 @@
             return $url_components['scheme'] . '://' . $url_components['host'] . '/' . trim( $url_components['path'], '/' ) . '?' . $_build_query;
         }
 
+        protected static function get_views_path( $name ) {
+            $file = ESSENTIAL_BLOCKS_DIR_PATH . 'views/' . $name . '.php';
+
+            if ( file_exists( $file ) ) {
+                return $file;
+            }
+
+            return false;
+        }
+
         /**
          * Get views for front-end display
          *
@@ -49,13 +85,60 @@
          * @return void
          */
         public static function views( $name, $data = [] ) {
-            extract( $data );
-            $helper = self::class;
-            $file   = ESSENTIAL_BLOCKS_DIR_PATH . 'views/' . $name . '.php';
+            $__file = static::get_views_path( $name );
+            $helper = static::class;
 
-            if ( is_readable( $file ) ) {
-                include $file;
+            extract( $data );
+            if ( is_readable( $__file ) ) {
+                include $__file;
             }
+        }
+
+        /**
+         * Convert Recursive Array to String
+         * @param array $array
+         * @param string $seperator
+         * @param boolean $valueOnly | optional
+         * @return string
+         */
+        public static function recursive_implode( $array, $seperator, $valueOnly = false ) {
+            $result = "";
+            if ( isset( $array["value"] ) && $valueOnly ) {
+                $array = $array["value"];
+            }
+            if ( is_array( $array ) ) {
+                foreach ( $array as $key => $value ) {
+                    if ( is_array( $value ) ) {
+                        $result .= self::recursive_implode( $value, $seperator, true ) . $seperator;
+                    } else {
+                        $result .= $value . $seperator;
+                    }
+                }
+            } else if ( is_string( $array ) ) {
+                $result .= $array . $seperator;
+            }
+            $result = substr( $result, 0, 0 - strlen( $seperator ) );
+
+            return $result;
+        }
+
+        public static function recursive_implode_acf( $array, $seperator ) {
+            $result = "";
+            if ( is_array( $array ) ) {
+                foreach ( $array as $key => $value ) {
+                    if ( is_array( $value ) || is_object($value) ) {
+                        $result .= self::recursive_implode_acf( (array)$value, $seperator );
+                    } else {
+                        $value = $value ? $value : "Null";
+                        $index = is_numeric($key) ? "" : $key . ": ";
+                        $result .= $index . $value . $seperator;
+                    }
+                }
+            } else if ( is_string( $array ) ) {
+                $result .= $array . $seperator;
+            }
+
+            return $result;
         }
 
         /**

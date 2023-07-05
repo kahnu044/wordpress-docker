@@ -21,23 +21,18 @@ abstract class Block {
      */
     protected $assets_manager = null;
     protected $dir            = '';
-
-
+    protected $is_pro         = false;
 
     //WordPress older than 6.1 don't support array, needs to handle if multiple value needed
     // protected $editor_scripts = ['essential-blocks-editor-script'];
     // protected $editor_styles = ['essential-blocks-editor-css'];
-    protected $editor_scripts = 'essential-blocks-editor-script';
-    protected $editor_styles = 'essential-blocks-editor-css';
+    protected $editor_scripts   = 'essential-blocks-editor-script';
+    protected $editor_styles    = 'essential-blocks-editor-css';
     protected $animation_script = 'essential-blocks-eb-animation';
-    protected $animation_style = 'essential-blocks-animation';
+    protected $animation_style  = 'essential-blocks-animation';
 
     protected $frontend_styles  = ['essential-blocks-frontend-style'];
     protected $frontend_scripts = [];
-
-    // public function __construct() {
-    //     Scripts::get_instance();
-    // }
 
     /**
      * unique name of block
@@ -56,12 +51,22 @@ abstract class Block {
         return true;
     }
 
+    public function get_block_path( $name, $wp_version_check = false ) {
+        $path = ESSENTIAL_BLOCKS_DIR_PATH . 'blocks/' . $name;
+
+        if ( $wp_version_check && ESSENTIAL_BLOCKS_WP_VERSION < 5.8 ) {
+            $path = 'essential-blocks/' . $name;
+        }
+
+        return apply_filters( 'essential_blocks_block_path', $path, $this->is_pro, $name, $wp_version_check );
+    }
+
     public function path( $name = '' ) {
         if ( empty( $name ) ) {
             $name = $this->get_name();
         }
 
-        return ESSENTIAL_BLOCKS_DIR_PATH . 'blocks/' . $name;
+        return $this->get_block_path( $name );
     }
 
     public function register_block_type( $name, ...$args ) {
@@ -69,19 +74,12 @@ abstract class Block {
             $name = $this->get_name();
         }
 
-        $path = ESSENTIAL_BLOCKS_WP_VERSION < 5.8
-        ? 'essential-blocks/' . $name
-        : ESSENTIAL_BLOCKS_DIR_PATH . 'blocks/' . $name;
-
-        return register_block_type(
-            $path,
-            ...$args
-        );
+        return register_block_type( $this->get_block_path( $name, true ), ...$args );
     }
 
     public function load_frontend_styles() {
         //Enqueue Animation
-        wp_enqueue_style($this->animation_style);
+        wp_enqueue_style( $this->animation_style );
 
         if ( empty( $this->frontend_styles ) ) {
             return;
@@ -93,7 +91,7 @@ abstract class Block {
     }
 
     public function load_frontend_scripts() {
-        wp_enqueue_script($this->animation_script);
+        wp_enqueue_script( $this->animation_script );
 
         if ( empty( $this->frontend_scripts ) ) {
             return;
@@ -105,6 +103,10 @@ abstract class Block {
     }
 
     public function load_scripts() {
+
+        $this->frontend_styles = apply_filters("eb_frontend_styles/{$this->get_name()}", $this->frontend_styles);
+        $this->frontend_scripts = apply_filters("eb_frontend_scripts/{$this->get_name()}", $this->frontend_scripts);
+
         $this->load_frontend_styles();
         $this->load_frontend_scripts();
     }
@@ -140,8 +142,8 @@ abstract class Block {
             };
         }
 
-        $_args['editor_script'] = array_merge([$this->editor_scripts], [$this->animation_script]);
-        $_args['editor_style']  = array_merge([$this->editor_styles], [$this->animation_style]);
+        $_args['editor_script'] = array_merge( [$this->editor_scripts], [$this->animation_script] );
+        $_args['editor_style']  = array_merge( [$this->editor_styles], [$this->animation_style] );
 
         if ( property_exists( $this, 'attributes' ) ) {
             $_args['attributes'] = $this->attributes;

@@ -106,7 +106,11 @@ class UAGB_Popup_Builder {
 		if ( ! is_front_page() ) {
 			$this->post_id = get_the_ID();
 		}
-		if ( 'spectra-popup' === get_post_type( $this->post_id ) ) {
+		$elementor_preview_active = false;
+		if ( defined( 'ELEMENTOR_VERSION' ) ) { // Check if elementor is active.
+			$elementor_preview_active = \Elementor\Plugin::$instance->preview->is_preview_mode(); 
+		}
+		if ( 'spectra-popup' === get_post_type( $this->post_id ) || $elementor_preview_active ) {
 			return;
 		}
 		$this->enqueue_popup_scripts();
@@ -182,7 +186,8 @@ class UAGB_Popup_Builder {
 				}
 			}
 		endwhile;
-		add_action( 'wp_footer', array( $this, 'generate_popup_shortcode' ) );
+		wp_reset_postdata();
+		add_action( 'wp_body_open', array( $this, 'generate_popup_shortcode' ) );
 	}
 
 	/**

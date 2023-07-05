@@ -58,7 +58,7 @@ class Enqueue {
         $this->assets_dir = 'assets/';
 
         if ( 'script' === $config['type'] && in_array( 'wp-i18n', $config['dependencies'], true ) ) {
-            wp_set_script_translations( $handle, 'essentialBlocks' );
+            wp_set_script_translations( $handle, 'essential-blocks' );
         }
     }
 

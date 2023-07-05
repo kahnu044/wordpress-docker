@@ -175,7 +175,6 @@ class BlocksPatterns {
             file_put_contents( $cache_file_dir . '/patterns.json', json_encode( $data ) );
             return true;
         } catch ( Exception $e ) {
-            error_log( $e->getMessage() );
             return false;
         }
     }

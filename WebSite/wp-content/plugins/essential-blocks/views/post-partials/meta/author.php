@@ -8,10 +8,11 @@ if (in_array("author", $allMeta)) {
 
     $author .= sprintf(
         '<span class="ebpg-posted-by">
-            by <a href="%2$s" title="%1$s" rel="author">%1$s</a>
+            %3$s <a href="%2$s" title="%1$s" rel="author">%1$s</a>
         </span>',
         $authorName,
-        $authorUrl
+        $authorUrl,
+        $authorPrefix
     );
 }
 

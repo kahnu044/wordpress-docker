@@ -18,6 +18,13 @@ class Scripts {
             $this->plugin = wpdev_essential_blocks();
         }, 1 );
 
+        //Enqueue Assets Only for FSE
+        global $pagenow;
+        if ( $pagenow === "site-editor.php" ) {
+            add_action( 'admin_init', [$this, 'block_editor_assets'], 1 );
+            add_action( 'admin_init', [$this, 'frontend_backend_assets'] );
+        }
+
         add_action( 'enqueue_block_editor_assets', [$this, 'block_editor_assets'] );
         add_action( 'enqueue_block_editor_assets', [$this, 'frontend_backend_assets'] );
         add_action( 'wp_enqueue_scripts', [$this, 'frontend_backend_assets'] );
@@ -26,6 +33,8 @@ class Scripts {
 
     public function block_editor_assets() {
         $this->is_gutenberg_editor = true;
+
+        global $pagenow;
 
         wpdev_essential_blocks()->assets->register( 'twenty-move', 'js/jquery.event.move.js' );
         wpdev_essential_blocks()->assets->register( 'image-loaded', 'js/images-loaded.min.js' );
@@ -38,7 +47,8 @@ class Scripts {
         wpdev_essential_blocks()->assets->register( 'controls-util', '../dist/controls.js', [
             'essential-blocks-blocks-localize'
         ] );
-        wpdev_essential_blocks()->assets->register( 'editor-script', '../dist/index.js', [
+
+        $editor_scripts_deps = [
             'essential-blocks-vendor-bundle',
             'essential-blocks-controls-util',
             'essential-blocks-twenty-move',
@@ -50,18 +60,21 @@ class Scripts {
             'essential-blocks-typedjs',
             'essential-blocks-slickjs',
             'essential-blocks-patterns'
-        ] );
-        wpdev_essential_blocks()->assets->enqueue( 'enable-disable', '../lib/enable-disable-blocks/index.js', [
-            'essential-blocks-editor-script',
-            'essential-blocks-blocks-localize'
-        ] );
+        ];
+
+        if ( $pagenow !== 'widgets.php' ) {
+            wpdev_essential_blocks()->assets->register( 'global-styles', '../lib/global-styles/dist/index.js' );
+            $editor_scripts_deps[] = 'essential-blocks-global-styles';
+        }
+
+        wpdev_essential_blocks()->assets->register( 'editor-script', '../dist/index.js', $editor_scripts_deps );
+
         //If vendor files has css and extists
         if ( file_exists( ESSENTIAL_BLOCKS_DIR_PATH . 'vendor-bundle/style.css' ) ) {
             wpdev_essential_blocks()->assets->register( 'admin-vendor-style', '../vendor-bundle/style.css' );
         }
 
-        // register styles
-        wpdev_essential_blocks()->assets->register( 'editor-css', '../dist/controls.css', [
+        $editor_styles_deps = [
             'essential-blocks-slick-style',
             'essential-blocks-fslightbox-style',
             'essential-blocks-twenty-twenty-style-image-comparison',
@@ -70,8 +83,17 @@ class Scripts {
             'essential-blocks-fontpicker-material-theme',
             'essential-blocks-fontpicker-default-theme',
             'essential-blocks-fontawesome',
-            'essential-blocks-frontend-style'
-        ] );
+            'essential-blocks-frontend-style',
+            'essential-blocks-block-common'
+        ];
+
+        if ( $pagenow !== 'widgets.php' ) {
+            wpdev_essential_blocks()->assets->register( 'global-styles', '../lib/global-styles/dist/style.css' );
+            $editor_styles_deps[] = 'essential-blocks-global-styles';
+        }
+
+        // register styles
+        wpdev_essential_blocks()->assets->register( 'editor-css', '../dist/controls.css', $editor_styles_deps );
     }
 
     /**
@@ -93,6 +115,7 @@ class Scripts {
         wpdev_essential_blocks()->assets->register( 'twenty-twenty-style-image-comparison', 'css/twentytwenty.css' );
         wpdev_essential_blocks()->assets->register( 'fslightbox-style', 'css/fslightbox.min.css' );
         wpdev_essential_blocks()->assets->register( 'slick-style', 'css/slick.css' );
+        wpdev_essential_blocks()->assets->register( 'block-common', 'css/block-common.css' );
         wpdev_essential_blocks()->assets->register( 'typedjs', 'js/typed.min.js' );
     }
 
@@ -104,16 +127,17 @@ class Scripts {
         wpdev_essential_blocks()->assets->enqueue( 'blocks-localize', 'js/eb-blocks-localize.js' );
 
         global $pagenow;
-
+        $editor_type = "";
         if ( $pagenow == 'post-new.php' || $pagenow == 'post.php' ) {
-            wpdev_essential_blocks()->assets->localize( 'blocks-localize', 'eb_conditional_localize', [
-                'editor_type' => 'edit-post'
-            ] );
+            $editor_type = 'edit-post';
         } elseif ( $pagenow == 'site-editor.php' || ( $pagenow == 'themes.php' && isset( $_GET['page'] ) && $_GET['page'] == 'gutenberg-edit-site' ) ) {
-            wpdev_essential_blocks()->assets->localize( 'blocks-localize', 'eb_conditional_localize', [
-                'editor_type' => 'edit-site'
-            ] );
+            $editor_type = 'edit-site';
+        } elseif ( $pagenow == 'widgets.php' ) {
+            $editor_type = 'edit-widgets';
         }
+        wpdev_essential_blocks()->assets->localize( 'blocks-localize', 'eb_conditional_localize', [
+            'editor_type' => $editor_type
+        ] );
 
         $eb_settings = get_option( 'eb_settings', [] );
         $googleFont  = ! empty( $eb_settings['googleFont'] ) ? $eb_settings['googleFont'] : 'true';
@@ -122,13 +146,15 @@ class Scripts {
         $plugin = $this->plugin;
 
         $localize_array = [
-            'eb_plugins_url' => ESSENTIAL_BLOCKS_URL,
-            'eb_wp_version'  => ESSENTIAL_BLOCKS_WP_VERSION,
-            'eb_version'     => ESSENTIAL_BLOCKS_VERSION,
-            'eb_admin_url'   => get_admin_url(),
-            'rest_rootURL'   => get_rest_url(),
-            'ajax_url'       => admin_url( 'admin-ajax.php' ),
-            'nft_nonce'      => wp_create_nonce( 'eb-nft-nonce' )
+            'eb_plugins_url'  => ESSENTIAL_BLOCKS_URL,
+            'eb_wp_version'   => ESSENTIAL_BLOCKS_WP_VERSION,
+            'eb_version'      => ESSENTIAL_BLOCKS_VERSION,
+            'eb_admin_url'    => get_admin_url(),
+            'rest_rootURL'    => get_rest_url(),
+            'ajax_url'        => admin_url( 'admin-ajax.php' ),
+            'nft_nonce'       => wp_create_nonce( 'eb-nft-nonce' ),
+            'is_pro_active'   => ESSENTIAL_BLOCKS_IS_PRO_ACTIVE ? "true" : "false",
+            'upgrade_pro_url' => ESSENTIAL_BLOCKS_UPGRADE_PRO_URL
         ];
         if ( is_admin() ) {
             $admin_localize_array = [

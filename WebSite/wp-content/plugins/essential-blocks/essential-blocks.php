@@ -3,10 +3,10 @@
 /**
  * Plugin Name: Essential Blocks
  * Plugin URI: https://essential-blocks.com
- * Description: The Ultimate Blocks Library for WordPress Gutenberg editor.
+ * Description: The ultimate blocks library for Gutenberg editor. Packed with 40+ powerful free blocks, it is an essential and feature-rich plugin to create websites with ease.
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
- * Version: 4.0.8
+ * Version: 4.1.3
  * License: GPL3+
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: essential-blocks

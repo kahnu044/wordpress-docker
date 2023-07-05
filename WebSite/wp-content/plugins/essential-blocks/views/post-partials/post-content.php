@@ -1,11 +1,14 @@
 <?php
 
+use EssentialBlocks\Utils\Helper;
+
 $contentHTML = '';
 
 $contentHTML .= $showContent || $showReadMore ? '<div class="ebpg-entry-content">' : '';
 
 if ($showContent) {
     $_content = !empty($result->post_excerpt) ? $result->post_excerpt : $result->post_content;
+    $_content = Helper::removeHtmlTagWithInnerContents($_content, ["figure"]);
     $content  = $block_object->truncate(wp_kses_post(strip_tags($_content)), $contentLength);
 
     $post_classes = $block_object->get_name() == 'post-grid' ? 'ebpg-grid-post-excerpt' : 'ebpg-carousel-post-excerpt';

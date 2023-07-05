@@ -581,11 +581,6 @@ parameters:
 			path: src/Validator/ValidationContext.php
 
 		-
-			message: "#^Only booleans are allowed in an if condition, GraphQL\\\\Language\\\\AST\\\\SelectionSetNode\\|null given\\.$#"
-			count: 1
-			path: src/Validator/ValidationContext.php
-
-		-
 			message: "#^Only booleans are allowed in a negated boolean, array\\<GraphQL\\\\Language\\\\AST\\\\FragmentDefinitionNode\\> given\\.$#"
 			count: 1
 			path: src/Validator/ValidationContext.php
@@ -596,7 +591,7 @@ parameters:
 			path: tests/Executor/DirectivesTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"class@anonymous/tests/Executor/ExecutorTest\\.php\\:1329\"\\.$#"
+			message: "#^Anonymous function should have native return typehint \"class@anonymous/tests/Executor/ExecutorTest\\.php\\:1331\"\\.$#"
 			count: 1
 			path: tests/Executor/ExecutorTest.php
 

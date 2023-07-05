@@ -34,7 +34,7 @@ class OpenVerse extends ThirdPartyIntegration {
                 'callback' => 'get_siteinfo',
                 'public'   => false
             ]
-        ] );
+        ]);
     }
 
     /**

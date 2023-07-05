@@ -18,8 +18,8 @@ class PluginInstaller extends ThirdPartyIntegration {
      * Openverse plugin_install
      */
     public function plugin_install() {
-        if ( isset( $_POST['admin_nonce'] )
-            && ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+            wp_send_json_error( __( 'Could not install the plugin.' ) );
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
@@ -33,5 +33,6 @@ class PluginInstaller extends ThirdPartyIntegration {
         } else {
             wp_send_json_error( __( 'Could not install the plugin.' ) );
         }
+        wp_die();
     }
 }

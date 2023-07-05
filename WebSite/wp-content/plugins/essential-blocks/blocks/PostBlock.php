@@ -17,7 +17,9 @@ abstract class PostBlock extends Block {
         'readmoreText'       => 'Read More',
         'showMeta'           => true,
         'headerMeta'         => '[{"value":"categories","label":"Categories"}]',
-        'footerMeta'         => '[{"value":"avatar","label":"Author Avatar"},{"value":"author","label":"Author Name"},{"value":"date","label":"Published Date"}]'
+        'footerMeta'         => '[{"value":"avatar","label":"Author Avatar"},{"value":"author","label":"Author Name"},{"value":"date","label":"Published Date"}]',
+        'authorPrefix'       => 'by',
+        'datePrefix'         => 'on'
     ];
 
     abstract public function get_default_attributes();
@@ -33,6 +35,12 @@ abstract class PostBlock extends Block {
     public static function get_posts( $queryData, $isAjax = false ) {
         $queryData['source']  = $queryData['source'] === 'posts' ? 'post' : $queryData['source'];
         $queryData['orderby'] = $queryData['orderby'] === 'id' ? 'ID' : $queryData['orderby'];
+
+        //Set Orderby to Default if Pro Orderby is selected and Pro isn't active
+        $proOrderby = ['rand', 'menu_order', 'comment_count'];
+        if ( ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE && in_array( $queryData['orderby'], $proOrderby ) ) {
+            $queryData['orderby'] = 'date';
+        }
 
         $args = [
             'post_type'        => $queryData['source'],

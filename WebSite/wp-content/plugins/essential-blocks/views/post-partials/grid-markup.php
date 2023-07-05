@@ -29,6 +29,20 @@ foreach ( $posts as $result ) {
     $tags          = require __DIR__ . '/meta/tags.php';
     $readtime      = require __DIR__ . '/meta/readtime.php';
 
+    $_meta_html = apply_filters(
+        'eb_post_grid_meta_markup',
+        array_merge( $tax_meta_html, [
+            'avatar' => $avatar,
+            'author' => $author,
+            'date' => $date,
+            'categories' => $categories,
+            'tags' => $tags,
+            'readtime' => $readtime,
+        ] ),
+        $result->ID,
+        $allMeta
+    );
+
     /**
      * Article Markup
      */
