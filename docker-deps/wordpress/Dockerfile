@@ -22,7 +22,6 @@ RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
     php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('/tmp/composer-setup.php'); exit(1); } echo PHP_EOL;" && \
     sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     rm /tmp/composer-setup.php
-    chmod +x /usr/local/bin/composer
 
 RUN curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > /usr/bin/wp && \
     chmod +x /usr/bin/wp
