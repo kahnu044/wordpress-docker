@@ -14,11 +14,16 @@ RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
 RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources.list.d/php.list && apt update -y && apt dist-upgrade -y
 RUN apt update -y
 RUN apt install -y php7.4-cli php7.4-bz2 php-common php7.4-curl php7.4-gd php7.4-json php7.4-mbstring php7.4-mysql php7.4-xml php7.4-curl php7.4-soap php7.4-bcmath php7.4-zip php7.4-gd php7.4-imagick php7.4-intl
-RUN php7.4 -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php7.4 -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
-    php7.4 composer-setup.php --install-dir=/usr/bin --filename=composer && \
-    php7.4 -r "unlink('composer-setup.php');" && \
-    chmod +x /usr/bin/composer
+
+# Download and install Composer
+RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
+    HASH=`curl -sS https://composer.github.io/installer.sig` && \
+    echo $HASH && \
+    php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('/tmp/composer-setup.php'); exit(1); } echo PHP_EOL;" && \
+    sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm /tmp/composer-setup.php
+    chmod +x /usr/local/bin/composer
+
 RUN curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > /usr/bin/wp && \
     chmod +x /usr/bin/wp
 RUN whoami
