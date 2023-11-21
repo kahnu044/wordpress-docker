@@ -10,10 +10,11 @@ class Slider extends Block {
         'essential-blocks-slickjs',
         'essential-blocks-vendor-bundle'
     ];
-    protected $frontend_styles = ['essential-blocks-frontend-style', 'essential-blocks-slick-style'];
+    protected $frontend_styles = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome','essential-blocks-slick-style', 'essential-blocks-common-style'];
 
     /**
      * Unique name of the block.
+     *
      * @return string
      */
     public function get_name() {
@@ -22,12 +23,14 @@ class Slider extends Block {
 
     /**
      * Register all other scripts
+     *
      * @return void
      */
     public function register_scripts() {
         $this->assets_manager->register(
             'slider-frontend',
-            $this->path() . '/frontend/index.js'
+            $this->path() . '/frontend/index.js',
+            ['jquery']
         );
     }
 }

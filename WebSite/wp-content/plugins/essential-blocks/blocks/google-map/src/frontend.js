@@ -1,7 +1,12 @@
+import { GOOGLE_MAP_STYLES, SNAZZY_MAP_STYLES } from "./constants";
 document.addEventListener("DOMContentLoaded", function (event) {
     let mapContainers = document.querySelectorAll(".eb-google-map-wrapper");
 
     if (mapContainers.length <= 0) {
+        return;
+    }
+
+    if (!window.google) {
         return;
     }
 
@@ -13,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let latitude = map.getAttribute("data-latitude") || "0";
         let longitude = map.getAttribute("data-longitude") || "0";
         let imageSize = map.getAttribute("data-image-size");
+        let themeSource = map.getAttribute("data-theme-source");
+        let googleMapStyle = map.getAttribute("data-google-style");
+        let snazzyMapStyle = map.getAttribute("data-snazzy-style");
         let markers = JSON.parse(map.getAttribute("data-marker"));
 
         const googleMap = new window.google.maps.Map(map, {
@@ -24,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
             zoom: markers.length === 1 ? parseInt(mapZoom) : 0,
             mapTypeId: mapType,
             zoomControl: mapZoom,
+            styles:
+                "google_theme" === themeSource
+                    ? GOOGLE_MAP_STYLES[googleMapStyle]
+                    : SNAZZY_MAP_STYLES[snazzyMapStyle],
         });
 
         if (markers && 0 < markers.length) {

@@ -39,7 +39,7 @@ const {
     TypographyDropdown,
     faIcons,
     AdvancedControls,
-    DynamicInputControl
+    DynamicInputControl,
 } = window.EBControls;
 
 import {
@@ -106,6 +106,7 @@ function Inspector(props) {
 
         //
         imageUrl,
+        imageAlt,
 
         //
         selectedIcon,
@@ -495,6 +496,54 @@ function Inspector(props) {
                                             </BaseControl>
                                         )}
                                     </PanelBody>
+
+                                    {enableButton && !isInfoClick && (
+                                        <PanelBody
+                                            title={__(
+                                                "Button",
+                                                "essential-blocks"
+                                            )}
+                                            initialOpen={false}
+                                        >
+                                            <DynamicInputControl
+                                                label="Button Text"
+                                                attrName="buttonText"
+                                                inputValue={buttonText}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) =>
+                                                    setAttributes({
+                                                        buttonText: text,
+                                                    })
+                                                }
+                                            />
+
+                                            <DynamicInputControl
+                                                label="Link URL (use https:// at the beginning)"
+                                                placeholder="https://your-site.com"
+                                                attrName="infoboxLink"
+                                                inputValue={infoboxLink}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) =>
+                                                    setAttributes({
+                                                        infoboxLink: text,
+                                                    })
+                                                }
+                                            />
+
+                                            <ToggleControl
+                                                label={__(
+                                                    "Open in New Tab",
+                                                    "essential-blocks"
+                                                )}
+                                                checked={linkNewTab}
+                                                onChange={() =>
+                                                    setAttributes({
+                                                        linkNewTab: !linkNewTab,
+                                                    })
+                                                }
+                                            />
+                                        </PanelBody>
+                                    )}
                                 </>
                             )}
                             {tab.name === "styles" && (
@@ -754,10 +803,12 @@ function Inspector(props) {
                                                             onSelect={({
                                                                 id,
                                                                 url,
+                                                                alt,
                                                             }) =>
                                                                 setAttributes({
                                                                     imageUrl: url,
                                                                     imageId: id,
+                                                                    imageAlt: alt,
                                                                 })
                                                             }
                                                             type="image"
@@ -1138,36 +1189,6 @@ function Inspector(props) {
                                                     })
                                                 }
                                             /> */}
-
-                                            <DynamicInputControl
-                                                label="Button Text"
-                                                attrName="buttonText"
-                                                inputValue={buttonText}
-                                                setAttributes={setAttributes}
-                                                onChange={(text) => setAttributes({ buttonText: text })}
-                                            />
-
-                                            <DynamicInputControl
-                                                label="Link URL (use https:// at the beginning)"
-                                                placeholder="https://your-site.com"
-                                                attrName="infoboxLink"
-                                                inputValue={infoboxLink}
-                                                setAttributes={setAttributes}
-                                                onChange={(text) => setAttributes({ infoboxLink: text })}
-                                            />
-
-                                            <ToggleControl
-                                                label={__(
-                                                    "Open in New Tab",
-                                                    "essential-blocks"
-                                                )}
-                                                checked={linkNewTab}
-                                                onChange={() =>
-                                                    setAttributes({
-                                                        linkNewTab: !linkNewTab,
-                                                    })
-                                                }
-                                            />
 
                                             <TypographyDropdown
                                                 baseLabel="Typography"

@@ -6,23 +6,30 @@ use EssentialBlocks\Utils\Helper;
 class PostGrid extends PostBlock {
     protected $frontend_scripts = ['essential-blocks-post-grid-frontend'];
 
-    protected $frontend_styles  = ['essential-blocks-frontend-style'];
+    protected $frontend_styles = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome'];
 
     protected static $default_attributes = [
-        'thumbnailSize'      => '',
-        'loadMoreOptions'    => false,
-        'showTaxonomyFilter' => false,
+        'thumbnailSize'       => '',
+        'loadMoreOptions'     => false,
+        'showTaxonomyFilter'  => false,
+        'showSearch'          => false,
+        'enableAjaxSearch'    => false,
+        'addIcon'             => false,
+        'iconPosition'        => 'left',
+        'icon'                => 'fas fa-chevron-right',
+        'preset'              => 'style-1',
+        'enableThumbnailSort' => true
     ];
 
-    public function get_default_attributes(){
-        return array_merge(parent::$default_attributes, self::$default_attributes);
+    public function get_default_attributes() {
+        return array_merge( parent::$default_attributes, self::$default_attributes );
     }
 
-	/**
+    /**
      * Unique name of the block.
-	 * @return string
-	 */
-    public function get_name(){
+     * @return string
+     */
+    public function get_name() {
         return 'post-grid';
     }
 
@@ -30,7 +37,7 @@ class PostGrid extends PostBlock {
      * Register all other scripts
      * @return void
      */
-    public function register_scripts(){
+    public function register_scripts() {
         $this->assets_manager->register(
             'post-grid-frontend',
             $this->path() . '/frontend/index.js'
@@ -44,38 +51,66 @@ class PostGrid extends PostBlock {
      * @param mixed $content
      * @return mixed
      */
-	public function render_callback($attributes, $content) {
-        if( is_admin() ) {
+    public function render_callback( $attributes, $content ) {
+        if ( is_admin() ) {
             return;
         }
 
         $queryData = $attributes["queryData"];
 
         //Query Result
-        $query = apply_filters('eb_post_grid_query_results', $this->get_posts( $queryData ));
+        $result = $this->get_posts( $queryData );
+        $query  = [];
+        if ( isset( $result->posts ) && is_array( $result->posts ) && count( $result->posts ) > 0 ) {
+            $query = apply_filters( 'eb_post_grid_query_results', $result->posts );
+        }
 
         $attributes = wp_parse_args( $attributes, $this->get_default_attributes() );
 
-        $className = isset($attributes["className"]) ? $attributes["className"] : "";
-        $classHook = isset($attributes['classHook']) ? $attributes['classHook'] : '';
+        //Set enableThumbnailSort to false if preset is 4/5
+        if ( isset( $attributes['enableThumbnailSort'] ) && !in_array($attributes["preset"], ['style-1', 'style-2', 'style-3']) ) {
+            $attributes['enableThumbnailSort'] = false;
+        }
+
+        $className = isset( $attributes["className"] ) ? $attributes["className"] : "";
+        $classHook = isset( $attributes['classHook'] ) ? $attributes['classHook'] : '';
 
         $_default_attributes = array_keys( parent::$default_attributes );
-        $_essential_attrs = [
-            'thumbnailSize' => $attributes["thumbnailSize"]
+        $_essential_attrs    = [
+            'thumbnailSize'      => $attributes["thumbnailSize"],
+            'loadMoreOptions'    => $attributes['loadMoreOptions'],
+            'showSearch'         => $attributes['showSearch'],
+            'showTaxonomyFilter' => $attributes['showTaxonomyFilter'],
+            'enableAjaxSearch'   => $attributes['enableAjaxSearch'],
+            'addIcon'            => $attributes['addIcon'],
+            'iconPosition'       => $attributes['iconPosition'],
+            'icon'               => $attributes['icon'],
+            'preset'             => $attributes['preset']
         ];
-        array_walk($_default_attributes, function ($key) use ($attributes, &$_essential_attrs) {
+
+        //set total posts
+        if ( isset( $result->found_posts ) ) {
+            if ( isset( $attributes['loadMoreOptions']['totalPosts'] ) ) {
+                $attributes['loadMoreOptions']['totalPosts'] = $result->found_posts;
+            }
+            if ( isset( $_essential_attrs['loadMoreOptions']['totalPosts'] ) ) {
+                $_essential_attrs['loadMoreOptions']['totalPosts'] = $result->found_posts;
+            }
+        }
+
+        array_walk( $_default_attributes, function ( $key ) use ( $attributes, &$_essential_attrs ) {
             $_essential_attrs[$key] = $attributes[$key];
-        });
+        } );
 
         ob_start();
-        Helper::views('post-grid', array_merge( $attributes, [
+        Helper::views( 'post-grid', array_merge( $attributes, [
             'essentialAttr' => $_essential_attrs,
             'className'     => $className,
             'classHook'     => $classHook,
             'posts'         => $query,
             'block_object'  => $this
-        ]));
+        ] ) );
 
         return ob_get_clean();
-	}
+    }
 }

@@ -24,13 +24,12 @@ class WPUnionType extends UnionType {
 	/**
 	 * WPUnionType constructor.
 	 *
-	 * @param array        $config The Config to setup a Union Type
+	 * @param array<string,mixed>              $config The Config to setup a Union Type
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry
 	 *
 	 * @since 0.0.30
 	 */
 	public function __construct( array $config, TypeRegistry $type_registry ) {
-
 		$this->type_registry = $type_registry;
 
 		/**
@@ -58,20 +57,20 @@ class WPUnionType extends UnionType {
 			return $prepared_types;
 		};
 
-		$config['resolveType'] = function ( $object ) use ( $config ) {
+		$config['resolveType'] = function ( $obj ) use ( $config ) {
 			$type = null;
 			if ( is_callable( $config['resolveType'] ) ) {
-				$type = call_user_func( $config['resolveType'], $object );
+				$type = call_user_func( $config['resolveType'], $obj );
 			}
 
 			/**
 			 * Filter the resolve type method for all unions
 			 *
-			 * @param mixed       $type          The Type to resolve to, based on the object being resolved
-			 * @param mixed       $object        The Object being resolved
+			 * @param mixed $type The Type to resolve to, based on the object being resolved
+			 * @param mixed $obj  The Object being resolved
 			 * @param \WPGraphQL\Type\WPUnionType $wp_union_type The WPUnionType instance
 			 */
-			return apply_filters( 'graphql_union_resolve_type', $type, $object, $this );
+			return apply_filters( 'graphql_union_resolve_type', $type, $obj, $this );
 		};
 
 		/**

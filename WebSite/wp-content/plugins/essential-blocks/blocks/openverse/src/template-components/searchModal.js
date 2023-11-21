@@ -241,7 +241,7 @@ export default function SeachModal(props) {
 						{__("Select Media", "essential-blocks")}
 					</div>
 					<button className="close-btn" onClick={() => props.setTrigger(false)}>
-						<span class="dashicons dashicons-no"></span>
+						<span className="dashicons dashicons-no"></span>
 					</button>
 				</div>
 				<div className="openverse-modal__content">

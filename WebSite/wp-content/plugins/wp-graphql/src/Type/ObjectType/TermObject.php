@@ -2,7 +2,6 @@
 
 namespace WPGraphQL\Type\ObjectType;
 
-use Exception;
 use WP_Taxonomy;
 
 /**
@@ -27,5 +26,4 @@ class TermObject {
 
 		\WPGraphQL\Registry\Utils\TermObject::register_types( $tax_object );
 	}
-
 }

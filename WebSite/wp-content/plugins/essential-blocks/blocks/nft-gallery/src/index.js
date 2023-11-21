@@ -26,5 +26,9 @@ ebConditionalRegisterBlockType(metadata, {
     ],
     edit: Edit,
     save: Save,
-    example: {}
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/nft-gallery/image/screenshot.png`,
+        },
+    },
 });

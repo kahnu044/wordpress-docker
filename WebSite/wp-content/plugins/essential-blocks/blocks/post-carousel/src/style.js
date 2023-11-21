@@ -54,11 +54,7 @@ const {
 } = window.EBControls;
 
 export default function Style(props) {
-    const {
-        attributes,
-        setAttributes,
-        name
-    } = props;
+    const { attributes, setAttributes, name } = props;
     const {
         blockId,
         blockMeta,
@@ -558,8 +554,9 @@ export default function Style(props) {
 		// 	${columnBDShadowHoverDesktop}
 		// }
 
-		${preset === "style-1"
-            ? `
+		${
+            preset === "style-1"
+                ? `
 				.eb-post-carousel-wrapper.${blockId}.style-1 .ebpg-carousel-post-holder::after {
 					${columnBackgroundStylesDesktop}
 					${columnPaddingStylesDesktop}
@@ -570,11 +567,12 @@ export default function Style(props) {
 					${columnBDShadowHoverDesktop}
 				}
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-2"
-            ? `
+		${
+            preset === "style-2"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesDesktop}
 					${columnBDShadowDesktop}
@@ -587,11 +585,12 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-3"
-            ? `
+		${
+            preset === "style-3"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesDesktop}
 					${columnBDShadowDesktop}
@@ -604,22 +603,24 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-3" && mediaWidthStylesDesktop
-            ? `
+		${
+            preset === "style-3" && mediaWidthStylesDesktop
+                ? `
 			.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumber === "0"
-                ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumber === "0"
+                    ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumber}%;
 				}`
-                : mediaWidthNumber === "100"
+                    : mediaWidthNumber === "100"
                     ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 						flex-wrap: wrap;
 					}
@@ -636,10 +637,11 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumber}%;
 				}`
             }`
-            : ""
+                : ""
         }
-		${preset === "style-4"
-            ? `
+		${
+            preset === "style-4"
+                ? `
 
 			.eb-post-carousel-wrapper.${blockId}.style-4 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 				justify-content: ${styleVerticalAlignment};
@@ -653,15 +655,16 @@ export default function Style(props) {
 				border-width: 0px !important;
 			}
 			`
-            : ""
+                : ""
         }
 
 	`;
 
     let mediaWidthNumberTab = mediaWidthStylesTab.replace(/\D/g, "");
     const carouselColumnStylesTab = `
-		${preset === "style-1"
-            ? `
+		${
+            preset === "style-1"
+                ? `
 				.eb-post-carousel-wrapper.${blockId}.style-1 .ebpg-carousel-post-holder::after {
 					${columnBackgroundStylesTab}
 					${columnPaddingStylesTab}
@@ -672,11 +675,12 @@ export default function Style(props) {
 					${columnBDShadowHoverTab}
 				}
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-2"
-            ? `
+		${
+            preset === "style-2"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesTab}
 					${columnBDShadowDesktop}
@@ -689,11 +693,12 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-3"
-            ? `
+		${
+            preset === "style-3"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesTab}
 					${columnBDShadowDesktop}
@@ -704,22 +709,24 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-3" && mediaWidthStylesTab
-            ? `
+		${
+            preset === "style-3" && mediaWidthStylesTab
+                ? `
 			.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumberTab === "0"
-                ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumberTab === "0"
+                    ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumberTab}%;
 				}`
-                : mediaWidthNumberTab === "100"
+                    : mediaWidthNumberTab === "100"
                     ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 						flex-wrap: wrap;
 					}
@@ -736,10 +743,11 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumberTab}%;
 				}`
             }`
-            : ""
+                : ""
         }
-		${preset === "style-4"
-            ? `
+		${
+            preset === "style-4"
+                ? `
 
 			.eb-post-carousel-wrapper.${blockId}.style-4 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 				${columnPaddingStylesTab}
@@ -751,14 +759,15 @@ export default function Style(props) {
 				${columnBDShadowTab}
 			}
 			`
-            : ""
+                : ""
         }
 	`;
 
     let mediaWidthNumberMobile = mediaWidthStylesMobile.replace(/\D/g, "");
     const carouselColumnStylesMobile = `
-		${preset === "style-1"
-            ? `
+		${
+            preset === "style-1"
+                ? `
 				.eb-post-carousel-wrapper.${blockId}.style-1 .ebpg-carousel-post-holder::after {
 					${columnBackgroundStylesMobile}
 					${columnPaddingStylesMobile}
@@ -769,11 +778,12 @@ export default function Style(props) {
 					${columnBDShadowHoverMobile}
 				}
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-2"
-            ? `
+		${
+            preset === "style-2"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesMobile}
 					${columnBDShadowMobile}
@@ -784,11 +794,12 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
 
-		${preset === "style-3"
-            ? `
+		${
+            preset === "style-3"
+                ? `
 				.eb-post-carousel-wrapper.${blockId} .ebpg-carousel-post-holder {
 					${columnBackgroundStylesMobile}
 					${columnBDShadowDesktop}
@@ -799,21 +810,23 @@ export default function Style(props) {
 				}
 
 			`
-            : ""
+                : ""
         }
-		${preset === "style-3" && mediaWidthStylesMobile
-            ? `
+		${
+            preset === "style-3" && mediaWidthStylesMobile
+                ? `
 			.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumberMobile === "0"
-                ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumberMobile === "0"
+                    ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumberMobile}%;
 				}`
-                : mediaWidthNumberMobile === "100"
+                    : mediaWidthNumberMobile === "100"
                     ? `.eb-post-carousel-wrapper.${blockId}.style-3 .ebpg-carousel-post-holder {
 						flex-wrap: wrap;
 					}
@@ -830,10 +843,11 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumberMobile}%;
 				}`
             }`
-            : ""
+                : ""
         }
-		${preset === "style-4"
-            ? `
+		${
+            preset === "style-4"
+                ? `
 
 			.eb-post-carousel-wrapper.${blockId}.style-4 .ebpg-carousel-post-holder .ebpg-entry-wrapper {
 				${columnPaddingStylesMobile}
@@ -845,7 +859,7 @@ export default function Style(props) {
 				${columnBDShadowMobile}
 			}
 			`
-            : ""
+                : ""
         }
 	`;
 
@@ -1369,6 +1383,18 @@ export default function Style(props) {
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active {
 			width: calc(${MOBdotsSizeRange}${MOBdotsSizeUnit}* 2);
 		}
+
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li button:before {
+			background-color: ${dotsColor} !important;
+			font-size: 0;
+		}
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li.slick-active button:before,
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li.slick-active button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li.slick-active button:before {
+			background-color: ${dotsActiveColor} !important;
+		}
 	`;
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
@@ -1442,5 +1468,5 @@ export default function Style(props) {
                 blockName={name}
             />
         </>
-    )
+    );
 }

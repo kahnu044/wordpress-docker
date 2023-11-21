@@ -32,13 +32,12 @@ class WPSchema extends Schema {
 	/**
 	 * WPSchema constructor.
 	 *
-	 * @param \GraphQL\Type\SchemaConfig $config The config for the Schema.
+	 * @param \GraphQL\Type\SchemaConfig       $config The config for the Schema.
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry
 	 *
 	 * @since 0.0.9
 	 */
 	public function __construct( SchemaConfig $config, TypeRegistry $type_registry ) {
-
 		$this->config = $config;
 
 		/**
@@ -52,5 +51,4 @@ class WPSchema extends Schema {
 		$this->filterable_config = apply_filters( 'graphql_schema_config', $config, $type_registry );
 		parent::__construct( $this->filterable_config );
 	}
-
 }

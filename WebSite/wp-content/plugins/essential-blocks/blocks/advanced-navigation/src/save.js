@@ -30,7 +30,7 @@ export default function save({ attributes }) {
 						navBtnType === true ? "responsive-icon" : "responsive-text"
 					} ${hamburgerCloseIconAlign}`}
 				>
-					<div class="eb-nav-contents">
+					<div className="eb-nav-contents">
 						<InnerBlocks.Content />
 					</div>
 				</div>

@@ -5,10 +5,11 @@ use EssentialBlocks\Core\Block;
 
 class Tab extends Block {
 	/**
-     * Unique name of the block.
+	 * Unique name of the block.
+	 *
 	 * @return string
 	 */
-    public function get_name(){
-        return 'tab';
-    }
+	public function get_name() {
+		return 'tab';
+	}
 }

@@ -30,6 +30,8 @@ const Save = ({ attributes }) => {
         buttonClasses,
         contentPosition,
         linkOpenNewTab,
+        flipMode,
+        isMouseLeaveOn,
         classHook,
     } = attributes;
 
@@ -39,6 +41,8 @@ const Save = ({ attributes }) => {
             : contentPosition === "right"
             ? " eb-flipbox-align-right"
             : "";
+    const flipModeClass =
+        flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
     return (
         <div {...useBlockProps.save()}>
@@ -46,11 +50,19 @@ const Save = ({ attributes }) => {
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
                 <div
-                    className={`eb-flipbox-container ${blockId}${alignmentClass}`}
+                    className={`eb-flipbox-container ${blockId}${alignmentClass}${flipModeClass}`}
                     data-id={blockId}
                     data-flip-type={flipType}
+                    data-flip-mode={flipMode}
+                    {...("click" === flipMode
+                        ? { "data-flip-mouseleave": isMouseLeaveOn }
+                        : {})}
                 >
-                    <div className={`eb-flipper ${flipType}`}>
+                    <div
+                        className={`eb-flipper${
+                            "hover" === flipMode ? " " + flipType : ""
+                        }`}
+                    >
                         <div className="eb-flipbox-front">
                             <div className="eb-flipbox-items-container">
                                 {frontIconOrImage !== "none" && (

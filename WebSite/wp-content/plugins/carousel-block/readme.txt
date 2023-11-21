@@ -3,7 +3,7 @@ Contributors: virgildia
 Donate link: http://virgiliudiaconu.com/
 Tags: gutenberg, carousel, slide, slideshow, slider, block
 Requires at least: 5.8
-Tested up to: 6.0
+Tested up to: 6.4
 Requires PHP: 5.6+
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -109,3 +109,9 @@ Added responsive setting for slides to scroll at a time.
 
 = 1.0.8 =
 Small CSS improvements in the editor. Updated slick CSS stylesheet handle. Tested on WordPress 6.0.
+
+= 1.0.9 =
+Fixed error message on Widget Editor screen. Tested on WordPress 6.3.1.
+
+= 1.0.10 =
+Fixed lodash error with latest WordPress 6.4 update

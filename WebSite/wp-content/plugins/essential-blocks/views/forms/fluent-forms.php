@@ -40,13 +40,13 @@
 ?>
 
 <div
-    <?php esc_attr_e( $wrapper_attributes );?>>
-    <div class="<?php esc_attr_e( implode( ' ', $_wrapper_classes ) );?> eb-parent-wrapper">
-        <div class="<?php esc_attr_e( implode( ' ', $_form_wrapper_classes ) );?>">
-            <?php
-                $shortcode = sprintf( '[fluentform id="' . $formId . '"]' );
-                echo do_shortcode( shortcode_unautop( $shortcode ) );
+	<?php echo wp_kses_data( $wrapper_attributes ); ?>>
+	<div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-parent-wrapper">
+		<div class="<?php echo esc_attr( implode( ' ', $_form_wrapper_classes ) ); ?>">
+			<?php
+                $shortcode = sprintf( '[fluentform id="%s"]', esc_attr( $formId ) );
+                echo do_shortcode( shortcode_unautop( wp_kses_post( $shortcode ) ) );
             ?>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>

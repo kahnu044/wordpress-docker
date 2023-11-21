@@ -7,34 +7,40 @@ use EssentialBlocks\Traits\HasSingletone;
 use WP_REST_Server;
 
 abstract class Base {
-    use HasSingletone;
+	use HasSingletone;
 
-    /**
-     * Register REST Routes
-     *
-     * @return void
-     */
-    abstract function register();
+	/**
+	 * Register REST Routes
+	 *
+	 * @return void
+	 */
+	abstract function register();
 
-    public function register_endpoint( $endpoint, $args = [] ){
-        register_rest_route( 'essential-blocks/v1', $endpoint, $args );
-    }
+	public function register_endpoint( $endpoint, $args = array() ) {
+		register_rest_route( 'essential-blocks/v1', $endpoint, $args );
+	}
 
-    public function get( $endpoint, $args = [] ){
-        $_args = wp_parse_args( $args, [
-            'methods' => WP_REST_Server::READABLE,
-            'permission_callback' => '__return_true'
-        ]);
+	public function get( $endpoint, $args = array() ) {
+		$_args = wp_parse_args(
+			$args,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'permission_callback' => '__return_true',
+			)
+		);
 
-        $this->register_endpoint($endpoint, $_args);
-    }
+		$this->register_endpoint( $endpoint, $_args );
+	}
 
-    public function post( $endpoint, $args = [] ){
-        $_args = wp_parse_args( $args, [
-            'methods' => WP_REST_Server::CREATABLE,
-            'permission_callback' => '__return_true'
-        ]);
+	public function post( $endpoint, $args = array() ) {
+		$_args = wp_parse_args(
+			$args,
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'permission_callback' => '__return_true',
+			)
+		);
 
-        $this->register_endpoint($endpoint, $_args);
-    }
+		$this->register_endpoint( $endpoint, $_args );
+	}
 }

@@ -4,14 +4,8 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31
+class ComposerStaticInite4233d9d1c831bf27939e187620292ff
 {
-    public static $files = array (
-        'a3ed03db03d57650e139da3e8903943c' => __DIR__ . '/../..' . '/access-functions.php',
-        'f23fb2f3f8f0b37aeaa2e54bba971cf2' => __DIR__ . '/../..' . '/activation.php',
-        '041a301cb7808aeb8a9086a5113fbadc' => __DIR__ . '/../..' . '/deactivation.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
         'W' => 
         array (
@@ -370,6 +364,7 @@ class ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31
         'WPGraphQL\\Type\\Enum\\PostObjectsConnectionOrderbyEnum' => __DIR__ . '/../..' . '/src/Type/Enum/PostObjectsConnectionOrderbyEnum.php',
         'WPGraphQL\\Type\\Enum\\PostStatusEnum' => __DIR__ . '/../..' . '/src/Type/Enum/PostStatusEnum.php',
         'WPGraphQL\\Type\\Enum\\RelationEnum' => __DIR__ . '/../..' . '/src/Type/Enum/RelationEnum.php',
+        'WPGraphQL\\Type\\Enum\\ScriptLoadingStrategyEnum' => __DIR__ . '/../..' . '/src/Type/Enum/ScriptLoadingStrategyEnum.php',
         'WPGraphQL\\Type\\Enum\\TaxonomyEnum' => __DIR__ . '/../..' . '/src/Type/Enum/TaxonomyEnum.php',
         'WPGraphQL\\Type\\Enum\\TaxonomyIdTypeEnum' => __DIR__ . '/../..' . '/src/Type/Enum/TaxonomyIdTypeEnum.php',
         'WPGraphQL\\Type\\Enum\\TermNodeIdTypeEnum' => __DIR__ . '/../..' . '/src/Type/Enum/TermNodeIdTypeEnum.php',
@@ -459,9 +454,9 @@ class ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5ed7a79210c1a5e59ebbd078da057d31::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite4233d9d1c831bf27939e187620292ff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite4233d9d1c831bf27939e187620292ff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite4233d9d1c831bf27939e187620292ff::$classMap;
 
         }, null, ClassLoader::class);
     }

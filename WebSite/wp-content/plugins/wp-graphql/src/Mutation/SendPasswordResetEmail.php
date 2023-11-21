@@ -2,10 +2,7 @@
 
 namespace WPGraphQL\Mutation;
 
-use Exception;
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WP_User;
 use WPGraphQL\AppContext;
 
 class SendPasswordResetEmail {
@@ -31,9 +28,9 @@ class SendPasswordResetEmail {
 	/**
 	 * Defines the mutation input field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
-	public static function get_input_fields() : array {
+	public static function get_input_fields(): array {
 		return [
 			'username' => [
 				'type'        => [
@@ -47,15 +44,15 @@ class SendPasswordResetEmail {
 	/**
 	 * Defines the mutation output field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
-	public static function get_output_fields() : array {
+	public static function get_output_fields(): array {
 		return [
 			'user'    => [
 				'type'              => 'User',
 				'description'       => __( 'The user that the password reset email was sent to', 'wp-graphql' ),
 				'deprecationReason' => __( 'This field will be removed in a future version of WPGraphQL', 'wp-graphql' ),
-				'resolve'           => function ( $payload, $args, AppContext $context ) {
+				'resolve'           => static function ( $payload, $args, AppContext $context ) {
 					return ! empty( $payload['id'] ) ? $context->get_loader( 'user' )->load_deferred( $payload['id'] ) : null;
 				},
 			],
@@ -68,13 +65,11 @@ class SendPasswordResetEmail {
 
 	/**
 	 * Defines the mutation data modification closure.
-	 *
-	 * @return callable
 	 */
-	public static function mutate_and_get_payload() : callable {
-		return function ( $input ) {
+	public static function mutate_and_get_payload(): callable {
+		return static function ( $input ) {
 			if ( ! self::was_username_provided( $input ) ) {
-				throw new UserError( __( 'Enter a username or email address.', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Enter a username or email address.', 'wp-graphql' ) );
 			}
 
 			// We obsfucate the actual success of this mutation to prevent user enumeration.
@@ -131,7 +126,7 @@ class SendPasswordResetEmail {
 	/**
 	 * Was a username or email address provided?
 	 *
-	 * @param array $input The input args.
+	 * @param array<string,mixed> $input The input args.
 	 *
 	 * @return bool
 	 */
@@ -142,13 +137,12 @@ class SendPasswordResetEmail {
 	/**
 	 * Get WP_User object representing this user
 	 *
-	 * @param  string $username The user's username or email address.
+	 * @param string $username The user's username or email address.
 	 *
 	 * @return \WP_User|false WP_User object on success, false on failure.
 	 */
 	private static function get_user_data( $username ) {
 		if ( self::is_email_address( $username ) ) {
-
 			$username = wp_unslash( $username );
 
 			if ( ! is_string( $username ) ) {
@@ -164,7 +158,7 @@ class SendPasswordResetEmail {
 	/**
 	 * Get the error message indicating why the user wasn't found
 	 *
-	 * @param  string $username The user's username or email address.
+	 * @param string $username The user's username or email address.
 	 *
 	 * @return string
 	 */
@@ -179,7 +173,7 @@ class SendPasswordResetEmail {
 	/**
 	 * Is the provided username arg an email address?
 	 *
-	 * @param  string $username The user's username or email address.
+	 * @param string $username The user's username or email address.
 	 *
 	 * @return bool
 	 */

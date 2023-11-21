@@ -102,7 +102,7 @@ const save = ({ attributes }) => {
                                 <div className="eb-player-wrapper">
                                     <span
                                         id={`close-${blockId}`}
-                                        class="eb-modal-close"
+                                        className="eb-modal-close"
                                     >
                                         &times;
                                     </span>

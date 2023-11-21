@@ -7,6 +7,12 @@
  * @package uagb
  */
 
+/**
+ * Adding this comment to avoid PHPStan errors of undefined variable as these variables are defined else where.
+ *
+ * @var int $id
+ */
+
 // Add fonts.
 UAGB_Block_JS::blocks_advanced_image_gfont( $attr );
 
@@ -223,7 +229,7 @@ if ( 'none' !== $attr['maskShape'] ) {
 		$imagePath = $attr['maskCustomShape']['url'];
 	}
 	if ( ! empty( $imagePath ) ) {
-		$selectors['.wp-block-uagb-image .wp-block-uagb-image__figure img'] = array(
+		$selectors[ '.wp-block-uagb-image .wp-block-uagb-image__figure img, .uagb-block-' . $id . ' .wp-block-uagb-image--layout-overlay__color-wrapper' ] = array(
 			'mask-image'            => 'url(' . $imagePath . ')',
 			'-webkit-mask-image'    => 'url(' . $imagePath . ')',
 			'mask-size'             => $attr['maskSize'],
@@ -237,8 +243,8 @@ if ( 'none' !== $attr['maskShape'] ) {
 }
 
 // tablet.
-$t_selectors['.wp-block-uagb-image--layout-default figure']           = $image_border_css_tablet;
-$t_selectors['.wp-block-uagb-image--layout-overlay figure']           = $image_border_css_tablet;
+$t_selectors['.wp-block-uagb-image--layout-default figure img']       = $image_border_css_tablet;
+$t_selectors['.wp-block-uagb-image--layout-overlay figure img']       = $image_border_css_tablet;
 $t_selectors['.wp-block-uagb-image .wp-block-uagb-image__figure img'] = array(
 	'width' => UAGB_Helper::get_css_value( $attr['widthTablet'], 'px' ),
 );
@@ -285,8 +291,8 @@ if ( $attr['customHeightSetTablet'] ) {
 }
 
 // mobile.
-$m_selectors['.wp-block-uagb-image--layout-default figure']           = $image_border_css_mobile;
-$m_selectors['.wp-block-uagb-image--layout-overlay figure']           = $image_border_css_mobile;
+$m_selectors['.wp-block-uagb-image--layout-default figure img']       = $image_border_css_mobile;
+$m_selectors['.wp-block-uagb-image--layout-overlay figure img']       = $image_border_css_mobile;
 $m_selectors['.wp-block-uagb-image .wp-block-uagb-image__figure img'] = array(
 	'width' => UAGB_Helper::get_css_value( $attr['widthMobile'], 'px' ),
 );
@@ -344,4 +350,8 @@ $base_selector = '.uagb-block-';
 $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'heading', '.wp-block-uagb-image--layout-overlay .wp-block-uagb-image--layout-overlay__inner .uagb-image-heading', $combined_selectors );
 $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'caption', '.wp-block-uagb-image .wp-block-uagb-image__figure figcaption', $combined_selectors );
 
-return UAGB_Helper::generate_all_css( $combined_selectors, $base_selector . $id );
+return UAGB_Helper::generate_all_css(
+	$combined_selectors,
+	$base_selector . $id,
+	isset( $gbs_class ) ? $gbs_class : ''
+);

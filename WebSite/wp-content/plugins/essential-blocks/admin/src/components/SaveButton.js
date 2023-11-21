@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 
 import "./style.css";
 
-import { saveEBSettingsData } from "./helpers/fetchData";
+const { saveEBSettingsData } = window.EBControls;
 
 const SaveButton = (props) => {
 	const {

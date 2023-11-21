@@ -1,6 +1,6 @@
 import { useEffect, useState } from "@wordpress/element";
 
-import { saveEBSettingsData } from "../helpers/fetchData";
+const { saveEBSettingsData } = window.EBControls;
 
 const OpenseaNft = (props) => {
     const { setTrigger, settingsKey, settingsData, setSettingsData } = props;

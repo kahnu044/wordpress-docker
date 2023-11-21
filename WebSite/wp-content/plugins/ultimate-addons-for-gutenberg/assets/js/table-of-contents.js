@@ -3,7 +3,7 @@ let scrollOffset = 30;
 let scrolltoTop = false;
 let scrollElement = null;
 
-// eslint-disable-next-line no-undef
+
 UAGBTableOfContents = {
 	_getDocumentElement() {
 		let document_element = document;
@@ -16,21 +16,22 @@ UAGBTableOfContents = {
 		}
 		return document_element;
 	},
-	init( id ) {
+	init( id, attr ) {
 		const document_element = UAGBTableOfContents._getDocumentElement();
 		if ( document.querySelector( '.uagb-toc__list' ) !== null ) {
 			document.querySelector( '.uagb-toc__list' ).addEventListener(
 				'click',
-				UAGBTableOfContents._scroll // eslint-disable-line no-undef
+				UAGBTableOfContents._scroll
 			);
 		}
 		if ( document.querySelector( '.uagb-toc__scroll-top' ) !== null ) {
 			document.querySelector( '.uagb-toc__scroll-top' ).addEventListener(
 				'click',
-				UAGBTableOfContents._scrollTop // eslint-disable-line no-undef
+				UAGBTableOfContents._scrollTop
 			);
 		}
 
+		if( attr?.makeCollapsible ){
 		const elementToOpen = document_element.querySelector( id );
 
 		/* We need the following fail-safe click listener cause an usual click-listener
@@ -42,8 +43,8 @@ UAGBTableOfContents = {
 			const element = event.target;
 
 			// These two conditions help us target the required element (collapsible icon beside TOC heading).
-			const condition1 = element?.tagName === 'path' || element?.tagName === 'svg'; // Check if the clicked element type is either path or SVG.
-			const condition2 = element?.parentNode?.className === 'uagb-toc__title'; // Check if the clicked element's parent has the required class.
+			const condition1 = element?.tagName === 'path' || element?.tagName === 'svg' || element?.tagName === 'DIV'; // Check if the clicked element type is either path or SVG or Title DIV.
+			const condition2 = element?.className === 'uagb-toc__title' || element?.parentNode?.className === 'uagb-toc__title' || element?.parentNode?.tagName === 'svg'; // Check if the clicked element's parent has the required class.
 
 			if ( condition1 && condition2 ) {
 				const $root = element?.closest( `.wp-block-uagb-table-of-contents${id}` );
@@ -67,10 +68,11 @@ UAGBTableOfContents = {
 				}
 			}
 		}
+	}
 
 		document.addEventListener(
 			'scroll',
-			UAGBTableOfContents._showHideScroll // eslint-disable-line no-undef
+			UAGBTableOfContents._showHideScroll
 		);
 	},
 
@@ -147,7 +149,6 @@ UAGBTableOfContents = {
 		const offset = document.querySelector( hash ).offsetTop;
 
 		if ( null !== offset ) {
-			// eslint-disable-next-line no-undef
 			scroll( {
 				top: offset - scrollOffset,
 				behavior: 'smooth',
@@ -182,7 +183,7 @@ UAGBTableOfContents = {
 
 		let hash = e.target.getAttribute( 'href' );
 		if ( hash ) {
-			const node = document.querySelector( '.wp-block-uagb-table-of-contents' ); // eslint-disable-line no-undef
+			const node = document.querySelector( '.wp-block-uagb-table-of-contents' );
 
 			scrollData = node.getAttribute( 'data-scroll' );
 			scrollOffset = node.getAttribute( 'data-offset' );
@@ -195,20 +196,28 @@ UAGBTableOfContents = {
 			}
 			if ( scrollData ) {
 				if ( null !== offset ) {
-					// eslint-disable-next-line no-undef
 					scroll( {
 						top: offset - scrollOffset,
 						behavior: 'smooth',
 					} );
 				}
 			} else {
-				// eslint-disable-next-line no-undef
 				scroll( {
 					top: offset,
 					behavior: 'auto',
 				} );
 			}
 		}
+	},
+	selectDomElement( id ){
+		// Select id class but not with script init class.
+		const thisScope = document.querySelector( `${ id }:not(.script-init)` );
+		if ( ! thisScope ) {
+			return null;
+		}
+		// Add script init class to avoid reinit.
+		thisScope.classList.add( 'script-init' );
+		return thisScope;
 	},
 
 	/**
@@ -231,7 +240,7 @@ UAGBTableOfContents = {
 				.replace( /\u2013|\u2014/g, '' ) // Remove long dash
 				.replace( /&(amp;)/g, '' ) // Remove &
 				.replace( /[&]nbsp[;]/gi, '-' ) // Replace inseccable spaces
-				.replace( /[^a-z0-9 -_]/gi, '' ) // Keep only alphnumeric, space, -, _
+				.replace( /[^a-zA-Z0-9\u00C0-\u017F _-]/g, '' ) // Keep only alphnumeric, space, -, _ and latin characters.
 				.replace( /&(mdash;)/g, '' ) // Remove long dash
 				.replace( /\s+/g, '-' ) // Replace spaces with -
 				.replace( /[&\/\\#,^!+()$~%.\[\]'":*?;-_<>{}@‘’”“|]/g, '' ) // Remove special chars
@@ -241,10 +250,12 @@ UAGBTableOfContents = {
 
 			return decodeURI( encodeURIComponent( parsedSlug ) );
 		};
-		const $thisScope = document.querySelector( id );
+		const $thisScope = UAGBTableOfContents.selectDomElement( id );
+
 		if ( ! $thisScope ) {
 			return;
 		}
+		
 		if ( $thisScope.querySelector( '.uag-toc__collapsible-wrap' ) !== null ) {
 			if ( $thisScope.querySelector( '.uag-toc__collapsible-wrap' ).length > 0 ) {
 				$thisScope.querySelector( '.uagb-toc__title-wrap' ).classList.add( 'uagb-toc__is-collapsible' );
@@ -340,8 +351,8 @@ UAGBTableOfContents = {
 		if ( scrollElement !== null ) {
 			scrollElement.classList.add( 'uagb-toc__show-scroll' );
 		}
-		UAGBTableOfContents._showHideScroll(); // eslint-disable-line no-undef
-		UAGBTableOfContents.hyperLinks(); // eslint-disable-line no-undef
-		UAGBTableOfContents.init( id ); // eslint-disable-line no-undef
+		UAGBTableOfContents._showHideScroll();
+		UAGBTableOfContents.hyperLinks();
+		UAGBTableOfContents.init( id, attr );
 	},
 };

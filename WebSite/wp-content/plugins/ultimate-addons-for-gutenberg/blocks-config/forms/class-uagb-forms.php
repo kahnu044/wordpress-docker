@@ -98,8 +98,8 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 		/**
 		 * Return array of validated attributes.
 		 *
-		 * @param array $block_attr of Block.
-		 * @param int   $block_id of Block.
+		 * @param array  $block_attr of Block.
+		 * @param string $block_id of Block.
 		 * @since 2.6.2
 		 * @return array
 		 */
@@ -124,8 +124,8 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 		 * @since 2.3.5
 		 * @access private
 		 *
-		 * @param  array $blocks_array Block Array.
-		 * @param  int   $block_id of Block.
+		 * @param  array  $blocks_array Block Array.
+		 * @param  string $block_id of Block.
 		 *
 		 * @return mixed $recursive_inner_forms inner blocks Array.
 		 */
@@ -196,7 +196,7 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 					$current_block_attributes = $this->recursive_inner_forms( $blocks, $block_id );
 				}
 			}
-			if ( wp_is_block_theme() ) {
+			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 				$wp_query_args        = array(
 					'post_status' => array( 'publish' ),
 					'post_type'   => 'wp_template',
@@ -216,6 +216,9 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 						$template_content      = parse_blocks( $template_post_content );
 						if ( get_template() === $template->theme && ! empty( $template_content ) && is_array( $template_content ) ) {
 							$current_block_attributes = $this->recursive_inner_forms( $template_content, $block_id );
+							if ( is_array( $current_block_attributes ) && $current_block_attributes['block_id'] === $block_id ) {
+								break;
+							}
 						}
 					}
 				}
@@ -236,8 +239,48 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 				}
 			}
 
+			// Check for $current_block_attributes is not set and check for Advanced Hooks.
+			if ( empty( $current_block_attributes ) && defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) ) {
+
+				$option = array(
+					'location'  => 'ast-advanced-hook-location',
+					'exclusion' => 'ast-advanced-hook-exclusion',
+					'users'     => 'ast-advanced-hook-users',
+				);
+				
+				$result = Astra_Target_Rules_Fields::get_instance()->get_posts_by_conditions( ASTRA_ADVANCED_HOOKS_POST_TYPE, $option );
+
+				if ( ! empty( $result ) && is_array( $result ) ) {
+					$post_ids = array_keys( $result );
+					
+					foreach ( $post_ids as $post_id ) {
+
+						$custom_post = get_post( $post_id );
+
+						if ( ! $custom_post instanceof WP_Post ) {
+							continue;
+						}
+
+						$post_content = $custom_post->post_content;
+						if ( has_block( 'uagb/forms', $post_content ) ) {
+							$blocks = parse_blocks( $post_content );
+							if ( ! empty( $blocks ) && is_array( $blocks ) ) {
+								$current_block_attributes = $this->recursive_inner_forms( $blocks, $block_id );
+								if ( is_array( $current_block_attributes ) && $current_block_attributes['block_id'] === $block_id ) {
+									break;
+								}
+							}
+						}
+					}               
+				}
+			}
+
 			if ( empty( $current_block_attributes ) ) {
 				wp_send_json_error( 400 );
+			}
+			$admin_email = get_option( 'admin_email' );
+			if ( is_array( $current_block_attributes ) && isset( $current_block_attributes['afterSubmitToEmail'] ) && empty( trim( $current_block_attributes['afterSubmitToEmail'] ) ) && is_string( $admin_email ) ) {
+				$current_block_attributes['afterSubmitToEmail'] = sanitize_email( $admin_email );
 			}
 			if ( ! isset( $current_block_attributes['reCaptchaType'] ) ) {
 				$current_block_attributes['reCaptchaType'] = 'v2';
@@ -340,6 +383,30 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 
 		}
 
+		/**
+		 * Validate emails from $to, $cc and $bcc.
+		 *
+		 * @param array $emails array.
+		 * @since 2.7.0
+		 * @return array
+		 */
+		public function get_valid_emails( $emails ) {
+			$valid_emails = array();
+
+			if ( is_array( $emails ) ) {
+				foreach ( $emails as $email ) {
+					$email = trim( $email );
+					$email = sanitize_email( $email );
+
+					if ( is_email( $email ) ) {
+						$valid_emails[] = $email;
+					}
+				}
+			}
+
+			return $valid_emails;
+		}
+
 
 		/**
 		 *
@@ -353,33 +420,55 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 		 */
 		public function send_email( $body, $form_data, $args ) {
 
-			$to      = isset( $args['afterSubmitToEmail'] ) ? sanitize_email( $args['afterSubmitToEmail'] ) : sanitize_email( get_option( 'admin_email' ) );
-			$cc      = isset( $args['afterSubmitCcEmail'] ) ? sanitize_email( $args['afterSubmitCcEmail'] ) : '';
-			$bcc     = isset( $args['afterSubmitBccEmail'] ) ? sanitize_email( $args['afterSubmitBccEmail'] ) : '';
+			$to      = isset( $args['afterSubmitToEmail'] ) ? trim( $args['afterSubmitToEmail'] ) : sanitize_email( get_option( 'admin_email' ) );
+			$cc      = isset( $args['afterSubmitCcEmail'] ) ? trim( $args['afterSubmitCcEmail'] ) : '';
+			$bcc     = isset( $args['afterSubmitBccEmail'] ) ? trim( $args['afterSubmitBccEmail'] ) : '';
 			$subject = isset( $args['afterSubmitEmailSubject'] ) ? $args['afterSubmitEmailSubject'] : __( 'Form Submission', 'ultimate-addons-for-gutenberg' );
 
-			$headers = array(
-				'Reply-To-: ' . get_bloginfo( 'name' ) . ' <' . $to . '>',
-				'Content-Type: text/html; charset=UTF-8',
-				'cc: ' . get_bloginfo( 'name' ) . ' <' . $cc . '>',
-			);
+			if ( ! empty( $to ) && is_string( $to ) ) {
+				$to_emails = $this->get_valid_emails( explode( ',', $to ) );
+			}
 
-			$succefull_mail = wp_mail( $to, $subject, $body, $headers );
+			if ( ! empty( $cc ) && is_string( $cc ) ) {
+				$cc_emails = $this->get_valid_emails( explode( ',', $cc ) );
+			}
 
-			if ( $bcc && ! empty( $bcc ) ) {
-				$bcc_emails = explode( ',', $bcc );
-				foreach ( $bcc_emails as $bcc_email ) {
-					wp_mail( sanitize_email( trim( $bcc_email ) ), $subject, $body, $headers );
+			if ( ! empty( $bcc ) && is_string( $bcc ) ) {
+				$bcc_emails = $this->get_valid_emails( explode( ',', $bcc ) );
+			}
+
+			if ( empty( $to_emails ) ) {
+				wp_send_json_success( 400 );
+			}
+
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+			foreach ( $to_emails as $email ) {
+				$headers[] = 'Reply-To: ' . get_bloginfo( 'name' ) . ' <' . $email . '>';
+			}
+
+			if ( ! empty( $cc_emails ) ) {
+				foreach ( $cc_emails as $email ) {
+					$headers[] = 'Cc: ' . $email;
 				}
 			}
-			if ( $succefull_mail ) {
+
+			if ( ! empty( $bcc_emails ) ) {
+				foreach ( $bcc_emails as $email ) {
+					$headers[] = 'Bcc: ' . $email;
+				}
+			}
+
+			$successful_mail = wp_mail( $to_emails, $subject, $body, $headers );
+
+			if ( $successful_mail ) {
 				do_action( 'uagb_form_success', $form_data );
 				wp_send_json_success( 200 );
 			} else {
 				wp_send_json_success( 400 );
 			}
-
 		}
+
 
 	}
 

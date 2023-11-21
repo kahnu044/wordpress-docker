@@ -1,9 +1,4 @@
-import {
-    wrapMarginConst,
-    wrapPaddingConst,
-    WrpBdShadowConst,
-    WrpBgConst,
-} from "./constants";
+import { wrapMarginConst, wrapPaddingConst, WrpBdShadowConst, WrpBgConst } from "./constants";
 
 const {
     generateDimensionsAttributes,
@@ -79,14 +74,33 @@ const attributes = {
         type: "number",
         default: 32,
     },
+    googlemMapStyle: {
+        type: "string",
+        default: "standard",
+    },
+    googleMapStyle: {
+        type: "string",
+        default: "standard",
+    },
+    snazzyMapStyle: {
+        type: "string",
+        default: "default",
+    },
+    themeSource: {
+        type: "string",
+        default: "google_theme",
+    },
     // dimensions Control related Attributes start
-
     ...generateDimensionsAttributes(wrapMarginConst),
     ...generateDimensionsAttributes(wrapPaddingConst),
     ...generateBackgroundAttributes(WrpBgConst),
     ...generateBorderShadowAttributes(WrpBdShadowConst),
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(typoPrefixs)),
+    cover: {
+        type: "string",
+        default: "",
+    },
 };
 
 export default attributes;

@@ -40,7 +40,7 @@ export default function Creator(props) {
     }, []);
 
     return (
-        <div class="eb_nft_creator">
+        <div className="eb_nft_creator">
             {showOwnerImage && creatorImage && (
                 <img src={creatorImage} alt={creatorName} />
             )}

@@ -2,7 +2,6 @@
 
 namespace WPGraphQL\Mutation;
 
-use Exception;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
@@ -30,7 +29,7 @@ class MediaItemCreate {
 	/**
 	 * Defines the mutation input field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_input_fields() {
 		return [
@@ -96,14 +95,14 @@ class MediaItemCreate {
 	/**
 	 * Defines the mutation output field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_output_fields() {
 		return [
 			'mediaItem' => [
 				'type'        => 'MediaItem',
 				'description' => __( 'The MediaItem object mutation type.', 'wp-graphql' ),
-				'resolve'     => function ( $payload, $args, AppContext $context ) {
+				'resolve'     => static function ( $payload, $args, AppContext $context ) {
 					if ( empty( $payload['postObjectId'] ) || ! absint( $payload['postObjectId'] ) ) {
 						return null;
 					}
@@ -120,17 +119,17 @@ class MediaItemCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return static function ( $input, AppContext $context, ResolveInfo $info ) {
 			/**
 			 * Stop now if a user isn't allowed to upload a mediaItem
 			 */
 			if ( ! current_user_can( 'upload_files' ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to upload mediaItems', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to upload mediaItems', 'wp-graphql' ) );
 			}
 
 			$post_type_object = get_post_type_object( 'attachment' );
 			if ( empty( $post_type_object ) ) {
-				throw new UserError( __( 'The Media Item could not be created', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'The Media Item could not be created', 'wp-graphql' ) );
 			}
 
 			/**
@@ -143,7 +142,7 @@ class MediaItemCreate {
 
 				// Bail if can't edit other users' attachments.
 				if ( get_current_user_id() !== $input['authorId'] && ( ! isset( $post_type_object->cap->edit_others_posts ) || ! current_user_can( $post_type_object->cap->edit_others_posts ) ) ) {
-					throw new UserError( __( 'Sorry, you are not allowed to create mediaItems as this user', 'wp-graphql' ) );
+					throw new UserError( esc_html__( 'Sorry, you are not allowed to create mediaItems as this user', 'wp-graphql' ) );
 				}
 			}
 
@@ -156,11 +155,12 @@ class MediaItemCreate {
 			$sanitized_file_path = sanitize_file_name( $input['filePath'] );
 
 			// Check that the filetype is allowed
-			$check_file = wp_check_filetype( $uploaded_file_url );
+			$check_file = wp_check_filetype( $sanitized_file_path );
 
 			// if the file doesn't pass the check, throw an error
 			if ( ! $check_file['ext'] || ! $check_file['type'] || ! wp_http_validate_url( $uploaded_file_url ) ) {
-				throw new UserError( sprintf( __( 'Invalid filePath "%s"', 'wp-graphql' ), $input['filePath'] ) );
+				// translators: %s is the file path.
+				throw new UserError( esc_html( sprintf( __( 'Invalid filePath "%s"', 'wp-graphql' ), $input['filePath'] ) ) );
 			}
 
 			$protocol = wp_parse_url( $input['filePath'], PHP_URL_SCHEME );
@@ -180,7 +180,16 @@ class MediaItemCreate {
 			$allowed_protocols = apply_filters( 'graphql_media_item_create_allowed_protocols', $allowed_protocols, $protocol, $input, $context, $info );
 
 			if ( ! in_array( $protocol, $allowed_protocols, true ) ) {
-				throw new UserError( sprintf( __( 'Invalid protocol. "%1$s". Only "%2$s" allowed.', 'wp-graphql' ), $protocol, implode( '", "', $allowed_protocols ) ) );
+				throw new UserError(
+					esc_html(
+						sprintf(
+							// translators: %1$s is the protocol, %2$s is the list of allowed protocols.
+							__( 'Invalid protocol. "%1$s". Only "%2$s" allowed.', 'wp-graphql' ),
+							$protocol,
+							implode( '", "', $allowed_protocols )
+						)
+					)
+				);
 			}
 
 			/**
@@ -189,7 +198,7 @@ class MediaItemCreate {
 			 */
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 
-			$file_contents = file_get_contents( $input['filePath'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$file_contents = file_get_contents( $input['filePath'] );
 
 			/**
 			 * If the mediaItem file is from a local server, use wp_upload_bits before saving it to the uploads folder
@@ -210,7 +219,7 @@ class MediaItemCreate {
 			 * Handle the error from download_url if it occurs
 			 */
 			if ( is_wp_error( $temp_file ) ) {
-				throw new UserError( __( 'Sorry, the URL for this file is invalid, it must be a valid URL', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Sorry, the URL for this file is invalid, it must be a valid URL', 'wp-graphql' ) );
 			}
 
 			/**
@@ -242,7 +251,7 @@ class MediaItemCreate {
 			 * Handle the error from wp_handle_sideload if it occurs
 			 */
 			if ( ! empty( $file['error'] ) ) {
-				throw new UserError( __( 'Sorry, the URL for this file is invalid, it must be a path to the mediaItem file', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Sorry, the URL for this file is invalid, it must be a path to the mediaItem file', 'wp-graphql' ) );
 			}
 
 			/**
@@ -264,11 +273,11 @@ class MediaItemCreate {
 				$post_parent_type = get_post_type_object( $parent->post_type );
 
 				if ( empty( $post_parent_type ) ) {
-					throw new UserError( __( 'The parent of the Media Item is of an invalid type', 'wp-graphql' ) );
+					throw new UserError( esc_html__( 'The parent of the Media Item is of an invalid type', 'wp-graphql' ) );
 				}
 
 				if ( 'attachment' !== $post_parent_type->name && ( ! isset( $post_parent_type->cap->edit_post ) || ! current_user_can( $post_parent_type->cap->edit_post, $attachment_parent_id ) ) ) {
-					throw new UserError( __( 'Sorry, you are not allowed to upload mediaItems assigned to this parent node', 'wp-graphql' ) );
+					throw new UserError( esc_html__( 'Sorry, you are not allowed to upload mediaItems assigned to this parent node', 'wp-graphql' ) );
 				}
 			}
 
@@ -290,7 +299,7 @@ class MediaItemCreate {
 					throw new UserError( esc_html( $error_message ) );
 				}
 
-				throw new UserError( __( 'The media item failed to create but no error was provided', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'The media item failed to create but no error was provided', 'wp-graphql' ) );
 			}
 
 			/**

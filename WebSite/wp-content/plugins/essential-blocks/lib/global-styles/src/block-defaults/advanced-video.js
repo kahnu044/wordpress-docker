@@ -110,19 +110,15 @@ function AdvancedVideo(prpos) {
                     loop: false,
                 },
                 imageOverlay: false,
-                previewImage:
-                    "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+                previewImage: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
                 previewImageId: null,
 
-                placeholderImage:
-                    "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+                placeholderImage: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
                 placeholderImageId: null,
                 customPlayIcon: true,
-                customPlayIconURL:
-                    "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+                customPlayIconURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
                 customPlayIconId: null,
-                placeholderPlayIconURL:
-                    "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+                placeholderPlayIconURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
                 lightboxPlayIcon: true,
                 placeholderPlayIconId: null,
                 videoOptions: "none",

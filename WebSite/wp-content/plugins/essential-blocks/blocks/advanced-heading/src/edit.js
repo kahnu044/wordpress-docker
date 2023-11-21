@@ -510,10 +510,11 @@ export default function Edit(props) {
                             <div className={"eb-ah-separator " + seperatorType}>
                                 {seperatorType === "icon" && (
                                     <i
-                                        className={`${separatorIcon
-                                            ? separatorIcon
-                                            : "fas fa-arrow-circle-down"
-                                            }`}
+                                        className={`${
+                                            separatorIcon
+                                                ? separatorIcon
+                                                : "fas fa-arrow-circle-down"
+                                        }`}
                                     ></i>
                                 )}
                             </div>
@@ -560,10 +561,11 @@ export default function Edit(props) {
                             <div className={"eb-ah-separator " + seperatorType}>
                                 {seperatorType === "icon" && (
                                     <i
-                                        className={`${separatorIcon
-                                            ? separatorIcon
-                                            : "fas fa-arrow-circle-down"
-                                            }`}
+                                        className={`${
+                                            separatorIcon
+                                                ? separatorIcon
+                                                : "fas fa-arrow-circle-down"
+                                        }`}
                                     ></i>
                                 )}
                             </div>

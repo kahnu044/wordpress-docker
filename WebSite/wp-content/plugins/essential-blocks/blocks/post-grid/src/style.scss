@@ -46,6 +46,15 @@
 		}
 	}
 
+	.ebpg-entry-wrapper {
+		display: flex;
+		flex-direction: column;
+	}
+	.ebpg-entry-content {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.ebpg-entry-meta {
 		display: flex;
 		align-items: center;
@@ -98,7 +107,9 @@
 
 	.ebpg-readmore-btn {
 		a {
-			display: inline-block;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
 		}
 	}
 
@@ -194,7 +205,6 @@
 		}
 
 		&.prev-next-btn {
-
 			.ebpg-pagination-item,
 			.ebpg-pagination-item-separator {
 				display: none !important;

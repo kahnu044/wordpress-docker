@@ -36,6 +36,19 @@ if ( !function_exists( 'eedee_gutenslider_block_init' ) ) {
             'gutensliderDividers' => $eedee_gutenslider_dividers,
             'pluginsUrl'          => plugin_dir_url( __DIR__ ),
         );
+        $editor_css = 'build/gutenslider-editor.css';
+        wp_register_style(
+            'eedee-gutenslider-block-editor-style',
+            plugins_url( $editor_css, dirname( __FILE__ ) ),
+            array(),
+            filemtime( "{$dir}/{$editor_css}" )
+        );
+        wp_register_style(
+            'eedee-gutenslider-init',
+            plugins_url( 'build/gutenslider-init.css', dirname( __FILE__ ) ),
+            array(),
+            filemtime( "{$dir}/build/gutenslider-init.css" )
+        );
         $script_asset_path = "{$dir}/build/gutenslider.asset.php";
         $index_js = 'build/gutenslider.js';
         $script_asset = (include $script_asset_path);
@@ -44,13 +57,6 @@ if ( !function_exists( 'eedee_gutenslider_block_init' ) ) {
             plugins_url( $index_js, dirname( __FILE__ ) ),
             $script_asset['dependencies'],
             $script_asset['version']
-        );
-        $editor_css = 'build/gutenslider.css';
-        wp_register_style(
-            'eedee-gutenslider-block-editor',
-            plugins_url( $editor_css, dirname( __FILE__ ) ),
-            array(),
-            filemtime( "{$dir}/{$editor_css}" )
         );
         wp_localize_script( 'eedee-gutenslider-block-editor', 'eedeeGutenslider', $eedee_gutenslider_block_variables );
         $script_front_asset_path = "{$dir}/build/gutenslider-front.asset.php";
@@ -68,8 +74,9 @@ if ( !function_exists( 'eedee_gutenslider_block_init' ) ) {
         register_block_type( 'eedee/block-gutenslider', array(
             'api_version'     => 2,
             'attributes'      => apply_filters( 'gutenslider_attributes', $gutenslider_attributes ),
+            'style'           => 'eedee-gutenslider-init',
             'editor_script'   => $editor_script,
-            'editor_style'    => 'eedee-gutenslider-block-editor',
+            'editor_style'    => 'eedee-gutenslider-block-editor-style',
             'render_callback' => 'eedee_gutenslider_dynamic_render_callback',
         ) );
         register_block_type( 'eedee/block-gutenslide', array(
@@ -144,15 +151,64 @@ if ( !function_exists( 'gutenslider_block_i18n' ) ) {
 
 }
 add_action( 'init', 'gutenslider_block_i18n' );
-if ( !function_exists( 'gutenslider_image_sizes' ) ) {
-    function gutenslider_image_sizes()
+add_image_size( 'gs-tiny', 50, 9999 );
+add_image_size( 'xl', 1600, 9999 );
+add_image_size( 'xxl', 2200, 9999 );
+add_image_size( 'xxxl', 2800, 9999 );
+add_image_size( 'xxxxl', 3400, 9999 );
+add_image_size( 'xxxxxl', 4000, 9999 );
+if ( !function_exists( 'include_index_class_to_gs_slide_child_blocks' ) ) {
+    /**
+     * add the slide index to the classes of gutenslide slides
+     */
+    function include_index_class_to_gs_slide_child_blocks( $block_content, $block )
     {
-        add_image_size( 'xl', 1600, 9999 );
-        add_image_size( 'xxl', 2200, 9999 );
-        add_image_size( 'xxxl', 2800, 9999 );
-        add_image_size( 'xxxxl', 3400, 9999 );
-        add_image_size( 'xxxxxl', 4000, 9999 );
+        
+        if ( $block['blockName'] === 'eedee/block-gutenslider' ) {
+            
+            if ( isset( $block['attrs']['firstNotLazy'] ) ) {
+                if ( !function_exists( 'gs_rep_count' ) ) {
+                    function gs_rep_count( $matches )
+                    {
+                        static  $count = 0 ;
+                        return sprintf(
+                            'class="%1$swp-block-eedee-block-gutenslide%2$s gs-slide-%3$s"%4$sclass="eedee-background-div%5$simg class="%6$s gs-slide-img-%3$s"',
+                            $matches[1],
+                            $matches[2],
+                            $count++,
+                            $matches[3],
+                            $matches[4],
+                            $matches[5]
+                        );
+                    }
+                
+                }
+                return preg_replace_callback( '/class="(.*?)wp-block-eedee-block-gutenslide(.*?)"(.*?)class="eedee-background-div(.*?)img class="(.*?)"/i', 'gs_rep_count', $block_content );
+            } else {
+                return $block_content;
+            }
+        
+        } else {
+            return $block_content;
+        }
+    
     }
 
 }
-add_action( 'init', 'gutenslider_image_sizes' );
+add_filter(
+    'render_block',
+    'include_index_class_to_gs_slide_child_blocks',
+    10,
+    2
+);
+add_filter(
+    'wp_img_tag_add_loading_attr',
+    function ( $value, $image, $context ) {
+    if ( false !== strpos( $image, 'gs-slide-img-0' ) ) {
+        return false;
+    }
+    return true;
+},
+    9,
+    3
+);

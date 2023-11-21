@@ -1,10 +1,10 @@
 const example = {
 	attributes: {
 		sliderData: [
-			{src: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png"},
-			{src: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png"},
-			{src: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png"},
-			{src: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png"},
+			{src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png"},
+			{src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png"},
+			{src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png"},
+			{src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png"},
 		],
 	}
 };

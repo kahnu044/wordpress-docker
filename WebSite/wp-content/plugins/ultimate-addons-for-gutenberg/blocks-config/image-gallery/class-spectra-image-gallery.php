@@ -1182,22 +1182,24 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 		 */
 		private function render_masonry_pagination_controls( $attributes ) {
 			ob_start();
-			if ( $attributes['paginateUseLoader'] ) {
-				?>
+			if ( $attributes['mediaGallery'] && count( $attributes['mediaGallery'] ) > $attributes['paginateLimit'] ) {
+				if ( $attributes['paginateUseLoader'] ) {
+					?>
 					<div class="spectra-image-gallery__control-loader wp-block-button">
 						<div class="wp-block-button__link spectra-image-gallery__control-loader--1"></div>
 						<div class="wp-block-button__link spectra-image-gallery__control-loader--2"></div>
 						<div class="wp-block-button__link spectra-image-gallery__control-loader--3"></div>
 					</div>
-				<?php
-			} else {
-				?>
+					<?php
+				} else {
+					?>
 					<div class="spectra-image-gallery__control-wrapper wp-block-button">
 						<div class="spectra-image-gallery__control-button wp-block-button__link" aria-label="<?php echo esc_attr( $attributes['paginateButtonText'] ); ?>" tabIndex=0>
 							<?php echo esc_html( $attributes['paginateButtonText'] ); ?>
 						</div>
 					</div>
-				<?php
+					<?php
+				}
 			}
 			return ob_get_clean();
 		}
@@ -1454,15 +1456,17 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 		}
 
 		/**
-		 * Renders Front-end Masonry Layout.
+		 * Renders the Front-end Masonry Layout.
 		 *
-		 * @param string $id       Block ID.
-		 * @param array  $attr      Array of attributes.
-		 * @param string $selector Selector to identify the carousel.
-		 *
+		 * @param string $id                 The Block ID.
+		 * @param array  $attr               An array of attributes.
+		 * @param string $selector           The selector used to identify the carousel.
+		 * @param array  $lightbox_settings  An array of Lightbox Swiper Settings.
+		 * @param array  $thumbnail_settings An array of Thumbnail Swiper Settings.
 		 * @since 2.1
+		 * @return string   The rendered markup or an empty string.
 		 */
-		public static function render_frontend_masonry_layout( $id, $attr, $selector ) {
+		public static function render_frontend_masonry_layout( $id, $attr, $selector, $lightbox_settings, $thumbnail_settings ) {
 			ob_start();
 			?>
 				window.addEventListener( 'DOMContentLoaded', function() {
@@ -1477,26 +1481,29 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 								isotope.layout();
 							});
 							imagesLoaded( element ).on( 'always', function() {
-								element.style.visibility = 'visible';
+								element.parentNode.style.visibility = 'visible';
 							});
 						}
-						UAGBImageGalleryMasonry.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>' );
+						UAGBImageGalleryMasonry.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>', <?php echo wp_json_encode( $lightbox_settings ); ?>, <?php echo wp_json_encode( $thumbnail_settings ); ?> );
 					}
 				});
 			<?php
-			return ob_get_clean();
+			$output = ob_get_clean();
+			return is_string( $output ) ? $output : '';
 		}
 
 		/**
-		 * Renders Front-end Grid Paginated Layout.
+		 * Renders the Front-end Grid Paginated Layout.
 		 *
-		 * @param string $id       Block ID.
-		 * @param array  $attr      Array of attributes.
-		 * @param string $selector Selector to identify the carousel.
-		 *
+		 * @param string $id                 The Block ID.
+		 * @param array  $attr               An array of attributes.
+		 * @param string $selector           The selector used to identify the carousel.
+		 * @param array  $lightbox_settings  An array of Lightbox Swiper Settings.
+		 * @param array  $thumbnail_settings An array of Thumbnail Swiper Settings.
 		 * @since 2.1
+		 * @return string   The rendered markup or an empty string.
 		 */
-		public static function render_frontend_grid_pagination( $id, $attr, $selector ) {
+		public static function render_frontend_grid_pagination( $id, $attr, $selector, $lightbox_settings, $thumbnail_settings ) {
 			ob_start();
 			?>
 				window.addEventListener( 'DOMContentLoaded', function() {
@@ -1512,11 +1519,12 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 								isotope.layout();
 							});
 						}
-						UAGBImageGalleryPagedGrid.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>' );
+						UAGBImageGalleryPagedGrid.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>', <?php echo wp_json_encode( $lightbox_settings ); ?>, <?php echo wp_json_encode( $thumbnail_settings ); ?> );
 					}
 				});
 			<?php
-			return ob_get_clean();
+			$output = ob_get_clean();
+			return is_string( $output ) ? $output : '';
 		}
 
 		/**
@@ -1592,9 +1600,8 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 		 * @param array  $lightbox_settings   Array of Lightbox Swiper Settings.
 		 * @param array  $thumbnail_settings  Array of Thumbnail Swiper Settings.
 		 * @param string $selector            Selector to identify the lightbox.
-		 * @return string       The Output Buffer.
-		 *
 		 * @since 2.4.0
+		 * @return string       The Output Buffer.
 		 */
 		public static function render_frontend_lightbox( $id, $attr, $lightbox_settings, $thumbnail_settings, $selector ) {
 			$pro_clicker = apply_filters( 'uagb_image_gallery_pro_lightbox_js', '', $id, $attr );
@@ -1608,39 +1615,12 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 
 					let lightboxSwiper = null;
 					let thumbnailSwiper = null;
-					const theBody = document.querySelector( 'body' );
-					const updateCounter = ( curPage ) => {
-						const lightbox = blockScope.nextElementSibling;
-						const counter = lightbox.querySelector( '.spectra-image-gallery__control-lightbox--count-page' );
-						counter.innerHTML = parseInt( curPage ) + 1;
-					};
 
-					const enableLightbox = ( goTo ) => {
-						if ( ! lightboxSwiper ) {
-							return;
-						}
-						const lightbox = blockScope.nextElementSibling;
-						lightbox.style.display = '';
-						lightbox.focus();
-						setTimeout( () => {
-							lightboxSwiper.slideTo( goTo );
-						}, 100 );
-						setTimeout( () => {
-							lightbox.style.opacity = 1;
-							theBody.style.overflow = 'hidden';
-						}, 250 );
-					}
-					<?php // Get all the images and assign them click events. ?>
-					const images = blockScope.querySelectorAll( '.spectra-image-gallery__media-wrapper' );
-					for ( let i = 0; i < images.length; i++ ) {
-						images[ i ].style.cursor = 'pointer';
-						images[ i ].addEventListener( 'click', () => enableLightbox( i ) );
-					}
 					<?php // First set the Thumbnail Swiper if needed. This will be used in the Lightbox Swiper. ?>
-					let lightboxSettings = <?php echo $lightbox_settings; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+					let lightboxSettings = <?php echo wp_json_encode( $lightbox_settings ); ?>;
 					<?php if ( $attr['lightboxThumbnails'] ) : ?>
 						thumbnailSwiper = new Swiper( "<?php echo esc_attr( $selector . '+.spectra-image-gallery__control-lightbox .spectra-image-gallery__control-lightbox--thumbnails' ); ?>",
-							<?php echo $thumbnail_settings; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							<?php echo wp_json_encode( $thumbnail_settings ); ?>
 						);
 						lightboxSettings = {
 							...lightboxSettings,
@@ -1651,54 +1631,10 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 					<?php endif; ?>
 					<?php // Next set the Lightbox Swiper. ?>
 					lightboxSwiper = new Swiper( "<?php echo esc_attr( $selector . '+.spectra-image-gallery__control-lightbox .spectra-image-gallery__control-lightbox--main' ); ?>",
-						<?php echo $lightbox_settings; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php echo wp_json_encode( $lightbox_settings ); ?>
 					);
-					<?php // Now run the Swiper Updations if needed. ?>
-					lightboxSwiper.on( 'activeIndexChange', ( swiperInstance ) => {
-						<?php if ( $attr['lightboxThumbnails'] ) : ?>
-							thumbnailSwiper.slideTo( swiperInstance.activeIndex );
-						<?php endif; ?>
-						<?php if ( $attr['lightboxDisplayCount'] ) : ?>
-							updateCounter( swiperInstance.activeIndex );
-						<?php endif; ?>
-					} );
-					<?php if ( $attr['lightboxThumbnails'] ) : ?>
-						thumbnailSwiper.on( 'activeIndexChange', ( swiperInstance ) => {
-							lightboxSwiper.slideTo( swiperInstance.activeIndex );
-						} );
-					<?php endif; ?>
+					loadLightBoxImages( blockScope, lightboxSwiper, null, <?php echo wp_json_encode( $attr ); ?>, thumbnailSwiper );
 					<?php echo $pro_clicker; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					if ( blockScope.nextElementSibling.classList.contains( 'spectra-image-gallery__control-lightbox' ) ) {
-						<?php // Then set the Close Button if needed. ?>
-						const lightbox = blockScope.nextElementSibling;
-						lightbox.addEventListener( 'keydown', ( event ) => {
-							if ( 27 === event.keyCode ) {
-								theBody.style.overflow = '';
-								lightbox.style.opacity = 0;
-								setTimeout( () => {
-									lightbox.style.display = 'none';
-								}, 250 );
-							}
-						} );
-						lightbox.style.display = 'none';
-						<?php if ( $attr['lightboxCloseIcon'] ) : ?>
-							const closeButton = lightbox.querySelector( '.spectra-image-gallery__control-lightbox--close' );
-							if ( closeButton ) {
-								closeButton.addEventListener( 'click', () => {
-									theBody.style.overflow = '';
-									lightbox.style.opacity = 0;
-									setTimeout( () => {
-										lightbox.style.display = 'none';
-									}, 250 );
-								} );
-							}
-						<?php endif; ?>
-						<?php // Finally set the Total if needed. ?>
-						<?php if ( $attr['lightboxDisplayCount'] ) : ?>
-							const lightboxTotal = lightbox.querySelector( '.spectra-image-gallery__control-lightbox--count-total' );
-							lightboxTotal.innerHTML = '<?php echo count( (array) $attr['mediaGallery'] ); ?>';
-						<?php endif; ?>
-					}
 				} );
 			<?php
 			return ob_get_clean();

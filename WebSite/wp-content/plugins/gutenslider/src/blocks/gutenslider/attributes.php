@@ -17,7 +17,7 @@ $gutenslider_attributes = array(
     'default' => 'change',
 ),
     'bgImageId'          => array(
-    'type' => 'number',
+    'type' => 'string',
 ),
     'animation'          => array(
     'type'    => 'string',
@@ -441,6 +441,10 @@ $gutenslider_attributes = array(
     'type'    => 'boolean',
     'default' => true,
 ),
+    'lgZoomEnabled'      => array(
+    'type'    => 'boolean',
+    'default' => false,
+),
     'hasLgCounter'       => array(
     'type'    => 'boolean',
     'default' => true,
@@ -483,6 +487,18 @@ $gutenslider_attributes = array(
     'arrowFollowMouse'   => array(
     'type'    => 'boolean',
     'default' => false,
+),
+    'firstNotLazy'       => array(
+    'type'    => 'boolean',
+    'default' => false,
+),
+    'bgImagePos'         => array(
+    'type'    => 'string',
+    'default' => '50% 50%',
+),
+    'wrapAutoHeight'     => array(
+    'type'    => 'boolean',
+    'default' => true,
 ),
 );
 $eedee_gutenslider_dividers = array(

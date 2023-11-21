@@ -13,7 +13,6 @@ import attributes from "./attributes";
 import metadata from "../block.json";
 import "./style.scss";
 
-import example from "./example";
 
 const { ebConditionalRegisterBlockType } = EBControls;
 
@@ -30,5 +29,5 @@ ebConditionalRegisterBlockType(metadata, {
 	attributes,
 	edit: Edit,
 	save: Save,
-	example: example,
+	example: {},
 });

@@ -1,9 +1,7 @@
 const example = {
 	attributes: {
-		leftImageURL:
-			"https://essential-addons.com/elementor/wp-content/uploads/2020/01/white-balloon_compare.png",
-		rightImageURL:
-			"https://essential-addons.com/elementor/wp-content/uploads/2020/01/white-balloon.png"
+		leftImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/white-balloon-bnw.jpeg",
+		rightImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/white-balloon.jpeg"
 	}
 };
 

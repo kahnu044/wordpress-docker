@@ -1006,6 +1006,7 @@ function Inspector({ attributes, setAttributes }) {
 
                                         {applyFilters(
                                             "eb_countdown_label_bg",
+                                            '',
                                             attributes,
                                             setAttributes
                                         )}

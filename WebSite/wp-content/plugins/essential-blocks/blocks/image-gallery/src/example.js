@@ -2,48 +2,48 @@ const example = {
 	attributes: {
 		images: [
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/china.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/CA.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
 			}
 		],
 
 		sources: [
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
 				caption: ""
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
 				caption: ""
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
 				caption: ""
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
 				caption: ""
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/china.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
 				caption: ""
 			},
 			{
-				url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/CA.png",
+				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
 				caption: ""
 			}
 		],

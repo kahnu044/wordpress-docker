@@ -1,4 +1,5 @@
 import { useEffect, useState } from "@wordpress/element";
+import { applyFilters } from "@wordpress/hooks";
 import Switch from "rc-switch";
 import "../../../assets/css/switch.css";
 import { __ } from "@wordpress/i18n";
@@ -12,74 +13,11 @@ import LogoOpensea from "../icons/options/logo-opensea.png";
 import { EditIcon } from "../icons/options/icon-edit";
 import EBLoader from "./Loader";
 
-import { fetchEBSettingsData, saveEBSettingsData } from "./helpers/fetchData";
+const { fetchEBSettingsData, saveEBSettingsData } = window.EBControls;
 import GoogleMaps from "./modal/googleMaps";
 import Instagram from "./modal/instagram";
 import OpenseaNft from "./modal/openseaNft";
 import Openverse from "./modal/openverse";
-
-const apiIntegrations = {
-    googleMapApi: {
-        logo: LogoGoogleMaps,
-        title: __("Google Maps", "essential-blocks"),
-        description: __(
-            __(
-                "You have to retrieve API key to use Google Maps from Essential Blocks.",
-                "essential-blocks"
-            ),
-            "essential-blocks"
-        ),
-        doc: "https://essential-blocks.com/docs/retrieve-google-maps-api/",
-        component: GoogleMaps,
-    },
-    instagramToken: {
-        logo: LogoInstagram,
-        title: __("Instagram", "essential-blocks"),
-        description: __(
-            "To showcase your Instagram feed on your website, collect Instagram access tokens.",
-            "essential-blocks"
-        ),
-        doc:
-            "https://essential-blocks.com/docs/retrieve-instagram-access-token/",
-        component: Instagram,
-    },
-    openseaApi: {
-        logo: LogoOpensea,
-        title: "Opensea NFT",
-        description: __(
-            "To display your OpenSea NFT items, collections, wallets, etc. connect the API key here.",
-            "essential-blocks"
-        ),
-        doc: "https://essential-blocks.com/docs/retrieve-opensea-nft-api/",
-        component: OpenseaNft,
-    },
-    openverseApi: {
-        logo: LogoOpenverse,
-        title: "Openverse",
-        description: __(
-            "To get unlimited access to Openverse images, provide your email & project name to generate API keys.",
-            "essential-blocks"
-        ),
-        doc: "https://essential-blocks.com/docs/generate-openverse-api/",
-        component: Openverse,
-    },
-};
-
-const optimizations = {
-    googleFont: {
-        logo: LogoGoogleFont,
-        title: "Google Fonts",
-        description: __(
-            "Enable Google Fonts to get access to 1400+ exclusive fonts for all the fully customizable blocks of Essential Blocks.",
-            "essential-blocks"
-        ),
-        doc: "https://essential-blocks.com/docs/configure-google-fonts/",
-    },
-    // fontAwesome: {
-    // 	logo: LogoGoogleFont,
-    // 	title: "Font Awesome",
-    // },
-};
 
 /**
  * TabOptions Components
@@ -95,6 +33,7 @@ export default function TabOptions() {
         response: false,
         message: "",
     });
+
     useEffect(() => {
         /**
          * fetch settings data using AJAX
@@ -103,6 +42,69 @@ export default function TabOptions() {
             setSettingsData(data ?? {});
         });
     }, []);
+
+    const optimizations = {
+        googleFont: {
+            logo: LogoGoogleFont,
+            title: "Google Fonts",
+            description: __(
+                "Enable Google Fonts to get access to 1400+ exclusive fonts for all the fully customizable blocks of Essential Blocks.",
+                "essential-blocks"
+            ),
+            doc: "https://essential-blocks.com/docs/configure-google-fonts/",
+        },
+        // fontAwesome: {
+        // 	logo: LogoGoogleFont,
+        // 	title: "Font Awesome",
+        // },
+    };
+
+    const apiIntegrations = applyFilters('eb_admin_option_integrations', {
+        googleMapApi: {
+            logo: LogoGoogleMaps,
+            title: __("Google Maps", "essential-blocks"),
+            description: __(
+                __(
+                    "You have to retrieve API key to use Google Maps from Essential Blocks.",
+                    "essential-blocks"
+                ),
+                "essential-blocks"
+            ),
+            doc: "https://essential-blocks.com/docs/retrieve-google-maps-api/",
+            component: GoogleMaps,
+        },
+        instagramToken: {
+            logo: LogoInstagram,
+            title: __("Instagram", "essential-blocks"),
+            description: __(
+                "To showcase your Instagram feed on your website, collect Instagram access tokens.",
+                "essential-blocks"
+            ),
+            doc:
+                "https://essential-blocks.com/docs/retrieve-instagram-access-token/",
+            component: Instagram,
+        },
+        openseaApi: {
+            logo: LogoOpensea,
+            title: "Opensea NFT",
+            description: __(
+                "To display your OpenSea NFT items, collections, wallets, etc. connect the API key here.",
+                "essential-blocks"
+            ),
+            doc: "https://essential-blocks.com/docs/retrieve-opensea-nft-api/",
+            component: OpenseaNft,
+        },
+        openverseApi: {
+            logo: LogoOpenverse,
+            title: "Openverse",
+            description: __(
+                "To get unlimited access to Openverse images, provide your email & project name to generate API keys.",
+                "essential-blocks"
+            ),
+            doc: "https://essential-blocks.com/docs/generate-openverse-api/",
+            component: Openverse,
+        },
+    });
 
     /**
      * handleEditBtnClick
@@ -167,7 +169,7 @@ export default function TabOptions() {
         const formData = new window.FormData();
         formData.append("action", "eb_regenerate_assets");
         formData.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
-        formData.append("security",EssentialBlocksLocalize.regenerate_assets_nonce);
+        formData.append("security", EssentialBlocksLocalize.regenerate_assets_nonce);
         formData.append("value", true);
 
         fetch(EssentialBlocksLocalize.ajax_url, {
@@ -275,7 +277,7 @@ export default function TabOptions() {
                                             <Switch
                                                 checked={
                                                     settingsData[item] ===
-                                                    "false"
+                                                        "false"
                                                         ? false
                                                         : true
                                                 }

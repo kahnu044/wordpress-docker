@@ -17,7 +17,8 @@ import {
     CheckboxControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { unescape as unescapeString, without } from "lodash";
+import { unescape as unescapeString } from "lodash";
+import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 /**
  * Internal dependencies
  */
@@ -35,6 +36,7 @@ const {
     UnitControl,
     ResetControl,
     AdvancedControls,
+    DynamicInputControl,
 } = window.EBControls;
 
 import {
@@ -43,6 +45,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 import { wrapMaxWidthPrefix } from "./constants/rangeNames";
+import faIcons from "./fontawesomeIcons";
 
 import {
     //
@@ -103,7 +106,7 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
         isSticky,
         contentHeight,
         topSpace,
-        hideOnMobile,
+        stickyHideOnMobile,
         scrollTarget,
         stickyPosition,
         //
@@ -112,10 +115,13 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
         deleteHeaderList,
         title,
         enableCopyLink,
+        scrollToTopIcon,
+        listStyle,
     } = attributes;
 
     const [options, setOptions] = useState(HEADERS);
     const [defaultOptions, setDefaultOptions] = useState([]);
+
     //
     useEffect(() => {
         setDefaultVisible();
@@ -241,15 +247,17 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                                     }
                                                 />
                                             )}
-                                            <TextControl
+                                            <DynamicInputControl
                                                 label={__(
                                                     "Title Text",
                                                     "essential-blocks"
                                                 )}
-                                                value={title}
-                                                onChange={(newTitle) =>
+                                                attrName="title"
+                                                inputValue={title}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) =>
                                                     setAttributes({
-                                                        title: newTitle,
+                                                        title: text,
                                                     })
                                                 }
                                             />
@@ -264,6 +272,7 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                         <div className="fix-select-over-lapping">
                                             <Select2
                                                 options={options}
+                                                value={defaultOptions}
                                                 defaultValue={defaultOptions}
                                                 isMulti
                                                 onChange={onHeaderChange}
@@ -357,10 +366,10 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                                         "Hide on Mobile",
                                                         "essential-blocks"
                                                     )}
-                                                    checked={hideOnMobile}
+                                                    checked={stickyHideOnMobile}
                                                     onChange={() =>
                                                         setAttributes({
-                                                            hideOnMobile: !hideOnMobile,
+                                                            stickyHideOnMobile: !stickyHideOnMobile,
                                                         })
                                                     }
                                                 />
@@ -393,6 +402,34 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                                 })
                                             }
                                             type="number"
+                                        />
+                                        <SelectControl
+                                            label={__(
+                                                "List Style",
+                                                "essential-blocks"
+                                            )}
+                                            value={listStyle}
+                                            options={[
+                                                {
+                                                    label: __(
+                                                        "Unordered",
+                                                        "essential-blocks"
+                                                    ),
+                                                    value: "ul",
+                                                },
+                                                {
+                                                    label: __(
+                                                        "Ordered",
+                                                        "essential-blocks"
+                                                    ),
+                                                    value: "ol",
+                                                },
+                                            ]}
+                                            onChange={(listStyle) =>
+                                                setAttributes({
+                                                    listStyle,
+                                                })
+                                            }
                                         />
                                     </PanelBody>
 
@@ -428,6 +465,24 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
 
                                         {scrollToTop && (
                                             <>
+                                                <Divider />
+                                                <BaseControl
+                                                    label={__(
+                                                        "Icon",
+                                                        "essential-blocks"
+                                                    )}
+                                                >
+                                                    <FontIconPicker
+                                                        icons={faIcons}
+                                                        value={scrollToTopIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                scrollToTopIcon: icon,
+                                                            })
+                                                        }
+                                                        appendTo="body"
+                                                    />
+                                                </BaseControl>
                                                 {!isSticky && (
                                                     <SelectControl
                                                         label={__(
@@ -503,37 +558,43 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                             </>
                                         )}
                                     </PanelBody>
-
-                                    <PanelBody
-                                        title={__(
-                                            "Exclude Headings",
-                                            "essential-blocks"
+                                    {typeof eb_conditional_localize !==
+                                        "undefined" &&
+                                        eb_conditional_localize?.editor_type !==
+                                            "edit-site" && (
+                                            <PanelBody
+                                                title={__(
+                                                    "Exclude Headings",
+                                                    "essential-blocks"
+                                                )}
+                                                initialOpen={false}
+                                            >
+                                                {deleteHeaderList.map(
+                                                    (header, index) => {
+                                                        return (
+                                                            <CheckboxControl
+                                                                key={index}
+                                                                label={unescapeString(
+                                                                    header.label
+                                                                )}
+                                                                value={
+                                                                    header.value
+                                                                }
+                                                                checked={
+                                                                    header.isDelete
+                                                                }
+                                                                onChange={() => {
+                                                                    onDeleteHeaderChange(
+                                                                        header,
+                                                                        index
+                                                                    );
+                                                                }}
+                                                            />
+                                                        );
+                                                    }
+                                                )}
+                                            </PanelBody>
                                         )}
-                                        initialOpen={false}
-                                    >
-                                        {deleteHeaderList.map(
-                                            (header, index) => {
-                                                return (
-                                                    <CheckboxControl
-                                                        key={index}
-                                                        label={unescapeString(
-                                                            header.label
-                                                        )}
-                                                        value={header.value}
-                                                        checked={
-                                                            header.isDelete
-                                                        }
-                                                        onChange={() => {
-                                                            onDeleteHeaderChange(
-                                                                header,
-                                                                index
-                                                            );
-                                                        }}
-                                                    />
-                                                );
-                                            }
-                                        )}
-                                    </PanelBody>
                                 </>
                             )}
                             {tab.name === "styles" && (
@@ -703,7 +764,7 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
                                                 baseLabel={__(
                                                     `${
                                                         isSticky
-                                                            ? "sticky content max width"
+                                                            ? "Sticky max width"
                                                             : "Container max width"
                                                     }`
                                                 )}

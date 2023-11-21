@@ -28,7 +28,7 @@ export default function LastSalePrice(props) {
     return (
         <>
             {showPrice && (
-                <div class="eb_nft_price">
+                <div className="eb_nft_price">
                     <span className="ebnft_label">Last Sale:</span>
                     <span className="ebnft_currency"><ETHIcon/></span>
                     <span className="ebnft_price">{price}</span>

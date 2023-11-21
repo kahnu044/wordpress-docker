@@ -101,28 +101,6 @@ class UAGB_Front_Assets {
 	}
 
 	/**
-	 * Enqueue asset files for FSE Theme.
-	 *
-	 * @since 2.4.1
-	 */
-	public function load_assets_for_fse_theme() {
-		global $_wp_current_template_content;
-		if ( $_wp_current_template_content ) {
-			$date                             = new DateTime();
-			$new_timestamp                    = $date->getTimestamp();
-			$dynamic_id                       = get_the_ID() + $new_timestamp;
-			$blocks                           = parse_blocks( $_wp_current_template_content );
-			$current_post_assets              = new UAGB_Post_Assets( $dynamic_id );
-			$current_post_assets->page_blocks = $blocks;
-			$assets                           = $current_post_assets->get_blocks_assets( $blocks );
-			$current_post_assets->stylesheet  = $assets['css'];
-			$current_post_assets->script      = $assets['js'];
-			$current_post_assets->gfonts      = array_merge( $current_post_assets->get_fonts(), UAGB_Helper::$gfonts );
-			$current_post_assets->enqueue_scripts();
-		}
-	}
-
-	/**
 	 * Enqueue asset files.
 	 *
 	 * @since 1.23.0
@@ -133,12 +111,8 @@ class UAGB_Front_Assets {
 			$this->post_assets->enqueue_scripts();
 		}
 
-		if ( wp_is_block_theme() ) {
-			$this->load_assets_for_fse_theme();
-		}
-
 		/* Archive & 404 page compatibility */
-		if ( is_archive() || ( is_home() && ! wp_is_block_theme() ) || is_search() || is_404() ) {
+		if ( is_archive() || is_home() || is_search() || is_404() ) {
 
 			global $wp_query;
 			$current_object_id = $wp_query->get_queried_object_id();
@@ -146,18 +120,17 @@ class UAGB_Front_Assets {
 			if ( 0 !== $current_object_id && null !== $current_object_id ) {
 				$current_post_assets = new UAGB_Post_Assets( $current_object_id );
 				$current_post_assets->enqueue_scripts();
-			} else {
-				foreach ( $cached_wp_query as $post ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			} elseif ( ! empty( $cached_wp_query ) && is_array( $cached_wp_query ) ) {
+				foreach ( $cached_wp_query as $post ) {
 					$current_post_assets = new UAGB_Post_Assets( $post->ID );
 					$current_post_assets->enqueue_scripts();
 				}
-			}
-
-			/*
-			If no posts are present in the category/archive
-			or 404 page (which is an obvious case for 404), then get the current page ID and enqueue script.
-			*/
-			if ( ! $cached_wp_query ) {
+			} else {
+				/*
+				If no posts are present in the category/archive
+				or 404 page (which is an obvious case for 404), then get the current page ID and enqueue script.
+				*/
+				$current_object_id   = is_int( $current_object_id ) ? $current_object_id : (int) $current_object_id;
 				$current_post_assets = new UAGB_Post_Assets( $current_object_id );
 				$current_post_assets->enqueue_scripts();
 			}

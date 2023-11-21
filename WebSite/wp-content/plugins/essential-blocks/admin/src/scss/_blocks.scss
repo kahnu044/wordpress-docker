@@ -64,46 +64,15 @@
 	}
 }
 
-// .eb-templates-block {
-// 	background: #ffffff;
-// 	box-shadow: 0px 15px 25px -10px rgba(32, 31, 80, 0.15);
-// 	border-radius: 5px;
-// 	display: block;
-// 	text-align: center;
-// 	transition: all 0.3ms ease-in-out;
-
-// 	&:hover {
-// 		box-shadow: 0px 65px 75px -10px rgba(32, 31, 80, 0.25);
-// 	}
-
-// 	img {
-// 		width: 100%;
-// 		border-radius: 5px 5px 0 0;
-// 	}
-
-// 	h4 {
-// 		font-weight: 700;
-// 		font-size: 18px;
-// 		line-height: 28px;
-// 		text-decoration: none;
-// 		display: inline-block;
-// 		margin: 15px;
-// 		word-break: break-word;
-// 		text-align: center;
-// 		color: #211c70;
-// 	}
-// }
-
 .eb-block-box {
 	background: #ffffff;
 	box-shadow: 0px 1px 2px rgb(23 57 97 / 10%);
 	border-radius: 5px;
 	padding: 18px 15px;
-	// margin: 0;
-
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	position: relative;
 
 	@media all and (max-width: 767px) {
 		margin-bottom: 20px !important;
@@ -193,6 +162,10 @@
 
 	&.eb-block-label {
 		position: relative;
+		border: 0;
+		margin: 0;
+		box-shadow: unset;
+		padding: 18px 15px;
 
 		&.popular {
 			&::after {
@@ -211,7 +184,7 @@
 		&.updated {
 			&::after {
 				content: "Updated";
-				background: #e6893c;
+				background: #828196;
 			}
 		}
 

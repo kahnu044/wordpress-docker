@@ -54,6 +54,7 @@ const {
     BorderShadowControl,
     BackgroundControl,
     AdvancedControls,
+    DynamicInputControl,
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -166,6 +167,13 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     ),
                                                     value: "external",
                                                 },
+                                                {
+                                                    label: __(
+                                                        "Exit Intent",
+                                                        "essential-blocks"
+                                                    ),
+                                                    value: "exit_intent",
+                                                }
                                             ]}
                                             onChange={(newTrigger) =>
                                                 setAttributes({
@@ -214,12 +222,16 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 </BaseControl>
                                                 {"button" === btnType && (
                                                     <>
-                                                        <TextControl
+                                                        <DynamicInputControl
                                                             label={__(
                                                                 "Button Text",
                                                                 "essential-blocks"
                                                             )}
-                                                            value={btnText}
+                                                            attrName="btnText"
+                                                            inputValue={btnText}
+                                                            setAttributes={
+                                                                setAttributes
+                                                            }
                                                             onChange={(
                                                                 newBtnText
                                                             ) =>
@@ -435,6 +447,50 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         "essential-blocks"
                                                     )}
                                                 />
+                                            </>
+                                        )}
+                                        {"exit_intent" === trigger && (
+                                            <>
+                                                <BaseControl>
+                                                    <h3>
+                                                        {__(
+                                                            "Exit Intent Settings",
+                                                            "essential-blocks"
+                                                        )}
+                                                    </h3>
+                                                </BaseControl>
+                                                <ToggleControl
+                                                    label={__(
+                                                        "Use Cookies",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={useCookies}
+                                                    onChange={() =>
+                                                        setAttributes({
+                                                            useCookies: !useCookies,
+                                                        })
+                                                    }
+                                                />
+                                                {useCookies && (
+                                                    <TextControl
+                                                        label={__(
+                                                            "Cookie Expire(In days)",
+                                                            "essential-blocks"
+                                                        )}
+                                                        value={cookieExpireTime}
+                                                        onChange={(
+                                                            newCookieExpireTime
+                                                        ) =>
+                                                            setAttributes({
+                                                                cookieExpireTime: newCookieExpireTime,
+                                                            })
+                                                        }
+                                                        help={__(
+                                                            "Leave blank if you want to delete cookie after browser closed.",
+                                                            "essential-blocks"
+                                                        )}
+                                                    />
+                                                )}
                                             </>
                                         )}
                                         <Divider />

@@ -1,1 +1,5 @@
-<p><?php esc_html_e( $content ); ?></p>
+<p>
+    <?php
+        echo esc_html( $content );
+    ?>
+</p>

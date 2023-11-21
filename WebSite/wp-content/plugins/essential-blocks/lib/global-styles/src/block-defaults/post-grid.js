@@ -445,7 +445,7 @@ function PostGrid(props) {
                                 )}
 
                                 <EbImageSizeSelector
-                                    attrName={"thumbnailSize"}
+                                    attrname={"thumbnailSize"}
                                     resRequiredProps={resRequiredProps}
                                     handleBlockDefault={handleBlockDefault}
                                 />

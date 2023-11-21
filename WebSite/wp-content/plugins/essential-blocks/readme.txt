@@ -2,9 +2,9 @@
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: block, gutenberg, blocks, gutenberg blocks, editor, button, post grid, TOC, countdown, progress bar, flipbox, advanced tab, slider, gutenberg editor, forms, woocommerce, template, page builder, block plugin, pattern, gutenberg templates, gutenberg patterns, block editor, block pattern, block template, Website Builder, starter templates, site editor, woocommerce, woocommerce block, google map, instagram feed, Nft, popup, social icon, testimonial, info box, team member
 Requires at least: 5.8
-Tested up to: 6.2
+Tested up to: 6.4
 Requires PHP: 5.6
-Stable tag: 4.1.3
+Stable tag: 4.3.9
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -12,7 +12,7 @@ The Essential Blocks Library for WordPress Gutenberg Editor.
 
 == Description ==
 Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate blocks library for WordPress!
-Enhance your Gutenberg experience with 40+ unique blocks (more coming soon). Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before.
+Enhance your Gutenberg experience with 50+ unique blocks (more coming soon). Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before.
 
 https://youtu.be/PnZx4ZOMyzI
 
@@ -38,7 +38,7 @@ EEnable and disable individual blocks to make your page load faster and smoother
 ###🚀 ASSET REGENERATION
 Keep your website's loading speed fast and secure against heavy scripts and CSS files with the Asset Regeneration feature.
 
-###🖊️ OMPATIBILITY WITH GOOGLE FONTS
+###🖊️ COMPATIBILITY WITH GOOGLE FONTS
 Choose any Google Font you prefer from a collection of 1,000+ font families available using Essential Blocks. Now, you can give your websites a customized look with stunning typographies.
 
 ###💻 RESPONSIVE ON ALL DEVICES
@@ -54,7 +54,7 @@ Enhance the flexibility and customization options of your Guteneberg-built websi
 Get stunningly designed, ready-to-use block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
 
 ###🎯 STUNNING GUTENBERG TEMPLATES
-Explore and get access to 1,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
+Explore and get access to 2,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
 
 You will find a wide variety of stunning Gutenberg website or web page templates in any niche:
 - Blog & Magazine
@@ -76,8 +76,8 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 ###👨‍💻 EXPERT SUPPORT
 We have a very friendly support team ready to help you out. Ask your questions in the support forum, we will get back to you immediately.
 
-## 45+ FREE & ADVANCED BLOCKS AND COUNTING
-Design without limits in WordPress block editor, using 30+ of the most useful Essential Blocks for Gutenberg.
+## 50+ FREE & ADVANCED BLOCKS AND COUNTING
+Design without limits in WordPress block editor, using 50+ of the most useful Essential Blocks for Gutenberg.
 
 - **[Accordion](https://essential-blocks.com/demo/accordion/)** - Add beautiful accordions in your pages, posts, anywhere & reduce scrolling
 - **[Button](https://essential-blocks.com/demo/button/)** - Quickly add modern buttons with hover effect in your post or page
@@ -121,11 +121,16 @@ Design without limits in WordPress block editor, using 30+ of the most useful Es
 - **[Openverse](https://essential-blocks.com/demo/openverse)** -  Easily search & use royalty free images, stock photos, etc CC-licensed images from Openverse for your website
 - **[Google Maps](https://essential-blocks.com/demo/google-maps)** -  Present a fully responsive map on your website with your preferred configurations, styles, etc.
 - **[Shape Divider](https://essential-blocks.com/demo/shape-divider/)** - Make your website designs stand out by showcasing different sections with stunning shape dividers
+- **[Form](https://essential-blocks.com/demo/form-block/)** - Create responsive forms of any type - contact forms, RSVP forms, or subscription forms - in Gutenberg and manage easily them from your WordPress dashboard
 - **[Timeline Slider (PRO)](https://essential-blocks.com/demo/timeline-slider)** - Showcase your posts & pages in an attractive timeline slider and design with stunning presets & styling options
 - **[Advanced Search (PRO)](https://essential-blocks.com/demo/advanced-search)** - Let visitors find any content on your website easily with a customizable, dynamic search bar
 - **[Data Table (PRO)](https://essential-blocks.com/demo/data-table/)** - Insert an advanced data table on your website without any code and display information in an eye-catching way
 - **[Woo Product Carousel (PRO)](https://essential-blocks.com/demo/woo-product-carousel/)** - Display your WooCommerce products with dynamic Product Carousels and designs using limitless styling options
 - **[News Ticker (PRO)](https://essential-blocks.com/demo/news-ticker)** - Show the latest news or highlights on your website with a dynamic ticker in an engaging way that instantly drives attention
+- **[Fancy Chart (PRO)](https://essential-blocks.com/demo/fancy-chart)** - Design visually stunning & interactive charts to bring life to dull datasets
+- **[Multicolumn Pricing Table (PRO)](https://essential-blocks.com/demo/multicolumn-pricing-table)** - Use a variety of layouts to impact your customers to choose the pricing best plan by showcasing comparison table by mentioning features, displaying icons, and so on
+- **[Stacked Cards (PRO)](https://essential-blocks.com/demo/stacked-cards)** - Display your content in a unique style with the EB Stacked Cards block. With this block, you can easily make your stacked cards sticky in place and provide users an interactive experience when they scroll through your website
+- **[Testimonial Slide (PRO)](https://essential-blocks.com/demo/testimonial-slider)** - Display engaging and credible customer testimonials, reviews and ratings in a sleek slider format to build trust and encourage conversions
 
 More blocks and demos coming soon (weekly update)
 
@@ -216,6 +221,116 @@ Yes, you can effortlessly display your WooCommerce products on your store websit
 If you found the recent version of Essential Blocks isn’t working or conflicting with other plugins, then you can use earlier versions of the plugin.
 
 == Changelog ==
+
+= 4.3.9 - 20/11/2023
+- Fixed: Form Block issue with FSE
+- Few minor bug fixes & improvements
+
+= 4.3.8 - 09/11/2023
+- Few minor bug fixes & improvements
+
+= 4.3.7 - 09/11/2023
+- Added: New presets in **Testimonial Block**
+- Added: Flip on Click feature in **Flipbox** block
+- Added: RTL support in **Slider** block
+- Improved: Block Preview for multiple blocks updated
+
+= 4.3.6 - 02/11/2023
+- Fixed: **Post Grid** css broken issue
+- Fixed: **Advanced Image** default image size issue
+
+= 4.3.5 - 01/11/2023
+- Added: Custom Order control in **Post Grid** block contents
+- Added: Exit Intent feature in **Popup** block
+- Added: Google Theme and SnazzyMaps Theme in **Google Map** block
+- Added: Select option to set default display filter in **Image Gallery** block
+- Added: Second Button option and Custom Icon picker for Arrow in **Slider** block
+- Fixed: Special Character issue in **Table of Content** block headings
+- Fixed: Exclude posts not working issue in Dynamic blocks
+- Fixed: Image Size issue in **Advanced Image** block
+- Improved: Style controls in **Post Grid** block
+
+= 4.3.4 - 23/10/2023
+- Added: **Post Carousel** block add read more button for all presets
+- Added: **Fluent Form** block change form from controls
+- Fixed: Column duplicate issue fix
+- Fixed: **Form Block** input text font size issue in respinsive mode
+- Fixed: Essential Blocks Settings page bank when Gutenberg plugin is active issue fix
+
+= 4.3.3 - 16/10/2023
+- Improved: Dashboard UI/UX
+- Minor Bug fixes & improvements
+
+= 4.3.2 - 05/10/2023
+- Added: **Image Gallery** block custom link option
+- Added: **Slider Block** image size control
+- Added: New Navigation style for all Slides
+- Fixed: **Toggle Content** block shows blank space
+- Fixed: **Typing Text** block Duplictae issue fix
+- Improved: **Accordion Block** Accesibility improvement
+
+= 4.3.1 - 27/09/2023
+- Fixed: **Form Block** database creation issue fix
+- Minor Bug fixes & improvements
+
+= 4.3.0 - 27/09/2023
+- Added: New Block **Form Block**
+- Fixed: Overlay issue in **Toggle Content** block
+- Minor Bug fixes & improvements
+
+= 4.2.6 - 18/09/2023
+- Improved: Security Enhancement
+- Minor Bug fixes & improvements
+
+= 4.2.5 - 11/09/2023
+- Fixed: **Post Grid** and **Post Carousel** Tags are visible on the top of the carousel
+- Improved: Add image size control in **Advanced Image** Block
+
+= 4.2.4 - 10/09/2023
+- Fixed: **Post Grid** pagination doesn't update on adding new post
+- Fixed: **Advanced Tab** block content not showing on tab click
+- Fixed: **Toggle Content** block content not showing on toggle
+
+= 4.2.3 - 07/09/2023
+- Added: "H" tag select control in **Number Counter** Block
+- Added: Custom Id support in **Advanced Tab** Block
+- Fixed: **Fluent Forms** Block style not loading in Editor
+- Fixed: **Post Carousel** Block conflict issue fix with LearnDash
+- Fixed: Initial loading issue in **Image Slider** Block
+- Improved: Security Enhancement
+- Minor Bug fixes & improvements
+
+= 4.2.2 - 30/08/2023
+- Fixed: Advanced Navigation error in Widget Area
+- Improved: Security Enhancement
+- Minor Bug fixes & improvements
+
+= 4.2.1 - 29/08/2023
+- Improved: Security Enhancement
+- Minor Bug fixes & improvements
+
+= 4.2.0 - 20/08/2023
+- Fixed: **Post Grid** Pagination conflict with Filter
+- Fixed: **Woo Product Grid** Add to Cart button issue fix
+- Fixed: **Table of Content** shows multiple after 4.1.6 update issue fix
+- Other bug fixes & improvements
+
+= 4.1.6 - 09/08/2023
+- Added: **Table of Content** block FSE support and more controls
+- Fixed: **Slider** block conflict with animation
+- Other bug fixes & improvements
+
+= 4.1.5 - 17/07/2023
+- Added: **Advanced Image** block image size option
+- Added: **Social Share** block Open in New Tab option
+- Fixed: **Advanced Tab** block active color not changing
+- Fixed: **Post Grid** block responsive issue conflict with Animation
+
+= 4.1.4 - 05/07/2023
+- Fixed: **Image Gallery** image alt tag missing
+- Fixed: **Infobox** image alt tag not changing
+- Fixed: Adding font group in font-family css
+- Minor bug fixes & improvements
 
 = 4.1.3 - 25/06/2023
 - Schedule update with minor bug fixes & improvements

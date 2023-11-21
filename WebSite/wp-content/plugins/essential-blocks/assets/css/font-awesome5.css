@@ -4283,7 +4283,7 @@
   width: auto;
 }
 @font-face {
-  font-family: "Font Awesome 5 Brands";
+  font-family: "FontAwesome";
   font-style: normal;
   font-weight: normal;
   font-display: auto;
@@ -4295,7 +4295,7 @@
     url(../fonts/fa-brands-400.svg#fontawesome) format("svg");
 }
 .fab {
-  font-family: "Font Awesome 5 Brands";
+  font-family: "FontAwesome";
 }
 @font-face {
   font-family: "Font Awesome 5 Free";

@@ -3,13 +3,19 @@
 $headerMeta = ! is_array( $headerMeta ) ? (array) $headerMeta : $headerMeta;
 $footerMeta = ! is_array( $footerMeta ) ? (array) $footerMeta : $footerMeta;
 
-$headerMeta = array_map( function ( $item ) {
-    return $item->value;
-}, $headerMeta );
+$headerMeta = array_map(
+    function ( $item ) {
+        return isset( $item->value ) ? $item->value : '';
+    },
+    $headerMeta
+);
 
-$footerMeta = array_map( function ( $item ) {
-    return $item->value;
-}, $footerMeta );
+$footerMeta = array_map(
+    function ( $item ) {
+        return isset( $item->value ) ? $item->value : '';
+    },
+    $footerMeta
+);
 
 /**
  * @var string $source
@@ -31,14 +37,17 @@ foreach ( $posts as $result ) {
 
     $_meta_html = apply_filters(
         'eb_post_grid_meta_markup',
-        array_merge( $tax_meta_html, [
-            'avatar' => $avatar,
-            'author' => $author,
-            'date' => $date,
-            'categories' => $categories,
-            'tags' => $tags,
-            'readtime' => $readtime,
-        ] ),
+        array_merge(
+            $tax_meta_html,
+            [
+                'avatar'     => $avatar,
+                'author'     => $author,
+                'date'       => $date,
+                'categories' => $categories,
+                'tags'       => $tags,
+                'readtime'   => $readtime
+            ]
+        ),
         $result->ID,
         $allMeta
     );
@@ -51,16 +60,21 @@ foreach ( $posts as $result ) {
     $wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper" href="%1$s"></a>', get_permalink( $result->ID ) );
     if ( $preset === 'style-5' ) {
         $html .= $wrapper_link_html;
-        $wrapper_link_html = "";
+        $wrapper_link_html = '';
     }
-    $html .= require __DIR__ . '/post-thumbnail.php';
+    if ( ! $enableThumbnailSort ) {
+        $html .= require __DIR__ . '/post-thumbnail.php';
+    }
     $html .= '<div class="ebpg-entry-wrapper">';
+    if ( $enableThumbnailSort ) {
+        $html .= require __DIR__ . '/post-thumbnail.php';
+    }
     $html .= require __DIR__ . '/title.php';
     $html .= require __DIR__ . '/meta/header.php';
     $html .= require __DIR__ . '/post-content.php';
     $html .= require __DIR__ . '/meta/footer.php';
-    $html .= '</div>'; //End of class "ebpg-entry-wrapper"
-    $html .= '</div>'; //End of class "ebpg-grid-post-holder"
+    $html .= '</div>'; // End of class "ebpg-entry-wrapper"
+    $html .= '</div>'; // End of class "ebpg-grid-post-holder"
     $html .= '</article>';
 }
 

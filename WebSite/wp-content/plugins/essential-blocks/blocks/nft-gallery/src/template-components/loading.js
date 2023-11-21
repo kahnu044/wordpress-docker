@@ -19,14 +19,14 @@ export default function Loading(props) {
             {times(limit, (i) => {
                 if (layout === 'grid') {
                     return (
-                        <div class="eb_nft_item">
+                        <div className="eb_nft_item">
                             <LoadingGridIcon/>
                         </div>
                     )
                 }
                 if (layout === 'list') {
                     return (
-                        <div class="eb_nft_item">
+                        <div className="eb_nft_item">
                             <LoadingListIcon />
                         </div>
                     )

@@ -1,5 +1,6 @@
 <?php
 namespace EssentialBlocks\Utils;
+
 use EssentialBlocks\Traits\HasSingletone;
 
 class Enqueue {
@@ -36,7 +37,7 @@ class Enqueue {
      * @param string $handle
      * @param string $filename
      * @param array  $dependencies
-     * @param mixed $args
+     * @param mixed  $args
      *
      * @return void
      */

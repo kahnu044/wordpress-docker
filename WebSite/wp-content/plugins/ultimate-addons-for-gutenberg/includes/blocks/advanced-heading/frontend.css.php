@@ -268,9 +268,7 @@ if ( $attr['headingDescToggle'] || 'none' !== $attr['seperatorStyle'] ) {
 		),
 	);
 }
-/**
- * Get Combined selectors with filters.
- */
+
 $combined_selectors = UAGB_Helper::get_combined_selectors(
 	'advanced-heading',
 	array(
@@ -285,6 +283,10 @@ $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'head', ' .uagb-he
 $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'subHead', ' .uagb-desc-text', $combined_selectors );
 $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'highLight', '.wp-block-uagb-advanced-heading .uagb-highlight', $combined_selectors );
 
-$base_selector = ( $attr['classMigrate'] ) ? '.uagb-block-' : '#uagb-adv-heading-';
+$base_selector = ( $attr['classMigrate'] ) ? '.wp-block-uagb-advanced-heading.uagb-block-' : '#uagb-adv-heading-';
 
-return UAGB_Helper::generate_all_css( $combined_selectors, $base_selector . $id );
+return UAGB_Helper::generate_all_css(
+	$combined_selectors,
+	$base_selector . $id,
+	isset( $gbs_class ) ? '.wp-block-uagb-advanced-heading' . $gbs_class : ''
+);

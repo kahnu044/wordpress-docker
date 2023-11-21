@@ -47,7 +47,7 @@
 
 .eb-toc__list-wrap {
 	ul {
-		display: inline-block;
+		// display: inline-block;
 		text-align: left;
 		margin: 0em 0em 1.5em 1.3em;
 		padding: 0em 0em 0em 1.3em;
@@ -93,39 +93,10 @@
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-	transform: rotate(-90deg);
+	// transform: rotate(-90deg);
 	padding-bottom: 5px;
 	font-size: 20px;
 }
-
-// block icon style
-// .st0 {
-// 	fill: url(#SVGID_1_);
-// }
-
-// .st1 {
-// 	fill: url(#SVGID_2_);
-// }
-
-// .st2 {
-// 	fill: url(#SVGID_3_);
-// }
-
-// .st3 {
-// 	fill: url(#SVGID_4_);
-// }
-
-// .st4 {
-// 	fill: url(#SVGID_5_);
-// }
-
-// .st5 {
-// 	fill: url(#SVGID_6_);
-// }
-
-// .st6 {
-// 	fill: url(#SVGID_7_);
-// }
 
 .eb-toc-header {
 	position: relative;
@@ -197,33 +168,6 @@
 	}
 }
 
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-collapsible.eb-toc-initially-collapsed {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-collapsible.eb-toc-initially-collapsed.eb-toc-is-not-sticky {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-collapsible.eb-toc-initially-not-collapsed {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-initially-collapsed {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-initially-collapsed {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-initially-not-collapsed {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-initially-collapsed.eb-toc-is-sticky {
-// }
-
-// .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-initially-not-collapsed.eb-toc-is-not-sticky {
-// }
-
-//
-//
-//
 .eb-toc-container:not(.eb-toc-content-visible):not(.eb-toc-content-hidden).eb-toc-collapsible.eb-toc-initially-collapsed.eb-toc-is-sticky {
 	visibility: hidden;
 }
@@ -256,6 +200,7 @@
 
 .eb-toc-container.eb-toc-content-hidden .eb-toc-wrapper {
 	height: 0;
+	opacity: 0;
 }
 
 .eb-toc-container.eb-toc-content-hidden .eb-toc-button {

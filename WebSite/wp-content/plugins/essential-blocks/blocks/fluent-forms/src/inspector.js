@@ -2,9 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
 import {
     PanelBody,
     ToggleControl,
@@ -15,6 +13,7 @@ import {
     TabPanel,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
+import { applyFilters } from "@wordpress/hooks";
 
 import objAttributes from "./attributes";
 
@@ -28,6 +27,7 @@ const {
 } = EBControls;
 
 import {
+    FORM_LISTS,
     INPUT_TEXTAREA_INDENT,
     INPUT_WIDTH,
     INPUT_HEIGHT,
@@ -111,6 +111,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         checkboxCheckedColor,
         formBackgroundColor,
         formAlignment,
+        formId,
     } = attributes;
 
     const resRequiredProps = {
@@ -154,6 +155,22 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "essential-blocks"
                                         )}
                                     >
+                                        <SelectControl
+                                            label={__(
+                                                "Select Form",
+                                                "essential-blocks"
+                                            )}
+                                            value={formId}
+                                            options={applyFilters(
+                                                "eb_fluent_form_lists",
+                                                FORM_LISTS
+                                            )}
+                                            onChange={(newFormId) =>
+                                                setAttributes({
+                                                    formId: newFormId,
+                                                })
+                                            }
+                                        />
                                         <ToggleControl
                                             label={__(
                                                 "Show Labels",

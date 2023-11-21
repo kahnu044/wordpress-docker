@@ -11,10 +11,10 @@ class FluentForms extends Block {
 
     protected $attributes = [
         'blockId' => [
-            'type' => "string"
+            'type' => 'string'
         ],
         'formId'  => [
-            'type' => "string"
+            'type' => 'string'
         ]
     ];
 
@@ -31,6 +31,7 @@ class FluentForms extends Block {
 
     /**
      * Unique name of the block.
+     *
      * @return string
      */
     public function get_name() {
@@ -43,16 +44,18 @@ class FluentForms extends Block {
 
     /**
      * Register all other scripts
+     *
      * @return void
      */
     public function register_scripts() {
+
         $this->assets_manager->register(
             'fluent-form-styles',
-            plugins_url() . '/fluentform/public/css/fluent-forms-public.css'
+            plugins_url() . '/fluentform/assets/css/fluent-forms-public.css'
         );
         $this->assets_manager->register(
             'fluentform-public-default',
-            plugins_url() . '/fluentform/public/css/fluentform-public-default.css',
+            plugins_url() . '/fluentform/assets/css/fluentform-public-default.css',
             [
                 'essential-blocks-fluent-form-styles',
                 'essential-blocks-editor-css'
@@ -60,13 +63,14 @@ class FluentForms extends Block {
         );
         $this->assets_manager->register(
             'fluentform-public-default-frontend',
-            plugins_url() . '/fluentform/public/css/fluentform-public-default.css',
+            plugins_url() . '/fluentform/assets/css/fluentform-public-default.css',
             ['essential-blocks-fluent-form-styles']
         );
     }
 
     /**
      * Get form meta using FluentForm Helpers.
+     *
      * @param mixed $id
      *
      * @return mixed
@@ -107,19 +111,23 @@ class FluentForms extends Block {
         }
 
         ob_start();
-        Helper::views( 'forms/fluent-forms', wp_parse_args(
-            $attributes, [
-                'classHook'           => '',
-                'formId'              => '',
-                'customCheckboxStyle' => false,
-                'showLabels'          => true,
-                'showPlaceholder'     => true,
-                'showErrorMessage'    => true,
-                'formAlignment'       => 'none',
-                'wrapper_attributes'  => get_block_wrapper_attributes(),
-                'block_object'        => $this
-            ]
-        ) );
+        Helper::views(
+            'forms/fluent-forms',
+            wp_parse_args(
+                $attributes,
+                [
+                    'classHook'           => '',
+                    'formId'              => '',
+                    'customCheckboxStyle' => false,
+                    'showLabels'          => true,
+                    'showPlaceholder'     => true,
+                    'showErrorMessage'    => true,
+                    'formAlignment'       => 'none',
+                    'wrapper_attributes'  => get_block_wrapper_attributes(),
+                    'block_object'        => $this
+                ]
+            )
+        );
         return ob_get_clean();
     }
 }

@@ -7,7 +7,7 @@ use WPGraphQL\Data\Connection\EnqueuedStylesheetConnectionResolver;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\Data\Connection\UserRoleConnectionResolver;
 use WPGraphQL\Data\DataSource;
-use \WPGraphQL\Model\User as UserModel;
+use WPGraphQL\Model\User as UserModel;
 use WPGraphQL\Type\Connection\PostObjects;
 
 /**
@@ -32,7 +32,7 @@ class User {
 				'connections' => [
 					'enqueuedScripts'     => [
 						'toType'  => 'EnqueuedScript',
-						'resolve' => function ( $source, $args, $context, $info ) {
+						'resolve' => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedScriptsConnectionResolver( $source, $args, $context, $info );
 
 							return $resolver->get_connection();
@@ -40,7 +40,7 @@ class User {
 					],
 					'enqueuedStylesheets' => [
 						'toType'  => 'EnqueuedStylesheet',
-						'resolve' => function ( $source, $args, $context, $info ) {
+						'resolve' => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedStylesheetConnectionResolver( $source, $args, $context, $info );
 
 							return $resolver->get_connection();
@@ -52,7 +52,7 @@ class User {
 						'queryClass'         => 'WP_Query',
 						'description'        => __( 'Connection between the User and Revisions authored by the user', 'wp-graphql' ),
 						'connectionArgs'     => PostObjects::get_connection_args(),
-						'resolve'            => function ( $root, $args, $context, $info ) {
+						'resolve'            => static function ( $root, $args, $context, $info ) {
 							$resolver = new PostObjectConnectionResolver( $root, $args, $context, $info, 'revision' );
 
 							return $resolver->get_connection();
@@ -61,14 +61,16 @@ class User {
 					'roles'               => [
 						'toType'        => 'UserRole',
 						'fromFieldName' => 'roles',
-						'resolve'       => function ( UserModel $user, $args, $context, $info ) {
+						'resolve'       => static function ( UserModel $user, $args, $context, $info ) {
 							$resolver = new UserRoleConnectionResolver( $user, $args, $context, $info );
-							// Only get roles matching the slugs of the roles belonging to the user
 
-							if ( isset( $user->roles ) && ! empty( $user->roles ) ) {
-								$resolver->set_query_arg( 'slugIn', $user->roles );
+							// abort if no roles are set
+							if ( empty( $user->roles ) ) {
+								return null;
 							}
 
+							// Only get roles matching the slugs of the roles belonging to the user
+							$resolver->set_query_arg( 'slugIn', $user->roles );
 							return $resolver->get_connection();
 						},
 					],
@@ -80,7 +82,7 @@ class User {
 					'databaseId'             => [
 						'type'        => [ 'non_null' => 'Int' ],
 						'description' => __( 'Identifies the primary key from the database.', 'wp-graphql' ),
-						'resolve'     => function ( \WPGraphQL\Model\User $user ) {
+						'resolve'     => static function ( \WPGraphQL\Model\User $user ) {
 							return absint( $user->userId );
 						},
 					],
@@ -122,7 +124,7 @@ class User {
 					],
 					'name'                   => [
 						'type'        => 'String',
-						'description' => __( 'Display name of the user. This is equivalent to the WP_User->dispaly_name property.', 'wp-graphql' ),
+						'description' => __( 'Display name of the user. This is equivalent to the WP_User->display_name property.', 'wp-graphql' ),
 					],
 					'registeredDate'         => [
 						'type'        => 'String',
@@ -178,8 +180,7 @@ class User {
 							],
 
 						],
-						'resolve' => function ( $user, $args, $context, $info ) {
-
+						'resolve' => static function ( $user, $args ) {
 							$avatar_args = [];
 							if ( is_numeric( $args['size'] ) ) {
 								$avatar_args['size'] = absint( $args['size'] );

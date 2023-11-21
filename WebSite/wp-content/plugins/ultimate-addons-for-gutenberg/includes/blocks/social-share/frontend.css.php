@@ -3,6 +3,8 @@
  * Frontend CSS & Google Fonts loading File.
  *
  * @since 2.0.0
+ * @var mixed[] $attr
+ * @var int $id
  *
  * @package uagb
  */
@@ -22,22 +24,34 @@ $m_image_size = UAGB_Helper::get_css_value( $attr['sizeMobile'], $attr['sizeType
 $t_image_size = UAGB_Helper::get_css_value( $attr['sizeTablet'], $attr['sizeType'] );
 
 $selectors = array(
-	' .uagb-ss-repeater a.uagb-ss__link'           => array(
+	' .uagb-ss-repeater span.uagb-ss__link'           => array(
 		'color' => $attr['iconColor'],
 	),
-	' .uagb-ss-repeater a.uagb-ss__link svg'       => array(
+	' .uagb-ss-repeater a.uagb-ss__link'              => array( // Backward user case.
+		'color' => $attr['iconColor'],
+	),
+	' .uagb-ss-repeater span.uagb-ss__link svg'       => array(
 		'fill' => $attr['iconColor'],
 	),
-	' .uagb-ss-repeater:hover a.uagb-ss__link'     => array(
+	' .uagb-ss-repeater a.uagb-ss__link svg'          => array( // Backward user case.
+		'fill' => $attr['iconColor'],
+	),
+	' .uagb-ss-repeater:hover span.uagb-ss__link'     => array(
 		'color' => $attr['iconHoverColor'],
 	),
-	' .uagb-ss-repeater:hover a.uagb-ss__link svg' => array(
+	' .uagb-ss-repeater:hover a.uagb-ss__link'        => array( // Backward user case.
+		'color' => $attr['iconHoverColor'],
+	),
+	' .uagb-ss-repeater:hover span.uagb-ss__link svg' => array(
 		'fill' => $attr['iconHoverColor'],
 	),
-	' .uagb-ss-repeater.uagb-ss__wrapper'          => array(
+	' .uagb-ss-repeater:hover a.uagb-ss__link svg'    => array( // Backward user case.
+		'fill' => $attr['iconHoverColor'],
+	),
+	' .uagb-ss-repeater.uagb-ss__wrapper'             => array(
 		'background' => $attr['iconBgColor'],
 	),
-	' .uagb-ss-repeater.uagb-ss__wrapper:hover'    => array(
+	' .uagb-ss-repeater.uagb-ss__wrapper:hover'       => array(
 		'background' => $attr['iconBgHoverColor'],
 	),
 );
@@ -55,7 +69,8 @@ $m_selectors['.uagb-social-share__outer-wrap .block-editor-inner-blocks'] = arra
 $selectors['.uagb-social-share__layout-vertical .uagb-ss__wrapper']     = array(
 	'margin-left'   => 0,
 	'margin-right'  => 0,
-	'margin-bottom' => UAGB_Helper::get_css_value( $attr['gap'], 'px' ),
+	'margin-top'    => UAGB_Helper::get_css_value( ( $attr['gap'] / 2 ), 'px' ),
+	'margin-bottom' => UAGB_Helper::get_css_value( ( $attr['gap'] / 2 ), 'px' ),
 );
 $selectors['.uagb-social-share__layout-vertical .uagb-ss__link']        = array(
 	'padding' => UAGB_Helper::get_css_value( $attr['bgSize'], 'px' ),
@@ -63,12 +78,14 @@ $selectors['.uagb-social-share__layout-vertical .uagb-ss__link']        = array(
 $m_selectors['.uagb-social-share__layout-vertical .uagb-ss__wrapper']   = array(
 	'margin-left'   => 0,
 	'margin-right'  => 0,
-	'margin-bottom' => UAGB_Helper::get_css_value( $attr['gapMobile'], 'px' ),
+	'margin-top'    => UAGB_Helper::get_css_value( ( $gap_mobile_fallback / 2 ), 'px' ),
+	'margin-bottom' => UAGB_Helper::get_css_value( ( $gap_mobile_fallback / 2 ), 'px' ),
 );
 $t_selectors['.uagb-social-share__layout-vertical .uagb-ss__wrapper']   = array(
 	'margin-left'   => 0,
 	'margin-right'  => 0,
-	'margin-bottom' => UAGB_Helper::get_css_value( $attr['gapTablet'], 'px' ),
+	'margin-top'    => UAGB_Helper::get_css_value( ( $gap_tablet_fallback / 2 ), 'px' ),
+	'margin-bottom' => UAGB_Helper::get_css_value( ( $gap_tablet_fallback / 2 ), 'px' ),
 );
 $selectors['.uagb-social-share__layout-horizontal .uagb-ss__link']      = array(
 	'padding' => UAGB_Helper::get_css_value( $attr['bgSize'], 'px' ),
@@ -164,7 +181,6 @@ $selectors['.uagb-social-share__outer-wrap'] = array(
 	'justify-content'   => $alignment,
 	'-webkit-box-pack'  => $alignment,
 	'-ms-flex-pack'     => $alignment,
-	'justify-content'   => $alignment,
 	'-webkit-box-align' => $alignment,
 	'-ms-flex-align'    => $alignment,
 	'align-items'       => $alignment,
@@ -174,7 +190,6 @@ $t_selectors['.uagb-social-share__outer-wrap'] = array(
 	'justify-content'   => $t_alignment,
 	'-webkit-box-pack'  => $t_alignment,
 	'-ms-flex-pack'     => $t_alignment,
-	'justify-content'   => $t_alignment,
 	'-webkit-box-align' => $t_alignment,
 	'-ms-flex-align'    => $t_alignment,
 	'align-items'       => $t_alignment,
@@ -184,7 +199,6 @@ $m_selectors['.uagb-social-share__outer-wrap'] = array(
 	'justify-content'   => $m_alignment,
 	'-webkit-box-pack'  => $m_alignment,
 	'-ms-flex-pack'     => $m_alignment,
-	'justify-content'   => $m_alignment,
 	'-webkit-box-align' => $m_alignment,
 	'-ms-flex-align'    => $m_alignment,
 	'align-items'       => $m_alignment,
@@ -242,7 +256,6 @@ if ( 'horizontal' === $attr['social_layout'] ) {
 			'justify-content'   => $alignment,
 			'-webkit-box-pack'  => $alignment,
 			'-ms-flex-pack'     => $alignment,
-			'justify-content'   => $alignment,
 			'-webkit-box-align' => $alignment,
 			'-ms-flex-align'    => $alignment,
 			'align-items'       => $alignment,
@@ -253,7 +266,6 @@ if ( 'horizontal' === $attr['social_layout'] ) {
 			'justify-content'   => $t_alignment,
 			'-webkit-box-pack'  => $t_alignment,
 			'-ms-flex-pack'     => $t_alignment,
-			'justify-content'   => $t_alignment,
 			'-webkit-box-align' => $t_alignment,
 			'-ms-flex-align'    => $t_alignment,
 			'align-items'       => $t_alignment,
@@ -264,7 +276,6 @@ if ( 'horizontal' === $attr['social_layout'] ) {
 			'justify-content'   => $m_alignment,
 			'-webkit-box-pack'  => $m_alignment,
 			'-ms-flex-pack'     => $m_alignment,
-			'justify-content'   => $m_alignment,
 			'-webkit-box-align' => $m_alignment,
 			'-ms-flex-align'    => $m_alignment,
 			'align-items'       => $m_alignment,
@@ -283,7 +294,6 @@ if ( 'horizontal' === $attr['social_layout'] ) {
 			'justify-content'   => $t_alignment,
 			'-webkit-box-pack'  => $t_alignment,
 			'-ms-flex-pack'     => $t_alignment,
-			'justify-content'   => $t_alignment,
 			'-webkit-box-align' => $t_alignment,
 			'-ms-flex-align'    => $t_alignment,
 			'align-items'       => $t_alignment,
@@ -302,7 +312,6 @@ if ( 'horizontal' === $attr['social_layout'] ) {
 			'justify-content'   => $m_alignment,
 			'-webkit-box-pack'  => $m_alignment,
 			'-ms-flex-pack'     => $m_alignment,
-			'justify-content'   => $m_alignment,
 			'-webkit-box-align' => $m_alignment,
 			'-ms-flex-align'    => $m_alignment,
 			'align-items'       => $m_alignment,

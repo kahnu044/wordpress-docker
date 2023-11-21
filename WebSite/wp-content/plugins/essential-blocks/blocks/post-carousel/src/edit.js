@@ -6,7 +6,7 @@ import { useEffect, createRef } from "@wordpress/element";
 import { useBlockProps } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 import { doAction, applyFilters } from "@wordpress/hooks";
-import { dateI18n, format, __experimentalGetSettings } from "@wordpress/date";
+import { dateI18n, format, getSettings } from "@wordpress/date";
 
 /**
  * External depencencies
@@ -26,29 +26,20 @@ const {
     duplicateBlockIdFix,
     ebJsonStringCheck,
     CustomQuery,
+    DynamicInputValueHandler,
 } = window.EBControls;
 
 const SlickArrow = (props) => {
     const { className, style, onClick, faClass } = props;
     return (
-        <div
-            className={className}
-            style={{ ...style }}
-            onClick={onClick}
-        >
+        <div className={className} style={{ ...style }} onClick={onClick}>
             <i className={faClass}></i>
         </div>
     );
-}
+};
 
 export default function Edit(props) {
-    const {
-        attributes,
-        setAttributes,
-        className,
-        clientId,
-        isSelected,
-    } = props;
+    const { attributes, setAttributes, className, clientId, isSelected } = props;
     const {
         blockId,
         blockMeta,
@@ -87,9 +78,10 @@ export default function Edit(props) {
         dotPreset,
         leftArrowIcon,
         rightArrowIcon,
+        cover,
     } = attributes;
 
-    const dateFormat = __experimentalGetSettings().formats.date;
+    const dateFormat = getSettings().formats.date;
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
@@ -139,23 +131,22 @@ export default function Edit(props) {
 
     const slider = createRef();
 
-    return (
+    return cover.length ? (
+        <div>
+            <img src={cover} alt="post carousel" style={{ maxWidth: "100%" }} />
+        </div>
+    ) : (
         <>
             {isSelected && <Inspector {...props} slider={slider} />}
-            <CustomQuery
-                isEdit={true}
-                attributes={attributes}
-                setAttributes={setAttributes}
-            />
+            <CustomQuery isEdit={true} attributes={attributes} setAttributes={setAttributes} />
             <div {...blockProps}>
                 <Style {...props} />
 
-                <div
-                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                >
+                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div
-                        className={`eb-post-carousel-wrapper ${blockId} ${dotPreset} ${preset} ${dots ? "eb-slider-dots" : ""
-                            } ${adaptiveHeight ? "equal-height" : ""}`}
+                        className={`eb-post-carousel-wrapper ${blockId} ${dotPreset} ${preset} ${
+                            dots ? "eb-slider-dots" : ""
+                        } ${adaptiveHeight ? "equal-height" : ""}`}
                         data-id={blockId}
                     >
                         <Slider {...settings} ref={slider}>
@@ -164,82 +155,72 @@ export default function Edit(props) {
                                 queryResults.map((post, index) => {
                                     //Generate Featured Image
                                     const {
-                                        featuredImageInfo: {
-                                            url: imageSourceUrl,
-                                            alt: featuredImageAlt,
-                                        } = {},
+                                        featuredImageInfo: { url: imageSourceUrl, alt: featuredImageAlt } = {},
                                     } = post;
                                     const featuredImage = showThumbnail && (
-                                        <img
-                                            key={index}
-                                            src={imageSourceUrl}
-                                            alt={featuredImageAlt}
-                                        />
+                                        <img key={index} src={imageSourceUrl} alt={featuredImageAlt} />
                                     );
 
                                     //Generate Title
                                     const title = post?.title?.rendered;
                                     const titleWithLimitWords =
-                                        titleLength >= 0
-                                            ? title
-                                                .trim()
-                                                .split(" ", titleLength)
-                                                .join(" ")
-                                            : title;
+                                        titleLength >= 0 ? title.trim().split(" ", titleLength).join(" ") : title;
                                     const titleHTML = `
 						<${titleTag} class="ebpg-entry-title">
-							<a class="ebpg-carousel-post-link" href="javascript:void(0)" title="${titleWithLimitWords}">
+							<a class="ebpg-carousel-post-link" href="#" title="${titleWithLimitWords}">
 								${titleWithLimitWords}
 							</a>
 						</${titleTag}>
 					`;
 
                                     //Generate Excerpt & Read More
-                                    let excerpt = post?.excerpt?.rendered;
-                                    const excerptElement = document.createElement(
-                                        "div"
-                                    );
-                                    excerptElement.innerHTML = excerpt
-                                        ? excerpt
-                                        : "";
-                                    excerpt =
-                                        excerptElement.textContent ||
-                                        excerptElement.innerText ||
-                                        "";
+                                    let excerpt = post?.excerpt ? post?.excerpt?.rendered : post?.content?.rendered;
+
+                                    const excerptElement = document.createElement("div");
+                                    excerptElement.innerHTML = excerpt ? excerpt : "";
+                                    excerpt = excerptElement.textContent || excerptElement.innerText || "";
                                     const excerptWithLimitWords =
                                         contentLength >= 0
-                                            ? excerpt
-                                                .trim()
-                                                .split(" ", contentLength)
-                                                .join(" ")
+                                            ? excerpt.trim().split(" ", contentLength).join(" ")
                                             : excerpt;
 
                                     const avatarUrl = (author) => {
                                         if (author.avatar_urls && author.avatar_urls[96]) {
                                             return author.avatar_urls[96];
-                                        }
-                                        else {
+                                        } else {
                                             return "http://1.gravatar.com/avatar/467ceabf70aaa0e555b7dd11c9729241?s=96&d=mm&r=g";
                                         }
-                                    }
-                                    const avatar = post._embedded && post._embedded.author ? (
-                                        <div className="ebpg-author-avatar">
-                                            <a href={post._embedded.author[0].link}>
-                                                <img
-                                                    alt={
-                                                        post._embedded.author[0].name
-                                                            ? post._embedded.author[0].name
-                                                            : post._embedded.author[0].slug
-                                                    }
-                                                    src={avatarUrl(post._embedded.author[0])}
-                                                />
-                                            </a>
-                                        </div>
-                                    ) : "";
+                                    };
+                                    const avatar =
+                                        post._embedded && post._embedded.author ? (
+                                            <div className="ebpg-author-avatar">
+                                                <a href={post._embedded.author[0].link}>
+                                                    <img
+                                                        alt={
+                                                            post._embedded.author[0].name
+                                                                ? post._embedded.author[0].name
+                                                                : post._embedded.author[0].slug
+                                                        }
+                                                        src={avatarUrl(post._embedded.author[0])}
+                                                    />
+                                                </a>
+                                            </div>
+                                        ) : (
+                                            ""
+                                        );
 
                                     const date = (
                                         <span className="ebpg-posted-on">
-                                            {datePrefix + " "}
+                                            <DynamicInputValueHandler
+                                                value={datePrefix}
+                                                tagName="span"
+                                                onChange={(datePrefix) =>
+                                                    setAttributes({
+                                                        datePrefix,
+                                                    })
+                                                }
+                                                readOnly={true}
+                                            />{" "}
                                             <time
                                                 dateTime={format(
                                                     "c",
@@ -254,75 +235,70 @@ export default function Edit(props) {
                                         </span>
                                     );
 
-                                    const author = post._embedded && post._embedded.author ? (
-                                        <span className="ebpg-posted-by">
-                                            {authorPrefix + " "}
-                                            <a
-                                                href="javascript:void(0)"
-                                                title={
-                                                    post._embedded.author[0]
-                                                        .name
-                                                        ? post._embedded
-                                                            .author[0].name
-                                                        : post._embedded
-                                                            .author[0].slug
-                                                }
-                                                rel="author"
-                                            >
-                                                {post._embedded.author[0].name
-                                                    ? post._embedded.author[0]
-                                                        .name
-                                                    : post._embedded.author[0]
-                                                        .slug}
-                                            </a>
-                                        </span>
-                                    ) : (
-                                        ""
-                                    );
+                                    const author =
+                                        post._embedded && post._embedded.author ? (
+                                            <span className="ebpg-posted-by">
+                                                <DynamicInputValueHandler
+                                                    value={authorPrefix}
+                                                    tagName="span"
+                                                    onChange={(frontTitle) =>
+                                                        setAttributes({
+                                                            frontTitle,
+                                                        })
+                                                    }
+                                                    readOnly={true}
+                                                />{" "}
+                                                <a
+                                                    href="#"
+                                                    title={
+                                                        post._embedded.author[0].name
+                                                            ? post._embedded.author[0].name
+                                                            : post._embedded.author[0].slug
+                                                    }
+                                                    rel="author"
+                                                >
+                                                    {post._embedded.author[0].name
+                                                        ? post._embedded.author[0].name
+                                                        : post._embedded.author[0].slug}
+                                                </a>
+                                            </span>
+                                        ) : (
+                                            ""
+                                        );
 
                                     const postTermsVal = {};
-                                    post._embedded && post._embedded["wp:term"] &&
+                                    post._embedded &&
+                                        post._embedded["wp:term"] &&
                                         post._embedded["wp:term"].length > 0 &&
-                                        post._embedded["wp:term"].map(
-                                            (item) => {
-                                                let termObj = {};
-                                                let termName = "";
-                                                item.length > 0 &&
-                                                    item.map((term) => {
-                                                        termName =
-                                                            term.taxonomy;
-                                                        termObj[term.slug] = {
-                                                            name: term.name,
-                                                            id: term.id,
-                                                            link: term.link,
-                                                            slug: term.slug,
-                                                        };
-                                                    });
-                                                postTermsVal[
-                                                    termName
-                                                ] = termObj;
-                                            }
-                                        );
+                                        post._embedded["wp:term"].map((item) => {
+                                            let termObj = {};
+                                            let termName = "";
+                                            item.length > 0 &&
+                                                item.map((term) => {
+                                                    termName = term.taxonomy;
+                                                    termObj[term.slug] = {
+                                                        name: term.name,
+                                                        id: term.id,
+                                                        link: term.link,
+                                                        slug: term.slug,
+                                                    };
+                                                });
+                                            postTermsVal[termName] = termObj;
+                                        });
 
                                     const postTermsHtml = {};
                                     if (Object.keys(postTermsVal).length > 0) {
-                                        Object.keys(postTermsVal).map(
-                                            (term) => {
-                                                let termClass = term;
-                                                if (term === "category") {
-                                                    termClass = "categories";
-                                                } else if (
-                                                    term === "post_tag"
-                                                ) {
-                                                    termClass = "tags";
-                                                }
-                                                let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
-                                                Object.keys(postTermsVal[term])
-                                                    .length > 0 &&
-                                                    Object.keys(
-                                                        postTermsVal[term]
-                                                    ).map((item, index) => {
-                                                        markup += `
+                                        Object.keys(postTermsVal).map((term) => {
+                                            let termClass = term;
+                                            if (term === "category") {
+                                                termClass = "categories";
+                                            } else if (term === "post_tag") {
+                                                termClass = "tags";
+                                            }
+                                            let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
+                                            Object.keys(postTermsVal[term]).length > 0 &&
+                                                Object.keys(postTermsVal[term]).map((item, index) => {
+                                                    markup += `
 													<a
 														key=${index}
 														href=${postTermsVal[term][item].link}
@@ -331,36 +307,21 @@ export default function Edit(props) {
 														${postTermsVal[term][item].name}
 													</a>
 												`;
-                                                    });
-                                                markup += `</div>`;
-                                                postTermsHtml[term] = markup;
-                                            }
-                                        );
+                                                });
+                                            markup += `</div>`;
+                                            postTermsHtml[term] = markup;
+                                        });
                                     }
 
                                     const categories = postTermsVal.category ? (
                                         <div className="ebpg-meta ebpg-categories-meta">
-                                            {Object.keys(
-                                                postTermsVal.category
-                                            ).map((item, index) => (
+                                            {Object.keys(postTermsVal.category).map((item, index) => (
                                                 <a
                                                     key={index}
-                                                    href={
-                                                        postTermsVal.category[
-                                                            item
-                                                        ].link
-                                                    }
-                                                    title={
-                                                        postTermsVal.category[
-                                                            item
-                                                        ].name
-                                                    }
+                                                    href={postTermsVal.category[item].link}
+                                                    title={postTermsVal.category[item].name}
                                                 >
-                                                    {
-                                                        postTermsVal.category[
-                                                            item
-                                                        ].name
-                                                    }
+                                                    {postTermsVal.category[item].name}
                                                 </a>
                                             ))}
                                         </div>
@@ -370,26 +331,12 @@ export default function Edit(props) {
 
                                     const tags = postTermsVal.post_tag ? (
                                         <div className="ebpg-meta ebpg-tags-meta">
-                                            {Object.keys(
-                                                postTermsVal.post_tag
-                                            ).map((item) => (
+                                            {Object.keys(postTermsVal.post_tag).map((item) => (
                                                 <a
-                                                    href={
-                                                        postTermsVal.post_tag[
-                                                            item
-                                                        ].link
-                                                    }
-                                                    title={
-                                                        postTermsVal.post_tag[
-                                                            item
-                                                        ].name
-                                                    }
+                                                    href={postTermsVal.post_tag[item].link}
+                                                    title={postTermsVal.post_tag[item].name}
                                                 >
-                                                    {
-                                                        postTermsVal.post_tag[
-                                                            item
-                                                        ].name
-                                                    }
+                                                    {postTermsVal.post_tag[item].name}
                                                 </a>
                                             ))}
                                         </div>
@@ -404,31 +351,27 @@ export default function Edit(props) {
                                         tags,
                                     };
 
-                                    const headerMetaItems = ebJsonStringCheck(
-                                        headerMeta
-                                    )
-                                        ? JSON.parse(headerMeta).map(
-                                            (item) => item.value
-                                        )
+                                    const headerMetaItems = ebJsonStringCheck(headerMeta)
+                                        ? JSON.parse(headerMeta).map((item) => item.value)
                                         : [];
                                     const headerMetaHtml = showMeta ? (
                                         <div className="ebpg-entry-meta ebpg-header-meta">
-                                            {headerMetaItems.includes(
-                                                "avatar"
-                                            ) && avatar}
+                                            {headerMetaItems.includes("avatar") && avatar}
                                             <div className="ebpg-entry-meta-items">
                                                 {headerMetaItems.map((item) => {
                                                     if (metaObject.hasOwnProperty(item)) {
                                                         return metaObject[item];
-                                                    }
-                                                    else if (postTermsHtml.hasOwnProperty(item)) {
+                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
                                                         return parse(postTermsHtml[item]);
-                                                    }
-                                                    else {
-                                                        if (item === 'avatar') {
-                                                            return
+                                                    } else {
+                                                        if (item === "avatar") {
+                                                            return;
                                                         }
-                                                        return applyFilters('essential_blocks_post_carousel_dynamic_fields_markup', '', item)
+                                                        return applyFilters(
+                                                            "essential_blocks_post_carousel_dynamic_fields_markup",
+                                                            "",
+                                                            item
+                                                        );
                                                     }
                                                 })}
                                             </div>
@@ -437,31 +380,27 @@ export default function Edit(props) {
                                         ""
                                     );
 
-                                    const footerMetaItems = ebJsonStringCheck(
-                                        footerMeta
-                                    )
-                                        ? JSON.parse(footerMeta).map(
-                                            (item) => item.value
-                                        )
+                                    const footerMetaItems = ebJsonStringCheck(footerMeta)
+                                        ? JSON.parse(footerMeta).map((item) => item.value)
                                         : [];
                                     const footerMetaHtml = showMeta ? (
                                         <div className="ebpg-entry-meta ebpg-footer-meta">
-                                            {footerMetaItems.includes(
-                                                "avatar"
-                                            ) && avatar}
+                                            {footerMetaItems.includes("avatar") && avatar}
                                             <div className="ebpg-entry-meta-items">
                                                 {footerMetaItems.map((item) => {
                                                     if (metaObject.hasOwnProperty(item)) {
                                                         return metaObject[item];
-                                                    }
-                                                    else if (postTermsHtml.hasOwnProperty(item)) {
+                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
                                                         return parse(postTermsHtml[item]);
-                                                    }
-                                                    else {
-                                                        if (item === 'avatar') {
-                                                            return
+                                                    } else {
+                                                        if (item === "avatar") {
+                                                            return;
                                                         }
-                                                        return applyFilters('essential_blocks_post_carousel_dynamic_fields_markup', '', item)
+                                                        return applyFilters(
+                                                            "essential_blocks_post_carousel_dynamic_fields_markup",
+                                                            "",
+                                                            item
+                                                        );
                                                     }
                                                 })}
                                             </div>
@@ -477,49 +416,31 @@ export default function Edit(props) {
                                         >
                                             <div className="ebpg-carousel-post-holder">
                                                 {preset === "style-4" && (
-                                                    <a
-                                                        className="ebpg-post-link-wrapper"
-                                                        href="javascript:void(0)"
-                                                    ></a>
+                                                    <a className="ebpg-post-link-wrapper" href="#"></a>
                                                 )}
                                                 <div className="ebpg-entry-media">
                                                     {showThumbnail && (
                                                         <div className="ebpg-entry-thumbnail">
-                                                            {preset !==
-                                                                "style-4" && (
-                                                                    <a
-                                                                        className="ebpg-post-link-wrapper"
-                                                                        href="javascript:void(0)"
-                                                                    ></a>
-                                                                )}
-                                                            {post._embedded && post._embedded[
-                                                                "wp:featuredmedia"
-                                                            ] &&
-                                                                post._embedded[
-                                                                    "wp:featuredmedia"
-                                                                ].length >
-                                                                0 && (
+                                                            {preset !== "style-4" && (
+                                                                <a className="ebpg-post-link-wrapper" href="#"></a>
+                                                            )}
+                                                            {post._embedded &&
+                                                                post._embedded["wp:featuredmedia"] &&
+                                                                post._embedded["wp:featuredmedia"].length > 0 && (
                                                                     <img
                                                                         src={
-                                                                            post
-                                                                                ._embedded[
-                                                                                "wp:featuredmedia"
-                                                                            ][0]
+                                                                            post._embedded["wp:featuredmedia"][0]
                                                                                 .source_url
                                                                         }
-                                                                        alt={
-                                                                            post?.title?.alt_text
-                                                                        }
+                                                                        alt={post?.title?.alt_text}
                                                                     />
                                                                 )}
-                                                            {post._embedded && !post._embedded[
-                                                                "wp:featuredmedia"
-                                                            ] && (
-                                                                    <img
-                                                                        src="https://via.placeholder.com/250x250.png"
-                                                                        alt="No Thumbnail Available"
-                                                                    />
-                                                                )}
+                                                            {post._embedded && !post._embedded["wp:featuredmedia"] && (
+                                                                <img
+                                                                    src={EssentialBlocksLocalize?.placeholder_image}
+                                                                    alt="No Thumbnail Available"
+                                                                />
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
@@ -538,29 +459,20 @@ export default function Edit(props) {
                                                     )}
 
                                                     <div className="ebpg-entry-content">
-                                                        {showContent && (
+                                                        {showContent && excerptWithLimitWords && (
                                                             <div className="ebpg-carousel-post-excerpt">
                                                                 <p>
-                                                                    {
-                                                                        excerptWithLimitWords
-                                                                    }
-                                                                    {__(
-                                                                        expansionIndicator
-                                                                    )}
+                                                                    {excerptWithLimitWords}
+                                                                    {__(expansionIndicator)}
                                                                 </p>
                                                             </div>
                                                         )}
                                                         {showReadMore && (
                                                             <div className="ebpg-readmore-btn">
-                                                                <a href="javascript:void(0)">
-                                                                    {__(
-                                                                        readmoreText
-                                                                    )}
-                                                                </a>
+                                                                <a href="#">{__(readmoreText)}</a>
                                                             </div>
                                                         )}
                                                     </div>
-
                                                     {/* Footer Meta */}
                                                     {showMeta && footerMetaHtml}
                                                 </div>
@@ -568,10 +480,7 @@ export default function Edit(props) {
                                         </article>
                                     );
                                 })}
-                            {typeof queryResults != "undefined" &&
-                                queryResults.length < 1 && (
-                                    <p>No Posts Found</p>
-                                )}
+                            {typeof queryResults != "undefined" && queryResults.length < 1 && <p>No Posts Found</p>}
                         </Slider>
                     </div>
                 </div>

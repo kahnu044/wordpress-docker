@@ -1,0 +1,31 @@
+<svg width="58" height="57" viewBox="0 0 58 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="58" height="57" fill="#F5F5F5"/>
+<g id="Deliverable Icon">
+<path d="M-923 -218C-923 -219.105 -922.105 -220 -921 -220H1940C1941.1 -220 1942 -219.105 1942 -218V1215C1942 1216.1 1941.1 1217 1940 1217H-921C-922.105 1217 -923 1216.1 -923 1215V-218Z" fill="white"/>
+<g id="form icon last">
+<g id="Frame 10940">
+<path id="Vector" d="M55.0971 41.5518H2.90291C1.85196 41.5518 1 42.4246 1 43.5014V54.0849C1 55.1616 1.85196 56.0345 2.90291 56.0345H55.0971C56.148 56.0345 57 55.1616 57 54.0849V43.5014C57 42.4246 56.148 41.5518 55.0971 41.5518Z" stroke="#6C3BFF" stroke-width="1.93103"/>
+<path id="Vector_2" d="M26.4015 48.7745L28.2592 50.6322L31.9718 46.9196" stroke="#6C3BFF" stroke-width="1.93103" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M55.0971 1H2.90291C1.85196 1 1 1.84054 1 2.87739V13.6054C1 14.6422 1.85196 15.4828 2.90291 15.4828H55.0971C56.148 15.4828 57 14.6422 57 13.6054V2.87739C57 1.84054 56.148 1 55.0971 1Z" stroke="#6C3BFF" stroke-width="1.93103"/>
+<path id="Vector_4" d="M15.6313 5.82764H47.939" stroke="#6C3BFF" stroke-width="1.93103" stroke-linecap="round"/>
+<path id="Vector_5" d="M15.6313 10.6553H35.5451" stroke="#6C3BFF" stroke-width="1.93103" stroke-linecap="round"/>
+<path id="Vector_6" d="M55.0971 21.2759H2.90291C1.85196 21.2759 1 22.1164 1 23.1533V33.8812C1 34.9181 1.85196 35.7586 2.90291 35.7586H55.0971C56.148 35.7586 57 34.9181 57 33.8812V23.1533C57 22.1164 56.148 21.2759 55.0971 21.2759Z" stroke="#6C3BFF" stroke-width="1.93103"/>
+<path id="Vector_7" d="M15.6313 26.1034H47.939" stroke="#6C3BFF" stroke-width="1.93103" stroke-linecap="round"/>
+<path id="Vector_8" d="M15.6313 30.931H35.5451" stroke="#6C3BFF" stroke-width="1.93103" stroke-linecap="round"/>
+<g id="Rectangle 1159">
+<mask id="path-11-inside-1_0_1" fill="white">
+<rect x="5.82759" y="4.86206" width="5.7931" height="5.7931" rx="0.965517"/>
+</mask>
+<rect x="5.82759" y="4.86206" width="5.7931" height="5.7931" rx="0.965517" stroke="#6C3BFF" stroke-width="3.86207" mask="url(#path-11-inside-1_0_1)"/>
+</g>
+<g id="Rectangle 1160">
+<mask id="path-12-inside-2_0_1" fill="white">
+<rect x="5.82759" y="25.1379" width="5.7931" height="5.7931" rx="0.965517"/>
+</mask>
+<rect x="5.82759" y="25.1379" width="5.7931" height="5.7931" rx="0.965517" stroke="#6C3BFF" stroke-width="3.86207" mask="url(#path-12-inside-2_0_1)"/>
+</g>
+</g>
+</g>
+<path d="M-921 -219H1940V-221H-921V-219ZM1941 -218V1215H1943V-218H1941ZM1940 1216H-921V1218H1940V1216ZM-922 1215V-218H-924V1215H-922ZM-921 1216C-921.552 1216 -922 1215.55 -922 1215H-924C-924 1216.66 -922.657 1218 -921 1218V1216ZM1941 1215C1941 1215.55 1940.55 1216 1940 1216V1218C1941.66 1218 1943 1216.66 1943 1215H1941ZM1940 -219C1940.55 -219 1941 -218.552 1941 -218H1943C1943 -219.657 1941.66 -221 1940 -221V-219ZM-921 -221C-922.657 -221 -924 -219.657 -924 -218H-922C-922 -218.552 -921.552 -219 -921 -219V-221Z" fill="black" fill-opacity="0.1"/>
+</g>
+</svg>

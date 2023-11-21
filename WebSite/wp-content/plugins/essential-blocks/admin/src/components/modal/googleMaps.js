@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { ExternalLink } from "@wordpress/components";
-import { saveEBSettingsData } from "../helpers/fetchData";
 import { useState } from "@wordpress/element";
+const { saveEBSettingsData } = window.EBControls;
 
 const GoogleMaps = (props) => {
     const { setTrigger, settingsKey, settingsData, setSettingsData } = props;

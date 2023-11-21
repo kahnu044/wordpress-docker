@@ -29,14 +29,17 @@ class FontLoader {
      */
     public function __construct( $block_name ) {
         self::$block_name = $block_name;
-        //Get font from each block loaded in page
+
+        // Get font from each block loaded in page
         add_filter( 'render_block', [$this, 'get_fonts_on_render_block'], 10, 2 );
+
         // add_filter( 'wp_enqueue_scripts', [$this, 'eb_enqueue_fonts'], 15 );
         add_action( 'wp_footer', [$this, 'eb_enqueue_fonts'], 15 );
     }
 
     /**
      * Run font loader after all block render
+     *
      * @since 4.0.2
      * @access public
      */
@@ -46,6 +49,7 @@ class FontLoader {
 
     /**
      * Get Attributes on block render
+     *
      * @since 4.0.2
      * @access public
      */
@@ -62,6 +66,7 @@ class FontLoader {
 
     /**
      * Generate Font family from Attributes
+     *
      * @since 4.0.0
      * @access public
      */
@@ -76,6 +81,7 @@ class FontLoader {
 
     /**
      * Load fonts.
+     *
      * @since 4.0.0
      * @access public
      */
@@ -105,7 +111,8 @@ class FontLoader {
                     wp_register_style(
                         $handle_name,
                         add_query_arg( $query_args, '//fonts.googleapis.com/css' ),
-                        []
+                        [],
+                        ESSENTIAL_BLOCKS_VERSION
                     );
                     wp_enqueue_style( $handle_name );
                 }

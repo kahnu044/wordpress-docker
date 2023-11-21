@@ -30,7 +30,7 @@ export default function CurrentPrice(props) {
     return (
         <>
             {showPrice && (
-                <div class="eb_nft_price">
+                <div className="eb_nft_price">
                     <span className="ebnft_label">Price:</span>
                     <span className="ebnft_currency"><ETHIcon/></span>
                     <span className="ebnft_price">{price}</span>

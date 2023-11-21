@@ -2,7 +2,7 @@
  * External Dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useRef } from "@wordpress/element";
+import { useEffect, useState, useRef } from "@wordpress/element";
 import { useBlockProps } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 import classnames from "classnames";
@@ -18,6 +18,7 @@ const {
     generateBorderShadowStyles,
     generateTypographyStyles,
     generateBackgroundControlStyles,
+    NoticeComponent,
 } = EBControls;
 
 import {
@@ -25,20 +26,16 @@ import {
     wrapPaddingConst,
     WrpBgConst,
     WrpBdShadowConst,
+    GOOGLE_MAP_STYLES,
+    SNAZZY_MAP_STYLES,
 } from "./constants";
-import {
-    typoPrefix_title,
-    typoPrefix_desc,
-} from "./constants/typographyConstants";
+import { typoPrefix_title, typoPrefix_desc } from "./constants/typographyConstants";
+
+import { GoogleMapIcon } from "./icon";
+import { Dashicon } from "@wordpress/components";
 
 const edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        className,
-        clientId,
-        isSelected,
-    } = props;
+    const { attributes, setAttributes, className, clientId, isSelected } = props;
 
     const {
         blockId,
@@ -57,7 +54,13 @@ const edit = (props) => {
         titleHoverColor,
         descColor,
         imageSize,
+        cover,
+        themeSource,
+        googleMapStyle,
+        snazzyMapStyle,
     } = attributes;
+
+    const [isMapInit, setIsMapInit] = useState(true);
 
     useEffect(() => {
         // this useEffect is for creating an unique id for each block's unique className by a random unique number
@@ -289,6 +292,9 @@ const edit = (props) => {
         isMount,
         imageSize,
         blockId,
+        themeSource,
+        googleMapStyle,
+        snazzyMapStyle,
     ]);
 
     useEffect(() => {
@@ -296,9 +302,7 @@ const edit = (props) => {
 
         let defaultMarker = [
             {
-                title: searchAddress
-                    ? searchAddress
-                    : __("Marker 1", "essential-block"),
+                title: searchAddress ? searchAddress : __("Marker 1", "essential-block"),
                 latitude: latitude,
                 longitude: longitude,
                 location: searchAddress,
@@ -311,18 +315,21 @@ const edit = (props) => {
     // initialize map
     const initMap = () => {
         const editor = getEditorIframe()?.contentWindow?.document ?? document;
-        mapRef.current = new window.google.maps.Map(
-            editor.getElementById(blockId),
-            {
-                center: {
-                    lat: Number(marker[0]?.latitude) || Number(latitude),
-                    lng: Number(marker[0]?.longitude) || Number(longitude),
-                },
-                gestureHandling: "cooperative",
-                zoom: marker.length === 1 ? parseInt(mapZoom) || "13" : 0,
-                mapTypeId: mapType,
-            }
-        );
+        if (!window.google || !editor.getElementById(blockId)) {
+            setIsMapInit(false);
+            return;
+        }
+        mapRef.current = window?.google?.maps && new window.google.maps.Map(editor.getElementById(blockId), {
+            center: {
+                lat: Number(marker[0]?.latitude) || Number(latitude),
+                lng: Number(marker[0]?.longitude) || Number(longitude),
+            },
+            gestureHandling: "cooperative",
+            zoom: marker.length === 1 ? parseInt(mapZoom) || "13" : 0,
+            mapTypeId: mapType,
+            styles:
+                "google_theme" === themeSource ? GOOGLE_MAP_STYLES[googleMapStyle] : SNAZZY_MAP_STYLES[snazzyMapStyle],
+        });
         if (marker.length > 0) {
             multipleMarkers(marker);
         }
@@ -335,18 +342,10 @@ const edit = (props) => {
             var marker, i;
             var bounds = new google.maps.LatLngBounds();
             for (i = 0; i < locations.length; i++) {
-                let iconUrl =
-                    "true" == locations[i].showCustomIcon
-                        ? locations[i].imageUrl
-                        : locations[i].icon;
+                let iconUrl = "true" == locations[i].showCustomIcon ? locations[i].imageUrl : locations[i].icon;
                 let icon = {
-                    url:
-                        iconUrl ||
-                        "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                    scaledSize: new google.maps.Size(
-                        imageSizeNew,
-                        imageSizeNew
-                    ),
+                    url: iconUrl || "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                    scaledSize: new google.maps.Size(imageSizeNew, imageSizeNew),
                 };
 
                 marker = new google.maps.Marker({
@@ -359,11 +358,9 @@ const edit = (props) => {
                     map: mapRef.current,
                 });
 
-                const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${
-                    locations[i].title
-                }</h6><div class="eb-google-map-overview-content">${
-                    locations[i].content ? `<p>${locations[i].content}</p>` : ""
-                }</div></div>`;
+                const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${locations[i].title
+                    }</h6><div class="eb-google-map-overview-content">${locations[i].content ? `<p>${locations[i].content}</p>` : ""
+                    }</div></div>`;
                 bounds.extend(marker.getPosition());
                 if (i == 0) {
                     infowindow.setContent(contentString);
@@ -386,15 +383,14 @@ const edit = (props) => {
         }
     };
 
-    return (
+    return cover.length ? (
+        <div>
+            <img src={cover} alt="google map" style={{ maxWidth: "100%" }} />
+        </div>
+    ) : (
         <>
             {isSelected && (
-                <Inspector
-                    key="inspector"
-                    attributes={attributes}
-                    setAttributes={setAttributes}
-                    map={mapRef.current}
-                />
+                <Inspector key="inspector" attributes={attributes} setAttributes={setAttributes} map={mapRef.current} />
             )}
             <div {...blockProps}>
                 <style>
@@ -425,14 +421,38 @@ const edit = (props) => {
 				 }
 				 `}
                 </style>
-                <div
-                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                >
-                    <div
-                        id={blockId}
-                        className={`${blockId} eb-google-map-wrapper`}
-                        style={{ height: `${mapHeight || 400}px` }}
-                    ></div>
+                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                    {!isMapInit && (
+                        <NoticeComponent
+                            Icon={GoogleMapIcon}
+                            title={"Google Maps"}
+                            description={
+                                <>
+                                    Please add your Google Map API&nbsp;
+                                    <a
+                                        target="_blank"
+                                        href={`${EssentialBlocksLocalize?.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
+                                    >
+                                        Here
+                                    </a>
+                                    &nbsp;to display Google Maps Block
+                                </>
+                            }
+                            externalDocLink={"https://essential-blocks.com/docs/retrieve-google-maps-api"}
+                            externalDocText={
+                                <>
+                                    Learn more about Google Map API <Dashicon icon="external" />
+                                </>
+                            }
+                        />
+                    )}
+                    {isMapInit && (
+                        <div
+                            id={blockId}
+                            className={`${blockId} eb-google-map-wrapper`}
+                            style={{ height: `${mapHeight || 400}px` }}
+                        ></div>
+                    )}
                 </div>
             </div>
         </>

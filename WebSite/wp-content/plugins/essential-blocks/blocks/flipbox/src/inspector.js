@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
+import { applyFilters } from "@wordpress/hooks";
 import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -17,7 +17,6 @@ import {
     BaseControl,
     TabPanel,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
 
 /*
  * External dependencies
@@ -37,6 +36,7 @@ import {
     LINK_TYPE,
     FRONT_IMAGE_UNITS,
     CONTENT_POSITION,
+    FLIP_MODE,
 } from "./constants";
 
 const {
@@ -50,6 +50,7 @@ const {
     ColorControl,
     BackgroundControl,
     AdvancedControls,
+    DynamicInputControl,
 } = window.EBControls;
 
 import {
@@ -138,6 +139,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         displayButtonIcon,
         contentPosition,
         linkOpenNewTab,
+        flipMode,
+        isMouseLeaveOn,
     } = attributes;
 
     // Genereate different button styles
@@ -224,6 +227,44 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         )}
                                         initialOpen={true}
                                     >
+                                        <SelectControl
+                                            label={__(
+                                                "Flip Mode",
+                                                "essential-blocks"
+                                            )}
+                                            value={flipMode}
+                                            options={applyFilters(
+                                                "eb_flipbox_modes",
+                                                FLIP_MODE
+                                            )}
+                                            onChange={(selected) =>
+                                                setAttributes({
+                                                    flipMode: selected,
+                                                })
+                                            }
+                                            help={
+                                                flipMode === "click"
+                                                    ? __(
+                                                          "Click mode only available in frontend.",
+                                                          "essential-blocks"
+                                                      )
+                                                    : ""
+                                            }
+                                        />
+                                        {"click" === flipMode && (
+                                            <ToggleControl
+                                                label={__(
+                                                    "Use Mouse Leave when click mode on",
+                                                    "essential-blocks"
+                                                )}
+                                                checked={isMouseLeaveOn}
+                                                onChange={() => {
+                                                    setAttributes({
+                                                        isMouseLeaveOn: !isMouseLeaveOn,
+                                                    });
+                                                }}
+                                            />
+                                        )}
                                         <BaseControl
                                             label={__(
                                                 "Alignment",
@@ -269,7 +310,6 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             step={1}
                                             noUnits
                                         />
-
                                         <ResponsiveRangeController
                                             baseLabel={__(
                                                 "Box Width",
@@ -282,7 +322,6 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             step={1}
                                             noUnits
                                         />
-
                                         <SelectControl
                                             label={__(
                                                 "Flipbox Type",
@@ -729,18 +768,26 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     }}
                                                 />
                                                 {showFrontTitle && (
-                                                    <TextControl
-                                                        label={__(
-                                                            "Front Title",
-                                                            "essential-blocks"
-                                                        )}
-                                                        value={frontTitle}
-                                                        onChange={(newText) =>
-                                                            setAttributes({
-                                                                frontTitle: newText,
-                                                            })
-                                                        }
-                                                    />
+                                                    <>
+                                                        <DynamicInputControl
+                                                            label={__(
+                                                                "Front Title",
+                                                                "essential-blocks"
+                                                            )}
+                                                            attrName="frontTitle"
+                                                            inputValue={
+                                                                frontTitle
+                                                            }
+                                                            setAttributes={
+                                                                setAttributes
+                                                            }
+                                                            onChange={(text) =>
+                                                                setAttributes({
+                                                                    frontTitle: text,
+                                                                })
+                                                            }
+                                                        />
+                                                    </>
                                                 )}
                                                 <ToggleControl
                                                     label={__(
@@ -785,15 +832,19 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     }}
                                                 />
                                                 {showBackTitle && (
-                                                    <TextControl
+                                                    <DynamicInputControl
                                                         label={__(
                                                             "Back Title",
                                                             "essential-blocks"
                                                         )}
-                                                        value={backTitle}
-                                                        onChange={(newText) =>
+                                                        attrName="backTitle"
+                                                        inputValue={backTitle}
+                                                        setAttributes={
+                                                            setAttributes
+                                                        }
+                                                        onChange={(text) =>
                                                             setAttributes({
-                                                                backTitle: newText,
+                                                                backTitle: text,
                                                             })
                                                         }
                                                     />
@@ -880,7 +931,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             </ButtonGroup>
                                         </BaseControl>
 
-                                        <TextControl
+                                        {/* <TextControl
                                             label={__(
                                                 "Link",
                                                 "essential-blocks"
@@ -889,6 +940,20 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             placeholder="https://your-link.com"
                                             onChange={(newLink) =>
                                                 setAttributes({ link: newLink })
+                                            }
+                                        /> */}
+                                        <DynamicInputControl
+                                            label={__(
+                                                "Link",
+                                                "essential-blocks"
+                                            )}
+                                            attrName="link"
+                                            inputValue={link}
+                                            setAttributes={setAttributes}
+                                            onChange={(text) =>
+                                                setAttributes({
+                                                    link: text,
+                                                })
                                             }
                                         />
                                         <ToggleControl

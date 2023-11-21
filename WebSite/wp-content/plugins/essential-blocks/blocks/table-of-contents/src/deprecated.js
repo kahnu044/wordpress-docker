@@ -5,7 +5,7 @@ import { RichText, useBlockProps } from "@wordpress/block-editor";
 const { omit } = lodash;
 
 import attributes from "./attributes";
-import List from "./list";
+import List from "./listOld";
 
 const deprecated = [
     {

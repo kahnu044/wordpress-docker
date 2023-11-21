@@ -60,13 +60,7 @@ import {
 } from "./constants";
 
 export default function Edit(props) {
-    const {
-        attributes,
-        setAttributes,
-        className,
-        clientId,
-        isSelected,
-    } = props;
+    const { attributes, setAttributes, className, clientId, isSelected } = props;
     const {
         resOption,
         blockId,
@@ -115,11 +109,10 @@ export default function Edit(props) {
         loadMoreHoverBgColor,
         loadMoreActiveColor,
         loadMoreActiveBgColor,
+        cover,
     } = attributes;
 
-    const is_woocommerce_active =
-        EssentialBlocksLocalize?.get_plugins["woocommerce/woocommerce.php"]
-            ?.active;
+    const is_woocommerce_active = EssentialBlocksLocalize?.get_plugins["woocommerce/woocommerce.php"]?.active;
 
     // this useEffect is for creating an unique id for each block's unique className by a random unique number
     useEffect(() => {
@@ -153,11 +146,7 @@ export default function Edit(props) {
     };
 
     const contentAlignmentClass =
-        contentAlignment === "left"
-            ? "flex-start"
-            : contentAlignment === "right"
-                ? "flex-end"
-                : "center";
+        contentAlignment === "left" ? "flex-start" : contentAlignment === "right" ? "flex-end" : "center";
 
     // title typography
     const {
@@ -580,13 +569,14 @@ export default function Edit(props) {
 			${btnBackgroundColor ? `background: ${btnBackgroundColor};` : ""}
 			transition: all 0.3s, ${btnShadowTransitionStyle};
 		}
-		${gridPreset !== "grid-preset-3"
-            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
+		${
+            gridPreset !== "grid-preset-3"
+                ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
 			${btnShadowStylesHoverDesktop}
 			${btnHoverColor ? `color: ${btnHoverColor};` : ""}
 			${btnBackgroundHoverColor ? `background: ${btnBackgroundHoverColor};` : ""}
 		}`
-            : ""
+                : ""
         }
 
 
@@ -608,12 +598,13 @@ export default function Edit(props) {
 			${contentBackgroundColor ? `background: ${contentBackgroundColor};` : ""}
 		}
 
-		${backgroundOverlayColor
-            ? `
+		${
+            backgroundOverlayColor
+                ? `
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-content-wrapper {
 			background: ${backgroundOverlayColor};
 		}`
-            : ""
+                : ""
         }
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
@@ -628,9 +619,10 @@ export default function Edit(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverDesktop : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowDesktop}
 			transition: ${imgBDShadowTransition};
 			overflow: hidden;
@@ -651,10 +643,7 @@ export default function Edit(props) {
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
 			${imageWidthDesktop}
-			${autoHeight || imageHeightDesktop === ""
-            ? `height: 100%;`
-            : imageHeightDesktop
-        }
+			${autoHeight || imageHeightDesktop === "" ? `height: 100%;` : imageHeightDesktop}
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product {
@@ -817,9 +806,10 @@ export default function Edit(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverTab : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowTab}
 		}
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product:hover {
@@ -958,9 +948,10 @@ export default function Edit(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverMobile : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowMobile}
 		}
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product:hover {
@@ -1035,8 +1026,7 @@ export default function Edit(props) {
             } else if (i <= 3) {
                 html += `<button class="ebpg-pagination-item">${i}</button>`;
             } else if (i === totalPages) {
-                html +=
-                    '<button class="ebpg-pagination-item-separator">...</button>';
+                html += '<button class="ebpg-pagination-item-separator">...</button>';
                 html += `<button class="ebpg-pagination-item">${i}</button>`;
             } else {
                 html += "";
@@ -1048,14 +1038,13 @@ export default function Edit(props) {
 
     const presetClass = "grid" === layout ? gridPreset : listPreset;
 
-    return (
+    return cover.length ? (
+        <div>
+            <img src={cover} alt="woo product grid" style={{ maxWidth: "100%" }} />
+        </div>
+    ) : (
         <>
-            {isSelected && (
-                <Inspector
-                    attributes={attributes}
-                    setAttributes={setAttributes}
-                />
-            )}
+            {isSelected && <Inspector attributes={attributes} setAttributes={setAttributes} />}
 
             <WoocommerceQuery
                 isEdit={true}
@@ -1068,8 +1057,8 @@ export default function Edit(props) {
             <div {...blockProps}>
                 {!is_woocommerce_active && (
                     <div>
-                        <strong>WooCommerce</strong> is not installed/activated
-                        on your site. Please install and activate{" "}
+                        <strong>WooCommerce</strong> is not installed/activated on your site. Please install and
+                        activate{" "}
                         <a
                             href={
                                 EssentialBlocksLocalize.eb_admin_url +
@@ -1112,64 +1101,42 @@ export default function Edit(props) {
 				   }
 				   `}
                         </style>
-                        <div
-                            className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                        >
-                            <div
-                                className={`eb-woo-products-wrapper ${blockId}`}
-                                data-id={blockId}
-                            >
-                                <div
-                                    className={`eb-woo-products-gallery ${presetClass}`}
-                                >
+                        <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                            <div className={`eb-woo-products-wrapper ${blockId}`} data-id={blockId}>
+                                <div className={`eb-woo-products-gallery ${presetClass}`}>
                                     {typeof queryResults === "object" &&
                                         queryResults.length > 0 &&
                                         queryResults.map((item, index) => (
-                                            <div
-                                                className="eb-woo-products-col"
-                                                key={index}
-                                            >
+                                            <div className="eb-woo-products-col" key={index}>
                                                 <div className="eb-woo-product">
                                                     <div className="eb-woo-product-image-wrapper">
                                                         <div className="eb-woo-product-image">
                                                             {item.image ? (
                                                                 <a href="#">
-                                                                    <img
-                                                                        src={
-                                                                            item
-                                                                                .image[
-                                                                            "large"
-                                                                            ]
-                                                                        }
-                                                                    />
+                                                                    <img src={item.image["large"]} />
                                                                 </a>
                                                             ) : (
                                                                 <a href="#">
                                                                     <img
-                                                                        src="https://via.placeholder.com/200x200.png"
+                                                                        src={EssentialBlocksLocalize?.placeholder_image}
                                                                         alt="No preview available"
                                                                     />
                                                                 </a>
                                                             )}
-                                                            {showSaleBadge &&
-                                                                item.sale && (
-                                                                    <span
-                                                                        className={`eb-woo-product-ribbon ${saleBadgeAlign}`}
-                                                                    >
-                                                                        {
-                                                                            saleText
-                                                                        }
-                                                                    </span>
-                                                                )}
+                                                            {showSaleBadge && item.sale && (
+                                                                <span
+                                                                    className={`eb-woo-product-ribbon ${saleBadgeAlign}`}
+                                                                >
+                                                                    {saleText}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         {layout === "grid" && (
                                                             <div className="eb-woo-product-overlay">
                                                                 <div className="eb-woo-product-button-list">
                                                                     <a className="eb-woo-product-button button">
                                                                         {isCustomCartBtn
-                                                                            ? customCartButtonText(
-                                                                                item.type
-                                                                            )
+                                                                            ? customCartButtonText(item.type)
                                                                             : item.add_to_cart_text}
                                                                     </a>
                                                                 </div>
@@ -1179,39 +1146,31 @@ export default function Edit(props) {
                                                     {layout === "grid" && (
                                                         <div
                                                             className="eb-woo-product-content-wrapper"
-                                                            data-rating={Math.round(
-                                                                item.rating_average
-                                                            )}
+                                                            data-rating={Math.round(item.rating_average)}
                                                         >
                                                             <div className="eb-woo-product-content">
-                                                                {showRating &&
-                                                                    item.rating_average && (
-                                                                        <div
-                                                                            className="eb-woo-product-rating-wrapper"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: ratingHtml(
-                                                                                    parseInt(
-                                                                                        item.rating_average
-                                                                                    )
-                                                                                ),
-                                                                            }}
-                                                                        ></div>
-                                                                    )}
+                                                                {showRating && item.rating_average && (
+                                                                    <div
+                                                                        className="eb-woo-product-rating-wrapper"
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html: ratingHtml(
+                                                                                parseInt(item.rating_average)
+                                                                            ),
+                                                                        }}
+                                                                    ></div>
+                                                                )}
 
                                                                 <h3
                                                                     className="eb-woo-product-title"
                                                                     dangerouslySetInnerHTML={{
-                                                                        __html:
-                                                                            item.title,
+                                                                        __html: item.title,
                                                                     }}
-                                                                >
-                                                                </h3>
+                                                                ></h3>
                                                                 {showPrice && (
                                                                     <p
                                                                         className="eb-woo-product-price"
                                                                         dangerouslySetInnerHTML={{
-                                                                            __html:
-                                                                                item.price_html,
+                                                                            __html: item.price_html,
                                                                         }}
                                                                     ></p>
                                                                 )}
@@ -1222,65 +1181,44 @@ export default function Edit(props) {
                                                     {layout === "list" && (
                                                         <div
                                                             className="eb-woo-product-content-wrapper"
-                                                            data-rating={Math.round(
-                                                                item.rating_average
-                                                            )}
+                                                            data-rating={Math.round(item.rating_average)}
                                                         >
                                                             <div className="eb-woo-product-content">
                                                                 <h3
                                                                     className="eb-woo-product-title"
                                                                     dangerouslySetInnerHTML={{
-                                                                        __html:
-                                                                            item.title,
+                                                                        __html: item.title,
                                                                     }}
-                                                                >
-                                                                </h3>
+                                                                ></h3>
                                                                 {showPrice && (
                                                                     <p
                                                                         className="eb-woo-product-price"
                                                                         dangerouslySetInnerHTML={{
-                                                                            __html:
-                                                                                item.price_html,
+                                                                            __html: item.price_html,
                                                                         }}
                                                                     ></p>
                                                                 )}
-                                                                {showRating &&
-                                                                    item.rating_average && (
-                                                                        <div
-                                                                            className="eb-woo-product-rating-wrapper"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: ratingHtml(
-                                                                                    parseInt(
-                                                                                        item.rating_average
-                                                                                    )
-                                                                                ),
-                                                                            }}
-                                                                        ></div>
-                                                                    )}
+                                                                {showRating && item.rating_average && (
+                                                                    <div
+                                                                        className="eb-woo-product-rating-wrapper"
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html: ratingHtml(
+                                                                                parseInt(item.rating_average)
+                                                                            ),
+                                                                        }}
+                                                                    ></div>
+                                                                )}
                                                                 <p className="eb-woo-product-details">
                                                                     {/* {item.excerpt.substring(0, 65)} */}
                                                                     {item.excerpt
-                                                                        .split(
-                                                                            " "
-                                                                        )
-                                                                        .slice(
-                                                                            0,
-                                                                            Math.abs(
-                                                                                parseInt(
-                                                                                    productDescLength
-                                                                                )
-                                                                            )
-                                                                        )
-                                                                        .join(
-                                                                            " "
-                                                                        )}
+                                                                        .split(" ")
+                                                                        .slice(0, Math.abs(parseInt(productDescLength)))
+                                                                        .join(" ")}
                                                                 </p>
                                                                 <div className="eb-woo-product-button-list">
                                                                     <a className="eb-woo-product-button button">
                                                                         {isCustomCartBtn
-                                                                            ? customCartButtonText(
-                                                                                item.type
-                                                                            )
+                                                                            ? customCartButtonText(item.type)
                                                                             : item.add_to_cart_text}
                                                                     </a>
                                                                 </div>
@@ -1290,17 +1228,11 @@ export default function Edit(props) {
                                                 </div>
                                             </div>
                                         ))}
-                                    {typeof queryResults === "object" &&
-                                        queryResults.length <= 0 && (
-                                            <>
-                                                <p>
-                                                    {__(
-                                                        "No product found",
-                                                        "essential-blocks"
-                                                    )}
-                                                </p>
-                                            </>
-                                        )}
+                                    {typeof queryResults === "object" && queryResults.length <= 0 && (
+                                        <>
+                                            <p>{__("No product found", "essential-blocks")}</p>
+                                        </>
+                                    )}
                                 </div>
                                 {/* Pagination */}
                                 {typeof queryResults != "undefined" &&
@@ -1308,34 +1240,24 @@ export default function Edit(props) {
                                     typeof loadMoreOptions != "undefined" &&
                                     loadMoreOptions.enableMorePosts && (
                                         <div
-                                            className={`ebpg-pagination ${loadMoreOptions.loadMoreType ===
-                                                "3"
-                                                ? "prev-next-btn"
-                                                : ""
-                                                }`}
+                                            className={`ebpg-pagination ${
+                                                loadMoreOptions.loadMoreType === "3" ? "prev-next-btn" : ""
+                                            }`}
                                         >
-                                            {loadMoreOptions.loadMoreType ===
-                                                "1" && (
-                                                    <button className="btn ebpg-pagination-button">
-                                                        {
-                                                            loadMoreOptions.loadMoreButtonTxt
-                                                        }
-                                                    </button>
-                                                )}
-                                            {(loadMoreOptions.loadMoreType ===
-                                                "2" ||
-                                                loadMoreOptions.loadMoreType ===
-                                                "3") && (
-                                                    <div
-                                                        className="btn ebpg-pagination-page"
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: paginationLinks(
-                                                                loadMoreOptions,
-                                                                queryData.per_page
-                                                            ),
-                                                        }}
-                                                    ></div>
-                                                )}
+                                            {loadMoreOptions.loadMoreType === "1" && (
+                                                <button className="btn ebpg-pagination-button">
+                                                    {loadMoreOptions.loadMoreButtonTxt}
+                                                </button>
+                                            )}
+                                            {(loadMoreOptions.loadMoreType === "2" ||
+                                                loadMoreOptions.loadMoreType === "3") && (
+                                                <div
+                                                    className="btn ebpg-pagination-page"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: paginationLinks(loadMoreOptions, queryData.per_page),
+                                                    }}
+                                                ></div>
+                                            )}
                                         </div>
                                     )}
                             </div>

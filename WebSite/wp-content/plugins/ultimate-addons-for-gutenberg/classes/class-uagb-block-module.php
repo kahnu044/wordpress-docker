@@ -93,10 +93,11 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		 * @param string $slug Block slug.
 		 * @param array  $attr Block attributes.
 		 * @param string $id   Block id.
+		 * @param bool   $is_gbs Is Global Block Style.
 		 * @return array
 		 */
-		public static function get_frontend_css( $slug, $attr, $id ) {
-			return self::get_frontend_assets( $slug, $attr, $id, 'css' );
+		public static function get_frontend_css( $slug, $attr, $id, $is_gbs = false ) {
+			return self::get_frontend_assets( $slug, $attr, $id, 'css', $is_gbs );
 		}
 
 		/**
@@ -114,6 +115,26 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		}
 
 		/**
+		 * Filter GBS Placeholder Attributes.
+		 *
+		 * @param array $attributes Block attributes.
+		 * @since 2.9.0
+		 * @return array $attributes Block attributes by removing 0.001020304.
+		 */
+		public static function gbs_filter_placeholder_attributes( $attributes ) {
+			if ( ! empty( $attributes ) && is_array( $attributes ) ) {
+				foreach ( $attributes as $key => $attribute ) {
+					// Replace 0.001020304 with empty string.
+					if ( 0.001020304 === $attribute ) {
+						$attributes[ $key ] = '';
+					}
+				}
+				return $attributes;
+			}
+			return array();
+		}
+		
+		/**
 		 * Get frontend Assets.
 		 *
 		 * @since 2.0.0
@@ -122,9 +143,12 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		 * @param array  $attr Block attributes.
 		 * @param string $id   Block id.
 		 * @param string $type Asset Type.
+		 * @param bool   $is_gbs Is Global Block Style.
 		 * @return array
 		 */
-		public static function get_frontend_assets( $slug, $attr, $id, $type = 'css' ) {
+		public static function get_frontend_assets( $slug, $attr, $id, $type = 'css', $is_gbs = false ) {
+
+			$attr = self::gbs_filter_placeholder_attributes( $attr ); // Filter out GBS Placeholders if any added.
 
 			$assets = array();
 
@@ -156,14 +180,19 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 				if ( file_exists( $assets_file ) ) {
 
+					
 					// Set default attributes.
 					$attr_file = $block_dir . '/attributes.php';
-
+					
 					if ( file_exists( $attr_file ) ) {
-
+						
 						$default_attr = include $attr_file;
-
+						
 						$attr = self::get_fallback_values( $default_attr, $attr );
+						
+						if ( ! empty( $attr['globalBlockStyleId'] ) && $is_gbs ) {
+							$gbs_class = UAGB_Helper::get_gbs_selector( $attr['globalBlockStyleId'] );
+						}
 					}
 
 					// Get Assets.
@@ -198,64 +227,74 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 			$blocks = UAGB_Admin_Helper::get_block_options();
 
-			if ( null === self::$block_assets ) {
+			if ( null === self::$block_assets && defined( 'UAGB_URL' ) ) {
 				self::$block_assets = array(
 					// Lib.
-					'uagb-imagesloaded' => array(
+					'uagb-imagesloaded'          => array(
 						'src'  => UAGB_URL . 'assets/js/imagesloaded.min.js',
 						'dep'  => array( 'jquery' ),
 						'type' => 'js',
 					),
-					'uagb-slick-js'     => array(
+					'uagb-slick-js'              => array(
 						'src'  => UAGB_URL . 'assets/js/slick.min.js',
 						'dep'  => array( 'jquery' ),
 						'type' => 'js',
 					),
-					'uagb-slick-css'    => array(
+					'uagb-slick-css'             => array(
 						'src'  => UAGB_URL . 'assets/css/slick.min.css',
 						'dep'  => array(),
 						'type' => 'css',
 					),
-					'uagb-masonry'      => array(
+					'uagb-masonry'               => array(
 						'src'  => UAGB_URL . 'assets/js/isotope.min.js',
 						'dep'  => array( 'jquery' ),
 						'type' => 'js',
 					),
-					'uagb-cookie-lib'   => array(
+					'uagb-cookie-lib'            => array(
 						'src'        => UAGB_URL . 'assets/js/js_cookie.min.js',
 						'dep'        => array( 'jquery' ),
 						'skipEditor' => true,
 						'type'       => 'js',
 					),
-					'uagb-bodymovin-js' => array(
+					'uagb-bodymovin-js'          => array(
 						'src'        => UAGB_URL . 'assets/js/uagb-bodymovin.min.js',
 						'dep'        => array(),
 						'skipEditor' => true,
 						'type'       => 'js',
 					),
-					'uagb-countUp-js'   => array(
+					'uagb-countUp-js'            => array(
 						'src'  => UAGB_URL . 'assets/js/countUp.min.js',
 						'dep'  => array(),
 						'type' => 'js',
 					),
-					'uagb-swiper-js'    => array(
+					'uagb-swiper-js'             => array(
 						'src'        => UAGB_URL . 'assets/js/swiper-bundle.min.js',
 						'dep'        => array(),
 						'skipEditor' => true,
 						'type'       => 'js',
 					),
-					'uagb-swiper-css'   => array(
+					'uagb-swiper-css'            => array(
 						'src'  => UAGB_URL . 'assets/css/swiper-bundle.min.css',
 						'dep'  => array(),
 						'type' => 'css',
 					),
-					'uagb-aos-js'       => array(
+					'uagb-aos-js'                => array(
 						'src'  => UAGB_URL . 'assets/js/aos.min.js',
 						'dep'  => array(),
 						'type' => 'js',
 					),
-					'uagb-aos-css'      => array(
+					'uagb-aos-css'               => array(
 						'src'  => UAGB_URL . 'assets/css/aos.min.css',
+						'dep'  => array(),
+						'type' => 'css',
+					),
+					'uagb-block-positioning-js'  => array(
+						'src'  => UAGB_URL . 'assets/js/spectra-block-positioning.min.js',
+						'dep'  => array(),
+						'type' => 'js',
+					),
+					'uagb-block-positioning-css' => array(
+						'src'  => UAGB_URL . 'assets/css/spectra-block-positioning.min.css',
 						'dep'  => array(),
 						'type' => 'css',
 					),

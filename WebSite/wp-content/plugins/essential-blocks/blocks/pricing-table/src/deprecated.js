@@ -57,7 +57,7 @@ const deprecated = [
 									{showHeaderIcon && (
 										<div className="eb-pricing-icon" data-icon={headerIcon}>
 											<span className="icon">
-												<i class={headerIcon}></i>
+												<i className={headerIcon}></i>
 											</span>
 										</div>
 									)}

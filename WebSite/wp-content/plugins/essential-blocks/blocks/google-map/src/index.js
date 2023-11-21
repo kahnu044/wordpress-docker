@@ -12,6 +12,7 @@ import Save from "./save";
 import attributes from "./attributes";
 import "./style.scss";
 import metadata from "../block.json";
+import deprecated from "./deprecated";
 
 const { ebConditionalRegisterBlockType } = EBControls;
 
@@ -26,5 +27,10 @@ ebConditionalRegisterBlockType(metadata, {
     ],
     edit: Edit,
     save: Save,
-    example: {}
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/google-map/image/screenshot.png`,
+        },
+    },
+    deprecated,
 });

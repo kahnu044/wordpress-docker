@@ -157,8 +157,7 @@ function TeamMember(props) {
                 showDescs: true,
                 description:
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
-                imageUrl:
-                    "../wp-content/plugins/essential-blocks/assets/images/user.jpg",
+                imageUrl: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/user.jpg",
                 isImgHeightAuto: false,
                 showSocials: true,
                 iconsJustify: "center",

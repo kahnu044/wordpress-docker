@@ -86,7 +86,7 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			define( 'UAGB_BASE', plugin_basename( UAGB_FILE ) );
 			define( 'UAGB_DIR', plugin_dir_path( UAGB_FILE ) );
 			define( 'UAGB_URL', plugins_url( '/', UAGB_FILE ) );
-			define( 'UAGB_VER', '2.6.9' );
+			define( 'UAGB_VER', '2.10.1' );
 			define( 'UAGB_MODULES_DIR', UAGB_DIR . 'modules/' );
 			define( 'UAGB_MODULES_URL', UAGB_URL . 'modules/' );
 			define( 'UAGB_SLUG', 'spectra' );
@@ -166,7 +166,8 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			require_once UAGB_DIR . 'classes/class-uagb-front-assets.php';
 			require_once UAGB_DIR . 'classes/class-uagb-init-blocks.php';
 			require_once UAGB_DIR . 'classes/class-uagb-rest-api.php';
-			require_once UAGB_DIR . 'classes/class-uagb-coming-soon.php';
+			require_once UAGB_DIR . 'classes/class-uagb-visibility.php';
+			require_once UAGB_DIR . 'classes/class-uagb-caching.php';
 
 			if ( 'twentyseventeen' === get_template() ) {
 				require_once UAGB_DIR . 'classes/class-uagb-twenty-seventeen-compatibility.php';
@@ -186,6 +187,9 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			} else {
 				add_filter( 'ast_block_templates_disable', '__return_true' );
 			}
+
+			// Includes Zip AI library.
+			require_once UAGB_DIR . 'lib/zip-ai/zip-ai.php';
 		}
 
 		/**
@@ -281,6 +285,30 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 
 				if ( isset( $attributes['UAGAnimationRepeat'] ) ) {
 					unset( $attributes['UAGAnimationRepeat'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationDelayInterval'] ) ) {
+					unset( $attributes['UAGAnimationDelayInterval'] );
+				}
+
+				if ( isset( $attributes['UAGAnimationDoNotApplyToContainer'] ) ) {
+					unset( $attributes['UAGAnimationDoNotApplyToContainer'] );
+				}
+
+				if ( isset( $attributes['UAGStickyLocation'] ) ) {
+					unset( $attributes['UAGStickyLocation'] );
+				}
+
+				if ( isset( $attributes['UAGStickyRestricted'] ) ) {
+					unset( $attributes['UAGStickyRestricted'] );
+				}
+
+				if ( isset( $attributes['UAGStickyOffset'] ) ) {
+					unset( $attributes['UAGStickyOffset'] );
+				}
+
+				if ( isset( $attributes['UAGPosition'] ) ) {
+					unset( $attributes['UAGPosition'] );
 				}
 
 					$request['attributes'] = $attributes;
@@ -402,10 +430,13 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			// This class is loaded from blocks config.
 			UAGB_Popup_Builder::generate_scripts();
 
+			UAGB_Update::migrate_visibility_mode();
+
 			// Adds filters to modify the blocks allowed in excerpts.
 			add_filter( 'excerpt_allowed_blocks', array( $this, 'add_blocks_to_excerpt' ), 20 );
 			add_filter( 'excerpt_allowed_wrapper_blocks', array( $this, 'add_wrapper_blocks_to_excerpt' ), 20 );
 			add_filter( 'uagb_blocks_allowed_in_excerpt', array( $this, 'add_uagb_blocks_to_excerpt' ), 20, 2 );
+			$this->get_regenerate_assets_on_migration();
 		}
 
 		/**
@@ -453,6 +484,42 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 
 			// If either parameter is not an array, return the original excerpt blocks.
 			return $excerpt_blocks;
+		}
+
+		/**
+		 * Generate assets on migration.
+		 *
+		 * @since 2.7.10
+		 * @return void
+		 */
+		public function get_regenerate_assets_on_migration() {
+			// Parse the host (domain/hostname) from the site URL.
+			$site_host = wp_parse_url( site_url(), PHP_URL_HOST );
+
+			// Check if $site_host is empty or not a string. If true, return and exit the function.
+			if ( empty( $site_host ) || ! is_string( $site_host ) ) {
+				return;
+			}
+
+			// Remove 'www.' from the domain.
+			$domain = str_replace( 'www.', '', $site_host );
+
+			// Replace dots (.) with dashes (-) in the domain to create $site_domain.
+			$site_domain = str_replace( '.', '-', $domain );
+
+			// Retrieve the stored domain from admin settings.
+			$stored_domain = \UAGB_Admin_Helper::get_admin_settings_option( 'uagb_site_url', '' );
+
+			// If the stored domain is empty, update the 'uagb_site_url' option in admin settings with the modified site domain and return.
+			if ( empty( $stored_domain ) ) {
+				\UAGB_Admin_Helper::update_admin_settings_option( 'uagb_site_url', $site_domain );
+				return;
+			}
+
+			// If the stored domain is different from the current site domain, update the '__uagb_asset_version' option with the current timestamp.
+			if ( $stored_domain !== $site_domain ) {
+				\UAGB_Admin_Helper::update_admin_settings_option( '__uagb_asset_version', time() );
+			}
 		}
 	}
 }

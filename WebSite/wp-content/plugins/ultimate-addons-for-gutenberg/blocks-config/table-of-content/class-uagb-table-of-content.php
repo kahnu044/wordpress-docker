@@ -210,8 +210,8 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 
 			$string = preg_replace( '/[\x00-\x1F\x7F]*/u', '', $string );
 			$string = str_replace( array( '&amp;', '&nbsp;' ), ' ', $string );
-			// Remove all except alphbets, space, `-` and `_`.
-			$string = preg_replace( '/[^A-Za-z0-9 _-]/', '', $string );
+			// Remove all except alphbets, space, `-`,`_` and latin characters.
+			$string = preg_replace( '/[^a-zA-Z0-9\p{L} _-]/u', '', $string );
 			// Convert space characters to an `_` (underscore).
 			$string = preg_replace( '/\s+/', '_', $string );
 			// Replace multiple `_` (underscore) with a single `-` (hyphen).
@@ -225,7 +225,7 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 				$string = 'toc_' . uniqid();
 			}
 
-			return strtolower( $string ); // Replaces multiple hyphens with single one.
+			return mb_strtolower( $string ); // Replaces multiple hyphens with single one.
 		}
 
 		/**
@@ -341,7 +341,7 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 					}
 				}
 
-				$toc .= sprintf( '<li class="uagb-toc__list"><a href="#%s">%s</a>', esc_attr( $id ), esc_html( $title ) );
+				$toc .= sprintf( '<li class="uagb-toc__list"><a href="#%s" class="uagb-toc-link__trigger">%s</a>', esc_attr( $id ), esc_html( $title ) );
 
 				$last_level = $level;
 			}
@@ -448,11 +448,16 @@ if ( ! class_exists( 'UAGB_Table_Of_Content' ) ) {
 
 			if ( empty( $uagb_toc_heading_content ) || UAGB_ASSET_VER !== $uagb_toc_version ) {
 				global $_wp_current_template_content;
+				$custom_post  = get_post( $post->ID );
+				$post_content = '';
+				if ( $custom_post instanceof WP_Post ) {
+					$post_content = $custom_post->post_content;
+				}
 				// If the current template contents exist, use that - else get the content from the post ID.
-				if ( $_wp_current_template_content ) {
-					$content = $_wp_current_template_content;
+				if ( $_wp_current_template_content && has_block( 'uagb/table-of-contents', $_wp_current_template_content ) ) {
+					$content = $_wp_current_template_content . $post_content;
 				} else {
-					$content = get_post( $post->ID )->post_content;
+					$content = $post_content;
 				}
 				$uagb_toc_heading_content          = $this->table_of_contents_get_headings_from_content( $content );
 				$blocks                            = parse_blocks( $content );

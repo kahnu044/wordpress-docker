@@ -11,7 +11,8 @@ class PostCarousel extends PostBlock {
     protected $frontend_styles = [
         'essential-blocks-frontend-style',
         'essential-blocks-slick-style',
-        'essential-blocks-fontawesome'
+        'essential-blocks-fontawesome',
+        'essential-blocks-common-style'
     ];
 
     protected static $default_attributes = [
@@ -26,8 +27,9 @@ class PostCarousel extends PostBlock {
         'pauseOnHover'     => true,
         'slideToShowRange' => 3,
         'titleLength'      => '10',
-        "leftArrowIcon"    => "fas fa-chevron-circle-left",
-        "rightArrowIcon"   => "fas fa-chevron-circle-right"
+        'leftArrowIcon'    => 'fas fa-chevron-circle-left',
+        'rightArrowIcon'   => 'fas fa-chevron-circle-right',
+        'addIcon'          => false
     ];
 
     public function get_default_attributes() {
@@ -36,6 +38,7 @@ class PostCarousel extends PostBlock {
 
     /**
      * Unique name of the block.
+     *
      * @return string
      */
     public function get_name() {
@@ -44,6 +47,7 @@ class PostCarousel extends PostBlock {
 
     /**
      * Register all other scripts
+     *
      * @return void
      */
     public function register_scripts() {
@@ -67,14 +71,18 @@ class PostCarousel extends PostBlock {
             return;
         }
 
-        $queryData = $attributes["queryData"];
+        $queryData = $attributes['queryData'];
 
-        //Query Result
-        $query = apply_filters( 'eb_post_carousel_query_results', $this->get_posts( $queryData ) );
+        // Query Result
+        $result = $this->get_posts( $queryData );
+        $query  = [];
+        if ( isset( $result->posts ) && is_array( $result->posts ) && count( $result->posts ) > 0 ) {
+            $query = apply_filters( 'eb_post_carousel_query_results', $result->posts );
+        }
 
         $attributes = wp_parse_args( $attributes, $this->get_default_attributes() );
 
-        $className = isset( $attributes["className"] ) ? $attributes["className"] : "";
+        $className = isset( $attributes['className'] ) ? $attributes['className'] : '';
         $classHook = isset( $attributes['classHook'] ) ? $attributes['classHook'] : '';
 
         $_default_attributes = array_keys( parent::$default_attributes );
@@ -85,9 +93,12 @@ class PostCarousel extends PostBlock {
             $_default_attributes[] = 'rightArrowIcon';
         }
         $_essential_attrs = [];
-        array_walk( $_default_attributes, function ( $key ) use ( $attributes, &$_essential_attrs ) {
-            $_essential_attrs[$key] = $attributes[$key];
-        } );
+        array_walk(
+            $_default_attributes,
+            function ( $key ) use ( $attributes, &$_essential_attrs ) {
+                $_essential_attrs[$key] = $attributes[$key];
+            }
+        );
 
         $_slider_attributes = self::$default_attributes;
 
@@ -98,20 +109,29 @@ class PostCarousel extends PostBlock {
         $_slider_attributes['MOBslideToShowRange'] = 1;
 
         $_slider_settings = [];
-        array_walk( $_slider_attributes, function ( $value, $key ) use ( $attributes, &$_slider_settings ) {
-            $_slider_settings[$key] = isset( $attributes[$key] ) ? $attributes[$key] : $value;
-        } );
+        array_walk(
+            $_slider_attributes,
+            function ( $value, $key ) use ( $attributes, &$_slider_settings ) {
+                $_slider_settings[$key] = isset( $attributes[$key] ) ? $attributes[$key] : $value;
+            }
+        );
 
         ob_start();
-        Helper::views( 'post-carousel', array_merge( $attributes, [
-            'essentialAttr'  => $_essential_attrs,
-            'sliderSettings' => $_slider_settings,
-            'className'      => $className,
-            'classHook'      => $classHook,
-            'thumbnailSize'  => '',
-            'posts'          => $query,
-            'block_object'   => $this
-        ] ) );
+        Helper::views(
+            'post-carousel',
+            array_merge(
+                $attributes,
+                [
+                    'essentialAttr'  => $_essential_attrs,
+                    'sliderSettings' => $_slider_settings,
+                    'className'      => $className,
+                    'classHook'      => $classHook,
+                    'thumbnailSize'  => '',
+                    'posts'          => $query,
+                    'block_object'   => $this
+                ]
+            )
+        );
 
         return ob_get_clean();
     }

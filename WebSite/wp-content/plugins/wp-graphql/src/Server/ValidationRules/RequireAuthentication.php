@@ -8,7 +8,6 @@ use GraphQL\Language\AST\NodeKind;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Validator\Rules\QuerySecurityRule;
 use GraphQL\Validator\ValidationContext;
-use WPGraphQL\AppContext;
 
 /**
  * Class RequireAuthentication
@@ -18,10 +17,11 @@ use WPGraphQL\AppContext;
 class RequireAuthentication extends QuerySecurityRule {
 
 	/**
+	 * Whether the rule is enabled or not.
+	 *
 	 * @return bool
 	 */
 	protected function isEnabled() {
-
 		$restrict_endpoint = null;
 
 		/**
@@ -59,12 +59,13 @@ class RequireAuthentication extends QuerySecurityRule {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * @param \GraphQL\Validator\ValidationContext $context
 	 *
-	 * @return callable[]|mixed[]
+	 * @return callable[]
 	 */
 	public function getVisitor( ValidationContext $context ) {
-
 		$allowed_root_fields = [];
 
 		/**
@@ -79,7 +80,6 @@ class RequireAuthentication extends QuerySecurityRule {
 			$context,
 			[
 				NodeKind::FIELD => static function ( FieldNode $node ) use ( $context, $allowed_root_fields ) {
-
 					$parent_type = $context->getParentType();
 
 					if ( ! $parent_type instanceof Type || empty( $parent_type->name ) ) {
@@ -94,10 +94,11 @@ class RequireAuthentication extends QuerySecurityRule {
 						$context->reportError(
 							new Error(
 								sprintf(
+									// translators: %s is the field name
 									__( 'The field "%s" cannot be accessed without authentication.', 'wp-graphql' ),
 									$context->getParentType() . '.' . $node->name->value
 								),
-								//@phpstan-ignore-next-line
+								// @phpstan-ignore-next-line
 								[ $node ]
 							)
 						);
@@ -106,5 +107,4 @@ class RequireAuthentication extends QuerySecurityRule {
 			]
 		);
 	}
-
 }

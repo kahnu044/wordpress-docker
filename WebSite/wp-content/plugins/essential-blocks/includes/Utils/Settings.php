@@ -4,24 +4,24 @@ namespace EssentialBlocks\Utils;
 
 class Settings {
 
-    private static $instance;
+	private static $instance;
 
-    public static function get_instance() {
-        if ( null === static::$instance ) {
-            static::$instance = new static;
-        }
-        return static::$instance;
-    }
+	public static function get_instance() {
+		if ( null === static::$instance ) {
+			static::$instance = new static();
+		}
+		return static::$instance;
+	}
 
-    public function __construct() {
-        // $_settings = get_option( 'eb_settings', [] );
-    }
-
-    public function get( $key, $default = false ) {
+    public static function get( $key, $default = false ) {
         return get_option( $key, $default );
     }
 
-    public function save( $key, $value = '' ) {
+    public static function save( $key, $value = '' ) {
+        return update_option( $key , $value );
+    }
+
+    public static function save_eb_settings( $key, $value = '' ) {
         $settings = get_option( 'eb_settings', [] );
         if ( empty( $value ) ) {
             unset( $settings[$key] );
@@ -29,16 +29,16 @@ class Settings {
             $settings[$key] = $value;
         }
 
-        return update_option( 'eb_settings', $settings );
-    }
+		return update_option( 'eb_settings', $settings );
+	}
 
-    public function set_transient( $key, $value, $expiration = null ) {
+    public static function set_transient( $key, $value, $expiration = null ) {
         if ( $expiration === null ) {
             $expiration = HOUR_IN_SECONDS * 6;
         }
         return set_transient( $key, $value, $expiration );
     }
-    public function get_transient( $key ) {
+    public static function get_transient( $key ) {
         return get_transient( $key );
     }
 
@@ -48,7 +48,7 @@ class Settings {
      * @param mixed $data
      * @return bool
      */
-    public function save_integration( $type, $data = null ){
+    public static function save_integration( $type, $data = null ){
         return false;
     }
 
@@ -57,7 +57,7 @@ class Settings {
      * @param mixed $data
      * @return bool
      */
-    public function save_blocks_option( $data = [] ){
+    public static function save_blocks_option( $data = [] ){
         /**
          * Sanitize Data
          */

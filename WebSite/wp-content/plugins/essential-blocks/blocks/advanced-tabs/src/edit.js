@@ -169,6 +169,7 @@ const Edit = ({
                         image: "",
                         isExpanded: true,
                         isDefault: true,
+                        customId: "",
                     },
                     {
                         text: "Tab Title 2",
@@ -178,6 +179,7 @@ const Edit = ({
                         image: "",
                         isExpanded: false,
                         isDefault: false,
+                        customId: "",
                     },
                     {
                         text: "Tab Title 3",
@@ -187,6 +189,7 @@ const Edit = ({
                         image: "",
                         isExpanded: false,
                         isDefault: false,
+                        customId: "",
                     },
                 ],
             });
@@ -662,13 +665,13 @@ const Edit = ({
 			${hvTextColor ? `color:${hvTextColor};` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active{
 			${actTlBdShdStyesDesktop}
 			${actTlBackgroundStylesDesktop}
 			transition:${actTlBdShdTransitionStyle}, ${actTlBgTransitionStyle};
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover{
 			${actTlBdShdStylesHoverDesktop}
 			${actTlHoverBackgroundStylesDesktop}
 		}
@@ -676,7 +679,7 @@ const Edit = ({
 	${
         showCaret
             ? `
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
 			content: "";
 			position: absolute;
 			width: 0px;
@@ -710,28 +713,22 @@ const Edit = ({
     }
 
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active span{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active span{
 			${actIconColor ? `color:${actIconColor};` : ""}
 			${actColorTransition ? `transition:color ${actColorTransition}s;` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover span{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover span{
 			${actHvIconColor ? `color:${actHvIconColor};` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active .tab-title-text{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active .tab-title-text{
 			${actTextColor ? `color:${actTextColor};` : ""}
 			${actColorTransition ? `transition:color ${actColorTransition}s;` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover .tab-title-text{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover .tab-title-text{
 			${actHvTextColor ? `color:${actHvTextColor};` : ""}
-		}
-
-		.${blockId}.eb-advanced-tabs-wrapper .eb-tab-wrapper[data-tab-id="${
-        (tabTitles.find((item) => item.isDefault) || { id: "1" }).id
-    }"][data-tab-parent-id="${blockId}"]{
-			display:block;
 		}
 
 

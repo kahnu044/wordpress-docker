@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < wooProductGrids.length; i++) {
         let currentWooProducts = wooProductGrids[i];
         let wooPagination = currentWooProducts.querySelector(
-            ".ebpg-pagination"
+            ".ebproductgrid-pagination"
         );
 
         if (wooPagination) {
@@ -22,11 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Pagination Button
             if (wooPaginationButton.length > 0) {
-                document
-                    .querySelectorAll(".ebpg-pagination")
-                    .forEach((item) => {
-                        eb_paginationNumberHandler(item);
-                    });
+                document.querySelectorAll(".ebproductgrid-pagination").forEach((item) => {
+                    eb_paginationNumberHandler(item);
+                });
                 wooPaginationButton.forEach((button) => {
                     let pageNumber = 1;
                     button.addEventListener("click", function () {
@@ -34,29 +32,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             this,
                             "ebpg-pagination-button"
                         ); //Is Pagination Type Load More True
-                        const isPrevious = eb_hasClass(
-                            this,
-                            "ebpg-pagination-item-previous"
-                        ); //Is Pagination Type Previous
-                        const isNext = eb_hasClass(
-                            this,
-                            "ebpg-pagination-item-next"
-                        ); //Is Pagination Type Previous
+                        const isPrevious = eb_hasClass(this, "ebpg-pagination-item-previous"); //Is Pagination Type Previous
+                        const isNext = eb_hasClass(this, "ebpg-pagination-item-next"); //Is Pagination Type Previous
                         if (isLoadMore) {
                             pageNumber = parseInt(pageNumber) + 1; //Get Page Number
                         } else if (isPrevious) {
-                            pageNumber =
-                                parseInt(eb_handlePreviousNext(this)) - 1;
+                            pageNumber = parseInt(eb_handlePreviousNext(this)) - 1;
                         } else if (isNext) {
-                            pageNumber =
-                                parseInt(eb_handlePreviousNext(this)) + 1;
+                            pageNumber = parseInt(eb_handlePreviousNext(this)) + 1;
                         } else {
                             pageNumber = parseInt(this.dataset.pagenumber); //Get Page Number
                         }
 
-                        const queryStringSelector = this.closest(
-                            ".eb-woo-products-wrapper"
-                        );
+                        const queryStringSelector = this.closest(".eb-woo-products-wrapper");
                         if (queryStringSelector) {
                             const queryString = queryStringSelector.dataset;
                             apiFetch({
@@ -64,61 +52,32 @@ document.addEventListener("DOMContentLoaded", function () {
                             }).then((result) => {
                                 if (isLoadMore) {
                                     if (!result) {
-                                        const noPostsMarkup =
-                                            '<p class="eb-no-posts">No more products</p>';
-                                        this.closest(
-                                            ".ebpg-pagination"
-                                        ).insertAdjacentHTML(
-                                            "beforebegin",
-                                            noPostsMarkup
-                                        );
-                                        this.closest(
-                                            ".ebpg-pagination"
-                                        ).remove();
+                                        const noPostsMarkup = '<p class="eb-no-posts">No more products</p>';
+                                        this.closest(".ebproductgrid-pagination").insertAdjacentHTML("beforebegin", noPostsMarkup);
+                                        this.closest(".ebproductgrid-pagination").remove();
                                     } else {
-                                        this.closest(".ebpg-pagination")
-                                            .parentElement.querySelector(
-                                                ".eb-woo-products-gallery"
-                                            )
-                                            .insertAdjacentHTML(
-                                                "beforeend",
-                                                result
-                                            );
+                                        this.closest(".ebproductgrid-pagination")
+                                            .parentElement.querySelector(".eb-woo-products-gallery")
+                                            .insertAdjacentHTML("beforeend", result);
                                     }
                                 } else {
-                                    this.closest(".eb-woo-products-wrapper")
-                                        .querySelectorAll(
-                                            ".eb-woo-products-col"
-                                        )
-                                        .forEach((post) => {
-                                            post.remove();
+                                    //Remove current posts
+                                    this.closest(".eb-woo-products-wrapper").querySelectorAll(".eb-woo-products-col").forEach((post) => {
+                                        post.remove();
+                                    });
+                                    //Insert new posts from api response
+                                    this.closest(".ebproductgrid-pagination").parentElement.querySelector(".eb-woo-products-gallery").insertAdjacentHTML(
+                                        "beforeend", result
+                                    );
+                                    //Handle pagination number buttons
+                                    if (eb_hasClass(this, "ebpg-pagination-item")) {
+                                        this.closest(".ebproductgrid-pagination").querySelectorAll(".ebpg-pagination-item").forEach((post) => {
+                                            post.classList.remove("active");
                                         });
-                                    this.closest(".ebpg-pagination")
-                                        .parentElement.querySelector(
-                                            ".eb-woo-products-gallery"
-                                        )
-                                        .insertAdjacentHTML(
-                                            "beforeend",
-                                            result
-                                        );
-                                    if (
-                                        eb_hasClass(
-                                            this,
-                                            "ebpg-pagination-item"
-                                        )
-                                    ) {
-                                        this.closest(".ebpg-pagination")
-                                            .querySelectorAll(
-                                                ".ebpg-pagination-item"
-                                            )
-                                            .forEach((post) => {
-                                                post.classList.remove("active");
-                                            });
                                         this.classList.add("active");
                                     }
-                                    eb_paginationNumberHandler(
-                                        this.closest(".ebpg-pagination")
-                                    );
+                                    //handle all pagination number button
+                                    eb_paginationNumberHandler(this.closest(".ebproductgrid-pagination"));
                                 }
                             });
                         }
@@ -135,9 +94,7 @@ function eb_hasClass(target, className) {
 
 function eb_handlePreviousNext(selector) {
     let pageNumber = 1;
-    const active = selector
-        .closest(".ebpg-pagination")
-        .querySelector(".ebpg-pagination-item.active");
+    const active = selector.closest(".ebproductgrid-pagination")?.querySelector(".ebpg-pagination-item.active");
     if (active) {
         pageNumber = active.dataset ? active.dataset.pagenumber : 1;
 
@@ -164,7 +121,7 @@ function eb_handlePreviousNext(selector) {
             prevSelector.classList.add("active");
             active.classList.remove("active");
         }
-        eb_paginationNumberHandler(selector.closest(".ebpg-pagination"));
+        eb_paginationNumberHandler(selector.closest(".ebproductgrid-pagination"));
     }
     return pageNumber;
 }

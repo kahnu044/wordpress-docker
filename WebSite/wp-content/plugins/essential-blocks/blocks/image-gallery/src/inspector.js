@@ -65,6 +65,8 @@ import {
 
 import { FILTER_TYPOGRAPHY } from "./typoConstants";
 
+import { handleCustomURL, handleOpenNewTab } from "./helpers";
+
 const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
@@ -100,6 +102,7 @@ function Inspector(props) {
         filterAllTitle,
         sources,
         filterItems,
+        defaultFilter,
         filterColorType,
         filterColor,
         filterHoverColor,
@@ -107,7 +110,11 @@ function Inspector(props) {
         filterHoverBGColor,
         filterActColor,
         filterActBGColor,
+        addCustomLink,
+        images,
     } = attributes;
+
+    const [defaultFilterOptions, setDefaultFilterOptions] = useState("");
 
     /**
      * Get All Image Sizes
@@ -131,6 +138,28 @@ function Inspector(props) {
             setImageAllSizes(updatedSize);
         }
     }, []);
+
+    useEffect(() => {
+        if (!enableFilter) {
+            return
+        }
+        let options = [{
+            label: filterAllTitle,
+            value: '*'
+        }]
+
+        if (filterItems.length > 0) {
+            options = [
+                ...options,
+                ...filterItems
+            ]
+        }
+        if (!defaultFilter) {
+            setAttributes({ defaultFilter: '*' })
+        }
+        setDefaultFilterOptions([...options])
+
+    }, [filterItems, enableFilterAll])
 
     /**
      * Change Preset Styles
@@ -293,7 +322,7 @@ function Inspector(props) {
                                         />
 
                                         <EbImageSizeSelector
-                                            attrName={"imageSize"}
+                                            attrname={"imageSize"}
                                             resRequiredProps={resRequiredProps}
                                             label={"Image Size"} //Optional
                                         />
@@ -351,6 +380,20 @@ function Inspector(props) {
                                                 })
                                             }
                                         />
+                                        {disableLightBox && (
+                                            <ToggleControl
+                                                label={__(
+                                                    "Add custom link?",
+                                                    "essential-blocks"
+                                                )}
+                                                checked={addCustomLink}
+                                                onChange={() =>
+                                                    setAttributes({
+                                                        addCustomLink: !addCustomLink,
+                                                    })
+                                                }
+                                            />
+                                        )}
                                     </PanelBody>
 
                                     <PanelBody
@@ -402,6 +445,18 @@ function Inspector(props) {
 
                                         {enableFilter && (
                                             <>
+                                                <SelectControl
+                                                    label={__(
+                                                        "Default Selected Filter",
+                                                        "essential-blocks"
+                                                    )}
+                                                    value={defaultFilter}
+                                                    options={defaultFilterOptions}
+                                                    onChange={(selected) =>
+                                                        setAttributes({ defaultFilter: selected })
+                                                    }
+                                                />
+
                                                 <Divider />
                                                 <PanelRow>
                                                     {__(
@@ -437,41 +492,40 @@ function Inspector(props) {
                                         )}
                                     </PanelBody>
 
-                                    {enableFilter && (
-                                        <PanelBody
-                                            title={__(
-                                                "Gallery Items",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
-                                            {sources.map((item, index) => {
-                                                return (
-                                                    <PanelBody
-                                                        title={
-                                                            "Image " +
-                                                            (index + 1)
-                                                        }
-                                                        initialOpen={false}
-                                                        onToggle={() =>
-                                                            setAttributes({
-                                                                initialSlide: index,
-                                                            })
-                                                        }
-                                                        className="eb-img-gallery-item-single-panel"
-                                                        key={index}
-                                                    >
+                                    <PanelBody
+                                        title={__(
+                                            "Gallery Items",
+                                            "essential-blocks"
+                                        )}
+                                        initialOpen={false}
+                                    >
+                                        {sources.map((item, index) => {
+                                            return (
+                                                <PanelBody
+                                                    title={
+                                                        "Image " + (index + 1)
+                                                    }
+                                                    initialOpen={false}
+                                                    onToggle={() =>
+                                                        setAttributes({
+                                                            initialSlide: index,
+                                                        })
+                                                    }
+                                                    className="eb-img-gallery-item-single-panel"
+                                                    key={index}
+                                                >
+                                                    {enableFilter && (
                                                         <Select2
                                                             name="select-gallery-item"
                                                             value={
                                                                 item.hasOwnProperty(
                                                                     "filter"
                                                                 ) &&
-                                                                item.filter
-                                                                    .length > 0
+                                                                    item.filter
+                                                                        .length > 0
                                                                     ? JSON.parse(
-                                                                          item.filter
-                                                                      )
+                                                                        item.filter
+                                                                    )
                                                                     : ""
                                                             }
                                                             onChange={(
@@ -488,20 +542,73 @@ function Inspector(props) {
                                                             isMulti="true"
                                                             Placeholder="Select Filter"
                                                         />
+                                                    )}
+                                                    {disableLightBox &&
+                                                        addCustomLink && (
+                                                            <>
+                                                                <TextControl
+                                                                    label={__(
+                                                                        "URL",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    value={
+                                                                        item.customLink
+                                                                    }
+                                                                    onChange={(
+                                                                        text
+                                                                    ) =>
+                                                                        handleCustomURL(
+                                                                            text,
+                                                                            item.id,
+                                                                            images,
+                                                                            setAttributes
+                                                                        )
+                                                                    }
+                                                                />
+                                                                {item.url &&
+                                                                    item.url
+                                                                        .length >
+                                                                    0 &&
+                                                                    !item.isValidUrl && (
+                                                                        <span className="error">
+                                                                            URL
+                                                                            is
+                                                                            not
+                                                                            valid
+                                                                        </span>
+                                                                    )}
+                                                                <ToggleControl
+                                                                    label={__(
+                                                                        "Open in New Tab",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    checked={
+                                                                        item.openNewTab
+                                                                    }
+                                                                    onChange={() =>
+                                                                        handleOpenNewTab(
+                                                                            !item.openNewTab,
+                                                                            item.id,
+                                                                            images,
+                                                                            setAttributes
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </>
+                                                        )}
 
-                                                        <Divider />
-                                                        <PanelRow>
-                                                            {__(
-                                                                "Image",
-                                                                "essential-blocks"
-                                                            )}
-                                                        </PanelRow>
-                                                        <img src={item.url} />
-                                                    </PanelBody>
-                                                );
-                                            })}
-                                        </PanelBody>
-                                    )}
+                                                    <Divider />
+                                                    <PanelRow>
+                                                        {__(
+                                                            "Image",
+                                                            "essential-blocks"
+                                                        )}
+                                                    </PanelRow>
+                                                    <img src={item.url} />
+                                                </PanelBody>
+                                            );
+                                        })}
+                                    </PanelBody>
                                 </>
                             )}
 
@@ -637,45 +744,45 @@ function Inspector(props) {
 
                                                 {imageSizeType ===
                                                     "adaptive" && (
-                                                    <>
-                                                        <ResponsiveRangeController
-                                                            baseLabel={__(
-                                                                "Image Max Height",
-                                                                "essential-blocks"
-                                                            )}
-                                                            controlName={
-                                                                IMAGE_MAX_HEIGHT
-                                                            }
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
-                                                            units={
-                                                                IMAGE_UNIT_TYPES
-                                                            }
-                                                            min={0}
-                                                            max={500}
-                                                            step={1}
-                                                        />
-                                                        <ResponsiveRangeController
-                                                            baseLabel={__(
-                                                                "Image Max Width",
-                                                                "essential-blocks"
-                                                            )}
-                                                            controlName={
-                                                                IMAGE_MAX_WIDTH
-                                                            }
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
-                                                            units={
-                                                                IMAGE_UNIT_TYPES
-                                                            }
-                                                            min={0}
-                                                            max={500}
-                                                            step={1}
-                                                        />
-                                                    </>
-                                                )}
+                                                        <>
+                                                            <ResponsiveRangeController
+                                                                baseLabel={__(
+                                                                    "Image Max Height",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                controlName={
+                                                                    IMAGE_MAX_HEIGHT
+                                                                }
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                units={
+                                                                    IMAGE_UNIT_TYPES
+                                                                }
+                                                                min={0}
+                                                                max={500}
+                                                                step={1}
+                                                            />
+                                                            <ResponsiveRangeController
+                                                                baseLabel={__(
+                                                                    "Image Max Width",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                controlName={
+                                                                    IMAGE_MAX_WIDTH
+                                                                }
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                units={
+                                                                    IMAGE_UNIT_TYPES
+                                                                }
+                                                                min={0}
+                                                                max={500}
+                                                                step={1}
+                                                            />
+                                                        </>
+                                                    )}
                                             </>
                                         )}
 
@@ -694,7 +801,7 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 noShadow
-                                                // noBorder
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>
@@ -1008,141 +1115,141 @@ function Inspector(props) {
 
                                                 {filterColorType ===
                                                     "normal" && (
-                                                    <PanelColorSettings
-                                                        className={
-                                                            "eb-subpanel"
-                                                        }
-                                                        title={__(
-                                                            "Normal Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: filterColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterColor: newColor,
-                                                                        }
+                                                        <PanelColorSettings
+                                                            className={
+                                                                "eb-subpanel"
+                                                            }
+                                                            title={__(
+                                                                "Normal Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            initialOpen={true}
+                                                            colorSettings={[
+                                                                {
+                                                                    value: filterColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                            {
-                                                                value: filterBGColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterBGColor: newColor,
-                                                                        }
+                                                                },
+                                                                {
+                                                                    value: filterBGColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterBGColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Background Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Background Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
+                                                                },
+                                                            ]}
+                                                        />
+                                                    )}
 
                                                 {filterColorType ===
                                                     "hover" && (
-                                                    <PanelColorSettings
-                                                        className={
-                                                            "eb-subpanel"
-                                                        }
-                                                        title={__(
-                                                            "Hover Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: filterHoverColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterHoverColor: newColor,
-                                                                        }
+                                                        <PanelColorSettings
+                                                            className={
+                                                                "eb-subpanel"
+                                                            }
+                                                            title={__(
+                                                                "Hover Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            initialOpen={true}
+                                                            colorSettings={[
+                                                                {
+                                                                    value: filterHoverColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterHoverColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                            {
-                                                                value: filterHoverBGColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterHoverBGColor: newColor,
-                                                                        }
+                                                                },
+                                                                {
+                                                                    value: filterHoverBGColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterHoverBGColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Background Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Background Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
+                                                                },
+                                                            ]}
+                                                        />
+                                                    )}
 
                                                 {filterColorType ===
                                                     "active" && (
-                                                    <PanelColorSettings
-                                                        className={
-                                                            "eb-subpanel"
-                                                        }
-                                                        title={__(
-                                                            "Active Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: filterActColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterActColor: newColor,
-                                                                        }
+                                                        <PanelColorSettings
+                                                            className={
+                                                                "eb-subpanel"
+                                                            }
+                                                            title={__(
+                                                                "Active Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            initialOpen={true}
+                                                            colorSettings={[
+                                                                {
+                                                                    value: filterActColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterActColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                            {
-                                                                value: filterActBGColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            filterActBGColor: newColor,
-                                                                        }
+                                                                },
+                                                                {
+                                                                    value: filterActBGColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                filterActBGColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Background Color",
+                                                                        "essential-blocks"
                                                                     ),
-                                                                label: __(
-                                                                    "Background Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
+                                                                },
+                                                            ]}
+                                                        />
+                                                    )}
                                             </BaseControl>
 
                                             <PanelRow>
@@ -1155,8 +1262,8 @@ function Inspector(props) {
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     )}
@@ -1197,8 +1304,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

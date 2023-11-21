@@ -1,15 +1,15 @@
 import * as typoPrefixs from "./constants/typographyPrefixConstants";
 import {
-	mediaBackground,
-	mediaBgRadius,
-	mediaBgMargin,
-	// buttonRadius,
-	buttonPadding,
-	contentPadding,
-	titlePadding,
-	subTitlePadding,
-	wrapperMargin,
-	wrapperPadding,
+    mediaBackground,
+    mediaBgRadius,
+    mediaBgMargin,
+    // buttonRadius,
+    buttonPadding,
+    contentPadding,
+    titlePadding,
+    subTitlePadding,
+    wrapperMargin,
+    wrapperPadding,
 } from "./constants/dimensionsConstants";
 
 import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
@@ -17,435 +17,439 @@ import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
 import { wrpBdShadow, btnBdShd } from "./constants/borderShadowConstants";
 
 import {
-	mediaIconSize,
-	mediaImageWidth,
-	mediaImageHeight,
-	mediaContentGap,
+    mediaIconSize,
+    mediaImageWidth,
+    mediaImageHeight,
+    mediaContentGap,
 } from "./constants/rangeNames";
 
 const {
-	generateDimensionsAttributes,
-	generateTypographyAttributes,
-	generateBackgroundAttributes,
-	generateBorderShadowAttributes,
-	generateResponsiveRangeAttributes,
+    generateDimensionsAttributes,
+    generateTypographyAttributes,
+    generateBackgroundAttributes,
+    generateBorderShadowAttributes,
+    generateResponsiveRangeAttributes,
 } = window.EBControls;
 
 const attributes = {
-	// the following 4 attributes is must required for responsive options and asset generation for frontend
-	// responsive control attributes ⬇
-	resOption: {
-		type: "string",
-		default: "Desktop",
-	},
+    // the following 4 attributes is must required for responsive options and asset generation for frontend
+    // responsive control attributes ⬇
+    resOption: {
+        type: "string",
+        default: "Desktop",
+    },
 
-	// blockId attribute for making unique className and other uniqueness ⬇
-	blockId: {
-		type: "string",
-	},
-	blockRoot: {
-		type: "string",
-		default: "essential_block",
-	},
+    // blockId attribute for making unique className and other uniqueness ⬇
+    blockId: {
+        type: "string",
+    },
+    blockRoot: {
+        type: "string",
+        default: "essential_block",
+    },
 
-	// blockMeta is for keeping all the styles ⬇
-	blockMeta: {
-		type: "object",
-	},
+    // blockMeta is for keeping all the styles ⬇
+    blockMeta: {
+        type: "object",
+    },
 
-	// isOverlay is to check if a overlay on the block's background should exist ⬇
-	isOverlay: {
-		type: "boolean",
-		default: false,
-	},
+    // isOverlay is to check if a overlay on the block's background should exist ⬇
+    isOverlay: {
+        type: "boolean",
+        default: false,
+    },
 
-	// this attribute is for selecting the desired design preset from the layout design presets options ⬇
-	layoutPreset: {
-		type: "string",
-		default: "preset1",
-	},
+    // this attribute is for selecting the desired design preset from the layout design presets options ⬇
+    layoutPreset: {
+        type: "string",
+        default: "preset1",
+    },
 
-	// media attribute is for checking which of these (image / icon / number) is chosen for head top media ⬇
-	media: {
-		type: "string",
-		default: "icon",
-	},
+    // media attribute is for checking which of these (image / icon / number) is chosen for head top media ⬇
+    media: {
+        type: "string",
+        default: "icon",
+    },
 
-	//
-	numIconColor: {
-		type: "string",
-	},
+    //
+    numIconColor: {
+        type: "string",
+    },
 
-	// should icon number background
-	useNumIconBg: {
-		type: "boolean",
-		default: true,
-	},
+    // should icon number background
+    useNumIconBg: {
+        type: "boolean",
+        default: true,
+    },
 
-	//
-	numIconBgType: {
-		type: "string",
-		default: "gradient",
-	},
+    //
+    numIconBgType: {
+        type: "string",
+        default: "gradient",
+    },
 
-	//
-	numIconBgColor: {
-		type: "string",
-		default: "#0003",
-	},
+    //
+    numIconBgColor: {
+        type: "string",
+        default: "#0003",
+    },
 
-	//
-	numIconBgGradient: {
-		type: "string",
-		default: "linear-gradient(45deg,#ffc2de,#ff46a1)",
-	},
+    //
+    numIconBgGradient: {
+        type: "string",
+        default: "linear-gradient(45deg,#ffc2de,#ff46a1)",
+    },
 
-	//
-	imageUrl: {
-		source: "attribute",
-		selector: ".eb-infobox-image",
-		attribute: "src",
-		// default: "https://source.unsplash.com/user/cristofer",
-	},
+    //
+    imageUrl: {
+        source: "attribute",
+        selector: ".eb-infobox-image",
+        attribute: "src",
+        // default: "https://source.unsplash.com/user/cristofer",
+    },
 
-	//
-	imageId: {
-		type: "string",
-	},
+    //
+    imageId: {
+        type: "string",
+    },
 
-	//
-	mediaImgWidthUnit: {
-		type: "string",
-		default: "px",
-	},
-	mediaImgWidth: {
-		type: "number",
-		default: 300,
-	},
-	TABmediaImgWidth: {
-		type: "number",
-	},
-	MOBmediaImgWidth: {
-		type: "number",
-	},
+    imageAlt: {
+        type: "string",
+    },
 
-	//
-	isMediaImgHeightAuto: {
-		type: "boolean",
-		default: true,
-	},
-	mediaImgHeightUnit: {
-		type: "string",
-		default: "px",
-	},
-	mediaImgHeight: {
-		type: "number",
-	},
-	TABmediaImgHeight: {
-		type: "number",
-	},
-	MOBmediaImgHeight: {
-		type: "number",
-	},
+    //
+    mediaImgWidthUnit: {
+        type: "string",
+        default: "px",
+    },
+    mediaImgWidth: {
+        type: "number",
+        default: 300,
+    },
+    TABmediaImgWidth: {
+        type: "number",
+    },
+    MOBmediaImgWidth: {
+        type: "number",
+    },
 
-	//
-	selectedIcon: {
-		type: "string",
-		source: "attribute",
-		selector: ".eb-infobox-icon-data-selector",
-		attribute: "data-icon",
-		default: "far fa-gem",
-		// default: "far fa-sun",
-	},
+    //
+    isMediaImgHeightAuto: {
+        type: "boolean",
+        default: true,
+    },
+    mediaImgHeightUnit: {
+        type: "string",
+        default: "px",
+    },
+    mediaImgHeight: {
+        type: "number",
+    },
+    TABmediaImgHeight: {
+        type: "number",
+    },
+    MOBmediaImgHeight: {
+        type: "number",
+    },
 
-	//
-	number: {
-		type: "string",
-	},
+    //
+    selectedIcon: {
+        type: "string",
+        source: "attribute",
+        selector: ".eb-infobox-icon-data-selector",
+        attribute: "data-icon",
+        default: "far fa-gem",
+        // default: "far fa-sun",
+    },
 
-	// this attribute is for checking whether subtitle should be shown or not ⬇
-	enableSubTitle: {
-		type: "boolean",
-		default: false,
-	},
+    //
+    number: {
+        type: "string",
+    },
 
-	//  this attribute is for checking whether content should be shown or not ⬇
-	enableDescription: {
-		type: "boolean",
-		default: true,
-	},
+    // this attribute is for checking whether subtitle should be shown or not ⬇
+    enableSubTitle: {
+        type: "boolean",
+        default: false,
+    },
 
-	// this attribute is for checking whether a button should be shown or not ⬇
-	enableButton: {
-		type: "boolean",
-		default: true,
-	},
+    //  this attribute is for checking whether content should be shown or not ⬇
+    enableDescription: {
+        type: "boolean",
+        default: true,
+    },
 
-	//
-	isInfoClick: {
-		type: "boolean",
-		default: false,
-	},
+    // this attribute is for checking whether a button should be shown or not ⬇
+    enableButton: {
+        type: "boolean",
+        default: true,
+    },
 
-	//
-	buttonText: {
-		type: "string",
-		default: "Learn More",
-	},
+    //
+    isInfoClick: {
+        type: "boolean",
+        default: false,
+    },
 
-	//
-	buttonTextColor: {
-		type: "string",
-	},
+    //
+    buttonText: {
+        type: "string",
+        default: "Learn More",
+    },
 
-	//
-	buttonHvrTextColor: {
-		type: "string",
-	},
+    //
+    buttonTextColor: {
+        type: "string",
+    },
 
-	// //
-	// buttonBgColor: {
-	// 	type: "string",
-	// },
+    //
+    buttonHvrTextColor: {
+        type: "string",
+    },
 
-	//
-	btnEffect: {
-		type: "string",
-	},
+    // //
+    // buttonBgColor: {
+    // 	type: "string",
+    // },
 
-	//
-	infoboxLink: {
-		type: "string",
-	},
-	linkNewTab: {
-		type: "boolean",
-		default: false,
-	},
+    //
+    btnEffect: {
+        type: "string",
+    },
 
-	//
-	title: {
-		type: "text",
-		selector: ".title",
-		default: "This is an info box",
-	},
+    //
+    infoboxLink: {
+        type: "string",
+    },
+    linkNewTab: {
+        type: "boolean",
+        default: false,
+    },
 
-	//
-	titleColor: {
-		type: "string",
-	},
+    //
+    title: {
+        type: "text",
+        selector: ".title",
+        default: "This is an info box",
+    },
 
-	//
-	subTitle: {
-		type: "text",
-		selector: ".subtitle",
-		default: "This is a Sub title",
-	},
+    //
+    titleColor: {
+        type: "string",
+    },
 
-	//
-	subTitleColor: {
-		type: "string",
-	},
+    //
+    subTitle: {
+        type: "text",
+        selector: ".subtitle",
+        default: "This is a Sub title",
+    },
 
-	//
-	description: {
-		type: "text",
-		selector: ".description",
-		default:
-			"Write a short description, that will describe the title or something informational and useful",
-	},
+    //
+    subTitleColor: {
+        type: "string",
+    },
 
-	//
-	descriptionColor: {
-		type: "string",
-	},
+    //
+    description: {
+        type: "text",
+        selector: ".description",
+        default:
+            "Write a short description, that will describe the title or something informational and useful",
+    },
 
-	//
-	iconSize: {
-		type: "number",
-		default: 50,
-	},
-	TABiconSize: {
-		type: "number",
-	},
-	MOBiconSize: {
-		type: "number",
-	},
+    //
+    descriptionColor: {
+        type: "string",
+    },
 
-	// .infobox-wrapper-inner flex-direction
-	flexDirection: {
-		type: "string",
-	},
+    //
+    iconSize: {
+        type: "number",
+        default: 50,
+    },
+    TABiconSize: {
+        type: "number",
+    },
+    MOBiconSize: {
+        type: "number",
+    },
 
-	// .icon-img-wrapper align-self property
-	mediaAlignSelf: {
-		type: "string",
-	},
+    // .infobox-wrapper-inner flex-direction
+    flexDirection: {
+        type: "string",
+    },
 
-	// .contents-wrapper text-alignment
-	contentAlignment: {
-		type: "string",
-	},
+    // .icon-img-wrapper align-self property
+    mediaAlignSelf: {
+        type: "string",
+    },
 
-	//
-	titleTag: {
-		type: "string",
-		default: "h2",
-	},
-	subTitleTag: {
-		type: "string",
-		default: "h3",
-	},
+    // .contents-wrapper text-alignment
+    contentAlignment: {
+        type: "string",
+    },
 
-	//
-	mediaAlignment: {
-		type: "string",
-	},
+    //
+    titleTag: {
+        type: "string",
+        default: "h2",
+    },
+    subTitleTag: {
+        type: "string",
+        default: "h3",
+    },
 
-	//
-	contentsAlignment: {
-		type: "string",
-	},
+    //
+    mediaAlignment: {
+        type: "string",
+    },
 
-	btnAlignment: {
-		type: "string",
-	},
+    //
+    contentsAlignment: {
+        type: "string",
+    },
 
-	// Responsive Range Controller attributes
-	...generateResponsiveRangeAttributes(mediaIconSize, {
-		defaultRange: 50,
-	}),
-	...generateResponsiveRangeAttributes(mediaImageWidth, {
-		defaultRange: 300,
-	}),
-	...generateResponsiveRangeAttributes(mediaImageHeight),
-	...generateResponsiveRangeAttributes(mediaContentGap, {
-		defaultRange: 20,
-		noUnits: true,
-	}),
+    btnAlignment: {
+        type: "string",
+    },
 
-	// typography attributes
-	...generateTypographyAttributes(Object.values(typoPrefixs)),
+    // Responsive Range Controller attributes
+    ...generateResponsiveRangeAttributes(mediaIconSize, {
+        defaultRange: 50,
+    }),
+    ...generateResponsiveRangeAttributes(mediaImageWidth, {
+        defaultRange: 300,
+    }),
+    ...generateResponsiveRangeAttributes(mediaImageHeight),
+    ...generateResponsiveRangeAttributes(mediaContentGap, {
+        defaultRange: 20,
+        noUnits: true,
+    }),
 
-	// dimensions Control related Attributes
-	...generateDimensionsAttributes(mediaBackground, {
-		top: 20,
-		bottom: 20,
-		right: 20,
-		left: 20,
-	}),
-	...generateDimensionsAttributes(mediaBgRadius, {
-		top: 20,
-		bottom: 20,
-		isLinked: false,
-	}),
-	...generateDimensionsAttributes(mediaBgMargin, {
-		top: 15,
-		isLinked: false,
-	}),
-	...generateDimensionsAttributes(buttonPadding, {
-		top: 15,
-		bottom: 15,
-		right: 30,
-		left: 30,
-		isLinked: false,
-	}),
-	// ...generateDimensionsAttributes(buttonRadius, {
-	// 	top: 10,
-	// 	bottom: 10,
-	// 	right: 10,
-	// 	left: 10,
-	// }),
-	...generateDimensionsAttributes(titlePadding, {
-		top: 10,
-		bottom: 10,
-		isLinked: false,
-	}),
-	...generateDimensionsAttributes(subTitlePadding, {
-		top: 10,
-		bottom: 10,
-		isLinked: false,
-	}),
-	...generateDimensionsAttributes(contentPadding, {
-		top: 10,
-		bottom: 50,
-		isLinked: false,
-	}),
+    // typography attributes
+    ...generateTypographyAttributes(Object.values(typoPrefixs)),
 
-	...generateDimensionsAttributes(wrapperMargin),
-	...generateDimensionsAttributes(wrapperPadding, {
-		top: 50,
-		bottom: 70,
-		right: 30,
-		left: 30,
-		isLinked: false,
-	}),
+    // dimensions Control related Attributes
+    ...generateDimensionsAttributes(mediaBackground, {
+        top: 20,
+        bottom: 20,
+        right: 20,
+        left: 20,
+    }),
+    ...generateDimensionsAttributes(mediaBgRadius, {
+        top: 20,
+        bottom: 20,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(mediaBgMargin, {
+        top: 15,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(buttonPadding, {
+        top: 15,
+        bottom: 15,
+        right: 30,
+        left: 30,
+        isLinked: false,
+    }),
+    // ...generateDimensionsAttributes(buttonRadius, {
+    // 	top: 10,
+    // 	bottom: 10,
+    // 	right: 10,
+    // 	left: 10,
+    // }),
+    ...generateDimensionsAttributes(titlePadding, {
+        top: 10,
+        bottom: 10,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(subTitlePadding, {
+        top: 10,
+        bottom: 10,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(contentPadding, {
+        top: 10,
+        bottom: 50,
+        isLinked: false,
+    }),
 
-	// ...generateDimensionsAttributes(wrp_border, {
-	// 	top: 0,
-	// 	bottom: 0,
-	// 	right: 0,
-	// 	left: 0,
-	// }),
-	// ...generateDimensionsAttributes(wrp_radius),
+    ...generateDimensionsAttributes(wrapperMargin),
+    ...generateDimensionsAttributes(wrapperPadding, {
+        top: 50,
+        bottom: 70,
+        right: 30,
+        left: 30,
+        isLinked: false,
+    }),
 
-	...generateBorderShadowAttributes(btnBdShd, {
-		// bdrDefaults: {
-		// 	top: 10,
-		// 	bottom: 10,
-		// 	right: 10,
-		// 	left: 10,
-		// },
-		rdsDefaults: {
-			top: 10,
-			bottom: 10,
-			right: 10,
-			left: 10,
-		},
-		// noShadow: true,
-		// noBorder: true,
-	}),
+    // ...generateDimensionsAttributes(wrp_border, {
+    // 	top: 0,
+    // 	bottom: 0,
+    // 	right: 0,
+    // 	left: 0,
+    // }),
+    // ...generateDimensionsAttributes(wrp_radius),
 
-	...generateBorderShadowAttributes(wrpBdShadow, {
-		// bdrDefaults: {
-		// 	top: 10,
-		// 	bottom: 0,
-		// 	right: 10,
-		// 	left: 0,
-		// 	isLinked: false,
-		// },
-		// rdsDefaults: {
-		// 	top: 0,
-		// 	bottom: 50,
-		// 	right: 500,
-		// 	left: 1000,
-		// 	isLinked: false,
-		// },
-		// noShadow: true,
-		// noBorder: true,
-		// defaultBdrColor: "#f2f",
-		// defaultBdrStyle: "solid",
-	}),
+    ...generateBorderShadowAttributes(btnBdShd, {
+        // bdrDefaults: {
+        // 	top: 10,
+        // 	bottom: 10,
+        // 	right: 10,
+        // 	left: 10,
+        // },
+        rdsDefaults: {
+            top: 10,
+            bottom: 10,
+            right: 10,
+            left: 10,
+        },
+        // noShadow: true,
+        // noBorder: true,
+    }),
 
-	// background attributes ⬇
-	...generateBackgroundAttributes(infoWrapBg, {
-		isBgDefaultGradient: true,
-		defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-		// noOverlay: true,
-		// noMainBgi: true,
-		// noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-	}),
+    ...generateBorderShadowAttributes(wrpBdShadow, {
+        // bdrDefaults: {
+        // 	top: 10,
+        // 	bottom: 0,
+        // 	right: 10,
+        // 	left: 0,
+        // 	isLinked: false,
+        // },
+        // rdsDefaults: {
+        // 	top: 0,
+        // 	bottom: 50,
+        // 	right: 500,
+        // 	left: 1000,
+        // 	isLinked: false,
+        // },
+        // noShadow: true,
+        // noBorder: true,
+        // defaultBdrColor: "#f2f",
+        // defaultBdrStyle: "solid",
+    }),
 
-	// background attributes ⬇
-	...generateBackgroundAttributes(infoBtnBg, {
-		defaultFillColor: "#E1D8FF",
-		defaultBgGradient:
-			"linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
-		forButton: true,
-		// noOverlay: true,
-		// noMainBgi: true,
-		// noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-		// isBgDefaultGradient: true,
-	}),
+    // background attributes ⬇
+    ...generateBackgroundAttributes(infoWrapBg, {
+        isBgDefaultGradient: true,
+        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
+        // noOverlay: true,
+        // noMainBgi: true,
+        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+    }),
+
+    // background attributes ⬇
+    ...generateBackgroundAttributes(infoBtnBg, {
+        defaultFillColor: "#E1D8FF",
+        defaultBgGradient:
+            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+        forButton: true,
+        // noOverlay: true,
+        // noMainBgi: true,
+        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+        // isBgDefaultGradient: true,
+    }),
 };
 
 export default attributes;

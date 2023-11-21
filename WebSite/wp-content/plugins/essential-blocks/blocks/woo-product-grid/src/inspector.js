@@ -212,7 +212,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                 loadMoreOptions.loadMoreType = "1";
             }
 
-            if (!loadMoreOptions.loadMorloadMoreButtonTxteType) {
+            if (!loadMoreOptions.loadMoreButtonTxt) {
                 loadMoreOptions.loadMoreButtonTxt = "Load More";
             }
 

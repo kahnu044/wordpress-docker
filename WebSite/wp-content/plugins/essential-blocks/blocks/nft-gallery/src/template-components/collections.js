@@ -25,20 +25,20 @@ export default function Collections(props) {
     return (
         <div className={`eb_nft_content_wrap eb_nft_${layout} nft_collections ${layout === "grid" ? gridPreset : listPreset}`}>
             {typeof data === "object" && data.map((item, index) => (
-                <div class="eb_nft_item">
+                <div className="eb_nft_item">
                     {displayImage && (
-                        <div class="eb_nft_thumbnail">
+                        <div className="eb_nft_thumbnail">
                             <Image item={item} />
                         </div>
                     )}
 
-                    <div class="eb_nft_content">
+                    <div className="eb_nft_content">
                         {displayTitle && (
                             <h3 className="eb_nft_title">{item.name}</h3>
                         )}
 
                         {displayButton && (
-                            <div class="eb_nft_button"><button><a target="_blank" href={`https://opensea.io/collection/${item.slug}`}>{buttonText}</a></button></div>
+                            <div className="eb_nft_button"><button><a target="_blank" href={`https://opensea.io/collection/${item.slug}`}>{buttonText}</a></button></div>
                         )}
                     </div>
                 </div>

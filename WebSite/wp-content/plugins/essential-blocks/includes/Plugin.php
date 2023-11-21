@@ -1,6 +1,7 @@
 <?php
 
 namespace EssentialBlocks;
+
 use EssentialBlocks\API\Server;
 use EssentialBlocks\Admin\Admin;
 use EssentialBlocks\Core\Blocks;
@@ -9,15 +10,18 @@ use EssentialBlocks\Core\PostMeta;
 use EssentialBlocks\Utils\Enqueue;
 use EssentialBlocks\Utils\Settings;
 use EssentialBlocks\Core\FontLoader;
-use EssentialBlocks\Core\ModifyWPCore;
 use EssentialBlocks\Core\Maintenance;
 use EssentialBlocks\Integrations\NFT;
+use EssentialBlocks\Core\ModifyWPCore;
+use EssentialBlocks\Integrations\Data;
+use EssentialBlocks\Integrations\Form;
 use EssentialBlocks\Core\PageTemplates;
 use EssentialBlocks\Core\BlocksPatterns;
 use EssentialBlocks\Traits\HasSingletone;
 use EssentialBlocks\Integrations\GoogleMap;
 use EssentialBlocks\Integrations\Instagram;
 use EssentialBlocks\Integrations\OpenVerse;
+use EssentialBlocks\Integrations\Pagination;
 use EssentialBlocks\Integrations\GlobalStyles;
 use EssentialBlocks\Integrations\AssetGeneration;
 use EssentialBlocks\Integrations\PluginInstaller;
@@ -25,7 +29,7 @@ use EssentialBlocks\Integrations\PluginInstaller;
 final class Plugin {
     use HasSingletone;
 
-    public $version = '4.1.3';
+    public $version = '4.3.9';
 
     public $admin;
     /**
@@ -56,6 +60,7 @@ final class Plugin {
         $this->set_locale();
 
         $this->load_admin_dependencies();
+
         Maintenance::get_instance();
 
         $this->assets = Enqueue::get_instance( ESSENTIAL_BLOCKS_URL, ESSENTIAL_BLOCKS_DIR_PATH, $this->version );
@@ -66,21 +71,6 @@ final class Plugin {
 
         Scripts::get_instance();
 
-        // Fetch Enabled Blocks if not than Default Block List
-        self::$blocks = Blocks::get_instance( self::$settings );
-
-        add_action( 'init', function () {
-            /**
-             * Register a meta `_eb_attr`
-             */
-            PostMeta::get_instance()->register_meta();
-
-            /**
-             * Register all blocks dynamically
-             */
-            self::$blocks->register_blocks( $this->assets );
-        } );
-
         FontLoader::get_instance( 'essential-blocks' );
 
         // Templates
@@ -88,6 +78,12 @@ final class Plugin {
 
         //NFT Ajax
         NFT::get_instance();
+
+        //Form Ajax
+        Form::get_instance();
+
+        //Ajax for Get/Set Core Data
+        Data::get_instance();
 
         //Openverse Ajax
         OpenVerse::get_instance();
@@ -113,6 +109,24 @@ final class Plugin {
         //Global Style Ajax for Store
         GlobalStyles::get_instance();
 
+        // pagination
+        Pagination::get_instance();
+
+        // Fetch Enabled Blocks if not than Default Block List
+        self::$blocks = Blocks::get_instance( self::$settings );
+
+        add_action( 'init', function () {
+            /**
+             * Register a meta `_eb_attr`
+             */
+            PostMeta::get_instance()->register_meta();
+
+            /**
+             * Register all blocks dynamically
+             */
+            self::$blocks->register_blocks( $this->assets );
+        } );
+
         add_action( 'plugins_loaded', [$this, 'plugins_loaded'] );
 
         add_action( 'wp_loaded', [$this, 'wp_loaded'] );
@@ -128,7 +142,7 @@ final class Plugin {
      * @since 2.0
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cloning is forbidden.', 'essential-blocks' ), '2.0' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Cloning is forbidden.', 'essential-blocks' ), '2.0' );
     }
 
     /**
@@ -137,7 +151,7 @@ final class Plugin {
      * @since 2.0
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, __( 'Unserializing instances of this class is forbidden.', 'essential-blocks' ), '2.0' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Unserializing instances of this class is forbidden.', 'essential-blocks' ), '2.0' );
     }
 
     /**
@@ -179,6 +193,11 @@ final class Plugin {
         $this->define( 'ESSENTIAL_BLOCKS_IS_PRO_ACTIVE', class_exists( 'EssentialBlocks\Pro\Plugin' ) ? true : false );
         $this->define( 'ESSENTIAL_BLOCKS_SITE_URL', 'https://essential-blocks.com/' );
         $this->define( 'ESSENTIAL_BLOCKS_UPGRADE_PRO_URL', 'https://essential-blocks.com/upgrade' );
+        $this->define( 'ESSENTIAL_BLOCKS_PLACEHOLDER_IMAGE', ESSENTIAL_BLOCKS_URL . 'assets/images/placeholder.png' );
+
+        //Table Name constants
+        global $wpdb;
+        $this->define( 'ESSENTIAL_BLOCKS_FORM_SETTINGS_TABLE', $wpdb->prefix . 'eb_form_settings' );
     }
 
     /**
@@ -215,9 +234,6 @@ final class Plugin {
     }
 
     private function load_admin_dependencies() {
-        require_once ESSENTIAL_BLOCKS_DIR_PATH . '/includes/class-helpers.php';
-
-        //Include NFT AJAX Class
-        // require_once ESSENTIAL_BLOCKS_DIR_PATH . '/includes/class-nft-ajax.php';
+        //Admin dependency codes here
     }
 }

@@ -48,7 +48,7 @@ if ( ! class_exists( 'EbStyleHandlerParseCss' ) ) {
 
                     if ( isset( $attributes['ref'] ) && ! empty( $attributes['ref'] ) && $item["blockName"] === "core/block" ) {
                         $reusable_block                                  = get_post( $attributes['ref'] );
-                        $reusable_content                                = parse_blocks( $reusable_block->post_content );
+                        $reusable_content                                = ! empty( $reusable_block ) ? parse_blocks( $reusable_block->post_content ) : [];
                         $reusable_blocks                                 = [];
                         $eb_blocks["reusableBlocks"][$attributes['ref']] = self::eb_block_style_recursive( $reusable_content, $reusable_blocks );
                     } else {

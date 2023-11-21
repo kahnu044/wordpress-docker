@@ -30,21 +30,21 @@ export default function Items(props) {
             {(typeof data === "object" && data.length > 0) && (
                 <>
                     {data.map((item, index) => (
-                        <div class="eb_nft_item">
+                        <div className="eb_nft_item">
                             {displayImage && (
-                                <div class="eb_nft_thumbnail">
+                                <div className="eb_nft_thumbnail">
                                     <Image item={item} />
                                 </div>
                             )}
 
-                            <div class="eb_nft_content">
+                            <div className="eb_nft_content">
                                 {displayTitle && (
                                     <h3 className="eb_nft_title">{item.name || "#" + item.token_id}</h3>
                                 )}
 
-                                <div class="eb_nft_content_body">
+                                <div className="eb_nft_content_body">
                                     {(displayCreator || displayOwner) && (
-                                        <div class="eb_nft_owner_wrapper">
+                                        <div className="eb_nft_owner_wrapper">
                                             {displayCreator && (
                                                 <Creator attributes={attributes} creator={item.creator} label={creatorLabel} />
                                             )}
@@ -54,7 +54,7 @@ export default function Items(props) {
                                         </div>
                                     )}
 
-                                    <div class="eb_nft_price_wrapper">
+                                    <div className="eb_nft_price_wrapper">
                                         {displayPrice && (
                                             <CurrentPrice item={item} />
                                         )}
@@ -62,11 +62,11 @@ export default function Items(props) {
                                             <LastSalePrice item={item} />
                                         )}
                                     </div>
-                                    
+
                                 </div>
 
                                 {displayButton && (
-                                    <div class="eb_nft_button"><button><a target="_blank" href={item.permalink}>{buttonText}</a></button></div>
+                                    <div className="eb_nft_button"><button><a target="_blank" href={item.permalink}>{buttonText}</a></button></div>
                                 )}
                             </div>
                         </div>

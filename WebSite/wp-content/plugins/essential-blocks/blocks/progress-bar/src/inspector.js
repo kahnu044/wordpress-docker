@@ -25,6 +25,7 @@ const {
     TypographyDropdown,
     GradientColorControl,
     AdvancedControls,
+    DynamicInputControl,
 } = window.EBControls;
 
 import {
@@ -136,12 +137,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             />
                                         )}
                                         <Divider />
-                                        <TextControl
+                                        <DynamicInputControl
                                             label={__(
                                                 "Title",
                                                 "essential-blocks"
                                             )}
-                                            value={title}
+                                            attrName="title"
+                                            inputValue={title}
+                                            setAttributes={setAttributes}
                                             onChange={(newTitle) =>
                                                 setAttributes({
                                                     title: newTitle,

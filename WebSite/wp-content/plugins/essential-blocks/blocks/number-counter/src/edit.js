@@ -124,6 +124,8 @@ const Edit = (props) => {
         TABmIconZRange,
         MOBmIconZUnit,
         MOBmIconZRange,
+        counterTitleLevel,
+        titleLevel,
     } = attributes;
 
     const counterRef = useRef(null);
@@ -174,6 +176,7 @@ const Edit = (props) => {
         startValue,
         separator,
         isShowSeparator,
+        counterTitleLevel,
     ]);
 
     // this useEffect is for creating a unique blockId for each block's unique className
@@ -407,7 +410,7 @@ const Edit = (props) => {
     const wrapperStylesDesktop = `
 
 	.eb-counter-wrapper.${blockId} .eb-counter-title,
-	.eb-counter-wrapper.${blockId} h4.eb-counter-number {
+	.eb-counter-wrapper.${blockId} .eb-counter-number {
 		margin: 0;
 		padding: 0;
 	}
@@ -432,9 +435,10 @@ const Edit = (props) => {
 		display:flex;
 		flex:1;
 		text-align: ${contentAlignment || "center"};
-		${contentsAlignSelf && media !== "none"
-            ? `justify-content:${contentsAlignSelf};`
-            : ""
+		${
+            contentsAlignSelf && media !== "none"
+                ? `justify-content:${contentsAlignSelf};`
+                : ""
         }
 		${wrapperFlexDirection ? `flex-direction: ${wrapperFlexDirection};` : " "}
 		${numTitleGapDesktop}
@@ -478,15 +482,17 @@ const Edit = (props) => {
 
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				align-self: ${mediaAlignSelf};
 				${mediaBgMarginStylesDesktop}
 			}
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .icon-img-wrapper{
 						${mediaImgWidthUnit === "%" ? mediaImgWidthDesktop : " "}
@@ -505,25 +511,28 @@ const Edit = (props) => {
 						${imageUrl ? " " : mediaRadiusStylesDesktop}
 					}
 					`
-                : " "
+                    : " "
             }
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 				.eb-counter-wrapper.${blockId} .eb-icon {
 
 					${mediaBgPaddingDesktop}
 					${mediaRadiusStylesDesktop}
 
-					${useIconBg
-                    ? `${iconBgType === "fill"
-                        ? `background-color: ${iconBgColor};`
-                        : iconBgType === "gradient"
-                            ? `background-image: ${iconBgGradient};`
+					${
+                        useIconBg
+                            ? `${
+                                  iconBgType === "fill"
+                                      ? `background-color: ${iconBgColor};`
+                                      : iconBgType === "gradient"
+                                      ? `background-image: ${iconBgGradient};`
+                                      : " "
+                              }`
                             : " "
-                    }`
-                    : " "
-                }
+                    }
 
 				}
 
@@ -541,11 +550,11 @@ const Edit = (props) => {
 				}
 
 				`
-                : ""
+                    : ""
             }
 			`
             : " "
-        }
+    }
 	`;
 
     const wrapperStylesTab = `
@@ -593,15 +602,17 @@ const Edit = (props) => {
 	}
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				${mediaBgMarginStylesTab}
 			}
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .eb-icon {
 						${mediaRadiusStylesTab}
@@ -615,30 +626,33 @@ const Edit = (props) => {
 					}
 
 				`
-                : " "
+                    : " "
             }
 
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper{
-					${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthTab
-                    : mediaImgWidthUnit === "%"
-                        ? `width: auto;`
-                        : " "
-                }
+					${
+                        TABmediaImgWidthUnit === "%"
+                            ? mediaImgWidthTab
+                            : mediaImgWidthUnit === "%"
+                            ? `width: auto;`
+                            : " "
+                    }
 				}
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper img {
 
-					${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthTab
-                }
+					${
+                        TABmediaImgWidthUnit === "%"
+                            ? mediaImgWidthUnit === "%"
+                                ? " "
+                                : `width: 100%;`
+                            : mediaImgWidthTab
+                    }
 
 					${isMediaImgHeightAuto ? "" : mediaImgHeightTab}
 
@@ -650,11 +664,11 @@ const Edit = (props) => {
 				}
 
 				`
-                : " "
+                    : " "
             }
 		`
             : " "
-        }
+    }
 
 	`;
 
@@ -704,15 +718,17 @@ const Edit = (props) => {
 
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				${mediaBgMarginStylesMobile}
 			}
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .eb-icon {
 						${mediaRadiusStylesMobile}
@@ -726,30 +742,33 @@ const Edit = (props) => {
 					}
 
 				`
-                : " "
+                    : " "
             }
 
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper{
-					${MOBmediaImgWidthUnit === "%"
-                    ? mediaImgWidthMobile
-                    : mediaImgWidthUnit === "%"
-                        ? `width: auto;`
-                        : " "
-                }
+					${
+                        MOBmediaImgWidthUnit === "%"
+                            ? mediaImgWidthMobile
+                            : mediaImgWidthUnit === "%"
+                            ? `width: auto;`
+                            : " "
+                    }
 				}
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper img {
 
-					${MOBmediaImgWidthUnit === "%"
-                    ? mediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthMobile
-                }
+					${
+                        MOBmediaImgWidthUnit === "%"
+                            ? mediaImgWidthUnit === "%"
+                                ? " "
+                                : `width: 100%;`
+                            : mediaImgWidthMobile
+                    }
 
 					${isMediaImgHeightAuto ? "" : mediaImgHeightMobile}
 
@@ -761,11 +780,11 @@ const Edit = (props) => {
 				}
 
 				`
-                : " "
+                    : " "
             }
 		`
             : " "
-        }
+    }
 
 
 
@@ -892,7 +911,7 @@ const Edit = (props) => {
                         ) : null}
 
                         <div className="counter-contents-wrapper">
-                            <h4 className="eb-counter-number">
+                            <attributes.counterTitleLevel className="eb-counter-number">
                                 <span className="eb-counter-prefix">
                                     {counterPrefix}
                                 </span>
@@ -905,9 +924,9 @@ const Edit = (props) => {
                                 <span className="eb-counter-suffix">
                                     {counterSuffix}
                                 </span>
-                            </h4>
+                            </attributes.counterTitleLevel>
                             <RichText
-                                tagName="h3"
+                                tagName={titleLevel}
                                 className="eb-counter-title"
                                 value={counterTitle}
                                 allowedFormats={[

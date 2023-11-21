@@ -2,7 +2,6 @@
 
 namespace WPGraphQL\Data\Connection;
 
-use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
@@ -29,15 +28,9 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	protected $taxonomy;
 
 	/**
-	 * TermObjectConnectionResolver constructor.
+	 * {@inheritDoc}
 	 *
-	 * @param mixed       $source     source passed down from the resolve tree
-	 * @param array       $args       array of arguments input in the field as part of the GraphQL query
-	 * @param \WPGraphQL\AppContext $context Object containing app context that gets passed down the resolve tree
-	 * @param \GraphQL\Type\Definition\ResolveInfo $info Info about fields passed down the resolve tree
-	 * @param mixed|string|null $taxonomy The name of the Taxonomy the resolver is intended to be used for
-	 *
-	 * @throws \Exception
+	 * @param mixed|string|null $taxonomy The name of the Taxonomy the resolver is intended to be used for.
 	 */
 	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, $taxonomy = null ) {
 		$this->taxonomy = $taxonomy;
@@ -48,8 +41,6 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_query_args() {
-
-
 		$all_taxonomies = \WPGraphQL::get_allowed_taxonomies();
 		$taxonomy       = ! empty( $this->taxonomy ) && in_array( $this->taxonomy, $all_taxonomies, true ) ? [ $this->taxonomy ] : $all_taxonomies;
 
@@ -81,12 +72,6 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 		 * Set the number, ensuring it doesn't exceed the amount set as the $max_query_amount
 		 */
 		$query_args['number'] = min( max( absint( $first ), absint( $last ), 10 ), $this->query_amount ) + 1;
-
-		/**
-		 * Orderby Name by default
-		 */
-		$query_args['orderby'] = 'name';
-		$query_args['order']   = 'ASC';
 
 		/**
 		 * Don't calculate the total rows, it's not needed and can be expensive
@@ -130,17 +115,19 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 		$query_args['fields'] = 'ids';
 
 		/**
-		 * If there's no orderby params in the inputArgs, set order based on the first/last argument
+		 * If there's no orderby params in the inputArgs, default to ordering by name.
 		 */
-		if ( ! empty( $query_args['order'] ) ) {
+		if ( empty( $query_args['orderby'] ) ) {
+			$query_args['orderby'] = 'name';
+		}
 
-			if ( ! empty( $last ) ) {
-				if ( 'ASC' === $query_args['order'] ) {
-					$query_args['order'] = 'DESC';
-				} else {
-					$query_args['order'] = 'ASC';
-				}
-			}
+		/**
+		 * If orderby params set but not order, default to ASC if going forward, DESC if going backward.
+		 */
+		if ( empty( $query_args['order'] ) && 'name' === $query_args['orderby'] ) {
+			$query_args['order'] = ! empty( $last ) ? 'DESC' : 'ASC';
+		} elseif ( empty( $query_args['order'] ) ) {
+			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
 		}
 
 		/**
@@ -174,7 +161,7 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_ids_from_query() {
-		/** @var string[] $ids **/
+		/** @var string[] $ids */
 		$ids = ! empty( $this->query->get_terms() ) ? $this->query->get_terms() : [];
 
 		// If we're going backwards, we need to reverse the array.
@@ -193,11 +180,9 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Whether the connection query should execute. Certain contexts _may_ warrant
-	 * restricting the query to execute at all. Default is true, meaning any time
-	 * a TermObjectConnection resolver is asked for, it will execute.
+	 * {@inheritDoc}
 	 *
-	 * @return bool
+	 * Default is true, meaning any time a TermObjectConnection resolver is asked for, it will execute.
 	 */
 	public function should_execute() {
 		return true;
@@ -209,10 +194,9 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	 * to explore more dynamic ways to map this, but for now this gets the job done.
 	 *
 	 * @since  0.0.5
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function sanitize_input_fields() {
-
 		$arg_mapping = [
 			'objectIds'           => 'object_ids',
 			'hideEmpty'           => 'hide_empty',
@@ -267,9 +251,7 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Filters the GraphQL args before they are used in get_query_args().
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function get_args(): array {
 		$args = $this->args;
@@ -289,9 +271,12 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 					case 'termTaxonomId':
 					case 'termTaxonomyId':
 						if ( is_array( $input_value ) ) {
-							$args['where'][ $input_key ] = array_map( function ( $id ) {
-								return Utils::get_database_id_from_id( $id );
-							}, $input_value );
+							$args['where'][ $input_key ] = array_map(
+								static function ( $id ) {
+									return Utils::get_database_id_from_id( $id );
+								},
+								$input_value
+							);
 							break;
 						}
 
@@ -315,13 +300,9 @@ class TermObjectConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid, i.e the term corresponding to the offset
-	 * exists. Offset is equivalent to term_id. So this function is equivalent to checking if the
-	 * term with the given ID exists.
+	 * {@inheritDoc}
 	 *
-	 * @param int $offset The ID of the node used in the cursor for offset
-	 *
-	 * @return bool
+	 * @param int $offset The ID of the node used in the cursor for offset.
 	 */
 	public function is_valid_offset( $offset ) {
 		return get_term( absint( $offset ) ) instanceof \WP_Term;

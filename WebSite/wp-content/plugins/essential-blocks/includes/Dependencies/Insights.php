@@ -172,8 +172,8 @@
          * @return string
          */
         private function redirect_to() {
-            $request_uri  = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
-            $query_string = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
+            $request_uri  = ! empty( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( sanitize_url( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ) : '';
+            $query_string = wp_parse_url( sanitize_url( $_SERVER['REQUEST_URI'] ), PHP_URL_QUERY );
             parse_str( $query_string, $current_url );
 
             $unset_array = ['dismiss', 'plugin', '_wpnonce', 'later', 'plugin_action', 'marketing_optin'];
@@ -362,7 +362,7 @@
                 }
             }
             $body['marketing_method'] = $this->marketing;
-            $body['server']           = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : '';
+            $body['server']           = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ) : '';
 
             /**
              * Collect all active and inactive plugins
@@ -454,7 +454,7 @@
              */
             if ( $site_id == false && $this->item_id !== false && $original_site_url === false ) {
                 if ( isset( $_SERVER['REMOTE_ADDR'] ) && ! empty( $_SERVER['REMOTE_ADDR'] && $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ) ) {
-                    $country_request = wp_remote_get( 'http://ip-api.com/json/' . $_SERVER['REMOTE_ADDR'] . '?fields=country' );
+                    $country_request = wp_remote_get( 'http://ip-api.com/json/' . sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) . '?fields=country' );
                     if ( ! is_wp_error( $country_request ) && $country_request['response']['code'] == 200 ) {
                         $ip_data         = json_decode( $country_request['body'] );
                         $body['country'] = isset( $ip_data->country ) ? $ip_data->country : 'NOT SET';
@@ -615,18 +615,18 @@
 
             $this->has_notice = true;
 
-            $url_yes = add_query_arg(
-                [
-                    'plugin'        => $this->plugin_name,
-                    'plugin_action' => 'yes'
-                ]
-            );
-            $url_no = add_query_arg(
-                [
-                    'plugin'        => $this->plugin_name,
-                    'plugin_action' => 'no'
-                ]
-            );
+            $url_yes = add_query_arg( [
+                'plugin'        => $this->plugin_name,
+                'plugin_action' => 'yes'
+            ] );
+
+            $url_no = add_query_arg( [
+                'plugin'        => $this->plugin_name,
+                'plugin_action' => 'no'
+            ] );
+
+            $url_yes = wp_nonce_url( $url_yes, '_wpnonce_optin_' . $this->plugin_name );
+            $url_no  = wp_nonce_url( $url_no, '_wpnonce_optin_' . $this->plugin_name );
 
             // Decide on notice text
             $notice_text       = $this->notice_options['notice'];
@@ -634,488 +634,505 @@
 
         ?>
 
-        <div class="eb-optin" style="display: flex; align-items: center;">
-            <div class="eb-optin-logo">
-                <?php echo $this->get_thumbnail( ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo.svg' ) ?>
-            </div>
-            <div class="eb-optin-content">
-                <p class="notice-text"><?php echo wp_kses_post( $notice_text ); ?></p>
-                <p>
-                    <a href="<?php echo esc_url( $url_yes ); ?>" class="button-primary">
-                        <?php echo esc_html( $this->notice_options['yes'] ); ?>
-                    </a>&nbsp;
-                    <a href="<?php echo esc_url( $url_no ); ?>" class="button-secondary">
-                        <?php echo esc_html( $this->notice_options['no'] ); ?>
-                    </a>&nbsp;
-                    <a href="#" class="<?php echo 'wpinsights-' . esc_attr( $this->plugin_name ) . '-collect' ?>">
-                        <?php echo $this->notice_options['consent_button_text']; ?>
-                    </a>
-                </p>
-                <div class="wpinsights-data" style="display: none;">
-                    <p><?php echo wp_kses_post( $extra_notice_text ); ?></p>
-                </div>
-            </div>
-            <!-- <div class="eb-optin-gift"><img src="<?php echo ESSENTIAL_BLOCKS_URL . 'assets/images/giftbox.svg' ?>"></div> -->
+<div class="eb-optin" style="display: flex; align-items: center;">
+    <div class="eb-optin-logo">
+        <?php echo wp_kses_post( $this->get_thumbnail( ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg' ) ); ?>
+    </div>
+    <div class="eb-optin-content">
+        <p class="notice-text"><?php echo wp_kses_post( $notice_text ); ?></p>
+        <p>
+            <a href="<?php echo esc_url( $url_yes ); ?>" class="button-primary">
+                <?php echo esc_html( $this->notice_options['yes'] ); ?>
+            </a>&nbsp;
+            <a href="<?php echo esc_url( $url_no ); ?>" class="button-secondary">
+                <?php echo esc_html( $this->notice_options['no'] ); ?>
+            </a>&nbsp;
+            <a href="#" class="<?php echo 'wpinsights-' . esc_attr( $this->plugin_name ) . '-collect'; ?>">
+                <?php echo esc_html( $this->notice_options['consent_button_text'] ); ?>
+            </a>
+        </p>
+        <div class="wpinsights-data" style="display: none;">
+            <p><?php echo wp_kses_post( $extra_notice_text ); ?></p>
         </div>
-        <style type="text/css">
-            #wpnotice-essential_blocks-opt_in {
-                border-left-color: #a022ff;
-            }
+    </div>
+</div>
 
-            .eb-optin-content .button-primary {
-                background-color: #a022ff;
-                border-color: #a022ff;
-            }
-
-            .eb-optin-content .button-primary:hover {
-                background-color: #9849d3;
-                border-color: #a022ff;
-            }
-
-            .eb-optin-content .button-secondary {
-                background-color: #ebebeb;
-                color: #af6be3;
-                border-color: #d8b8ef;
-            }
-
-            .eb-optin-content .wpinsights-essential-blocks-collect {
-                color: #a496ae;
-            }
-
-            .eb-optin .eb-optin-gift {
-                width: 40px;
-                margin-left: auto;
-            }
-
-            .notice-text {
-                position: relative;
-            }
-
-            .notice-text .gift-icon {
-                position: absolute;
-                top: -4px;
-                right: -25px;
-                font-size: 20px;
-            }
-
-            .eb-optin .eb-optin-gift img {
-                height: 40px;
-                width: auto;
-            }
-        </style>
-
-    <?php
-        }
-
-            public function get_thumbnail( $image ) {
-                $output = '<div style="padding: 10px 10px 10px 0px; box-sizing: border-box; height: 60px; width: 60px;" class="wpnotice-thumbnail-wrapper">';
-                $output .= '<img style="max-width: 100%; max-height: 100%;" src="' . esc_url( $image ) . '">';
-                $output .= '</div>';
-                return wp_kses_post( $output );
-            }
-
-            public function notice_script() {
-                if ( $this->has_notice ) {
-                    echo "<script type='text/javascript'>jQuery('.wpinsights-" . esc_attr( $this->plugin_name ) . "-collect').on('click', function(e) {e.preventDefault();jQuery('.wpinsights-data').slideToggle('fast');});</script>";
-                }
-            }
-
-            /**
-             * Set all notice options to customized notice.
-             *
-             * @since 3.0.0
-             * @param array $options
-             * @return void
-             */
-            public function set_notice_options( $options = [] ) {
-                $default_options = [
-                    'consent_button_text' => __( 'What we collect', 'wpinsight' ),
-                    'yes'                 => __( 'Sure, I\'d like to help', 'wpinsight' ),
-                    'no'                  => __( 'No Thanks.', 'wpinsight' )
-                ];
-                $options              = wp_parse_args( $options, $default_options );
-                $this->notice_options = $options;
-            }
-
-            /**
-             * Responsible for track the click from Notice.
-             *
-             * @return void
-             */
-            public function clicked( $notice = null ) {
-                if ( isset( $_GET['plugin'] ) && isset( $_GET['plugin_action'] ) ) {
-                    if ( isset( $_GET['tab'] ) && $_GET['tab'] === 'plugin-information' ) {
-                        return;
-                    }
-                    $plugin = sanitize_text_field( $_GET['plugin'] );
-                    $action = sanitize_text_field( $_GET['plugin_action'] );
-                    if ( $action == 'yes' ) {
-                        $this->schedule_tracking();
-                        $this->set_is_tracking_allowed( true, $plugin );
-                        if ( $this->do_tracking( true ) ) {
-                            $this->update_block_notice( $plugin );
-                        }
-                    } else {
-                        $this->set_is_tracking_allowed( false, $plugin );
-                        $this->update_block_notice( $plugin );
-                    }
-
-                    if ( ! is_null( $notice ) ) {
-                        $notice->dismiss->dismiss_notice();
-                    }
-
-                    /**
-                     * Redirect User To the Current URL, but without set query arguments.
-                     */
-                    wp_safe_redirect( $this->redirect_to() );
-                }
-            }
-
-            /**
-             * Set if we should block the opt-in notice for this plugin
-             *
-             * @since 3.0.0
-             */
-            public function update_block_notice( $plugin = null ) {
-                if ( empty( $plugin ) ) {
-                    $plugin = $this->plugin_name;
-                }
-                $block_notice = get_option( 'wpins_block_notice' );
-                if ( empty( $block_notice ) || ! is_array( $block_notice ) ) {
-                    $block_notice = [$plugin => $plugin];
-                } else {
-                    $block_notice[$plugin] = $plugin;
-                }
-                update_option( 'wpins_block_notice', $block_notice, 'no' );
-            }
-
-            /**
-             * AJAX callback when the deactivated form is submitted.
-             *
-             * @since 3.0.0
-             */
-            public function deactivate_reasons_form_submit() {
-                check_ajax_referer( 'wpins_deactivation_nonce', 'security' );
-                if ( isset( $_POST['values'] ) ) {
-                    $values = sanitize_text_field( $_POST['values'] );
-                    update_option( 'wpins_deactivation_reason_' . $this->plugin_name, $values, 'no' );
-                }
-                if ( isset( $_POST['details'] ) ) {
-                    $details = sanitize_text_field( $_POST['details'] );
-                    update_option( 'wpins_deactivation_details_' . $this->plugin_name, $details, 'no' );
-                }
-                echo 'success';
-                wp_die();
-            }
-
-            /**
-             * Filter the deactivation link to allow us to present a form when the user deactivates the plugin
-             *
-             * @since 3.0.0
-             */
-            public function deactivate_action_links( $links ) {
-                /**
-                 * Check is tracking allowed or not.
-                 */
-                if ( ! $this->is_tracking_allowed() ) {
-                    return $links;
-                }
-                if ( isset( $links['deactivate'] ) && $this->include_goodbye_form ) {
-                    $deactivation_link = $links['deactivate'];
-                    /**
-                     * Change the default deactivate button link.
-                     */
-                    $deactivation_link   = str_replace( '<a ', '<div class="wpinsights-goodbye-form-wrapper-' . esc_attr( $this->plugin_name ) . '"><div class="wpinsights-goodbye-form-bg"></div><span class="wpinsights-goodbye-form" id="wpinsights-goodbye-form"></span></div><a onclick="javascript:event.preventDefault();" id="wpinsights-goodbye-link-' . esc_attr( $this->plugin_name ) . '" ', $deactivation_link );
-                    $links['deactivate'] = $deactivation_link;
-                }
-                return $links;
-            }
-
-            /**
-             * ALL Deactivate Reasons.
-             *
-             * @since 3.0.0
-             */
-            public function deactivation_reasons() {
-                $form            = [];
-                $form['heading'] = __( 'Sorry to see you go &#128542;', 'wpinsight' );
-                $form['body']    = __( 'If you have a moment, please share why you are deactivating this plugin. All submissions are anonymous and we only use this feedback to improve Essential Blocks for Gutenberg.', 'wpinsight' );
-
-                $form['options'] = [
-                    __( 'I no longer need the plugin', 'wpinsight' ),
-                    [
-                        'label'       => __( 'I found a better plugin', 'wpinsight' ),
-                        'extra_field' => __( 'Please share which plugin', 'wpinsight' )
-                    ],
-                    __( "I couldn't get the plugin to work", 'wpinsight' ),
-                    __( 'It\'s a temporary deactivation', 'wpinsight' ),
-                    [
-                        'label'       => __( 'Other', 'wpinsight' ),
-                        'extra_field' => __( 'Please share the reason', 'wpinsight' ),
-                        'type'        => 'textarea'
-                    ]
-                ];
-                return apply_filters( 'wpins_form_text_' . $this->plugin_name, $form );
-            }
-
-            /**
-             * Deactivate Reasons Form.
-             * This form will appears when user wants to deactivate the plugin to send you deactivated reasons.
-             *
-             * @since 3.0.0
-             */
-            public function deactivate_reasons_form_style() {
-            ?>
-        <style type="text/css">
-            .wpinsights-form-active-essential-blocks .wpinsights-goodbye-form-bg {
-                background: rgba(0, 0, 0, .8);
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 9;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks {
-                position: relative;
-                display: none;
-            }
-
-            .wpinsights-form-active-essential-blocks .wpinsights-goodbye-form-wrapper-essential-blocks {
-                display: flex !important;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form {
-                display: none;
-            }
-
-            .wpinsights-form-active-essential-blocks .wpinsights-goodbye-form {
-                position: relative !important;
-                width: 550px;
-                max-width: 80%;
-                background: #fff;
-                box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, .2);
-                border-radius: 3px;
-                white-space: normal;
-                overflow: hidden;
-                display: block;
-                z-index: 999999;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-head {
-                background: #fff;
-                color: #495157;
-                padding: 18px;
-                box-shadow: 0 0 8px rgba(0, 0, 0, .1);
-                font-size: 15px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-head img.emoji {
-                float: none;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form .wpinsights-goodbye-form-head strong {
-                font-size: 15px;
-                text-transform: uppercase;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body {
-                padding: 8px 18px;
-                color: #333;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body label {
-                padding-left: 5px;
-                color: #6d7882;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body .wpinsights-goodbye-form-caption {
-                font-weight: 400;
-                font-size: 15px;
-                color: #495157;
-                line-height: 1.4;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options {
-                padding-top: 5px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li {
-                margin-bottom: 15px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div {
-                display: inline;
-                padding-left: 3px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div>input,
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div>textarea {
-                margin: 10px 18px;
-                padding: 8px;
-                width: 80%;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .deactivating-spinner {
-                display: none;
-                padding-bottom: 20px !important;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .deactivating-spinner .spinner {
-                float: none;
-                margin: 4px 4px 0 18px;
-                vertical-align: bottom;
-                visibility: visible;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer {
-                padding: 8px 18px;
-                margin-bottom: 15px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer>.wpinsights-goodbye-form-buttons {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpinsights-submit-btn {
-                background-color: #a022ff;
-                -webkit-border-radius: 3px;
-                border-radius: 3px;
-                color: #fff;
-                line-height: 1;
-                padding: 15px 20px;
-                font-size: 13px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpsp-put-deactivate-btn {
-                color: #a022ff;
-                line-height: 1;
-                padding-right: 10px;
-                font-size: 13px;
-            }
-
-            .wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpinsights-deactivate-btn {
-                font-size: 13px;
-                color: #a4afb7;
-                background: none;
-                float: right;
-                padding-right: 10px;
-                width: auto;
-                text-decoration: underline;
-            }
-        </style>
-
-    <?php
-        }
-
-            /**
-             * Deactivate Reasons Form.
-             * This form will appears when user wants to deactivate the plugin to send you deactivated reasons.
-             *
-             * @since 3.0.0
-             */
-            public function deactivate_reasons_form_script() {
-                $form = $this->deactivation_reasons();
-
-                $html = '<div class="wpinsights-goodbye-form-head"><strong>' . esc_html( $form['heading'] ) . '</strong></div>';
-                $html .= '<div class="wpinsights-goodbye-form-body"><p class="wpinsights-goodbye-form-caption">' . esc_html( $form['body'] ) . '</p>';
-                if ( is_array( $form['options'] ) ) {
-                    $html .= '<div id="wpinsights-goodbye-options" class="wpinsights-goodbye-options"><ul>';
-                    foreach ( $form['options'] as $option ) {
-                        if ( is_array( $option ) ) {
-                            $id = strtolower( str_replace( ' ', '_', esc_attr( $option['label'] ) ) );
-                            $id = $id . '_' . $this->plugin_name;
-                            $html .= '<li class="has-goodbye-extra">';
-                            $html .= '<input type="radio" name="wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options" id="' . esc_attr( $id ) . '" value="' . esc_attr( $option['label'] ) . '">';
-                            $html .= '<div><label for="' . esc_attr( $id ) . '">' . esc_attr( $option['label'] ) . '</label>';
-                            if ( isset( $option['extra_field'] ) && ! isset( $option['type'] ) ) {
-                                $html .= '<input type="text" style="display: none" name="' . esc_attr( $id ) . '" id="' . str_replace( ' ', '', esc_attr( $option['extra_field'] ) ) . '" placeholder="' . esc_attr( $option['extra_field'] ) . '">';
-                            }
-                            if ( isset( $option['extra_field'] ) && isset( $option['type'] ) ) {
-                                $html .= '<' . $option['type'] . ' style="display: none" type="text" name="' . esc_attr( $id ) . '" id="' . str_replace( ' ', '', esc_attr( $option['extra_field'] ) ) . '" placeholder="' . esc_attr( $option['extra_field'] ) . '"></' . $option['type'] . '>';
-                            }
-                            $html .= '</div></li>';
-                        } else {
-                            $id = strtolower( str_replace( ' ', '_', esc_attr( $option ) ) );
-                            $id = $id . '_' . $this->plugin_name;
-                            $html .= '<li><input type="radio" name="wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options" id="' . esc_attr( $id ) . '" value="' . esc_attr( $option ) . '"> <label for="' . esc_attr( $id ) . '">' . esc_attr( $option ) . '</label></li>';
-                        }
-                    }
-                    $html .= '</ul></div><!-- .wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options -->';
-                }
-                $html .= '</div><!-- .wpinsights-goodbye-form-body -->';
-                $html .= '<p class="deactivating-spinner"><span class="spinner"></span> ' . __( 'Submitting form', 'wpinsight' ) . '</p>';
-
-            ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                $("#wpinsights-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>").on("click", function() {
-                    // We'll send the user to this deactivation link when they've completed or dismissed the form
-                    var url = document.getElementById("wpinsights-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>");
-                    $('body').toggleClass('wpinsights-form-active-<?php echo esc_attr( $this->plugin_name ); ?>');
-                    $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form").fadeIn();
-                    $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form").html('<?php echo $html; ?>' + '<div class="wpinsights-goodbye-form-footer"><div class="wpinsights-goodbye-form-buttons"><a id="wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>" class="wpinsights-submit-btn" href="#"><?php esc_html_e( 'Submit and Deactivate', 'wpinsight' );?></a>&nbsp;<a class="wpsp-put-deactivate-btn" href="' + url + '"><?php esc_html_e( 'Skip & Deactivate', 'wpinsight' );?></a></div></div>');
-                    $('#wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>').on('click', function(e) {
-                        // As soon as we click, the body of the form should disappear
-                        $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .wpinsights-goodbye-form-body").fadeOut();
-                        $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .wpinsights-goodbye-form-footer").fadeOut();
-                        // Fade in spinner
-                        $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .deactivating-spinner").fadeIn();
-                        e.preventDefault();
-                        var checkedInput = $("input[name='wpinsights-<?php echo esc_attr( $this->plugin_name ); ?>-goodbye-options']:checked"),
-                            checkedInputVal, details;
-                        if (checkedInput.length > 0) {
-                            checkedInputVal = checkedInput.val();
-                            details = $('input[name="' + checkedInput[0].id + '"], textarea[name="' + checkedInput[0].id + '"]').val();
-                        }
-
-                        if (typeof details === 'undefined') {
-                            details = '';
-                        }
-                        if (typeof checkedInputVal === 'undefined') {
-                            checkedInputVal = 'No Reason';
-                        }
-
-                        var data = {
-                            'action': 'deactivation_form_<?php echo esc_attr( $this->plugin_name ); ?>',
-                            'values': checkedInputVal,
-                            'details': details,
-                            'security': "<?php echo wp_create_nonce( 'wpins_deactivation_nonce' ); ?>",
-                            'dataType': "json"
-                        }
-
-                        $.post(
-                            ajaxurl,
-                            data,
-                            function(response) {
-                                // Redirect to original deactivation URL
-                                window.location.href = url;
-                            }
-                        );
-                    });
-                    $('#wpinsights-goodbye-options > ul ').on('click', 'li label, li > input', function(e) {
-                        var parent = $(this).parents('li');
-                        parent.siblings().find('label').next('input, textarea').css('display', 'none');
-                        parent.find('label').next('input, textarea').css('display', 'block');
-                    });
-                    // If we click outside the form, the form will close
-                    $('.wpinsights-goodbye-form-bg').on('click', function() {
-                        $("#wpinsights-goodbye-form").fadeOut();
-                        $('body').removeClass('wpinsights-form-active-<?php echo esc_attr( $this->plugin_name ); ?>');
-                    });
-                });
-            });
-        </script>
 <?php
     }
+
+        public function get_thumbnail( $image ) {
+            $output = '<div style="padding: 10px 10px 10px 0px; box-sizing: border-box; height: 35px;" class="wpnotice-thumbnail-wrapper">';
+            $output .= '<img style="max-width: 100%; max-height: 100%;" src="' . esc_url( $image ) . '">';
+            $output .= '</div>';
+            return wp_kses_post( $output );
+        }
+
+        public function notice_script() {
+            if ( $this->has_notice ) {
+                echo "<script type='text/javascript'>jQuery('.wpinsights-" . esc_attr( $this->plugin_name ) . "-collect').on('click', function(e) {e.preventDefault();jQuery('.wpinsights-data').slideToggle('fast');});</script>";
+            }
+        }
+
+        /**
+         * Set all notice options to customized notice.
+         *
+         * @since 3.0.0
+         * @param array $options
+         * @return void
+         */
+        public function set_notice_options( $options = [] ) {
+            $default_options = [
+                'consent_button_text' => __( 'What we collect', 'wpinsight' ),
+                'yes'                 => __( 'Sure, I\'d like to help', 'wpinsight' ),
+                'no'                  => __( 'No Thanks.', 'wpinsight' )
+            ];
+            $options              = wp_parse_args( $options, $default_options );
+            $this->notice_options = $options;
+        }
+
+        /**
+         * Responsible for track the click from Notice.
+         *
+         * @return void
+         */
+        public function clicked( $notice = null ) {
+            if ( isset( $_GET['_wpnonce'] ) && isset( $_GET['plugin'] ) && isset( $_GET['plugin_action'] ) ) {
+                if ( isset( $_GET['tab'] ) && $_GET['tab'] === 'plugin-information' ) {
+                    return;
+                }
+
+                if ( ! wp_verify_nonce( $_GET['_wpnonce'], '_wpnonce_optin_' . $this->plugin_name ) ) {
+                    return;
+                }
+                $plugin = sanitize_text_field( $_GET['plugin'] );
+                $action = sanitize_text_field( $_GET['plugin_action'] );
+                if ( $action == 'yes' ) {
+                    $this->schedule_tracking();
+                    $this->set_is_tracking_allowed( true, $plugin );
+                    if ( $this->do_tracking( true ) ) {
+                        $this->update_block_notice( $plugin );
+                    }
+                } else {
+                    $this->set_is_tracking_allowed( false, $plugin );
+                    $this->update_block_notice( $plugin );
+                }
+
+                if ( ! is_null( $notice ) ) {
+                    $notice->dismiss->dismiss_notice();
+                }
+
+                /**
+                 * Redirect User To the Current URL, but without set query arguments.
+                 */
+                wp_safe_redirect( $this->redirect_to() );
+            }
+        }
+
+        /**
+         * Set if we should block the opt-in notice for this plugin
+         *
+         * @since 3.0.0
+         */
+        public function update_block_notice( $plugin = null ) {
+            if ( empty( $plugin ) ) {
+                $plugin = $this->plugin_name;
+            }
+            $block_notice = get_option( 'wpins_block_notice' );
+            if ( empty( $block_notice ) || ! is_array( $block_notice ) ) {
+                $block_notice = [$plugin => $plugin];
+            } else {
+                $block_notice[$plugin] = $plugin;
+            }
+            update_option( 'wpins_block_notice', $block_notice, 'no' );
+        }
+
+        /**
+         * AJAX callback when the deactivated form is submitted.
+         *
+         * @since 3.0.0
+         */
+        public function deactivate_reasons_form_submit() {
+            check_ajax_referer( 'wpins_deactivation_nonce', 'security' );
+            if ( isset( $_POST['values'] ) ) {
+                $values = sanitize_text_field( $_POST['values'] );
+                update_option( 'wpins_deactivation_reason_' . $this->plugin_name, $values, 'no' );
+            }
+            if ( isset( $_POST['details'] ) ) {
+                $details = sanitize_text_field( $_POST['details'] );
+                update_option( 'wpins_deactivation_details_' . $this->plugin_name, $details, 'no' );
+            }
+            echo 'success';
+            wp_die();
+        }
+
+        /**
+         * Filter the deactivation link to allow us to present a form when the user deactivates the plugin
+         *
+         * @since 3.0.0
+         */
+        public function deactivate_action_links( $links ) {
+            /**
+             * Check is tracking allowed or not.
+             */
+            if ( ! $this->is_tracking_allowed() ) {
+                return $links;
+            }
+            if ( isset( $links['deactivate'] ) && $this->include_goodbye_form ) {
+                $deactivation_link = $links['deactivate'];
+                /**
+                 * Change the default deactivate button link.
+                 */
+                $deactivation_link   = str_replace( '<a ', '<div class="wpinsights-goodbye-form-wrapper-' . esc_attr( $this->plugin_name ) . '"><div class="wpinsights-goodbye-form-bg"></div><span class="wpinsights-goodbye-form" id="wpinsights-goodbye-form"></span></div><a onclick="javascript:event.preventDefault();" id="wpinsights-goodbye-link-' . esc_attr( $this->plugin_name ) . '" ', $deactivation_link );
+                $links['deactivate'] = $deactivation_link;
+            }
+            return $links;
+        }
+
+        /**
+         * ALL Deactivate Reasons.
+         *
+         * @since 3.0.0
+         */
+        public function deactivation_reasons() {
+            $form            = [];
+            $form['heading'] = __( 'Sorry to see you go &#128542;', 'wpinsight' );
+            $form['body']    = __( 'If you have a moment, please share why you are deactivating this plugin. All submissions are anonymous and we only use this feedback to improve Essential Blocks for Gutenberg.', 'wpinsight' );
+
+            $form['options'] = [
+                __( 'I no longer need the plugin', 'wpinsight' ),
+                [
+                    'label'       => __( 'I found a better plugin', 'wpinsight' ),
+                    'extra_field' => __( 'Please share which plugin', 'wpinsight' )
+                ],
+                __( "I couldn't get the plugin to work", 'wpinsight' ),
+                __( 'It\'s a temporary deactivation', 'wpinsight' ),
+                [
+                    'label'       => __( 'Other', 'wpinsight' ),
+                    'extra_field' => __( 'Please share the reason', 'wpinsight' ),
+                    'type'        => 'textarea'
+                ]
+            ];
+            return apply_filters( 'wpins_form_text_' . $this->plugin_name, $form );
+        }
+
+        /**
+         * Deactivate Reasons Form.
+         * This form will appears when user wants to deactivate the plugin to send you deactivated reasons.
+         *
+         * @since 3.0.0
+         */
+        public function deactivate_reasons_form_style() {
+        ?>
+<style type="text/css">
+.wpinsights-form-active-essential-blocks .wpinsights-goodbye-form-bg {
+    background: rgba(0, 0, 0, .8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks {
+    position: relative;
+    display: none;
+}
+
+.wpinsights-form-active-essential-blocks .wpinsights-goodbye-form-wrapper-essential-blocks {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form {
+    display: none;
+}
+
+.wpinsights-form-active-essential-blocks .wpinsights-goodbye-form {
+    position: relative !important;
+    width: 550px;
+    max-width: 80%;
+    background: #fff;
+    box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, .2);
+    border-radius: 3px;
+    white-space: normal;
+    overflow: hidden;
+    display: block;
+    z-index: 999999;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-head {
+    background: #fff;
+    color: #495157;
+    padding: 18px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .1);
+    font-size: 15px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-head img.emoji {
+    float: none;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form .wpinsights-goodbye-form-head strong {
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body {
+    padding: 8px 18px;
+    color: #333;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body label {
+    padding-left: 5px;
+    color: #6d7882;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body .wpinsights-goodbye-form-caption {
+    font-weight: 400;
+    font-size: 15px;
+    color: #495157;
+    line-height: 1.4;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options {
+    padding-top: 5px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li {
+    margin-bottom: 15px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div {
+    display: inline;
+    padding-left: 3px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div>input,
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-body #wpinsights-goodbye-options ul>li>div>textarea {
+    margin: 10px 18px;
+    padding: 8px;
+    width: 80%;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .deactivating-spinner {
+    display: none;
+    padding-bottom: 20px !important;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .deactivating-spinner .spinner {
+    float: none;
+    margin: 4px 4px 0 18px;
+    vertical-align: bottom;
+    visibility: visible;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer {
+    padding: 8px 18px;
+    margin-bottom: 15px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer>.wpinsights-goodbye-form-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpinsights-submit-btn {
+    background-color: #a022ff;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    color: #fff;
+    line-height: 1;
+    padding: 15px 20px;
+    font-size: 13px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpsp-put-deactivate-btn {
+    color: #a022ff;
+    line-height: 1;
+    padding-right: 10px;
+    font-size: 13px;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .wpinsights-goodbye-form-footer .wpinsights-deactivate-btn {
+    font-size: 13px;
+    color: #a4afb7;
+    background: none;
+    float: right;
+    padding-right: 10px;
+    width: auto;
+    text-decoration: underline;
+}
+
+.wpinsights-goodbye-form-wrapper-essential-blocks .hide {
+    display: none;
+}
+</style>
+
+<?php
+    }
+
+        /**
+         * Deactivate Reasons Form.
+         * This form will appears when user wants to deactivate the plugin to send you deactivated reasons.
+         *
+         * @since 3.0.0
+         */
+        public function deactivate_reasons_form_script() {
+            $form = $this->deactivation_reasons();
+
+            $html = '<div class="wpinsights-goodbye-form-head"><strong>' . esc_html( $form['heading'] ) . '</strong></div>';
+            $html .= '<div class="wpinsights-goodbye-form-body"><p class="wpinsights-goodbye-form-caption">' . esc_html( $form['body'] ) . '</p>';
+            if ( is_array( $form['options'] ) ) {
+                $html .= '<div id="wpinsights-goodbye-options" class="wpinsights-goodbye-options"><ul>';
+                foreach ( $form['options'] as $option ) {
+                    if ( is_array( $option ) ) {
+                        $id = strtolower( str_replace( ' ', '_', esc_attr( $option['label'] ) ) );
+                        $id = $id . '_' . $this->plugin_name;
+                        $html .= '<li class="has-goodbye-extra">';
+                        $html .= '<input type="radio" name="wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options" id="' . esc_attr( $id ) . '" value="' . esc_attr( $option['label'] ) . '" />';
+                        $html .= '<div><label for="' . esc_attr( $id ) . '">' . esc_attr( $option['label'] ) . '</label>';
+                        if ( isset( $option['extra_field'] ) && ! isset( $option['type'] ) ) {
+                            $html .= '<input type="text" style="display: none" name="' . esc_attr( $id ) . '" class="hide" id="' . str_replace( ' ', '', esc_attr( $option['extra_field'] ) ) . '" placeholder="' . esc_attr( $option['extra_field'] ) . '">';
+                        }
+                        if ( isset( $option['extra_field'] ) && isset( $option['type'] ) ) {
+                            $html .= '<' . $option['type'] . ' style="display: none" class="hide" type="text" name="' . esc_attr( $id ) . '" id="' . str_replace( ' ', '', esc_attr( $option['extra_field'] ) ) . '" placeholder="' . esc_attr( $option['extra_field'] ) . '"></' . $option['type'] . '>';
+                        }
+                        $html .= '</div></li>';
+                    } else {
+                        $id = strtolower( str_replace( ' ', '_', esc_attr( $option ) ) );
+                        $id = $id . '_' . $this->plugin_name;
+                        $html .= '<li><input type="radio" name="wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options" id="' . esc_attr( $id ) . '" value="' . esc_attr( $option ) . '" /> <label for="' . esc_attr( $id ) . '">' . esc_attr( $option ) . '</label></li>';
+                    }
+                }
+                $html .= '</ul></div><!-- .wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options -->';
+            }
+            $html .= '</div><!-- .wpinsights-goodbye-form-body -->';
+            $html .= '<p class="deactivating-spinner"><span class="spinner"></span> ' . __( 'Submitting form', 'wpinsight' ) . '</p>';
+            $allowed_html = array_merge( [
+                'input'    => [
+                    'type'        => [],
+                    'name'        => [],
+                    'value'       => [],
+                    'placeholder' => [],
+                    'class'       => [],
+                    'id'          => [],
+                    'style'       => []
+                ],
+                'textarea' => [
+                    'type'        => [],
+                    'name'        => [],
+                    'value'       => [],
+                    'placeholder' => [],
+                    'class'       => [],
+                    'id'          => [],
+                    'style'       => []
+                ],
+                'label'    => [
+                    'for' => []
+                ],
+                'strong'   => [
+                    'for' => []
+                ],
+                'ul'       => [
+                    'class' => []
+                ],
+                'li'       => [
+                    'class' => []
+                ],
+                'div'      => [
+                    'class' => [],
+                    'id'    => []
+                ],
+                'p'        => [
+                    'class' => [],
+                    'id'    => []
+                ],
+                'span'     => [
+                    'class' => []
+                ]
+            ] );
+        ?>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("#wpinsights-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>").on("click", function() {
+        // We'll send the user to this deactivation link when they've completed or dismissed the form
+        var url = document.getElementById(
+            "wpinsights-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>");
+        $('body').toggleClass('wpinsights-form-active-<?php echo esc_attr( $this->plugin_name ); ?>');
+        $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form")
+            .fadeIn();
+        $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form")
+            .html('<?php echo wp_kses( $html, $allowed_html ); ?>' +
+                '<div class="wpinsights-goodbye-form-footer"><div class="wpinsights-goodbye-form-buttons"><a id="wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>" class="wpinsights-submit-btn" href="#"><?php esc_html_e( 'Submit and Deactivate', 'wpinsight' );?></a>&nbsp;<a class="wpsp-put-deactivate-btn" href="' +
+                url + '"><?php esc_html_e( 'Skip & Deactivate', 'wpinsight' );?></a></div></div>');
+        $('#wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>').on('click', function(
+            e) {
+            // As soon as we click, the body of the form should disappear
+            $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .wpinsights-goodbye-form-body")
+                .fadeOut();
+            $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .wpinsights-goodbye-form-footer")
+                .fadeOut();
+            // Fade in spinner
+            $("#wpinsights-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .deactivating-spinner")
+                .fadeIn();
+            e.preventDefault();
+            var checkedInput = $(
+                    "input[name='wpinsights-<?php echo esc_attr( $this->plugin_name ); ?>-goodbye-options']:checked"
+                ),
+                checkedInputVal, details;
+            if (checkedInput.length > 0) {
+                checkedInputVal = checkedInput.val();
+                details = $('input[name="' + checkedInput[0].id + '"], textarea[name="' +
+                    checkedInput[0].id + '"]').val();
+            }
+
+            if (typeof details === 'undefined') {
+                details = '';
+            }
+            if (typeof checkedInputVal === 'undefined') {
+                checkedInputVal = 'No Reason';
+            }
+
+            var data = {
+                'action': 'deactivation_form_<?php echo esc_attr( $this->plugin_name ); ?>',
+                'values': checkedInputVal,
+                'details': details,
+                'security': "<?php echo esc_html( wp_create_nonce( 'wpins_deactivation_nonce' ) ); ?>",
+                'dataType': "json"
+            }
+
+            $.post(
+                ajaxurl,
+                data,
+                function(response) {
+                    // Redirect to original deactivation URL
+                    window.location.href = url;
+                }
+            );
+        });
+        $('#wpinsights-goodbye-options > ul ').on('click', 'li label, li > input', function(e) {
+            var parent = $(this).parents('li');
+            parent.siblings().find('label').next('input, textarea').css('display', 'none');
+            parent.find('label').next('input, textarea').css('display', 'block');
+        });
+        // If we click outside the form, the form will close
+        $('.wpinsights-goodbye-form-bg').on('click', function() {
+            $("#wpinsights-goodbye-form").fadeOut();
+            $('body').removeClass(
+                'wpinsights-form-active-<?php echo esc_attr( $this->plugin_name ); ?>');
+        });
+    });
+});
+</script>
+<?php
+}
 }

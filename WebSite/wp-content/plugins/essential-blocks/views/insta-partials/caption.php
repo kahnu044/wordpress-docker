@@ -4,5 +4,9 @@
      */
 ?>
 <div class="eb-instagram-caption">
-    <p><?php esc_html_e( $caption ); ?></p>
+	<p>
+        <?php
+            echo esc_html( $caption );
+        ?>
+    </p>
 </div>

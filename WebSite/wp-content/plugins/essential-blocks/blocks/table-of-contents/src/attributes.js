@@ -343,7 +343,7 @@ const attributes = {
         type: "boolean",
         default: false,
     },
-    hideOnMobile: {
+    stickyHideOnMobile: {
         type: "boolean",
         default: false,
     },
@@ -374,6 +374,11 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    scrollToTopIcon: {
+        type: "string",
+        default: "fas fa-angle-up",
+    },
+    listStyle: { type: "string", default: "ul" },
     // typography attributes
     ...generateTypographyAttributes(Object.values(typoPrefixs)),
 

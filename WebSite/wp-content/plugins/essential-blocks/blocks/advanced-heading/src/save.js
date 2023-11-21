@@ -29,11 +29,10 @@ const Save = ({ attributes }) => {
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
                                 <i
-                                    className={`${
-                                        separatorIcon
+                                    className={`${separatorIcon
                                             ? separatorIcon
                                             : "fas fa-arrow-circle-down"
-                                    }`}
+                                        }`}
                                 ></i>
                             )}
                         </div>
@@ -54,11 +53,10 @@ const Save = ({ attributes }) => {
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
                                 <i
-                                    className={`${
-                                        separatorIcon
+                                    className={`${separatorIcon
                                             ? separatorIcon
                                             : "fas fa-arrow-circle-down"
-                                    }`}
+                                        }`}
                                 ></i>
                             )}
                         </div>

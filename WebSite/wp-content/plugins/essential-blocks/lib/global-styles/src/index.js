@@ -9,7 +9,10 @@ import EBIcon from "./assets/icon"
 import "./store";
 
 
-registerPlugin('eb-global-controls', {
-    icon: EBIcon,
-    render: EBGlobalControls,
-});
+registerPlugin(
+	'eb-global-controls',
+	{
+		icon: EBIcon,
+		render: EBGlobalControls,
+	}
+);

@@ -12,17 +12,21 @@ const { ebConditionalRegisterBlockType } = EBControls;
 const { name, category } = metadata;
 
 ebConditionalRegisterBlockType(metadata, {
-	keywords: [
-		__("Openverse", "essential-blocks"),
-		__("Openverse block", "essential-blocks"),
-		__("Openverse image", "essential-blocks"),
-		__("EB Openverse block", "essential-blocks"),
-		__("eb openverse block", "essential-blocks"),
-		__("essential blocks", "essential-blocks"),
-	],
-	icon: OpenverseIcon,
-	attributes,
-	edit: Edit,
-	save,
-	example: Example,
+    keywords: [
+        __("Openverse", "essential-blocks"),
+        __("Openverse block", "essential-blocks"),
+        __("Openverse image", "essential-blocks"),
+        __("EB Openverse block", "essential-blocks"),
+        __("eb openverse block", "essential-blocks"),
+        __("essential blocks", "essential-blocks"),
+    ],
+    icon: OpenverseIcon,
+    attributes,
+    edit: Edit,
+    save,
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/openverse/image/screenshot.png`,
+        },
+    },
 });

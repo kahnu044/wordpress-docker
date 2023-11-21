@@ -94,6 +94,14 @@
 		}
 	}
 }
+.eb-block-default-popup {
+	.block-editor-block-preview__container {
+		.block-editor-block-preview__content iframe {
+			width: auto !important;
+		}
+	}
+}
+
 
 .components-menu-group .components-menu-item__button svg {
 	max-width: 24px;

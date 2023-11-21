@@ -3,8 +3,6 @@
 namespace WPGraphQL\Data\Connection;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 
 /**
@@ -23,26 +21,22 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 	protected $query;
 
 	/**
-	 * Determines whether the query should execute at all. It's possible that in some
-	 * situations we may want to prevent the underlying query from executing at all.
-	 *
-	 * In those cases, this would be set to false.
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function should_execute() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function get_loader_name() {
 		return 'user';
 	}
 
 	/**
-	 * Converts the args that were input to the connection into args that can be executed
-	 * by WP_User_Query
+	 * {@inheritDoc}
 	 *
-	 * @return array
 	 * @throws \Exception
 	 */
 	public function get_query_args() {
@@ -107,8 +101,26 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 		 * If the request is not authenticated, limit the query to users that have
 		 * published posts, as they're considered publicly facing users.
 		 */
-		if ( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() && empty( $query_args['has_published_posts'] ) ) {
 			$query_args['has_published_posts'] = true;
+		}
+
+		/**
+		 * If `has_published_posts` is set to `attachment`, throw a warning.
+		 *
+		 * @todo Remove this when the `hasPublishedPosts` enum type changes.
+		 *
+		 * @see https://github.com/wp-graphql/wp-graphql/issues/2963
+		 */
+		if ( ! empty( $query_args['has_published_posts'] ) && 'attachment' === $query_args['has_published_posts'] ) {
+			graphql_debug(
+				__( 'The `hasPublishedPosts` where arg does not support the `ATTACHMENT` value, and will be removed from the possible enum values in a future release.', 'wp-graphql' ),
+				[
+					'operationName' => $this->context->operationName ?? '',
+					'query'         => $this->context->query ?? '',
+					'variables'     => $this->context->variables ?? '',
+				]
+			);
 		}
 
 		if ( ! empty( $query_args['search'] ) ) {
@@ -121,7 +133,6 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 		 * Map the orderby inputArgs to the WP_User_Query
 		 */
 		if ( ! empty( $this->args['where']['orderby'] ) && is_array( $this->args['where']['orderby'] ) ) {
-
 			foreach ( $this->args['where']['orderby'] as $orderby_input ) {
 				/**
 				 * These orderby options should not include the order parameter.
@@ -136,7 +147,6 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 				) ) {
 					$query_args['orderby'] = esc_sql( $orderby_input['field'] );
 				} elseif ( ! empty( $orderby_input['field'] ) ) {
-
 					$order = $orderby_input['order'];
 					if ( ! empty( $this->args['last'] ) ) {
 						if ( 'ASC' === $order ) {
@@ -153,7 +163,7 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
-		 * Convert meta_value_num to seperate meta_value value field which our
+		 * Convert meta_value_num to separate meta_value value field which our
 		 * graphql_wp_term_query_cursor_pagination_support knowns how to handle
 		 */
 		if ( isset( $query_args['orderby'] ) && 'meta_value_num' === $query_args['orderby'] ) {
@@ -190,9 +200,9 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns an array of ids from the query being executed.
+	 * {@inheritDoc}
 	 *
-	 * @return array
+	 * @return int[]
 	 */
 	public function get_ids_from_query() {
 		$ids = method_exists( $this->query, 'get_results' ) ? $this->query->get_results() : [];
@@ -212,9 +222,10 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 	 * There's probably a cleaner/more dynamic way to approach this, but this was quick. I'd be
 	 * down to explore more dynamic ways to map this, but for now this gets the job done.
 	 *
-	 * @param array $args The query "where" args
+	 * @param array<string,mixed> $args The query "where" args
 	 *
-	 * @return array
+	 * @return array<string,mixed>
+	 * @throws \GraphQL\Error\UserError If the user does not have the "list_users" capability.
 	 * @since  0.0.5
 	 */
 	protected function sanitize_input_fields( array $args ) {
@@ -230,7 +241,7 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 			) &&
 			! current_user_can( 'list_users' )
 		) {
-			throw new UserError( __( 'Sorry, you are not allowed to filter users by role.', 'wp-graphql' ) );
+			throw new UserError( esc_html__( 'Sorry, you are not allowed to filter users by role.', 'wp-graphql' ) );
 		}
 
 		$arg_mapping = [
@@ -268,13 +279,10 @@ class UserConnectionResolver extends AbstractConnectionResolver {
 		$query_args = apply_filters( 'graphql_map_input_fields_to_wp_user_query', $query_args, $args, $this->source, $this->args, $this->context, $this->info );
 
 		return ! empty( $query_args ) && is_array( $query_args ) ? $query_args : [];
-
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid, i.e the user corresponding to the offset
-	 * exists. Offset is equivalent to user_id. So this function is equivalent to checking if the
-	 * user with the given ID exists.
+	 * {@inheritDoc}
 	 *
 	 * @param int $offset The ID of the node used as the offset in the cursor
 	 *

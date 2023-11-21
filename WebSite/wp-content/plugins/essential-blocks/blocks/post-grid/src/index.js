@@ -17,5 +17,9 @@ ebConditionalRegisterBlockType(metadata, {
     attributes,
     edit: Edit,
     save: () => null,
-    example: {},
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/post-grid/image/screenshot.png`,
+        },
+    },
 });

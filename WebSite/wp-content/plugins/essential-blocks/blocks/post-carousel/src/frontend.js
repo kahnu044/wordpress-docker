@@ -13,7 +13,9 @@ apiFetch.use(apiFetch.createRootURLMiddleware(rootURL));
 // import Slider from "react-slick";
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    const wrappers = document.getElementsByClassName(`eb-post-carousel-wrapper`);
+    const wrappers = document.getElementsByClassName(
+        `eb-post-carousel-wrapper`
+    );
 
     for (let wrapper of wrappers) {
         const dataset = wrapper.dataset;
@@ -33,7 +35,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let speed = settings.speed;
 
         (function ($) {
-            $("." + slider).slick({
+            $(".init-" + slider).slick({
                 arrows,
                 autoplay,
                 dots,

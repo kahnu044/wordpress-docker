@@ -10,7 +10,7 @@ class TaxonomyConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	protected $query;
 
@@ -18,7 +18,6 @@ class TaxonomyConnectionResolver extends AbstractConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_ids_from_query() {
-
 		$ids     = [];
 		$queried = $this->query;
 
@@ -45,7 +44,7 @@ class TaxonomyConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * Get the items from the source
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public function get_query() {
 		if ( isset( $this->query_args['name'] ) ) {
@@ -61,32 +60,25 @@ class TaxonomyConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * The name of the loader to load the data
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function get_loader_name() {
 		return 'taxonomy';
 	}
 
 	/**
-	 * Determine if the offset used for pagination is valid
+	 * {@inheritDoc}
 	 *
-	 * @param mixed $offset
-	 *
-	 * @return bool
+	 * @param string $offset The offset (taxonomy name) to check.
 	 */
 	public function is_valid_offset( $offset ) {
 		return (bool) get_taxonomy( $offset );
 	}
 
 	/**
-	 * Determine if the query should execute
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function should_execute() {
 		return true;
 	}
-
 }

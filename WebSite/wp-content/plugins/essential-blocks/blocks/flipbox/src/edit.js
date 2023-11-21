@@ -78,6 +78,7 @@ const {
     generateBackgroundControlStyles,
     generateBorderShadowStyles,
     isValidHtml,
+    DynamicInputValueHandler,
 } = window.EBControls;
 
 function Edit(props) {
@@ -144,6 +145,8 @@ function Edit(props) {
         displayButtonIcon,
         align,
         contentPosition,
+        flipMode,
+        isMouseLeaveOn,
         classHook,
     } = attributes;
 
@@ -1237,15 +1240,14 @@ function Edit(props) {
             select,
             clientId,
         });
-    }, []);
 
-    // // this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
-    // useEffect(() => {
-    // 	mimmikCssForPreviewBtnClick({
-    // 		domObj: document,
-    // 		select,
-    // 	});
-    // }, []);
+        if (!flipMode) {
+            setAttributes({ flipMode: "hover" });
+        }
+        if (!isMouseLeaveOn) {
+            setAttributes({ isMouseLeaveOn: true });
+        }
+    }, []);
 
     const alignmentClass =
         contentPosition === "center"
@@ -1367,9 +1369,7 @@ function Edit(props) {
                                                     href={link ? link : "#"}
                                                     className="title-link"
                                                 >
-                                                    <RichText
-                                                        tagName="h3"
-                                                        className="eb-flipbox-front-title"
+                                                    <DynamicInputValueHandler
                                                         value={
                                                             isValidHtml(
                                                                 frontTitle
@@ -1380,6 +1380,8 @@ function Edit(props) {
                                                                       "essential-blocks"
                                                                   )
                                                         }
+                                                        tagName="h3"
+                                                        className="eb-flipbox-front-title"
                                                         allowedFormats={[
                                                             "core/bold",
                                                             "core/italic",
@@ -1395,12 +1397,11 @@ function Edit(props) {
                                                                 frontTitle,
                                                             })
                                                         }
+                                                        readOnly={true}
                                                     />
                                                 </a>
                                             ) : (
-                                                <RichText
-                                                    tagName="h3"
-                                                    className="eb-flipbox-front-title"
+                                                <DynamicInputValueHandler
                                                     value={
                                                         isValidHtml(frontTitle)
                                                             ? frontTitle
@@ -1409,6 +1410,8 @@ function Edit(props) {
                                                                   "essential-blocks"
                                                               )
                                                     }
+                                                    tagName="h3"
+                                                    className="eb-flipbox-front-title"
                                                     allowedFormats={[
                                                         "core/bold",
                                                         "core/italic",
@@ -1422,6 +1425,7 @@ function Edit(props) {
                                                             frontTitle,
                                                         })
                                                     }
+                                                    readOnly={true}
                                                 />
                                             )}
                                         </div>
@@ -1482,7 +1486,7 @@ function Edit(props) {
                                                     href={link ? link : "#"}
                                                     className="title-link"
                                                 >
-                                                    <RichText
+                                                    {/* <RichText
                                                         tagName="h3"
                                                         className="eb-flipbox-back-title"
                                                         value={
@@ -1508,12 +1512,38 @@ function Edit(props) {
                                                                 backTitle,
                                                             })
                                                         }
+                                                    /> */}
+                                                    <DynamicInputValueHandler
+                                                        value={
+                                                            isValidHtml(
+                                                                backTitle
+                                                            )
+                                                                ? backTitle
+                                                                : __(
+                                                                      "Invalid HTML Tag",
+                                                                      "essential-blocks"
+                                                                  )
+                                                        }
+                                                        tagName="h3"
+                                                        className="eb-flipbox-back-title"
+                                                        allowedFormats={[
+                                                            "core/bold",
+                                                            "core/italic",
+                                                            "core/link",
+                                                            "core/strikethrough",
+                                                            "core/underline",
+                                                            "core/text-color",
+                                                        ]}
+                                                        onChange={(backTitle) =>
+                                                            setAttributes({
+                                                                backTitle,
+                                                            })
+                                                        }
+                                                        readOnly={true}
                                                     />
                                                 </a>
                                             ) : (
-                                                <RichText
-                                                    tagName="h3"
-                                                    className="eb-flipbox-back-title"
+                                                <DynamicInputValueHandler
                                                     value={
                                                         isValidHtml(backTitle)
                                                             ? backTitle
@@ -1522,6 +1552,8 @@ function Edit(props) {
                                                                   "essential-blocks"
                                                               )
                                                     }
+                                                    tagName="h3"
+                                                    className="eb-flipbox-back-title"
                                                     allowedFormats={[
                                                         "core/bold",
                                                         "core/italic",
@@ -1535,6 +1567,7 @@ function Edit(props) {
                                                             backTitle,
                                                         })
                                                     }
+                                                    readOnly={true}
                                                 />
                                             )}
                                         </div>

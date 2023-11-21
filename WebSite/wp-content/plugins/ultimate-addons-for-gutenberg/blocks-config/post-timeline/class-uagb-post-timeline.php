@@ -1019,7 +1019,8 @@ if ( ! class_exists( 'UAGB_Post_Timeline' ) ) {
 
 			$target = ( isset( $attributes['linkTarget'] ) && ( true === $attributes['linkTarget'] ) ) ? '_blank' : '_self';
 
-			$tag = $attributes['headingTag'];
+			$array_of_allowed_HTML = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'p' );
+			$tag                   = UAGB_Helper::title_tag_allowed_html( $attributes['headingTag'], $array_of_allowed_HTML, 'h3' );
 			global $post;
 			?>
 				<?php do_action( "uagb_single_post_before_title_{$attributes['post_type']}", get_the_ID(), $attributes ); ?>
@@ -1044,7 +1045,7 @@ if ( ! class_exists( 'UAGB_Post_Timeline' ) ) {
 			do_action( "uagb_single_post_before_cta_{$attributes['post_type']}", get_the_ID(), $attributes );
 			?>
 			<div class="uagb-timeline__link_parent wp-block-button">
-				<a class="uagb-timeline__link wp-block-button__link" href="<?php echo esc_url( apply_filters( "uagb_single_post_link_{$attributes['post_type']}", get_the_permalink(), get_the_ID(), $attributes ) ); ?>" target="<?php echo esc_attr( $target ); ?>" rel=" noopener noreferrer"><?php echo esc_html( $attributes['readMoreText'] ); ?></a>
+				<a class="uagb-timeline__link wp-block-button__link" href="<?php echo esc_url( apply_filters( "uagb_single_post_link_{$attributes['post_type']}", get_the_permalink(), get_the_ID(), $attributes ) ); ?>" target="<?php echo esc_attr( $target ); ?>" rel=" noopener noreferrer"><?php echo wp_kses_post( $attributes['readMoreText'] ); ?></a>
 			</div>
 			<?php
 			do_action( "uagb_single_post_after_cta_{$attributes['post_type']}", get_the_ID(), $attributes );
@@ -1085,10 +1086,6 @@ if ( ! class_exists( 'UAGB_Post_Timeline' ) ) {
 			$excerpt_length_fallback = UAGB_Block_Helper::get_fallback_number( $attributes['exerptLength'], 'exerptLength', $attributes['blockName'] );
 
 			$excerpt = UAGB_Helper::uagb_get_excerpt( $post->ID, $post->post_content, $excerpt_length_fallback );
-
-			if ( ! $excerpt ) {
-				$excerpt = null;
-			}
 
 			$excerpt = apply_filters( "uagb_single_post_excerpt_{$attributes['post_type']}", $excerpt, get_the_ID(), $attributes );
 			do_action( "uagb_single_post_before_excerpt_{$attributes['post_type']}", get_the_ID(), $attributes );

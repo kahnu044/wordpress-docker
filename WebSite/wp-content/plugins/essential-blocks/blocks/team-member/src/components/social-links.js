@@ -9,7 +9,7 @@ export default function SocialLinks({
                 <li key={index}>
                     <a
                         className={icnEffect || " "}
-                        href={link ? link : "javascript:void(0)"}
+                        href={link ? link : "#"}
                         {...(link && {
                             target: linkNewTab ? "_blank" : "_self",
                         })}

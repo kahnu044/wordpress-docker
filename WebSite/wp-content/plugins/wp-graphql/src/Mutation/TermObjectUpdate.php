@@ -3,11 +3,10 @@ namespace WPGraphQL\Mutation;
 
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQLRelay\Relay;
-use WP_Taxonomy;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\TermObjectMutation;
 use WPGraphQL\Utils\Utils;
+use WP_Taxonomy;
 
 /**
  * Class TermObjectUpdate
@@ -39,7 +38,7 @@ class TermObjectUpdate {
 	 *
 	 * @param \WP_Taxonomy $taxonomy The taxonomy type of the mutation.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_input_fields( WP_Taxonomy $taxonomy ) {
 		return array_merge(
@@ -66,7 +65,7 @@ class TermObjectUpdate {
 	 *
 	 * @param \WP_Taxonomy $taxonomy The taxonomy type of the mutation.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_output_fields( WP_Taxonomy $taxonomy ) {
 		return TermObjectCreate::get_output_fields( $taxonomy );
@@ -81,7 +80,7 @@ class TermObjectUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload( WP_Taxonomy $taxonomy, $mutation_name ) {
-		return function ( $input, AppContext $context, ResolveInfo $info ) use ( $taxonomy, $mutation_name ) {
+		return static function ( $input, AppContext $context, ResolveInfo $info ) use ( $taxonomy, $mutation_name ) {
 			$term_id = Utils::get_database_id_from_id( $input['id'] );
 
 			/**
@@ -89,7 +88,7 @@ class TermObjectUpdate {
 			 */
 			if ( empty( $term_id ) ) {
 				// Translators: The placeholder is the name of the taxonomy for the term being edited
-				throw new UserError( sprintf( __( 'The ID passed is not for a %1$s object', 'wp-graphql' ), $taxonomy->graphql_single_name ) );
+				throw new UserError( esc_html( sprintf( __( 'The ID passed is not for a %1$s object', 'wp-graphql' ), $taxonomy->graphql_single_name ) ) );
 			}
 
 			/**
@@ -107,17 +106,17 @@ class TermObjectUpdate {
 						throw new UserError( esc_html( $error_message ) );
 					} else {
 						// Translators: The placeholder is the name of the taxonomy for the term being deleted
-						throw new UserError( sprintf( __( 'The %1$s node failed to update', 'wp-graphql' ), $taxonomy->name ) );
+						throw new UserError( esc_html( sprintf( __( 'The %1$s node failed to update', 'wp-graphql' ), $taxonomy->name ) ) );
 					}
 				}
 
 				// Translators: The placeholder is the name of the taxonomy for the term being deleted
-				throw new UserError( sprintf( __( 'The %1$s node failed to update', 'wp-graphql' ), $taxonomy->name ) );
+				throw new UserError( esc_html( sprintf( __( 'The %1$s node failed to update', 'wp-graphql' ), $taxonomy->name ) ) );
 			}
 
 			if ( $taxonomy->name !== $existing_term->taxonomy ) {
 				// translators: The first placeholder is an ID and the second placeholder is the name of the post type being edited
-				throw new UserError( sprintf( __( 'The id %1$d is not of the type "%2$s"', 'wp-graphql' ), $term_id, $taxonomy->name ) );
+				throw new UserError( esc_html( sprintf( __( 'The id %1$d is not of the type "%2$s"', 'wp-graphql' ), $term_id, $taxonomy->name ) ) );
 			}
 
 			/**
@@ -125,7 +124,7 @@ class TermObjectUpdate {
 			 */
 			if ( ! current_user_can( 'edit_term', $existing_term->term_id ) ) {
 				// Translators: The placeholder is the name of the taxonomy for the term being deleted
-				throw new UserError( sprintf( __( 'You do not have permission to update %1$s', 'wp-graphql' ), $taxonomy->graphql_plural_name ) );
+				throw new UserError( esc_html( sprintf( __( 'You do not have permission to update %1$s', 'wp-graphql' ), $taxonomy->graphql_plural_name ) ) );
 			}
 
 			/**
@@ -145,7 +144,7 @@ class TermObjectUpdate {
 				 */
 				if ( is_wp_error( $update ) ) {
 					// Translators: the placeholder is the name of the taxonomy
-					throw new UserError( sprintf( __( 'The %1$s failed to update', 'wp-graphql' ), $taxonomy->name ) );
+					throw new UserError( esc_html( sprintf( __( 'The %1$s failed to update', 'wp-graphql' ), $taxonomy->name ) ) );
 				}
 			}
 

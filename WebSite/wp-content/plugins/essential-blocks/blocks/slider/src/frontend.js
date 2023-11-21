@@ -13,8 +13,40 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let sliderContentType = wrapper.getAttribute("data-sliderContentType");
         let sliderType = wrapper.getAttribute("data-sliderType");
         let textAlign = wrapper.getAttribute("data-textAlign");
+        let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
+        let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
 
         const slider = createRef();
+
+        function SampleNextArrow(props) {
+            const { className, style, onClick, arrowNextIcon } = props;
+            return (
+                <div
+                    className={className}
+                    style={{ ...style, display: "block" }}
+                    onClick={onClick}
+                >
+                    <i aria-hidden="true" className={arrowNextIcon}></i>
+                </div>
+            );
+        }
+
+        function SamplePrevArrow(props) {
+            const { className, style, onClick, arrowPrevIcon } = props;
+            return (
+                <div
+                    className={className}
+                    style={{ ...style, display: "block" }}
+                    onClick={onClick}
+                >
+                    <i aria-hidden="true" className={arrowPrevIcon}></i>
+                </div>
+            );
+        }
+
+        settings.nextArrow = <SampleNextArrow arrowNextIcon={arrowNextIcon} />;
+        settings.prevArrow = <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />;
+
         render(
             <Slider
                 ref={slider}
@@ -89,28 +121,56 @@ window.addEventListener("DOMContentLoaded", (event) => {
                                                 }}
                                             ></p>
                                         )}
-                                    {image.showButton &&
-                                        image.buttonText &&
-                                        image.buttonText.length > 0 && (
-                                            <a
-                                                href={
-                                                    image.buttonUrl &&
-                                                    image.isValidUrl
-                                                        ? image.buttonUrl
-                                                        : "#"
-                                                }
-                                                className="eb-slider-button"
-                                                target={
-                                                    image.openNewTab
-                                                        ? "_blank"
-                                                        : "_self"
-                                                }
-                                                rel="noopener"
-                                                dangerouslySetInnerHTML={{
-                                                    __html: image.buttonText,
-                                                }}
-                                            ></a>
-                                        )}
+                                    <div className="eb-slider-button-wrapper">
+                                        {image.showButton &&
+                                            image.buttonText &&
+                                            image.buttonText.length > 0 && (
+                                                <a
+                                                    href={
+                                                        image.buttonUrl &&
+                                                        image.isValidUrl
+                                                            ? image.buttonUrl
+                                                            : "#"
+                                                    }
+                                                    className="eb-slider-button"
+                                                    target={
+                                                        image.openNewTab
+                                                            ? "_blank"
+                                                            : "_self"
+                                                    }
+                                                    rel="noopener"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html:
+                                                            image.buttonText,
+                                                    }}
+                                                ></a>
+                                            )}
+
+                                        {image.showSecondButton &&
+                                            image.secondButtonText &&
+                                            image.secondButtonText.length >
+                                                0 && (
+                                                <a
+                                                    href={
+                                                        image.secondButtonUrl &&
+                                                        image.isValidUrl
+                                                            ? image.secondButtonUrl
+                                                            : "#"
+                                                    }
+                                                    className="eb-slider-second-button"
+                                                    target={
+                                                        image.secondButtonOpenNewTab
+                                                            ? "_blank"
+                                                            : "_self"
+                                                    }
+                                                    rel="noopener"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html:
+                                                            image.secondButtonText,
+                                                    }}
+                                                ></a>
+                                            )}
+                                    </div>
                                 </div>
                             </>
                         )}

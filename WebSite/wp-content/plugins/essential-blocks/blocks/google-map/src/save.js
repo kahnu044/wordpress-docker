@@ -12,6 +12,9 @@ const Save = ({ attributes }) => {
         searchAddress,
         imageSize,
         marker,
+        googleMapStyle,
+        snazzyMapStyle,
+        themeSource,
     } = attributes;
 
     return (
@@ -30,6 +33,9 @@ const Save = ({ attributes }) => {
                         data-search-address={searchAddress}
                         data-marker={JSON.stringify(marker)}
                         data-image-size={imageSize || 32}
+                        data-theme-source={themeSource}
+                        data-google-style={googleMapStyle}
+                        data-snazzy-style={snazzyMapStyle}
                         style={{ height: `${mapHeight}px` }}
                     ></div>
                 </div>

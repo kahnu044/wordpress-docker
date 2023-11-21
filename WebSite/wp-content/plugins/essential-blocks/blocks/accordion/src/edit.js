@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useState } from "@wordpress/element";
+import { useEffect } from "@wordpress/element";
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
 import { select, dispatch } from "@wordpress/data";

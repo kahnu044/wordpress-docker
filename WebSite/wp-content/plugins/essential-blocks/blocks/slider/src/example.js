@@ -1,10 +1,10 @@
 const example = {
 	attributes: {
 		images: [
-			{url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png"},
-			{url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png"},
-			{url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png"},
-			{url: "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png"},
+			{url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png"},
+			{url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png"},
+			{url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png"},
+			{url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png"},
 		],
 	}
 };

@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -53,7 +52,7 @@ import {
     sizeUnitTypes,
     imgHeightUnits,
     LAYOUT_TYPES,
-    // HEADER_TAGS,
+    HEADER_TAGS,
     CONTENTS_ALIGNMENTS,
     // HOVER_EFFECT,
 } from "./constants";
@@ -131,6 +130,8 @@ const Inspector = (props) => {
         imageUrl,
         imageId,
         isMediaImgHeightAuto,
+        counterTitleLevel,
+        titleLevel,
     } = attributes;
 
     const handleSeparatorChange = (separastorSelectLabel) => {
@@ -430,6 +431,77 @@ const Inspector = (props) => {
                                                 }
                                             />
                                         )}
+                                    </PanelBody>
+                                    <PanelBody>
+                                        <BaseControl
+                                            label={__(
+                                                "Counter Title Level",
+                                                "essential-blocks"
+                                            )}
+                                            id="eb-advance-heading-alignment"
+                                        >
+                                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                                {HEADER_TAGS.map(
+                                                    (item, key) => (
+                                                        <Button
+                                                            key={key}
+                                                            // isLarge
+                                                            isPrimary={
+                                                                counterTitleLevel ===
+                                                                item.value
+                                                            }
+                                                            isSecondary={
+                                                                counterTitleLevel !==
+                                                                item.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    counterTitleLevel:
+                                                                        item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
+                                        <Divider />
+                                        <BaseControl
+                                            label={__(
+                                                "Title Level",
+                                                "essential-blocks"
+                                            )}
+                                            id="eb-advance-heading-alignment"
+                                        >
+                                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                                {HEADER_TAGS.map(
+                                                    (item, key) => (
+                                                        <Button
+                                                            key={key}
+                                                            // isLarge
+                                                            isPrimary={
+                                                                titleLevel ===
+                                                                item.value
+                                                            }
+                                                            isSecondary={
+                                                                titleLevel !==
+                                                                item.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    titleLevel:
+                                                                        item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
                                     </PanelBody>
                                 </>
                             )}

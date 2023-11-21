@@ -90,11 +90,9 @@ function EBGlobalControls(props) {
             preview: true,
             previewData: {
                 image: {
-                    url:
-                        "https://essential-blocks.com/wp-content/uploads/2022/03/advanced-images.jpg",
+                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
                 },
-                imageCaption:
-                    "Style images in Gutenberg with advanced options.",
+                imageCaption: "Style images in Gutenberg with advanced options.",
             },
         },
         advanced_tabs: {
@@ -141,10 +139,8 @@ function EBGlobalControls(props) {
             component: ImageComparison,
             preview: true,
             previewData: {
-                leftImageURL:
-                    "https://essential-addons.com/elementor/wp-content/uploads/2020/01/white-balloon_compare.png",
-                rightImageURL:
-                    "https://essential-addons.com/elementor/wp-content/uploads/2020/01/white-balloon.png",
+                leftImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/white-balloon-bnw.jpeg",
+                rightImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/white-balloon.jpeg",
             },
         },
         image_gallery: {
@@ -153,60 +149,48 @@ function EBGlobalControls(props) {
             previewData: {
                 images: [
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/china.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/CA.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
                     },
                 ],
 
                 sources: [
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
                         caption: "",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
                         caption: "",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
                         caption: "",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
                         caption: "",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/china.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
                         caption: "",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/CA.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
                         caption: "",
                     },
                 ],
@@ -224,8 +208,7 @@ function EBGlobalControls(props) {
             component: InteractivePromo,
             preview: true,
             previewData: {
-                imageURL:
-                    "https://essential-addons.com/elementor/wp-content/uploads/2020/01/image_16.png",
+                imageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
             },
         },
         nft_gallery: {
@@ -250,20 +233,16 @@ function EBGlobalControls(props) {
             previewData: {
                 sliderData: [
                     {
-                        src:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
                     },
                     {
-                        src:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
                     },
                     {
-                        src:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
                     },
                     {
-                        src:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
                     },
                 ],
             },
@@ -298,20 +277,16 @@ function EBGlobalControls(props) {
             previewData: {
                 images: [
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
                     },
                     {
-                        url:
-                            "https://essential-addons.com/elementor/wp-content/uploads/2020/01/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
                     },
                 ],
             },
@@ -521,6 +496,7 @@ function EBGlobalControls(props) {
     return (
         <>
             <PluginSidebar
+                className="eb-global-controls"
                 icon={<EBIcon />}
                 name="eb-global-controls"
                 title={__("EB Global Controls", "essential-blocks")}

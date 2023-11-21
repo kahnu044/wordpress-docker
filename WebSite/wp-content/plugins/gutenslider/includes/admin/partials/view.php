@@ -19,7 +19,7 @@ echo  esc_url( GUTENSLIDER_REVIEW_URL ) ;
 			<div class="row">
 				<div class="col-md-6 d-flex align-items-center py-5">
 					<div class="d-flex flex-column">
-						<h3>Welcome to Gutenslider <span style="color: #9d50bb;">5.10</span></h3>
+						<h3>Welcome to Gutenslider <span style="color: #9d50bb;">6.1</span></h3>
 						<p>Gutenslider is now <b>ready to be used</b> in your posts and pages. All you need to do is to go to the editor and add the "Gutenslider" block. Check out the blog posts below to learn more about how to get started.</p>
 					</div>
 				</div>
@@ -62,7 +62,7 @@ echo  esc_url( GUTENSLIDER_PLUGIN_URL . 'build/images/adding-gutenslider-block-1
 					<div class="blog-post">
 						<a href="https://gutenslider.org/wordpress-fullscreen-background-slider/"><h4 class="post-heading">Fullscreen Sliders in Wordpress</h4></a>
 						<a href="https://gutenslider.org/wordpress-fullscreen-background-slider/" ><img class="py-3" src="<?php 
-echo  esc_url( GUTENSLIDER_PLUGIN_URL . 'build/images/samuel-zeller-158996-unsplash.png' ) ;
+echo  esc_url( GUTENSLIDER_PLUGIN_URL . 'build/images/samuel-zeller-158996-unsplash.webp' ) ;
 ?>" /></a>
 						<div class="post-description py-3">
 							With Gutenslider, it is very easy to add custom sliders to your WordPress website or blog. Unlike many other sliders, Gutenslider is fully integrated into the gutenberg editor backend. In this post, we will show you, how to integrate sliders very fast and simple. The tutorial covers the basics of how to add sliders.

@@ -9,7 +9,7 @@ export default function Loading(props) {
 		<div className="eb-openverse-grid openverse_loading">
 			{times(limit, (i) => {
 				return (
-					<div class="eb-openverse-grid-item">
+					<div className="eb-openverse-grid-item">
 						<LoadingItem />
 					</div>
 				);

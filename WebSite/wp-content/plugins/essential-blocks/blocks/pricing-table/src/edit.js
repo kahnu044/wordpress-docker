@@ -4,9 +4,9 @@
 import { __ } from "@wordpress/i18n";
 import { useEffect } from "@wordpress/element";
 import {
-	useBlockProps,
-	BlockControls,
-	AlignmentToolbar,
+    useBlockProps,
+    BlockControls,
+    AlignmentToolbar,
 } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 
@@ -18,444 +18,451 @@ import classnames from "classnames";
 import Inspector from "./inspector";
 
 import {
-	buttonIconSpacing,
-	buttonIconSize,
-	buttonPadding,
-	buttonMargin,
-	wrapperPadding,
-	wrapperMargin,
-	titlePadding,
-	titleMargin,
-	priceCurrencyMargin,
-	buttonBorderShadow,
-	buttonBackgroundControl,
-	priceTableBackground,
-	wrapperBorderShadow,
-	iconBorderShadow,
-	ribbonBorderShadow,
-	headerIconSize,
-	headerIconWidth,
-	headerIconHeight,
-	salepriceCurrencyMargin,
-	featuresIconSize,
+    buttonIconSpacing,
+    buttonIconSize,
+    buttonPadding,
+    buttonMargin,
+    wrapperPadding,
+    wrapperMargin,
+    titlePadding,
+    titleMargin,
+    priceCurrencyMargin,
+    buttonBorderShadow,
+    buttonBackgroundControl,
+    priceTableBackground,
+    wrapperBorderShadow,
+    iconBorderShadow,
+    ribbonBorderShadow,
+    headerIconSize,
+    headerIconWidth,
+    headerIconHeight,
+    salepriceCurrencyMargin,
+    featuresIconSize,
 } from "./constants";
 
 import {
-	typoPrefix_title,
-	typoPrefix_subtitle,
-	typoPrefix_price_title,
-	typoPrefix_price_currency,
-	typoPrefix_pricing_period,
-	typoPrefix_saleprice,
-	typoPrefix_saleprice_currency,
-	typoPrefix_features_text,
-	typoPrefix_button,
-	typoPrefix_ribbon,
+    typoPrefix_title,
+    typoPrefix_subtitle,
+    typoPrefix_price_title,
+    typoPrefix_price_currency,
+    typoPrefix_pricing_period,
+    typoPrefix_saleprice,
+    typoPrefix_saleprice_currency,
+    typoPrefix_features_text,
+    typoPrefix_button,
+    typoPrefix_ribbon,
 } from "./constants/typographyPrefixConstants";
 
 const {
-	softMinifyCssStrings,
-	duplicateBlockIdFix,
-	generateDimensionsControlStyles,
-	generateBackgroundControlStyles,
-	generateBorderShadowStyles,
-	generateTypographyStyles,
-	generateResponsiveRangeStyles,
+    softMinifyCssStrings,
+    duplicateBlockIdFix,
+    generateDimensionsControlStyles,
+    generateBackgroundControlStyles,
+    generateBorderShadowStyles,
+    generateTypographyStyles,
+    generateResponsiveRangeStyles,
+    DynamicInputValueHandler,
 } = window.EBControls;
 
 const edit = (props) => {
-	const { attributes, isSelected, setAttributes, clientId, className } = props;
-	const {
-		blockId,
-		blockMeta,
-		// responsive control attribute ⬇
-		resOption,
-		pricingStyle,
-		title,
-		showSubtitle,
-		subtitle,
-		showHeaderIcon,
-		headerIcon,
-		showTitleLine,
-		mainPrice,
-		showOnSale,
-		salePrice,
-		salePriceTextColor,
-		salepriceCurrencyTextColor,
-		priceCurrency,
-		currencyPlacement,
-		pricePeriod,
-		periodSeparator,
-		hideFeatures,
-		features,
-		showButton,
-		buttonIcon,
-		buttonIconPosition,
-		buttonText,
-		buttonURL,
-		featuresTextColor,
-		titleBackgroundColor,
-		titleTextColor,
-		titleLineColor,
-		subtitleTextColor,
-		priceTextColor,
-		priceCurrencyTextColor,
-		pricingPeriodTextColor,
-		buttonTextColor,
-		hoverTextColor,
-		iconBackgroundColor,
-		iconBackgroundHoverColor,
-		showIconBackground,
-		iconColor,
-		iconHoverColor,
-		contentAlign,
-		showRibbon,
-		ribbonStyle,
-		ribbonText,
-		ribbonColor,
-		ribbonBackgroundColor,
-		featuresAlignment,
-		buttonAlignment,
-		headerAlignment,
-		priceAlignment,
-		iconAlignment,
-		classHook,
-		ribbonAlignHorizontal,
-		ribbonAlignVertical,
-		showFeatureLine,
-		pricingTopBgColor,
-	} = attributes;
+    const {
+        attributes,
+        isSelected,
+        setAttributes,
+        clientId,
+        className,
+    } = props;
+    const {
+        blockId,
+        blockMeta,
+        // responsive control attribute ⬇
+        resOption,
+        pricingStyle,
+        title,
+        showSubtitle,
+        subtitle,
+        showHeaderIcon,
+        headerIcon,
+        showTitleLine,
+        mainPrice,
+        showOnSale,
+        salePrice,
+        salePriceTextColor,
+        salepriceCurrencyTextColor,
+        priceCurrency,
+        currencyPlacement,
+        pricePeriod,
+        periodSeparator,
+        hideFeatures,
+        features,
+        showButton,
+        buttonIcon,
+        buttonIconPosition,
+        buttonText,
+        buttonURL,
+        featuresTextColor,
+        titleBackgroundColor,
+        titleTextColor,
+        titleLineColor,
+        subtitleTextColor,
+        priceTextColor,
+        priceCurrencyTextColor,
+        pricingPeriodTextColor,
+        buttonTextColor,
+        hoverTextColor,
+        iconBackgroundColor,
+        iconBackgroundHoverColor,
+        showIconBackground,
+        iconColor,
+        iconHoverColor,
+        contentAlign,
+        showRibbon,
+        ribbonStyle,
+        ribbonText,
+        ribbonColor,
+        ribbonBackgroundColor,
+        featuresAlignment,
+        buttonAlignment,
+        headerAlignment,
+        priceAlignment,
+        iconAlignment,
+        classHook,
+        ribbonAlignHorizontal,
+        ribbonAlignVertical,
+        showFeatureLine,
+        pricingTopBgColor,
+    } = attributes;
 
-	// wrapper styles css in strings
-	const {
-		dimensionStylesDesktop: wrapperPaddingStylesDesktop,
-		dimensionStylesTab: wrapperPaddingStylesTab,
-		dimensionStylesMobile: wrapperPaddingStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: wrapperPadding,
-		styleFor: "padding",
-		attributes,
-	});
+    // wrapper styles css in strings
+    const {
+        dimensionStylesDesktop: wrapperPaddingStylesDesktop,
+        dimensionStylesTab: wrapperPaddingStylesTab,
+        dimensionStylesMobile: wrapperPaddingStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: wrapperPadding,
+        styleFor: "padding",
+        attributes,
+    });
 
-	const {
-		dimensionStylesDesktop: wrapperMarginStylesDesktop,
-		dimensionStylesTab: wrapperMarginStylesTab,
-		dimensionStylesMobile: wrapperMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: wrapperMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: wrapperMarginStylesDesktop,
+        dimensionStylesTab: wrapperMarginStylesTab,
+        dimensionStylesMobile: wrapperMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: wrapperMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		backgroundStylesDesktop: priceTableBackgroundStylesDesktop,
-		hoverBackgroundStylesDesktop: priceTableHoverBackgroundStylesDesktop,
-		backgroundStylesTab: priceTableBackgroundStylesTab,
-		hoverBackgroundStylesTab: priceTableHoverBackgroundStylesTab,
-		backgroundStylesMobile: priceTableBackgroundStylesMobile,
-		hoverBackgroundStylesMobile: priceTableHoverBackgroundStylesMobile,
-		overlayStylesDesktop: priceTableOverlayStylesDesktop,
-		hoverOverlayStylesDesktop: priceTableHoverOverlayStylesDesktop,
-		overlayStylesTab: priceTableOverlayStylesTab,
-		hoverOverlayStylesTab: priceTableHoverOverlayStylesTab,
-		overlayStylesMobile: priceTableOverlayStylesMobile,
-		hoverOverlayStylesMobile: priceTableHoverOverlayStylesMobile,
-		bgTransitionStyle: priceTableBgTransitionStyle,
-		ovlTransitionStyle: priceTableOvlTransitionStyle,
-	} = generateBackgroundControlStyles({
-		attributes,
-		controlName: priceTableBackground,
-	});
+    const {
+        backgroundStylesDesktop: priceTableBackgroundStylesDesktop,
+        hoverBackgroundStylesDesktop: priceTableHoverBackgroundStylesDesktop,
+        backgroundStylesTab: priceTableBackgroundStylesTab,
+        hoverBackgroundStylesTab: priceTableHoverBackgroundStylesTab,
+        backgroundStylesMobile: priceTableBackgroundStylesMobile,
+        hoverBackgroundStylesMobile: priceTableHoverBackgroundStylesMobile,
+        overlayStylesDesktop: priceTableOverlayStylesDesktop,
+        hoverOverlayStylesDesktop: priceTableHoverOverlayStylesDesktop,
+        overlayStylesTab: priceTableOverlayStylesTab,
+        hoverOverlayStylesTab: priceTableHoverOverlayStylesTab,
+        overlayStylesMobile: priceTableOverlayStylesMobile,
+        hoverOverlayStylesMobile: priceTableHoverOverlayStylesMobile,
+        bgTransitionStyle: priceTableBgTransitionStyle,
+        ovlTransitionStyle: priceTableOvlTransitionStyle,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: priceTableBackground,
+    });
 
-	const {
-		styesDesktop: bdShadowStyesDesktop,
-		styesTab: bdShadowStyesTab,
-		styesMobile: bdShadowStyesMobile,
-		stylesHoverDesktop: bdShadowStylesHoverDesktop,
-		stylesHoverTab: bdShadowStylesHoverTab,
-		stylesHoverMobile: bdShadowStylesHoverMobile,
-		transitionStyle: bdShadowTransitionStyle,
-	} = generateBorderShadowStyles({
-		controlName: wrapperBorderShadow,
-		attributes,
-	});
+    const {
+        styesDesktop: bdShadowStyesDesktop,
+        styesTab: bdShadowStyesTab,
+        styesMobile: bdShadowStyesMobile,
+        stylesHoverDesktop: bdShadowStylesHoverDesktop,
+        stylesHoverTab: bdShadowStylesHoverTab,
+        stylesHoverMobile: bdShadowStylesHoverMobile,
+        transitionStyle: bdShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: wrapperBorderShadow,
+        attributes,
+    });
 
-	const {
-		typoStylesDesktop: titleTypoStylesDesktop,
-		typoStylesTab: titleTypoStylesTab,
-		typoStylesMobile: titleTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_title,
-		defaultFontSize: 28,
-	});
+    const {
+        typoStylesDesktop: titleTypoStylesDesktop,
+        typoStylesTab: titleTypoStylesTab,
+        typoStylesMobile: titleTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_title,
+        defaultFontSize: 28,
+    });
 
-	const {
-		typoStylesDesktop: subtitleTypoStylesDesktop,
-		typoStylesTab: subtitleTypoStylesTab,
-		typoStylesMobile: subtitleTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_subtitle,
-	});
+    const {
+        typoStylesDesktop: subtitleTypoStylesDesktop,
+        typoStylesTab: subtitleTypoStylesTab,
+        typoStylesMobile: subtitleTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_subtitle,
+    });
 
-	const {
-		dimensionStylesDesktop: titlePaddingStylesDesktop,
-		dimensionStylesTab: titlePaddingStylesTab,
-		dimensionStylesMobile: titlePaddingStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: titlePadding,
-		styleFor: "padding",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: titlePaddingStylesDesktop,
+        dimensionStylesTab: titlePaddingStylesTab,
+        dimensionStylesMobile: titlePaddingStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: titlePadding,
+        styleFor: "padding",
+        attributes,
+    });
 
-	const {
-		dimensionStylesDesktop: titleMarginStylesDesktop,
-		dimensionStylesTab: titleMarginStylesTab,
-		dimensionStylesMobile: titleMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: titleMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: titleMarginStylesDesktop,
+        dimensionStylesTab: titleMarginStylesTab,
+        dimensionStylesMobile: titleMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: titleMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		typoStylesDesktop: priceTextTypoStylesDesktop,
-		typoStylesTab: priceTextTypoStylesTab,
-		typoStylesMobile: priceTextTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_price_title,
-	});
+    const {
+        typoStylesDesktop: priceTextTypoStylesDesktop,
+        typoStylesTab: priceTextTypoStylesTab,
+        typoStylesMobile: priceTextTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_price_title,
+    });
 
-	const {
-		typoStylesDesktop: priceCurrencyTypoStylesDesktop,
-		typoStylesTab: priceCurrencyTypoStylesTab,
-		typoStylesMobile: priceCurrencyTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_price_currency,
-	});
+    const {
+        typoStylesDesktop: priceCurrencyTypoStylesDesktop,
+        typoStylesTab: priceCurrencyTypoStylesTab,
+        typoStylesMobile: priceCurrencyTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_price_currency,
+    });
 
-	const {
-		dimensionStylesDesktop: priceCurrencyMarginStylesDesktop,
-		dimensionStylesTab: priceCurrencyMarginStylesTab,
-		dimensionStylesMobile: priceCurrencyMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: priceCurrencyMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: priceCurrencyMarginStylesDesktop,
+        dimensionStylesTab: priceCurrencyMarginStylesTab,
+        dimensionStylesMobile: priceCurrencyMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: priceCurrencyMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		typoStylesDesktop: pricePeriodTypoStylesDesktop,
-		typoStylesTab: pricePeriodTypoStylesTab,
-		typoStylesMobile: pricePeriodTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_pricing_period,
-	});
+    const {
+        typoStylesDesktop: pricePeriodTypoStylesDesktop,
+        typoStylesTab: pricePeriodTypoStylesTab,
+        typoStylesMobile: pricePeriodTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_pricing_period,
+    });
 
-	const {
-		typoStylesDesktop: salePriceTypoStylesDesktop,
-		typoStylesTab: salePriceTypoStylesTab,
-		typoStylesMobile: salePriceTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_saleprice,
-	});
+    const {
+        typoStylesDesktop: salePriceTypoStylesDesktop,
+        typoStylesTab: salePriceTypoStylesTab,
+        typoStylesMobile: salePriceTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_saleprice,
+    });
 
-	const {
-		typoStylesDesktop: salePriceCurrencyTypoStylesDesktop,
-		typoStylesTab: salePriceCurrencyTypoStylesTab,
-		typoStylesMobile: salePriceCurrencyTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_saleprice_currency,
-	});
+    const {
+        typoStylesDesktop: salePriceCurrencyTypoStylesDesktop,
+        typoStylesTab: salePriceCurrencyTypoStylesTab,
+        typoStylesMobile: salePriceCurrencyTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_saleprice_currency,
+    });
 
-	const {
-		dimensionStylesDesktop: salePriceMarginStylesDesktop,
-		dimensionStylesTab: salePriceMarginStylesTab,
-		dimensionStylesMobile: salePriceMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: salepriceCurrencyMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: salePriceMarginStylesDesktop,
+        dimensionStylesTab: salePriceMarginStylesTab,
+        dimensionStylesMobile: salePriceMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: salepriceCurrencyMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		typoStylesDesktop: featuresTypoStylesDesktop,
-		typoStylesTab: featuresTypoStylesTab,
-		typoStylesMobile: featuresTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_features_text,
-	});
+    const {
+        typoStylesDesktop: featuresTypoStylesDesktop,
+        typoStylesTab: featuresTypoStylesTab,
+        typoStylesMobile: featuresTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_features_text,
+    });
 
-	const {
-		rangeStylesDesktop: featuresIconSizeDesktop,
-		rangeStylesTab: featuresIconSizeTab,
-		rangeStylesMobile: featuresIconSizeMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: featuresIconSize,
-		property: "font-size",
-		attributes,
-		customUnit: "px",
-	});
+    const {
+        rangeStylesDesktop: featuresIconSizeDesktop,
+        rangeStylesTab: featuresIconSizeTab,
+        rangeStylesMobile: featuresIconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: featuresIconSize,
+        property: "font-size",
+        attributes,
+        customUnit: "px",
+    });
 
-	const {
-		rangeStylesDesktop: buttonIconSpaceRightDesktop,
-		rangeStylesTab: buttonIconSpaceRightTab,
-		rangeStylesMobile: buttonIconSpaceRightMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: buttonIconSpacing,
-		property: "margin-right",
-		attributes,
-		customUnit: "px",
-	});
+    const {
+        rangeStylesDesktop: buttonIconSpaceRightDesktop,
+        rangeStylesTab: buttonIconSpaceRightTab,
+        rangeStylesMobile: buttonIconSpaceRightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: buttonIconSpacing,
+        property: "margin-right",
+        attributes,
+        customUnit: "px",
+    });
 
-	const {
-		rangeStylesDesktop: buttonIconSpaceLeftDesktop,
-		rangeStylesTab: buttonIconSpaceLeftTab,
-		rangeStylesMobile: buttonIconSpaceLeftMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: buttonIconSpacing,
-		property: "margin-left",
-		attributes,
-		customUnit: "px",
-	});
+    const {
+        rangeStylesDesktop: buttonIconSpaceLeftDesktop,
+        rangeStylesTab: buttonIconSpaceLeftTab,
+        rangeStylesMobile: buttonIconSpaceLeftMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: buttonIconSpacing,
+        property: "margin-left",
+        attributes,
+        customUnit: "px",
+    });
 
-	const {
-		dimensionStylesDesktop: buttonPaddingStylesDesktop,
-		dimensionStylesTab: buttonPaddingStylesTab,
-		dimensionStylesMobile: buttonPaddingStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: buttonPadding,
-		styleFor: "padding",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: buttonPaddingStylesDesktop,
+        dimensionStylesTab: buttonPaddingStylesTab,
+        dimensionStylesMobile: buttonPaddingStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: buttonPadding,
+        styleFor: "padding",
+        attributes,
+    });
 
-	const {
-		dimensionStylesDesktop: buttonMarginStylesDesktop,
-		dimensionStylesTab: buttonMarginStylesTab,
-		dimensionStylesMobile: buttonMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: buttonMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: buttonMarginStylesDesktop,
+        dimensionStylesTab: buttonMarginStylesTab,
+        dimensionStylesMobile: buttonMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: buttonMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		rangeStylesDesktop: buttonIconSizeDesktop,
-		rangeStylesTab: buttonIconSizeTab,
-		rangeStylesMobile: buttonIconSizeMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: buttonIconSize,
-		property: "font-size",
-		attributes,
-		customUnit: "px",
-	});
+    const {
+        rangeStylesDesktop: buttonIconSizeDesktop,
+        rangeStylesTab: buttonIconSizeTab,
+        rangeStylesMobile: buttonIconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: buttonIconSize,
+        property: "font-size",
+        attributes,
+        customUnit: "px",
+    });
 
-	const {
-		typoStylesDesktop: buttonTypoStylesDesktop,
-		typoStylesTab: buttonTypoStylesTab,
-		typoStylesMobile: buttonTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_button,
-	});
+    const {
+        typoStylesDesktop: buttonTypoStylesDesktop,
+        typoStylesTab: buttonTypoStylesTab,
+        typoStylesMobile: buttonTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_button,
+    });
 
-	const {
-		backgroundStylesDesktop: buttonBackgroundStylesDesktop,
-		hoverBackgroundStylesDesktop: buttonHoverBackgroundStylesDesktop,
-		bgTransitionStyle: buttonBgTransitionStyle,
-	} = generateBackgroundControlStyles({
-		attributes,
-		controlName: buttonBackgroundControl,
-		noOverlay: true,
-		noMainBgi: true,
-	});
+    const {
+        backgroundStylesDesktop: buttonBackgroundStylesDesktop,
+        hoverBackgroundStylesDesktop: buttonHoverBackgroundStylesDesktop,
+        bgTransitionStyle: buttonBgTransitionStyle,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: buttonBackgroundControl,
+        noOverlay: true,
+        noMainBgi: true,
+    });
 
-	const {
-		styesDesktop: btnShadowStyesDesktop,
-		styesTab: btnShadowStyesTab,
-		styesMobile: btnShadowStyesMobile,
-		stylesHoverDesktop: btnShadowStylesHoverDesktop,
-		stylesHoverTab: btnShadowStylesHoverTab,
-		stylesHoverMobile: btnShadowStylesHoverMobile,
-	} = generateBorderShadowStyles({
-		controlName: buttonBorderShadow,
-		attributes,
-	});
+    const {
+        styesDesktop: btnShadowStyesDesktop,
+        styesTab: btnShadowStyesTab,
+        styesMobile: btnShadowStyesMobile,
+        stylesHoverDesktop: btnShadowStylesHoverDesktop,
+        stylesHoverTab: btnShadowStylesHoverTab,
+        stylesHoverMobile: btnShadowStylesHoverMobile,
+    } = generateBorderShadowStyles({
+        controlName: buttonBorderShadow,
+        attributes,
+    });
 
-	const {
-		rangeStylesDesktop: headerIconSizeDesktop,
-		rangeStylesTab: headerIconSizeTab,
-		rangeStylesMobile: headerIconSizeMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: headerIconSize,
-		property: "font-size",
-		attributes,
-	});
+    const {
+        rangeStylesDesktop: headerIconSizeDesktop,
+        rangeStylesTab: headerIconSizeTab,
+        rangeStylesMobile: headerIconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: headerIconSize,
+        property: "font-size",
+        attributes,
+    });
 
-	const {
-		rangeStylesDesktop: headerIconWidthDesktop,
-		rangeStylesTab: headerIconWidthTab,
-		rangeStylesMobile: headerIconWidthMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: headerIconWidth,
-		property: "width",
-		attributes,
-	});
+    const {
+        rangeStylesDesktop: headerIconWidthDesktop,
+        rangeStylesTab: headerIconWidthTab,
+        rangeStylesMobile: headerIconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: headerIconWidth,
+        property: "width",
+        attributes,
+    });
 
-	const {
-		rangeStylesDesktop: headerIconHeightDesktop,
-		rangeStylesTab: headerIconHeightTab,
-		rangeStylesMobile: headerIconHeightMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: headerIconHeight,
-		property: "height",
-		attributes,
-	});
+    const {
+        rangeStylesDesktop: headerIconHeightDesktop,
+        rangeStylesTab: headerIconHeightTab,
+        rangeStylesMobile: headerIconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: headerIconHeight,
+        property: "height",
+        attributes,
+    });
 
-	const {
-		styesDesktop: iconBorderShadowDesktop,
-		styesTab: iconBorderShadowTab,
-		styesMobile: iconBorderShadowMobile,
-		stylesHoverDesktop: iconBorderShadowHoverDesktop,
-		stylesHoverTab: iconBorderShadowHoverTab,
-		stylesHoverMobile: iconBorderShadowHoverMobile,
-	} = generateBorderShadowStyles({
-		controlName: iconBorderShadow,
-		attributes,
-	});
+    const {
+        styesDesktop: iconBorderShadowDesktop,
+        styesTab: iconBorderShadowTab,
+        styesMobile: iconBorderShadowMobile,
+        stylesHoverDesktop: iconBorderShadowHoverDesktop,
+        stylesHoverTab: iconBorderShadowHoverTab,
+        stylesHoverMobile: iconBorderShadowHoverMobile,
+    } = generateBorderShadowStyles({
+        controlName: iconBorderShadow,
+        attributes,
+    });
 
-	const iconAlign = iconAlignment || contentAlign;
+    const iconAlign = iconAlignment || contentAlign;
 
-	const {
-		typoStylesDesktop: ribbonTypoStylesDesktop,
-		typoStylesTab: ribbonTypoStylesTab,
-		typoStylesMobile: ribbonTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_ribbon,
-	});
+    const {
+        typoStylesDesktop: ribbonTypoStylesDesktop,
+        typoStylesTab: ribbonTypoStylesTab,
+        typoStylesMobile: ribbonTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_ribbon,
+    });
 
-	const {
-		styesDesktop: ribbonBorderShadowDesktop,
-		stylesHoverDesktop: ribbonBorderShadowHoverDesktop,
-	} = generateBorderShadowStyles({
-		controlName: ribbonBorderShadow,
-		attributes,
-	});
+    const {
+        styesDesktop: ribbonBorderShadowDesktop,
+        stylesHoverDesktop: ribbonBorderShadowHoverDesktop,
+    } = generateBorderShadowStyles({
+        controlName: ribbonBorderShadow,
+        attributes,
+    });
 
-	const desktopStyles = `
+    const desktopStyles = `
 		  .eb-pricing-wrapper.${blockId} .eb-pricing {
 			  text-align: ${contentAlign};
 			  ${ribbonStyle === "ribbon-4" ? "overflow: hidden;" : ""}
 		  }
-		  
+
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-1::before {
 			  content: "";
 			  color: ${ribbonColor};
@@ -504,9 +511,9 @@ const edit = (props) => {
 			  ${titlePaddingStylesDesktop}
 			  ${titleMarginStylesDesktop}
 			  background: ${
-					titleBackgroundColor ||
-					(pricingStyle === "style-2" ? "#c8e6c9" : "none")
-				};
+                  titleBackgroundColor ||
+                  (pricingStyle === "style-2" ? "#c8e6c9" : "none")
+              };
 			  position: relative;
 			  z-index: 0;
 		  }
@@ -566,24 +573,24 @@ const edit = (props) => {
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
 			  ${
-					buttonIconPosition === "left"
-						? buttonIconSpaceRightDesktop
-						: buttonIconSpaceLeftDesktop
-				}
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightDesktop
+                      : buttonIconSpaceLeftDesktop
+              }
 			  ${buttonIconSizeDesktop}
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon {
 			  display: flex;
 			  align-items: center;
 			  justify-content: ${
-					iconAlign === "left"
-						? "flex-start"
-						: iconAlign === "right"
-						? "flex-end"
-						: "center"
-				};
+                  iconAlign === "left"
+                      ? "flex-start"
+                      : iconAlign === "right"
+                      ? "flex-end"
+                      : "center"
+              };
 		  }
-		  
+
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  display: flex;
 			  align-items: center;
@@ -592,18 +599,18 @@ const edit = (props) => {
 			  ${headerIconHeightDesktop}
 			  ${iconBorderShadowDesktop}
 			  ${
-					showIconBackground
-						? "background-color: " + iconBackgroundColor + ";"
-						: "background-color: transparent;"
-				}
+                  showIconBackground
+                      ? "background-color: " + iconBackgroundColor + ";"
+                      : "background-color: transparent;"
+              }
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item:hover .eb-pricing-icon .icon {
 			  ${iconBorderShadowHoverDesktop}
 			  ${
-					showIconBackground
-						? "background-color: " + iconBackgroundHoverColor + ";"
-						: "background-color: transparent;"
-				}
+                  showIconBackground
+                      ? "background-color: " + iconBackgroundHoverColor + ";"
+                      : "background-color: transparent;"
+              }
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon i {
 			  ${headerIconSizeDesktop}
@@ -612,42 +619,42 @@ const edit = (props) => {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item:hover .eb-pricing-icon .icon i {
 			  color: ${iconHoverColor};
 		  }
-  
+
 		  ${
-				featuresAlignment
-					? `.eb-pricing-wrapper.${blockId} .eb-pricing-body {
+              featuresAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-body {
 				  text-align: ${featuresAlignment};
 			  }`
-					: ""
-			}
-  
+                  : ""
+          }
+
 		  ${
-				buttonAlignment
-					? `.eb-pricing-wrapper.${blockId} .eb-pricing-footer {
+              buttonAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-footer {
 				  text-align: ${buttonAlignment};
 			  }`
-					: ""
-			}
-  
+                  : ""
+          }
+
 		  ${
-				headerAlignment
-					? `.eb-pricing-wrapper.${blockId} .eb-pricing-header {
+              headerAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-header {
 				  text-align: ${headerAlignment};
 			  }`
-					: ""
-			}
-  
+                  : ""
+          }
+
 		  ${
-				priceAlignment
-					? `.eb-pricing-wrapper.${blockId} .eb-pricing-tag {
+              priceAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-tag {
 				  text-align: ${priceAlignment};
 			  }`
-					: ""
-			}
-		  
+                  : ""
+          }
+
 	  `;
 
-	const tabStyles = `
+    const tabStyles = `
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-2::before,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-3::before,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-4::before {
@@ -715,10 +722,10 @@ const edit = (props) => {
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
 			  ${
-					buttonIconPosition === "left"
-						? buttonIconSpaceRightTab
-						: buttonIconSpaceLeftTab
-				}
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightTab
+                      : buttonIconSpaceLeftTab
+              }
 			  ${buttonIconSizeTab}
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
@@ -734,7 +741,7 @@ const edit = (props) => {
 		  }
 	  `;
 
-	const mobileStyles = `
+    const mobileStyles = `
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-2::before,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-3::before,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item.ribbon-4::before {
@@ -786,7 +793,7 @@ const edit = (props) => {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li {
 			  ${featuresTypoStylesMobile}
 		  }
-		  
+
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon {
 			  ${featuresIconSizeMobile}
 		  }
@@ -803,10 +810,10 @@ const edit = (props) => {
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
 			  ${
-					buttonIconPosition === "left"
-						? buttonIconSpaceRightMobile
-						: buttonIconSpaceLeftMobile
-				}
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightMobile
+                      : buttonIconSpaceLeftMobile
+              }
 			  ${buttonIconSizeMobile}
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
@@ -822,27 +829,27 @@ const edit = (props) => {
 		  }
 	  `;
 
-	var titleLineStyle = "";
-	var headerAlign =
-		headerAlignment === "left"
-			? "margin: 0 !important;"
-			: headerAlignment === "right"
-			? "margin: 0 0 0 auto !important;"
-			: "margin: 0 auto !important;";
-	var headerAlignStyle3 =
-		headerAlignment === "left"
-			? "transform: translateX(-80%) !important;"
-			: headerAlignment === "right"
-			? "transform: translateX(80%) !important;"
-			: "margin: 0 auto !important;";
-	var priceAlign =
-		priceAlignment === "left"
-			? "margin: 0 !important;"
-			: priceAlignment === "right"
-			? "margin: 0 0 0 auto !important;"
-			: "margin: 0 auto !important;";
-	if (showTitleLine) {
-		titleLineStyle = `
+    var titleLineStyle = "";
+    var headerAlign =
+        headerAlignment === "left"
+            ? "margin: 0 !important;"
+            : headerAlignment === "right"
+            ? "margin: 0 0 0 auto !important;"
+            : "margin: 0 auto !important;";
+    var headerAlignStyle3 =
+        headerAlignment === "left"
+            ? "transform: translateX(-80%) !important;"
+            : headerAlignment === "right"
+            ? "transform: translateX(80%) !important;"
+            : "margin: 0 auto !important;";
+    var priceAlign =
+        priceAlignment === "left"
+            ? "margin: 0 !important;"
+            : priceAlignment === "right"
+            ? "margin: 0 0 0 auto !important;"
+            : "margin: 0 auto !important;";
+    if (showTitleLine) {
+        titleLineStyle = `
 		  .${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
 			  content: "";
 			  position: absolute;
@@ -864,21 +871,21 @@ const edit = (props) => {
 			  margin: 0 0 0 auto;
 		  }
 		  ${
-				headerAlignment
-					? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
+              headerAlignment
+                  ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
 							 ${headerAlign}
 						 }`
-					: ""
-			}
-		  
+                  : ""
+          }
+
 		 ${
-				priceAlignment
-					? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-tag::after {
+             priceAlignment
+                 ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-tag::after {
 						 ${priceAlign}
 					 }`
-					: ""
-			}
-		  
+                 : ""
+         }
+
 		  .${blockId}.eb-pricing-content-left .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header:after, .${blockId}.eb-pricing-content-left .eb-pricing.style-3 .eb-pricing-item .eb-pricing-tag:after {
 			  transform: translateX(-80%);
 		  }
@@ -886,12 +893,12 @@ const edit = (props) => {
 			  transform: translateX(80%);
 		  }
 		  ${
-				headerAlignment
-					? `.${blockId} .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header::after {
+              headerAlignment
+                  ? `.${blockId} .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header::after {
 							 ${headerAlignStyle3}
 						 }`
-					: ""
-			}
+                  : ""
+          }
 		  .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header:after {
 			  position: absolute;
 			  content: "";
@@ -916,480 +923,668 @@ const edit = (props) => {
 			  transform: scaleX(1) !important;
 		  }
 	  `;
-	}
+    }
 
-	// ribbon Class
-	const ribbonClass = showRibbon ? ` featured ${ribbonStyle}` : "";
+    // ribbon Class
+    const ribbonClass = showRibbon ? ` featured ${ribbonStyle}` : "";
 
-	// all css styles for large screen width (desktop/laptop) in strings ⬇
-	const desktopAllStyles = softMinifyCssStrings(`
+    // all css styles for large screen width (desktop/laptop) in strings ⬇
+    const desktopAllStyles = softMinifyCssStrings(`
 		  ${desktopStyles}
 		  ${titleLineStyle}
 	  `);
 
-	// all css styles for Tab in strings ⬇
-	const tabAllStyles = softMinifyCssStrings(`
+    // all css styles for Tab in strings ⬇
+    const tabAllStyles = softMinifyCssStrings(`
 		  ${tabStyles}
 	  `);
 
-	// all css styles for Mobile in strings ⬇
-	const mobileAllStyles = softMinifyCssStrings(`
+    // all css styles for Mobile in strings ⬇
+    const mobileAllStyles = softMinifyCssStrings(`
 		  ${mobileStyles}
 	  `);
 
-	// Set All Style in "blockMeta" Attribute
-	useEffect(() => {
-		const styleObject = {
-			desktop: desktopAllStyles,
-			tab: tabAllStyles,
-			mobile: mobileAllStyles,
-		};
-		if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-			setAttributes({ blockMeta: styleObject });
-		}
-	}, [attributes]);
-	
-	// this useEffect is for creating an unique id for each block's unique className by a random unique number
-	useEffect(() => {
-		const BLOCK_PREFIX = "eb-pricing";
-		duplicateBlockIdFix({
-			BLOCK_PREFIX,
-			blockId,
-			setAttributes,
-			select,
-			clientId,
-		});
-	}, []);
+    // Set All Style in "blockMeta" Attribute
+    useEffect(() => {
+        const styleObject = {
+            desktop: desktopAllStyles,
+            tab: tabAllStyles,
+            mobile: mobileAllStyles,
+        };
+        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
+            setAttributes({ blockMeta: styleObject });
+        }
+    }, [attributes]);
 
-	const blockProps = useBlockProps({
-		className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-	});
+    // this useEffect is for creating an unique id for each block's unique className by a random unique number
+    useEffect(() => {
+        const BLOCK_PREFIX = "eb-pricing";
+        duplicateBlockIdFix({
+            BLOCK_PREFIX,
+            blockId,
+            setAttributes,
+            select,
+            clientId,
+        });
+    }, []);
 
-	useEffect(() => {
-		if (features.length > 0) return;
+    const blockProps = useBlockProps({
+        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
+    });
 
-		const defaultFeatures = [
-			{
-				icon: "fas fa-check",
-				text: "Unlimited Calls",
-				color: "#03bb89",
-				clickable: "false",
-				link: "",
-			},
-			{
-				icon: "fas fa-check",
-				text: "Free Hosting",
-				color: "#03bb89",
-				clickable: "false",
-				link: "",
-			},
-			{
-				icon: "fas fa-check",
-				text: "500MB Free Storage",
-				color: "#03bb89",
-				clickable: "false",
-				link: "",
-			},
-			{
-				icon: "fas fa-check",
-				text: "24/7 Support",
-				color: "#03bb89",
-				clickable: "false",
-				link: "",
-			},
-		];
+    useEffect(() => {
+        if (features.length > 0) return;
 
-		setAttributes({ features: defaultFeatures });
-	}, []);
+        const defaultFeatures = [
+            {
+                icon: "fas fa-check",
+                text: "Unlimited Calls",
+                color: "#03bb89",
+                clickable: "false",
+                link: "",
+            },
+            {
+                icon: "fas fa-check",
+                text: "Free Hosting",
+                color: "#03bb89",
+                clickable: "false",
+                link: "",
+            },
+            {
+                icon: "fas fa-check",
+                text: "500MB Free Storage",
+                color: "#03bb89",
+                clickable: "false",
+                link: "",
+            },
+            {
+                icon: "fas fa-check",
+                text: "24/7 Support",
+                color: "#03bb89",
+                clickable: "false",
+                link: "",
+            },
+        ];
 
-	return (
-		<>
-			<BlockControls>
-				<AlignmentToolbar
-					value={contentAlign}
-					onChange={(contentAlign) =>
-						setAttributes({ contentAlign: contentAlign || "center" })
-					}
-				/>
-			</BlockControls>
-			{isSelected && (
-				<Inspector attributes={attributes} setAttributes={setAttributes} />
-			)}
-			<div {...blockProps}>
-				<style>
-					{`
+        setAttributes({ features: defaultFeatures });
+    }, []);
+
+    return (
+        <>
+            <BlockControls>
+                <AlignmentToolbar
+                    value={contentAlign}
+                    onChange={(contentAlign) =>
+                        setAttributes({
+                            contentAlign: contentAlign || "center",
+                        })
+                    }
+                />
+            </BlockControls>
+            {isSelected && (
+                <Inspector
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
+            )}
+            <div {...blockProps}>
+                <style>
+                    {`
 				   ${desktopAllStyles}
-   
+
 				   /* mimmikcssStart */
-   
+
 				   ${resOption === "Tablet" ? tabAllStyles : " "}
 				   ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-   
+
 				   /* mimmikcssEnd */
-   
-				   @media all and (max-width: 1024px) {	
-   
-					   /* tabcssStart */			
+
+				   @media all and (max-width: 1024px) {
+
+					   /* tabcssStart */
 					   ${softMinifyCssStrings(tabAllStyles)}
-					   /* tabcssEnd */			
-				   
+					   /* tabcssEnd */
+
 				   }
-				   
+
 				   @media all and (max-width: 767px) {
-					   
-					   /* mobcssStart */			
+
+					   /* mobcssStart */
 					   ${softMinifyCssStrings(mobileAllStyles)}
-					   /* mobcssEnd */			
-				   
+					   /* mobcssEnd */
+
 				   }
 				   `}
-				</style>
-				<div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-					<div
-						className={`${blockId} eb-pricing-wrapper eb-pricing-content-${contentAlign}`}
-					>
-						<div className={`eb-pricing ${pricingStyle} `}>
-							<div
-								className={`eb-pricing-item${ribbonClass} ${
-									ribbonStyle !== "ribbon-1"
-										? ribbonAlignHorizontal
-										: ribbonAlignVertical
-								}`}
-							>
-								<div className="eb-pricing-item-overlay"></div>
+                </style>
+                <div
+                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                >
+                    <div
+                        className={`${blockId} eb-pricing-wrapper eb-pricing-content-${contentAlign}`}
+                    >
+                        <div className={`eb-pricing ${pricingStyle} `}>
+                            <div
+                                className={`eb-pricing-item${ribbonClass} ${
+                                    ribbonStyle !== "ribbon-1"
+                                        ? ribbonAlignHorizontal
+                                        : ribbonAlignVertical
+                                }`}
+                            >
+                                <div className="eb-pricing-item-overlay"></div>
 
-								{pricingStyle == "style-4" && (
-									<>
-										<div className="eb-pricing-top">
-											{showHeaderIcon && (
-												<div className="eb-pricing-icon" data-icon={headerIcon}>
-													<span className="icon">
-														<i className={headerIcon}></i>
-													</span>
-												</div>
-											)}
-											<div className="eb-pricing-tag">
-												<span className="price-tag">
-													<span
-														className={`original-price${
-															showOnSale === true ? " line-through" : ""
-														}`}
-														data-price={mainPrice}
-													>
-														{currencyPlacement === "left" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-														{mainPrice}
-														{currencyPlacement === "right" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-													</span>
+                                {pricingStyle == "style-4" && (
+                                    <>
+                                        <div className="eb-pricing-top">
+                                            {showHeaderIcon && (
+                                                <div
+                                                    className="eb-pricing-icon"
+                                                    data-icon={headerIcon}
+                                                >
+                                                    <span className="icon">
+                                                        <i
+                                                            className={
+                                                                headerIcon
+                                                            }
+                                                        ></i>
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <div className="eb-pricing-tag">
+                                                <span className="price-tag">
+                                                    <span
+                                                        className={`original-price${
+                                                            showOnSale === true
+                                                                ? " line-through"
+                                                                : ""
+                                                        }`}
+                                                        data-price={mainPrice}
+                                                    >
+                                                        {currencyPlacement ===
+                                                            "left" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                        {mainPrice}
+                                                        {currencyPlacement ===
+                                                            "right" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                    </span>
 
-													{showOnSale && (
-														<>
-															<span
-																className="sale-price"
-																data-sale-price={salePrice}
-															>
-																{currencyPlacement === "left" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-																{salePrice}
-																{currencyPlacement === "right" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-															</span>
-														</>
-													)}
-												</span>
-												<span
-													className="price-period"
-													data-period-separator={periodSeparator}
-													data-price-period={pricePeriod}
-												>
-													{periodSeparator} {pricePeriod}
-												</span>
-											</div>
-											<div className="eb-pricing-header">
-												<h2 className="eb-pricing-title">{title}</h2>
-												{showSubtitle && (
-													<span className="eb-pricing-subtitle">
-														{subtitle}
-													</span>
-												)}
-											</div>
-										</div>
+                                                    {showOnSale && (
+                                                        <>
+                                                            <span
+                                                                className="sale-price"
+                                                                data-sale-price={
+                                                                    salePrice
+                                                                }
+                                                            >
+                                                                {currencyPlacement ===
+                                                                    "left" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                                {salePrice}
+                                                                {currencyPlacement ===
+                                                                    "right" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </span>
+                                                <span
+                                                    className="price-period"
+                                                    data-period-separator={
+                                                        periodSeparator
+                                                    }
+                                                    data-price-period={
+                                                        pricePeriod
+                                                    }
+                                                >
+                                                    {periodSeparator}{" "}
+                                                    {pricePeriod}
+                                                </span>
+                                            </div>
+                                            <div className="eb-pricing-header">
+                                                <h2 className="eb-pricing-title">
+                                                    {title}
+                                                </h2>
+                                                {showSubtitle && (
+                                                    <span className="eb-pricing-subtitle">
+                                                        {subtitle}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
 
-										<div className="eb-pricing-bottom">
-											{hideFeatures !== true && (
-												<div className="eb-pricing-body">
-													<ul
-														className={`eb-pricebox-features ${
-															showFeatureLine ? "" : "no-border"
-														}`}
-													>
-														{features.map(
-															(
-																{ icon, text, color, clickable, link },
-																index
-															) => (
-																<li
-																	key={index}
-																	className="eb-pricebox-feature-item"
-																	data-icon={icon}
-																	data-color={color}
-																	data-clickable={clickable}
-																	data-link={link}
-																>
-																	{clickable && link ? (
-																		<a href={link}>
-																			<span
-																				className={`eb-pricebox-icon ${icon}`}
-																				style={{ color: color }}
-																			/>
-																			<span className="eb-pricebox-feature-text">
-																				{text}
-																			</span>
-																		</a>
-																	) : (
-																		<>
-																			<span
-																				className={`eb-pricebox-icon ${icon}`}
-																				style={{ color: color }}
-																			/>
-																			<span className="eb-pricebox-feature-text">
-																				{text}
-																			</span>
-																		</>
-																	)}
-																</li>
-															)
-														)}
-													</ul>
-												</div>
-											)}
+                                        <div className="eb-pricing-bottom">
+                                            {hideFeatures !== true && (
+                                                <div className="eb-pricing-body">
+                                                    <ul
+                                                        className={`eb-pricebox-features ${
+                                                            showFeatureLine
+                                                                ? ""
+                                                                : "no-border"
+                                                        }`}
+                                                    >
+                                                        {features.map(
+                                                            (
+                                                                {
+                                                                    icon,
+                                                                    text,
+                                                                    color,
+                                                                    clickable,
+                                                                    link,
+                                                                },
+                                                                index
+                                                            ) => (
+                                                                <li
+                                                                    key={index}
+                                                                    className="eb-pricebox-feature-item"
+                                                                    data-icon={
+                                                                        icon
+                                                                    }
+                                                                    data-color={
+                                                                        color
+                                                                    }
+                                                                    data-clickable={
+                                                                        clickable
+                                                                    }
+                                                                    data-link={
+                                                                        link
+                                                                    }
+                                                                >
+                                                                    {clickable &&
+                                                                    link ? (
+                                                                        <a
+                                                                            href={
+                                                                                link
+                                                                            }
+                                                                        >
+                                                                            <span
+                                                                                className={`eb-pricebox-icon ${icon}`}
+                                                                                style={{
+                                                                                    color: color,
+                                                                                }}
+                                                                            />
+                                                                            <span className="eb-pricebox-feature-text">
+                                                                                {
+                                                                                    text
+                                                                                }
+                                                                            </span>
+                                                                        </a>
+                                                                    ) : (
+                                                                        <>
+                                                                            <span
+                                                                                className={`eb-pricebox-icon ${icon}`}
+                                                                                style={{
+                                                                                    color: color,
+                                                                                }}
+                                                                            />
+                                                                            <span className="eb-pricebox-feature-text">
+                                                                                {
+                                                                                    text
+                                                                                }
+                                                                            </span>
+                                                                        </>
+                                                                    )}
+                                                                </li>
+                                                            )
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            )}
 
-											{showButton && (
-												<div
-													className="eb-pricing-footer"
-													data-icon={buttonIcon}
-												>
-													<div className="eb-pricing-button-wrapper">
-														<a href={buttonURL} className="eb-pricing-button">
-															{buttonIconPosition === "left" && (
-																<i className={buttonIcon}></i>
-															)}
-															<span className="eb-button-text">
-																{buttonText}
-															</span>
-															{buttonIconPosition === "right" && (
-																<i className={buttonIcon}></i>
-															)}
-														</a>
-													</div>
-												</div>
-											)}
-										</div>
-									</>
-								)}
+                                            {showButton && (
+                                                <div
+                                                    className="eb-pricing-footer"
+                                                    data-icon={buttonIcon}
+                                                >
+                                                    <div className="eb-pricing-button-wrapper">
+                                                        <a
+                                                            href={buttonURL}
+                                                            className="eb-pricing-button"
+                                                        >
+                                                            {buttonIconPosition ===
+                                                                "left" && (
+                                                                <i
+                                                                    className={
+                                                                        buttonIcon
+                                                                    }
+                                                                ></i>
+                                                            )}
+                                                            <DynamicInputValueHandler
+                                                                value={
+                                                                    buttonText
+                                                                }
+                                                                tagName="span"
+                                                                className="eb-button-text"
+                                                                onChange={(
+                                                                    buttonText
+                                                                ) =>
+                                                                    setAttributes(
+                                                                        {
+                                                                            buttonText,
+                                                                        }
+                                                                    )
+                                                                }
+                                                                readOnly={true}
+                                                            />
+                                                            {buttonIconPosition ===
+                                                                "right" && (
+                                                                <i
+                                                                    className={
+                                                                        buttonIcon
+                                                                    }
+                                                                ></i>
+                                                            )}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
 
-								{pricingStyle !== "style-4" && (
-									<>
-										{showHeaderIcon && (
-											<div className="eb-pricing-icon" data-icon={headerIcon}>
-												<span className="icon">
-													<i className={headerIcon}></i>
-												</span>
-											</div>
-										)}
-										<div className="eb-pricing-header">
-											<h2 className="eb-pricing-title">{title}</h2>
-											{showSubtitle && (
-												<span className="eb-pricing-subtitle">{subtitle}</span>
-											)}
-										</div>
-										{pricingStyle !== "style-3" && (
-											<div className="eb-pricing-tag">
-												<span className="price-tag">
-													<span
-														className={`original-price${
-															showOnSale === true ? " line-through" : ""
-														}`}
-														data-price={mainPrice}
-													>
-														{currencyPlacement === "left" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-														{mainPrice}
-														{currencyPlacement === "right" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-													</span>
+                                {pricingStyle !== "style-4" && (
+                                    <>
+                                        {showHeaderIcon && (
+                                            <div
+                                                className="eb-pricing-icon"
+                                                data-icon={headerIcon}
+                                            >
+                                                <span className="icon">
+                                                    <i
+                                                        className={headerIcon}
+                                                    ></i>
+                                                </span>
+                                            </div>
+                                        )}
+                                        <div className="eb-pricing-header">
+                                            <h2 className="eb-pricing-title">
+                                                {title}
+                                            </h2>
+                                            {showSubtitle && (
+                                                <span className="eb-pricing-subtitle">
+                                                    {subtitle}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {pricingStyle !== "style-3" && (
+                                            <div className="eb-pricing-tag">
+                                                <span className="price-tag">
+                                                    <span
+                                                        className={`original-price${
+                                                            showOnSale === true
+                                                                ? " line-through"
+                                                                : ""
+                                                        }`}
+                                                        data-price={mainPrice}
+                                                    >
+                                                        {currencyPlacement ===
+                                                            "left" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                        {mainPrice}
+                                                        {currencyPlacement ===
+                                                            "right" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                    </span>
 
-													{showOnSale && (
-														<>
-															<span
-																className="sale-price"
-																data-sale-price={salePrice}
-															>
-																{currencyPlacement === "left" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-																{salePrice}
-																{currencyPlacement === "right" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-															</span>
-														</>
-													)}
-												</span>
-												<span
-													className="price-period"
-													data-period-separator={periodSeparator}
-													data-price-period={pricePeriod}
-												>
-													{periodSeparator} {pricePeriod}
-												</span>
-											</div>
-										)}
+                                                    {showOnSale && (
+                                                        <>
+                                                            <span
+                                                                className="sale-price"
+                                                                data-sale-price={
+                                                                    salePrice
+                                                                }
+                                                            >
+                                                                {currencyPlacement ===
+                                                                    "left" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                                {salePrice}
+                                                                {currencyPlacement ===
+                                                                    "right" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </span>
+                                                <span
+                                                    className="price-period"
+                                                    data-period-separator={
+                                                        periodSeparator
+                                                    }
+                                                    data-price-period={
+                                                        pricePeriod
+                                                    }
+                                                >
+                                                    {periodSeparator}{" "}
+                                                    {pricePeriod}
+                                                </span>
+                                            </div>
+                                        )}
 
-										{hideFeatures !== true && (
-											<div className="eb-pricing-body">
-												<ul
-													className={`eb-pricebox-features ${
-														showFeatureLine ? "" : "no-border"
-													}`}
-												>
-													{features.map(
-														({ icon, text, color, clickable, link }, index) => (
-															<li
-																key={index}
-																className="eb-pricebox-feature-item"
-																data-icon={icon}
-																data-color={color}
-																data-clickable={clickable}
-																data-link={link}
-															>
-																{clickable && link ? (
-																	<a href={link}>
-																		<span
-																			className={`eb-pricebox-icon ${icon}`}
-																			style={{ color: color }}
-																		/>
-																		<span className="eb-pricebox-feature-text">
-																			{text}
-																		</span>
-																	</a>
-																) : (
-																	<>
-																		<span
-																			className={`eb-pricebox-icon ${icon}`}
-																			style={{ color: color }}
-																		/>
-																		<span className="eb-pricebox-feature-text">
-																			{text}
-																		</span>
-																	</>
-																)}
-															</li>
-														)
-													)}
-												</ul>
-											</div>
-										)}
+                                        {hideFeatures !== true && (
+                                            <div className="eb-pricing-body">
+                                                <ul
+                                                    className={`eb-pricebox-features ${
+                                                        showFeatureLine
+                                                            ? ""
+                                                            : "no-border"
+                                                    }`}
+                                                >
+                                                    {features.map(
+                                                        (
+                                                            {
+                                                                icon,
+                                                                text,
+                                                                color,
+                                                                clickable,
+                                                                link,
+                                                            },
+                                                            index
+                                                        ) => (
+                                                            <li
+                                                                key={index}
+                                                                className="eb-pricebox-feature-item"
+                                                                data-icon={icon}
+                                                                data-color={
+                                                                    color
+                                                                }
+                                                                data-clickable={
+                                                                    clickable
+                                                                }
+                                                                data-link={link}
+                                                            >
+                                                                {clickable &&
+                                                                link ? (
+                                                                    <a
+                                                                        href={
+                                                                            link
+                                                                        }
+                                                                    >
+                                                                        <span
+                                                                            className={`eb-pricebox-icon ${icon}`}
+                                                                            style={{
+                                                                                color: color,
+                                                                            }}
+                                                                        />
+                                                                        <span className="eb-pricebox-feature-text">
+                                                                            {
+                                                                                text
+                                                                            }
+                                                                        </span>
+                                                                    </a>
+                                                                ) : (
+                                                                    <>
+                                                                        <span
+                                                                            className={`eb-pricebox-icon ${icon}`}
+                                                                            style={{
+                                                                                color: color,
+                                                                            }}
+                                                                        />
+                                                                        <span className="eb-pricebox-feature-text">
+                                                                            {
+                                                                                text
+                                                                            }
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        )}
 
-										{pricingStyle === "style-3" && (
-											<div className="eb-pricing-tag">
-												<span className="price-tag">
-													<span
-														className={`original-price${
-															showOnSale === true ? " line-through" : ""
-														}`}
-														data-price={mainPrice}
-													>
-														{currencyPlacement === "left" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-														{mainPrice}
-														{currencyPlacement === "right" && (
-															<span className="price-currency">
-																{priceCurrency}
-															</span>
-														)}
-													</span>
+                                        {pricingStyle === "style-3" && (
+                                            <div className="eb-pricing-tag">
+                                                <span className="price-tag">
+                                                    <span
+                                                        className={`original-price${
+                                                            showOnSale === true
+                                                                ? " line-through"
+                                                                : ""
+                                                        }`}
+                                                        data-price={mainPrice}
+                                                    >
+                                                        {currencyPlacement ===
+                                                            "left" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                        {mainPrice}
+                                                        {currencyPlacement ===
+                                                            "right" && (
+                                                            <span className="price-currency">
+                                                                {priceCurrency}
+                                                            </span>
+                                                        )}
+                                                    </span>
 
-													{showOnSale && (
-														<>
-															<span
-																className="sale-price"
-																data-sale-price={salePrice}
-															>
-																{currencyPlacement === "left" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-																{salePrice}
-																{currencyPlacement === "right" && (
-																	<span className="price-currency">
-																		{priceCurrency}
-																	</span>
-																)}
-															</span>
-														</>
-													)}
-												</span>
-												<span
-													className="price-period"
-													data-period-separator={periodSeparator}
-													data-price-period={pricePeriod}
-												>
-													{periodSeparator} {pricePeriod}
-												</span>
-											</div>
-										)}
-										{showButton && (
-											<div className="eb-pricing-footer" data-icon={buttonIcon}>
-												<div className="eb-pricing-button-wrapper">
-													<a href={buttonURL} className="eb-pricing-button">
-														{buttonIconPosition === "left" && (
-															<i className={buttonIcon}></i>
-														)}
-														<span className="eb-button-text">{buttonText}</span>
-														{buttonIconPosition === "right" && (
-															<i className={buttonIcon}></i>
-														)}
-													</a>
-												</div>
-											</div>
-										)}
-									</>
-								)}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+                                                    {showOnSale && (
+                                                        <>
+                                                            <span
+                                                                className="sale-price"
+                                                                data-sale-price={
+                                                                    salePrice
+                                                                }
+                                                            >
+                                                                {currencyPlacement ===
+                                                                    "left" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                                {salePrice}
+                                                                {currencyPlacement ===
+                                                                    "right" && (
+                                                                    <span className="price-currency">
+                                                                        {
+                                                                            priceCurrency
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </span>
+                                                <span
+                                                    className="price-period"
+                                                    data-period-separator={
+                                                        periodSeparator
+                                                    }
+                                                    data-price-period={
+                                                        pricePeriod
+                                                    }
+                                                >
+                                                    {periodSeparator}{" "}
+                                                    {pricePeriod}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {showButton && (
+                                            <div
+                                                className="eb-pricing-footer"
+                                                data-icon={buttonIcon}
+                                            >
+                                                <div className="eb-pricing-button-wrapper">
+                                                    <a
+                                                        href={buttonURL}
+                                                        className="eb-pricing-button"
+                                                    >
+                                                        {buttonIconPosition ===
+                                                            "left" && (
+                                                            <i
+                                                                className={
+                                                                    buttonIcon
+                                                                }
+                                                            ></i>
+                                                        )}
+                                                        <DynamicInputValueHandler
+                                                            value={buttonText}
+                                                            tagName="span"
+                                                            className="eb-button-text"
+                                                            onChange={(
+                                                                buttonText
+                                                            ) =>
+                                                                setAttributes({
+                                                                    buttonText,
+                                                                })
+                                                            }
+                                                            readOnly={true}
+                                                        />
+                                                        {buttonIconPosition ===
+                                                            "right" && (
+                                                            <i
+                                                                className={
+                                                                    buttonIcon
+                                                                }
+                                                            ></i>
+                                                        )}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default edit;

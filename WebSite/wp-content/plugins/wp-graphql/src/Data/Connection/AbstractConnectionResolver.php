@@ -7,8 +7,6 @@ use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Model\Model;
 use WPGraphQL\Model\Post;
 
 /**
@@ -31,7 +29,7 @@ abstract class AbstractConnectionResolver {
 	/**
 	 * The args input on the field calling the connection
 	 *
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	protected $args;
 
@@ -52,7 +50,7 @@ abstract class AbstractConnectionResolver {
 	/**
 	 * The query args used to query for data to resolve the connection
 	 *
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	protected $query_args;
 
@@ -94,22 +92,22 @@ abstract class AbstractConnectionResolver {
 	protected $query;
 
 	/**
-	 * @var array
+	 * @var mixed[]
 	 */
 	protected $items;
 
 	/**
-	 * @var array
+	 * @var int[]|string[]
 	 */
 	protected $ids;
 
 	/**
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	protected $nodes;
 
 	/**
-	 * @var array
+	 * @var array<string,mixed>[]
 	 */
 	protected $edges;
 
@@ -121,11 +119,9 @@ abstract class AbstractConnectionResolver {
 	/**
 	 * ConnectionResolver constructor.
 	 *
-	 * @param mixed       $source  source passed down from the resolve tree
-	 * @param array       $args    array of arguments input in the field as part of the GraphQL
-	 *                             query
-	 * @param \WPGraphQL\AppContext $context Object containing app context that gets passed down the resolve
- * tree
+	 * @param mixed                                $source  source passed down from the resolve tree
+	 * @param array<string,mixed>                  $args    array of arguments input in the field as part of the GraphQL query
+	 * @param \WPGraphQL\AppContext                $context Object containing app context that gets passed down the resolve tree
 	 * @param \GraphQL\Type\Definition\ResolveInfo $info Info about fields passed down the resolve tree
 	 *
 	 * @throws \Exception
@@ -198,7 +194,6 @@ abstract class AbstractConnectionResolver {
 		 * @param array                      $unfiltered_args Array of arguments input in the field as part of the GraphQL query.
 		 */
 		$this->query_args = apply_filters( 'graphql_connection_query_args', $this->get_query_args(), $this, $args );
-
 	}
 
 	/**
@@ -219,7 +214,7 @@ abstract class AbstractConnectionResolver {
 	protected function getLoader() {
 		$name = $this->get_loader_name();
 		if ( empty( $name ) || ! is_string( $name ) ) {
-			throw new Exception( __( 'The Connection Resolver needs to define a loader name', 'wp-graphql' ) );
+			throw new Exception( esc_html__( 'The Connection Resolver needs to define a loader name', 'wp-graphql' ) );
 		}
 
 		return $this->context->get_loader( $name );
@@ -230,10 +225,12 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * @deprecated Deprecated since v1.11.0 in favor of $this->get_args();
 	 *
+	 * @return array<string,mixed>
+	 *
 	 * @codeCoverageIgnore
 	 */
 	public function getArgs(): array {
-		_deprecated_function( __METHOD__, '1.11.0', static::class . '::get_args()' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		_deprecated_function( __METHOD__, '1.11.0', static::class . '::get_args()' );
 		return $this->get_args();
 	}
 
@@ -242,7 +239,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Useful for modifying the $args before they are passed to $this->get_query_args().
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_args(): array {
 		return $this->args;
@@ -250,8 +247,6 @@ abstract class AbstractConnectionResolver {
 
 	/**
 	 * Returns the AppContext of the connection
-	 *
-	 * @return \WPGraphQL\AppContext
 	 */
 	public function getContext(): AppContext {
 		return $this->context;
@@ -259,8 +254,6 @@ abstract class AbstractConnectionResolver {
 
 	/**
 	 * Returns the ResolveInfo of the connection
-	 *
-	 * @return \GraphQL\Type\Definition\ResolveInfo
 	 */
 	public function getInfo(): ResolveInfo {
 		return $this->info;
@@ -268,8 +261,6 @@ abstract class AbstractConnectionResolver {
 
 	/**
 	 * Returns whether the connection should execute
-	 *
-	 * @return bool
 	 */
 	public function getShouldExecute(): bool {
 		return $this->should_execute;
@@ -286,7 +277,7 @@ abstract class AbstractConnectionResolver {
 	 * @codeCoverageIgnore
 	 */
 	public function setQueryArg( $key, $value ) {
-		_deprecated_function( __METHOD__, '0.3.0', static::class . '::set_query_arg()' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		_deprecated_function( __METHOD__, '0.3.0', static::class . '::set_query_arg()' );
 
 		return $this->set_query_arg( $key, $value );
 	}
@@ -335,7 +326,7 @@ abstract class AbstractConnectionResolver {
 	 * For example, if the ConnectionResolver uses WP_Query to fetch the data, this
 	 * should return $args for use in `new WP_Query`
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	abstract public function get_query_args();
 
@@ -357,7 +348,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Determine whether or not the query should execute.
 	 *
-	 * Return true to exeucte, return false to prevent execution.
+	 * Return true to execute, return false to prevent execution.
 	 *
 	 * Various criteria can be used to determine whether a Connection Query should
 	 * be executed.
@@ -395,22 +386,24 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * @since 1.9.0
 	 *
-	 * @throws \Exception if child class forgot to implement this.
+	 * @throws \Exception If child class forgot to implement this.
 	 *
-	 * @return array the array of IDs.
+	 * @return int[]|string[] the array of IDs.
 	 */
 	public function get_ids_from_query() {
-		throw new Exception( sprintf(
-			__( 'Class %s does not implement a valid method `get_ids_from_query()`.', 'wp-graphql' ),
-			get_class( $this )
-		) );
+		throw new Exception(
+			sprintf(
+				// translators: %s is the name of the connection resolver class.
+				esc_html__( 'Class %s does not implement a valid method `get_ids_from_query()`.', 'wp-graphql' ),
+				static::class
+			)
+		);
 	}
 
 	/**
 	 * Given an ID, return the model for the entity or null
 	 *
-	 * @param mixed $id The ID to identify the object by. Could be a database ID or an in-memory ID
-	 *                  (like post_type name)
+	 * @param mixed $id The ID to identify the object by. Could be a database ID or an in-memory ID (like post_type name)
 	 *
 	 * @return mixed|\WPGraphQL\Model\Model|null
 	 * @throws \Exception
@@ -431,7 +424,7 @@ abstract class AbstractConnectionResolver {
 	public function get_query_amount() {
 
 		/**
-		 * Filter the maximum number of posts per page that should be quried. The default is 100 to prevent queries from
+		 * Filter the maximum number of posts per page that should be queried. The default is 100 to prevent queries from
 		 * being exceedingly resource intensive, however individual systems can override this for their specific needs.
 		 *
 		 * This filter is intentionally applied AFTER the query_args filter, as
@@ -447,7 +440,6 @@ abstract class AbstractConnectionResolver {
 		$max_query_amount = apply_filters( 'graphql_connection_max_query_amount', 100, $this->source, $this->args, $this->context, $this->info );
 
 		return min( $max_query_amount, absint( $this->get_amount_requested() ) );
-
 	}
 
 	/**
@@ -456,7 +448,7 @@ abstract class AbstractConnectionResolver {
 	 * This checks the $args to determine the amount requested, and if
 	 *
 	 * @return int|null
-	 * @throws \Exception
+	 * @throws \GraphQL\Error\UserError If there is an issue with the pagination $args.
 	 */
 	public function get_amount_requested() {
 
@@ -504,7 +496,6 @@ abstract class AbstractConnectionResolver {
 		 * @param \WPGraphQL\Data\Connection\AbstractConnectionResolver $resolver Instance of the connection resolver class
 		 */
 		return max( 0, apply_filters( 'graphql_connection_amount_requested', $amount_requested, $this ) );
-
 	}
 
 	/**
@@ -537,7 +528,7 @@ abstract class AbstractConnectionResolver {
 	 * Gets the array index for the given offset.
 	 *
 	 * @param int|string|false $offset The cursor pagination offset.
-	 * @param array      $ids    The array of ids from the query.
+	 * @param int[]|string[]   $ids    The array of ids from the query.
 	 *
 	 * @return int|false $index The array index of the offset.
 	 */
@@ -557,11 +548,11 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * @see https://relay.dev/graphql/connections.htm#sec-Pagination-algorithm
 	 *
-	 * @param array $ids The array of IDs from the query to slice, ordered as expected by the GraphQL query.
+	 * @param int[]|string[] $ids The array of IDs from the query to slice, ordered as expected by the GraphQL query.
 	 *
 	 * @since 1.9.0
 	 *
-	 * @return array
+	 * @return int[]|string[]
 	 */
 	public function apply_cursors_to_ids( array $ids ) {
 		if ( empty( $ids ) ) {
@@ -570,7 +561,6 @@ abstract class AbstractConnectionResolver {
 
 		// First we slice the array from the front.
 		if ( ! empty( $this->args['after'] ) ) {
-
 			$offset = $this->get_offset_for_cursor( $this->args['after'] );
 			$index  = $this->get_array_index_for_offset( $offset, $ids );
 
@@ -600,7 +590,7 @@ abstract class AbstractConnectionResolver {
 	 * These IDs have been fetched from the query with all the query args applied,
 	 * then sliced (overfetching by 1) by pagination args.
 	 *
-	 * @return array
+	 * @return int[]|string[]
 	 */
 	public function get_ids() {
 		$ids = $this->get_ids_from_query();
@@ -621,7 +611,7 @@ abstract class AbstractConnectionResolver {
 	 * @return int|mixed
 	 */
 	public function get_offset() {
-		_deprecated_function( __METHOD__, '1.9.0', static::class . '::get_offset_for_cursor()' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		_deprecated_function( __METHOD__, '1.9.0', static::class . '::get_offset_for_cursor()' );
 
 		// Using shorthand since this is for deprecated code.
 		$cursor = $this->args['after'] ?? null;
@@ -635,6 +625,8 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Connections that use a string-based offset should override this method.
 	 *
+	 * @param ?string $cursor The cursor to convert to an offset.
+	 *
 	 * @return int|mixed
 	 */
 	public function get_offset_for_cursor( string $cursor = null ) {
@@ -642,12 +634,12 @@ abstract class AbstractConnectionResolver {
 
 		// We avoid using ArrayConnection::cursorToOffset() because it assumes an `int` offset.
 		if ( ! empty( $cursor ) ) {
-			$offset = substr( base64_decode( $cursor ), strlen( 'arrayconnection:' ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+			$offset = substr( base64_decode( $cursor ), strlen( 'arrayconnection:' ) );
 		}
 
 		/**
 		 * We assume a numeric $offset is an integer ID.
-		 * If it isn't this method should be overriden by the child class.
+		 * If it isn't this method should be overridden by the child class.
 		 */
 		return is_numeric( $offset ) ? absint( $offset ) : $offset;
 	}
@@ -661,7 +653,7 @@ abstract class AbstractConnectionResolver {
 	 * ore if there are more "items" after the "before" argument, has_next_page()
 	 * will be set to true
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_next_page() {
 		if ( ! empty( $this->args['first'] ) ) {
@@ -686,7 +678,7 @@ abstract class AbstractConnectionResolver {
 	 * or if there are more "items" before the "after" argument, has_previous_page()
 	 * will be set to true.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_previous_page() {
 		if ( ! empty( $this->args['last'] ) ) {
@@ -706,7 +698,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Determine the start cursor from the connection
 	 *
-	 * @return mixed string|null
+	 * @return mixed|string|null
 	 */
 	public function get_start_cursor() {
 		$first_edge = $this->edges && ! empty( $this->edges ) ? $this->edges[0] : null;
@@ -719,7 +711,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Determine the end cursor from the connection
 	 *
-	 * @return mixed string|null
+	 * @return mixed|string|null
 	 */
 	public function get_end_cursor() {
 		$last_edge = ! empty( $this->edges ) ? $this->edges[ count( $this->edges ) - 1 ] : null;
@@ -734,7 +726,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * @used-by AbstractConnectionResolver::get_nodes()
 	 *
-	 * @return array
+	 * @return int[]|string[]
 	 */
 	public function get_ids_for_nodes() {
 		if ( empty( $this->ids ) ) {
@@ -757,7 +749,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * @uses AbstractConnectionResolver::get_ids_for_nodes()
 	 *
-	 * @return array
+	 * @return array<int|string,mixed|\WPGraphQL\Model\Model|null>
 	 * @throws \Exception
 	 */
 	public function get_nodes() {
@@ -793,12 +785,12 @@ abstract class AbstractConnectionResolver {
 	/**
 	 * Given an ID, a cursor is returned
 	 *
-	 * @param int $id
+	 * @param int|string $id
 	 *
 	 * @return string
 	 */
 	protected function get_cursor_for_node( $id ) {
-		return base64_encode( 'arrayconnection:' . $id ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		return base64_encode( 'arrayconnection:' . (string) $id );
 	}
 
 	/**
@@ -806,7 +798,7 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * This iterates over the nodes and returns edges
 	 *
-	 * @return array
+	 * @return array<string,mixed>[]
 	 */
 	public function get_edges() {
 		// Bail early if there are no nodes.
@@ -818,7 +810,6 @@ abstract class AbstractConnectionResolver {
 
 		// The nodes are already ordered, sliced, and populated. What's left is to populate the edge data for each one.
 		foreach ( $this->nodes as $id => $node ) {
-
 			$edge = [
 				'cursor'     => $this->get_cursor_for_node( $id ),
 				'node'       => $node,
@@ -854,10 +845,9 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Returns pageInfo for the connection
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_page_info() {
-
 		$page_info = [
 			'startCursor'     => $this->get_start_cursor(),
 			'endCursor'       => $this->get_end_cursor(),
@@ -870,7 +860,7 @@ abstract class AbstractConnectionResolver {
 		 *
 		 * This filter allows for additional fields to be filtered into the pageInfo
 		 * of a connection, such as "totalCount", etc, because the filter has enough
-		 * context of the query, args, request, etc to be able to calcuate and return
+		 * context of the query, args, request, etc to be able to calculate and return
 		 * that information.
 		 *
 		 * example:
@@ -893,13 +883,12 @@ abstract class AbstractConnectionResolver {
 		 * });
 		 */
 		return apply_filters( 'graphql_connection_page_info', $page_info, $this );
-
 	}
 
 	/**
 	 * Execute the resolver query and get the data for the connection
 	 *
-	 * @return array
+	 * @return int[]|string[]
 	 *
 	 * @throws \Exception
 	 */
@@ -966,7 +955,6 @@ abstract class AbstractConnectionResolver {
 		$this->loader->buffer( $this->ids );
 
 		return $this->ids;
-
 	}
 
 	/**
@@ -974,12 +962,11 @@ abstract class AbstractConnectionResolver {
 	 *
 	 * Get the connection to return to the Connection Resolver
 	 *
-	 * @return mixed|array|\GraphQL\Deferred
+	 * @return \GraphQL\Deferred
 	 *
 	 * @throws \Exception
 	 */
 	public function get_connection() {
-
 		$this->execute_and_get_ids();
 
 		/**
@@ -988,7 +975,6 @@ abstract class AbstractConnectionResolver {
 		 */
 		return new Deferred(
 			function () {
-
 				if ( ! empty( $this->ids ) ) {
 					$this->loader->load_many( $this->ids );
 				}
@@ -1033,10 +1019,7 @@ abstract class AbstractConnectionResolver {
 				 * @param \WPGraphQL\Data\Connection\AbstractConnectionResolver $connection_resolver The instance of the connection resolver
 				 */
 				return apply_filters( 'graphql_connection', $connection, $this );
-
 			}
 		);
-
 	}
-
 }

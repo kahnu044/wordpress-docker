@@ -1,6 +1,7 @@
 <?php
 
 namespace EssentialBlocks\Core;
+
 use EssentialBlocks\Traits\HasSingletone;
 
 /**
@@ -17,17 +18,18 @@ abstract class Block {
 
     /**
      * Enqueue
+     *
      * @var \EssentialBlocks\Utils\Enqueue
      */
     protected $assets_manager = null;
     protected $dir            = '';
     protected $is_pro         = false;
 
-    //WordPress older than 6.1 don't support array, needs to handle if multiple value needed
+    // WordPress older than 6.1 don't support array, needs to handle if multiple value needed
     // protected $editor_scripts = ['essential-blocks-editor-script'];
     // protected $editor_styles = ['essential-blocks-editor-css'];
-    protected $editor_scripts   = 'essential-blocks-editor-script';
-    protected $editor_styles    = 'essential-blocks-editor-css';
+    protected $editor_scripts   = [];
+    protected $editor_styles    = [];
     protected $animation_script = 'essential-blocks-eb-animation';
     protected $animation_style  = 'essential-blocks-animation';
 
@@ -36,6 +38,7 @@ abstract class Block {
 
     /**
      * unique name of block
+     *
      * @return string
      */
     abstract public function get_name();
@@ -78,7 +81,7 @@ abstract class Block {
     }
 
     public function load_frontend_styles() {
-        //Enqueue Animation
+        // Enqueue Animation
         wp_enqueue_style( $this->animation_style );
 
         if ( empty( $this->frontend_styles ) ) {
@@ -104,8 +107,8 @@ abstract class Block {
 
     public function load_scripts() {
 
-        $this->frontend_styles = apply_filters("eb_frontend_styles/{$this->get_name()}", $this->frontend_styles);
-        $this->frontend_scripts = apply_filters("eb_frontend_scripts/{$this->get_name()}", $this->frontend_scripts);
+        $this->frontend_styles  = apply_filters( "eb_frontend_styles/{$this->get_name()}", $this->frontend_styles );
+        $this->frontend_scripts = apply_filters( "eb_frontend_scripts/{$this->get_name()}", $this->frontend_scripts );
 
         $this->load_frontend_styles();
         $this->load_frontend_scripts();
@@ -142,8 +145,16 @@ abstract class Block {
             };
         }
 
-        $_args['editor_script'] = array_merge( [$this->editor_scripts], [$this->animation_script] );
-        $_args['editor_style']  = array_merge( [$this->editor_styles], [$this->animation_style] );
+        $_args['editor_script'] = array_merge(
+            is_array( $this->editor_scripts ) ? $this->editor_scripts : [$this->editor_scripts],
+            [$this->animation_script],
+            ['essential-blocks-editor-script']
+        );
+        $_args['editor_style'] = array_merge(
+            is_array( $this->editor_styles ) ? $this->editor_styles : [$this->editor_styles],
+            [$this->animation_style],
+            ['essential-blocks-editor-css']
+        );
 
         if ( property_exists( $this, 'attributes' ) ) {
             $_args['attributes'] = $this->attributes;

@@ -37,6 +37,23 @@ export const FILTER_ITEM_PADDING = "filterItmPadding";
 export const FILTER_ITEM_BORDER_SHADOW = "filterItmBdrShdw";
 export const FILTER_ITEM_GAP = "filterItemGap";
 
+export const INPUT_HEIGHT = "inputHeight";
+export const INPUT_PADDING = "inputPadding";
+export const INPUT_BORDER = "inputBrd";
+export const ICON_WIDTH = "iconWidth";
+export const SEARCH_RESULT_WIDTH = "searchResultWidth";
+export const SEARCH_RESULT_PADDING = "searchResultPadding";
+export const SEARCH_RESULT_MARGIN = "searchResultMargin";
+export const SEARCH_RESULT_BORDER = "searchResultBrd";
+export const SEARCH_CONTENT_PADDING = "searchContentPadding";
+export const SEARCH_CONTENT_MARGIN = "searchContentMargin";
+export const SEARCH_CONTENT_BORDER = "searchContentBrd";
+export const NO_SEARCH_ALIGNMENT = "noSearchAlignment";
+export const TAXONOMY_PADDING = "taxonomyPadding";
+export const TAXONOMY_BORDER = "taxonomyBorder";
+export const ICON_SIZE = "iconSize";
+export const ICON_SPACE = "iconSpace";
+
 export const UNIT_TYPES = [
     { label: "px", value: "px" },
     { label: "em", value: "em" },
@@ -82,21 +99,33 @@ export const PRESETS = [
     { label: __("Style 3", "essential-blocks"), value: "style-3" },
     { label: __("Style 4 (List View)"), value: "style-4" }, // Media Left || Content Right Alignment
     { label: __("Style 5 (Content Overlay)"), value: "style-5" }, // Featured Image Background || Content Overlay
-    { label: __("Style 6 (Pro)", "essential-blocks"), value: "pro-style-6", isPro: true },
-    { label: __("Style 7 (Pro)", "essential-blocks"), value: "pro-style-7", isPro: true },
-    { label: __("Style 8 (Pro)", "essential-blocks"), value: "pro-style-8", isPro: true },
+    {
+        label: __("Style 6 (Pro)", "essential-blocks"),
+        value: "pro-style-6",
+        isPro: true,
+    },
+    {
+        label: __("Style 7 (Pro)", "essential-blocks"),
+        value: "pro-style-7",
+        isPro: true,
+    },
+    {
+        label: __("Style 8 (Pro)", "essential-blocks"),
+        value: "pro-style-8",
+        isPro: true,
+    },
 ];
 
 export const TEXT_ALIGN = [
     { label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
     { label: __(<Dashicon icon={"editor-aligncenter"} />), value: "center" },
-    { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" }
+    { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },
 ];
 
 export const CONTENT_POSITION = [
     { label: __(<Dashicon icon={"editor-alignleft"} />), value: "flex-start" },
     { label: __(<Dashicon icon={"editor-aligncenter"} />), value: "center" },
-    { label: __(<Dashicon icon={"editor-alignright"} />), value: "flex-end" }
+    { label: __(<Dashicon icon={"editor-alignright"} />), value: "flex-end" },
 ];
 
 export const VERTICAL_POSITION = [
@@ -104,3 +133,11 @@ export const VERTICAL_POSITION = [
     { label: "Middle", value: "center" },
     { label: "Bottom", value: "flex-end" },
 ];
+export const ICON_POSITION = [
+    { label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
+    { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },
+];
+
+export const PRESET_1_ORDER = ["thumbnail", "title", "headerMeta", "excerpt", "footerMeta"];
+export const PRESET_4_ORDER = ["headerMeta", "title", "excerpt", "footerMeta"];
+export const PRESET_5_ORDER = ["title", "headerMeta"];

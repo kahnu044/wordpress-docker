@@ -2,7 +2,6 @@
 
 namespace WPGraphQL\Type\Connection;
 
-use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\Connection\MenuItemConnectionResolver;
@@ -40,8 +39,7 @@ class MenuItems {
 				[
 					'fromType'      => 'MenuItem',
 					'fromFieldName' => 'childItems',
-					'resolve'       => function ( MenuItem $menu_item, $args, AppContext $context, ResolveInfo $info ) {
-
+					'resolve'       => static function ( MenuItem $menu_item, $args, AppContext $context, ResolveInfo $info ) {
 						if ( empty( $menu_item->menuId ) || empty( $menu_item->databaseId ) ) {
 							return null;
 						}
@@ -51,7 +49,6 @@ class MenuItems {
 						$resolver->set_query_arg( 'meta_key', '_menu_item_menu_item_parent' );
 						$resolver->set_query_arg( 'meta_value', (int) $menu_item->databaseId );
 						return $resolver->get_connection();
-
 					},
 				]
 			)
@@ -65,33 +62,34 @@ class MenuItems {
 				[
 					'fromType' => 'Menu',
 					'toType'   => 'MenuItem',
-					'resolve'  => function ( Menu $menu, $args, AppContext $context, ResolveInfo $info ) {
-
+					'resolve'  => static function ( Menu $menu, $args, AppContext $context, ResolveInfo $info ) {
 						$resolver = new MenuItemConnectionResolver( $menu, $args, $context, $info );
-						$resolver->set_query_arg( 'tax_query', [
+						$resolver->set_query_arg(
+							'tax_query',
 							[
-								'taxonomy'         => 'nav_menu',
-								'field'            => 'term_id',
-								'terms'            => (int) $menu->menuId,
-								'include_children' => true,
-								'operator'         => 'IN',
-							],
-						] );
+								[
+									'taxonomy'         => 'nav_menu',
+									'field'            => 'term_id',
+									'terms'            => (int) $menu->menuId,
+									'include_children' => true,
+									'operator'         => 'IN',
+								],
+							]
+						);
 
 						return $resolver->get_connection();
 					},
 				]
 			)
 		);
-
 	}
 
 	/**
 	 * Given an array of $args, returns the args for the connection with the provided args merged
 	 *
-	 * @param array $args
+	 * @param array<string,mixed> $args
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public static function get_connection_config( $args = [] ) {
 		return array_merge(
@@ -117,15 +115,13 @@ class MenuItems {
 						'description' => __( 'The database ID of the parent menu object', 'wp-graphql' ),
 					],
 				],
-				'resolve'        => function ( $source, $args, $context, $info ) {
-					$resolver   = new MenuItemConnectionResolver( $source, $args, $context, $info );
-					$connection = $resolver->get_connection();
+				'resolve'        => static function ( $source, $args, $context, $info ) {
+					$resolver = new MenuItemConnectionResolver( $source, $args, $context, $info );
 
-					return $connection;
+					return $resolver->get_connection();
 				},
 			],
 			$args
 		);
 	}
-
 }

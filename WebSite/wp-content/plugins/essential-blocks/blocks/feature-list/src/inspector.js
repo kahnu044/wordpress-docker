@@ -178,7 +178,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             options={TITLE_TAG}
                                             onChange={(newTitleTag) =>
                                                 setAttributes({
-                                                    titleTag: newTitleTag,
+                                                    titleTag: newTitleTag
                                                 })
                                             }
                                         />

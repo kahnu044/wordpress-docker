@@ -5,9 +5,7 @@ import { Button } from "@wordpress/components";
 /**
  * Internal dependencies
  */
-const {
-    DynamicInputValueHandler
-} = window.EBControls;
+const { DynamicInputValueHandler } = window.EBControls;
 
 export default function InfoboxContainer({ attributes, setAttributes }) {
     const {
@@ -17,6 +15,7 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
         number,
         imageUrl,
         imageId,
+        imageAlt,
         titleTag,
         title,
         enableSubTitle,
@@ -50,7 +49,9 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                     {media === "number" ? (
                         <div className="icon-img-wrapper">
                             <div className="eb-infobox-num-wrapper number-or-icon">
-                                <span className="eb-infobox-number">{number}</span>
+                                <span className="eb-infobox-number">
+                                    {number}
+                                </span>
                             </div>
                         </div>
                     ) : null}
@@ -59,8 +60,12 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                         <div className="icon-img-wrapper">
                             <div className="eb-infobox-image-wrapper">
                                 <MediaUpload
-                                    onSelect={({ id, url }) =>
-                                        setAttributes({ imageUrl: url, imageId: id })
+                                    onSelect={({ id, url, alt }) =>
+                                        setAttributes({
+                                            imageUrl: url,
+                                            imageId: id,
+                                            imageAlt: alt,
+                                        })
                                     }
                                     type="image"
                                     value={imageId}
@@ -69,14 +74,20 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                             return (
                                                 <Button
                                                     className="eb-infobox-img-btn components-button"
-                                                    label={__("Upload Image", "essential-blocks")}
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
                                                     icon="format-image"
                                                     onClick={open}
                                                 />
                                             );
                                         } else {
                                             return (
-                                                <img className="eb-infobox-image" src={imageUrl} />
+                                                <img
+                                                    className="eb-infobox-image"
+                                                    src={imageUrl}
+                                                />
                                             );
                                         }
                                     }}
@@ -98,7 +109,9 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                 tagName={subTitleTag}
                                 className="subtitle"
                                 value={subTitle}
-                                onChange={(subTitle) => setAttributes({ subTitle })}
+                                onChange={(subTitle) =>
+                                    setAttributes({ subTitle })
+                                }
                             />
                         ) : null}
 
@@ -107,7 +120,9 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                 tagName="p"
                                 className="description"
                                 value={description}
-                                onChange={(description) => setAttributes({ description })}
+                                onChange={(description) =>
+                                    setAttributes({ description })
+                                }
                             />
                         ) : null}
 
@@ -115,15 +130,19 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                             <div className="eb-infobox-btn-wrapper">
                                 <DynamicInputValueHandler
                                     tagName="a"
-                                    className={`infobox-btn ${btnEffect || " "}`}
+                                    className={`infobox-btn ${
+                                        btnEffect || " "
+                                    }`}
                                     value={buttonText}
                                     allowedFormats={[
                                         "core/bold",
                                         "core/italic",
                                         "core/strikethrough",
-                                        "core/underline"
+                                        "core/underline",
                                     ]}
-                                    onChange={(text) => setAttributes({ buttonText: text })}
+                                    onChange={(text) =>
+                                        setAttributes({ buttonText: text })
+                                    }
                                 />
                                 {/* <a
                                     href={infoboxLink}

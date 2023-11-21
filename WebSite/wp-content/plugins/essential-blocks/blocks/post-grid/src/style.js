@@ -34,6 +34,8 @@ import {
     FILTER_ITEM_PADDING,
     FILTER_ITEM_BORDER_SHADOW,
     FILTER_ITEM_GAP,
+    ICON_SIZE,
+    ICON_SPACE,
 } from "./constants/constants";
 import {
     EBPG_TITLE_TYPOGRAPHY,
@@ -43,7 +45,6 @@ import {
     EBPG_LOAD_MORE_TYPOGRAPHY,
     FILTER_ITEM_TYPOGRAPHY,
 } from "./constants/typographyPrefixConstants";
-
 
 const {
     softMinifyCssStrings,
@@ -56,11 +57,7 @@ const {
 } = window.EBControls;
 
 export default function Style(props) {
-    const {
-        attributes,
-        setAttributes,
-        name
-    } = props;
+    const { attributes, setAttributes, name, isContentEnabled } = props;
 
     const {
         blockId,
@@ -131,19 +128,21 @@ export default function Style(props) {
         filterHoverBgColor,
         filterHoverTextColor,
         classHook,
+        addIcon,
+        iconPosition,
+        enableContents,
     } = attributes;
 
     useEffect(() => {
-        const borderColor = attributes[`${FILTER_ITEM_BORDER_SHADOW}borderColor`]
-        const borderStyle = attributes[`${FILTER_ITEM_BORDER_SHADOW}borderStyle`]
+        const borderColor = attributes[`${FILTER_ITEM_BORDER_SHADOW}borderColor`];
+        const borderStyle = attributes[`${FILTER_ITEM_BORDER_SHADOW}borderStyle`];
         if (!borderColor && borderStyle === "none") {
             setAttributes({
                 [`${FILTER_ITEM_BORDER_SHADOW}borderColor`]: "#d18df1",
                 [`${FILTER_ITEM_BORDER_SHADOW}borderStyle`]: "solid",
-            })
+            });
         }
-    }, [])
-
+    }, []);
 
     //
     // CSS/styling Codes Starts from Here
@@ -537,12 +536,48 @@ export default function Style(props) {
         attributes,
     });
 
+    // button icon size
+    const {
+        rangeStylesDesktop: iconSizeDesktop,
+        rangeStylesTab: iconSizeTab,
+        rangeStylesMobile: iconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "font-size",
+        attributes,
+        customUnit: "px",
+    });
+
+    // button gap left
+    const {
+        rangeStylesDesktop: iconGapLeftDesktop,
+        rangeStylesTab: iconGapLeftTab,
+        rangeStylesMobile: iconGapLeftMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SPACE,
+        property: "margin-left",
+        attributes,
+        customUnit: "px",
+    });
+
+    // button gap right
+    const {
+        rangeStylesDesktop: iconGapRightDesktop,
+        rangeStylesTab: iconGapRightTab,
+        rangeStylesMobile: iconGapRightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SPACE,
+        property: "margin-right",
+        attributes,
+        customUnit: "px",
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-post-grid-wrapper.${blockId}{
 			display: grid;
 			position: relative;
-			grid-template-columns: repeat(${columnNumberDesktop.replace(/\D/g,"")}, minmax(0, 1fr));
+			grid-template-columns: repeat(${columnNumberDesktop.replace(/\D/g, "")}, minmax(0, 1fr));
 			${columnGapDesktop}
 			${wrapperMarginStylesDesktop}
 			${wrapperPaddingStylesDesktop}
@@ -558,12 +593,13 @@ export default function Style(props) {
     const wrapperStylesTab = `
 		.eb-post-grid-wrapper.${blockId}{
 			grid-template-columns: repeat(
-				${columnNumberTab
-            ? columnNumberTab.replace(/\D/g, "")
-            : typeof queryResults === "object" && queryResults.length > 1
-                ? 2
-                : 1
-        },
+				${
+                    columnNumberTab
+                        ? columnNumberTab.replace(/\D/g, "")
+                        : typeof queryResults === "object" && queryResults.length > 1
+                        ? 2
+                        : 1
+                },
 				minmax(0, 1fr)
 			);
 			${columnGapTab}
@@ -607,19 +643,21 @@ export default function Style(props) {
 			${columnHoverBackgroundStylesDesktop}
 			${columnBDShadowHoverDesktop}
 		}
-		${preset === "style-4" && mediaWidthStylesDesktop
-            ? `
+		${
+            preset === "style-4" && mediaWidthStylesDesktop
+                ? `
 			.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumber === "0"
-                ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumber === "0"
+                    ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumber}%;
 				}`
-                : mediaWidthNumber === "100"
+                    : mediaWidthNumber === "100"
                     ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 						flex-wrap: wrap;
 					}
@@ -636,15 +674,16 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumber}%;
 				}`
             }`
-            : ""
+                : ""
         }
-		${preset === "style-5"
-            ? `
+		${
+            preset === "style-5"
+                ? `
 			.eb-post-grid-wrapper.${blockId}.style-5 .ebpg-grid-post-holder .ebpg-entry-wrapper {
 				justify-content: ${styleVerticalAlignment};
 			}
 			`
-            : ""
+                : ""
         }
 	`;
 
@@ -659,19 +698,21 @@ export default function Style(props) {
 			${columnHoverBackgroundStylesTab}
 			${columnBDShadowHoverTab}
 		}
-		${preset === "style-4" && mediaWidthStylesTab
-            ? `
+		${
+            preset === "style-4" && mediaWidthStylesTab
+                ? `
 			.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumberTab === "0"
-                ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumberTab === "0"
+                    ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumberTab}%;
 				}`
-                : mediaWidthNumberTab === "100"
+                    : mediaWidthNumberTab === "100"
                     ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 						flex-wrap: wrap;
 					}
@@ -688,7 +729,7 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumberTab}%;
 				}`
             }`
-            : ""
+                : ""
         }
 	`;
 
@@ -703,19 +744,21 @@ export default function Style(props) {
 			${columnHoverBackgroundStylesMobile}
 			${columnBDShadowHoverMobile}
 		}
-		${preset === "style-4" && mediaWidthStylesMobile
-            ? `
+		${
+            preset === "style-4" && mediaWidthStylesMobile
+                ? `
 			.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 				align-items: ${styleVerticalAlignment};
 			}
-			${mediaWidthNumberMobile === "0"
-                ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
+			${
+                mediaWidthNumberMobile === "0"
+                    ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-media {
 					display: none;
 				}
 				.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder .ebpg-entry-wrapper {
 					width: ${100 - mediaWidthNumberMobile}%;
 				}`
-                : mediaWidthNumberMobile === "100"
+                    : mediaWidthNumberMobile === "100"
                     ? `.eb-post-grid-wrapper.${blockId}.style-4 .ebpg-grid-post-holder {
 						flex-wrap: wrap;
 					}
@@ -732,11 +775,20 @@ export default function Style(props) {
 					width: ${100 - mediaWidthNumberMobile}%;
 				}`
             }`
-            : ""
+                : ""
         }
 	`;
 
     const thumbnailStyleDesktop = `
+        ${
+            preset === "style-1" || preset === "style-2" || preset === "style-3"
+                ? `
+            .eb-post-grid-wrapper.${blockId} .ebpg-entry-media {
+                ${isContentEnabled("thumbnail") && `order: ${enableContents.indexOf("thumbnail") + 1}`}
+            }
+            `
+                : ""
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-thumbnail {
 			${thumbnailMarginStylesDesktop}
 		}
@@ -784,6 +836,9 @@ export default function Style(props) {
 	`;
 
     const titleStyleDesktop = `
+		.eb-post-grid-wrapper.${blockId} .ebpg-entry-header {
+            ${isContentEnabled("title") && `order: ${enableContents.indexOf("title") + 1}`}
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title {
 			text-align: ${titleTextAlign};
 			${titleTypoStylesDesktop}
@@ -819,6 +874,9 @@ export default function Style(props) {
 	`;
 
     const contentStyleDesktop = `
+		.eb-post-grid-wrapper.${blockId} .ebpg-entry-content, .eb-post-grid-wrapper.${blockId} .ebpg-grid-post-excerpt {
+            ${isContentEnabled("excerpt") && `order: ${enableContents.indexOf("excerpt") + 1}`}
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-grid-post-excerpt p {
 			color: ${contentColor};
 			text-align: ${contentTextAlign};
@@ -844,6 +902,7 @@ export default function Style(props) {
     const readmoreStyleDesktop = `
 		.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn {
 			text-align: ${readmoreTextAlign};
+            order: 10;
 		}
 		.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn a {
 			color: ${readmoreColor};
@@ -859,6 +918,15 @@ export default function Style(props) {
 			background-color: ${readmoreBGHoverColor};
             ${readMoreBDShadowHoverDesktop}
 		}
+
+		${
+            addIcon
+                ? `.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn .eb-button-icon {
+					${iconSizeDesktop}
+					${iconPosition === "left" ? iconGapRightDesktop : iconGapLeftDesktop}
+				}`
+                : ""
+        }
 	`;
 
     const readmoreStyleTab = `
@@ -871,6 +939,14 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn a:hover {
             ${readMoreBDShadowHoverTab}
 		}
+		${
+            addIcon
+                ? `.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn .eb-button-icon {
+					${iconSizeTab}
+					${iconPosition === "left" ? iconGapRightTab : iconGapLeftTab}
+				}`
+                : ""
+        }
 	`;
 
     const readmoreStyleMobile = `
@@ -883,6 +959,14 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn a:hover {
             ${readMoreBDShadowHoverMobile}
 		}
+		${
+            addIcon
+                ? `.eb-post-grid-wrapper.${blockId} .ebpg-readmore-btn .eb-button-icon {
+					${iconSizeMobile}
+					${iconPosition === "left" ? iconGapRightMobile : iconGapLeftMobile}
+				}`
+                : ""
+        }
 	`;
 
     const avatarStyleDesktop = `
@@ -1063,6 +1147,7 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-header-meta {
 			justify-content: ${headerMetaTextAlign};
 			${headerMetaMarginStylesDesktop}
+            ${isContentEnabled("headerMeta") && `order: ${enableContents.indexOf("headerMeta") + 1}`}
 		}
 		.eb-post-grid-wrapper.${blockId} .ebpg-header-meta .ebpg-entry-meta-items {
 			justify-content: ${headerMetaTextAlign};
@@ -1097,6 +1182,7 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-footer-meta {
 			justify-content: ${footerMetaTextAlign};
 			${footerMetaMarginStylesDesktop}
+            ${isContentEnabled("footerMeta") && `order: ${enableContents.indexOf("footerMeta") + 1}`}
 		}
 		.eb-post-grid-wrapper.${blockId} .ebpg-footer-meta .ebpg-entry-meta-items {
 			justify-content: ${footerMetaTextAlign};
@@ -1178,7 +1264,9 @@ export default function Style(props) {
 	`;
 
     const filterStylesDesktop = `
-		${showTaxonomyFilter ? `
+		${
+            showTaxonomyFilter
+                ? `
 			.eb-post-grid-wrapper.${blockId} .eb-post-grid-category-filter {
 				${filterMarginStylesDesktop}
 			}
@@ -1202,11 +1290,15 @@ export default function Style(props) {
 				background-color: ${filterHoverBgColor};
 				${filterBDShadowHoverDesktop}
 			}
-		` : ""}
+		`
+                : ""
+        }
 	`;
 
     const filterStylesTab = `
-		${showTaxonomyFilter ? `
+		${
+            showTaxonomyFilter
+                ? `
 			.eb-post-grid-wrapper.${blockId} .eb-post-grid-category-filter {
 				${filterMarginStylesTab}
 			}
@@ -1221,11 +1313,15 @@ export default function Style(props) {
 			.eb-post-grid-wrapper.${blockId} .ebpg-category-filter-list-item:hover {
 				${filterBDShadowHoverTab}
 			}
-		` : ""}
+		`
+                : ""
+        }
 	`;
 
     const filterStylesMobile = `
-		${showTaxonomyFilter ? `
+		${
+            showTaxonomyFilter
+                ? `
 			.eb-post-grid-wrapper.${blockId} .eb-post-grid-category-filter {
 				${filterMarginStylesMobile}
 			}
@@ -1240,7 +1336,9 @@ export default function Style(props) {
 			.eb-post-grid-wrapper.${blockId} .ebpg-category-filter-list-item:hover {
 				${filterBDShadowHoverMobile}
 			}
-		` : ""}
+		`
+                : ""
+        }
 	`;
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
@@ -1320,5 +1418,5 @@ export default function Style(props) {
                 blockName={name}
             />
         </>
-    )
+    );
 }

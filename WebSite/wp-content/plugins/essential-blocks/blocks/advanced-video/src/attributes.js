@@ -43,13 +43,9 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
-    videoSource: {
-        type: "string",
-        default: "youtube",
-    },
     videoURL: {
         type: "string",
-        default: "http://www.youtube.com/watch?v=PnZx4ZOMyzI",
+        default: "https://www.youtube.com/watch?v=PnZx4ZOMyzI",
     },
     videoLinkYoutube: {
         type: "string",
@@ -82,8 +78,7 @@ const attributes = {
 
     previewImage: {
         type: "string",
-        default:
-            "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
     },
     previewImageId: {
         type: "string",
@@ -92,8 +87,7 @@ const attributes = {
 
     placeholderImage: {
         type: "string",
-        default:
-            "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
     },
     placeholderImageId: {
         type: "string",
@@ -120,8 +114,7 @@ const attributes = {
     },
     customPlayIconURL: {
         type: "string",
-        default:
-            "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
     },
     customPlayIconId: {
         type: "string",
@@ -130,8 +123,7 @@ const attributes = {
 
     placeholderPlayIconURL: {
         type: "string",
-        default:
-            "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
     },
     lightboxPlayIcon: {
         type: "boolean",

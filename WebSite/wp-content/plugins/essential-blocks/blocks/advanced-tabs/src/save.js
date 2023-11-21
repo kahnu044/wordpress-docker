@@ -27,6 +27,10 @@ export default function save({ attributes }) {
                                 <li
                                     key={index}
                                     data-title-tab-id={item.id}
+                                    data-title-custom-id={item.customId}
+                                    {...(item.customId
+                                        ? { id: item.customId }
+                                        : {})}
                                     className={
                                         item.isDefault ? "active" : "inactive"
                                     }
@@ -55,7 +59,7 @@ export default function save({ attributes }) {
                         </ul>
                     </div>
 
-                    <div class="eb-tabs-contents">
+                    <div className="eb-tabs-contents">
                         <InnerBlocks.Content />
                     </div>
                 </div>

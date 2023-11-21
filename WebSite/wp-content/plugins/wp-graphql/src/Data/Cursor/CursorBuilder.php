@@ -10,7 +10,7 @@ class CursorBuilder {
 	/**
 	 * The field by which the cursor should order the results
 	 *
-	 * @var array
+	 * @var array<string,mixed>[]
 	 */
 	public $fields;
 
@@ -85,13 +85,12 @@ class CursorBuilder {
 		}
 
 		$this->fields[] = $escaped_field;
-
 	}
 
 	/**
 	 * Returns true at least one ordering field has been added
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_fields() {
 		return count( $this->fields ) > 0;
@@ -100,12 +99,11 @@ class CursorBuilder {
 	/**
 	 * Generate the final SQL string to be appended to WHERE clause
 	 *
-	 * @param mixed|array|null $fields
+	 * @param mixed|array<string,mixed>[]|null $fields
 	 *
 	 * @return string
 	 */
 	public function to_sql( $fields = null ) {
-
 		if ( null === $fields ) {
 			$fields = $this->fields;
 		}
@@ -138,7 +136,7 @@ class CursorBuilder {
 		}
 
 		if ( count( $fields ) === 1 ) {
-			return " {$key} {$compare} {$value}";
+			return " {$key} {$compare} {$value} ";
 		}
 
 		$nest = $this->to_sql( \array_slice( $fields, 1 ) );

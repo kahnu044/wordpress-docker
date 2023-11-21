@@ -97,11 +97,12 @@ UAGBForms = {
 
 			if ( reCaptchaSiteKeyV3 ) {
 				if ( attr.hidereCaptchaBatch ) {
-					if ( document.getElementsByClassName( 'grecaptcha-badge' )[ 0 ] === undefined ) {
-						return;
-					}
-					const badge = document.getElementsByClassName( 'grecaptcha-badge' )[ 0 ];
-					badge.style.visibility = 'hidden';
+					setTimeout( function(){
+						const badge = document.getElementsByClassName( 'grecaptcha-badge' )[0];
+						if( badge ){
+							badge.style.visibility = 'hidden';
+						}
+					}, 500 );
 				}
 				const api = document.createElement( 'script' );
 				api.type = 'text/javascript';
@@ -210,8 +211,8 @@ UAGBForms = {
 			hideForm.style.display = 'none';
 
 			const errorMsg = document.querySelector( '.uagb-forms-failed-message-' + attr.block_id );
-			errorMsg.classList.remove( 'uagb-forms-submit-message-hide' );
-			errorMsg.classList.add( 'uagb-forms-failed-message' );
+			errorMsg?.classList?.remove( 'uagb-forms-submit-message-hide' );
+			errorMsg?.classList?.add( 'uagb-forms-failed-message' );
 			return false;
 		}
 

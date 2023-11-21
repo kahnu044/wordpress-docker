@@ -68,8 +68,14 @@ class UAGB_Init_Blocks {
 
 		add_action( 'wp_ajax_uagb_forms_recaptcha', array( $this, 'forms_recaptcha' ) );
 
+		// For Spectra Global Block Styles.
+		add_action( 'wp_ajax_uag_global_block_styles', array( $this, 'uag_global_block_styles' ) );
+
 		if ( ! is_admin() ) {
 			add_action( 'render_block', array( $this, 'render_block' ), 5, 2 );
+
+			// For Spectra Global Block Styles.
+			add_filter( 'render_block', array( $this, 'add_gbs_class' ), 10, 2 );
 		}
 
 		if ( current_user_can( 'edit_posts' ) ) {
@@ -96,7 +102,7 @@ class UAGB_Init_Blocks {
 
 		$labels = array(
 			'name'               => _x( 'Popup Builder', 'plural', 'ultimate-addons-for-gutenberg' ),
-			'singular_name'      => _x( 'Popup', 'singular', 'ultimate-addons-for-gutenberg' ),
+			'singular_name'      => _x( 'Spectra Popup', 'singular', 'ultimate-addons-for-gutenberg' ),
 			'view_item'          => __( 'View Popup', 'ultimate-addons-for-gutenberg' ),
 			'add_new_item'       => __( 'Create New Popup', 'ultimate-addons-for-gutenberg' ),
 			'add_new'            => __( 'Create Popup', 'ultimate-addons-for-gutenberg' ),
@@ -109,17 +115,18 @@ class UAGB_Init_Blocks {
 		);
 
 		$type_args = array(
-			'supports'      => $supports,
-			'labels'        => $labels,
-			'public'        => false,
-			'show_in_menu'  => false,
-			'show_ui'       => true,
-			'show_in_rest'  => true,
-			'template_lock' => 'all',
-			'template'      => array(
+			'supports'          => $supports,
+			'labels'            => $labels,
+			'public'            => false,
+			'show_in_menu'      => false,
+			'show_in_admin_bar' => true,
+			'show_ui'           => true,
+			'show_in_rest'      => true,
+			'template_lock'     => 'all',
+			'template'          => array(
 				array( 'uagb/popup-builder', array() ),
 			),
-			'rewrite'       => array(
+			'rewrite'           => array(
 				'slug'       => 'spectra-popup',
 				'with-front' => false,
 				'pages'      => false,
@@ -160,8 +167,9 @@ class UAGB_Init_Blocks {
 		$spectra_popup_dashboard = UAGB_Popup_Builder::create_for_admin();
 
 		add_action( 'admin_enqueue_scripts', array( $spectra_popup_dashboard, 'popup_toggle_scripts' ) );
-
 		add_action( 'wp_ajax_uag_update_popup_status', array( $spectra_popup_dashboard, 'update_popup_status' ) );
+
+		do_action( 'spectra_pro_popup_dashboard' );
 
 		add_filter( 'manage_spectra-popup_posts_columns', array( $spectra_popup_dashboard, 'popup_builder_admin_headings' ) );
 		add_action( 'manage_spectra-popup_posts_custom_column', array( $spectra_popup_dashboard, 'popup_builder_admin_content' ), 10, 2 );
@@ -206,26 +214,37 @@ class UAGB_Init_Blocks {
 		// Check if animations extension is enabled and an animation type is selected.
 		if (
 			'enabled' === \UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_animations_extension', 'enabled' ) &&
-			! empty( $block['attrs']['UAGAnimationType'] ) &&
-			$block['attrs']['UAGAnimationType']
+			! empty( $block['attrs']['UAGAnimationType'] )
 		) {
 
-			$attrs = $block['attrs'];
+			$attrs                                      = $block['attrs'];
+			$attrs['UAGAnimationDoNotApplyToContainer'] = isset( $attrs['UAGAnimationDoNotApplyToContainer'] ) ? $attrs['UAGAnimationDoNotApplyToContainer'] : false;
+			$block_positioning                          = ! empty( $attrs['UAGPosition'] ) && is_string( $attrs['UAGPosition'] ) ? $attrs['UAGPosition'] : false; 
 
-			// Defaults aren't received here, hence we set them.
-			// Without these defaults, empty data is sent to markup (which doesn't affect the functionality at all but still it's a good practice to follow).
-			$attrs['UAGAnimationTime']   = isset( $attrs['UAGAnimationTime'] ) ? $attrs['UAGAnimationTime'] : 400;
-			$attrs['UAGAnimationDelay']  = isset( $attrs['UAGAnimationDelay'] ) ? $attrs['UAGAnimationDelay'] : 0;
-			$attrs['UAGAnimationEasing'] = isset( $attrs['UAGAnimationEasing'] ) ? $attrs['UAGAnimationEasing'] : 'ease';
-			$attrs['UAGAnimationRepeat'] = isset( $attrs['UAGAnimationRepeat'] ) ? 'false' : 'true';
+			// Container-specific animation attributes.
+			if ( ! $attrs['UAGAnimationDoNotApplyToContainer'] ) {
+				// Defaults aren't received here, hence we set them.
+				// Without these defaults, empty data is sent to markup (which doesn't affect the functionality at all but still it's a good practice to follow).
+				$attrs['UAGAnimationTime']   = isset( $attrs['UAGAnimationTime'] ) ? $attrs['UAGAnimationTime'] : 400;
+				$attrs['UAGAnimationDelay']  = isset( $attrs['UAGAnimationDelay'] ) ? $attrs['UAGAnimationDelay'] : 0;
+				$attrs['UAGAnimationEasing'] = isset( $attrs['UAGAnimationEasing'] ) ? $attrs['UAGAnimationEasing'] : 'ease';
+				$attrs['UAGAnimationRepeat'] = isset( $attrs['UAGAnimationRepeat'] ) ? 'false' : 'true';
 
-			$aos_attributes = '<div data-aos= "' . esc_attr( $attrs['UAGAnimationType'] ) . '" data-aos-duration="' . esc_attr( $attrs['UAGAnimationTime'] ) . '" data-aos-delay="' . esc_attr( $attrs['UAGAnimationDelay'] ) . '" data-aos-easing="' . esc_attr( $attrs['UAGAnimationEasing'] ) . '" data-aos-once="' . esc_attr( $attrs['UAGAnimationRepeat'] ) . '" ';
+				// Container-specific animation attributes.
+				$attrs['UAGAnimationDelayInterval'] = isset( $attrs['UAGAnimationDelayInterval'] ) ? $attrs['UAGAnimationDelayInterval'] : 200;
 
-			$block_content = preg_replace( '/<div /', $aos_attributes, $block_content, 1 );
-
+				// If this is a sticky element, don't update the attributes of this element just yet.
+				if ( 'sticky' !== $block_positioning ) {
+					$aos_attributes = '<div data-aos= "' . esc_attr( $attrs['UAGAnimationType'] ) . '" data-aos-duration="' . esc_attr( $attrs['UAGAnimationTime'] ) . '" data-aos-delay="' . esc_attr( $attrs['UAGAnimationDelay'] ) . '" data-aos-easing="' . esc_attr( $attrs['UAGAnimationEasing'] ) . '" data-aos-once="' . esc_attr( $attrs['UAGAnimationRepeat'] ) . '" ';
+					$block_content  = preg_replace( '/<div /', $aos_attributes, $block_content, 1 );
+				}
+			}
 		}
 
-		// Render Block Manipulation for Spectra Pro Blocks.
+		// Render Block Manipulation for the required Spectra Blocks.
+		$block_content = apply_filters( 'uagb_render_block', $block_content, $block );
+
+		// Render Block Manipulation for the required Spectra Pro Blocks.
 		$block_content = apply_filters( 'spectra_pro_render_block', $block_content, $block );
 
 		return $block_content;
@@ -557,6 +576,24 @@ class UAGB_Init_Blocks {
 	}
 
 	/**
+	 * Localize SVG icon scripts in chunks.
+	 * Ex - if 1800 icons available so we will localize 4 variables for it.
+	 *
+	 * @since 2.7.0
+	 * @return void
+	 */
+	public function add_svg_icon_assets() {
+		$localize_icon_chunks = UAGB_Helper::backend_load_font_awesome_icons();
+		if ( ! $localize_icon_chunks ) {
+			return;
+		}
+
+		foreach ( $localize_icon_chunks as $chunk_index => $value ) {
+			wp_localize_script( 'uagb-block-editor-js', "uagb_svg_icons_{$chunk_index}", $value );
+		}
+	}
+
+	/**
 	 * Enqueue Gutenberg block assets for backend editor.
 	 *
 	 * @since 1.0.0
@@ -721,7 +758,7 @@ class UAGB_Init_Blocks {
 				'enableMasonryGallery'                    => apply_filters( 'uag_enable_masonry_gallery', UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_masonry_gallery', 'enabled' ) ),
 				'enableAnimationsExtension'               => apply_filters( 'uag_enable_animations_extension', UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_animations_extension', 'enabled' ) ),
 				'enableResponsiveConditions'              => apply_filters( 'enable_block_responsive', UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_block_responsive', 'enabled' ) ),
-				'uagb_svg_icons'                          => UAGB_Helper::backend_load_font_awesome_icons(),
+				'number_of_icon_chunks'                   => UAGB_Helper::$number_of_icon_chunks,
 				'uagb_enable_extensions_for_blocks'       => apply_filters( 'uagb_enable_extensions_for_blocks', array() ),
 				'uagb_exclude_blocks_from_extension'      => $uagb_exclude_blocks_from_extension,
 				'uag_load_select_font_globally'           => $enable_selected_fonts,
@@ -738,7 +775,7 @@ class UAGB_Init_Blocks {
 				'recaptcha_site_key_v3'                   => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_site_key_v3', '' ),
 				'recaptcha_secret_key_v2'                 => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_secret_key_v2', '' ),
 				'recaptcha_secret_key_v3'                 => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_secret_key_v3', '' ),
-				'blocks_editor_spacing'                   => UAGB_Admin_Helper::get_admin_settings_option( 'uag_blocks_editor_spacing', 0 ),
+				'blocks_editor_spacing'                   => apply_filters( 'uagb_default_blocks_editor_spacing', UAGB_Admin_Helper::get_admin_settings_option( 'uag_blocks_editor_spacing', 0 ) ),
 				'load_font_awesome_5'                     => UAGB_Admin_Helper::get_admin_settings_option( 'uag_load_font_awesome_5', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'enabled' : 'disabled' ),
 				'auto_block_recovery'                     => UAGB_Admin_Helper::get_admin_settings_option( 'uag_auto_block_recovery', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'enabled' : 'disabled' ),
 				'font_awesome_5_polyfill'                 => array(),
@@ -746,7 +783,7 @@ class UAGB_Init_Blocks {
 				'spectra_pro_status'                      => is_plugin_active( 'spectra-pro/spectra-pro.php' ),
 				'spectra_custom_css_example'              => __(
 					'Use custom class added in block\'s advanced settings to target your desired block. Examples:
-				.my-class {text-align: center;} // my-class is a custom selector',
+			.my-class {text-align: center;} // my-class is a custom selector',
 					'ultimate-addons-for-gutenberg'
 				),
 				'is_rtl'                                  => is_rtl(),
@@ -755,6 +792,10 @@ class UAGB_Init_Blocks {
 				'is_site_editor'                          => $screen->id,
 				'current_post_id'                         => get_the_ID(),
 				'btn_inherit_from_theme'                  => UAGB_Admin_Helper::get_admin_settings_option( 'uag_btn_inherit_from_theme', 'disabled' ),
+				'wp_version'                              => get_bloginfo( 'version' ),
+				'is_block_theme'                          => UAGB_Admin_Helper::is_block_theme(),
+				'is_customize_preview'                    => is_customize_preview(),
+				'uag_enable_gbs_extension'                => \UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_gbs_extension', 'enabled' ),
 			)
 		);
 		// To match the editor with frontend.
@@ -764,6 +805,9 @@ class UAGB_Init_Blocks {
 		UAGB_Scripts_Utils::enqueue_blocks_styles();
 		// RTL Styles.
 		UAGB_Scripts_Utils::enqueue_blocks_rtl_styles();
+
+		// Add svg icons in chunks.
+		$this->add_svg_icon_assets();
 	}
 
 	/**
@@ -878,6 +922,172 @@ class UAGB_Init_Blocks {
 
 		update_option( 'spectra_svg_confirmation', 'yes' );
 		wp_send_json_success();
+	}
+
+	/**
+	 * Add Global Block Styles Class.
+	 *
+	 * @param string $block_content The block content.
+	 * @param array  $block The block data.
+	 * @since 2.9.0
+	 * @return mixed Returns the new block content.
+	 */
+	public function add_gbs_class( $block_content, $block ) {
+		if ( empty( $block['blockName'] ) || ! is_string( $block['blockName'] ) || false === strpos( $block['blockName'], 'uagb/' ) || empty( $block['attrs']['globalBlockStyleId'] ) || empty( $block['attrs']['block_id'] ) ) {
+			return $block_content;
+		}
+
+		// Check if GBS is enabled.
+		$gbs_status = \UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_gbs_extension', 'enabled' );
+
+		$style_name       = $block['attrs']['globalBlockStyleId'];
+		$style_class_name = 'spectra-gbs-' . $style_name;
+
+		// If GBS extension is disabled then add static class name.
+		if ( 'disabled' === $gbs_status ) {
+			$_block_slug      = str_replace( 'uagb/', '', $block['blockName'] );
+			$class_name       = 'spectra-gbs-uagb-gbs-default-' . $_block_slug;
+			$style_class_name = $class_name;
+		}
+
+		$block_id = 'uagb-block-' . $block['attrs']['block_id'];
+
+		// Replace the block id with the block id and the style class name.
+		$html = str_replace( $block_id, $block_id . ' ' . $style_class_name, $block_content );
+
+		return $html;
+	}
+
+	/**
+	 * Function to save Spectra Global Block Styles data.
+	 *
+	 * @since 2.9.0
+	 * @return void
+	 */
+	public function uag_global_block_styles() {
+		// Check if gbs enabled or not.
+		if ( 'enabled' !== \UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_gbs_extension', 'enabled' ) ) {
+			wp_send_json_error();
+		}
+
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error();
+		}
+		
+		if ( ! check_ajax_referer( 'uagb_ajax_nonce', 'security', false ) ) {
+			wp_send_json_error();
+		}
+		
+		$response_data = array( 'messsage' => __( 'No post data found!', 'ultimate-addons-for-gutenberg' ) );
+
+		if ( empty( $_POST['spectraGlobalStyles'] ) ) {
+			wp_send_json_error( $response_data );
+		}
+
+		$global_block_styles = json_decode( stripslashes( $_POST['spectraGlobalStyles'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! empty( $_POST['bulkUpdateStyles'] ) && 'no' !== $_POST['bulkUpdateStyles'] ) {
+			update_option( 'spectra_global_block_styles', $global_block_styles );
+			wp_send_json_success( $global_block_styles );
+		}
+		
+		if ( empty( $_POST ) || empty( $_POST['attributes'] ) || empty( $_POST['blockName'] ) || empty( $_POST['postId'] ) || empty( $_POST['spectraGlobalStyles'] ) || ! is_array( $global_block_styles ) ) {
+			wp_send_json_error( $response_data );
+		}
+		
+		$global_block_styles = is_array( $global_block_styles ) ? $global_block_styles : array();
+		$block_attr          = array();
+
+		$post_id = sanitize_text_field( $_POST['postId'] );
+		// Not sanitizing this array because $_POST['attributes'] is a very large array of different types of attributes.
+		foreach ( $global_block_styles as $key => $style ) {
+			if ( ! empty( $_POST['globalBlockStyleId'] ) && ! empty( $style['value'] ) && $style['value'] === $_POST['globalBlockStyleId'] ) {
+				$block_attr = $style['attributes'];
+				
+				if ( ! $block_attr ) {
+					wp_send_json_error( $response_data );
+					break;
+				}
+				
+				$_block_slug = str_replace( 'uagb/', '', sanitize_text_field( $_POST['blockName'] ) );
+				$_block_css  = UAGB_Block_Module::get_frontend_css( $_block_slug, $block_attr, $block_attr['block_id'], true );
+
+				$desktop = '';
+				$tablet  = '';
+				$mobile  = '';
+
+				$tab_styling_css = '';
+				$mob_styling_css = '';
+				$desktop        .= $_block_css['desktop'];
+				$tablet         .= $_block_css['tablet'];
+				$mobile         .= $_block_css['mobile'];
+				if ( ! empty( $tablet ) ) {
+					$tab_styling_css .= '@media only screen and (max-width: ' . UAGB_TABLET_BREAKPOINT . 'px) {';
+					$tab_styling_css .= $tablet;
+					$tab_styling_css .= '}';
+				}
+
+				if ( ! empty( $mobile ) ) {
+					$mob_styling_css .= '@media only screen and (max-width: ' . UAGB_MOBILE_BREAKPOINT . 'px) {';
+					$mob_styling_css .= $mobile;
+					$mob_styling_css .= '}';
+				}
+				$_block_css                                    = $desktop . $tab_styling_css . $mob_styling_css;
+				$global_block_styles[ $key ]['frontendStyles'] = $_block_css;
+				$gbs_stored                                    = get_option( 'spectra_global_block_styles', array() );
+				$gbs_stored_key_value                          = is_array( $gbs_stored ) && isset( $gbs_stored[ $key ] ) ? $gbs_stored[ $key ] : array();
+
+				if ( ! empty( $gbs_stored_key_value['post_ids'] ) ) {
+					$global_block_styles[ $key ]['post_ids'] = array_merge( $global_block_styles[ $key ]['post_ids'], $gbs_stored_key_value['post_ids'] );
+				}
+
+				// For FSE template slug.
+				if ( ! empty( $gbs_stored_key_value['page_template_slugs'] ) ) {
+					$global_block_styles[ $key ]['page_template_slugs'] = array_merge( $global_block_styles[ $key ]['page_template_slugs'], $gbs_stored_key_value['page_template_slugs'] );
+				}
+
+				// For global styles (  widget and customize area ).
+				if ( ! empty( $gbs_stored_key_value['styleForGlobal'] ) ) {
+					$global_block_styles[ $key ]['styleForGlobal'] = array_merge( $global_block_styles[ $key ]['styleForGlobal'], $gbs_stored_key_value['styleForGlobal'] );
+				}
+
+				update_option( 'spectra_global_block_styles', $global_block_styles );
+
+				if ( ! empty( $global_block_styles[ $key ]['post_ids'] ) && is_array( $global_block_styles[ $key ]['post_ids'] ) ) {
+					foreach ( $global_block_styles[ $key ]['post_ids'] as $post_id ) {
+						UAGB_Helper::delete_page_assets( $post_id );
+					}
+				}
+			}
+		}
+		
+		$spectra_gbs_google_fonts = get_option( 'spectra_gbs_google_fonts', array() );
+		
+		// Global Font Families.
+		$font_families = array();
+		foreach ( $block_attr as $name => $attribute ) {
+			if ( false !== strpos( $name, 'Family' ) && '' !== $attribute ) {
+				
+				$font_families[] = $attribute;
+			}
+		}
+
+		if ( isset( $block_attr['globalBlockStyleId'] ) && is_array( $spectra_gbs_google_fonts ) ) {
+			$spectra_gbs_google_fonts[ $block_attr['globalBlockStyleId'] ] = $font_families;
+			if ( isset( $spectra_gbs_google_fonts[ $block_attr['globalBlockStyleId'] ] ) && is_array( $spectra_gbs_google_fonts[ $block_attr['globalBlockStyleId'] ] ) ) {
+				$spectra_gbs_google_fonts[ $block_attr['globalBlockStyleId'] ] = array_unique( $spectra_gbs_google_fonts[ $block_attr['globalBlockStyleId'] ] );
+			}
+		}
+		
+		update_option( 'spectra_gbs_google_fonts', $spectra_gbs_google_fonts );
+
+		if ( ! empty( $_POST['globalBlockStylesFontFamilies'] ) ) {
+			$spectra_gbs_google_fonts_editor = json_decode( stripslashes( $_POST['globalBlockStylesFontFamilies'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			update_option( 'spectra_gbs_google_fonts_editor', $spectra_gbs_google_fonts_editor );
+		}
+		
+		wp_send_json_success( $global_block_styles );
 	}
 }
 

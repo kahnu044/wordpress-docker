@@ -3,8 +3,6 @@
 namespace WPGraphQL\Server;
 
 use GraphQL\Server\Helper;
-use GraphQL\Server\OperationParams;
-use GraphQL\Server\RequestError;
 
 /**
  * Extends GraphQL\Server\Helper to apply filters and parse query extensions.
@@ -17,9 +15,10 @@ class WPHelper extends Helper {
 	 * Parses normalized request params and returns instance of OperationParams
 	 * or array of OperationParams in case of batch operation.
 	 *
-	 * @param string $method The method of the request (GET, POST, etc).
-	 * @param array  $bodyParams The params passed to the body of the request.
-	 * @param array  $queryParams The query params passed to the request.
+	 * @param string  $method The method of the request (GET, POST, etc).
+	 * @param mixed[] $bodyParams The params passed to the body of the request.
+	 * @param mixed[] $queryParams The query params passed to the request.
+	 *
 	 * @return \GraphQL\Server\OperationParams|\GraphQL\Server\OperationParams[]
 	 * @throws \GraphQL\Server\RequestError Throws RequestError.
 	 */
@@ -65,8 +64,8 @@ class WPHelper extends Helper {
 	/**
 	 * Parse parameters and proxy to parse_extensions.
 	 *
-	 * @param  array $params Request parameters.
-	 * @return array
+	 * @param  mixed[] $params Request parameters.
+	 * @return mixed[]
 	 */
 	private function parse_params( $params ) {
 		if ( isset( $params[0] ) ) {
@@ -79,8 +78,8 @@ class WPHelper extends Helper {
 	/**
 	 * Parse query extensions.
 	 *
-	 * @param  array $params Request parameters.
-	 * @return array
+	 * @param  mixed[] $params Request parameters.
+	 * @return mixed[]
 	 */
 	private function parse_extensions( $params ) {
 		if ( isset( $params['extensions'] ) && is_string( $params['extensions'] ) ) {

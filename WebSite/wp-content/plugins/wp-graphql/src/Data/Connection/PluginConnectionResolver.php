@@ -11,7 +11,7 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @var array
+	 * @var array<string,array<string,mixed>>
 	 */
 	protected $query;
 
@@ -49,7 +49,7 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_query() {
 		// File has not loaded.
@@ -86,7 +86,6 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 
 		// Loop through the plugins, add additional data, and store them in $plugins_by_status.
 		foreach ( (array) $all_plugins as $plugin_file => $plugin_data ) {
-
 			if ( ! file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
 				unset( $all_plugins[ $plugin_file ] );
 				continue;
@@ -141,7 +140,7 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 			if ( $can_update && isset( $upgradable_list->response[ $plugin_file ] ) ) {
 				// An update is available.
 				$plugin_data['update'] = true;
-				// Exra info if known.
+				// Extra info if known.
 				$plugin_data = array_merge( (array) $upgradable_list->response[ $plugin_file ], [ 'update-supported' => true ], $plugin_data );
 
 				// Populate upgradable list.
@@ -200,7 +199,7 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 			$matches = array_keys(
 				array_filter(
 					$all_plugins,
-					function ( $plugin ) use ( $s ) {
+					static function ( $plugin ) use ( $s ) {
 						foreach ( $plugin as $value ) {
 							if ( is_string( $value ) && false !== stripos( wp_strip_all_tags( $value ), $s ) ) {
 								return true;
@@ -244,7 +243,7 @@ class PluginConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function should_execute() {
 		if ( is_multisite() ) {

@@ -131,36 +131,11 @@ export default function TabGeneral() {
                                 controls={false}
                                 light={introVideoThumb}
                                 playIcon={videoPlayIcon}
-                                // onClickPreview={() => {
-                                // 	setAttributes({
-                                // 		videoConfig: {
-                                // 			...videoConfig,
-                                // 			autoplay: true,
-                                // 		},
-                                // 	});
-                                // }}
-
                                 className="eb-react-player"
-                                // playing
                                 width="100%"
                                 height="100%"
                             />
                         </div>
-
-                        {/* <a
-							target="_blank"
-							href="https://essential-addons.com/elementor/changelog/"
-							className="eb-btn eb-btn-primary"
-						>
-							Create Your 1st Page
-						</a>
-						<a
-							target="_blank"
-							href="https://essential-addons.com/elementor/changelog/"
-							className="eb-btn eb-btn-link"
-						>
-							View Changelog
-						</a> */}
                     </div>
                 </div>
 
@@ -303,15 +278,21 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 4.1.3", "essential-blocks")}
+                                    {__("Version: 4.3.9", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("25/06/2023", "essential-blocks")}
+                                        {__("20/11/2023", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Schedule update with minor bug fixes & improvements",
+                                            "Fixed: Form Block issue with FSE",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Few minor bug fixes & improvements",
                                             "essential-blocks"
                                         )}
                                     </li>

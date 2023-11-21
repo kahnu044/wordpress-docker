@@ -2,13 +2,12 @@
 
 namespace WPGraphQL\Mutation;
 
-use Exception;
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
-use WP_Post_Type;
+use WPGraphQL\Data\PostObjectMutation;
 use WPGraphQL\Model\Post;
 use WPGraphQL\Utils\Utils;
-use WPGraphQL\Data\PostObjectMutation;
+use WP_Post_Type;
 
 
 class PostObjectDelete {
@@ -38,7 +37,7 @@ class PostObjectDelete {
 	 *
 	 * @param \WP_Post_Type $post_type_object The post type of the mutation.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_input_fields( $post_type_object ) {
 		return [
@@ -65,14 +64,14 @@ class PostObjectDelete {
 	 *
 	 * @param \WP_Post_Type $post_type_object The post type of the mutation.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_output_fields( WP_Post_Type $post_type_object ) {
 		return [
 			'deletedId'                            => [
 				'type'        => 'ID',
 				'description' => __( 'The ID of the deleted object', 'wp-graphql' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => static function ( $payload ) {
 					/** @var \WPGraphQL\Model\Post $deleted */
 					$deleted = $payload['postObject'];
 
@@ -82,7 +81,7 @@ class PostObjectDelete {
 			$post_type_object->graphql_single_name => [
 				'type'        => $post_type_object->graphql_single_name,
 				'description' => __( 'The object before it was deleted', 'wp-graphql' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => static function ( $payload ) {
 					/** @var \WPGraphQL\Model\Post $deleted */
 					$deleted = $payload['postObject'];
 
@@ -96,12 +95,12 @@ class PostObjectDelete {
 	 * Defines the mutation data modification closure.
 	 *
 	 * @param \WP_Post_Type $post_type_object The post type of the mutation.
-	 * @param string       $mutation_name    The mutation name.
+	 * @param string        $mutation_name    The mutation name.
 	 *
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload( WP_Post_Type $post_type_object, string $mutation_name ) {
-		return function ( $input ) use ( $post_type_object ) {
+		return static function ( $input ) use ( $post_type_object ) {
 			// Get the database ID for the post.
 			$post_id = Utils::get_database_id_from_id( $input['id'] );
 
@@ -110,7 +109,7 @@ class PostObjectDelete {
 			 */
 			if ( ! isset( $post_type_object->cap->delete_post ) || ! current_user_can( $post_type_object->cap->delete_post, $post_id ) ) {
 				// translators: the $post_type_object->graphql_plural_name placeholder is the name of the object being mutated
-				throw new UserError( sprintf( __( 'Sorry, you are not allowed to delete %1$s', 'wp-graphql' ), $post_type_object->graphql_plural_name ) );
+				throw new UserError( esc_html( sprintf( __( 'Sorry, you are not allowed to delete %1$s', 'wp-graphql' ), $post_type_object->graphql_plural_name ) ) );
 			}
 
 			/**
@@ -124,7 +123,7 @@ class PostObjectDelete {
 			$post_before_delete = ! empty( $post_id ) ? get_post( $post_id ) : null;
 
 			if ( empty( $post_before_delete ) ) {
-				throw new UserError( __( 'The post could not be deleted', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'The post could not be deleted', 'wp-graphql' ) );
 			}
 
 			$post_before_delete = new Post( $post_before_delete );
@@ -135,7 +134,7 @@ class PostObjectDelete {
 			 */
 			if ( 'trash' === $post_before_delete->post_status && true !== $force_delete ) {
 				// Translators: the first placeholder is the post_type of the object being deleted and the second placeholder is the unique ID of that object
-				throw new UserError( sprintf( __( 'The %1$s with id %2$s is already in the trash. To remove from the trash, use the forceDelete input', 'wp-graphql' ), $post_type_object->graphql_single_name, $post_id ) );
+				throw new UserError( esc_html( sprintf( __( 'The %1$s with id %2$s is already in the trash. To remove from the trash, use the forceDelete input', 'wp-graphql' ), $post_type_object->graphql_single_name, $post_id ) ) );
 			}
 
 			// If post is locked and the override is not specified, do not allow the edit
@@ -144,7 +143,7 @@ class PostObjectDelete {
 				$user         = get_userdata( (int) $locked_user_id );
 				$display_name = isset( $user->display_name ) ? $user->display_name : 'unknown';
 				/* translators: %s: User's display name. */
-				throw new UserError( sprintf( __( 'You cannot delete this item. %s is currently editing.', 'wp-graphql' ), esc_html( $display_name ) ) );
+				throw new UserError( esc_html( sprintf( __( 'You cannot delete this item. %s is currently editing.', 'wp-graphql' ), $display_name ) ) );
 			}
 
 			/**

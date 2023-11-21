@@ -82,5 +82,9 @@ $gutenslide_attributes = array(
 	'isHidden' => array(
 		'type' => 'boolean',
 		'default' => false,
+	),
+	'fetchPriority' => array(
+		'type' => 'boolean',
+		'default' => false,
 	)
 );

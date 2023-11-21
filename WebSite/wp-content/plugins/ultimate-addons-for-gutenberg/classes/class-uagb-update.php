@@ -41,6 +41,8 @@ if ( ! class_exists( 'UAGB_Update' ) ) :
 		 */
 		public function __construct() {
 			add_action( 'admin_init', array( $this, 'init' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			add_action( 'in_plugin_update_message-' . UAGB_BASE, array( $this, 'plugin_update_notification' ), 10 );
 		}
 
 		/**
@@ -143,6 +145,31 @@ if ( ! class_exists( 'UAGB_Update' ) ) :
 			do_action( 'uagb_update_after' );
 		}
 
+
+		/**
+		 * Migrate_visibility_mode
+		 *
+		 * @since 2.8.0
+		 * @return void
+		 */
+		public static function migrate_visibility_mode() {
+
+			$old_option      = UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_coming_soon_mode' );
+			$old_option_page = UAGB_Admin_Helper::get_admin_settings_option( 'uag_coming_soon_page' );
+
+			if ( ! $old_option && ! $old_option_page ) {
+				return;
+			}
+
+			// Update the option.
+			UAGB_Admin_Helper::update_admin_settings_option( 'uag_visibility_mode', $old_option ? $old_option : 'disabled' );
+			UAGB_Admin_Helper::update_admin_settings_option( 'uag_visibility_page', $old_option_page ? $old_option_page : '' );
+
+			// Delete the old option.
+			UAGB_Admin_Helper::delete_admin_settings_option( 'uag_enable_coming_soon_mode' );
+			UAGB_Admin_Helper::delete_admin_settings_option( 'uag_coming_soon_page' );
+		}
+
 		/**
 		 * Update asset generation option if it is not exist.
 		 *
@@ -156,6 +183,54 @@ if ( ! class_exists( 'UAGB_Update' ) ) :
 			if ( UAGB_Helper::is_uag_dir_has_write_permissions() ) {
 				update_option( '_uagb_allow_file_generation', 'enabled' );
 			}
+		}
+
+		/**
+		 * Plugin update notification.
+		 *
+		 * @param array $data Plugin update data.
+		 * @since 2.7.2
+		 * @return void
+		 */
+		public function plugin_update_notification( $data ) {
+			if ( ! empty( $data['upgrade_notice'] ) ) { ?>
+				<hr class="uagb-plugin-update-notification__separator" />
+				<div class="uagb-plugin-update-notification">
+					<div class="uagb-plugin-update-notification__icon">
+						<span class="dashicons dashicons-info"></span>
+					</div>
+					<div>
+						<div class="uagb-plugin-update-notification__title">
+							<?php echo esc_html__( 'Heads up!', 'ultimate-addons-for-gutenberg' ); ?>
+						</div>
+						<div class="uagb-plugin-update-notification__message">
+							<?php
+								printf(
+									wp_kses(
+										$data['upgrade_notice'],
+										array( 'a' => array( 'href' => array() ) )
+									)
+								);
+							?>
+						</div>
+					</div>
+				</div>
+				<?php
+			} //end if
+		}
+
+		/**
+		 * Enqueue styles.
+		 *
+		 * @since 2.7.2
+		 * @return void
+		 */
+		public function enqueue_styles() {
+			$screen = get_current_screen();
+			if ( empty( $screen->id ) || 'plugins' !== $screen->id ) {
+				return;
+			}
+			wp_enqueue_style( 'uagb-update-notice', UAGB_URL . 'admin/assets/css/update-notice.css', array(), UAGB_VER );
 		}
 	}
 

@@ -20,8 +20,8 @@ $t_selectors = array();
 $m_selectors = array();
 
 $svg_size   = UAGB_Helper::get_css_value( $attr['ctaFontSize'], $attr['ctaFontSizeType'] );
-$m_svg_size = UAGB_Helper::get_css_value( $attr['ctaFontSizeMobile'], $attr['ctaFontSizeType'] );
-$t_svg_size = UAGB_Helper::get_css_value( $attr['ctaFontSizeTablet'], $attr['ctaFontSizeType'] );
+$m_svg_size = UAGB_Helper::get_css_value( $attr['ctaFontSizeMobile'], $attr['ctaFontSizeTypeMobile'] );
+$t_svg_size = UAGB_Helper::get_css_value( $attr['ctaFontSizeTablet'], $attr['ctaFontSizeTypeTablet'] );
 
 $btn_padding_top    = isset( $attr['ctaTopPadding'] ) ? $attr['ctaTopPadding'] : $attr['ctaBtnVertPadding'];
 $btn_padding_bottom = isset( $attr['ctaBottomPadding'] ) ? $attr['ctaBottomPadding'] : $attr['ctaBtnVertPadding'];
@@ -54,7 +54,6 @@ if ( 'left' === $attr['textAlignMobile'] ) {
 }
 $selectors = array(
 	'.wp-block-uagb-call-to-action .uagb-cta__title'       => array(
-		'line-height'   => UAGB_Helper::get_css_value( $attr['titleLineHeight'], $attr['titleLineHeightType'] ),
 		'color'         => $attr['titleColor'],
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['titleSpace'], $attr['titleSpaceType'] ),
 	),
@@ -153,13 +152,13 @@ if ( 'left' === $attr['textAlign'] && 'right' === $attr['ctaPosition'] ) {
 }
 
 $t_selectors = array(
-	' .uagb-cta__title'                             => array(
+	'.wp-block-uagb-call-to-action .uagb-cta__title' => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['titleSpaceTablet'], $attr['titleSpaceType'] ),
 	),
-	' .uagb-cta__desc'                              => array(
+	'.wp-block-uagb-call-to-action .uagb-cta__desc'  => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['descSpaceTablet'], $attr['descSpaceType'] ),
 	),
-	' .uagb-cta__button-wrapper .uagb-cta-with-svg' => array(
+	' .uagb-cta__button-wrapper .uagb-cta-with-svg'  => array(
 		'font-size'   => $t_svg_size,
 		'width'       => $t_svg_size,
 		'height'      => $t_svg_size,
@@ -172,10 +171,10 @@ $t_selectors = array(
 		'line-height' => $t_svg_size,
 	),
 	'.wp-block-uagb-call-to-action a.uagb-cta-second__button svg' => array(
-		'font-size'   => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeType'] ),
-		'width'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeType'] ),
-		'height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeType'] ),
-		'line-height' => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeType'] ),
+		'font-size'   => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeTypeTablet'] ),
+		'width'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeTypeTablet'] ),
+		'height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeTypeTablet'] ),
+		'line-height' => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeTablet'], $attr['secondCtaFontSizeTypeTablet'] ),
 	),
 );
 
@@ -187,13 +186,13 @@ $t_selectors['.uagb-cta__content-stacked-tablet .uagb-cta__wrap']               
 );
 
 $m_selectors = array(
-	' .uagb-cta__title'                             => array(
+	'.wp-block-uagb-call-to-action .uagb-cta__title' => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['titleSpaceMobile'], $attr['titleSpaceType'] ),
 	),
-	' .uagb-cta__desc'                              => array(
+	'.wp-block-uagb-call-to-action .uagb-cta__desc'  => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['descSpaceMobile'], $attr['descSpaceType'] ),
 	),
-	' .uagb-cta__button-wrapper .uagb-cta-with-svg' => array(
+	' .uagb-cta__button-wrapper .uagb-cta-with-svg'  => array(
 		'font-size'   => $m_svg_size,
 		'width'       => $m_svg_size,
 		'height'      => $m_svg_size,
@@ -206,10 +205,10 @@ $m_selectors = array(
 		'line-height' => $m_svg_size,
 	),
 	'.wp-block-uagb-call-to-action a.uagb-cta-second__button svg' => array(
-		'font-size'   => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeType'] ),
-		'width'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeType'] ),
-		'height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeType'] ),
-		'line-height' => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeType'] ),
+		'font-size'   => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeTypeMobile'] ),
+		'width'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeTypeMobile'] ),
+		'height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeTypeMobile'] ),
+		'line-height' => UAGB_Helper::get_css_value( $attr['secondCtaFontSizeMobile'], $attr['secondCtaFontSizeTypeMobile'] ),
 	),
 );
 
@@ -267,7 +266,8 @@ if ( 'desktop' === $attr['stackBtn'] ) {
 		'column-gap' => UAGB_Helper::get_css_value( $attr['gapBtnTablet'], 'px' ),
 	);
 	$m_selectors[' .uagb-cta__buttons'] = array(
-		'column-gap' => UAGB_Helper::get_css_value( $attr['gapBtnMobile'], 'px' ),
+		'column-gap'      => UAGB_Helper::get_css_value( $attr['gapBtnMobile'], 'px' ),
+		'justify-content' => 'center',
 	);
 }
 if ( 'button' === $attr['ctaType'] && $attr['enabledSecondCtaButton'] ) {
@@ -281,35 +281,48 @@ if ( 'button' === $attr['ctaType'] && $attr['enabledSecondCtaButton'] ) {
 		'width' => UAGB_Helper::get_css_value( $btn_content_width_mobile_fallback, $attr['btncontentWidthType'] ),
 	);
 }
+
+$cta_icon_spacing        = UAGB_Helper::get_css_value( $attr['ctaIconSpace'], 'px' );
+$cta_icon_spacing_tablet = UAGB_Helper::get_css_value( $attr['ctaIconSpaceTablet'], 'px' );
+$cta_icon_spacing_mobile = UAGB_Helper::get_css_value( $attr['ctaIconSpaceMobile'], 'px' );
+
+$right_side_margin = 'margin-right';
+$left_side_margin  = 'margin-left';
+
+if ( ! is_rtl() ) {
+	$right_side_margin = 'margin-left';
+	$left_side_margin  = 'margin-right';
+}
+
 if ( 'before' === $attr['ctaIconPosition'] ) {
 	$selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg']   = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['ctaIconSpace'], 'px' ),
-		'font-size'    => $svg_size,
-		'width'        => $svg_size,
-		'height'       => $svg_size,
-		'line-height'  => $svg_size,
-		'fill'         => $attr['ctaBtnLinkColor'],
+		$left_side_margin => $cta_icon_spacing,
+		'font-size'       => $svg_size,
+		'width'           => $svg_size,
+		'height'          => $svg_size,
+		'line-height'     => $svg_size,
+		'fill'            => $attr['ctaBtnLinkColor'],
 	);
 	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg'] = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['ctaIconSpaceTablet'], 'px' ),
+		$left_side_margin => $cta_icon_spacing_tablet,
 	);
 	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg'] = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['ctaIconSpaceMobile'], 'px' ),
+		$left_side_margin => $cta_icon_spacing_mobile,
 	);
 } else {
 	$selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg']   = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['ctaIconSpace'], 'px' ),
-		'font-size'   => $svg_size,
-		'width'       => $svg_size,
-		'height'      => $svg_size,
-		'line-height' => $svg_size,
-		'fill'        => $attr['ctaBtnLinkColor'],
+		$right_side_margin => $cta_icon_spacing,
+		'font-size'        => $svg_size,
+		'width'            => $svg_size,
+		'height'           => $svg_size,
+		'line-height'      => $svg_size,
+		'fill'             => $attr['ctaBtnLinkColor'],
 	);
 	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg'] = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['ctaIconSpaceTablet'], 'px' ),
+		$right_side_margin => $cta_icon_spacing_tablet,
 	);
 	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper > svg'] = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['ctaIconSpaceMobile'], 'px' ),
+		$right_side_margin => $cta_icon_spacing_mobile,
 	);
 }
 
@@ -466,38 +479,41 @@ if ( 'desktop' === $attr['stack'] ) {
 	);
 }
 
+$second_cta_icon_spacing        = UAGB_Helper::get_css_value( $attr['secondCtaIconSpace'], 'px' );
+$second_cta_icon_spacing_tablet = UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceTablet'], 'px' );
+$second_cta_icon_spacing_mobile = UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceMobile'], 'px' );
+
 if ( 'before' === $attr['secondCtaIconPosition'] ) {
 	$selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg']   = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpace'], 'px' ),
-		'font-size'    => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'width'        => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'height'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'line-height'  => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'fill'         => $attr['secondCtaColor'],
+		$left_side_margin => $second_cta_icon_spacing,
+		'font-size'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'width'           => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'height'          => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'line-height'     => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'fill'            => $attr['secondCtaColor'],
 	);
 	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg'] = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceTablet'], 'px' ),
+		$left_side_margin => $second_cta_icon_spacing_tablet,
 	);
 	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg'] = array(
-		'margin-right' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceMobile'], 'px' ),
+		$left_side_margin => $second_cta_icon_spacing_mobile,
 	);
 } else {
 	$selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg']   = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpace'], 'px' ),
-		'font-size'   => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'width'       => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'line-height' => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
-		'fill'        => $attr['secondCtaColor'],
+		$right_side_margin => $second_cta_icon_spacing,
+		'font-size'        => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'width'            => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'height'           => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'line-height'      => UAGB_Helper::get_css_value( $attr['secondCtaFontSize'], $attr['secondCtaFontSizeType'] ),
+		'fill'             => $attr['secondCtaColor'],
 	);
 	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg'] = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceTablet'], 'px' ),
+		$right_side_margin => $second_cta_icon_spacing_tablet,
 	);
 	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta-second__button > svg'] = array(
-		'margin-left' => UAGB_Helper::get_css_value( $attr['secondCtaIconSpaceMobile'], 'px' ),
+		$right_side_margin => $second_cta_icon_spacing_mobile,
 	);
 }
-
 
 if ( ! $attr['secInheritFromTheme'] ) {
 	
@@ -531,21 +547,17 @@ if ( ! $attr['secInheritFromTheme'] ) {
 	
 	$t_selectors['.wp-block-uagb-call-to-action.wp-block-button a.uagb-cta-second__button'] = $second_cta_border_tablet;
 	$m_selectors['.wp-block-uagb-call-to-action.wp-block-button a.uagb-cta-second__button'] = $second_cta_border_mobile;
-	$m_selectors = array(
-		'.wp-block-uagb-call-to-action a.uagb-cta-second__button' => array(
-			'padding-top'    => UAGB_Helper::get_css_value( $attr['secondCtaTopMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
-			'padding-bottom' => UAGB_Helper::get_css_value( $attr['secondCtaBottomMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
-			'padding-left'   => UAGB_Helper::get_css_value( $attr['secondCtaLeftMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
-			'padding-right'  => UAGB_Helper::get_css_value( $attr['secondCtaRightMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
-		),
+	$m_selectors['.wp-block-uagb-call-to-action.wp-block-button a.uagb-cta-second__button'] = array(
+		'padding-top'    => UAGB_Helper::get_css_value( $attr['secondCtaTopMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
+		'padding-bottom' => UAGB_Helper::get_css_value( $attr['secondCtaBottomMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
+		'padding-left'   => UAGB_Helper::get_css_value( $attr['secondCtaLeftMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
+		'padding-right'  => UAGB_Helper::get_css_value( $attr['secondCtaRightMobilePadding'], $attr['secondCtaMobilePaddingUnit'] ),
 	);
-	$t_selectors = array(
-		'.wp-block-uagb-call-to-action a.uagb-cta-second__button' => array(
-			'padding-top'    => UAGB_Helper::get_css_value( $attr['secondCtaTopTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
-			'padding-bottom' => UAGB_Helper::get_css_value( $attr['secondCtaBottomTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
-			'padding-left'   => UAGB_Helper::get_css_value( $attr['secondCtaLeftTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
-			'padding-right'  => UAGB_Helper::get_css_value( $attr['secondCtaRightTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
-		),
+	$t_selectors['.wp-block-uagb-call-to-action.wp-block-button a.uagb-cta-second__button'] = array(
+		'padding-top'    => UAGB_Helper::get_css_value( $attr['secondCtaTopTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
+		'padding-bottom' => UAGB_Helper::get_css_value( $attr['secondCtaBottomTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
+		'padding-left'   => UAGB_Helper::get_css_value( $attr['secondCtaLeftTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
+		'padding-right'  => UAGB_Helper::get_css_value( $attr['secondCtaRightTabletPadding'], $attr['secondCtaTabletPaddingUnit'] ),
 	);
 }
 
@@ -605,31 +617,38 @@ if ( ! $attr['inheritFromTheme'] && 'button' === $attr['ctaType'] ) {
 		'background-color' => ( 'color' === $attr['ctaBgHoverType'] ) ? $attr['ctaBgHoverColor'] : 'transparent',
 		'border-color'     => $attr['btnBorderHColor'] ? $attr['btnBorderHColor'] : $attr['ctaBorderhoverColor'],
 	);
-	$t_selectors = array(
-		'.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper' => array_merge(
-			array(
-				'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
-				'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
-				'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
-				'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
-			),
-			$cta_border_tablet
-		),
+	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper'] = array(
+		'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+		'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+		'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+		'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
 	);
-	$m_selectors = array(
-		'.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper' => array_merge(
-			array(
-				'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
-				'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
-				'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
-				'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
-			),
-			$cta_border_mobile
-		),
+	$t_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper'] = $cta_border_tablet;
+	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper'] = array(
+		'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+		'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+		'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+		'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
 	);
-	
-	$t_selectors['.wp-block-uagb-call-to-action.wp-block-button .uagb-cta__buttons a.uagb-cta__button-link-wrapper.wp-block-button__link'] = $cta_border_tablet;
-	$m_selectors['.wp-block-uagb-call-to-action.wp-block-button .uagb-cta__buttons a.uagb-cta__button-link-wrapper.wp-block-button__link'] = $cta_border_mobile;
+	$m_selectors['.wp-block-uagb-call-to-action a.uagb-cta__button-link-wrapper'] = $cta_border_mobile;
+	$t_selectors['.wp-block-uagb-call-to-action.wp-block-button .uagb-cta__buttons a.uagb-cta__button-link-wrapper.wp-block-button__link'] = array_merge(
+		array(
+			'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+			'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+			'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+			'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingTablet'], $attr['tabletCTAPaddingUnit'] ),
+		),
+		$cta_border_tablet
+	);
+	$m_selectors['.wp-block-uagb-call-to-action.wp-block-button .uagb-cta__buttons a.uagb-cta__button-link-wrapper.wp-block-button__link'] = array_merge(
+		array(
+			'padding-top'    => UAGB_Helper::get_css_value( $attr['ctaTopPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+			'padding-bottom' => UAGB_Helper::get_css_value( $attr['ctaBottomPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+			'padding-left'   => UAGB_Helper::get_css_value( $attr['ctaLeftPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+			'padding-right'  => UAGB_Helper::get_css_value( $attr['ctaRightPaddingMobile'], $attr['mobileCTAPaddingUnit'] ),
+		),
+		$cta_border_mobile
+	);
 }
 $combined_selectors = array(
 	'desktop' => $selectors,
@@ -654,4 +673,8 @@ $combined_selectors = UAGB_Helper::get_typography_css( $attr, 'desc', ' .uagb-ct
 
 $base_selector = ( $attr['classMigrate'] ) ? '.uagb-block-' : '#uagb-cta-block-';
 
-return UAGB_Helper::generate_all_css( $combined_selectors, $base_selector . $id );
+return UAGB_Helper::generate_all_css(
+	$combined_selectors,
+	$base_selector . $id,
+	isset( $gbs_class ) ? $gbs_class : ''
+);

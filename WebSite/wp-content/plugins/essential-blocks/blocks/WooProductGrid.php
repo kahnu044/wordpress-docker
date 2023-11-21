@@ -13,6 +13,7 @@ class WooProductGrid extends Block {
 
     /**
      * Unique name of the block.
+     *
      * @return string
      */
     public function get_name() {
@@ -21,6 +22,7 @@ class WooProductGrid extends Block {
 
     /**
      * Register all other scripts
+     *
      * @return void
      */
     public function register_scripts() {
@@ -47,6 +49,9 @@ class WooProductGrid extends Block {
      * @param mixed $content
      * @return void|string
      */
+
+    private $sampleData = [];
+
     public function render_callback( $attributes, $content ) {
         if ( ! function_exists( '\WC' ) || is_admin() ) {
             return;
@@ -93,10 +98,29 @@ class WooProductGrid extends Block {
             $args[$key] = ! empty( $args[$key] ) ? implode( ',', $this->get_array_column( $args[$key], 'value' ) ) : $value;
         }
 
-        //Set Orderby to Default if Pro Orderby is selected and Pro isn't active
+        // Set Orderby to Default if Pro Orderby is selected and Pro isn't active
         $proOrderby = ['rand'];
         if ( isset( $args['orderby'] ) && ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE && in_array( $args['orderby'], $proOrderby ) ) {
             $args['orderby'] = 'date';
+        }
+
+        $isCustomCartBtn  = $_essential_attributes['isCustomCartBtn'];
+        $simpleCartText   = $_essential_attributes['simpleCartText'];
+        $variableCartText = $_essential_attributes['variableCartText'];
+        $groupedCartText  = $_essential_attributes['groupedCartText'];
+        $externalCartText = $_essential_attributes['externalCartText'];
+        $defaultCartText  = $_essential_attributes['defaultCartText'];
+
+        $this->sampleData = [
+            $simpleCartText,
+            $variableCartText,
+            $groupedCartText,
+            $externalCartText,
+            $defaultCartText
+        ];
+        if ( $isCustomCartBtn ) {
+            // change the cart button text according to editor change
+            add_filter( 'woocommerce_product_add_to_cart_text', [$this, 'eb_change_cart_button_text'], 10, 1 );
         }
 
         $args = wp_parse_args( $args, [
@@ -106,20 +130,57 @@ class WooProductGrid extends Block {
 
         $query = new WP_Query( Product::query_builder( $args ) );
 
-        $blockId   = isset( $attributes["blockId"] ) ? $attributes["blockId"] : "";
-        $classHook = isset( $attributes["classHook"] ) ? $attributes["classHook"] : "";
+        $blockId   = isset( $attributes['blockId'] ) ? $attributes['blockId'] : '';
+        $classHook = isset( $attributes['classHook'] ) ? $attributes['classHook'] : '';
+
+        //Handle loadMoreOptions
+        $loadMoreOptions = [];
+        if ( isset( $attributes['loadMoreOptions'] ) ) {
+            $loadMoreOptions               = $attributes['loadMoreOptions'];
+            $loadMoreOptions['totalPosts'] = $query->found_posts ?? 0;
+        }
 
         ob_start();
 
-        Helper::views( 'product-grid', array_merge( $_essential_attributes, [
-            'blockId'         => $blockId,
-            'classHook'       => $classHook,
-            'query'           => $query,
-            'essentialAttr'   => $_essential_attributes,
-            'loadMoreOptions' => isset( $attributes["loadMoreOptions"] ) ? $attributes["loadMoreOptions"] : [],
-            'queryData'       => $args
-        ] ) );
+        Helper::views(
+            'product-grid',
+            array_merge(
+                $_essential_attributes,
+                [
+                    'blockId'         => $blockId,
+                    'classHook'       => $classHook,
+                    'query'           => $query,
+                    'essentialAttr'   => $_essential_attributes,
+                    'loadMoreOptions' => $loadMoreOptions,
+                    'queryData'       => $args
+                ]
+            )
+        );
+
+        if ( $isCustomCartBtn ) {
+            // remove our own callback from filter
+            remove_filter( 'woocommerce_product_add_to_cart_text', [$this, 'eb_change_cart_button_text'], 10 );
+        }
 
         return ob_get_clean();
+    }
+
+    public function eb_change_cart_button_text( $text ) {
+        global $product;
+
+        list( $simpleCartText, $variableCartText, $groupedCartText, $externalCartText, $defaultCartText ) = $this->sampleData;
+
+        $product_type = $product->get_type();
+
+        $product_types = [
+            'external' => $externalCartText,
+            'grouped'  => $groupedCartText,
+            'simple'   => $simpleCartText,
+            'variable' => $variableCartText
+        ];
+
+        return isset( $product_types[$product_type] ) ?
+        esc_html( $product_types[$product_type] ) :
+        esc_html( $defaultCartText );
     }
 }

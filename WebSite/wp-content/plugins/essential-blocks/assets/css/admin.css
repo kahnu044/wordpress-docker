@@ -9,6 +9,7 @@
 	width: 21px;
 	margin-top: -2px;
 }
+
 #toplevel_page_essential-blocks.current .wp-menu-image img {
 	opacity: 1;
 }
@@ -17,6 +18,7 @@
 .eb-settings-wrap {
 	padding: 15px;
 }
+
 .eb-header-bar {
 	height: auto;
 	padding: 10px;
@@ -29,20 +31,24 @@
 	-webkit-align-items: center;
 	align-items: center;
 }
+
 .eb-settings-wrap .eb-header-left {
 	display: flex;
 	align-content: center;
 	align-items: center;
 }
+
 .eb-header-bar .eb-admin-logo-inline {
 	width: 42px;
 	box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
 	padding: 5px;
 	margin-right: 10px;
 }
+
 .eb-header-bar .eb-admin-logo-inline img {
 	width: 100%;
 }
+
 .eb-header-bar .title {
 	font-size: 24px;
 	color: #444;
@@ -56,9 +62,11 @@
 	-webkit-flex-grow: 1;
 	flex-grow: 1;
 }
+
 .eb-header-right {
 	text-align: right;
 }
+
 .eb-settings-tabs {
 	padding-top: 5px;
 }
@@ -66,6 +74,7 @@
 .eb-settings-tab h4 {
 	font-size: 22px;
 }
+
 .eb-elements-list h4 {
 	font-size: 18px;
 	text-transform: uppercase;
@@ -75,6 +84,7 @@
 	font-style: italic;
 	font-weight: lighter;
 }
+
 .eb-settings-tab p {
 	font-size: 14px;
 }
@@ -84,9 +94,11 @@
 	height: auto;
 	margin: 25px 0px 20px 0px;
 }
+
 .eb-settings-tabs ul li {
 	display: inline-block;
 }
+
 .eb-settings-tabs ul li a {
 	padding: 15px 20px;
 	background: #f8fafb;
@@ -96,17 +108,21 @@
 	text-decoration: none;
 	border-top: 2px solid #f8fafb;
 }
+
 .eb-settings-tabs ul li:first-child a {
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .eb-settings-tabs ul li a:focus {
 	outline: none;
 	box-shadow: none;
 }
+
 .eb-settings-tabs ul li a img {
 	width: 20px;
 	margin: 0 5px -3px 0;
 }
+
 .eb-settings-tab {
 	background: #fff;
 	padding: 15px 25px;
@@ -115,12 +131,14 @@
 	border-top: none;
 	position: relative;
 }
+
 .eb-settings-tabs ul li.ui-tabs-active a {
 	background: #fff;
 	outline: none;
 	box-shadow: none;
 	color: #343434;
 }
+
 p.eb-el-title {
 	font-size: 15px;
 	font-weight: normal;
@@ -128,15 +146,18 @@ p.eb-el-title {
 	color: #333;
 	margin: 0.5em;
 }
+
 .eb-form-control {
 	width: 100%;
 }
+
 textarea.eb-form-control {
 	padding: 15px;
 	font-size: 14px;
 	font-weight: 600;
 	color: #5d5d5d;
 }
+
 .eb-settings-wrap .row {
 	width: 100%;
 	height: auto;
@@ -146,18 +167,22 @@ textarea.eb-form-control {
 	align-content: flex-start;
 	padding: 15px 0px;
 }
+
 .col-full {
 	width: 100%;
 	height: auto;
 }
+
 .col-half {
 	width: 49%;
 	height: auto;
 }
+
 .col-one-third {
 	width: 32%;
 	height: auto;
 }
+
 /* Checkbox Style */
 .eb-checkbox-container {
 	display: flex;
@@ -165,6 +190,7 @@ textarea.eb-form-control {
 	align-items: center;
 	max-width: 1200px;
 }
+
 .eb-checkbox {
 	min-width: 250px;
 	font-size: 24px;
@@ -173,10 +199,12 @@ textarea.eb-form-control {
 	align-items: center;
 	margin: 10px;
 }
+
 .eb-checkbox input[type="checkbox"] {
 	visibility: hidden;
 	display: none;
 }
+
 .eb-checkbox label {
 	width: 2em;
 	height: 1em;
@@ -184,6 +212,7 @@ textarea.eb-form-control {
 	cursor: pointer;
 	display: block;
 }
+
 .eb-checkbox label:before {
 	content: "";
 	position: absolute;
@@ -194,6 +223,7 @@ textarea.eb-form-control {
 	background: #cbcfd0;
 	border-radius: 50px;
 }
+
 .eb-checkbox label:after {
 	content: "";
 	position: absolute;
@@ -208,11 +238,13 @@ textarea.eb-form-control {
 	z-index: 2;
 	animation: switch-off 0.3s ease-out;
 }
-.eb-checkbox input[type="checkbox"]:checked + label:before {
+
+.eb-checkbox input[type="checkbox"]:checked+label:before {
 	background: #7e86f9;
 	box-shadow: inset 0px 1px 1px rgba(84, 152, 140, 0.5);
 }
-.eb-checkbox input[type="checkbox"]:checked + label:after {
+
+.eb-checkbox input[type="checkbox"]:checked+label:after {
 	left: 1.2em;
 	background: #7e86f9;
 	animation: switch-on 0.3s ease-out;
@@ -229,16 +261,20 @@ textarea.eb-form-control {
 		transform: scaleX(1.3);
 	}
 }
+
 /* Eael Tab Toggles */
 .eb-settings-tab {
 	display: none;
 }
+
 .eb-settings-tab.active {
 	display: block;
 }
+
 .eb-tabs li a.active {
 	background-color: #fff;
 }
+
 /* Footer Style */
 
 .eb-settings-footer {
@@ -247,9 +283,11 @@ textarea.eb-form-control {
 	margin-top: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .eb-settings-footer .submit {
 	padding: 0px;
 }
+
 .eb-settings-footer p.submit {
 	margin-top: 0px;
 }
@@ -257,6 +295,7 @@ textarea.eb-form-control {
 .eb-settings-tab img {
 	max-width: 100%;
 }
+
 .button.eb-btn {
 	background-color: #0099cc;
 	color: #fff;
@@ -269,6 +308,7 @@ textarea.eb-form-control {
 	text-shadow: none;
 	letter-spacing: 0.05em;
 }
+
 .button.eb-btn:hover,
 .button.eb-btn:focus {
 	background-color: #1e96f1;
@@ -284,6 +324,7 @@ textarea.eb-form-control {
 	color: #fff;
 	padding: 10px 20px;
 }
+
 .eb-save-btn-wrap .eb-btn:hover,
 .eb-save-btn-wrap .eb-btn:focus {
 	background-color: #02cc7b;
@@ -294,6 +335,7 @@ textarea.eb-form-control {
 	background-color: #e74c3c;
 	color: #fff;
 }
+
 .eb-btn.eb-demo-btn:hover,
 .eb-btn.eb-demo-btn:focus {
 	background-color: #f54;
@@ -303,10 +345,12 @@ textarea.eb-form-control {
 .eb-btn.eb-license-btn {
 	background-color: #0dc9c3;
 }
+
 .eb-btn.eb-license-btn:hover,
 .eb-btn.eb-license-btn:focus {
 	background-color: #08d1ca;
 }
+
 .eb-btn.eb-demo-btn,
 .eb-btn.eb-license-btn {
 	padding: 20px;
@@ -346,6 +390,7 @@ textarea.eb-form-control {
 	from {
 		-webkit-transform: rotate(0deg);
 	}
+
 	to {
 		-webkit-transform: rotate(360deg);
 	}
@@ -355,6 +400,7 @@ textarea.eb-form-control {
 	from {
 		-moz-transform: rotate(0deg);
 	}
+
 	to {
 		-moz-transform: rotate(360deg);
 	}
@@ -364,10 +410,12 @@ textarea.eb-form-control {
 	from {
 		transform: rotate(0deg);
 	}
+
 	to {
 		transform: rotate(360deg);
 	}
 }
+
 .eb-notice {
 	padding: 10px 15px;
 	max-width: 90%;
@@ -400,6 +448,7 @@ textarea.eb-form-control {
 	align-items: center;
 	align-content: center;
 }
+
 /* Header Button */
 .eb-header-bar .eb-btn {
 	background-color: #3ccd94;
@@ -407,14 +456,17 @@ textarea.eb-form-control {
 	font-size: 13px;
 	letter-spacing: 1px;
 }
+
 .eb-header-bar .eb-btn:hover,
 .eb-header-bar .eb-btn:focus {
 	background-color: #02cc7b;
 }
+
 .eb-save-btn-wrap .eb-btn.save-now,
 .eb-header-bar .eb-btn.save-now {
 	background: #e74c3c;
 }
+
 .eb-save-btn-wrap .eb-btn.save-now:hover,
 .eb-header-bar .eb-btn.save-now:hover {
 	background: #ff5544;
@@ -426,21 +478,23 @@ textarea.eb-form-control {
 	color: #008000;
 	font-style: italic;
 }
+
 .eb-license-container {
 	display: flex;
 	align-content: center;
 	align-items: center;
 	width: 100%;
 }
+
 .eb-license-container .eb-license-input {
 	flex: 1 1 auto;
 }
+
 .eb-license-container .eb-license-deactivation {
 	flex: 0 0 150px;
 }
-.eb-license-container
-	.eb-license-input
-	#essential-blocks-elementor-license-key {
+
+.eb-license-container .eb-license-input #essential-blocks-elementor-license-key {
 	width: 100%;
 	height: 50px;
 	margin: 0;
@@ -452,13 +506,13 @@ textarea.eb-form-control {
 	box-shadow: none;
 	line-height: 1;
 }
-.eb-license-container
-	.eb-license-input
-	#essential-blocks-elementor-license-key:disabled {
+
+.eb-license-container .eb-license-input #essential-blocks-elementor-license-key:disabled {
 	border-color: rgba(20, 216, 161, 0.25);
 	color: rgba(20, 216, 161, 0.5);
 	font-size: 17px;
 }
+
 .eb-license-container .eb-license-buttons #submit {
 	height: 50px;
 	margin: 0;
@@ -473,9 +527,8 @@ textarea.eb-form-control {
 	letter-spacing: 1px;
 	transition: all 0.3s;
 }
-.eb-license-container
-	.eb-license-buttons
-	#submit.eb-license-activation-btn:hover {
+
+.eb-license-container .eb-license-buttons #submit.eb-license-activation-btn:hover {
 	background-color: rgba(238, 53, 95, 1);
 }
 
@@ -483,14 +536,15 @@ textarea.eb-form-control {
 	background-color: rgba(186, 110, 120, 0.5);
 	font-size: 11px;
 }
-.eb-license-container
-	.eb-license-buttons
-	#submit.eb-license-deactivation-btn:hover {
+
+.eb-license-container .eb-license-buttons #submit.eb-license-deactivation-btn:hover {
 	background-color: rgba(186, 110, 120, 0.75);
 }
+
 .eb-license-instruction {
 	padding: 10px;
 }
+
 .eb-license-icon {
 	position: absolute;
 }
@@ -503,21 +557,25 @@ textarea.eb-form-control {
 	flex-flow: row wrap;
 	align-content: center;
 }
+
 .eb-admin-general-wrapper .eb-admin-general-inner {
 	max-width: 70em;
 	height: auto;
 	flex: 1 1 70%;
 }
+
 .eb-admin-general-wrapper .eb-sidebar {
 	flex: 1 1 200px;
 	padding: 20px;
 }
+
 .eb-admin-block-wrapper {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-between;
 	margin: -10px;
 }
+
 .eb-admin-block-wrapper .eb-admin-block {
 	background-color: #fff;
 	flex: 1 1 auto;
@@ -526,6 +584,7 @@ textarea.eb-form-control {
 	margin: 10px 10px 25px 10px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
 .eb-admin-block-large,
 .eb-sidebar-widget {
 	background: #fff;
@@ -533,6 +592,7 @@ textarea.eb-form-control {
 	padding: 1em;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
 .eb-admin-block-header {
 	max-height: 4em;
 	overflow: hidden;
@@ -543,25 +603,31 @@ textarea.eb-form-control {
 	align-content: center;
 	align-items: center;
 }
+
 .eb-admin-block-header-icon {
 	width: 42px;
 	box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
 	padding: 10px;
 }
+
 .eb-admin-block-header-icon svg {
 	width: 80%;
 	display: block;
 	margin: 0 auto;
 }
+
 .eb-admin-block-review .eb-admin-block-header-icon svg {
 	width: 100%;
 }
+
 .eb-admin-block-support .eb-admin-block-header-icon {
 	width: 30px;
 }
+
 .eb-admin-block-community .eb-admin-block-header-icon {
 	width: 36px;
 }
+
 .eb-settings-tab .eb-admin-title {
 	margin: 1em 0;
 	padding: 0 1.26582em;
@@ -570,12 +636,14 @@ textarea.eb-form-control {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
 .eb-admin-block-content {
 	overflow: hidden;
 	position: relative;
 	padding: 1em 1.5em 1.5em;
 	background-color: #fff;
 }
+
 .eb-preview-img {
 	width: 100%;
 }
@@ -584,20 +652,24 @@ textarea.eb-form-control {
 	flex: 1 1 200px;
 	padding: 20px;
 }
+
 .eb-sidebar-block {
 	margin: calc(10% + 1.5em) auto;
 }
+
 .eb-sidebar-block .eb-admin-sidebar-logo {
 	max-width: 150px;
 	display: block;
 	margin: 0 auto;
 }
-.eb-sidebar-block .eb-admin-sidebar-logo > img,
-.eb-sidebar-block .eb-admin-sidebar-logo > svg {
+
+.eb-sidebar-block .eb-admin-sidebar-logo>img,
+.eb-sidebar-block .eb-admin-sidebar-logo>svg {
 	width: 100%;
 	display: block;
 	margin: 10px auto;
 }
+
 .eb-admin-sidebar-cta a {
 	font-size: 1em;
 	color: rgba(35, 40, 45, 0.45);
@@ -657,7 +729,7 @@ textarea.eb-form-control {
 	font-size: 14px;
 }
 
-.eb-admin-checkbox-label > div {
+.eb-admin-checkbox-label>div {
 	margin-left: 20px;
 }
 

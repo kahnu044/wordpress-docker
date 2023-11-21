@@ -13,147 +13,165 @@ import classnames from "classnames";
 import Inspector from "./inspector";
 
 import {
-	typoPrefix_text,
-	typoPrefix_title,
+    typoPrefix_text,
+    typoPrefix_title,
 } from "./constants/typographyPrefixConstants";
 
 import {
-	dimensionsMargin,
-	dimensionsPadding,
+    dimensionsMargin,
+    dimensionsPadding,
 } from "./constants/dimensionsNames";
 
 import { wrapBg } from "./constants/backgroundsConstants";
 import { wrpBdShadow } from "./constants/borderShadowConstants";
+import { NOTICE_ALIGNMENT } from "./constants";
 
 const {
-	//
-	softMinifyCssStrings,
-	generateTypographyStyles,
-	generateDimensionsControlStyles,
-	generateBackgroundControlStyles,
-	generateBorderShadowStyles,
-	// mimmikCssForPreviewBtnClick,
-	duplicateBlockIdFix,
+    //
+    softMinifyCssStrings,
+    generateTypographyStyles,
+    generateDimensionsControlStyles,
+    generateBackgroundControlStyles,
+    generateBorderShadowStyles,
+    // mimmikCssForPreviewBtnClick,
+    duplicateBlockIdFix,
+    generateResponsiveAlignStyles,
 } = window.EBControls;
 
 export default function Edit(props) {
-	const { attributes, setAttributes, className, clientId, isSelected } = props;
-	const {
-		blockId,
-		blockMeta,
-		// responsive control attribute ⬇
-		resOption,
+    const {
+        attributes,
+        setAttributes,
+        className,
+        clientId,
+        isSelected,
+    } = props;
+    const {
+        blockId,
+        blockMeta,
+        // responsive control attribute ⬇
+        resOption,
 
-		dismissible,
-		title,
-		text,
-		titleColor,
-		textColor,
-		classHook,
-	} = attributes;
+        dismissible,
+        title,
+        text,
+        titleColor,
+        textColor,
+        classHook,
+    } = attributes;
 
-	// this useEffect is for creating a unique id for each block's unique className by a random unique number
-	useEffect(() => {
-		// const current_block_id = attributes.blockId;
+    // this useEffect is for creating a unique id for each block's unique className by a random unique number
+    useEffect(() => {
+        // const current_block_id = attributes.blockId;
 
-		const BLOCK_PREFIX = "eb-notice";
-		duplicateBlockIdFix({
-			BLOCK_PREFIX,
-			blockId,
-			setAttributes,
-			select,
-			clientId,
-		});
-	}, []);
+        const BLOCK_PREFIX = "eb-notice";
+        duplicateBlockIdFix({
+            BLOCK_PREFIX,
+            blockId,
+            setAttributes,
+            select,
+            clientId,
+        });
+    }, []);
 
-	const blockProps = useBlockProps({
-		className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-	});
+    const blockProps = useBlockProps({
+        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
+    });
 
-	//
-	// CSS/styling Codes Starts from Here
+    //
+    // CSS/styling Codes Starts from Here
 
-	const {
-		typoStylesDesktop: titleTypoStylesDesktop,
-		typoStylesTab: titleTypoStylesTab,
-		typoStylesMobile: titleTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_title,
-		defaultFontSize: 32,
-	});
+    const {
+        typoStylesDesktop: titleTypoStylesDesktop,
+        typoStylesTab: titleTypoStylesTab,
+        typoStylesMobile: titleTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_title,
+        defaultFontSize: 32,
+    });
 
-	const {
-		typoStylesDesktop: textTypoStylesDesktop,
-		typoStylesTab: textTypoStylesTab,
-		typoStylesMobile: textTypoStylesMobile,
-	} = generateTypographyStyles({
-		attributes,
-		prefixConstant: typoPrefix_text,
-		defaultFontSize: 18,
-	});
+    const {
+        typoStylesDesktop: textTypoStylesDesktop,
+        typoStylesTab: textTypoStylesTab,
+        typoStylesMobile: textTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_text,
+        defaultFontSize: 18,
+    });
 
-	const {
-		dimensionStylesDesktop: wrapperMarginStylesDesktop,
-		dimensionStylesTab: wrapperMarginStylesTab,
-		dimensionStylesMobile: wrapperMarginStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: dimensionsMargin,
-		styleFor: "margin",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: wrapperMarginStylesDesktop,
+        dimensionStylesTab: wrapperMarginStylesTab,
+        dimensionStylesMobile: wrapperMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: dimensionsMargin,
+        styleFor: "margin",
+        attributes,
+    });
 
-	const {
-		dimensionStylesDesktop: wrapperPaddingStylesDesktop,
-		dimensionStylesTab: wrapperPaddingStylesTab,
-		dimensionStylesMobile: wrapperPaddingStylesMobile,
-	} = generateDimensionsControlStyles({
-		controlName: dimensionsPadding,
-		styleFor: "padding",
-		attributes,
-	});
+    const {
+        dimensionStylesDesktop: wrapperPaddingStylesDesktop,
+        dimensionStylesTab: wrapperPaddingStylesTab,
+        dimensionStylesMobile: wrapperPaddingStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: dimensionsPadding,
+        styleFor: "padding",
+        attributes,
+    });
 
-	const {
-		backgroundStylesDesktop,
-		hoverBackgroundStylesDesktop,
-		backgroundStylesTab,
-		hoverBackgroundStylesTab,
-		backgroundStylesMobile,
-		hoverBackgroundStylesMobile,
-		overlayStylesDesktop,
-		hoverOverlayStylesDesktop,
-		overlayStylesTab,
-		hoverOverlayStylesTab,
-		overlayStylesMobile,
-		hoverOverlayStylesMobile,
-		bgTransitionStyle,
-		ovlTransitionStyle,
-	} = generateBackgroundControlStyles({
-		attributes,
-		controlName: wrapBg,
-	});
+    const {
+        alignStylesDesktop: noticeAlignDesktop,
+        alignStylesTab: noticeAlignTab,
+        alignStylesMobile: noticeAlignMobile,
+    } = generateResponsiveAlignStyles({
+        controlName: NOTICE_ALIGNMENT,
+        property: "text-align",
+        attributes,
+    });
 
-	const {
-		styesDesktop: bdShadowStyesDesktop,
-		styesTab: bdShadowStyesTab,
-		styesMobile: bdShadowStyesMobile,
-		stylesHoverDesktop: bdShadowStylesHoverDesktop,
-		stylesHoverTab: bdShadowStylesHoverTab,
-		stylesHoverMobile: bdShadowStylesHoverMobile,
-		transitionStyle: bdShadowTransitionStyle,
-	} = generateBorderShadowStyles({
-		controlName: wrpBdShadow,
-		attributes,
-		// noShadow: true,
-		// noBorder: true,
-	});
+    const {
+        backgroundStylesDesktop,
+        hoverBackgroundStylesDesktop,
+        backgroundStylesTab,
+        hoverBackgroundStylesTab,
+        backgroundStylesMobile,
+        hoverBackgroundStylesMobile,
+        overlayStylesDesktop,
+        hoverOverlayStylesDesktop,
+        overlayStylesTab,
+        hoverOverlayStylesTab,
+        overlayStylesMobile,
+        hoverOverlayStylesMobile,
+        bgTransitionStyle,
+        ovlTransitionStyle,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: wrapBg,
+    });
 
-	// wrapper styles css in strings ⬇
-	const wrapperStylesDesktop = `
+    const {
+        styesDesktop: bdShadowStyesDesktop,
+        styesTab: bdShadowStyesTab,
+        styesMobile: bdShadowStyesMobile,
+        stylesHoverDesktop: bdShadowStylesHoverDesktop,
+        stylesHoverTab: bdShadowStylesHoverTab,
+        stylesHoverMobile: bdShadowStylesHoverMobile,
+        transitionStyle: bdShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: wrpBdShadow,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
+    // wrapper styles css in strings ⬇
+    const wrapperStylesDesktop = `
 
 	.eb-notice-wrapper.${blockId} > * {
 		position: relative;
-	}	
+	}
 
 	.eb-notice-wrapper.${blockId}{
 		${wrapperMarginStylesDesktop}
@@ -163,14 +181,14 @@ export default function Edit(props) {
 		transition:${bgTransitionStyle}, ${bdShadowTransitionStyle};
 		overflow: hidden;
 		position: relative;
-		
+		${noticeAlignDesktop}
 	}
-	
+
 	.eb-notice-wrapper.${blockId}:hover{
 		${hoverBackgroundStylesDesktop}
 		${bdShadowStylesHoverDesktop}
 	}
-	
+
 	.eb-notice-wrapper.${blockId}:before{
 		${overlayStylesDesktop}
 		transition:${ovlTransitionStyle};
@@ -182,12 +200,13 @@ export default function Edit(props) {
 
 	`;
 
-	const wrapperStylesTab = `
+    const wrapperStylesTab = `
 	.eb-notice-wrapper.${blockId}{
 		${wrapperMarginStylesTab}
 		${wrapperPaddingStylesTab}
 		${backgroundStylesTab}
-		${bdShadowStyesTab}		
+		${bdShadowStyesTab}
+		${noticeAlignTab}
 	}
 
 	.eb-notice-wrapper.${blockId}:hover{
@@ -205,12 +224,13 @@ export default function Edit(props) {
 
 	`;
 
-	const wrapperStylesMobile = `
+    const wrapperStylesMobile = `
 	.eb-notice-wrapper.${blockId}{
 		${wrapperMarginStylesMobile}
 		${wrapperPaddingStylesMobile}
 		${backgroundStylesMobile}
 		${bdShadowStyesMobile}
+		${noticeAlignMobile}
 	}
 
 	.eb-notice-wrapper.${blockId}:hover{
@@ -227,57 +247,57 @@ export default function Edit(props) {
 	}
 	`;
 
-	//
-	// titleWrapper styles css in strings ⬇
-	const titleWrapperStylesDesktop = `
+    //
+    // titleWrapper styles css in strings ⬇
+    const titleWrapperStylesDesktop = `
 	.eb-notice-wrapper.${blockId} .eb-notice-title-wrapper{
-		display: flex;
+		// display: flex;
 		justify-content: space-between;
-	}	
+	}
 	`;
 
-	// title styles css in strings ⬇
-	const titleStylesDesktop = `
+    // title styles css in strings ⬇
+    const titleStylesDesktop = `
 	.eb-notice-wrapper.${blockId} .eb-notice-title{
-		${titleTypoStylesDesktop}		
+		${titleTypoStylesDesktop}
 		color: ${titleColor || "#fff"};
 	}
 	`;
 
-	const titleStylesTab = `
+    const titleStylesTab = `
 	.eb-notice-wrapper.${blockId} .eb-notice-title{
 		${titleTypoStylesTab}
 	}
 	`;
 
-	const titleStylesMobile = `
+    const titleStylesMobile = `
 	.eb-notice-wrapper.${blockId} .eb-notice-title{
 		${titleTypoStylesMobile}
 	}
 	`;
 
-	// text styles css in strings ⬇
-	const textStylesDesktop = `
+    // text styles css in strings ⬇
+    const textStylesDesktop = `
 	.eb-notice-wrapper.${blockId} .eb-notice-text{
 		${textTypoStylesDesktop}
 		color: ${textColor || "#edf1f7"};
 	}
 	`;
 
-	const textStylesTab = `
+    const textStylesTab = `
 	.eb-notice-wrapper.${blockId} .eb-notice-text{
 		${textTypoStylesTab}
 	}
 	`;
 
-	const textStylesMobile = `
+    const textStylesMobile = `
 	.eb-notice-wrapper.${blockId} .eb-notice-text{
 		${textTypoStylesMobile}
 	}
 	`;
 
-	// dismiss styles css in strings ⬇
-	const dismissStylesDesktop = `
+    // dismiss styles css in strings ⬇
+    const dismissStylesDesktop = `
 	.eb-notice-wrapper.${blockId} .eb-notice-dismiss{
 		color: ${textColor || "#edf1f7"};
 		display: ${dismissible ? "flex" : "none"};
@@ -302,8 +322,8 @@ export default function Edit(props) {
 
 	`;
 
-	// all css styles for large screen width (desktop/laptop) in strings ⬇
-	const desktopAllStyles = softMinifyCssStrings(`
+    // all css styles for large screen width (desktop/laptop) in strings ⬇
+    const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
 		${titleWrapperStylesDesktop}
 		${dismissStylesDesktop}
@@ -311,38 +331,38 @@ export default function Edit(props) {
 		${textStylesDesktop}
 	`);
 
-	// all css styles for Tab in strings ⬇
-	const tabAllStyles = softMinifyCssStrings(`
+    // all css styles for Tab in strings ⬇
+    const tabAllStyles = softMinifyCssStrings(`
 		${wrapperStylesTab}
 		${titleStylesTab}
 		${textStylesTab}
 	`);
 
-	// all css styles for Mobile in strings ⬇
-	const mobileAllStyles = softMinifyCssStrings(`
+    // all css styles for Mobile in strings ⬇
+    const mobileAllStyles = softMinifyCssStrings(`
 		${wrapperStylesMobile}
 		${titleStylesMobile}
 		${textStylesMobile}
 	`);
 
-	// Set All Style in "blockMeta" Attribute
-	useEffect(() => {
-		const styleObject = {
-			desktop: desktopAllStyles,
-			tab: tabAllStyles,
-			mobile: mobileAllStyles,
-		};
-		if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-			setAttributes({ blockMeta: styleObject });
-		}
-	}, [attributes]);
+    // Set All Style in "blockMeta" Attribute
+    useEffect(() => {
+        const styleObject = {
+            desktop: desktopAllStyles,
+            tab: tabAllStyles,
+            mobile: mobileAllStyles,
+        };
+        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
+            setAttributes({ blockMeta: styleObject });
+        }
+    }, [attributes]);
 
-	return (
-		<>
-			{isSelected && <Inspector {...props} />}
-			<div {...blockProps}>
-				<style>
-					{`
+    return (
+        <>
+            {isSelected && <Inspector {...props} />}
+            <div {...blockProps}>
+                <style>
+                    {`
 				${desktopAllStyles}
 
 				/* mimmikcssStart */
@@ -352,48 +372,57 @@ export default function Edit(props) {
 
 				/* mimmikcssEnd */
 
-				@media all and (max-width: 1024px) {	
+				@media all and (max-width: 1024px) {
 
-					/* tabcssStart */			
+					/* tabcssStart */
 					${softMinifyCssStrings(tabAllStyles)}
-					/* tabcssEnd */			
-				
+					/* tabcssEnd */
+
 				}
-				
+
 				@media all and (max-width: 767px) {
-					
-					/* mobcssStart */			
+
+					/* mobcssStart */
 					${softMinifyCssStrings(mobileAllStyles)}
-					/* mobcssEnd */			
-				
+					/* mobcssEnd */
+
 				}
 				`}
-				</style>
+                </style>
 
-				<div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-					<div className={`eb-notice-wrapper ${blockId}`} data-id={blockId}>
-						<div className="eb-notice-title-wrapper">
-							<RichText
-								className="eb-notice-title"
-								value={title}
-								onChange={(newTitle) => setAttributes({ title: newTitle })}
-								placeholder="Add Title..."
-								keepPlaceholderOnFocus
-							/>
-						</div>
-						<span className="eb-notice-dismiss" />
-						<div>
-							<RichText
-								className="eb-notice-text"
-								value={text}
-								onChange={(newText) => setAttributes({ text: newText })}
-								placeholder="Add Text..."
-								keepPlaceholderOnFocus
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+                <div
+                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                >
+                    <div
+                        className={`eb-notice-wrapper ${blockId}`}
+                        data-id={blockId}
+                    >
+                        <div className="eb-notice-title-wrapper">
+                            <RichText
+                                className="eb-notice-title"
+                                value={title}
+                                onChange={(newTitle) =>
+                                    setAttributes({ title: newTitle })
+                                }
+                                placeholder="Add Title..."
+                                keepPlaceholderOnFocus
+                            />
+                        </div>
+                        <span className="eb-notice-dismiss" />
+                        <div>
+                            <RichText
+                                className="eb-notice-text"
+                                value={text}
+                                onChange={(newText) =>
+                                    setAttributes({ text: newText })
+                                }
+                                placeholder="Add Text..."
+                                keepPlaceholderOnFocus
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }

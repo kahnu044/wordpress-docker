@@ -365,7 +365,7 @@ const edit = (props) => {
         return (
             <img
                 style={{ width: "100%" }}
-                src="https://raw.githubusercontent.com/rupok/essential-blocks-templates/dev/previews/instagram-preview.png"
+                src={EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/instagram-preview.png"}
             />
         );
     }

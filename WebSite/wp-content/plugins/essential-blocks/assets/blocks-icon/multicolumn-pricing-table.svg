@@ -1,0 +1,127 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	width="24"
+	height="20"
+	viewBox="0 0 58 49"
+	fill="none"
+>
+	<g clipPath="url(#clip0_326_27)">
+		<path
+			d="M39.36 1.15002H55.51C56.08 1.15002 56.55 1.62002 56.55 2.19002V46.13C56.55 46.7 56.08 47.17 55.51 47.17H39.36V1.15002Z"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			fill="none"
+		/>
+		<path
+			d="M23.19 1.15002H39.36V47.17H23.19C22.63 47.17 22.17 46.71 22.17 46.15V2.17002C22.17 1.61002 22.63 1.15002 23.19 1.15002Z"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			fill="none"
+		/>
+		<path
+			d="M1.14999 6.70001H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M1.14999 13.96H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M1.14999 21.22H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M1.14999 28.48H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M1.14999 35.74H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M1.14999 43H14.51"
+			stroke="#6C3BFF"
+			stroke-width="2.3"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M28.03 21.48H34.28"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M28.03 28.08H34.28"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M28.03 34.67H34.28"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M28.03 41.27H34.28"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M44.82 21.48H51.08"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M44.82 28.08H51.08"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M44.82 34.67H51.08"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M44.82 41.27H51.08"
+			stroke="#6C3BFF"
+			stroke-miterlimit="10"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M50.54 10.17C50.78 10.17 50.97 9.98002 50.97 9.74002V9.38002C50.97 8.18002 50.01 7.19002 48.81 7.15002V6.58002C48.81 6.34002 48.62 6.15002 48.38 6.15002C48.14 6.15002 47.95 6.34002 47.95 6.58002V7.15002C46.72 7.19002 45.75 8.22002 45.79 9.45002C45.82 10.34 46.37 11.13 47.2 11.45L49.26 12.27C49.96 12.55 50.31 13.35 50.02 14.05C49.81 14.57 49.31 14.91 48.75 14.91H48.04C47.28 14.91 46.67 14.29 46.67 13.54V13.18C46.67 12.94 46.48 12.75 46.24 12.75C46 12.75 45.81 12.94 45.81 13.18V13.54C45.81 14.74 46.77 15.73 47.97 15.77V16.34C47.97 16.58 48.16 16.77 48.4 16.77C48.64 16.77 48.83 16.58 48.83 16.34V15.77C50.06 15.73 51.03 14.7 50.99 13.47C50.96 12.58 50.41 11.79 49.58 11.47L47.52 10.65C46.82 10.37 46.47 9.57002 46.76 8.87002C46.97 8.35002 47.47 8.01002 48.03 8.01002H48.74C49.5 8.01002 50.11 8.63002 50.11 9.38002V9.74002C50.11 9.98002 50.3 10.17 50.54 10.17Z"
+			fill="#6C3BFF"
+		/>
+		<path
+			d="M32.88 10.17C33.12 10.17 33.31 9.98002 33.31 9.74002V9.38002C33.31 8.18002 32.35 7.19002 31.15 7.15002V6.58002C31.15 6.34002 30.96 6.15002 30.72 6.15002C30.48 6.15002 30.29 6.34002 30.29 6.58002V7.15002C29.06 7.19002 28.09 8.22002 28.13 9.45002C28.16 10.34 28.71 11.13 29.54 11.45L31.6 12.27C32.3 12.55 32.65 13.35 32.36 14.05C32.15 14.57 31.65 14.91 31.09 14.91H30.38C29.62 14.91 29.01 14.29 29.01 13.54V13.18C29.01 12.94 28.82 12.75 28.58 12.75C28.34 12.75 28.15 12.94 28.15 13.18V13.54C28.15 14.74 29.11 15.73 30.31 15.77V16.34C30.31 16.58 30.5 16.77 30.74 16.77C30.98 16.77 31.17 16.58 31.17 16.34V15.77C32.4 15.73 33.37 14.7 33.33 13.47C33.3 12.58 32.75 11.79 31.92 11.47L29.86 10.65C29.16 10.37 28.81 9.57002 29.1 8.87002C29.31 8.35002 29.81 8.01002 30.37 8.01002H31.08C31.84 8.01002 32.45 8.63002 32.45 9.38002V9.74002C32.45 9.98002 32.64 10.17 32.88 10.17Z"
+			fill="#6C3BFF"
+		/>
+	</g>
+	<defs>
+		<clipPath id="clip0_326_27">
+			<rect width="57.69" height="48.32" fill="white" />
+		</clipPath>
+	</defs>
+</svg>

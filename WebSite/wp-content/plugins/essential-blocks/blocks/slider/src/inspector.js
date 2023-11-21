@@ -16,8 +16,11 @@ import {
     TextControl,
     TextareaControl,
     ColorPalette,
+    BaseControl,
+    __experimentalDivider as Divider,
 } from "@wordpress/components";
 import { select } from "@wordpress/data";
+import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 /*
  * Internal depencencies
@@ -32,6 +35,9 @@ import {
     BUTTON_MARGIN,
     BUTTON_PADDING,
     BUTTON_BORDER_SHADOW,
+    BUTTON2_MARGIN,
+    BUTTON2_PADDING,
+    BUTTON2_BORDER_SHADOW,
     DOTS_GAP,
     ARROW_POSITION,
     DOTS_POSITION,
@@ -57,6 +63,7 @@ import {
     TITLE_TYPOGRAPHY,
     SUBTITLE_TYPOGRAPHY,
     BUTTON_TYPOGRAPHY,
+    BUTTON2_TYPOGRAPHY,
 } from "./constants/typography-constant";
 
 import {
@@ -66,6 +73,10 @@ import {
     handleButtonText,
     handleButtonURL,
     handleOpenNewTab,
+    handleShowSecondButton,
+    handleSecondButtonText,
+    handleSecondButtonURL,
+    handleSecondButtonOpenNewTab,
 } from "./helpers";
 
 const {
@@ -77,6 +88,7 @@ const {
     ColorControl,
     AdvancedControls,
     stripHtmlTags,
+    faArrowIcons,
 } = window.EBControls;
 
 function Inspector(props) {
@@ -104,6 +116,11 @@ function Inspector(props) {
         buttonHoverColor,
         buttonBGColor,
         buttonHoverBGColor,
+        secondButtonColorType,
+        secondButtonColor,
+        secondButtonHoverColor,
+        secondButtonBGColor,
+        secondButtonHoverBGColor,
         overlayColor,
         arrowColorType,
         arrowColor,
@@ -112,6 +129,8 @@ function Inspector(props) {
         dotsActiveColor,
         textAlign,
         verticalAlign,
+        arrowPrevIcon,
+        arrowNextIcon,
     } = attributes;
 
     const resRequiredProps = {
@@ -348,6 +367,45 @@ function Inspector(props) {
                                             min={0}
                                             max={3000}
                                         />
+
+                                        {arrows && (
+                                            <>
+                                                <BaseControl
+                                                    label={__(
+                                                        "Arrow Prev Icon",
+                                                        "essential-blocks"
+                                                    )}
+                                                >
+                                                    <FontIconPicker
+                                                        icons={faArrowIcons}
+                                                        value={arrowPrevIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                arrowPrevIcon: icon,
+                                                            })
+                                                        }
+                                                        appendTo="body"
+                                                    />
+                                                </BaseControl>
+                                                <BaseControl
+                                                    label={__(
+                                                        "Arrow Next Icon",
+                                                        "essential-blocks"
+                                                    )}
+                                                >
+                                                    <FontIconPicker
+                                                        icons={faArrowIcons}
+                                                        value={arrowNextIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                arrowNextIcon: icon,
+                                                            })
+                                                        }
+                                                        appendTo="body"
+                                                    />
+                                                </BaseControl>
+                                            </>
+                                        )}
                                     </PanelBody>
 
                                     <PanelBody
@@ -517,6 +575,97 @@ function Inspector(props) {
                                                                             )
                                                                         }
                                                                     />
+
+                                                                    <ToggleControl
+                                                                        label={__(
+                                                                            "Add Second Button",
+                                                                            "essential-blocks"
+                                                                        )}
+                                                                        checked={
+                                                                            item.showSecondButton
+                                                                        }
+                                                                        onChange={() =>
+                                                                            handleShowSecondButton(
+                                                                                !item.showSecondButton,
+                                                                                index,
+                                                                                images,
+                                                                                setAttributes
+                                                                            )
+                                                                        }
+                                                                    />
+
+                                                                    {item.showSecondButton && (
+                                                                        <>
+                                                                            <TextControl
+                                                                                label={__(
+                                                                                    "Second Button Text",
+                                                                                    "essential-blocks"
+                                                                                )}
+                                                                                value={
+                                                                                    item.secondButtonText
+                                                                                }
+                                                                                onChange={(
+                                                                                    text
+                                                                                ) =>
+                                                                                    handleSecondButtonText(
+                                                                                        text,
+                                                                                        index,
+                                                                                        images,
+                                                                                        setAttributes
+                                                                                    )
+                                                                                }
+                                                                            />
+                                                                            <TextControl
+                                                                                label={__(
+                                                                                    "Second Button URL",
+                                                                                    "essential-blocks"
+                                                                                )}
+                                                                                value={
+                                                                                    item.secondButtonUrl
+                                                                                }
+                                                                                onChange={(
+                                                                                    text
+                                                                                ) =>
+                                                                                    handleSecondButtonURL(
+                                                                                        text,
+                                                                                        index,
+                                                                                        images,
+                                                                                        setAttributes
+                                                                                    )
+                                                                                }
+                                                                            />
+                                                                            {item.secondButtonUrl &&
+                                                                                item
+                                                                                    .secondButtonUrl
+                                                                                    .length >
+                                                                                    0 &&
+                                                                                !item.isValidUrl && (
+                                                                                    <span className="error">
+                                                                                        URL
+                                                                                        is
+                                                                                        not
+                                                                                        valid
+                                                                                    </span>
+                                                                                )}
+                                                                            <ToggleControl
+                                                                                label={__(
+                                                                                    "Open in New Tab",
+                                                                                    "essential-blocks"
+                                                                                )}
+                                                                                checked={
+                                                                                    item.secondButtonOpenNewTab
+                                                                                }
+                                                                                onChange={() =>
+                                                                                    handleSecondButtonOpenNewTab(
+                                                                                        !item.secondButtonOpenNewTab,
+                                                                                        index,
+                                                                                        images,
+                                                                                        setAttributes
+                                                                                    )
+                                                                                }
+                                                                            />
+                                                                        </>
+                                                                    )}
                                                                 </>
                                                             )}
                                                         </>
@@ -938,6 +1087,177 @@ function Inspector(props) {
                                                     controlName={BUTTON_PADDING}
                                                     baseLabel="Padding"
                                                 />
+
+                                                <PanelBody
+                                                    title={__(
+                                                        "Second Button",
+                                                        "essential-blocks"
+                                                    )}
+                                                    initialOpen={false}
+                                                >
+                                                    <ButtonGroup className="eb-inspector-btn-group">
+                                                        {NORMAL_HOVER.map(
+                                                            (item, index) => (
+                                                                <Button
+                                                                    key={index}
+                                                                    isPrimary={
+                                                                        secondButtonColorType ===
+                                                                        item.value
+                                                                    }
+                                                                    isSecondary={
+                                                                        secondButtonColorType !==
+                                                                        item.value
+                                                                    }
+                                                                    onClick={() =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                secondButtonColorType:
+                                                                                    item.value,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {item.label}
+                                                                </Button>
+                                                            )
+                                                        )}
+                                                    </ButtonGroup>
+
+                                                    {secondButtonColorType ===
+                                                        "normal" && (
+                                                        <PanelColorSettings
+                                                            className={
+                                                                "eb-subpanel"
+                                                            }
+                                                            title={__(
+                                                                "Normal Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            initialOpen={true}
+                                                            colorSettings={[
+                                                                {
+                                                                    value: secondButtonColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                secondButtonColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Color",
+                                                                        "essential-blocks"
+                                                                    ),
+                                                                },
+                                                                {
+                                                                    value: secondButtonBGColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                secondButtonBGColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Background Color",
+                                                                        "essential-blocks"
+                                                                    ),
+                                                                },
+                                                            ]}
+                                                        />
+                                                    )}
+
+                                                    {secondButtonColorType ===
+                                                        "hover" && (
+                                                        <PanelColorSettings
+                                                            className={
+                                                                "eb-subpanel"
+                                                            }
+                                                            title={__(
+                                                                "Hover Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            initialOpen={true}
+                                                            colorSettings={[
+                                                                {
+                                                                    value: secondButtonHoverColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                secondButtonHoverColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Color",
+                                                                        "essential-blocks"
+                                                                    ),
+                                                                },
+                                                                {
+                                                                    value: secondButtonHoverBGColor,
+                                                                    onChange: (
+                                                                        newColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                secondButtonHoverBGColor: newColor,
+                                                                            }
+                                                                        ),
+                                                                    label: __(
+                                                                        "Background Color",
+                                                                        "essential-blocks"
+                                                                    ),
+                                                                },
+                                                            ]}
+                                                        />
+                                                    )}
+                                                    <PanelRow>
+                                                        Button Border & Shadow
+                                                    </PanelRow>
+                                                    <BorderShadowControl
+                                                        controlName={
+                                                            BUTTON2_BORDER_SHADOW
+                                                        }
+                                                        resRequiredProps={
+                                                            resRequiredProps
+                                                        }
+                                                        // noShadow
+                                                        // noBorder
+                                                    />
+                                                    <TypographyDropdown
+                                                        baseLabel={__(
+                                                            "Typography",
+                                                            "essential-blocks"
+                                                        )}
+                                                        typographyPrefixConstant={
+                                                            BUTTON2_TYPOGRAPHY
+                                                        }
+                                                        resRequiredProps={
+                                                            resRequiredProps
+                                                        }
+                                                    />
+                                                    <ResponsiveDimensionsControl
+                                                        resRequiredProps={
+                                                            resRequiredProps
+                                                        }
+                                                        controlName={
+                                                            BUTTON2_MARGIN
+                                                        }
+                                                        baseLabel="Margin"
+                                                    />
+                                                    <ResponsiveDimensionsControl
+                                                        resRequiredProps={
+                                                            resRequiredProps
+                                                        }
+                                                        controlName={
+                                                            BUTTON2_PADDING
+                                                        }
+                                                        baseLabel="Padding"
+                                                    />
+                                                </PanelBody>
                                             </PanelBody>
                                         </>
                                     )}

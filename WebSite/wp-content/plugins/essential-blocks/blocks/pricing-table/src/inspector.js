@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -74,6 +73,7 @@ const {
     BackgroundControl,
     BorderShadowControl,
     AdvancedControls,
+    DynamicInputControl,
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -577,28 +577,39 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 closeOnSelect
                                             />
                                         </BaseControl>
-                                        <SelectControl
+                                        <BaseControl
                                             label={__(
                                                 "Icon Position",
                                                 "essential-blocks"
                                             )}
-                                            value={buttonIconPosition}
-                                            options={[
-                                                {
-                                                    label: "Left",
-                                                    value: "left",
-                                                },
-                                                {
-                                                    label: "Right",
-                                                    value: "right",
-                                                },
-                                            ]}
-                                            onChange={(buttonIconPosition) => {
-                                                setAttributes({
-                                                    buttonIconPosition,
-                                                });
-                                            }}
-                                        />
+                                        >
+                                            <ButtonGroup>
+                                                {RIBBON_ALIGNMENT_HORIZONTAL.map(
+                                                    (item, index) => (
+                                                        <Button
+                                                            // isLarge
+                                                            key={index}
+                                                            isPrimary={
+                                                                buttonIconPosition ===
+                                                                item.value
+                                                            }
+                                                            isSecondary={
+                                                                buttonIconPosition !==
+                                                                item.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    buttonIconPosition:
+                                                                        item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
                                         <ResponsiveRangeController
                                             baseLabel={__(
                                                 "Icon Spacing",
@@ -611,24 +622,28 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             step={1}
                                             noUnits
                                         />
-                                        <TextControl
+                                        <DynamicInputControl
                                             label={__(
                                                 "Button Text",
                                                 "essential-blocks"
                                             )}
-                                            value={buttonText}
+                                            attrName="buttonText"
+                                            inputValue={buttonText}
+                                            setAttributes={setAttributes}
                                             onChange={(text) =>
                                                 setAttributes({
                                                     buttonText: text,
                                                 })
                                             }
                                         />
-                                        <TextControl
+                                        <DynamicInputControl
                                             label={__(
                                                 "Button Link",
                                                 "essential-blocks"
                                             )}
-                                            value={buttonURL}
+                                            attrName="buttonURL"
+                                            inputValue={buttonURL}
+                                            setAttributes={setAttributes}
                                             onChange={(link) =>
                                                 setAttributes({
                                                     buttonURL: link,

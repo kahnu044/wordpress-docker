@@ -8,7 +8,27 @@ import attributes from "./attributes";
 const deprecated = [
     {
         attributes: {
-            ...attributes
+            ...attributes,
+            videoURL: {
+                type: "string",
+                default: "http://www.youtube.com/watch?v=PnZx4ZOMyzI",
+            },
+            previewImage: {
+                type: "string",
+                default: "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+            },
+            placeholderImage: {
+                type: "string",
+                default: "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-placeholder.png",
+            },
+            customPlayIconURL: {
+                type: "string",
+                default: "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+            },
+            placeholderPlayIconURL: {
+                type: "string",
+                default: "https://essential-blocks.com/wp-content/uploads/2022/05/adv-video-playicon.svg",
+            },
         },
         supports: {
             anchor: true,
@@ -16,7 +36,9 @@ const deprecated = [
         save: (props) => {
             const { attributes } = props
             const {
+                resOption,
                 blockId,
+                blockMeta,
                 videoConfig,
                 showBar,
                 videoURL,
@@ -30,11 +52,17 @@ const deprecated = [
                 customPlayIcon,
                 customPlayIconURL,
                 classHook,
+                lightboxPlayIconType,
+                lightboxPlayIconlib,
+                customPlayIconlib,
+                placeholderCustomPlayIconType,
             } = attributes;
 
             return (
                 <div {...useBlockProps.save()}>
-                    <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
                         <div
                             className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`}
                             data-id={blockId}
@@ -52,11 +80,18 @@ const deprecated = [
                                         data-playing={videoConfig.autoplay}
                                         data-overlay={imageOverlay}
                                         data-light={
-                                            previewImage && previewImage.length > 0 ? previewImage : false
+                                            previewImage && previewImage.length > 0
+                                                ? previewImage
+                                                : false
                                         }
+                                        data-customPlayIconType={
+                                            placeholderCustomPlayIconType
+                                        }
+                                        data-customPlayIconLib={customPlayIconlib}
                                         data-customPlayIcon={customPlayIcon}
                                         data-playicon={
-                                            customPlayIconURL && customPlayIconURL.length > 0
+                                            customPlayIconURL &&
+                                                customPlayIconURL.length > 0
                                                 ? customPlayIconURL
                                                 : null
                                         }
@@ -70,17 +105,37 @@ const deprecated = [
                                         id={`myBtn-${blockId}`}
                                         className="player-placeholder"
                                         style={{
-                                            backgroundImage: "url( " + placeholderImage + ")",
+                                            backgroundImage:
+                                                "url( " + placeholderImage + ")",
                                         }}
                                     >
-                                        {lightboxPlayIcon && placeholderPlayIconURL && (
-                                            <img alt="" />
+                                        {lightboxPlayIcon && (
+                                            <>
+                                                {lightboxPlayIconType == "icon" && (
+                                                    <i
+                                                        className={lightboxPlayIconlib}
+                                                    />
+                                                )}
+                                                {lightboxPlayIconType == "image" &&
+                                                    placeholderPlayIconURL && (
+                                                        <img
+                                                            src={placeholderPlayIconURL}
+                                                            alt=""
+                                                        />
+                                                    )}
+                                            </>
                                         )}
                                     </div>
 
-                                    <div id={`eb-modal-${blockId}`} className="eb-modal-player">
+                                    <div
+                                        id={`eb-modal-${blockId}`}
+                                        className="eb-modal-player"
+                                    >
                                         <div className="eb-player-wrapper">
-                                            <span id={`close-${blockId}`} class="eb-modal-close">
+                                            <span
+                                                id={`close-${blockId}`}
+                                                className="eb-modal-close"
+                                            >
                                                 &times;
                                             </span>
                                             <div

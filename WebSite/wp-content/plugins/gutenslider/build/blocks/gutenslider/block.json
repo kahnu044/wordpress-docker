@@ -1,0 +1,548 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eedee/block-gutenslider",
+  "textdomain": "gutenslider",
+  "title": "Gutenslider",
+  "description": "Slider Block for Gutenberg that slides images and videos with arbitrary blocks on top.",
+  "category": "media",
+  "keywords": [
+    "Slider",
+    "Image",
+    "Carousel"
+  ],
+  "icon": "universal-access-alt",
+  "script": "eedee-gutenslider-block-editor",
+  "editorScript": "file:../../../build/gutenslider-pro.js",
+  "style": "eedee-gutenslider-block-editor",
+  "render": "file:./block-front.php",
+  "attributes": {
+    "gsBlockId": {
+      "type": "string"
+    },
+    "media": {
+      "type": "array"
+    },
+    "align": {
+      "type": "string",
+      "default": "none"
+    },
+    "contentMode": {
+      "type": "string",
+      "default": "change"
+    },
+    "bgImageId": {
+      "type": "number"
+    },
+    "animation": {
+      "type": "string",
+      "default": "slide"
+    },
+    "fadeMode": {
+      "type": "boolean",
+      "default": true
+    },
+    "slidesToShow": {
+      "type": "number",
+      "default": 1
+    },
+    "slidesToShowMd": {
+      "type": "number",
+      "default": 1
+    },
+    "slidesToShowSm": {
+      "type": "number",
+      "default": 1
+    },
+    "slidesToScroll": {
+      "type": "number",
+      "default": 1
+    },
+    "slidesToScrollMd": {
+      "type": "number",
+      "default": 1
+    },
+    "slidesToScrollSm": {
+      "type": "number",
+      "default": 1
+    },
+    "sliderHeight": {
+      "type": "string",
+      "default": "50vh"
+    },
+    "sliderHeightMd": {
+      "type": "string",
+      "default": "50vh"
+    },
+    "sliderHeightSm": {
+      "type": "string",
+      "default": "50vh"
+    },
+    "isFullScreen": {
+      "type": "boolean",
+      "default": false
+    },
+    "pauseOnHover": {
+      "type": "boolean",
+      "default": true
+    },
+    "pauseOnFocus": {
+      "type": "boolean",
+      "default": true
+    },
+    "pauseOnDotsHover": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableSpacing": {
+      "type": "boolean",
+      "default": true
+    },
+    "paddingX": {
+      "type": "string",
+      "default": "40px"
+    },
+    "paddingXMd": {
+      "type": "string",
+      "default": "40px"
+    },
+    "paddingXSm": {
+      "type": "string",
+      "default": "20px"
+    },
+    "paddingY": {
+      "type": "string",
+      "default": "40px"
+    },
+    "paddingYMd": {
+      "type": "string",
+      "default": "40px"
+    },
+    "paddingYSm": {
+      "type": "string",
+      "default": "20px"
+    },
+    "marginX": {
+      "type": "string",
+      "default": "0px"
+    },
+    "marginXMd": {
+      "type": "string",
+      "default": "0px"
+    },
+    "marginXSm": {
+      "type": "string",
+      "default": "0px"
+    },
+    "marginY": {
+      "type": "string",
+      "default": "0px"
+    },
+    "marginYMd": {
+      "type": "string",
+      "default": "0px"
+    },
+    "marginYSm": {
+      "type": "string",
+      "default": "0px"
+    },
+    "spacingX": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingY": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingXMobile": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingYMobile": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingXTablet": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingYTablet": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingXDesktop": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingYDesktop": {
+      "type": "number",
+      "default": 40
+    },
+    "spacingXUnit": {
+      "type": "string",
+      "default": "px"
+    },
+    "spacingYUnit": {
+      "type": "string",
+      "default": "px"
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "duration": {
+      "type": "number",
+      "default": 3
+    },
+    "fadeSpeed": {
+      "type": "number",
+      "default": 0.7
+    },
+    "arrows": {
+      "type": "boolean",
+      "default": true
+    },
+    "arrowsMd": {
+      "type": "boolean",
+      "default": true
+    },
+    "arrowsSm": {
+      "type": "boolean",
+      "default": true
+    },
+    "arrowSize": {
+      "type": "number",
+      "default": 30
+    },
+    "arrowSizeMd": {
+      "type": "number",
+      "default": 30
+    },
+    "arrowSizeSm": {
+      "type": "number",
+      "default": 30
+    },
+    "arrowColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "arrowStyle": {
+      "type": "string",
+      "default": "arrow-style-1"
+    },
+    "arrowBgColor": {
+      "type": "string",
+      "default": "transparent"
+    },
+    "arrowHoverColor": {
+      "type": "string",
+      "default": "#eeeeee"
+    },
+    "arrowBgHoverColor": {
+      "type": "string",
+      "default": "transparent"
+    },
+    "arrowXOffset": {
+      "type": "number",
+      "default": 10
+    },
+    "arrowXOffsetMd": {
+      "type": "number",
+      "default": 10
+    },
+    "arrowXOffsetSm": {
+      "type": "number",
+      "default": 10
+    },
+    "arrowYOffset": {
+      "type": "number",
+      "default": 0
+    },
+    "arrowYOffsetMd": {
+      "type": "number",
+      "default": 0
+    },
+    "arrowYOffsetSm": {
+      "type": "number",
+      "default": 0
+    },
+    "arrowPosition": {
+      "type": "string",
+      "default": "arrow-position-sides"
+    },
+    "arrowMixBlendMode": {
+      "type": "string",
+      "default": "none"
+    },
+    "dots": {
+      "type": "boolean",
+      "default": true
+    },
+    "dotsMd": {
+      "type": "boolean",
+      "default": true
+    },
+    "dotsSm": {
+      "type": "boolean",
+      "default": true
+    },
+    "dotSize": {
+      "type": "number",
+      "default": 25
+    },
+    "dotSizeMd": {
+      "type": "number",
+      "default": 25
+    },
+    "dotSizeSm": {
+      "type": "number",
+      "default": 25
+    },
+    "dotColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "dotStyle": {
+      "type": "string",
+      "default": "dot-style-1"
+    },
+    "dotPosition": {
+      "type": "string",
+      "default": "dot-position-bottom"
+    },
+    "hasParallax": {
+      "type": "boolean",
+      "default": false
+    },
+    "parallaxDirection": {
+      "type": "string",
+      "default": "down"
+    },
+    "parallaxAmount": {
+      "type": "number",
+      "default": 1.3
+    },
+    "overlayColor": {
+      "type": "string"
+    },
+    "dimRatio": {
+      "type": "number",
+      "default": 0.5
+    },
+    "rgbaBackground": {
+      "type": "string",
+      "default": ""
+    },
+    "textColor": {
+      "type": "string"
+    },
+    "mixBlendMode": {
+      "type": "string",
+      "default": "none"
+    },
+    "contentOpacity": {
+      "type": "number",
+      "default": 1
+    },
+    "verticalAlign": {
+      "type": "string",
+      "default": "center"
+    },
+    "loop": {
+      "type": "boolean",
+      "default": true
+    },
+    "visibleOnDesktop": {
+      "type": "boolean",
+      "default": true
+    },
+    "visibleOnTablet": {
+      "type": "boolean",
+      "default": true
+    },
+    "visibleOnMobile": {
+      "type": "boolean",
+      "default": true
+    },
+    "adaptiveHeight": {
+      "type": "boolean",
+      "default": false
+    },
+    "adaptiveHeightMd": {
+      "type": "boolean",
+      "default": false
+    },
+    "adaptiveHeightSm": {
+      "type": "boolean",
+      "default": false
+    },
+    "contentPosition": {
+      "type": "string",
+      "default": "center"
+    },
+    "autoCaption": {
+      "type": "string",
+      "default": "none"
+    },
+    "arrowXSpacing": {
+      "type": "number",
+      "default": 0
+    },
+    "zoom": {
+      "type": "boolean",
+      "default": false
+    },
+    "spaceBetween": {
+      "type": "number",
+      "default": 0
+    },
+    "spaceBetweenMd": {
+      "type": "number",
+      "default": 0
+    },
+    "spaceBetweenSm": {
+      "type": "number",
+      "default": 0
+    },
+    "centeredSlides": {
+      "type": "boolean",
+      "default": true
+    },
+    "dotType": {
+      "type": "string",
+      "default": "bullets"
+    },
+    "dotYOffset": {
+      "type": "number",
+      "default": 10
+    },
+    "dotYOffsetMd": {
+      "type": "number",
+      "default": 10
+    },
+    "dotYOffsetSm": {
+      "type": "number",
+      "default": 10
+    },
+    "isVertical": {
+      "type": "boolean",
+      "default": false
+    },
+    "hasLg": {
+      "type": "boolean",
+      "default": false
+    },
+    "lgTransition": {
+      "type": "string",
+      "default": "lg-slide"
+    },
+    "lgBgColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "lgFontColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "lgTitle": {
+      "type": "string",
+      "default": "none"
+    },
+    "lgCaption": {
+      "type": "string",
+      "default": "none"
+    },
+    "lgZoomIcon": {
+      "type": "boolean",
+      "default": true
+    },
+    "hasLgCounter": {
+      "type": "boolean",
+      "default": true
+    },
+    "lgThumbnails": {
+      "type": "boolean",
+      "default": true
+    },
+    "dividers": {
+      "type": "object",
+      "default": {
+        "top": {
+          "value": "none",
+          "inverted": false,
+          "flipY": false,
+          "color": "#fff",
+          "height": 60
+        },
+        "bottom": {
+          "value": "none",
+          "inverted": false,
+          "flipY": false,
+          "color": "#fff",
+          "height": 60
+        }
+      }
+    },
+    "keyboardNavigation": {
+      "type": "boolean",
+      "default": true
+    },
+    "hashNavigation": {
+      "type": "boolean",
+      "default": false
+    },
+    "hashId": {
+      "type": "string",
+      "default": ""
+    },
+    "arrowFollowMouse": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "anchor": true,
+    "align": true,
+    "html": false,
+    "spacing": {
+      "blockGap": {
+        "__experimentalDefault": "2em",
+        "sides": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "margin": [
+        "top",
+        "bottom"
+      ],
+      "padding": true,
+      "__experimentalDefaultControls": {
+        "padding": true,
+        "blockGap": true
+      }
+    },
+    "color": {
+      "__experimentalDuotone": "> .wp-block-cover__image-background, > .wp-block-cover__video-background",
+      "gradients": true,
+      "link": true,
+      "__experimentalDefaultControls": {
+        "background": true,
+        "text": true
+      }
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalFontFamily": true,
+      "__experimentalFontWeight": true,
+      "__experimentalFontStyle": true,
+      "__experimentalTextTransform": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalLetterSpacing": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true
+      }
+    }
+  }
+}

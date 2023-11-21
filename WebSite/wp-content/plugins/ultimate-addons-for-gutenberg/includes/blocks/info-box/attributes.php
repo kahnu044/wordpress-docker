@@ -25,6 +25,8 @@ return array_merge(
 		'prefixColor'                => '',
 		'prefixFontSize'             => '',
 		'prefixFontSizeType'         => 'px',
+		'prefixFontSizeTypeTablet'   => 'px',
+		'prefixFontSizeTypeMobile'   => 'px',
 		'prefixFontSizeTablet'       => '',
 		'prefixFontSizeMobile'       => '',
 		'prefixFontFamily'           => '',
@@ -37,6 +39,8 @@ return array_merge(
 		'prefixLoadGoogleFonts'      => false,
 		'headFontSize'               => '',
 		'headFontSizeType'           => 'px',
+		'headFontSizeTypeTablet'     => 'px',
+		'headFontSizeTypeMobile'     => 'px',
 		'headFontSizeTablet'         => '',
 		'headFontSizeMobile'         => '',
 		'headFontFamily'             => '',
@@ -49,6 +53,8 @@ return array_merge(
 		'headLoadGoogleFonts'        => false,
 		'subHeadFontSize'            => '',
 		'subHeadFontSizeType'        => 'px',
+		'subHeadFontSizeTypeTablet'  => 'px',
+		'subHeadFontSizeTypeMobile'  => 'px',
 		'subHeadFontSizeTablet'      => '',
 		'subHeadFontSizeMobile'      => '',
 		'subHeadFontFamily'          => '',
@@ -263,6 +269,10 @@ return array_merge(
 		'ctaBorderWidth'             => 1,
 		'ctaBorderRadius'            => 0,
 		'ctaBorderhoverColor'        => '',
+
+		// For Global Block Styles.
+		'globalBlockStyleName'       => '',
+		'globalBlockStyleId'         => '',
 	),
 	$cta_border_attribute
 );

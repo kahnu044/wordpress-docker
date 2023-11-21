@@ -4,72 +4,71 @@ namespace EssentialBlocks\Integrations;
 
 use EssentialBlocks\Utils\HttpRequest;
 
-class GoogleMap extends ThirdPartyIntegration
-{
-    public function __construct()
-    {
-        $this->add_ajax([
-            'google_map_api_key' => [
-                'callback' => 'google_map_api_key_callback',
-                'public'   => true
-            ],
-            'google_map_api_key_save' => [
-                'callback' => 'google_map_api_key_save_callback',
-                'public'   => false
-            ],
-        ]);
-    }
+class GoogleMap extends ThirdPartyIntegration {
 
-    /**
-     * Get Google Map API
-     */
-    public function google_map_api_key_callback()
-    {
-        if (!wp_verify_nonce($_POST['admin_nonce'], 'admin-nonce')) {
-            die(__('Nonce did not match', 'essential-blocks'));
-        }
+	public function __construct() {
+		$this->add_ajax(
+			array(
+				'google_map_api_key'      => array(
+					'callback' => 'google_map_api_key_callback',
+					'public'   => true,
+				),
+				'google_map_api_key_save' => array(
+					'callback' => 'google_map_api_key_save_callback',
+					'public'   => false,
+				),
+			)
+		);
+	}
 
-        $settings = get_option('eb_settings');
+	/**
+	 * Get Google Map API
+	 */
+	public function google_map_api_key_callback() {
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
+			die(esc_html__( 'Nonce did not match', 'essential-blocks' ) );
+		}
 
-        if (is_array($settings) && isset($settings['googleMapApi'])) {
-            wp_send_json_success($settings['googleMapApi']);
-        } else {
-            wp_send_json_error("Couldn't found data");
-        }
-        exit;
-    }
+		$settings = get_option( 'eb_settings' );
 
-    /**
-     * Google Map API key save callback
-     */
-    public function google_map_api_key_save_callback()
-    {
-        if (!wp_verify_nonce($_POST['admin_nonce'], 'admin-nonce')) {
-            die(__('Nonce did not match', 'essential-blocks'));
-        }
-        if (!current_user_can('edit_posts')) {
-            wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
-        }
+		if ( is_array( $settings ) && isset( $settings['googleMapApi'] ) ) {
+			wp_send_json_success( $settings['googleMapApi'] );
+		} else {
+			wp_send_json_error( "Couldn't found data" );
+		}
+		exit;
+	}
 
-        $api = "";
-        if (isset($_POST['googleMapApi'])) {
-            $api = trim($_POST['googleMapApi']);
-        }
+	/**
+	 * Google Map API key save callback
+	 */
+	public function google_map_api_key_save_callback() {
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
+			die(esc_html__( 'Nonce did not match', 'essential-blocks' ) );
+		}
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
+		}
 
-        $settings = is_array(get_option('eb_settings')) ? get_option('eb_settings') : [];
-        if (strlen($api) === 0) {
-            unset($settings['googleMapApi']);
-        } else {
-            $settings['googleMapApi'] = $api;
-        }
+		$api = '';
+		if ( isset( $_POST['googleMapApi'] ) ) {
+			$api = trim( sanitize_text_field( $_POST['googleMapApi'] ) );
+		}
 
-        if (is_array($settings) > 0) {
-            $output = update_option('eb_settings', $settings);
-            wp_send_json_success($output);
-        } else {
-            wp_send_json_error("Couldn't save data");
-        }
+		$settings = is_array( get_option( 'eb_settings' ) ) ? get_option( 'eb_settings' ) : array();
+		if ( strlen( $api ) === 0 ) {
+			unset( $settings['googleMapApi'] );
+		} else {
+			$settings['googleMapApi'] = $api;
+		}
 
-        exit;
-    }
+		if ( is_array( $settings ) > 0 ) {
+			$output = update_option( 'eb_settings', $settings );
+			wp_send_json_success( $output );
+		} else {
+			wp_send_json_error( "Couldn't save data" );
+		}
+
+		exit;
+	}
 }

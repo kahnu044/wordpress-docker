@@ -6,7 +6,7 @@ export const OpenverseIcon = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_1546_12)">
+    <g clipPath="url(#clip0_1546_12)">
       <path
         d="M6.25 7.5C6.94036 7.5 7.5 6.94036 7.5 6.25C7.5 5.55964 6.94036 5 6.25 5C5.55964 5 5 5.55964 5 6.25C5 6.94036 5.55964 7.5 6.25 7.5Z"
         fill="url(#paint0_linear_1546_12)"

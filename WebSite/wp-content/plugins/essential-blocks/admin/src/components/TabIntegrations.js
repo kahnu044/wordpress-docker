@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { __ } from "@wordpress/i18n";
 
-import { installPlugin } from "./helpers/installPlugins";
-
 import betterDocs from "../icons/intregrations/bd.svg";
 import betterlinks from "../icons/intregrations/btl.svg";
 import easyjobs from "../icons/intregrations/ej.svg";
@@ -11,6 +9,8 @@ import notificationx from "../icons/intregrations/nx.svg";
 import reviewx from "../icons/intregrations/rx.svg";
 import scheduledPress from "../icons/intregrations/wscp.svg";
 import essentialAddons from "../icons/intregrations/ea.svg";
+
+const {installPlugin} = window.EBControls;
 
 const integrations = [
     {
@@ -86,7 +86,7 @@ const integrations = [
     {
         slug: "essential-addons-for-elementor-lite",
         basename:
-            "essential-addons-for-elementor-lite/essential-addons-for-elementor-lite.php",
+            "essential-addons-for-elementor-lite/essential_adons_elementor.php",
         logo: essentialAddons,
         title: "Essential Addons for Elementor",
         desc: __(

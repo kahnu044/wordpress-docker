@@ -4,9 +4,9 @@ namespace WPGraphQL\Data;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
-use WP_Post_Type;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
+use WP_Post_Type;
 
 /**
  * Class PostObjectMutation
@@ -18,16 +18,14 @@ class PostObjectMutation {
 	/**
 	 * This handles inserting the post object
 	 *
-	 * @param array        $input             The input for the mutation
-	 * @param \WP_Post_Type $post_type_object The post_type_object for the type of post being
- * mutated
-	 * @param string       $mutation_name     The name of the mutation being performed
+	 * @param array<string,mixed> $input            The input for the mutation
+	 * @param \WP_Post_Type       $post_type_object The post_type_object for the type of post being mutated
+	 * @param string              $mutation_name    The name of the mutation being performed
 	 *
-	 * @return array $insert_post_args
+	 * @return array<string,mixed>
 	 * @throws \Exception
 	 */
 	public static function prepare_post_object( $input, $post_type_object, $mutation_name ) {
-
 		$insert_post_args = [];
 
 		/**
@@ -117,26 +115,20 @@ class PostObjectMutation {
 		 * Return the $args
 		 */
 		return $insert_post_args;
-
 	}
 
 	/**
 	 * This updates additional data related to a post object, such as postmeta, term relationships,
 	 * etc.
 	 *
-	 * @param int          $post_id               $post_id      The ID of the postObject being
-	 *                                            mutated
-	 * @param array        $input                 The input for the mutation
-	 * @param \WP_Post_Type $post_type_object The Post Type Object for the type of post being
- * mutated
-	 * @param string       $mutation_name         The name of the mutation (ex: create, update,
-	 *                                            delete)
-	 * @param \WPGraphQL\AppContext $context The AppContext passed down to all resolvers
-	 * @param \GraphQL\Type\Definition\ResolveInfo $info The ResolveInfo passed down to all resolvers
-	 * @param string       $intended_post_status  The intended post_status the post should have
-	 *                                            according to the mutation input
-	 * @param string       $default_post_status   The default status posts should use if an
-	 *                                            intended status wasn't set
+	 * @param int                                  $post_id              The ID of the postObject being mutated
+	 * @param array<string,mixed>                  $input                The input for the mutation
+	 * @param \WP_Post_Type                        $post_type_object     The Post Type Object for the type of post being mutated
+	 * @param string                               $mutation_name        The name of the mutation (ex: create, update, delete)
+	 * @param \WPGraphQL\AppContext                $context              The AppContext passed down to all resolvers
+	 * @param \GraphQL\Type\Definition\ResolveInfo $info                 The ResolveInfo passed down to all resolvers
+	 * @param string                               $default_post_status  The default status posts should use if an intended status wasn't set
+	 * @param string                               $intended_post_status The intended post_status the post should have according to the mutation input
 	 *
 	 * @return void
 	 */
@@ -223,18 +215,16 @@ class PostObjectMutation {
 			 */
 			self::remove_edit_lock( $post_id );
 		}
-
 	}
 
 	/**
 	 * Given a $post_id and $input from the mutation, check to see if any term associations are
 	 * being made, and properly set the relationships
 	 *
-	 * @param int          $post_id           The ID of the postObject being mutated
-	 * @param array        $input             The input for the mutation
-	 * @param \WP_Post_Type $post_type_object The Post Type Object for the type of post being
- * mutated
-	 * @param string       $mutation_name     The name of the mutation (ex: create, update, delete)
+	 * @param int                 $post_id           The ID of the postObject being mutated
+	 * @param array<string,mixed> $input             The input for the mutation
+	 * @param \WP_Post_Type       $post_type_object The Post Type Object for the type of post being mutated
+	 * @param string              $mutation_name     The name of the mutation (ex: create, update, delete)
 	 *
 	 * @return void
 	 */
@@ -270,13 +260,12 @@ class PostObjectMutation {
 				 * If there is input for the taxonomy, process it
 				 */
 				if ( isset( $input[ lcfirst( $tax_object->graphql_plural_name ) ] ) ) {
-
 					$term_input = $input[ lcfirst( $tax_object->graphql_plural_name ) ];
 
 					/**
 					 * Default append to true, but allow input to set it to false.
 					 */
-					$append = isset( $term_input['append'] ) && false === $term_input['append'] ? false : true;
+					$append = ! isset( $term_input['append'] ) || false !== $term_input['append'];
 
 					/**
 					 * Start an array of terms to connect
@@ -300,18 +289,14 @@ class PostObjectMutation {
 					 * If there are nodes in the term_input
 					 */
 					if ( ! empty( $term_input['nodes'] ) && is_array( $term_input['nodes'] ) ) {
-
 						foreach ( $term_input['nodes'] as $node ) {
-
 							$term_exists = false;
 
 							/**
 							 * Handle the input for ID first.
 							 */
 							if ( ! empty( $node['id'] ) ) {
-
 								if ( ! absint( $node['id'] ) ) {
-
 									$id_parts = Relay::fromGlobalId( $node['id'] );
 
 									if ( ! empty( $id_parts['id'] ) ) {
@@ -373,7 +358,6 @@ class PostObjectMutation {
 					}
 
 					wp_set_object_terms( $post_id, $terms_to_connect, $tax_object->name, $append );
-
 				}
 			}
 		}
@@ -383,13 +367,12 @@ class PostObjectMutation {
 	 * Given an array of Term properties (slug, name, description, etc), create the term and return
 	 * a term_id
 	 *
-	 * @param array  $node     The node input for the term
-	 * @param string $taxonomy The taxonomy the term input is for
+	 * @param array<string,mixed> $node     The node input for the term
+	 * @param string              $taxonomy The taxonomy the term input is for
 	 *
 	 * @return int $term_id The ID of the created term. 0 if no term was created.
 	 */
 	protected static function create_term_to_connect( $node, $taxonomy ) {
-
 		$created_term   = [];
 		$term_to_create = [];
 		$term_args      = [];
@@ -417,20 +400,17 @@ class PostObjectMutation {
 		}
 
 		if ( is_wp_error( $created_term ) ) {
-
 			if ( isset( $created_term->error_data['term_exists'] ) ) {
 				return $created_term->error_data['term_exists'];
 			}
 
 			return 0;
-
 		}
 
 		/**
 		 * Return the created term, or 0
 		 */
 		return isset( $created_term['term_id'] ) ? absint( $created_term['term_id'] ) : 0;
-
 	}
 
 	/**
@@ -441,11 +421,10 @@ class PostObjectMutation {
 	 *
 	 * @param int $post_id ID of the post being edited.
 	 *
-	 * @return array|false Array of the lock time and user ID. False if the post does not exist, or
+	 * @return int[]|false Array of the lock time and user ID. False if the post does not exist, or
 	 *                     there is no current user.
 	 */
 	public static function set_edit_lock( $post_id ) {
-
 		$post    = get_post( $post_id );
 		$user_id = get_current_user_id();
 
@@ -462,7 +441,6 @@ class PostObjectMutation {
 		update_post_meta( $post->ID, '_edit_lock', $lock );
 
 		return [ $now, $user_id ];
-
 	}
 
 	/**
@@ -473,7 +451,6 @@ class PostObjectMutation {
 	 * @return bool
 	 */
 	public static function remove_edit_lock( int $post_id ) {
-
 		$post = get_post( $post_id );
 
 		if ( empty( $post ) ) {
@@ -481,14 +458,13 @@ class PostObjectMutation {
 		}
 
 		return delete_post_meta( $post->ID, '_edit_lock' );
-
 	}
 
 	/**
 	 * Check the edit lock for a post
 	 *
-	 * @param false|int     $post_id ID of the post to delete the lock for
-	 * @param array      $input             The input for the mutation
+	 * @param false|int           $post_id ID of the post to delete the lock for
+	 * @param array<string,mixed> $input             The input for the mutation
 	 *
 	 * @return false|int Return false if no lock or the user_id of the owner of the lock
 	 */
@@ -510,5 +486,4 @@ class PostObjectMutation {
 
 		return false;
 	}
-
 }

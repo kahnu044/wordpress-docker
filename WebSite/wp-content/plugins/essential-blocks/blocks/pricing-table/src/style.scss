@@ -35,9 +35,11 @@
 }
 
 .eb-pricing .eb-pricing-button {
+	display: inline-block;
 	padding: 12px 25px;
 	background: #00c853;
 	font-size: 14px;
+	line-height: 16px;
 	font-weight: 600;
 	color: #fff;
 	text-transform: uppercase;
@@ -929,7 +931,8 @@
 		transition: 0.5s;
 
 		&:hover {
-			box-shadow: 0 14px 28px rgb(0 0 0 / 25%), 0 10px 10px rgb(0 0 0 / 22%);
+			box-shadow: 0 14px 28px rgb(0 0 0 / 25%),
+				0 10px 10px rgb(0 0 0 / 22%);
 		}
 
 		// ribbon

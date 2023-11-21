@@ -112,6 +112,7 @@ export default function Edit(props) {
             select,
             clientId,
         });
+
     }, []);
 
     const blockProps = useBlockProps({
@@ -736,9 +737,7 @@ export default function Edit(props) {
                                                 },
                                             });
                                         }}
-                                        // playIcon="<img href='http://localhost:10033/wp-content/uploads/2022/04/scroll-demo-icon.svg' />"
                                         className="eb-react-player"
-                                        // playing
                                         width="100%"
                                         height="100%"
                                     />

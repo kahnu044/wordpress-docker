@@ -164,12 +164,7 @@ export default function Edit(props) {
         });
 
         //
-        if (
-            // imageUrl ===
-            // "../wp-content/plugins/essential-blocks/assets/images/user.jpg"
-            /essential\-blocks.assets\/images\/user\.jpg/gi.test(
-                imageUrl || " "
-            )
+        if (/essential\-blocks.assets\/images\/user\.jpg/gi.test(imageUrl || " ")
         ) {
             setAttributes({
                 imageUrl: `${EssentialBlocksLocalize.eb_plugins_url}assets/images/user.jpg`,

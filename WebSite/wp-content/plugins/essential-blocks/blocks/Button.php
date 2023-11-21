@@ -4,13 +4,14 @@ namespace EssentialBlocks\blocks;
 use EssentialBlocks\Core\Block;
 
 class Button extends Block {
-    protected $frontend_styles  = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome', 'essential-blocks-hover-css'];
+	protected $frontend_styles = array( 'essential-blocks-frontend-style', 'essential-blocks-fontawesome', 'essential-blocks-hover-css' );
 
 	/**
-     * Unique name of the block.
+	 * Unique name of the block.
+	 *
 	 * @return string
 	 */
-    public function get_name(){
-        return 'button';
-    }
+	public function get_name() {
+		return 'button';
+	}
 }

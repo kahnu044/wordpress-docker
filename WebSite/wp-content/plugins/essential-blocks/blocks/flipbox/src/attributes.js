@@ -249,6 +249,14 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    flipMode: {
+        type: "string",
+        default: "hover",
+    },
+    isMouseLeaveOn: {
+        type: "boolean",
+        default: true,
+    },
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(prefixObjs)),
     // margin padding attributes ⬇

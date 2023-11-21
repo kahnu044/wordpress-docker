@@ -14,6 +14,45 @@ document.addEventListener("DOMContentLoaded", function (event) {
             titleNodes.push(item.querySelector(".eb-accordion-title-wrapper"));
         });
 
+        titleNodes.forEach(function (item, index) {
+            let uniqueId = Math.random().toString(36).substr(2, 7);
+            item.setAttribute("id", "eb-accordion-header-" + uniqueId);
+            item.setAttribute(
+                "aria-controls",
+                "eb-accordion-panel-" + uniqueId
+            );
+            item.setAttribute("aria-expanded", false);
+            item.setAttribute("role", "button");
+            let contentWrapper = item.nextElementSibling;
+            contentWrapper.setAttribute("id", "eb-accordion-panel-" + uniqueId);
+            contentWrapper.setAttribute(
+                "aria-labelledby",
+                "eb-accordion-header-" + uniqueId
+            );
+            contentWrapper.setAttribute("role", "region");
+            item.addEventListener("keydown", function (event) {
+                let key = event.which.toString();
+                let ctrlModifier = event.ctrlKey && key.match(/33|34/);
+                if (key.match(/38|40/) || ctrlModifier) {
+                    let direction = key.match(/34|40/) ? 1 : -1;
+                    let length = titleNodes.length;
+                    let newIndex = (index + length + direction) % length;
+                    titleNodes[newIndex].focus();
+                    event.preventDefault();
+                } else if (key.match(/35|36/)) {
+                    switch (key) {
+                        case "36":
+                            titleNodes[0].focus();
+                            break;
+                        case "35":
+                            titleNodes[titleNodes.length - 1].focus();
+                            break;
+                    }
+                    event.preventDefault();
+                }
+            });
+        });
+
         let contentNodes = [];
         Array.from(accordionWrapper).forEach(function (item) {
             contentNodes.push(
@@ -99,6 +138,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                 (function (selectedTab) {
                     selectedTab.addEventListener("click", onToggleTabClick);
+                    selectedTab.addEventListener("keydown", function (event) {
+                        if (event.key === " " || event.key === "Enter") {
+                            event.preventDefault();
+                            onToggleTabClick.call(selectedTab);
+                        }
+                    });
                 })(selectedTab);
             }
         }
@@ -113,10 +158,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
             if (isCollapsed) {
                 expandSection(contentNode);
                 contentNode.setAttribute("data-collapsed", "false");
+                clickedTab.setAttribute("aria-expanded", "true");
                 clickedTab.parentElement.classList.remove(hide);
             } else {
                 collapseSection(contentNode);
                 contentNode.setAttribute("data-collapsed", "true");
+                clickedTab.setAttribute("aria-expanded", "false");
                 clickedTab.parentElement.classList.add(hide);
             }
             // Change tab icon
@@ -129,13 +176,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 let selectedTab = titleNodes[i];
                 (function (selectedTab) {
                     selectedTab.addEventListener("click", onAccordionTabClick);
+                    selectedTab.addEventListener("keydown", function (event) {
+                        if (event.key === " " || event.key === "Enter") {
+                            event.preventDefault();
+                            onAccordionTabClick.call(selectedTab);
+                        }
+                    });
                 })(selectedTab);
             }
         }
 
         function onAccordionTabClick() {
             let clickedTab = this;
-            console.log("clickTab", accordionWrapper);
             Array.from(accordionWrapper).forEach((item) => {
                 item.classList.add(hide);
             });
@@ -147,10 +199,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
             if (isCollapsed) {
                 expandSection(contentNode);
                 contentNode.setAttribute("data-collapsed", "false");
+                clickedTab.setAttribute("aria-expanded", "true");
                 clickedTab.parentElement.classList.remove(hide);
             } else {
                 collapseSection(contentNode);
                 contentNode.setAttribute("data-collapsed", "true");
+                clickedTab.setAttribute("aria-expanded", "false");
                 changeIcon(clickedTab);
                 clickedTab.parentElement.classList.add(hide);
             }

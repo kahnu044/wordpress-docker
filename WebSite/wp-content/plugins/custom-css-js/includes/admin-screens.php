@@ -1341,7 +1341,7 @@ endif;
 			}
 
 			// Mark to enqueue the jQuery library, if necessary
-			if ( $options['language'] === 'js' ) {
+			if ( $options['language'] === 'js' && strstr( $options['side'], 'frontend' ) ) {
 				$_post->post_content = preg_replace( '@/\* Add your JavaScript code here[\s\S]*?End of comment \*/@im', '/* Default comment here */', $_post->post_content );
 				if ( preg_match( '/jquery\s*(\(|\.)/i', $_post->post_content ) && ! isset( $tree['jquery'] ) ) {
 					$tree['jquery'] = true;

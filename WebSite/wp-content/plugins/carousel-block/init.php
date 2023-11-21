@@ -16,11 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enqueue block editor JavaScript and CSS.
  */
 function carousel_block_editor_assets() {
+	$dependencies = [ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components' ];
+
+	// Conditionally enqueue 'wp-editor' to avoid conflicts on the widgets and customizer screens
+	if ( function_exists( 'get_current_screen' ) ) {
+		$screen = get_current_screen();
+		if ( $screen && $screen->base !== 'widgets' && $screen->base !== 'customize' ) {
+			$dependencies[] = 'wp-editor';
+		}
+	}
+
 	// Register block editor script for backend.
 	wp_enqueue_script(
 		'carousel-block-editor',
 		plugins_url( '/dist/blocks.build.js', __FILE__ ),
-		[ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ],
+		$dependencies,
 		filemtime( CB_PLUGIN_DIR . '/dist/blocks.build.js' ),
 		true
 	);

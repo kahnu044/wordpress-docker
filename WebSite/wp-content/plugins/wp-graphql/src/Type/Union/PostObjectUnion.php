@@ -2,7 +2,6 @@
 
 namespace WPGraphQL\Type\Union;
 
-use Exception;
 use WPGraphQL\Registry\TypeRegistry;
 
 /**
@@ -18,7 +17,6 @@ class PostObjectUnion {
 	 *
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry
 	 *
-	 * @return void
 	 * @throws \Exception
 	 */
 	public static function register_type( TypeRegistry $type_registry ): void {
@@ -28,7 +26,7 @@ class PostObjectUnion {
 				'name'        => 'PostObjectUnion',
 				'typeNames'   => self::get_possible_types(),
 				'description' => __( 'Union between the post, page and media item types', 'wp-graphql' ),
-				'resolveType' => function ( $value ) use ( $type_registry ) {
+				'resolveType' => static function ( $value ) use ( $type_registry ) {
 					_doing_it_wrong( 'PostObjectUnion', esc_attr__( 'The PostObjectUnion GraphQL type is deprecated. Use the ContentNode interface instead.', 'wp-graphql' ), '1.14.1' );
 
 					$type = null;
@@ -48,7 +46,7 @@ class PostObjectUnion {
 	/**
 	 * Returns a list of possible types for the union
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public static function get_possible_types() {
 		$possible_types = [];

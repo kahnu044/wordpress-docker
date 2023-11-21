@@ -85,6 +85,7 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
         $bg['backgroundVideoSize']       = isset($bg['backgroundVideoSize']) ? esc_attr( $bg['backgroundVideoSize'] ): 'cover';
         $bg['backgroundVideo']           = isset($bg['backgroundVideo']) ? $bg['backgroundVideo']: array();
         $bg['backgroundVideoLoop']       = isset($bg['backgroundVideoLoop']) ? esc_attr( $bg['backgroundVideoLoop'] ): true;
+        $bg['backgroundVideoPauseWhenInactive']       = isset($bg['backgroundVideoPauseWhenInactive']) ? esc_attr( $bg['backgroundVideoPauseWhenInactive'] ): true;
         $bg['backgroundVideoMuted']      = isset($bg['backgroundVideoMuted']) ? esc_attr( $bg['backgroundVideoMuted'] ): true;
         $bg['backgroundOverlayImage']    = isset($bg['backgroundOverlayImage']) ? esc_attr( $bg['backgroundOverlayImage'] ): '';
         $bg['backgroundOverlayVideo']    = isset($bg['backgroundOverlayVideo']) ? esc_attr( $bg['backgroundOverlayVideo'] ): '';
@@ -185,13 +186,22 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
             );
 
             $image_class = sprintf(
-                'swiper-lazy wp-image-%1$s',
+                'wp-image-%1$s',
                 esc_attr($bg['backgroundImage']['id'])
             );
 
-            $image_srcset = wp_get_attachment_image_srcset(
-                $bg['backgroundImage']['id']
-            );
+			$image_srcset_type = isset( $attr['fetchPriority'] ) && $attr['fetchPriority'] ? 'srcset' : 'srcset';
+            $image_srcset = sprintf(
+				' %1$s="%2$s"',
+				$image_srcset_type,
+				wp_get_attachment_image_srcset(
+					$bg['backgroundImage']['id']
+				)
+			);
+
+
+
+
             $image_sizes  = wp_get_attachment_image_sizes(
                 $bg['backgroundImage']['id'], false
             );
@@ -200,9 +210,27 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
                 'medium'
             );
 
-			if ( isset( $medium_src ) && is_array( $medium_src ) ) {
+			$fetch_priority = '';
+			if (isset($attr['fetchPriority']) && $attr['fetchPriority']) {
+				$fetch_priority = 'fetchpriority="high" ';
+			}
+
+			$image_small_source = '';
+
+			if ( isset( $medium_src ) ) {
 				$image_width = $medium_src[1];
 				$image_height = $medium_src[2];
+				$thumb_src = wp_get_attachment_image_src(
+					$bg['backgroundImage']['id'],
+					'medium'
+				);
+				if ( is_array($thumb_src) && array_key_exists( 3, $thumb_src ) && ! $thumb_src[3] ) {
+					$thumb_src = wp_get_attachment_image_src(
+						$bg['backgroundImage']['id'],
+						'thumbnail'
+					);
+				}
+				$image_small_source = sprintf(' src="%1$s"', $thumb_src[0]);
 			}
 
 			$background_style .= sprintf(
@@ -233,7 +261,7 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
             // data-... attributes so we construct them manually ...
             //
             $background_content = sprintf(
-                '<img class="%1$s" src="%2$s" alt="%3$s" style="%4$s" %5$s />',
+                '<img class="%1$s" src="%2$s" alt="%3$s" decoding="async" style="%4$s" %5$s />',
                 $image_class,
                 esc_url($bg['backgroundImage']['url']),
                 esc_attr($bg['backgroundImage']['alt']),
@@ -243,22 +271,31 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
 
             // $background_content = sprintf(
             //     '<img class="%1$s" alt="%2$s" style="%3$s"' .
-            //     ' data-srcset="%4$s" data-sizes="%5$s" ' .
-            //     ' width="%6$spx" height="%7$spx"/>',
+            //     ' %4$s' .
+			// 	'%8$s' .
+			// 	'%9$s' .
+            //     ' />',
             //     $image_class,
             //     esc_attr($bg['backgroundImage']['alt']),
             //     $image_style,
             //     $image_srcset,
             //     $image_sizes,
             //     $medium_src[1],
-            //     $medium_src[2]
+            //     $medium_src[2],
+			// 	$image_small_source,
+			// 	$fetch_priority
             // );
         } elseif ((( 'video' === $bg['backgroundType'] )
             || ( 'color' === $bg['backgroundType'] && 'color' === $bg['backgroundOverlayVideo'] )
             || ( 'gradient' === $bg['backgroundType'] && 'gradient' === $bg['backgroundOverlayVideo'] ))
             && isset($bg['backgroundVideo']['url'])
         ) {
+            $video_classes="";
             $background_classes .= ' bg-video';
+
+            if (isset($bg['backgroundVideoPauseWhenInactive']) && $bg['backgroundVideoPauseWhenInactive']) {
+                $video_classes .= 'bg-video-autopause';
+            }
 
             $poster = '';
             if (isset($bg['backgroundImage']) && isset($bg['backgroundImage']['url'])) {
@@ -284,8 +321,8 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
             $video_type = $bg['backgroundVideo']['mime'] ?? 'video/mp4';
 
             $background_content = sprintf(
-                '<video src="%1$s" class="swiper-lazy" type="%6$s" autoplay playsinline %2$s %3$s'
-                . ' poster="%4$s" style="%5$s" width="%7$s" height="%8$s"></video>',
+                '<video src="%1$s" type="%6$s" autoplay playsinline %2$s %3$s'
+                . ' poster="%4$s" style="%5$s" width="%7$s" height="%8$s" class="%9$s"></video>',
                 esc_url($bg['backgroundVideo']['url']),
                 esc_attr($bg['backgroundVideoLoop']) ? 'loop' : '',
                 esc_attr($bg['backgroundVideoMuted']) ? 'muted' : '',
@@ -293,7 +330,8 @@ if ( ! function_exists( 'eedee_gutenslide_dynamic_render_callback' ) ) {
                 $video_style,
                 $video_type,
                 $video_width,
-                $video_height
+                $video_height,
+                $video_classes
             );
         }
 

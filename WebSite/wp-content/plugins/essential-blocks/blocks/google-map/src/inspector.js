@@ -4,9 +4,12 @@
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState, useRef } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
+import { applyFilters } from "@wordpress/hooks";
 import {
     PanelBody,
     SelectControl,
+    BaseControl,
+    ButtonGroup,
     Button,
     TabPanel,
     RangeControl,
@@ -23,6 +26,9 @@ import {
     wrapPaddingConst,
     WrpBgConst,
     WrpBdShadowConst,
+    GOOGLE_MAP_STYLES_NAMES,
+    SNAZZY_MAP_STYLES_NAMES,
+    THEME_SOURCES,
 } from "./constants";
 import {
     typoPrefix_title,
@@ -41,9 +47,6 @@ const {
 const Inspector = ({ attributes, setAttributes, map }) => {
     const {
         resOption,
-        searchAddress,
-        latitude,
-        longitude,
         mapType,
         mapZoom,
         mapHeight,
@@ -52,6 +55,9 @@ const Inspector = ({ attributes, setAttributes, map }) => {
         titleHoverColor,
         descColor,
         imageSize,
+        googleMapStyle,
+        snazzyMapStyle,
+        themeSource,
     } = attributes;
 
     const resRequiredProps = {
@@ -331,6 +337,78 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                             max={200}
                                             allowReset={true}
                                         />
+                                        <Divider />
+
+                                        <BaseControl
+                                            label={__(
+                                                "Theme Source",
+                                                "essential-blocks"
+                                            )}
+                                            id="eb-advance-heading-alignment"
+                                        >
+                                            <ButtonGroup id="eb-advance-heading-alignment">
+                                                {THEME_SOURCES.map(
+                                                    (item, key) => (
+                                                        <Button
+                                                            key={key}
+                                                            // isLarge
+                                                            isPrimary={
+                                                                themeSource ===
+                                                                item.value
+                                                            }
+                                                            isSecondary={
+                                                                themeSource !==
+                                                                item.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    themeSource:
+                                                                        item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
+                                        {"google_theme" === themeSource && (
+                                            <SelectControl
+                                                label={__(
+                                                    "Google Themes",
+                                                    "essential-blocks"
+                                                )}
+                                                value={googleMapStyle}
+                                                options={applyFilters(
+                                                    "eb_google_theme_style",
+                                                    GOOGLE_MAP_STYLES_NAMES
+                                                )}
+                                                onChange={(newGoogleMapStyle) =>
+                                                    setAttributes({
+                                                        googleMapStyle: newGoogleMapStyle,
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                        {"snazzy_theme" === themeSource && (
+                                            <SelectControl
+                                                label={__(
+                                                    "Snazzy Themes",
+                                                    "essential-blocks"
+                                                )}
+                                                value={snazzyMapStyle}
+                                                options={applyFilters(
+                                                    "eb_snazzy_theme_style",
+                                                    SNAZZY_MAP_STYLES_NAMES
+                                                )}
+                                                onChange={(newSnazzyMapStyle) =>
+                                                    setAttributes({
+                                                        snazzyMapStyle: newSnazzyMapStyle,
+                                                    })
+                                                }
+                                            />
+                                        )}
                                     </PanelBody>
                                 </>
                             )}

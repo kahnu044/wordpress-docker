@@ -7,22 +7,27 @@ use WP_Query;
 use EssentialBlocks\Utils\Helper;
 
 class Product extends Base {
+    private $sampleData = [];
     /**
      * Register REST Routes
+     *
      * @return void
      */
     public function register() {
-        $this->get( 'products', [
-            'args'     => [
-                'order_by'   => [],
-                "order"      => [],
-                "per_page"   => [],
-                "offset"     => [],
-                "categories" => [],
-                "tags"       => []
-            ],
-            'callback' => [$this, 'get_products']
-        ] );
+        $this->get(
+            'products',
+            [
+                'args'     => [
+                    'order_by'   => [],
+                    'order'      => [],
+                    'per_page'   => [],
+                    'offset'     => [],
+                    'categories' => [],
+                    'tags'       => []
+                ],
+                'callback' => [$this, 'get_products']
+            ]
+        );
     }
 
     public static function __callStatic( $name, $arguments = [] ) {
@@ -33,17 +38,18 @@ class Product extends Base {
 
     /**
      * Get a list of WooCommerce products
+     *
      * @param mixed $request
      * @param mixed $local
-     * @return array<array>
+     * @return array|false|string|WP_Error
      *
      * @suppress PHP0417
      */
     public function get_products( $request, $local = false ) {
         $data       = [];
-        $query_data = maybe_unserialize( $request->get_param( 'query_data' ) );
-        $query_data = is_array( $query_data ) ? $query_data : [];
-        $pageNumber = (int) $request['pageNumber'] - 1;
+        $query_data = ! empty( $request->get_param( 'query_data' ) ) ? json_decode( $request->get_param( 'query_data' ) ) : [];
+        $query_data = ( is_object( $query_data ) || is_array( $query_data ) ) ? (array) $query_data : [];
+        $pageNumber = (int) sanitize_text_field( $request['pageNumber'] ) - 1;
 
         $_is_frontend = true;
 
@@ -58,8 +64,28 @@ class Product extends Base {
 
         $loop = new WP_Query( $this->query_builder( $query_data ) );
 
-        $attributes = $_is_frontend ? maybe_unserialize( $request->get_param( 'attributes' ) ) : [];
-        $attributes = ! empty( $attributes ) ? $attributes : [];
+        $attributes = $_is_frontend ? json_decode( $request->get_param( 'attributes' ) ) : [];
+        $attributes = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [];
+
+        $isCustomCartBtn  = isset( $attributes['isCustomCartBtn'] ) ? $attributes['isCustomCartBtn'] : false;
+        $simpleCartText   = isset( $attributes['simpleCartText'] ) ? $attributes['simpleCartText'] : 'Buy Now';
+        $variableCartText = isset( $attributes['variableCartText'] ) ? $attributes['variableCartText'] : 'Select Options';
+        $groupedCartText  = isset( $attributes['groupedCartText'] ) ? $attributes['groupedCartText'] : 'View Products';
+        $externalCartText = isset( $attributes['externalCartText'] ) ? $attributes['externalCartText'] : 'Buy Now';
+        $defaultCartText  = isset( $attributes['defaultCartText'] ) ? $attributes['defaultCartText'] : 'Read More';
+
+        $this->sampleData = [
+            $simpleCartText,
+            $variableCartText,
+            $groupedCartText,
+            $externalCartText,
+            $defaultCartText
+        ];
+        if ( $_is_frontend && $isCustomCartBtn ) {
+            // change the cart button text according to editor change
+            add_filter( 'woocommerce_product_add_to_cart_text', [$this, 'eb_change_cart_button_text'], 10, 1 );
+        }
+
         if ( $loop->have_posts() ) {
             if ( $_is_frontend ) {
                 ob_start();
@@ -74,8 +100,8 @@ class Product extends Base {
                 $products['id']               = $post_id;
                 $products['title']            = get_the_title();
                 $products['permalink']        = get_permalink();
-                $products['excerpt']          = strip_tags( get_the_content() );
-                $products['excerpt_full']     = strip_tags( get_the_excerpt() );
+                $products['excerpt']          = wp_strip_all_tags( get_the_content() );
+                $products['excerpt_full']     = wp_strip_all_tags( get_the_excerpt() );
                 $products['time']             = get_the_date();
                 $products['price']            = $product->get_price();
                 $products['price_sale']       = $product->get_sale_price();
@@ -107,7 +133,12 @@ class Product extends Base {
                 if ( ! empty( $tag ) ) {
                     $all_tag = [];
                     foreach ( $tag as $val ) {
-                        $all_tag[] = ['term_id' => $val->term_id, 'slug' => $val->slug, 'name' => $val->name, 'url' => get_term_link( $val->term_id )];
+                        $all_tag[] = [
+                            'term_id' => $val->term_id,
+                            'slug'    => $val->slug,
+                            'name'    => $val->name,
+                            'url'     => get_term_link( $val->term_id )
+                        ];
                     }
                     $products['tag'] = $all_tag;
                 }
@@ -117,7 +148,12 @@ class Product extends Base {
                 if ( ! empty( $cat ) ) {
                     $all_cats = [];
                     foreach ( $cat as $val ) {
-                        $all_cats[] = ['term_id' => $val->term_id, 'slug' => $val->slug, 'name' => $val->name, 'url' => get_term_link( $val->term_id )];
+                        $all_cats[] = [
+                            'term_id' => $val->term_id,
+                            'slug'    => $val->slug,
+                            'name'    => $val->name,
+                            'url'     => get_term_link( $val->term_id )
+                        ];
                     }
                     $products['category'] = $all_cats;
                 }
@@ -135,10 +171,15 @@ class Product extends Base {
             // wp_reset_query();
             wp_reset_postdata();
 
-            return $_is_frontend ? ob_get_clean() : $data;
-        }
+            if ( $_is_frontend && $isCustomCartBtn ) {
+                // remove our own callback from filter
+                remove_filter( 'woocommerce_product_add_to_cart_text', [$this, 'eb_change_cart_button_text'], 10 );
+            }
 
-        return new WP_Error( __( 'Nothing found.' ) );
+            return $_is_frontend ? ob_get_clean() : $data;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -157,22 +198,22 @@ class Product extends Base {
 
         if ( isset( $attr['orderby'] ) ) {
             switch ( $attr['orderby'] ) {
-            case 'price':
-                $query_args['meta_key'] = '_price';
-                $query_args['orderby']  = 'meta_value_num';
-                break;
-            case 'popular':
-                $query_args['meta_key'] = 'total_sales';
-                $query_args['orderby']  = 'meta_value_num';
-                $query_args['order']    = 'desc';
-                break;
-            case 'rating';
-                $query_args['meta_key'] = '_wc_average_rating';
-                $query_args['orderby']  = 'meta_value_num';
-                break;
-            default:
-                $query_args['orderby'] = $attr['orderby'];
-                break;
+                case 'price':
+                    $query_args['meta_key'] = '_price';
+                    $query_args['orderby']  = 'meta_value_num';
+                    break;
+                case 'popular':
+                    $query_args['meta_key'] = 'total_sales';
+                    $query_args['orderby']  = 'meta_value_num';
+                    $query_args['order']    = 'desc';
+                    break;
+                case 'rating';
+                    $query_args['meta_key'] = '_wc_average_rating';
+                    $query_args['orderby']  = 'meta_value_num';
+                    break;
+                default:
+                    $query_args['orderby'] = $attr['orderby'];
+                    break;
             }
         }
 
@@ -198,5 +239,24 @@ class Product extends Base {
         }
 
         return $query_args;
+    }
+
+    public function eb_change_cart_button_text( $text ) {
+        global $product;
+
+        list( $simpleCartText, $variableCartText, $groupedCartText, $externalCartText, $defaultCartText ) = $this->sampleData;
+
+        $product_type = $product->get_type();
+
+        $product_types = [
+            'external' => $externalCartText,
+            'grouped'  => $groupedCartText,
+            'simple'   => $simpleCartText,
+            'variable' => $variableCartText
+        ];
+
+        return isset( $product_types[$product_type] ) ?
+        esc_html( $product_types[$product_type] ):
+        esc_html( $defaultCartText );
     }
 }

@@ -26,12 +26,12 @@ const {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     duplicateBlockIdFix,
+    DynamicInputValueHandler,
 } = window.EBControls;
 
 import { parseTocSlug } from "./helper";
 
 import classnames from "classnames";
-
 import Inspector from "./inspector";
 import {
     typoPrefix_content,
@@ -170,6 +170,13 @@ function Edit({
         deleteHeaderList,
         hasUnderline,
         isMigrated,
+        contentGap = "20",
+        contentGapUnit = "px",
+        listSeperatorWidth = 3,
+        listSeperatorStyle = "solid",
+        listSeperatorColor = "#000",
+        showListSeparator,
+        scrollToTopIcon,
         classHook,
     } = attributes;
     const [visible, setVisible] = useState(true);
@@ -236,15 +243,17 @@ function Edit({
     }, [deleteHeadersLists]);
 
     useEffect(() => {
-        if (document.querySelector(".eb-toc-go-top")) {
-            return;
+        const previousGoTop = document.querySelector(".eb-toc-go-top");
+        if (previousGoTop) {
+            previousGoTop.remove();
         }
+
         const goTop = document.createElement("span");
-        goTop.innerHTML = ">";
+        goTop.innerHTML = `<i class="${scrollToTopIcon}"></i>`;
         goTop.setAttribute("class", "eb-toc-go-top ");
         goTop.style.right = "300px";
         document.body.insertBefore(goTop, document.body.lastChild);
-    }, []);
+    }, [scrollToTopIcon]);
 
     useEffect(() => {
         const scrollElement = document.querySelector(".eb-toc-go-top");
@@ -256,7 +265,7 @@ function Edit({
             scrollElement.classList.add("hide-scroll");
             scrollElement.classList.remove("show-scroll");
         }
-    }, [scrollToTop]);
+    }, [scrollToTop, scrollToTopIcon]);
 
     // this useEffect is for creating a unique blockId for each block's unique className
     useEffect(() => {
@@ -460,6 +469,24 @@ function Edit({
                   : // Important N.B. : in the selector above we used ".eb-toc-go-top.show-scroll" this. It's very important to start the selector with ".eb-" if this css strings goes inside "softMinifyCssStrings" function. Always make sure to use a selector that starts with ".eb-" when using this string inside "softMinifyCssStrings" function
                     ""
           }
+
+        .${blockId}.eb-toc-container .eb-toc-wrapper li {
+            padding-top: ${contentGap / 2}${contentGapUnit};
+        }
+
+        .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list li:not(:last-child) {
+            padding-bottom: ${contentGap / 2}${contentGapUnit};
+        }
+
+        ${
+            showListSeparator
+                ? `
+                .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list li:first-child {
+                    border-bottom: ${listSeperatorWidth}px ${listSeperatorStyle} ${listSeperatorColor};
+                }
+        `
+                : ""
+        }
 
 	  `;
 
@@ -686,13 +713,28 @@ function Edit({
                             onClick={() => collapsible && setVisible(!visible)}
                         >
                             {displayTitle && (
-                                <RichText
-                                    className="eb-toc-title"
-                                    placeholder="Table of content"
+                                <DynamicInputValueHandler
                                     value={title}
+                                    className="eb-toc-title"
+                                    tagName="div"
+                                    allowedFormats={[
+                                        "core/bold",
+                                        "core/italic",
+                                        "core/link",
+                                        "core/strikethrough",
+                                        "core/underline",
+                                        "core/text-color",
+                                    ]}
+                                    placeholder={__(
+                                        "Table of content",
+                                        "essential-blocks"
+                                    )}
                                     onChange={(title) =>
-                                        setAttributes({ title })
+                                        setAttributes({
+                                            title,
+                                        })
                                     }
+                                    readOnly={true}
                                 />
                             )}
                         </div>

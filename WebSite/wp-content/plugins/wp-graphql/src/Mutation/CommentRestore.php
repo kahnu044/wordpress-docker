@@ -32,7 +32,7 @@ class CommentRestore {
 	/**
 	 * Defines the mutation input field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_input_fields() {
 		return [
@@ -48,14 +48,14 @@ class CommentRestore {
 	/**
 	 * Defines the mutation output field configuration.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_output_fields() {
 		return [
 			'restoredId' => [
 				'type'        => 'Id',
 				'description' => __( 'The ID of the restored comment', 'wp-graphql' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => static function ( $payload ) {
 					$restore = (object) $payload['commentObject'];
 
 					return ! empty( $restore->comment_ID ) ? Relay::toGlobalId( 'comment', $restore->comment_ID ) : null;
@@ -64,7 +64,7 @@ class CommentRestore {
 			'comment'    => [
 				'type'        => 'Comment',
 				'description' => __( 'The restored comment object', 'wp-graphql' ),
-				'resolve'     => function ( $payload, $args, AppContext $context ) {
+				'resolve'     => static function ( $payload, $args, AppContext $context ) {
 					if ( ! isset( $payload['commentObject']->comment_ID ) || ! absint( $payload['commentObject']->comment_ID ) ) {
 						return null;
 					}
@@ -80,17 +80,17 @@ class CommentRestore {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return static function ( $input ) {
 			// Stop now if a user isn't allowed to delete the comment.
 			if ( ! current_user_can( 'moderate_comments' ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to restore this comment.', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to restore this comment.', 'wp-graphql' ) );
 			}
 
 			// Get the database ID for the comment.
 			$comment_id = Utils::get_database_id_from_id( $input['id'] );
 
 			if ( false === $comment_id ) {
-				throw new UserError( __( 'Sorry, you are not allowed to restore this comment.', 'wp-graphql' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to restore this comment.', 'wp-graphql' ) );
 			}
 
 			// Delete the comment.

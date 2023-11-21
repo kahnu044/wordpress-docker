@@ -84,3 +84,75 @@ export const handleOpenNewTab = (openNewTab, id, images, setAttributes) => {
 
     setAttributes({ images: updatedImageArray });
 };
+
+export const handleShowSecondButton = (
+    showSecondButton,
+    id,
+    images,
+    setAttributes
+) => {
+    let updatedImageArray = images.map((item) => {
+        if (item.id == id) {
+            return { ...item, showSecondButton: showSecondButton };
+        }
+        return item;
+    });
+
+    setAttributes({ images: updatedImageArray });
+};
+export const handleSecondButtonText = (
+    secondButtonText,
+    id,
+    images,
+    setAttributes
+) => {
+    let updatedImageArray = images.map((item) => {
+        if (item.id == id) {
+            return { ...item, secondButtonText: secondButtonText };
+        }
+        return item;
+    });
+
+    setAttributes({ images: updatedImageArray });
+};
+
+export const handleSecondButtonURL = (
+    secondButtonUrl,
+    id,
+    images,
+    setAttributes
+) => {
+    const validUrl = secondButtonUrl.length > 0 && validURL(secondButtonUrl);
+    let updatedImageArray = images.map((item) => {
+        if (item.id == id) {
+            return {
+                ...item,
+                secondButtonUrl: secondButtonUrl,
+                isValidUrl: validUrl,
+            };
+        }
+        return item;
+    });
+
+    setAttributes({ images: updatedImageArray });
+};
+
+export const handleSecondButtonOpenNewTab = (
+    secondButtonOpenNewTab,
+    id,
+    images,
+    setAttributes
+) => {
+    let updatedImageArray = images.map((item) => {
+        if (item.id == id) {
+            return {
+                ...item,
+                secondButtonOpenNewTab:
+                    secondButtonOpenNewTab === true ? true : false,
+            };
+        }
+        return item;
+    });
+
+    setAttributes({ images: updatedImageArray });
+};

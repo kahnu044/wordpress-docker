@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", function () {
             .replace(/^-+/, "") // Trim - from start of text
             .replace(/-+$/, ""); // Trim - from end of text
 
-        return decodeURI(encodeURIComponent(parsedSlug));
+        return decodeURIComponent(encodeURIComponent(parsedSlug));
     };
 
     const EBTableOfContents = {
@@ -30,6 +30,7 @@ window.addEventListener("DOMContentLoaded", function () {
             this._hide();
             this._show();
             this._hideOnMobileView();
+            this._hideOnDevice();
             this._tooltip();
         },
 
@@ -110,12 +111,14 @@ window.addEventListener("DOMContentLoaded", function () {
             let scrollTarget = container.getAttribute("data-scroll-target");
             let wrapper = document.querySelector(".eb-toc-wrapper");
             let offsetTop = wrapper.getAttribute("data-top-offset");
+            let scrollIcon = container.getAttribute("data-scroll-top-icon");
 
             if (hasScrollTop) {
                 // Create go to top element
                 const goTop = document.createElement("span");
-                goTop.setAttribute("class", "eb-toc-go-top ");
-                goTop.innerHTML = ">";
+                goTop.setAttribute("class", "eb-toc-go-top");
+                // goTop.setAttribute("class", " ");
+                goTop.innerHTML = `<i class="${scrollIcon}"></i>`;
                 document.body.insertBefore(goTop, document.body.lastChild);
 
                 // Add click event
@@ -169,7 +172,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         // Add scroll event
                         window.addEventListener("scroll", onScrollPage);
 
-                        showScroll();
+                        hideScroll();
                     } else {
                         hideScroll();
                     }
@@ -223,6 +226,23 @@ window.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                     });
+
+                    // add offset when go to url with hash id
+                    const urlHash = window.location.hash;
+                    // Remove the "#" symbol from the hash to get the ID
+                    const id = urlHash.slice(1);
+
+                    if (
+                        urlHash &&
+                        typeof wrapperOffset === "number" &&
+                        wrapperOffset
+                    ) {
+                        const yOffset = wrapperOffset
+                            ? Math.abs(wrapperOffset)
+                            : 0;
+                        const element = document.getElementById(id);
+                        element.style.scrollMarginTop = yOffset + "px";
+                    }
                 }
             }
         },
@@ -280,6 +300,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 if (node) {
                     let headers = JSON.parse(node.getAttribute("data-headers"));
+
                     let visibleHeaders = JSON.parse(
                         node.getAttribute("data-visible")
                     );
@@ -312,7 +333,7 @@ window.addEventListener("DOMContentLoaded", function () {
                             const element_text = parseTocSlug(element.text);
                             if (
                                 deleteHeaderLists &&
-                                !deleteHeaderLists[headerIndex].isDelete
+                                !deleteHeaderLists[headerIndex]?.isDelete
                             ) {
                                 all_header.forEach((item, index) => {
                                     const header_text = parseTocSlug(
@@ -324,16 +345,19 @@ window.addEventListener("DOMContentLoaded", function () {
                                             header_text
                                         ) === 0
                                     ) {
-                                        new ClipboardJS(`#${header_text}`);
+                                        if (isValidHtmlId(element.link)) {
+                                            new ClipboardJS(`#${element.link}`);
+                                        }
                                         item.innerHTML = `${
                                             item.innerHTML
-                                        }<span id="${header_text}"
+                                        }<span id="${element.link}"
                                     class="eb-toc__heading-anchor" data-clipboard-text="${
                                         location.protocol +
                                         "//" +
                                         location.host +
-                                        location.pathname
-                                    }#${header_text}">${copyLinkHtml}</span>`;
+                                        location.pathname +
+                                        (location.search ? location.search : "")
+                                    }#${element.link}">${copyLinkHtml}</span>`;
                                     }
                                 });
                             } else {
@@ -347,8 +371,7 @@ window.addEventListener("DOMContentLoaded", function () {
                                             header_text
                                         ) === 0
                                     ) {
-                                        // item.before(``);
-                                        item.innerHTML = `<span id="${header_text}" class="eb-toc__heading-anchor"></span>${item.innerHTML}`;
+                                        item.innerHTML = `<span id="${element.link}" class="eb-toc__heading-anchor"></span>${item.innerHTML}`;
                                     }
                                 });
                             }
@@ -367,11 +390,47 @@ window.addEventListener("DOMContentLoaded", function () {
             if (container) {
                 const isSticky =
                     container.getAttribute("data-sticky") === "true";
+                const stickyHideOnMobile =
+                    container.getAttribute("data-sticky-hide-mobile") == "true";
+
+                if (
+                    isSticky &&
+                    stickyHideOnMobile &&
+                    window.screen.width < 420
+                ) {
+                    container.style.display = "none";
+                }
+            }
+        },
+        /**
+         * Hide scroll to top
+         */
+        _hideOnDevice: function () {
+            const container = document.querySelector(".eb-toc-container");
+
+            if (container) {
+                const hideOnDesktop =
+                    container.getAttribute("data-hide-desktop") === "true";
+                const hideOnTab =
+                    container.getAttribute("data-hide-tab") === "true";
                 const hideOnMobile =
                     container.getAttribute("data-hide-mobile") == "true";
+                const goToTop = document.querySelector(".eb-toc-go-top");
 
-                if (isSticky && hideOnMobile && window.screen.width < 420) {
-                    container.style.display = "none";
+                if (hideOnDesktop && window.screen.width > 1024) {
+                    goToTop.style.display = "none";
+                }
+
+                if (
+                    hideOnTab &&
+                    window.screen.width < 1024 &&
+                    window.screen.width > 420
+                ) {
+                    goToTop.style.display = "none";
+                }
+
+                if (hideOnMobile && window.screen.width < 420) {
+                    goToTop.style.display = "none";
                 }
             }
         },
@@ -379,3 +438,10 @@ window.addEventListener("DOMContentLoaded", function () {
 
     EBTableOfContents.init();
 });
+
+function isValidHtmlId(text) {
+    if (/^[A-Za-z][-A-Za-z0-9_:.]*$/.test(text)) {
+        return text;
+    }
+    return false;
+}

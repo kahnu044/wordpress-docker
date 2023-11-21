@@ -55,13 +55,48 @@
 	}
 }
 
-/* 
+/*
 	--------------------------
 	Flip hover animation types
 	--------------------------
   */
+.eb-flipbox-container.eb-click-mode {
+	.flip-up {
+		transform: rotateX(180deg) !important;
+	}
 
-.eb-flipbox-container {
+	.flip-bottom {
+		transform: rotateX(-180deg) !important;
+	}
+
+	.flip-left {
+		transform: rotateY(-180deg) !important;
+	}
+
+	.flip-right {
+		transform: rotateY(180deg) !important;
+	}
+
+	.zoom-in {
+		transform: scale(1.1) !important;
+	}
+
+	.zoom-in .eb-flipbox-back {
+		z-index: 5;
+		transform: none;
+	}
+
+	.zoom-out {
+		transform: scale(0.8) !important;
+	}
+
+	.zoom-out .eb-flipbox-back {
+		z-index: 5;
+		transform: none;
+	}
+}
+
+.eb-flipbox-container.eb-hover-mode {
 	&:hover {
 		.flip-up {
 			transform: rotateX(180deg) !important;
@@ -111,9 +146,9 @@
 .eb-flipbox-back-title {
 	margin: 0 !important;
 }
-/* 
+/*
 	------------------
-	Flipbox items style 
+	Flipbox items style
 	--------------------
   */
 .eb-flipbox-items-container {
@@ -181,7 +216,7 @@
 	margin: 5px;
 }
 
-/* 
+/*
 	-------------
 	Button Styles
 	-------------

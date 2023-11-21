@@ -333,6 +333,7 @@ return array(
     'WPGraphQL\\Type\\Enum\\PostObjectsConnectionOrderbyEnum' => $baseDir . '/src/Type/Enum/PostObjectsConnectionOrderbyEnum.php',
     'WPGraphQL\\Type\\Enum\\PostStatusEnum' => $baseDir . '/src/Type/Enum/PostStatusEnum.php',
     'WPGraphQL\\Type\\Enum\\RelationEnum' => $baseDir . '/src/Type/Enum/RelationEnum.php',
+    'WPGraphQL\\Type\\Enum\\ScriptLoadingStrategyEnum' => $baseDir . '/src/Type/Enum/ScriptLoadingStrategyEnum.php',
     'WPGraphQL\\Type\\Enum\\TaxonomyEnum' => $baseDir . '/src/Type/Enum/TaxonomyEnum.php',
     'WPGraphQL\\Type\\Enum\\TaxonomyIdTypeEnum' => $baseDir . '/src/Type/Enum/TaxonomyIdTypeEnum.php',
     'WPGraphQL\\Type\\Enum\\TermNodeIdTypeEnum' => $baseDir . '/src/Type/Enum/TermNodeIdTypeEnum.php',
