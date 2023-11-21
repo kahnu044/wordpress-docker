@@ -31,12 +31,12 @@ function wpmu_update_blogs_date() {
 }
 
 /**
- * Gets a full blog URL, given a blog ID.
+ * Gets a full site URL, given a site ID.
  *
  * @since MU (3.0.0)
  *
- * @param int $blog_id Blog ID.
- * @return string Full URL of the blog if found. Empty string if not.
+ * @param int $blog_id Site ID.
+ * @return string Full site URL if found. Empty string if not.
  */
 function get_blogaddress_by_id( $blog_id ) {
 	$bloginfo = get_site( (int) $blog_id );
@@ -52,7 +52,7 @@ function get_blogaddress_by_id( $blog_id ) {
 }
 
 /**
- * Gets a full blog URL, given a blog name.
+ * Gets a full site URL, given a site name.
  *
  * @since MU (3.0.0)
  *
@@ -137,7 +137,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 			if ( false !== $blog ) {
 				return $blog;
 			}
-			if ( 'www.' === substr( $fields['domain'], 0, 4 ) ) {
+			if ( str_starts_with( $fields['domain'], 'www.' ) ) {
 				$nowww = substr( $fields['domain'], 4 );
 				$blog  = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->blogs WHERE domain IN (%s,%s) AND path = %s ORDER BY CHAR_LENGTH(domain) DESC", $nowww, $fields['domain'], $fields['path'] ) );
 			} else {
@@ -155,7 +155,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 			if ( false !== $blog ) {
 				return $blog;
 			}
-			if ( 'www.' === substr( $fields['domain'], 0, 4 ) ) {
+			if ( str_starts_with( $fields['domain'], 'www.' ) ) {
 				$nowww = substr( $fields['domain'], 4 );
 				$blog  = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->blogs WHERE domain IN (%s,%s) ORDER BY CHAR_LENGTH(domain) DESC", $nowww, $fields['domain'] ) );
 			} else {
@@ -419,7 +419,7 @@ function add_blog_option( $id, $option, $value ) {
 }
 
 /**
- * Removes option by name for a given blog ID. Prevents removal of protected WordPress options.
+ * Removes an option by name for a given blog ID. Prevents removal of protected WordPress options.
  *
  * @since MU (3.0.0)
  *
@@ -491,6 +491,8 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
  * @global array           $_wp_switched_stack
  * @global bool            $switched
  * @global string          $table_prefix
+ * @global string          $wp_template_path
+ * @global string          $wp_stylesheet_path
  * @global WP_Object_Cache $wp_object_cache
  *
  * @param int  $new_blog_id The ID of the blog to switch to. Default: current blog.
@@ -532,8 +534,10 @@ function switch_to_blog( $new_blog_id, $deprecated = null ) {
 	}
 
 	$wpdb->set_blog_id( $new_blog_id );
-	$GLOBALS['table_prefix'] = $wpdb->get_blog_prefix();
-	$GLOBALS['blog_id']      = $new_blog_id;
+	$GLOBALS['table_prefix']       = $wpdb->get_blog_prefix();
+	$GLOBALS['blog_id']            = $new_blog_id;
+	$GLOBALS['wp_template_path']   = null;
+	$GLOBALS['wp_stylesheet_path'] = null;
 
 	if ( function_exists( 'wp_cache_switch_to_blog' ) ) {
 		wp_cache_switch_to_blog( $new_blog_id );
@@ -560,16 +564,18 @@ function switch_to_blog( $new_blog_id, $deprecated = null ) {
 						'blog_meta',
 						'global-posts',
 						'networks',
+						'network-queries',
 						'sites',
 						'site-details',
 						'site-options',
+						'site-queries',
 						'site-transient',
 						'rss',
 						'users',
+						'user-queries',
+						'user_meta',
 						'useremail',
 						'userlogins',
-						'usermeta',
-						'user_meta',
 						'userslugs',
 					)
 				);
@@ -598,6 +604,8 @@ function switch_to_blog( $new_blog_id, $deprecated = null ) {
  * @global int             $blog_id
  * @global bool            $switched
  * @global string          $table_prefix
+ * @global string          $wp_template_path
+ * @global string          $wp_stylesheet_path
  * @global WP_Object_Cache $wp_object_cache
  *
  * @return bool True on success, false if we're already on the current blog.
@@ -623,8 +631,10 @@ function restore_current_blog() {
 	}
 
 	$wpdb->set_blog_id( $new_blog_id );
-	$GLOBALS['blog_id']      = $new_blog_id;
-	$GLOBALS['table_prefix'] = $wpdb->get_blog_prefix();
+	$GLOBALS['blog_id']            = $new_blog_id;
+	$GLOBALS['table_prefix']       = $wpdb->get_blog_prefix();
+	$GLOBALS['wp_template_path']   = null;
+	$GLOBALS['wp_stylesheet_path'] = null;
 
 	if ( function_exists( 'wp_cache_switch_to_blog' ) ) {
 		wp_cache_switch_to_blog( $new_blog_id );
@@ -651,16 +661,18 @@ function restore_current_blog() {
 						'blog_meta',
 						'global-posts',
 						'networks',
+						'network-queries',
 						'sites',
 						'site-details',
 						'site-options',
+						'site-queries',
 						'site-transient',
 						'rss',
 						'users',
+						'user-queries',
+						'user_meta',
 						'useremail',
 						'userlogins',
-						'usermeta',
-						'user_meta',
 						'userslugs',
 					)
 				);
