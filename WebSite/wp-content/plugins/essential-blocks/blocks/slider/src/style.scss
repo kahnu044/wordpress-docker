@@ -9,7 +9,11 @@
 		}
 	}
 
-	.image {
+	.eb-slider-type-image {
+		&:not(.slick-initialized):not(.slick-vertical) {
+			display: flex;
+		}
+
 		.eb-slider-item {
 			img {
 				width: 100%;
@@ -23,7 +27,7 @@
 		color: #000;
 	}
 
-	.content {
+	.eb-slider-type-content {
 		position: relative;
 
 		.eb-slider-item {
@@ -133,7 +137,7 @@
 		}
 	}
 
-	.content {
+	.eb-slider-type-content {
 		.eb-slider-item {
 			.eb-slider-content {
 				text-align: right;

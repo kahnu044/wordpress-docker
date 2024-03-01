@@ -3,15 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
-import {
-    PanelBody,
-    ToggleControl,
-    RangeControl,
-    Button,
-    BaseControl,
-    ButtonGroup,
-} from "@wordpress/components";
+import { PanelBody, ToggleControl, RangeControl, Button, BaseControl, ButtonGroup } from "@wordpress/components";
 /**
  * Internal dependencies
  */
@@ -29,6 +21,7 @@ import {
 import objAttributes from "../../../../blocks/testimonial/src/attributes";
 
 const {
+    ColorControl,
     ImageAvatar,
     ResponsiveDimensionsControl,
     TypographyDropdown,
@@ -88,8 +81,8 @@ function Testimonial(props) {
                 textAlign: "center",
                 userInfoPos: "flex-start",
                 imagePosition: 0,
-                userNameColor: "#7967ff",
-                descriptionColor: "#4a5059",
+                userNameColor: "var(--eb-global-primary-color)",
+                descriptionColor: "var(--eb-global-text-color)",
                 enableQuote: true,
                 quoteColor: "#edf1f7",
                 quoteSize: 60,
@@ -108,7 +101,7 @@ function Testimonial(props) {
                 companySizeUnit: "px",
                 descriptionSizeUnit: "px",
                 quoteSizeUnit: "px",
-                companyColor: "#4a5059",
+                companyColor: "var(--eb-global-heading-color)",
                 [`marginUnit`]: "px",
                 [`marginisLinked`]: true,
                 [`marginTop`]: 10,
@@ -167,27 +160,15 @@ function Testimonial(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("Layout Settings", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Layout Settings", "essential-blocks")} initialOpen={true}>
                         {avatarInline && (
-                            <BaseControl
-                                label={__(
-                                    "User Info Position",
-                                    "essential-blocks"
-                                )}
-                            >
+                            <BaseControl label={__("User Info Position", "essential-blocks")}>
                                 <ButtonGroup>
                                     {ALIGN_ITEMS.map((item, index) => (
                                         <Button
                                             key={index}
-                                            isSecondary={
-                                                avatarPosition !== item.value
-                                            }
-                                            isPrimary={
-                                                avatarPosition === item.value
-                                            }
+                                            isSecondary={avatarPosition !== item.value}
+                                            isPrimary={avatarPosition === item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     avatarPosition: item.value,
@@ -205,10 +186,7 @@ function Testimonial(props) {
                             <BaseControl
                                 label={
                                     avatarInline
-                                        ? __(
-                                              "User Info Align",
-                                              "essential-blocks"
-                                          )
+                                        ? __("User Info Align", "essential-blocks")
                                         : __("Image Align", "essential-blocks")
                                 }
                             >
@@ -216,12 +194,8 @@ function Testimonial(props) {
                                     {ALIGN_ITEMS.map((item, index) => (
                                         <Button
                                             key={index}
-                                            isSecondary={
-                                                avatarAlign !== item.value
-                                            }
-                                            isPrimary={
-                                                avatarAlign === item.value
-                                            }
+                                            isSecondary={avatarAlign !== item.value}
+                                            isPrimary={avatarAlign === item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     avatarAlign: item.value,
@@ -235,12 +209,7 @@ function Testimonial(props) {
                             </BaseControl>
                         )}
 
-                        <BaseControl
-                            label={__(
-                                "Description Position",
-                                "essential-blocks"
-                            )}
-                        >
+                        <BaseControl label={__("Description Position", "essential-blocks")}>
                             <ButtonGroup>
                                 {DESC_POSITIONS.map((item, index) => (
                                     <Button
@@ -259,19 +228,13 @@ function Testimonial(props) {
                             </ButtonGroup>
                         </BaseControl>
 
-                        <BaseControl
-                            label={__("Description Align", "essential-blocks")}
-                        >
+                        <BaseControl label={__("Description Align", "essential-blocks")}>
                             <ButtonGroup>
                                 {TEXT_ALIGN.map((option, index) => (
                                     <Button
                                         key={index}
-                                        isSecondary={
-                                            descTextAlign !== option.value
-                                        }
-                                        isPrimary={
-                                            descTextAlign === option.value
-                                        }
+                                        isSecondary={descTextAlign !== option.value}
+                                        isPrimary={descTextAlign === option.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 descTextAlign: option.value,
@@ -284,9 +247,7 @@ function Testimonial(props) {
                             </ButtonGroup>
                         </BaseControl>
 
-                        <BaseControl
-                            label={__("User Name Align", "essential-blocks")}
-                        >
+                        <BaseControl label={__("User Name Align", "essential-blocks")}>
                             <ButtonGroup>
                                 {TEXT_ALIGN.map((option, index) => (
                                     <Button
@@ -305,16 +266,12 @@ function Testimonial(props) {
                             </ButtonGroup>
                         </BaseControl>
 
-                        <BaseControl
-                            label={__("User Info Align", "essential-blocks")}
-                        >
+                        <BaseControl label={__("User Info Align", "essential-blocks")}>
                             <ButtonGroup>
                                 {ALIGN_ITEMS_VERTICAL.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isSecondary={
-                                            userInfoAlign !== item.value
-                                        }
+                                        isSecondary={userInfoAlign !== item.value}
                                         isPrimary={userInfoAlign === item.value}
                                         onClick={() =>
                                             handleBlockDefault({
@@ -340,28 +297,16 @@ function Testimonial(props) {
 
                         {enableQuote && (
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Quote Horizontal Align",
-                                        "essential-blocks"
-                                    )}
-                                >
+                                <BaseControl label={__("Quote Horizontal Align", "essential-blocks")}>
                                     <ButtonGroup>
                                         {ALIGN_ITEMS.map((item, index) => (
                                             <Button
                                                 key={index}
-                                                isSecondary={
-                                                    quoteHorizontalPosition !==
-                                                    item.value
-                                                }
-                                                isPrimary={
-                                                    quoteHorizontalPosition ===
-                                                    item.value
-                                                }
+                                                isSecondary={quoteHorizontalPosition !== item.value}
+                                                isPrimary={quoteHorizontalPosition === item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        quoteHorizontalPosition:
-                                                            item.value,
+                                                        quoteHorizontalPosition: item.value,
                                                     })
                                                 }
                                             >
@@ -372,36 +317,22 @@ function Testimonial(props) {
                                 </BaseControl>
 
                                 {quoteHorizontalPosition === "center" && (
-                                    <BaseControl
-                                        label={__(
-                                            "Quote Vertical Position",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Quote Vertical Position", "essential-blocks")}>
                                         <ButtonGroup>
-                                            {DESC_POSITIONS.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={
-                                                            quoteVerticalPosition !==
-                                                            item.value
-                                                        }
-                                                        isPrimary={
-                                                            quoteVerticalPosition ===
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                quoteVerticalPosition:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {DESC_POSITIONS.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isSecondary={quoteVerticalPosition !== item.value}
+                                                    isPrimary={quoteVerticalPosition === item.value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            quoteVerticalPosition: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
                                 )}
@@ -409,10 +340,7 @@ function Testimonial(props) {
                         )}
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Avatar", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Avatar", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label="Display Avatar"
                             checked={displayAvatar}
@@ -436,10 +364,7 @@ function Testimonial(props) {
                         )}
 
                         {displayAvatar && (
-                            <BaseControl
-                                id="eb-testimonial-image-pos"
-                                label={__("Image Position", "essential-blocks")}
-                            >
+                            <BaseControl id="eb-testimonial-image-pos" label={__("Image Position", "essential-blocks")}>
                                 <ToggleButton
                                     options={IMG_POSITIONS}
                                     onChange={(value) =>
@@ -452,9 +377,7 @@ function Testimonial(props) {
                         )}
 
                         {displayAvatar && imageUrl && (
-                            <PanelBody
-                                title={__("Image Setting", "essential-blocks")}
-                            >
+                            <PanelBody title={__("Image Setting", "essential-blocks")}>
                                 {imageUrl && (
                                     <ImageAvatar
                                         imageUrl={imageUrl}
@@ -467,24 +390,17 @@ function Testimonial(props) {
                                 )}
 
                                 <ToggleControl
-                                    label={__(
-                                        "Round Avatar",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Round Avatar", "essential-blocks")}
                                     checked={borderRadius === 50}
                                     onChange={() =>
                                         handleBlockDefault({
-                                            borderRadius:
-                                                borderRadius === 50 ? 0 : 50,
+                                            borderRadius: borderRadius === 50 ? 0 : 50,
                                         })
                                     }
                                 />
 
                                 <RangeControl
-                                    label={__(
-                                        "Border Radius",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Border Radius", "essential-blocks")}
                                     value={borderRadius}
                                     onChange={(newValue) =>
                                         handleBlockDefault({
@@ -497,49 +413,29 @@ function Testimonial(props) {
                             </PanelBody>
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Colors", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <PanelColorSettings
-                            initialOpen={true}
-                            colorSettings={[
-                                {
-                                    value: userNameColor,
-                                    onChange: (userNameColor) =>
-                                        handleBlockDefault({ userNameColor }),
-                                    label: __("Username", "essential-blocks"),
-                                },
-                                {
-                                    value: companyColor,
-                                    onChange: (companyColor) =>
-                                        handleBlockDefault({ companyColor }),
-                                    label: __("Company", "essential-blocks"),
-                                },
-                                {
-                                    value: descriptionColor,
-                                    onChange: (descriptionColor) =>
-                                        handleBlockDefault({
-                                            descriptionColor,
-                                        }),
-                                    label: __(
-                                        "Description",
-                                        "essential-blocks"
-                                    ),
-                                },
-                                {
-                                    value: quoteColor,
-                                    onChange: (quoteColor) =>
-                                        handleBlockDefault({ quoteColor }),
-                                    label: __("Quote", "essential-blocks"),
-                                },
-                            ]}
+                    <PanelBody title={__("Colors", "essential-blocks")} initialOpen={false}>
+                        <ColorControl
+                            label={__("Username", "essential-blocks")}
+                            color={userNameColor}
+                            onChange={(userNameColor) => handleBlockDefault({ userNameColor })}
+                        />
+                        <ColorControl
+                            label={__("Company", "essential-blocks")}
+                            color={companyColor}
+                            onChange={(companyColor) => handleBlockDefault({ companyColor })}
+                        />
+                        <ColorControl
+                            label={__("Description", "essential-blocks")}
+                            color={descriptionColor}
+                            onChange={(descriptionColor) => handleBlockDefault({ descriptionColor })}
+                        />
+                        <ColorControl
+                            label={__("Quote", "essential-blocks")}
+                            color={quoteColor}
+                            onChange={(quoteColor) => handleBlockDefault({ quoteColor })}
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Typography", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Typography", "essential-blocks")} initialOpen={false}>
                         <TypographyDropdown
                             baseLabel="Username"
                             typographyPrefixConstant={"username"}
@@ -567,10 +463,7 @@ function Testimonial(props) {
                             />
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Margin & Padding")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={"margin"}
@@ -583,24 +476,12 @@ function Testimonial(props) {
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Background ", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={TestimonialWrapBg}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Background ", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={TestimonialWrapBg} resRequiredProps={resRequiredProps} />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={WrpBdShadow}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
+                        <BorderShadowControl controlName={WrpBdShadow} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

@@ -15,11 +15,6 @@ import {
     TabPanel,
 } from "@wordpress/components";
 
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
 const {
     TypographyDropdown,
     ResponsiveDimensionsControl,
@@ -139,12 +134,12 @@ function Countdown(props) {
                 minutesLabel: "Minutes",
                 secondsLabel: "Seconds",
 
-                digitsColor: "",
+                digitsColor: "var(--eb-global-heading-color)",
                 dayDgColor: "",
                 hourDgColor: "",
                 minuteDgColor: "",
                 secondDgColor: "",
-                labelsColor: "",
+                labelsColor: "var(--eb-global-text-color)",
                 dayLbColor: "",
                 hourLbColor: "",
                 minuteLbColor: "",
@@ -234,30 +229,20 @@ function Countdown(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("Content Settings", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Content Settings", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
                             label={__("Display Days", "essential-blocks")}
                             checked={showDays}
-                            onChange={() =>
-                                handleBlockDefault({ showDays: !showDays })
-                            }
+                            onChange={() => handleBlockDefault({ showDays: !showDays })}
                         />
 
                         {showDays && (
                             <>
                                 <TextControl
-                                    label={__(
-                                        "Custom Label For Days",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Custom Label For Days", "essential-blocks")}
                                     value={daysLabel}
                                     type="text"
-                                    onChange={(daysLabel) =>
-                                        handleBlockDefault({ daysLabel })
-                                    }
+                                    onChange={(daysLabel) => handleBlockDefault({ daysLabel })}
                                 />
 
                                 <p
@@ -273,23 +258,16 @@ function Countdown(props) {
                         <ToggleControl
                             label={__("Display Hours", "essential-blocks")}
                             checked={showHours}
-                            onChange={() =>
-                                handleBlockDefault({ showHours: !showHours })
-                            }
+                            onChange={() => handleBlockDefault({ showHours: !showHours })}
                         />
 
                         {showHours && (
                             <>
                                 <TextControl
-                                    label={__(
-                                        "Custom Label For Hours",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Custom Label For Hours", "essential-blocks")}
                                     value={hoursLabel}
                                     type="text"
-                                    onChange={(hoursLabel) =>
-                                        handleBlockDefault({ hoursLabel })
-                                    }
+                                    onChange={(hoursLabel) => handleBlockDefault({ hoursLabel })}
                                 />
 
                                 <p
@@ -315,15 +293,10 @@ function Countdown(props) {
                         {showMinutes && (
                             <>
                                 <TextControl
-                                    label={__(
-                                        "Custom Label For Minutes",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Custom Label For Minutes", "essential-blocks")}
                                     value={minutesLabel}
                                     type="text"
-                                    onChange={(minutesLabel) =>
-                                        handleBlockDefault({ minutesLabel })
-                                    }
+                                    onChange={(minutesLabel) => handleBlockDefault({ minutesLabel })}
                                 />
 
                                 <p
@@ -349,15 +322,10 @@ function Countdown(props) {
                         {showSeconds && (
                             <>
                                 <TextControl
-                                    label={__(
-                                        "Custom Label For Seconds",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Custom Label For Seconds", "essential-blocks")}
                                     value={secondsLabel}
                                     type="text"
-                                    onChange={(secondsLabel) =>
-                                        handleBlockDefault({ secondsLabel })
-                                    }
+                                    onChange={(secondsLabel) => handleBlockDefault({ secondsLabel })}
                                 />
 
                                 <p
@@ -392,10 +360,7 @@ function Countdown(props) {
                         </BaseControl>
                         <ResponsiveRangeController
                             noUnits
-                            baseLabel={__(
-                                "Container Max Width",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Container Max Width", "essential-blocks")}
                             controlName={wrapperWidth}
                             resRequiredProps={resRequiredProps}
                             min={100}
@@ -405,10 +370,7 @@ function Countdown(props) {
 
                         <ResponsiveRangeController
                             noUnits
-                            baseLabel={__(
-                                "Space Between Boxs",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Space Between Boxs", "essential-blocks")}
                             controlName={boxsSpaceConst}
                             resRequiredProps={resRequiredProps}
                             min={0}
@@ -416,43 +378,31 @@ function Countdown(props) {
                             step={1}
                         />
 
-                        <BaseControl
-                            label={__("Contents Direction", "essential-blocks")}
-                        >
+                        <BaseControl label={__("Contents Direction", "essential-blocks")}>
                             <SelectControl
                                 value={contentsDirection}
                                 options={FLEX_DIRECTIONS}
-                                onChange={(contentsDirection) =>
-                                    handleBlockDefault({ contentsDirection })
-                                }
+                                onChange={(contentsDirection) => handleBlockDefault({ contentsDirection })}
                             />
                         </BaseControl>
 
-                        {contentsDirection &&
-                            contentsDirection.includes("row") && (
-                                <>
-                                    <BaseControl
-                                        label={__(
-                                            "Contents Justify Position",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <SelectControl
-                                            value={contentsJustify}
-                                            options={JUSTIFY_CONTENTS}
-                                            onChange={(contentsJustify) =>
-                                                handleBlockDefault({
-                                                    contentsJustify,
-                                                })
-                                            }
-                                        />
-                                    </BaseControl>
-                                </>
-                            )}
+                        {contentsDirection && contentsDirection.includes("row") && (
+                            <>
+                                <BaseControl label={__("Contents Justify Position", "essential-blocks")}>
+                                    <SelectControl
+                                        value={contentsJustify}
+                                        options={JUSTIFY_CONTENTS}
+                                        onChange={(contentsJustify) =>
+                                            handleBlockDefault({
+                                                contentsJustify,
+                                            })
+                                        }
+                                    />
+                                </BaseControl>
+                            </>
+                        )}
 
-                        <BaseControl
-                            label={__("Contents Alignment", "essential-blocks")}
-                        >
+                        <BaseControl label={__("Contents Alignment", "essential-blocks")}>
                             <ButtonGroup>
                                 {ALIGN_ITEMS.map(({ value, label }, index) => (
                                     <Button
@@ -471,23 +421,17 @@ function Countdown(props) {
                             </ButtonGroup>
                         </BaseControl>
 
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
                                 controlName={cdBoxsBgConst}
                                 resRequiredProps={resRequiredProps}
                                 noOverlay
                                 noMainBgi
-                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Padding", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Padding", "essential-blocks")} initialOpen={false}>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={cdBoxsPaddingConst}
@@ -495,28 +439,20 @@ function Countdown(props) {
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={cdBoxsBdShadowConst}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
                     </PanelBody>
-                    <PanelBody
-                        title={__("Digits", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Digits", "essential-blocks")} initialOpen={false}>
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={digitsColor}
-                            onChange={(digitsColor) =>
-                                handleBlockDefault({ digitsColor })
-                            }
+                            onChange={(digitsColor) => handleBlockDefault({ digitsColor })}
                         />
 
                         <TypographyDropdown
@@ -531,16 +467,11 @@ function Countdown(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Labels", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Labels", "essential-blocks")} initialOpen={false}>
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={labelsColor}
-                            onChange={(labelsColor) =>
-                                handleBlockDefault({ labelsColor })
-                            }
+                            onChange={(labelsColor) => handleBlockDefault({ labelsColor })}
                         />
 
                         <TypographyDropdown
@@ -555,10 +486,7 @@ function Countdown(props) {
                         />
                     </PanelBody>
                     {flexDirection === "row" && (
-                        <PanelBody
-                            title={__("Separator", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Separator", "essential-blocks")} initialOpen={false}>
                             <ToggleControl
                                 label={__("Show Separator", "essential-blocks")}
                                 checked={showSeparator}
@@ -572,10 +500,7 @@ function Countdown(props) {
                             {showSeparator && (
                                 <>
                                     <SelectControl
-                                        label={__(
-                                            "Separator Type",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Separator Type", "essential-blocks")}
                                         value={separatorType}
                                         options={SEPARATOR_TYPES}
                                         onChange={(separatorType) =>
@@ -586,10 +511,7 @@ function Countdown(props) {
                                     />
 
                                     <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Position Top",
-                                            "essential-blocks"
-                                        )}
+                                        baseLabel={__("Position Top", "essential-blocks")}
                                         controlName={separatorPosTop}
                                         resRequiredProps={resRequiredProps}
                                         min={0}
@@ -598,10 +520,7 @@ function Countdown(props) {
                                     />
 
                                     <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Position Right",
-                                            "essential-blocks"
-                                        )}
+                                        baseLabel={__("Position Right", "essential-blocks")}
                                         controlName={separatorPosRight}
                                         resRequiredProps={resRequiredProps}
                                         min={0}
@@ -621,19 +540,14 @@ function Countdown(props) {
 
                                     <TypographyDropdown
                                         baseLabel="Typography"
-                                        typographyPrefixConstant={
-                                            typoPrefix_separator
-                                        }
+                                        typographyPrefixConstant={typoPrefix_separator}
                                         resRequiredProps={resRequiredProps}
                                     />
                                 </>
                             )}
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__("Individual Box Styling", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Individual Box Styling", "essential-blocks")} initialOpen={false}>
                         {showDays && (
                             <SingleBoxControl
                                 resRequiredProps={resRequiredProps}
@@ -677,11 +591,8 @@ function Countdown(props) {
                     </PanelBody>
                     {/* Advanced */}
                     <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        // initialOpen={true}
+                        title={__("Wrapper Margin & Padding", "essential-blocks")}
+                    // initialOpen={true}
                     >
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
@@ -694,24 +605,15 @@ function Countdown(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background ", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WrpBgConst}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Background ", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WrpBgConst} resRequiredProps={resRequiredProps} />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WrpBdShadowConst}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

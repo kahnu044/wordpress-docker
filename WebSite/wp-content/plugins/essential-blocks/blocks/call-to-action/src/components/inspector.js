@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -14,12 +13,6 @@ import {
     TabPanel,
     ToggleControl,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
-
-/**
- * External Dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 /**
  * Internal Dependencies
@@ -53,7 +46,6 @@ import objAttributes from "./attributes";
 import SortableLists from "./sortable-lists";
 
 const {
-    faIcons: iconList,
     ColorControl,
     ResponsiveDimensionsControl,
     TypographyDropdown,
@@ -61,6 +53,8 @@ const {
     BorderShadowControl,
     ResponsiveRangeController,
     AdvancedControls,
+    EBIconPicker,
+    DynamicInputControl
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -70,11 +64,14 @@ const Inspector = ({ attributes, setAttributes }) => {
         showIcon,
         icon,
         iconColor,
+        title,
         titleTag,
         titleColor,
         showSubtitle,
+        subtitle,
         subtitleColor,
         sortableLists,
+        description,
         descriptionColor,
         showButton,
         buttonSize,
@@ -82,6 +79,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         buttonTextColor,
         buttonHoverTextColor,
         buttonHoverBackgroundColor,
+        buttonText,
         buttonURL,
         linkNewTab,
         buttonPosition,
@@ -178,6 +176,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 })
                                             }
                                         />
+                                        <DynamicInputControl
+                                            label={__("Title", "essential-blocks")}
+                                            attrName="title"
+                                            inputValue={title}
+                                            setAttributes={setAttributes}
+                                            onChange={(text) => setAttributes({ title: text })}
+                                        />
+                                        {showSubtitle && (
+                                            <>
+                                                <DynamicInputControl
+                                                    label={__("Subtitle", "essential-blocks")}
+                                                    attrName="subtitle"
+                                                    inputValue={subtitle}
+                                                    setAttributes={setAttributes}
+                                                    onChange={(text) => setAttributes({ subtitle: text })}
+                                                />
+                                            </>
+                                        )}
+                                        <DynamicInputControl
+                                            label={__("Description", "essential-blocks")}
+                                            attrName="description"
+                                            inputValue={description}
+                                            setAttributes={setAttributes}
+                                            onChange={(text) => setAttributes({ description: text })}
+                                            isTextarea={true}
+                                        />
                                         <BaseControl>
                                             <h3 className="eb-control-title">
                                                 {__(
@@ -200,13 +224,13 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             initialOpen={false}
                                         >
                                             <BaseControl>
-                                                <FontIconPicker
-                                                    icons={iconList}
+                                                <EBIconPicker
                                                     value={icon}
                                                     onChange={(icon) =>
-                                                        setAttributes({ icon })
+                                                        setAttributes({
+                                                            icon,
+                                                        })
                                                     }
-                                                    appendTo="body"
                                                 />
                                             </BaseControl>
                                             <ResponsiveRangeController
@@ -294,21 +318,23 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     )}
                                                 />
                                             )}
-                                            <TextControl
-                                                label={__(
-                                                    "Button Link",
-                                                    "essential-blocks"
-                                                )}
-                                                value={buttonURL}
+                                            <DynamicInputControl
+                                                label={__("Button Text", "essential-blocks")}
+                                                attrName="buttonText"
+                                                inputValue={buttonText}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) => setAttributes({ buttonText: text })}
+                                            />
+                                            <DynamicInputControl
+                                                label={__("Button Link", "essential-blocks")}
+                                                attrName="buttonURL"
+                                                inputValue={buttonURL}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) => setAttributes({ buttonURL: text })}
                                                 help={__(
                                                     "Use https or http",
                                                     "essential-blocks"
                                                 )}
-                                                onChange={(link) =>
-                                                    setAttributes({
-                                                        buttonURL: link,
-                                                    })
-                                                }
                                             />
                                             {buttonURL && (
                                                 <ToggleControl

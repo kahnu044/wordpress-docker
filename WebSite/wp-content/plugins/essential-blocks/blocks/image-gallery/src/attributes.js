@@ -16,6 +16,8 @@ import {
     FILTER_PADDING,
     FILTER_MARGIN,
     FILTER_BORDER_SHADOW,
+    LOADMORE_PADDING,
+    LOADMORE_BORDER,
 } from "./constants";
 import * as CAPTION_TYPOGRAPHY from "./typoConstants";
 import { __ } from "@wordpress/i18n";
@@ -77,11 +79,11 @@ const attributes = {
     },
     captionColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     captionBGColor: {
         type: "string",
-        default: "rgba(195 195 195 / 0.7)",
+        default: "var(--eb-global-secondary-color)",
     },
     overlayColor: {
         type: "string",
@@ -154,31 +156,60 @@ const attributes = {
     },
     filterColor: {
         type: "string",
-        default: "#555555",
+        default: "var(--eb-global-button-text-color)",
     },
     filterActColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     filterHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     filterBGColor: {
         type: "string",
-        default: "#EEEDF0",
+        default: "var(--eb-global-background-color)",
     },
     filterActBGColor: {
         type: "string",
-        default: "#7967ff",
+        default: "var(--eb-global-primary-color)",
     },
     filterHoverBGColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-primary-color)",
     },
     select2Options: {
         type: "string",
         default: "",
+    },
+    enableIsotope: {
+        type: "boolean",
+        default: false,
+    },
+    enableLoadMore: {
+        type: "boolean",
+        default: false,
+    },
+
+    loadmoreBtnText: {
+        type: "string",
+        default: "Load More",
+    },
+    imagesPerPage: {
+        type: "number",
+        default: 1,
+    },
+    loadmoreColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    loadmoreHvColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    loadmoreBGColor: {
+        type: "string",
+        default: "var(--eb-global-button-background-color)",
     },
 
     // typography attributes ⬇
@@ -280,6 +311,29 @@ const attributes = {
         // noShadow: true,
         // noBorder: true,
     }),
+
+    ...generateBorderShadowAttributes(LOADMORE_BORDER, {
+        bdrDefaults: {
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+        },
+        rdsDefaults: {
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+        },
+    }),
+    ...generateDimensionsAttributes(LOADMORE_PADDING, {
+        top: 14,
+        bottom: 14,
+        right: 14,
+        left: 14,
+        isLinked: true,
+    }),
+
 };
 
 export default attributes;

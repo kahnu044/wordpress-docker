@@ -20,7 +20,7 @@ ebConditionalRegisterBlockType(metadata, {
     save: () => null,
     example: {
         attributes: {
-            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/woo-product-grid/image/screenshot.png`,
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/woo-product-grid.jpg`,
         },
     },
 });

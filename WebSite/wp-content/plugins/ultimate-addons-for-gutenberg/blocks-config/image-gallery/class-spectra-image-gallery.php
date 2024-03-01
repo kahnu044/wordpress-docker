@@ -137,6 +137,10 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 								'type'    => 'object',
 								'default' => array(),
 							),
+							'disableLazyLoad'  => array(
+								'type'    => 'boolean',
+								'default' => false,
+							),
 						),
 						// Gallery Settings.
 						array(
@@ -1123,9 +1127,12 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 				<div class="spectra-image-gallery__control-lightbox--thumbnails-wrapper">
 					<div class="swiper spectra-image-gallery__control-lightbox--thumbnails">
 						<div class="swiper-wrapper">
-							<?php for ( $i = 0; $i < $total_images; $i++ ) { ?>
+							<?php 
+							for ( $i = 0; $i < $total_images; $i++ ) { 
+								$image_url = ! empty( $attributes['mediaGallery'][ $i ]['sizes']['thumbnail']['url'] ) ? $attributes['mediaGallery'][ $i ]['sizes']['thumbnail']['url'] : $attributes['mediaGallery'][ $i ]['url'];
+								?>
 								<div class="swiper-slide">
-									<img src="<?php echo esc_url( $attributes['mediaGallery'][ $i ]['sizes']['thumbnail']['url'] ); ?>" alt="<?php echo esc_attr( $attributes['mediaGallery'][ $i ]['alt'] ); ?>"/>
+									<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $attributes['mediaGallery'][ $i ]['alt'] ); ?>"/>
 								</div>
 							<?php } ?>
 						</div>
@@ -1365,7 +1372,7 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 				<picture>
 					<source media="(min-width: 1024px)" srcset="<?php echo esc_url( $image_url ); ?>">
 					<source media="(min-width: 768px)" srcset="<?php echo esc_url( $image_url_tab ); ?>">
-					<img class="spectra-image-gallery__media-thumbnail spectra-image-gallery__media-thumbnail--<?php echo esc_attr( $atts['feedLayout'] ); ?>" src="<?php echo esc_url( $image_url_mob ); ?>" alt="<?php echo esc_attr( $mediaArray['alt'] ); ?>" loading="lazy"/>
+					<img class="spectra-image-gallery__media-thumbnail spectra-image-gallery__media-thumbnail--<?php echo esc_attr( $atts['feedLayout'] ); ?>" src="<?php echo esc_url( $image_url_mob ); ?>" alt="<?php echo esc_attr( $mediaArray['alt'] ); ?>" <?php echo esc_attr( $atts['disableLazyLoad'] ) ? '' : 'loading="lazy"'; ?> />
 				</picture>
 				<div class="spectra-image-gallery__media-thumbnail-blurrer"></div>
 				<?php
@@ -1473,18 +1480,23 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 					const scope = document.querySelector( '.uagb-block-<?php echo esc_attr( $id ); ?>' );
 					if ( scope ){
 						if ( scope.children[0].classList.contains( 'spectra-image-gallery__layout--masonry' ) ) {
-							const element = scope.querySelector( '.spectra-image-gallery__layout--masonry' );
-							const isotope = new Isotope( element, {
-								itemSelector: '.spectra-image-gallery__media-wrapper--isotope',
-							} );
-							imagesLoaded( element ).on( 'progress', function() {
-								isotope.layout();
-							});
-							imagesLoaded( element ).on( 'always', function() {
-								element.parentNode.style.visibility = 'visible';
-							});
+							// Add timeout for the images to load.
+							setTimeout( function() {
+								const element = scope.querySelector( '.spectra-image-gallery__layout--masonry' );
+								const isotope = new Isotope( element, {
+									itemSelector: '.spectra-image-gallery__media-wrapper--isotope',
+									percentPosition: true,
+								} );
+								imagesLoaded( element ).on( 'progress', function() {
+									isotope.layout();
+								});
+								imagesLoaded( element ).on( 'always', function() {
+									element.parentNode.style.visibility = 'visible';
+								});
+								UAGBImageGalleryMasonry.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>', <?php echo wp_json_encode( $lightbox_settings ); ?>, <?php echo wp_json_encode( $thumbnail_settings ); ?> );
+								UAGBImageGalleryMasonry.initByOffset( element, isotope );
+							}, 500 );
 						}
-						UAGBImageGalleryMasonry.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>', <?php echo wp_json_encode( $lightbox_settings ); ?>, <?php echo wp_json_encode( $thumbnail_settings ); ?> );
 					}
 				});
 			<?php
@@ -1510,14 +1522,17 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 					const scope = document.querySelector( '.uagb-block-<?php echo esc_attr( $id ); ?>' );
 					if ( scope ){
 						if ( scope.children[0].classList.contains( 'spectra-image-gallery__layout--isogrid' ) ) {
-							const element = scope.querySelector( '.spectra-image-gallery__layout--isogrid' );
-							const isotope = new Isotope( element, {
-								itemSelector: '.spectra-image-gallery__media-wrapper--isotope',
-								layoutMode: 'fitRows',
-							} );
-							imagesLoaded( element ).on( 'progress', function() {
-								isotope.layout();
-							});
+							setTimeout( function() {
+								const element = scope.querySelector( '.spectra-image-gallery__layout--isogrid' );
+								const isotope = new Isotope( element, {
+									itemSelector: '.spectra-image-gallery__media-wrapper--isotope',
+									layoutMode: 'fitRows',
+								} );
+								imagesLoaded( element ).on( 'progress', function() {
+									isotope.layout();
+								});
+								UAGBImageGalleryMasonry.initByOffset( element, isotope );
+							}, 500 );
 						}
 						UAGBImageGalleryPagedGrid.init( <?php echo wp_json_encode( $attr ); ?>, '<?php echo esc_attr( $selector ); ?>', <?php echo wp_json_encode( $lightbox_settings ); ?>, <?php echo wp_json_encode( $thumbnail_settings ); ?> );
 					}
@@ -1644,16 +1659,12 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 		 * Renders Front-end Click Event.
 		 *
 		 * @param string $id             Block ID.
-		 * @param array  $media_gallery  The Media Gallery Attribute.
+		 * @param array  $attr           The array of Attribute.
 		 * @return string                The Output Buffer.
 		 *
 		 * @since 2.4.0
 		 */
-		public static function render_image_click( $id, $media_gallery ) {
-			$image_urls = array();
-			foreach ( $media_gallery as $media ) {
-				$image_urls[ $media['id'] ] = $media['url'];
-			}
+		public static function render_image_click( $id, $attr ) {
 			ob_start();
 			?>
 				window.addEventListener( 'DOMContentLoaded', () => {
@@ -1661,14 +1672,8 @@ if ( ! class_exists( 'Spectra_Image_Gallery' ) ) {
 					if ( ! blockScope ) {
 						return;
 					}
-					const mediaGallery = <?php echo wp_json_encode( $image_urls ); ?>;
-					const images = blockScope.querySelectorAll( '.spectra-image-gallery__media-wrapper' );
-					for ( let i = 0; i < images.length; i++ ) {
-						const imageID = parseInt( images[ i ].getAttribute( 'data-spectra-gallery-image-id' ) );
-						const imageURL = mediaGallery[ imageID ];
-						images[ i ].style.cursor = 'pointer';
-						images[ i ].addEventListener( 'click', () => window.open( imageURL, '_blank' ) );
-					}
+					const attr = <?php echo wp_json_encode( $attr ); ?>;
+					addClickListeners( blockScope, null, false, null, attr );
 				} );
 			<?php
 			return ob_get_clean();

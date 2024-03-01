@@ -8,6 +8,7 @@ export default function save({ attributes }) {
         isMediaOn,
         classHook,
         tagName,
+        closeAllTabs,
     } = attributes;
 
     return (
@@ -17,6 +18,9 @@ export default function save({ attributes }) {
             >
                 <div
                     className={`${blockId} eb-advanced-tabs-wrapper ${layout}`}
+                    {...(closeAllTabs
+                        ? { 'data-close-all-tabs': closeAllTabs }
+                        : {})}
                 >
                     <div className="eb-tabs-nav">
                         <ul
@@ -32,7 +36,7 @@ export default function save({ attributes }) {
                                         ? { id: item.customId }
                                         : {})}
                                     className={
-                                        item.isDefault ? "active" : "inactive"
+                                        closeAllTabs !== true && item.isDefault ? "active" : "inactive"
                                     }
                                 >
                                     {isMediaOn && (
@@ -64,6 +68,6 @@ export default function save({ attributes }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

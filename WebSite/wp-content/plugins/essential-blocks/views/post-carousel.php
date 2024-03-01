@@ -16,7 +16,7 @@
 
 <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?><?php echo esc_attr( $classHook ); ?>">
     <div
-        class="eb-post-carousel-wrapper                                                                                                                                                                                                                                                                                                                         <?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?>"
+        class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-carousel-wrapper"
         data-id="<?php echo esc_attr( $blockId ); ?>"
         data-querydata="<?php echo esc_attr( serialize( $queryData ) ); ?>"
         data-slidersettings="<?php echo esc_attr( json_encode( $sliderSettings ) ); ?>"

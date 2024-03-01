@@ -5,8 +5,8 @@ $read_more_icon = '';
 
 if ( $addIcon ) {
     $read_more_icon .= sprintf(
-        '<i class="%1$s eb-button-icon eb-button-icon-left hvr-icon"></i>',
-        $icon
+        '%1$s',
+        $helper::eb_render_icon( $helper::eb_get_icon_type( $icon ), 'eb-button-icon eb-button-icon-left hvr-icon', $icon )
     );
 }
 

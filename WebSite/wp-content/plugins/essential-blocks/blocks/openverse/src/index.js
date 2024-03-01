@@ -26,7 +26,7 @@ ebConditionalRegisterBlockType(metadata, {
     save,
     example: {
         attributes: {
-            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/openverse/image/screenshot.png`,
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/openverse.jpeg`,
         },
     },
 });

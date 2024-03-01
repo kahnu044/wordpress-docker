@@ -10,7 +10,7 @@ const example = {
                 isExpanded: false,
             },
             {
-                icon: "fab fa-twitter",
+                icon: "fab fa-x-twitter",
                 link: "#",
                 linkOpenNewTab: false,
                 isExpanded: false,

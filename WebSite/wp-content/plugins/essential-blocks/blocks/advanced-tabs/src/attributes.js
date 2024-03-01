@@ -27,12 +27,7 @@ import {
     prefixTtlWrpPadding,
 } from "./constants/dimensionsConstants";
 
-import {
-    prefixTitleMinWidth,
-    prefixIconSize,
-    prefixIconGap,
-    prefixCaretSize,
-} from "./constants/rangeNames";
+import { prefixTitleMinWidth, prefixIconSize, prefixIconGap, prefixCaretSize } from "./constants/rangeNames";
 
 const {
     generateDimensionsAttributes,
@@ -113,11 +108,11 @@ const attributes = {
     //
     textColor: {
         type: "string",
-        default: "#555555",
+        default: "var(--eb-global-heading-color)",
     },
     iconColor: {
         type: "string",
-        default: "#555555",
+        default: "var(--eb-global-heading-color)",
     },
     hvTextColor: {
         type: "string",
@@ -127,11 +122,11 @@ const attributes = {
     },
     actTextColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-background-color)",
     },
     actIconColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-background-color)",
     },
     actHvTextColor: {
         type: "string",
@@ -153,7 +148,11 @@ const attributes = {
     },
     caretColor: {
         type: "string",
-        default: "#7967ff",
+        default: "var(--eb-global-primary-color)",
+    },
+    closeAllTabs: {
+        type: 'boolean',
+        default: false,
     },
 
     //
@@ -184,45 +183,22 @@ const attributes = {
 
     //
     // Background Control Attributes
-    ...generateBackgroundAttributes(prefixWrapBg, {
-        // defaultFillColor: "#7967ff",
-        // isBgDefaultGradient: true,
-        // noOverlay: true,
-        // noMainBgi: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-    }),
+    ...generateBackgroundAttributes(prefixWrapBg),
     ...generateBackgroundAttributes(prefixTitleBg, {
-        defaultFillColor: "#EEEDF0",
-        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-background-color)",
         noOverlay: true,
-        // noMainBgi: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+        defaultBgGradient: "var(--eb-gradient-background-color)",
     }),
     ...generateBackgroundAttributes(prefixActTitleBg, {
-        defaultFillColor: "#7967ff",
-        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-primary-color)",
         noOverlay: true,
-        // noMainBgi: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+        defaultBgGradient: "var(--eb-gradient-background-color)",
     }),
     ...generateBackgroundAttributes(prefixContentBg, {
-        // defaultFillColor: "#888",
-        // isBgDefaultGradient: true,
         noOverlay: true,
-        // noMainBgi: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
     ...generateBackgroundAttributes(prefixTtlWrpBg, {
-        // defaultFillColor: "#f5f5f5",
-        // isBgDefaultGradient: true,
         noOverlay: true,
-        // noMainBgi: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
 
     //

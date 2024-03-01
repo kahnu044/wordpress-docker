@@ -86,7 +86,7 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			define( 'UAGB_BASE', plugin_basename( UAGB_FILE ) );
 			define( 'UAGB_DIR', plugin_dir_path( UAGB_FILE ) );
 			define( 'UAGB_URL', plugins_url( '/', UAGB_FILE ) );
-			define( 'UAGB_VER', '2.10.1' );
+			define( 'UAGB_VER', '2.12.4' );
 			define( 'UAGB_MODULES_DIR', UAGB_DIR . 'modules/' );
 			define( 'UAGB_MODULES_URL', UAGB_URL . 'modules/' );
 			define( 'UAGB_SLUG', 'spectra' );
@@ -173,6 +173,10 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 				require_once UAGB_DIR . 'classes/class-uagb-twenty-seventeen-compatibility.php';
 			}
 
+			if ( 'twentysixteen' === get_template() ) {
+				require_once UAGB_DIR . 'compatibility/class-uagb-twenty-sixteen-compatibility.php';
+			}
+
 			require_once UAGB_DIR . 'admin-core/admin-loader.php';
 
 			// Register all UAG Lite Blocks.
@@ -188,8 +192,14 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 				add_filter( 'ast_block_templates_disable', '__return_true' );
 			}
 
-			// Includes Zip AI library.
-			require_once UAGB_DIR . 'lib/zip-ai/zip-ai.php';
+			// Add the filters for the Zip AI Library and include it.
+			add_filter( 'zip_ai_collab_product_details', array( $this, 'add_zip_ai_collab_product_details' ), 20, 1 );
+			add_filter( 'zip_ai_modules', array( $this, 'add_zip_ai_modules' ), 20, 1 );
+			add_filter( 'zip_ai_auth_redirection_flag', '__return_true', 20, 1 );
+			add_filter( 'zip_ai_auth_redirection_url', array( $this, 'add_zip_ai_redirection_url' ), 20, 1 );
+			add_filter( 'zip_ai_revoke_redirection_url', array( $this, 'add_zip_ai_redirection_url' ), 20, 1 );
+
+			require_once UAGB_DIR . 'lib/class-uagb-zip-ai.php';
 		}
 
 		/**
@@ -418,11 +428,14 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 					'post',
 					'_uag_custom_page_level_css',
 					array(
-						'show_in_rest'  => true,
-						'type'          => 'string',
-						'single'        => true,
-						'auth_callback' => function() {
+						'show_in_rest'      => true,
+						'type'              => 'string',
+						'single'            => true,
+						'auth_callback'     => function() {
 							return current_user_can( 'edit_posts' );
+						},
+						'sanitize_callback' => function( $meta_value ) {
+							return wp_kses_post( $meta_value );
 						},
 					)
 				);
@@ -520,6 +533,65 @@ if ( ! class_exists( 'UAGB_Loader' ) ) {
 			if ( $stored_domain !== $site_domain ) {
 				\UAGB_Admin_Helper::update_admin_settings_option( '__uagb_asset_version', time() );
 			}
+		}
+
+		/**
+		 * Add the Zip AI Collab Product Details.
+		 *
+		 * @param mixed $product_details The previous product details, if any.
+		 * @since 2.10.2
+		 * @return array The Spectra product details.
+		 */
+		public function add_zip_ai_collab_product_details( $product_details ) {
+			// Overwrite the product details that were of a lower priority, if any.
+			$product_details = array(
+				'product_name'                          => 'Spectra',
+				'product_slug'                          => 'spectra',
+				'product_logo'                          => file_get_contents( UAGB_DIR . 'assets/images/logos/spectra.svg' ),
+				'product_primary_color'                 => '#5733ff',
+				'ai_assistant_learn_more_url'           => admin_url( 'admin.php?page=spectra&path=ai-features' ),
+				'ai_assistant_authorized_disable_url'   => admin_url( 'admin.php?page=spectra&path=ai-features&manage-features=yes' ),
+				'ai_assistant_unauthorized_disable_url' => admin_url( 'admin.php?page=spectra&path=ai-features&manage-features=yes' ),
+			);
+			// Return the Spectra product details.
+			return $product_details;
+		}
+
+		/**
+		 * Add the Zip AI Modules that come with Spectra.
+		 *
+		 * @param mixed $modules The modules for Zip AI, if any.
+		 * @since 2.10.2
+		 * @return array The Spectra default modules.
+		 */
+		public function add_zip_ai_modules( $modules ) {
+			// If the filtered modules is not an array, make it one.
+			$modules = is_array( $modules ) ? $modules : array();
+
+			// List of module names to enable.
+			$modules_to_enable = array( 'ai_assistant', 'ai_design_copilot' );
+
+			// Ensure each module in the list is enabled.
+			foreach ( $modules_to_enable as $module_name ) {
+				// @phpstan-ignore-next-line
+				if ( class_exists( '\ZipAI\Classes\Module' ) && method_exists( '\ZipAI\Classes\Module', 'force_enabled' ) ) {
+					\ZipAI\Classes\Module::force_enabled( $modules, $module_name );
+				}
+			}
+
+			// Return the Spectra default modules.
+			return $modules;
+		}
+
+		/**
+		 * Add the Zip AI Authorization/Revoke URL.
+		 *
+		 * @param mixed $auth_url The previous authorization URL, if any.
+		 * @since 2.10.2
+		 * @return string The Spectra redirection URL.
+		 */
+		public function add_zip_ai_redirection_url( $auth_url ) {
+			return admin_url( 'admin.php?page=spectra&path=ai-features' );
 		}
 	}
 }

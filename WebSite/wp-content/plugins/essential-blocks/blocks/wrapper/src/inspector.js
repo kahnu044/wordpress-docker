@@ -3,7 +3,6 @@
  *
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -12,14 +11,15 @@ import {
     BaseControl,
     ButtonGroup,
     Button,
+    SelectControl,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
 /**
  * Internal dependencies
  *
  */
 import {
     WRAPPER_WIDTH,
+    WRAPPER_HEIGHT,
     WRAPPER_BACKGROUND,
     WRAPPER_BORDER,
     WRAPPER_MARGIN,
@@ -27,6 +27,9 @@ import {
     SHAPE_DIVIDER_POSITIONS,
     SHAPE_DIVIDER_BOTTOM,
     SHAPE_DIVIDER_TOP,
+    WRAPPER_ALIGN,
+    HEIGHT_UNIT_TYPES,
+    CONTENT_ALIGNMENT,
 } from "./constants";
 import objAttributes from "./attributes";
 
@@ -40,7 +43,14 @@ const {
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
-    const { resOption, isWrapperWidth, shapeDividerPosition } = attributes;
+    const {
+        resOption,
+        isWrapperWidth,
+        shapeDividerPosition,
+        useCustomHeight,
+        contentAlign,
+        align
+    } = attributes;
 
     const resRequiredProps = {
         setAttributes,
@@ -83,6 +93,39 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "essential-blocks"
                                         )}
                                     >
+                                        <BaseControl
+                                            label={__(
+                                                "Wrapper Width",
+                                                "essential-blocks"
+                                            )}
+                                        >
+                                            <ButtonGroup id="eb-button-group-alignment">
+                                                {WRAPPER_ALIGN.map(
+                                                    (item, index) => (
+                                                        <Button
+                                                            key={index}
+                                                            isPrimary={
+                                                                align ===
+                                                                item.value
+                                                            }
+                                                            isSecondary={
+                                                                align !==
+                                                                item.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    align:
+                                                                        item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
+
                                         <ResponsiveRangeController
                                             baseLabel={__(
                                                 "Content Width",
@@ -107,6 +150,49 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 });
                                             }}
                                         />
+                                        <ToggleControl
+                                            label={__(
+                                                "Use Custom Height",
+                                                "essential-blocks"
+                                            )}
+                                            checked={useCustomHeight}
+                                            onChange={() => {
+                                                setAttributes({
+                                                    useCustomHeight: !useCustomHeight,
+                                                });
+                                            }}
+                                        />
+                                        {useCustomHeight && (
+                                            <>
+                                                <ResponsiveRangeController
+                                                    baseLabel={__(
+                                                        "Height",
+                                                        "essential-blocks"
+                                                    )}
+                                                    controlName={WRAPPER_HEIGHT}
+                                                    resRequiredProps={
+                                                        resRequiredProps
+                                                    }
+                                                    min={0}
+                                                    max={2560}
+                                                    step={1}
+                                                    units={HEIGHT_UNIT_TYPES}
+                                                />
+                                                <SelectControl
+                                                    label={__(
+                                                        "Content Alignment",
+                                                        "essential-blocks"
+                                                    )}
+                                                    value={contentAlign}
+                                                    options={CONTENT_ALIGNMENT}
+                                                    onChange={(selected) =>
+                                                        setAttributes({
+                                                            contentAlign: selected,
+                                                        })
+                                                    }
+                                                />
+                                            </>
+                                        )}
                                     </PanelBody>
                                     <PanelBody
                                         title={__(

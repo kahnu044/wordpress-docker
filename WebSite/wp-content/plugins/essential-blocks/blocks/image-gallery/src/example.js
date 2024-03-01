@@ -1,53 +1,53 @@
 const example = {
-	attributes: {
-		images: [
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
-			}
-		],
+    attributes: {
+        images: [
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
+            }
+        ],
 
-		sources: [
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
-				caption: ""
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
-				caption: ""
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
-				caption: ""
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
-				caption: ""
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
-				caption: ""
-			},
-			{
-				url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
-				caption: ""
-			}
-		],
-	}
+        sources: [
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
+                caption: ""
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
+                caption: ""
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
+                caption: ""
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
+                caption: ""
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
+                caption: ""
+            },
+            {
+                url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
+                caption: ""
+            }
+        ],
+    }
 };
 
 export default example;

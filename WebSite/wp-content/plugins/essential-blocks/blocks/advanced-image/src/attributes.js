@@ -63,11 +63,11 @@ const attributes = {
     },
     captionColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-primary-color)",
     },
     captionBGColor: {
         type: "string",
-        default: "rgba(174 98 209 / 0.7)",
+        default: "var(--eb-global-background-color)",
     },
     horizontalAlign: {
         type: "string",

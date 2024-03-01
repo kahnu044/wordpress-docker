@@ -16,11 +16,6 @@ import {
 } from "@wordpress/components";
 
 /**
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/**
  * Internal dependencies
  */
 import {
@@ -55,6 +50,7 @@ const {
     BackgroundControl,
     AdvancedControls,
     DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -240,27 +236,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 })
                                                             }
                                                         />
-                                                        <BaseControl
-                                                            label={__(
-                                                                "Button Icon",
-                                                                "essential-blocks"
-                                                            )}
-                                                        >
-                                                            <FontIconPicker
-                                                                icons={iconList}
-                                                                value={btnIcon}
-                                                                onChange={(
-                                                                    btnIcon
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            btnIcon,
-                                                                        }
-                                                                    )
-                                                                }
-                                                                appendTo="body"
-                                                            />
-                                                        </BaseControl>
+                                                        <EBIconPicker
+                                                            value={btnIcon}
+                                                            onChange={(icon) =>
+                                                                setAttributes({
+                                                                    btnIcon: icon,
+                                                                })
+                                                            }
+                                                            title={__("Button Icon", "essential-blocks")}
+                                                        />
                                                         <BaseControl
                                                             label={__(
                                                                 "Icon Position",
@@ -307,29 +291,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 )}
                                                 {"icon" === btnType && (
                                                     <>
-                                                        <BaseControl
-                                                            label={__(
-                                                                "Trigger Icon",
-                                                                "essential-blocks"
-                                                            )}
-                                                        >
-                                                            <FontIconPicker
-                                                                icons={iconList}
-                                                                value={
-                                                                    triggerIcon
-                                                                }
-                                                                onChange={(
-                                                                    triggerIcon
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            triggerIcon,
-                                                                        }
-                                                                    )
-                                                                }
-                                                                appendTo="body"
-                                                            />
-                                                        </BaseControl>
+                                                        <EBIconPicker
+                                                            value={triggerIcon}
+                                                            onChange={(icon) =>
+                                                                setAttributes({
+                                                                    triggerIcon: icon,
+                                                                })
+                                                            }
+                                                            title={__("Trigger Icon", "essential-blocks")}
+                                                        />
                                                     </>
                                                 )}
                                                 <BaseControl
@@ -1107,7 +1077,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "Margin & Padding",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={true}
+                                    // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}

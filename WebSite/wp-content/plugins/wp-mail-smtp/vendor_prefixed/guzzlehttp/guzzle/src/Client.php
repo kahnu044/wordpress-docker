@@ -109,7 +109,7 @@ class Client implements \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface, \WPMailSM
     /**
      * The HttpClient PSR (PSR-18) specify this method.
      *
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function sendRequest(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request) : \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface
     {
@@ -178,7 +178,7 @@ class Client implements \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface, \WPMailSM
      *
      * @deprecated Client::getConfig will be removed in guzzlehttp/guzzle:8.0.
      */
-    public function getConfig(?string $option = null)
+    public function getConfig(string $option = null)
     {
         return $option === null ? $this->config : $this->config[$option] ?? null;
     }
@@ -366,6 +366,9 @@ class Client implements \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface, \WPMailSM
             if (\is_bool($options['sink'])) {
                 throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\InvalidArgumentException('sink must not be a boolean');
             }
+        }
+        if (isset($options['version'])) {
+            $modify['version'] = $options['version'];
         }
         $request = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
         if ($request->getBody() instanceof \WPMailSMTP\Vendor\GuzzleHttp\Psr7\MultipartStream) {

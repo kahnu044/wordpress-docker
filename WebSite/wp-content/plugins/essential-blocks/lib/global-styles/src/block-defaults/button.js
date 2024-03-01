@@ -14,11 +14,6 @@ import {
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
 const {
     ColorControl,
     ResponsiveRangeController,
@@ -27,6 +22,7 @@ const {
     BackgroundControl,
     faIcons,
     BorderShadowControl,
+    EBIconPicker,
 } = window.EBControls;
 
 /**
@@ -83,11 +79,11 @@ function EBButton(props) {
                 iconPosition: "left",
                 iconSize: "",
                 iconSpace: "5px",
-                textColor: "",
+                textColor: "var(--eb-global-button-text-color)",
                 buttonAlign: "center",
                 buttonWidth: "auto",
                 hoverEffect: "",
-                hoverTextColor: "",
+                hoverTextColor: "var(--eb-global-button-text-color)",
                 hoverTransition: 0.3,
 
                 [`${BUTTON_BORDER}Bdr_Unit`]: "px",
@@ -151,9 +147,7 @@ function EBButton(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     <PanelBody title={__("General", "essential-blocks")}>
-                        <BaseControl
-                            label={__("Alignment", "essential-blocks")}
-                        >
+                        <BaseControl label={__("Alignment", "essential-blocks")}>
                             <ButtonGroup id="eb-button-group-alignment">
                                 {CONTENT_POSITION.map((item, index) => (
                                     <Button
@@ -191,10 +185,7 @@ function EBButton(props) {
                         </BaseControl>
                         {buttonWidth === "fixed" && (
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Fixed Width",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Fixed Width", "essential-blocks")}
                                 controlName={FIXED_WIDTH}
                                 resRequiredProps={resRequiredProps}
                                 min={100}
@@ -203,55 +194,28 @@ function EBButton(props) {
                             />
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Icon", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Icon", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label={__("Add icon", "essential-blocks")}
                             checked={addIcon}
-                            onChange={() =>
-                                handleBlockDefault({ addIcon: !addIcon })
-                            }
+                            onChange={() => handleBlockDefault({ addIcon: !addIcon })}
                         />
                         {addIcon && (
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Select Icon",
-                                        "essential-blocks"
-                                    )}
-                                >
-                                    <FontIconPicker
-                                        icons={faIcons}
-                                        value={icon}
-                                        onChange={(icon) =>
-                                            handleBlockDefault({ icon })
-                                        }
-                                        appendTo="body"
-                                        closeOnSelect
-                                    />
-                                </BaseControl>
-                                <BaseControl
-                                    label={__(
-                                        "Icon Postion",
-                                        "essential-blocks"
-                                    )}
-                                >
+                                <EBIconPicker
+                                    value={icon}
+                                    onChange={(icon) => handleBlockDefault({ icon })}
+                                />
+                                <BaseControl label={__("Icon Postion", "essential-blocks")}>
                                     <ButtonGroup id="eb-button-group-alignment">
                                         {ICON_POSITION.map((item, index) => (
                                             <Button
                                                 key={index}
-                                                isPrimary={
-                                                    iconPosition === item.value
-                                                }
-                                                isSecondary={
-                                                    iconPosition !== item.value
-                                                }
+                                                isPrimary={iconPosition === item.value}
+                                                isSecondary={iconPosition !== item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        iconPosition:
-                                                            item.value,
+                                                        iconPosition: item.value,
                                                     })
                                                 }
                                             >
@@ -275,10 +239,7 @@ function EBButton(props) {
                             </>
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Styles", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Styles", "essential-blocks")} initialOpen={true}>
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -295,10 +256,7 @@ function EBButton(props) {
                                 }
                             />
                             <ColorControl
-                                label={__(
-                                    "Text Hover Color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Text Hover Color", "essential-blocks")}
                                 color={hoverTextColor}
                                 onChange={(newHoverTextColor) =>
                                     handleBlockDefault({
@@ -308,9 +266,7 @@ function EBButton(props) {
                             />
                             <Divider />
                             <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__("Background", "essential-blocks")}
-                                </h3>
+                                <h3 className="eb-control-title">{__("Background", "essential-blocks")}</h3>
                             </BaseControl>
                             <BackgroundControl
                                 controlName={BUTTON_BACKGROUND}
@@ -320,14 +276,9 @@ function EBButton(props) {
                             />
                             <Divider />
                             <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__("Border", "essential-blocks")}
-                                </h3>
+                                <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                             </BaseControl>
-                            <BorderShadowControl
-                                controlName={BUTTON_BORDER}
-                                resRequiredProps={resRequiredProps}
-                            />
+                            <BorderShadowControl controlName={BUTTON_BORDER} resRequiredProps={resRequiredProps} />
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={BUTTON_PADDING}
@@ -338,7 +289,7 @@ function EBButton(props) {
                     {/* Advanced */}
                     <PanelBody
                         title={__("Wrapper Margin", "essential-blocks")}
-                        // initialOpen={true}
+                    // initialOpen={true}
                     >
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
@@ -358,14 +309,9 @@ function EBButton(props) {
                         />
                         {hoverEffect && (
                             <RangeControl
-                                label={__(
-                                    "Hover Transition",
-                                    "essential-blocks"
-                                )}
+                                label={__("Hover Transition", "essential-blocks")}
                                 value={hoverTransition}
-                                onChange={(hoverTransition) =>
-                                    handleBlockDefault({ hoverTransition })
-                                }
+                                onChange={(hoverTransition) => handleBlockDefault({ hoverTransition })}
                                 step={0.01}
                                 min={0}
                                 max={5}

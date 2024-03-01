@@ -29,6 +29,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         blockId,

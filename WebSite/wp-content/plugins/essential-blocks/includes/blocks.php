@@ -1,7 +1,7 @@
 <?php
 use EssentialBlocks\blocks\Row;
-// use EssentialBlocks\blocks\Icon;
 use EssentialBlocks\blocks\Form;
+use EssentialBlocks\blocks\Icon;
 use EssentialBlocks\blocks\PopUp;
 use EssentialBlocks\blocks\Button;
 use EssentialBlocks\blocks\Notice;
@@ -173,7 +173,7 @@ return [
         'label'      => __( 'Notice', 'essential-blocks' ),
         'value'      => 'notice',
         'visibility' => 'true',
-        'category'   => 'creative',
+        'category'   => 'marketing',
         'object'     => Notice::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/notice/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/notice/',
@@ -288,7 +288,7 @@ return [
         'label'      => __( 'Wrapper', 'essential-blocks' ),
         'value'      => 'wrapper',
         'visibility' => 'true',
-        'category'   => 'content',
+        'category'   => 'layout',
         'object'     => Wrapper::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/wrapper/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/block-wrapper/',
@@ -330,7 +330,7 @@ return [
         'value'      => 'row',
         'visibility' => 'true',
         'status'     => 'popular',
-        'category'   => 'content',
+        'category'   => 'layout',
         'object'     => Row::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/row/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-row/',
@@ -341,7 +341,7 @@ return [
         'value'      => 'table_of_contents',
         'visibility' => 'true',
         'status'     => 'updated',
-        'category'   => 'dynamic',
+        'category'   => 'content',
         'object'     => TableOfContents::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/table-of-contents/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-table-of-contents/',
@@ -372,7 +372,7 @@ return [
         'label'      => __( 'Advanced Navigation', 'essential-blocks' ),
         'value'      => 'advanced_navigation',
         'visibility' => 'true',
-        'category'   => 'dynamic',
+        'category'   => 'creative',
         'object'     => AdvancedNavigation::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-navigation/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-advanced-navigation/',
@@ -393,7 +393,7 @@ return [
         'label'      => __( 'Advanced Image', 'essential-blocks' ),
         'value'      => 'advanced_image',
         'visibility' => 'true',
-        'category'   => 'content',
+        'category'   => 'creative',
         'object'     => AdvancedImage::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-image/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-advanced-image/',
@@ -423,7 +423,7 @@ return [
         'label'      => __( 'Advanced Video', 'essential-blocks' ),
         'value'      => 'advanced_video',
         'visibility' => 'true',
-        'category'   => 'content',
+        'category'   => 'creative',
         'object'     => AdvancedVideo::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-video/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-advanced-video/',
@@ -433,7 +433,7 @@ return [
         'label'      => __( 'Popup', 'essential-blocks' ),
         'value'      => 'popup',
         'visibility' => 'true',
-        'category'   => 'creative',
+        'category'   => 'marketing',
         'object'     => PopUp::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/popup/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-popup/',
@@ -443,7 +443,7 @@ return [
         'label'      => __( 'Openverse', 'essential-blocks' ),
         'value'      => 'openverse',
         'visibility' => 'true',
-        'category'   => 'content',
+        'category'   => 'dynamic',
         'object'     => Openverse::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/openverse/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/openverse/',
@@ -474,7 +474,7 @@ return [
         'label'      => __( 'Shape Divider', 'essential-blocks' ),
         'value'      => 'shape_divider',
         'visibility' => 'true',
-        'category'   => 'content',
+        'category'   => 'creative',
         'object'     => ShapeDivider::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/shape-divider/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-shape-divider',
@@ -491,23 +491,24 @@ return [
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-form-block',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/form.svg'
     ],
-    // 'icon'                      => [
-    //     'label'      => __( 'Icon', 'essential-blocks' ),
-    //     'value'      => 'icon',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'object'     => Icon::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/shape-divider/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-shape-divider',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/icon-picker.svg'
-    // ],
+    'icon'                      => [
+        'label'      => __( 'Icon Picker', 'essential-blocks' ),
+        'value'      => 'icon',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'creative',
+        'object'     => Icon::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/icon-picker/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-icon-picker',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/icon-picker.svg'
+    ],
     'advanced_search'           => [
         'label'      => __( 'Advanced Search', 'essential-blocks' ),
         'value'      => 'advanced_search',
         'visibility' => 'true',
         'status'     => 'new',
         'is_pro'     => true,
-        'category'   => 'dynamic',
+        'category'   => 'content',
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-search',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-advanced-search',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/adv-search.svg'
@@ -559,7 +560,7 @@ return [
         'value'      => 'multicolumn_pricing_table',
         'visibility' => 'true',
         'status'     => 'new',
-        'category'   => 'creative',
+        'category'   => 'marketing',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/multicolumn-pricing-table',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-multicolumn-pricing-table',
@@ -597,5 +598,16 @@ return [
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/testimonial-slider/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-testimonial-slider',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/testimonial-slider.svg'
-    ]
+    ],
+    'off_canvas'             => [
+        'label'      => __( 'Offcanvas', 'essential-blocks' ),
+        'value'      => 'off_canvas',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'content',
+        'is_pro'     => true,
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/offcanvas/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-offcanvas/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks-icon/offcanvas.svg'
+    ],
 ];

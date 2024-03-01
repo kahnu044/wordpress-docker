@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", (event) => {
     const imageGalleries = document.querySelectorAll(
-        `.eb-gallery-img-wrapper.eb-filterable-img-gallery`
+        `.eb-gallery-img-wrapper.eb-filterable-img-gallery, .eb-gallery-img-wrapper.enable-isotope`
     );
 
     // filter functions
@@ -21,6 +21,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let wrapperid = imageGallery.getAttribute("data-id");
         let defaultFilter = imageGallery.getAttribute("data-default-filter");
 
+        const loadMoreBtn = imageGallery.closest(".eb-parent-wrapper").querySelectorAll('.eb-img-gallery-loadmore')[0];
+        const enableLoadmore = loadMoreBtn?.getAttribute("data-loadmore");;
+        const initShow = Number(loadMoreBtn?.getAttribute("data-images-per-page")); //number of images loaded on init & onclick load more button
+        let counter = initShow;
+
         // add class is-checked
         const selectFilters = imageGallery.closest(".eb-parent-wrapper").querySelectorAll('.eb-img-gallery-filter-item')
         if (selectFilters) {
@@ -33,7 +38,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 }
             }
             else {
-                selectFilters[0].classList.add("is-checked");
+                selectFilters[0]?.classList.add("is-checked");
             }
         }
 
@@ -44,6 +49,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 iso = new Isotope(`.${wrapperid}`, {
                     itemSelector: ".eb-gallery-img-content",
                     layoutMode: "fitRows",
+                    transitionDuration: '0.5s',
                 });
             } else {
                 iso = new Isotope(`.${wrapperid}`, {
@@ -54,7 +60,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     },
                 });
             }
-            iso.arrange({ filter: defaultFilter === '*' ? '*' : `.eb-filter-img-${defaultFilter}` });
+            if (defaultFilter) {
+                iso.arrange({ filter: defaultFilter === '*' ? '*' : `.eb-filter-img-${defaultFilter}` });
+            }
+            else {
+                iso.arrange();
+            }
+
+            if (enableLoadmore) loadMore(iso, initShow);
         });
 
         // bind filter button click
@@ -96,5 +109,65 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 event.target.classList.add("is-checked");
             });
         }
+
+
+        // loadmore function
+        function loadMore(isotopInstance, toShow) {
+            const hiddenElements = imageGallery.querySelectorAll('.hidden');
+            hiddenElements.forEach(function (element) {
+                element.classList.remove('hidden');
+            });
+
+            const hiddenElems = isotopInstance.filteredItems?.slice(toShow, isotopInstance.filteredItems.length).map(function (item) {
+                return item.element;
+            });
+
+            hiddenElems?.forEach(function (element) {
+                element.classList.add('hidden');
+            });
+
+            iso.arrange({ layoutMode: 'fitRows' });
+
+            // isotopInstance.isotope('layout');
+
+            //when no more to load, hide show more button
+            if (hiddenElems?.length == 0) {
+                loadMoreBtn.style.display = "none";
+            }
+            else {
+                loadMoreBtn.style.display = 'block';
+            };
+
+        }
+
+        // Loadmore Btn
+        if (enableLoadmore) {
+            const filtersWrapper = imageGallery.closest(".eb-parent-wrapper").querySelector('.eb-img-gallery-filter-wrapper');
+
+            if (filtersWrapper) { filtersWrapper.dataset.clicked = 'true' };
+
+            loadMoreBtn.addEventListener("click", function (event) {
+                iso = Isotope.data(`.${wrapperid}`);
+
+                if (filtersWrapper?.dataset.clicked === 'true') {
+                    // When filter button clicked, set the initial value for counter
+                    counter = initShow;
+                    filtersWrapper.dataset.clicked = 'false';
+                } else {
+                    counter = counter;
+                }
+
+                counter = counter + initShow;
+                loadMore(iso, counter);
+            });
+
+            filtersWrapper?.addEventListener('click', function () {
+                iso = Isotope.data(`.${wrapperid}`);
+                this.dataset.clicked = 'true'; // Set data-clicked attribute to 'true'
+
+                loadMore(iso, initShow);
+            });
+        }
+
     }
 });

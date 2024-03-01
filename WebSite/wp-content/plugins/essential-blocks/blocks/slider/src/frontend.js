@@ -15,6 +15,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let textAlign = wrapper.getAttribute("data-textAlign");
         let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
         let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
+        let TitleTag = wrapper.getAttribute("data-titleTag") || 'h2';
+        let ContentTag = wrapper.getAttribute("data-contentTag") || 'p';
 
         const slider = createRef();
 
@@ -47,12 +49,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
         settings.nextArrow = <SampleNextArrow arrowNextIcon={arrowNextIcon} />;
         settings.prevArrow = <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />;
 
+        const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
+
         render(
             <Slider
                 ref={slider}
                 {...settings}
                 key={`${settings.autoplay}-${settings.adaptiveHeight}`}
-                className={sliderType}
+                className={sliderTypeClass}
             >
                 {images.map((image) => (
                     <div className={`eb-slider-item ${sliderContentType}`}>
@@ -105,21 +109,24 @@ window.addEventListener("DOMContentLoaded", (event) => {
                                     className={`eb-slider-content align-${textAlign}`}
                                 >
                                     {image.title && image.title.length > 0 && (
-                                        <h2
-                                            className="eb-slider-title"
-                                            dangerouslySetInnerHTML={{
-                                                __html: image.title,
-                                            }}
-                                        ></h2>
+                                        <>
+                                            <TitleTag
+                                                className="eb-slider-title"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: image.title,
+                                                }}
+                                            ></TitleTag>
+                                        </>
+
                                     )}
                                     {image.subtitle &&
                                         image.subtitle.length > 0 && (
-                                            <p
+                                            <ContentTag
                                                 className="eb-slider-subtitle"
                                                 dangerouslySetInnerHTML={{
                                                     __html: image.subtitle,
                                                 }}
-                                            ></p>
+                                            ></ContentTag>
                                         )}
                                     <div className="eb-slider-button-wrapper">
                                         {image.showButton &&
@@ -128,7 +135,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                                                 <a
                                                     href={
                                                         image.buttonUrl &&
-                                                        image.isValidUrl
+                                                            image.isValidUrl
                                                             ? image.buttonUrl
                                                             : "#"
                                                     }
@@ -149,11 +156,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
                                         {image.showSecondButton &&
                                             image.secondButtonText &&
                                             image.secondButtonText.length >
-                                                0 && (
+                                            0 && (
                                                 <a
                                                     href={
                                                         image.secondButtonUrl &&
-                                                        image.isValidUrl
+                                                            image.isValidUrl
                                                             ? image.secondButtonUrl
                                                             : "#"
                                                     }

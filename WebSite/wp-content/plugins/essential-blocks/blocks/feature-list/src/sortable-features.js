@@ -21,7 +21,6 @@ import {
     SortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 /**
  * Internal dependencies
@@ -31,7 +30,7 @@ import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 // import ImageAvatar from "../../../util/image-avatar/";
 import { MEDIA_TYPES } from "./constants";
 import { ToggleControl } from "@wordpress/components";
-const { faIcons, ColorControl, ImageAvatar } = window.EBControls;
+const { ColorControl, ImageAvatar, EBIconPicker } = window.EBControls;
 
 // Style objects
 const trashStyle = {
@@ -171,26 +170,10 @@ const SortableItem = SortableElement(
                         {feature.iconType !== "none" && (
                             <>
                                 {feature.iconType === "icon" && (
-                                    <BaseControl
-                                        label={__(
-                                            "Select Icon",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <FontIconPicker
-                                            icons={faIcons}
-                                            onChange={(value) =>
-                                                onFeatureChange(
-                                                    "icon",
-                                                    value,
-                                                    position
-                                                )
-                                            }
-                                            value={feature.icon}
-                                            appendTo="body"
-                                            isMulti={false}
-                                        />
-                                    </BaseControl>
+                                    <EBIconPicker
+                                        value={feature.icon}
+                                        onChange={(value) => onFeatureChange("icon", value, position)}
+                                    />
                                 )}
                                 {feature.iconType === "image" &&
                                     !feature.featureImage && (

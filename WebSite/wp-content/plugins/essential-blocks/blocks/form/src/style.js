@@ -1,7 +1,3 @@
-/**
- * WordPress dependencies
- */
-import { useEffect } from "@wordpress/element";
 
 import {
     WRAPPER_MARGIN,
@@ -52,10 +48,11 @@ const {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
+    StyleComponent
 } = window.EBControls;
 
 export default function Style(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, name } = props;
     const {
         blockId,
         blockMeta,
@@ -553,61 +550,55 @@ export default function Style(props) {
 	`;
 
     const formDesktop = `
-        ${
-            formWidth === "full"
-                ? `
-                .eb-form-wrapper.${blockId} {
+        ${formWidth === "full"
+            ? `
+                .eb-parent-${blockId} {
                     width: 100%;
                 }`
-                : `.eb-form-wrapper.${blockId} {
+            : `.eb-parent-${blockId} {
                         ${formWidthDesktop}
                     }`
         }
 
-        ${
-            formAlign === "left"
-                ? `.eb-parent-${blockId}{
+        ${formAlign === "left"
+            ? `.eb-parent-${blockId}{
                         justify-content: left;
                     }`
-                : ""
+            : ""
         }
-        ${
-            formAlign === "center"
-                ? `.eb-parent-${blockId}{
+        ${formAlign === "center"
+            ? `.eb-parent-${blockId}{
                         justify-content: center;
                     }`
-                : ""
+            : ""
         }
-        ${
-            formAlign === "right"
-                ? `.eb-parent-${blockId}{
+        ${formAlign === "right"
+            ? `.eb-parent-${blockId}{
                         justify-content: right;
                     }`
-                : ""
+            : ""
         }
 	`;
     const formTab = `
 
-        ${
-            formWidth === "full"
-                ? `
+        ${formWidth === "full"
+            ? `
                 .eb-form-wrapper.${blockId} {
                     width: 100%;
                 }`
-                : `.eb-form-wrapper.${blockId} {
+            : `.eb-form-wrapper.${blockId} {
                         ${formWidthTab}
                     }`
         }
 	`;
     const formMobile = `
 
-        ${
-            formWidth === "full"
-                ? `
+        ${formWidth === "full"
+            ? `
                 .eb-form-wrapper.${blockId} {
                     width: 100%;
                 }`
-                : `.eb-form-wrapper.${blockId} {
+            : `.eb-form-wrapper.${blockId} {
                         ${formWidthMobile}
                     }`
         }
@@ -630,9 +621,8 @@ export default function Style(props) {
             color: ${requiredColor};
         }
 
-        ${
-            formStyle == "form-style-modern"
-                ? `
+        ${formStyle == "form-style-modern"
+            ? `
                 .eb-form-wrapper.${blockId} .eb-field-input-wrap label,
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern input:focus ~ label,
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern input:valid ~ label,
@@ -645,7 +635,7 @@ export default function Style(props) {
                 }
 
                 `
-                : ""
+            : ""
         }
 	`;
     const labelTab = `
@@ -694,9 +684,8 @@ export default function Style(props) {
 
 
 
-        ${
-            showInputIcon
-                ? `
+        ${showInputIcon
+            ? `
                 .eb-form-wrapper.${blockId} .eb-field-wrapper .eb-input-icon {
                     ${inputIconSizeStylesDesktop}
                     color: ${inputIconColor};
@@ -706,7 +695,7 @@ export default function Style(props) {
                 .eb-form-wrapper.${blockId} .eb-field-wrapper .eb-field-input {
                     padding-left: calc(${inputIconSizeRange}px + (${fieldsPaddingLeft}${fieldsPaddingUnit} * 1.6));
                 }`
-                : ""
+            : ""
         }
 
 
@@ -714,7 +703,7 @@ export default function Style(props) {
     const fieldsTab = `
         .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
-            ${rowGapStylesTab}
+            ${rowGapStylesTab ? rowGapStylesTab : rowGapStylesDesktop}
         }
 		.eb-form-wrapper.${blockId} .eb-field-wrapper .eb-field-input {
             ${fieldsTypoStylesTab}
@@ -730,7 +719,7 @@ export default function Style(props) {
     const fieldsMobile = `
         .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
-            ${rowGapStylesMobile}
+            ${rowGapStylesMobile ? rowGapStylesMobile : rowGapStylesDesktop}
         }
 		.eb-form-wrapper.${blockId} .eb-field-wrapper .eb-field-input {
             ${fieldsTypoStylesMobile}
@@ -864,30 +853,26 @@ export default function Style(props) {
 	`;
 
     const btnDesktop = `
-        ${
-            buttonAlign === "left"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${buttonAlign === "left"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                         justify-content: left;
                     }`
-                : ""
+            : ""
         }
-        ${
-            buttonAlign === "center"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${buttonAlign === "center"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                         justify-content: center;
                     }`
-                : ""
+            : ""
         }
-        ${
-            buttonAlign === "right"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${buttonAlign === "right"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                         justify-content: right;
                     }`
-                : ""
+            : ""
         }
-        ${
-            formLayout === "inline"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${formLayout === "inline"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                         align-items: ${btnVerticalAlign};
                     }
                     .eb-form-wrapper.${blockId} .eb-form.form-layout-inline .eb-form-fields {
@@ -897,41 +882,37 @@ export default function Style(props) {
                         flex-basis: calc(100% - ${inlineFormWidthRange}%);
                     }
 
-                    ${
-                        btnHorizontalPositionRange !== "undefined"
-                            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                    ${btnHorizontalPositionRange !== "undefined"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                     position: relative;
                                     right: ${btnHorizontalPositionRange}${btnHorizontalPositionUnit};
                                 }`
-                            : ""
-                    }
-                    ${
-                        btnVerticalAlign === "flex-start"
-                            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : ""
+            }
+                    ${btnVerticalAlign === "flex-start"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                     margin-top: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
                                 }`
-                            : ""
-                    }
-                    ${
-                        btnVerticalAlign === "flex-end"
-                            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : ""
+            }
+                    ${btnVerticalAlign === "flex-end"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                     margin-bottom: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
                                 }`
-                            : ""
-                    }
-                    `
                 : ""
+            }
+                    `
+            : ""
         }
-        ${
-            formLayout === "block"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit{
+        ${formLayout === "block"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit{
                         ${btnTopSpecingDesktop};
                     }
                     .eb-form-wrapper.${blockId}{
                         flex-direction: column;
                     }
                     `
-                : ""
+            : ""
         }
 
 
@@ -948,34 +929,31 @@ export default function Style(props) {
             ${btnBDShadowHoverDesktop}
 		}
 
-        ${
-            buttonWidth !== "auto"
-                ? buttonWidth === "full"
-                    ? `
+        ${buttonWidth !== "auto"
+            ? buttonWidth === "full"
+                ? `
 					.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button {
 						width: 100%;
 					}`
-                    : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
 							${buttonWidthDesktop}
 						}`
-                : ""
+            : ""
         }
 
-        ${
-            btnAddIcon
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
+        ${btnAddIcon
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
 					${iconSizeDesktop}
 					${iconPosition === "left" ? iconGapRightDesktop : iconGapLeftDesktop}
 				}`
-                : ""
+            : ""
         }
 
 	`;
 
     const btnTab = `
-        ${
-            formLayout === "inline"
-                ? `
+        ${formLayout === "inline"
+            ? `
                         .eb-form-wrapper.${blockId} .eb-form.form-layout-inline .eb-form-fields {
                             flex-basis: ${TABinlineFormWidthRange}%;
                         }
@@ -983,38 +961,34 @@ export default function Style(props) {
                             flex-basis: calc(100% - ${TABinlineFormWidthRange}%);
                         }
 
-                        ${
-                            btnHorizontalPositionRange !== "undefined"
-                                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                        ${btnHorizontalPositionRange !== "undefined"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                         position: relative;
                                         right: ${btnHorizontalPositionRange}${btnHorizontalPositionUnit};
                                     }`
-                                : ""
-                        }
-                        ${
-                            btnVerticalAlign === "flex-start"
-                                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : ""
+            }
+                        ${btnVerticalAlign === "flex-start"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                         margin-top: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
                                     }`
-                                : ""
-                        }
-                        ${
-                            btnVerticalAlign === "flex-end"
-                                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : ""
+            }
+                        ${btnVerticalAlign === "flex-end"
+                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                         margin-bottom: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
                                     }`
-                                : ""
-                        }
-                        `
                 : ""
+            }
+                        `
+            : ""
         }
-        ${
-            formLayout === "block"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${formLayout === "block"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                             ${btnTopSpecingTab};
                         }
                         `
-                : ""
+            : ""
         }
 		.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button {
             ${btnTypoStylesTab}
@@ -1025,36 +999,33 @@ export default function Style(props) {
             ${btnBDShadowHoverTab}
 		}
 
-        ${
-            buttonWidth !== "auto"
-                ? buttonWidth === "full"
-                    ? `
+        ${buttonWidth !== "auto"
+            ? buttonWidth === "full"
+                ? `
 					.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button {
 						width: 100%;
 					}`
-                    : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
 							${buttonWidthTab}
 						}`
-                : ""
+            : ""
         }
 
-        ${
-            btnAddIcon
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
+        ${btnAddIcon
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
 					${iconSizeTab}
 					${iconPosition === "left" ? iconGapRightTab : iconGapLeftTab}
 				}`
-                : ""
+            : ""
         }
 	`;
     const btnMobile = `
-        ${
-            formLayout === "block"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit {
+        ${formLayout === "block"
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit {
                                 ${btnTopSpecingMobile};
                             }
                             `
-                : ""
+            : ""
         }
 		.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button {
             ${btnTypoStylesMobile}
@@ -1065,26 +1036,24 @@ export default function Style(props) {
             ${btnBDShadowHoverMobile}
 		}
 
-        ${
-            buttonWidth !== "auto"
-                ? buttonWidth === "full"
-                    ? `
+        ${buttonWidth !== "auto"
+            ? buttonWidth === "full"
+                ? `
 					.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button {
 						width: 100%;
 					}`
-                    : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                : `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
 							${buttonWidthMobile}
 						}`
-                : ""
+            : ""
         }
 
-        ${
-            btnAddIcon
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
+        ${btnAddIcon
+            ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button .eb-button-icon {
 					${iconSizeMobile}
 					${iconPosition === "left" ? iconGapRightMobile : iconGapLeftMobile}
 				}`
-                : ""
+            : ""
         }
 	`;
 
@@ -1170,7 +1139,7 @@ export default function Style(props) {
 		${wrapperStylesTab}
 		${formTab}
 		${labelTab}
-		${fieldsTab}
+        ${fieldsTab}
 		${radioTab}
 		${checkboxTab}
 		${btnTab}
@@ -1189,46 +1158,16 @@ export default function Style(props) {
 		${successMobile}
 	`);
 
-    // Set All Style in "blockMeta" Attribute
-    useEffect(() => {
-        const styleObject = {
-            desktop: desktopAllStyles,
-            tab: tabAllStyles,
-            mobile: mobileAllStyles,
-        };
-        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-            setAttributes({ blockMeta: styleObject });
-        }
-    }, [attributes]);
-
     return (
-        <style>
-            {`
-				${desktopAllStyles}
-
-				/* mimmikcssStart */
-
-				${resOption === "Tablet" ? tabAllStyles : " "}
-				${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-
-				/* mimmikcssEnd */
-
-				@media all and (max-width: 1024px) {
-
-					/* tabcssStart */
-					${softMinifyCssStrings(tabAllStyles)}
-					/* tabcssEnd */
-
-				}
-
-				@media all and (max-width: 767px) {
-
-					/* mobcssStart */
-					${softMinifyCssStrings(mobileAllStyles)}
-					/* mobcssEnd */
-
-				}
-				`}
-        </style>
+        <>
+            <StyleComponent
+                attributes={attributes}
+                setAttributes={setAttributes}
+                desktopAllStyles={desktopAllStyles}
+                tabAllStyles={tabAllStyles}
+                mobileAllStyles={mobileAllStyles}
+                blockName={name}
+            />
+        </>
     );
 }

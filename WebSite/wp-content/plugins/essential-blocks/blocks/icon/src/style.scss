@@ -12,11 +12,13 @@
 		color: #333333;
 		font-size: 50px;
 		text-align: center;
+
 		i {
 			width: 1em;
 			height: 1em;
 			position: relative;
 			display: block;
+
 			&:before {
 				position: absolute;
 				left: 50%;
@@ -24,11 +26,13 @@
 			}
 		}
 	}
+
 	&.eb-icon-shape-circle {
 		.eb-icon-container {
 			border-radius: 50%;
 		}
 	}
+
 	&.eb-icon-view-framed {
 		.eb-icon-container {
 			padding: 0.5em;
@@ -36,6 +40,7 @@
 			background-color: transparent;
 		}
 	}
+
 	&.eb-icon-view-stacked {
 		.eb-icon-container {
 			padding: 0.5em;
@@ -43,5 +48,12 @@
 			color: #fff;
 			fill: #fff;
 		}
+	}
+
+	.dashicons,
+	.dashicons-before:before {
+		width: unset;
+		height: unset;
+		font-size: unset;
 	}
 }

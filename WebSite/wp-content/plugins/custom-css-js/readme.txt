@@ -4,8 +4,8 @@ Contributors: diana_burduja
 Email: diana@burduja.eu
 Tags: CSS, JS, javascript, custom CSS, custom JS, custom style, site css, add style, customize theme, custom code, external css, css3, style, styles, stylesheet, theme, editor, design, admin
 Requires at least: 3.0.1
-Tested up to: 6.4 
-Stable tag: 3.45
+Tested up to: 6.5 
+Stable tag: 3.46
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -86,9 +86,6 @@ Yes.
 = Who can publish/edit/delete Custom Codes? =
 By default only the Administrator will be able to publish/edit/delete Custom Codes. On the plugin activation there is a role created called Web Designer. You can assign this role to a non-admin user in order to allow to publish/edit/delete Custom Codes. On the plugin's Settings page there is an option to remove this role. 
 
-= Compatibility with qTranslate X plugin =
-* If the [qTranslate X](https://wordpress.org/plugins/qtranslate-x/) plugin is adding some `[:]` or `[:en]` characters to your code, then you need to remove the `custom-css-js` post type from the qTranslate settings. Check out [this screenshot](https://www.silkypress.com/wp-content/uploads/2016/08/ccj_qtranslate_compatibility.png) on how to do that.
-
 = My website has HTTPS urls, but the codes are linked as HTTP =
 The URL for the linked Codes is built just like the URL for other media (from Media Library) by using the WordPress Address option found on the WP Admin -> Settings -> General page, as shown in [this screenshot](https://www.silkypress.com/wp-content/uploads/2016/12/ccj-siteurl.png). If the WordPress Address has HTTPS in the url, then the Custom Codes and all the other media will have HTTPS in the url. 
 
@@ -104,6 +101,11 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 $. Add/Edit HTML 
 
 == Changelog ==
+
+= 3.46 =
+* 01/31/2024
+* Tweak: update the Bootstrap and jQuery library links 
+* Tweak: remove the qTranslate-x warning. The qTranslate-x plugin was removed from wp.org since Aug 2021
 
 = 3.45 =
 * 10/17/2023

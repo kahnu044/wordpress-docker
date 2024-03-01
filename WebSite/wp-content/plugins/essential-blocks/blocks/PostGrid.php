@@ -18,7 +18,9 @@ class PostGrid extends PostBlock {
         'iconPosition'        => 'left',
         'icon'                => 'fas fa-chevron-right',
         'preset'              => 'style-1',
-        'enableThumbnailSort' => true
+        'enableThumbnailSort' => true,
+        'defaultFilter'       => 'all',
+        'version'             => ""
     ];
 
     public function get_default_attributes() {
@@ -58,8 +60,28 @@ class PostGrid extends PostBlock {
 
         $queryData = $attributes["queryData"];
 
+        $customQueryData = $queryData; //Update with filter data
+
+        if ( isset( $attributes['showTaxonomyFilter'] ) && $attributes['showTaxonomyFilter'] ) {
+            $defaultFilter = isset( $attributes["defaultFilter"] ) ? $attributes["defaultFilter"] : "all";
+            if ( $defaultFilter !== "all" ) {
+                $taxonomy  = json_decode( $attributes['selectedTaxonomy'] );
+                $category  = get_term_by( 'slug', sanitize_text_field( $defaultFilter ), sanitize_text_field( $taxonomy->value ) );
+                $catString = json_encode( [[
+                    "label" => $category->name,
+                    "value" => $category->term_id
+                ]] );
+                $defaultTaxonomy[$taxonomy->value] = [
+                    'name'  => $defaultFilter,
+                    'slug'  => $defaultFilter,
+                    'value' => $catString
+                ];
+                $customQueryData['taxonomies'] = $defaultTaxonomy;
+            }
+        }
+
         //Query Result
-        $result = $this->get_posts( $queryData );
+        $result = $this->get_posts( $customQueryData );
         $query  = [];
         if ( isset( $result->posts ) && is_array( $result->posts ) && count( $result->posts ) > 0 ) {
             $query = apply_filters( 'eb_post_grid_query_results', $result->posts );
@@ -68,7 +90,7 @@ class PostGrid extends PostBlock {
         $attributes = wp_parse_args( $attributes, $this->get_default_attributes() );
 
         //Set enableThumbnailSort to false if preset is 4/5
-        if ( isset( $attributes['enableThumbnailSort'] ) && !in_array($attributes["preset"], ['style-1', 'style-2', 'style-3']) ) {
+        if ( isset( $attributes['enableThumbnailSort'] ) && ! in_array( $attributes["preset"], ['style-1', 'style-2', 'style-3'] ) ) {
             $attributes['enableThumbnailSort'] = false;
         }
 
@@ -85,7 +107,9 @@ class PostGrid extends PostBlock {
             'addIcon'            => $attributes['addIcon'],
             'iconPosition'       => $attributes['iconPosition'],
             'icon'               => $attributes['icon'],
-            'preset'             => $attributes['preset']
+            'preset'             => $attributes['preset'],
+            'defaultFilter'      => $attributes['defaultFilter'],
+            'version'            => isset( $attributes['version'] ) ? $attributes['version'] : ''
         ];
 
         //set total posts
@@ -107,6 +131,7 @@ class PostGrid extends PostBlock {
             'essentialAttr' => $_essential_attrs,
             'className'     => $className,
             'classHook'     => $classHook,
+            'queryData'     => $queryData,
             'posts'         => $query,
             'block_object'  => $this
         ] ) );

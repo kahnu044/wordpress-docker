@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { RichText, useBlockProps } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 /**
  * Internal dependencies
  */
@@ -40,10 +40,7 @@ const Save = ({ attributes }) => {
                     {media === "icon" ? (
                         <div className="icon-img-wrapper">
                             <div className="eb-icon ">
-                                <span
-                                    data-icon={selectedIcon}
-                                    className={`eb-counter-icon-data-selector  ${selectedIcon}`}
-                                ></span>
+                                <EBDisplayIcon icon={selectedIcon} className={`eb-counter-icon-data-selector`} />
                             </div>
                         </div>
                     ) : null}

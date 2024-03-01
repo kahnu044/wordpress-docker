@@ -3,19 +3,21 @@
  * Frontend CSS loading File.
  *
  * @since 2.2.0
- *
+ * @var mixed[] $attr
+ * @var int $id
  * @package uagb
  */
 
 // Adds Fonts.
 UAGB_Block_JS::blocks_modal_gfont( $attr );
-$m_selectors     = array();
-$t_selectors     = array();
-$selectors       = array();
-$is_rtl          = is_rtl();
-$btn_icon_size   = UAGB_Helper::get_css_value( $attr['btnFontSize'], $attr['btnFontSizeType'] );
-$t_btn_icon_size = UAGB_Helper::get_css_value( $attr['btnFontSizeTablet'], $attr['btnFontSizeType'] );
-$m_btn_icon_size = UAGB_Helper::get_css_value( $attr['btnFontSizeMobile'], $attr['btnFontSizeType'] );
+$m_selectors        = array();
+$t_selectors        = array();
+$selectors          = array();
+$is_rtl             = is_rtl();
+$btn_font_size_type = is_string( $attr['btnFontSizeType'] ) ? $attr['btnFontSizeType'] : '';
+$btn_icon_size      = UAGB_Helper::get_css_value( $attr['btnFontSize'], $btn_font_size_type );
+$t_btn_icon_size    = UAGB_Helper::get_css_value( $attr['btnFontSizeTablet'], $btn_font_size_type );
+$m_btn_icon_size    = UAGB_Helper::get_css_value( $attr['btnFontSizeMobile'], $btn_font_size_type );
 
 $btn_border_css        = UAGB_Block_Helper::uag_generate_border_css( $attr, 'btn' );
 $btn_border_css_tablet = UAGB_Block_Helper::uag_generate_border_css( $attr, 'btn', 'tablet' );
@@ -63,6 +65,7 @@ $selectors               = array(
 		'border-top-right-radius'    => UAGB_Helper::get_css_value( $attr['contentBorderTopRightRadius'], $attr['contentBorderRadiusUnit'] ),
 		'border-bottom-left-radius'  => UAGB_Helper::get_css_value( $attr['contentBorderBottomLeftRadius'], $attr['contentBorderRadiusUnit'] ),
 		'border-bottom-right-radius' => UAGB_Helper::get_css_value( $attr['contentBorderBottomRightRadius'], $attr['contentBorderRadiusUnit'] ),
+		'z-index'                    => '99999',
 	),
 	' .uagb-modal-popup-content:hover'           => array(
 		'border-color' => $attr['contentBorderHColor'],
@@ -74,8 +77,12 @@ $selectors               = array(
 		'font-size'   => UAGB_Helper::get_css_value( $attr['closeIconSize'], 'px' ),
 		'fill'        => $attr['closeIconColor'],
 	),
+	' .uagb-modal-popup-close:focus svg'         => array(
+		'filter' => 'drop-shadow(0 0 1px ' . $attr['closeIconColor'] . ')',
+	),
 	'.uagb-modal-popup.active'                   => array(
 		'background' => $attr['overlayColor'],
+		'z-index'    => '99999',
 	),
 	' .uagb-modal-popup-content'                 => array_merge(
 		array(

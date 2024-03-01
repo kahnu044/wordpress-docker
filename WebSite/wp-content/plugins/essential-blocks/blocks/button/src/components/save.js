@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { useBlockProps, RichText } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 const save = ({ attributes }) => {
     const {
         blockId,
@@ -27,25 +27,20 @@ const save = ({ attributes }) => {
                 >
                     <div className="eb-button">
                         <a
-                            className={`eb-button-anchor${
-                                hoverEffect ? ` ${hoverEffect}` : ""
-                            }`}
+                            className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
+                                }`}
                             href={buttonURL ? buttonURL : ""}
                             {...(newWindow && { target: "_blank" })}
                             rel={addNofollow ? "nofollow noopener" : "noopener"}
                         >
                             {addIcon && iconPosition === "left" ? (
-                                <i
-                                    className={`${icon} eb-button-icon eb-button-icon-left hvr-icon`}
-                                ></i>
+                                <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-left hvr-icon"} />
                             ) : (
                                 ""
                             )}
                             <RichText.Content value={buttonText} />
                             {addIcon && iconPosition === "right" ? (
-                                <i
-                                    className={`${icon} eb-button-icon eb-button-icon-right hvr-icon`}
-                                ></i>
+                                <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-right hvr-icon"} />
                             ) : (
                                 ""
                             )}

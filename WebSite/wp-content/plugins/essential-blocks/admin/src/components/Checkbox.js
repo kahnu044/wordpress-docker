@@ -174,6 +174,7 @@ export default function Checkbox() {
         marketing: 'Marketing Blocks',
         social: 'Social Blocks',
         woocommerce: 'WooCommerce Blocks',
+        layout: 'Layout Blocks',
     }
 
     return (
@@ -293,6 +294,7 @@ export default function Checkbox() {
                 </>
             )}
             <div className="eb-admin-checkboxes-group-wrapper">
+
                 {Object.keys(groupBlocks).map((group) => (
                     <>
                         <div className="eb-col-12 eb-group-title-wrapper">
@@ -372,7 +374,7 @@ export default function Checkbox() {
                     </>
                 ))}
 
-            </div>
+            </div >
 
             <EBLoader settings={loaderData} />
         </>

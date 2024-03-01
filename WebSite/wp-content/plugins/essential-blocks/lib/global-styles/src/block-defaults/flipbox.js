@@ -18,15 +18,9 @@ import {
 } from "@wordpress/components";
 
 /*
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/*
  * Internal dependencies
  */
 const {
-    faIcons,
     ImageAvatar,
     BorderShadowControl,
     getButtonClasses,
@@ -35,7 +29,7 @@ const {
     TypographyDropdown,
     ColorControl,
     BackgroundControl,
-    AdvancedControls,
+    EBIconPicker,
 } = window.EBControls;
 
 import objAttributes from "../../../../blocks/flipbox/src/attributes";
@@ -440,23 +434,13 @@ function Flipbox(props) {
                             initialOpen={false}
                         >
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Select Front Icon",
-                                        "essential-blocks"
-                                    )}
-                                >
-                                    <FontIconPicker
-                                        icons={faIcons}
-                                        value={frontIcon}
-                                        onChange={(frontIcon) =>
-                                            handleBlockDefault({ frontIcon })
-                                        }
-                                        appendTo="body"
-                                        closeOnSelect
-                                    />
-                                </BaseControl>
-
+                                <EBIconPicker
+                                    value={frontIcon}
+                                    onChange={(frontIcon) =>
+                                        handleBlockDefault({ frontIcon })
+                                    }
+                                    title={__("Select Front Icon", "essential-blocks")}
+                                />
                                 {frontIcon && (
                                     <ResponsiveRangeController
                                         baseLabel={__(
@@ -554,24 +538,13 @@ function Flipbox(props) {
                             initialOpen={false}
                         >
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Select Back Icon",
-                                        "essential-blocks"
-                                    )}
-                                    id="eb-flipbox-back-icon"
-                                >
-                                    <FontIconPicker
-                                        icons={faIcons}
-                                        value={backIcon}
-                                        onChange={(backIcon) =>
-                                            handleBlockDefault({ backIcon })
-                                        }
-                                        appendTo="body"
-                                        closeOnSelect
-                                    />
-                                </BaseControl>
-
+                                <EBIconPicker
+                                    value={backIcon}
+                                    onChange={(backIcon) =>
+                                        handleBlockDefault({ backIcon })
+                                    }
+                                    title={__("Select Back Icon", "essential-blocks")}
+                                />
                                 {backIcon && (
                                     <ResponsiveRangeController
                                         baseLabel={__(
@@ -1170,29 +1143,13 @@ function Flipbox(props) {
                                     }
                                 />
                                 {displayButtonIcon && (
-                                    <BaseControl
-                                        label={__(
-                                            "Select Icon",
-                                            "essential-blocks"
-                                        )}
-                                        id="eb-flipbox-link-icon"
-                                        help={__(
-                                            "Add icon with button (optional)",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <FontIconPicker
-                                            icons={faIcons}
-                                            value={buttonIcon}
-                                            onChange={(buttonIcon) =>
-                                                handleBlockDefault({
-                                                    buttonIcon,
-                                                })
-                                            }
-                                            appendTo="body"
-                                            closeOnSelect
-                                        />
-                                    </BaseControl>
+                                    <EBIconPicker
+                                        value={buttonIcon}
+                                        onChange={(buttonIcon) =>
+                                            handleBlockDefault({ buttonIcon })
+                                        }
+                                        title={__("Select Icon", "essential-blocks")}
+                                    />
                                 )}
                                 {displayButtonIcon && buttonIcon && (
                                     <>

@@ -11,15 +11,10 @@ import { select, dispatch, useSelect } from "@wordpress/data";
  */
 
 const {
-    softMinifyCssStrings,
-    generateBackgroundControlStyles,
-    generateDimensionsControlStyles,
-    generateTypographyStyles,
-    generateBorderShadowStyles,
-    generateResponsiveRangeStyles,
     duplicateBlockIdFix,
     filterBlocksByName,
     getBlockParentClientId,
+    EBDisplayIcon
 } = EBControls;
 
 import classnames from "classnames";
@@ -193,9 +188,7 @@ export default function Edit(props) {
                             </>
                         )}
                         <div className="eb-field-input-wrap">
-                            {isIcon && icon && (
-                                <i className={`${icon} eb-input-icon`}></i>
-                            )}
+                            {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
                             <input
                                 type={isHidden ? "hidden" : "text"}
                                 id={fieldName}

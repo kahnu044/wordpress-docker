@@ -121,11 +121,11 @@ const attributes = {
     },
     titleColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-heading-color)",
     },
     subtitleColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-text-color)",
     },
     buttonColorType: {
         type: "string",
@@ -133,19 +133,19 @@ const attributes = {
     },
     buttonColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     buttonHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     buttonBGColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-button-background-color)",
     },
     buttonHoverBGColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-tertiary-color)",
     },
 
     secondButtonColorType: {
@@ -154,23 +154,23 @@ const attributes = {
     },
     secondButtonColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-button-text-color)",
     },
     secondButtonHoverColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-button-text-color)",
     },
     secondButtonBGColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-tertiary-color)",
     },
     secondButtonHoverBGColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-background-color)",
     },
     overlayColor: {
         type: "string",
-        default: "rgb(184 133 228 / 75%)",
+        default: "rgb(234 233 235 / 75%)",
     },
     arrowColorType: {
         type: "string",
@@ -178,19 +178,19 @@ const attributes = {
     },
     arrowColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-primary-color)",
     },
     arrowHoverColor: {
         type: "string",
-        default: "#000000",
+        default: "var(--eb-global-tertiary-color)",
     },
     dotsColor: {
         type: "string",
-        default: "#777777",
+        default: "var(--eb-global-secondary-color)",
     },
     dotsActiveColor: {
         type: "string",
-        default: "#000000",
+        default: "var(--eb-global-primary-color)",
     },
     textAlign: {
         type: "string",
@@ -212,6 +212,14 @@ const attributes = {
     arrowNextIcon: {
         type: "string",
         default: "fas fa-arrow-alt-circle-right",
+    },
+    titleTag: {
+        type: "string",
+        default: "h2",
+    },
+    contentTag: {
+        type: "string",
+        default: "p",
     },
 
     // typography attributes ⬇
@@ -257,8 +265,8 @@ const attributes = {
     ...generateDimensionsAttributes(BUTTON2_MARGIN, {
         top: 0,
         bottom: 20,
-        right: 0,
-        left: 10,
+        right: 10,
+        left: 0,
         isLinked: false,
     }),
     ...generateDimensionsAttributes(BUTTON2_PADDING, {

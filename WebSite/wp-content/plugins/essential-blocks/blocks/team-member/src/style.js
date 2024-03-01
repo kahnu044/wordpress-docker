@@ -111,8 +111,8 @@ export default function Style(props) {
         isP9reverse,
         icnEffect,
         classHook,
+        isContentOverlay,
     } = attributes;
-
     //
     // styling codes start from here
     //
@@ -568,51 +568,97 @@ export default function Style(props) {
 		 }
 
 
-		 ${
-             preset === "preset3"
-                 ? `
-				 .${blockId}.eb-team-wrapper .image{
+		 ${preset === "preset3"
+            ? `
+				 .${blockId}.eb-team-wrapper .eb-team-member-image{
 					 position: relative;
 				 }
 				 `
-                 : ""
-         }
+            : ""
+        }
+		 ${preset === "preset3" && isContentOverlay
+            ? `
+            .${blockId}.eb-team-wrapper.content-overlay .eb-team-member-contents {
+                justify-content: ${conVtAlign || "center"};
+                ${contentsPaddingDesktop}
+                ${contentsMarginDesktop}
+                ${ovlBdShdStyleDesktop}
+                ${isConBgGradient
+                ? `background-image: ${conBgGradient};`
+                : `background-color: ${conBgColor};`
+            }
+            }
+				 `
+            : ""
+        }
 
-		 ${
-             preset === "preset2"
-                 ? `
-				 .${blockId}.eb-team-wrapper .contents{
-					 ${
-                         isConBgGradient
-                             ? `background-image: ${conBgGradient};`
-                             : `background-color: ${conBgColor};`
-                     }
+		 ${preset === "preset2"
+            ? `
+				 .${blockId}.eb-team-wrapper .eb-team-member-contents{
+					 ${isConBgGradient
+                ? `background-image: ${conBgGradient};`
+                : `background-color: ${conBgColor};`
+            }
 					 height: 50%;
 					 display: flex;
 					 flex-direction: column;
 					 justify-content: center;
 				 }
 
-				 .${blockId}.eb-team-wrapper div.contents .job_title {
+				 .${blockId}.eb-team-wrapper div.eb-team-member-contents .eb-team-member-job-title {
 					 display: block;
 				 }
 
-				 .${blockId}.eb-team-wrapper div.contents ul.socials {
+				 .${blockId}.eb-team-wrapper div.eb-team-member-contents ul.socials {
 					 display: flex;
 				 }
 
-				 .${blockId}.eb-team-wrapper:hover .contents{
+				 .${blockId}.eb-team-wrapper:hover .eb-team-member-contents{
 					 top: 50%;
 				 }
 
 				 `
-                 : ""
-         }
+            : ""
+        }
+
+         ${preset === "new-preset1" || preset === "new-preset2" || preset === "new-preset3"
+            ? `
+                .${blockId}.eb-team-wrapper .eb-team-member-contents-inner{
+                    ${isConBgGradient
+                ? `background-image: ${conBgGradient};`
+                : `background-color: ${conBgColor};`
+            }
+                    ${contentsPaddingDesktop}
+			        ${contentsMarginDesktop}
+			        ${ovlBdShdStyleDesktop}
+                }
+
+                .${blockId}.eb-team-wrapper .eb-team-member-job-title {
+                    ${jobTypoStylesDesktop}
+                    ${jobPaddingDesktop}
+                    color: ${jobColor};
+                    ${preset === "preset2" ? `display:none;` : ""}
+                }
+
+                .${blockId}.eb-team-wrapper div.eb-team-member-contents .eb-team-member-job-title {
+                    display: block;
+                }
+
+                .${blockId}.eb-team-wrapper div.eb-team-member-contents ul.socials {
+                    display: flex;
+                }
+
+                .${blockId}.eb-team-wrapper:hover .eb-team-member-contents{
+                    top: 50%;
+                }
+
+                `
+            : ""
+        }
 
 
-		 ${
-             preset === "preset5"
-                 ? `
+		 ${preset === "preset5"
+            ? `
 				 .${blockId}.eb-team-wrapper .eb-team-inner {
 					 display: flex;
 					 justify-content: space-between;
@@ -621,16 +667,16 @@ export default function Style(props) {
 					 ${p9flexGapDesktop}
 				 }
 
-				 .${blockId}.eb-team-wrapper .image {
+				 .${blockId}.eb-team-wrapper .eb-team-member-image {
 					 ${imgWidthDesktop}
 				 }
 
-				 .${blockId}.eb-team-wrapper .contents {
+				 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 					 flex:1;
 				 }
 				 `
-                 : ""
-         }
+            : ""
+        }
 
 
 
@@ -652,17 +698,16 @@ export default function Style(props) {
 
 		 }
 
-         .${blockId}.eb-team-wrapper .image {
-            ${
-                imageAlign === "left"
-                    ? "text-align: left;"
-                    : imageAlign === "right"
-                    ? "text-align: right;"
-                    : "text-align: center"
-            }
+         .${blockId}.eb-team-wrapper .eb-team-member-image {
+            ${imageAlign === "left"
+            ? "text-align: left;"
+            : imageAlign === "right"
+                ? "text-align: right;"
+                : "text-align: center"
+        }
          }
 
-		 .${blockId}.eb-team-wrapper .image img {
+		 .${blockId}.eb-team-wrapper .eb-team-member-image img {
 			 max-width: 100%;
 			 object-fit: cover;
 			 display: inline-block;
@@ -671,18 +716,16 @@ export default function Style(props) {
 			 ${imageMarginDesktop}
 			 ${imagePaddingDesktop}
 			 ${isImgHeightAuto ? `height:auto;` : imgHeightDesktop}
-			 ${
-                 preset === "preset6"
-                     ? `clipPath: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
-                     : ""
-             }
+			 ${preset === "preset6"
+            ? `clipPath: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
+            : ""
+        }
 		 }
 
 
-		 ${
-             imgBeforeEl
-                 ? `
-			 .${blockId}.eb-team-wrapper .image:before {
+		 ${imgBeforeEl
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 				 content: "";
 				 display: block;
 				 ${imgTopBgHeightDesktop}
@@ -691,115 +734,108 @@ export default function Style(props) {
 
 			 }
 
-			 .${blockId}.eb-team-wrapper .image:hover:before{
+			 .${blockId}.eb-team-wrapper .eb-team-member-image:hover:before{
 				 ${imgTopHoverBackgroundStyles}
 			 }
 			 `
-                 : ""
-         }
+            : ""
+        }
 
 
 
-		 .${blockId}.eb-team-wrapper .image:hover > img {
+		 .${blockId}.eb-team-wrapper .eb-team-member-image:hover > img {
 			 ${imageBdShdStylesHoverDesktop}
 			 transition: ${imageBdShdTransitionStyle};
 		 }
 
-		 .${blockId}.eb-team-wrapper .contents {
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 			 text-align: ${contentsAlign};
 			 box-sizing: border-box;
-			 ${
-                 preset === "preset2"
-                     ? `
+			 ${preset === "preset2"
+            ? `
 					 position: absolute;
 					 left: 0;
 					 right: 0;
 					 top: 100%;
 					 transition: 0.5s;
 					 `
-                     : ""
-             }
+            : ""
+        }
 		 }
 
-		 .${blockId}.eb-team-wrapper .contents .name {
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
 			 ${nameTypoStylesDesktop}
 			 ${namePaddingDesktop}
 			 color: ${nameColor};
 		 }
 
-		 .${blockId}.eb-team-wrapper .contents .job_title {
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-job-title {
 			 ${jobTypoStylesDesktop}
 			 ${jobPaddingDesktop}
 			 color: ${jobColor};
 			 ${preset === "preset2" ? `display:none;` : ""}
 		 }
 
-		 ${
-             showDescs
-                 ? `
-				 .${blockId}.eb-team-wrapper .contents .description {
+		 ${showDescs
+            ? `
+				 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 					 color: ${descsColor};
 					 ${descsPaddingDesktop}
 					 ${descsTypoStylesDesktop}
 				 }
 				 `
-                 : ""
-         }
+            : ""
+        }
 
- ${
-     showCSeparator
-         ? `
-		 .${blockId}.eb-team-wrapper .contents .content_separator {
+ ${showCSeparator
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 			 border: none;
 			 margin: auto;
 			 border-bottom: 1px ${cSepType} ${cSepColor};
 			 ${contentSepWidthDesktop}
 			 ${contentSepHeightDesktop}
-			 ${
-                 cSepAlign === "left"
-                     ? "margin-left:0;"
-                     : cSepAlign === "right"
-                     ? "margin-right:0;"
-                     : ""
-             }
+			 ${cSepAlign === "left"
+                ? "margin-left:0;"
+                : cSepAlign === "right"
+                    ? "margin-right:0;"
+                    : ""
+            }
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     showSocials && showSSeparator
-         ? `
-		 .${blockId}.eb-team-wrapper .social_separator {
+ ${showSocials && showSSeparator
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 			 border: none;
 			 margin: auto;
 			 border-bottom: 1px ${sSepType} ${sSepColor};
 			 ${socialSepWidthDesktop}
 			 ${socialSepHeightDesktop}
-			 ${
-                 sSepAlign === "left"
-                     ? "margin-left:0;"
-                     : sSepAlign === "right"
-                     ? "margin-right:0;"
-                     : ""
-             }
+			 ${sSepAlign === "left"
+                ? "margin-left:0;"
+                : sSepAlign === "right"
+                    ? "margin-right:0;"
+                    : ""
+            }
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     preset === "preset4"
-         ? `
+ ${preset === "preset4"
+            ? `
 		 .${blockId}.eb-team-wrapper .eb-team-inner {
 			 position: relative;
 		 }
 
-		 .${blockId}.eb-team-wrapper:hover .contents {
+		 .${blockId}.eb-team-wrapper:hover .eb-team-member-contents {
 			 opacity: 1;
 		 }
 
-		 .${blockId}.eb-team-wrapper .contents {
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 			 transition: 0.5s;
 			 opacity: 0;
 			 position: absolute;
@@ -813,20 +849,18 @@ export default function Style(props) {
 			 ${contentsPaddingDesktop}
 			 ${contentsMarginDesktop}
 			 ${ovlBdShdStyleDesktop}
-			 ${
-                 isConBgGradient
-                     ? `background-image: ${conBgGradient};`
-                     : `background-color: ${conBgColor};`
-             }
+			 ${isConBgGradient
+                ? `background-image: ${conBgGradient};`
+                : `background-color: ${conBgColor};`
+            }
 		 }
 
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     showSocials
-         ? `
+ ${showSocials
+            ? `
 		 ${socialStyles}
 
 		 .${blockId}.eb-team-wrapper ul.socials {
@@ -839,9 +873,8 @@ export default function Style(props) {
 			 ${socialWrapBackgroundStyles}
 			 transition: ${socialWrapTransitionStyle}, opacity .5s;
 			 ${preset === "preset2" ? `display:none;` : "display: flex;"}
-			 ${
-                 preset === "preset3"
-                     ? `
+			 ${preset === "preset3" && !isContentOverlay
+                ? `
 				 opacity:0;
 				 position: absolute;
 				 top: 0;
@@ -852,36 +885,33 @@ export default function Style(props) {
 				 ${contentsPaddingDesktop}
 				 ${contentsMarginDesktop}
 				 ${ovlBdShdStyleDesktop}
-				 ${
-                     isConBgGradient
-                         ? `background-image: ${conBgGradient};`
-                         : `background-color: ${conBgColor};`
-                 }
+				 ${isConBgGradient
+                    ? `background-image: ${conBgGradient};`
+                    : `background-color: ${conBgColor};`
+                }
 			 `
-                     : `
+                : `
 					 ${iconsWrapMarginDesktop}
 					 ${iconsWrapPaddingDesktop}
 					 `
-             }
+            }
 		 }
 
-		 ${
-             preset === "preset3"
-                 ? `
+		 ${preset === "preset3"
+                ? `
 				 .${blockId}.eb-team-wrapper:hover ul.socials {
 					 opacity: 1;
 				 }
 				 `
-                 : ""
-         }
+                : ""
+            }
 
 		 .${blockId}.eb-team-wrapper ul.socials:hover {
 			 ${socialWrapHoverBackgroundStyles}
 		 }
 
-	 ${
-         isIconsDevider
-             ? `
+	 ${isIconsDevider
+                ? `
 		 .${blockId}.eb-team-wrapper ul.socials li{
 			 position:relative;
 		 }
@@ -897,8 +927,8 @@ export default function Style(props) {
 			 ${sSepPosRightDesktop}
 		 }
 		 `
-             : ""
-     }
+                : ""
+            }
 
 		 .${blockId}.eb-team-wrapper ul.socials li a {
 			 box-sizing:content-box;
@@ -909,6 +939,7 @@ export default function Style(props) {
 			 align-items: center;
 			 height: 0;
 			 width: 0;
+             line-height: 1em;
 			 ${iconSizeDesktop}
 			 ${iconPaddingDesktop}
 			 ${socialBorderDesktop}
@@ -921,9 +952,19 @@ export default function Style(props) {
 			 ${socialBordersHoverDesktop}
 		 }
 
+         ${icnEffect
+                ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+                background-color:${hvIcnBgc};
+			    color:${hvIcnColor};
+			    ${socialBordersHoverDesktop}
+			}
+			`
+                : ""
+            }
+
 		 `
-         : ""
- }
+            : ""
+        }
 
 
 
@@ -955,10 +996,9 @@ export default function Style(props) {
 	 }
 
 
-	 ${
-         preset === "preset5"
-             ? `
-			 .${blockId}.eb-team-wrapper .image {
+	 ${preset === "preset5"
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-image {
 				 ${imgWidthTab}
 			 }
 
@@ -967,22 +1007,21 @@ export default function Style(props) {
 			 }
 
 			 `
-             : ""
-     }
+            : ""
+        }
 
 
-	 ${
-         imgBeforeEl
-             ? `
-		 .${blockId}.eb-team-wrapper .image:before {
+	 ${imgBeforeEl
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 			 ${imgTopBgHeightTab}
 		 }
 		 `
-             : ""
-     }
+            : ""
+        }
 
 
-	 .${blockId}.eb-team-wrapper .image > img {
+	 .${blockId}.eb-team-wrapper .eb-team-member-image > img {
 		 ${imageBdShdStyleTab}
 		 ${imageMarginTab}
 		 ${imagePaddingTab}
@@ -991,72 +1030,67 @@ export default function Style(props) {
 	 }
 
 
-	 .${blockId}.eb-team-wrapper .image:hover > img {
+	 .${blockId}.eb-team-wrapper .eb-team-member-image:hover > img {
 		 ${imageBdShdStylesHoverTab}
 
 	 }
 
 
-	 ${
-         showDescs
-             ? `
-			 .${blockId}.eb-team-wrapper .contents .description {
+	 ${showDescs
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 				 ${descsTypoStylesTab}
 				 ${descsPaddingTab}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
-	 .${blockId}.eb-team-wrapper .contents .name {
+	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
 		 ${nameTypoStylesTab}
 		 ${namePaddingTab}
 	 }
 
-	 .${blockId}.eb-team-wrapper .contents .job_title {
+	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-job-title {
 		 ${jobTypoStylesTab}
 		 ${jobPaddingTab}
 	 }
 
 
 
- ${
-     showCSeparator
-         ? `
-		 .${blockId}.eb-team-wrapper .contents .content_separator {
+ ${showCSeparator
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 			 ${contentSepWidthTab}
 			 ${contentSepHeightTab}
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     showSocials && showSSeparator
-         ? `
-		 .${blockId}.eb-team-wrapper .social_separator {
+ ${showSocials && showSSeparator
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 			 ${socialSepWidthTab}
 			 ${socialSepHeightTab}
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     preset === "preset4"
-         ? `
-		 .${blockId}.eb-team-wrapper .contents {
+ ${preset === "preset4"
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 			 ${contentsPaddingTab}
 			 ${contentsMarginTab}
 			 ${ovlBdShdStyleTab}
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
 
- ${
-     showSocials
-         ? `
+ ${showSocials
+            ? `
 		 ${socialStyles}
 
 		 .${blockId}.eb-team-wrapper ul.socials {
@@ -1064,27 +1098,25 @@ export default function Style(props) {
 			 ${iconsWrapPaddingTab}
 			 ${iconSpaceTab}
 			 ${iconRowGapTab}
-			 ${
-                 preset === "preset3"
-                     ? `
+			 ${preset === "preset3"
+                ? `
 						 ${contentsPaddingTab}
 						 ${contentsMarginTab}
 						 ${ovlBdShdStyleTab}
 					 `
-                     : ""
-             }
+                : ""
+            }
 		 }
 
 
-	 ${
-         isIconsDevider
-             ? `
+	 ${isIconsDevider
+                ? `
 			 .${blockId}.eb-team-wrapper ul.socials li + li:before {
 				 ${sSepPosRightTab}
 			 }
 			 `
-             : ""
-     }
+                : ""
+            }
 
 		 .${blockId}.eb-team-wrapper ul.socials li a {
 			 ${iconSizeTab}
@@ -1096,8 +1128,16 @@ export default function Style(props) {
 			 ${socialBordersHoverTab}
 		 }
 		 `
-         : ""
- }
+            : ""
+        }
+
+        ${icnEffect
+            ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+            ${socialBordersHoverTab}
+        }
+        `
+            : ""
+        }
 
 
 	 `;
@@ -1127,10 +1167,9 @@ export default function Style(props) {
 
 	 }
 
-	 ${
-         preset === "preset5"
-             ? `
-			 .${blockId}.eb-team-wrapper .image {
+	 ${preset === "preset5"
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-image {
 				 ${imgWidthMobile}
 			 }
 
@@ -1138,21 +1177,20 @@ export default function Style(props) {
 				 ${p9flexGapMobile}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
 
-	 ${
-         imgBeforeEl
-             ? `
-		 .${blockId}.eb-team-wrapper .image:before {
+	 ${imgBeforeEl
+            ? `
+		 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 			 ${imgTopBgHeightMobile}
 		 }
 		 `
-             : ""
-     }
+            : ""
+        }
 
-	 .${blockId}.eb-team-wrapper .image > img {
+	 .${blockId}.eb-team-wrapper .eb-team-member-image > img {
 		 ${preset === "preset5" ? "" : imgWidthMobile}
 		 ${imageBdShdStyleMobile}
 		 ${imageMarginMobile}
@@ -1164,71 +1202,66 @@ export default function Style(props) {
 
 
 
-	 .${blockId}.eb-team-wrapper .image:hover > img {
+	 .${blockId}.eb-team-wrapper .eb-team-member-image:hover > img {
 		 ${imageBdShdStylesHoverMobile}
 	 }
 
-	 ${
-         showDescs
-             ? `
-			 .${blockId}.eb-team-wrapper .contents .description {
+	 ${showDescs
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 				 ${descsTypoStylesMobile}
 				 ${descsPaddingMobile}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
-	 .${blockId}.eb-team-wrapper .contents .name {
+	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
 		 ${nameTypoStylesMobile}
 		 ${namePaddingMobile}
 	 }
 
-	 .${blockId}.eb-team-wrapper .contents .job_title {
+	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-job-title {
 		 ${jobTypoStylesMobile}
 		 ${jobPaddingMobile}
 	 }
 
 
 
-	 ${
-         showCSeparator
-             ? `
-			 .${blockId}.eb-team-wrapper .contents .content_separator {
+	 ${showCSeparator
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 				 ${contentSepWidthMobile}
 				 ${contentSepHeightMobile}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
-	 ${
-         showSocials && showSSeparator
-             ? `
-			 .${blockId}.eb-team-wrapper .social_separator {
+	 ${showSocials && showSSeparator
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 				 ${socialSepWidthMobile}
 				 ${socialSepHeightMobile}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
 
-	 ${
-         preset === "preset4"
-             ? `
-			 .${blockId}.eb-team-wrapper .contents {
+	 ${preset === "preset4"
+            ? `
+			 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 				 ${contentsPaddingMobile}
 				 ${contentsMarginMobile}
 				 ${ovlBdShdStyleMobile}
 			 }
 			 `
-             : ""
-     }
+            : ""
+        }
 
-	 ${
-         showSocials
-             ? `
+	 ${showSocials
+            ? `
 			 ${socialStyles}
 
 			 .${blockId}.eb-team-wrapper ul.socials {
@@ -1236,26 +1269,24 @@ export default function Style(props) {
 				 ${iconRowGapMobile}
 				 ${iconsWrapPaddingMobile}
 				 ${iconsWrapMarginMobile}
-				 ${
-                     preset === "preset3"
-                         ? `
+				 ${preset === "preset3"
+                ? `
 							 ${contentsPaddingMobile}
 							 ${contentsMarginMobile}
 							 ${ovlBdShdStyleMobile}
 						 `
-                         : ""
-                 }
+                : ""
+            }
 			 }
 
-			 ${
-                 isIconsDevider
-                     ? `
+			 ${isIconsDevider
+                ? `
 					 .${blockId}.eb-team-wrapper ul.socials li + li:before {
 						 ${sSepPosRightMobile}
 					 }
 					 `
-                     : ""
-             }
+                : ""
+            }
 
 			 .${blockId}.eb-team-wrapper ul.socials li a {
 				 ${iconSizeMobile}
@@ -1268,9 +1299,17 @@ export default function Style(props) {
 				 ${socialBordersHoverMobile}
 			 }
 
+             ${icnEffect
+                ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+                ${socialBordersHoverMobile}
+            }
+            `
+                : ""
+            }
+
 			 `
-             : ""
-     }
+            : ""
+        }
 
 
 	 `;

@@ -1,8 +1,3 @@
-/**
- * WordPress dependencies
- */
-import { useEffect, useState } from "@wordpress/element";
-
 import {
     typoPrefix_digits,
     typoPrefix_labels,
@@ -64,16 +59,6 @@ export default function Style(props) {
         showHours,
         showMinutes,
         showSeconds,
-
-        //
-        daysLabel,
-        hoursLabel,
-        minutesLabel,
-        secondsLabel,
-
-        //
-        preset,
-
         //
         showSeparator,
         separatorType,
@@ -116,12 +101,7 @@ export default function Style(props) {
         //
         boxsBds_borderStyle,
         classHook,
-        isEvergreenTimer,
-        evergreenTimerHours,
-        evergreenTimerMinutes,
-        recurringCountdown,
-        restartTime,
-        recurringCountdownEnd,
+
     } = attributes;
 
     //
@@ -253,15 +233,15 @@ export default function Style(props) {
         backgroundStylesMobile: dayBoxBgStylesMobile = "",
         hoverBackgroundStylesMobile: dayBoxHoverBgStylesMobile = "",
     } = showDays
-        ? generateBackgroundControlStyles({
-              noTransition: true,
-              attributes,
-              controlName: cdDayBoxBgConst,
-              noOverlay: true,
-              noMainBgi: true,
-              // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-          })
-        : {};
+            ? generateBackgroundControlStyles({
+                noTransition: true,
+                attributes,
+                controlName: cdDayBoxBgConst,
+                noOverlay: true,
+                noMainBgi: true,
+                // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+            })
+            : {};
 
     const {
         backgroundStylesDesktop: hourBoxBgStylesDesktop = "",
@@ -271,15 +251,15 @@ export default function Style(props) {
         backgroundStylesMobile: hourBoxBgStylesMobile = "",
         hoverBackgroundStylesMobile: hourBoxHoverBgStylesMobile = "",
     } = showHours
-        ? generateBackgroundControlStyles({
-              noTransition: true,
-              attributes,
-              controlName: cdHourBoxBgConst,
-              noOverlay: true,
-              noMainBgi: true,
-              // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-          })
-        : {};
+            ? generateBackgroundControlStyles({
+                noTransition: true,
+                attributes,
+                controlName: cdHourBoxBgConst,
+                noOverlay: true,
+                noMainBgi: true,
+                // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+            })
+            : {};
 
     const {
         backgroundStylesDesktop: minuteBoxBgStylesDesktop = "",
@@ -289,15 +269,15 @@ export default function Style(props) {
         backgroundStylesMobile: minuteBoxBgStylesMobile = "",
         hoverBackgroundStylesMobile: minuteBoxHoverBgStylesMobile = "",
     } = showMinutes
-        ? generateBackgroundControlStyles({
-              noTransition: true,
-              attributes,
-              controlName: cdMinuteBoxBgConst,
-              noOverlay: true,
-              noMainBgi: true,
-              // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-          })
-        : {};
+            ? generateBackgroundControlStyles({
+                noTransition: true,
+                attributes,
+                controlName: cdMinuteBoxBgConst,
+                noOverlay: true,
+                noMainBgi: true,
+                // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+            })
+            : {};
 
     const {
         backgroundStylesDesktop: secondBoxBgStylesDesktop = "",
@@ -307,15 +287,15 @@ export default function Style(props) {
         backgroundStylesMobile: secondBoxBgStylesMobile = "",
         hoverBackgroundStylesMobile: secondBoxHoverBgStylesMobile = "",
     } = showSeconds
-        ? generateBackgroundControlStyles({
-              noTransition: true,
-              attributes,
-              controlName: cdSecondBoxBgConst,
-              noOverlay: true,
-              noMainBgi: true,
-              // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-          })
-        : {};
+            ? generateBackgroundControlStyles({
+                noTransition: true,
+                attributes,
+                controlName: cdSecondBoxBgConst,
+                noOverlay: true,
+                noMainBgi: true,
+                // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+            })
+            : {};
 
     // styles related to generateBackgroundControlStyles end
 
@@ -441,11 +421,10 @@ export default function Style(props) {
 			transition: ${boxsBgTransitionStyle}, ${boxsbdShadowTransitionStyle};
 			${boxsPaddingDesktop}
 			${boxsbdShadowStyesDesktop}
-			${
-                contentsDirection.includes("row")
-                    ? `justify-content: ${contentsJustify};`
-                    : " "
-            }
+			${contentsDirection.includes("row")
+            ? `justify-content: ${contentsJustify};`
+            : " "
+        }
 			flex-direction: ${contentsDirection};
 			align-items: ${contentsAlign};
 		}
@@ -462,9 +441,8 @@ export default function Style(props) {
 			color: ${digitsColor};
 		}
 
-		${
-            showSeparator && flexDirection === "row"
-                ? `
+		${showSeparator && flexDirection === "row"
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box + .box:before {
 				position: absolute;
 				right: 90%;
@@ -479,7 +457,7 @@ export default function Style(props) {
 				line-height:0;
 			}
 			`
-                : " "
+            : " "
         }
 
 		.${blockId}.eb-cd-wrapper .eb-cd-inner .box span.eb-cd-label {
@@ -493,16 +471,14 @@ export default function Style(props) {
 			${BoxsSpaceBetweenDesktop}
 		}
 
-		${
-            showDays
-                ? `
+		${showDays
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-day{
 				${dayBoxBgStylesDesktop}
-				${
-                    boxsBds_borderStyle !== "none" && dayBdrColor
-                        ? `border-color: ${dayBdrColor};`
-                        : " "
-                }
+				${boxsBds_borderStyle !== "none" && dayBdrColor
+                ? `border-color: ${dayBdrColor};`
+                : " "
+            }
 			}
 
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-day:hover{
@@ -517,19 +493,17 @@ export default function Style(props) {
 				${dayDgColor ? `color: ${dayDgColor};` : " "}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showHours
-                ? `
+		${showHours
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-hour{
 				${hourBoxBgStylesDesktop}
-				${
-                    boxsBds_borderStyle !== "none" && hourBdrColor
-                        ? `border-color: ${hourBdrColor};`
-                        : " "
-                }
+				${boxsBds_borderStyle !== "none" && hourBdrColor
+                ? `border-color: ${hourBdrColor};`
+                : " "
+            }
 			}
 
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-hour:hover{
@@ -544,19 +518,17 @@ export default function Style(props) {
 				${hourDgColor ? `color: ${hourDgColor};` : " "}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showMinutes
-                ? `
+		${showMinutes
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-minute{
 				${minuteBoxBgStylesDesktop}
-				${
-                    boxsBds_borderStyle !== "none" && minuteBdrColor
-                        ? `border-color: ${minuteBdrColor};`
-                        : " "
-                }
+				${boxsBds_borderStyle !== "none" && minuteBdrColor
+                ? `border-color: ${minuteBdrColor};`
+                : " "
+            }
 			}
 
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-minute:hover{
@@ -571,19 +543,17 @@ export default function Style(props) {
 				${minuteDgColor ? `color: ${minuteDgColor};` : " "}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showSeconds
-                ? `
+		${showSeconds
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-second{
 				${secondBoxBgStylesDesktop}
-				${
-                    boxsBds_borderStyle !== "none" && secondBdrColor
-                        ? `border-color: ${secondBdrColor};`
-                        : " "
-                }
+				${boxsBds_borderStyle !== "none" && secondBdrColor
+                ? `border-color: ${secondBdrColor};`
+                : " "
+            }
 			}
 
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-second:hover{
@@ -598,7 +568,7 @@ export default function Style(props) {
 				${secondDgColor ? `color: ${secondDgColor};` : " "}
 			}
 			`
-                : " "
+            : " "
         }
 
 	`;
@@ -642,16 +612,15 @@ export default function Style(props) {
 			${digitsPaddingTab}
 		}
 
-		${
-            showSeparator && flexDirection === "row"
-                ? `
+		${showSeparator && flexDirection === "row"
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box + .box:before {
 				${separatorTypoStylesTab}
 				${SeparatorTopTab}
 				${SeparatorRightTab}
 			}
 			`
-                : " "
+            : " "
         }
 
 		.${blockId}.eb-cd-wrapper .eb-cd-inner .box span.eb-cd-label {
@@ -663,9 +632,8 @@ export default function Style(props) {
 			${BoxsSpaceBetweenTab}
 		}
 
-		${
-            showDays
-                ? `
+		${showDays
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-day{
 				${dayBoxBgStylesTab}
 			}
@@ -674,12 +642,11 @@ export default function Style(props) {
 				${dayBoxHoverBgStylesTab}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showHours
-                ? `
+		${showHours
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-hour{
 				${hourBoxBgStylesTab}
 			}
@@ -688,12 +655,11 @@ export default function Style(props) {
 				${hourBoxHoverBgStylesTab}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showMinutes
-                ? `
+		${showMinutes
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-minute{
 				${minuteBoxBgStylesTab}
 			}
@@ -702,12 +668,11 @@ export default function Style(props) {
 				${minuteBoxHoverBgStylesTab}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showSeconds
-                ? `
+		${showSeconds
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-second{
 				${secondBoxBgStylesTab}
 			}
@@ -717,7 +682,7 @@ export default function Style(props) {
 			}
 
 			`
-                : " "
+            : " "
         }
 
 	`;
@@ -761,16 +726,15 @@ export default function Style(props) {
 			${digitsPaddingMobile}
 		}
 
-		${
-            showSeparator && flexDirection === "row"
-                ? `
+		${showSeparator && flexDirection === "row"
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box + .box:before {
 				${separatorTypoStylesMobile}
 				${SeparatorTopMobile}
 				${SeparatorRightMobile}
 			}
 			`
-                : " "
+            : " "
         }
 
 		.${blockId}.eb-cd-wrapper .eb-cd-inner .box span.eb-cd-label {
@@ -782,9 +746,8 @@ export default function Style(props) {
 			${BoxsSpaceBetweenMobile}
 		}
 
-		${
-            showDays
-                ? `
+		${showDays
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-day{
 				${dayBoxBgStylesMobile}
 			}
@@ -793,12 +756,11 @@ export default function Style(props) {
 				${dayBoxHoverBgStylesMobile}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showHours
-                ? `
+		${showHours
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-hour{
 				${hourBoxBgStylesMobile}
 			}
@@ -807,12 +769,11 @@ export default function Style(props) {
 				${hourBoxHoverBgStylesMobile}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showMinutes
-                ? `
+		${showMinutes
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-minute{
 				${minuteBoxBgStylesMobile}
 			}
@@ -821,12 +782,11 @@ export default function Style(props) {
 				${minuteBoxHoverBgStylesMobile}
 			}
 			`
-                : " "
+            : " "
         }
 
-		${
-            showSeconds
-                ? `
+		${showSeconds
+            ? `
 			.${blockId}.eb-cd-wrapper .eb-cd-inner .box.cd-box-second{
 				${secondBoxBgStylesMobile}
 			}
@@ -836,7 +796,7 @@ export default function Style(props) {
 			}
 
 			`
-                : " "
+            : " "
         }
 
 

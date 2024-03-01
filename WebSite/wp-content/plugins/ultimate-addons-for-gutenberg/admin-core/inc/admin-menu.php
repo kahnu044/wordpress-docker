@@ -14,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use \ZipAI\Classes\Helper as Zip_Ai_Helper;
+use \ZipAI\Classes\Module as Zip_Ai_Module;
+
+
 /**
  * Class Admin_Menu.
  */
@@ -160,6 +164,18 @@ class Admin_Menu {
 		// Use this action hook to add sub menu to above menu.
 		do_action( 'spectra_after_menu_register' );
 
+		// Add the AI Features Submenu if Zip AI Library is loaded.
+		if ( defined( 'ZIP_AI_VERSION' ) ) {
+			add_submenu_page(
+				$menu_slug,
+				__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
+				__( 'AI Features', 'ultimate-addons-for-gutenberg' ),
+				$capability,
+				$menu_slug . '&path=ai-features',
+				array( $this, 'render' )
+			);
+		}
+
 		// Finally, add the Settings Submenu.
 		add_submenu_page(
 			$menu_slug,
@@ -244,6 +260,7 @@ class Admin_Menu {
 				'global_data'              => Admin_Helper::get_options(),
 				'uag_content_width_set_by' => \UAGB_Admin_Helper::get_admin_settings_option( 'uag_content_width_set_by', __( 'Spectra', 'ultimate-addons-for-gutenberg' ) ),
 				'spectra_pro_installed'    => file_exists( UAGB_DIR . '../spectra-pro/spectra-pro.php' ),
+				'spectra_pro_licensing'    => file_exists( UAGB_DIR . '../spectra-pro/admin/license-handler.php' ),
 				'spectra_pro_status'       => is_plugin_active( 'spectra-pro/spectra-pro.php' ),
 				'spectra_pro_ver'          => defined( 'SPECTRA_PRO_VER' ) ? SPECTRA_PRO_VER : null,
 				'spectra_custom_fonts'     => apply_filters( 'spectra_system_fonts', array() ),
@@ -254,6 +271,48 @@ class Admin_Menu {
 				'spectra_pro_url'          => \UAGB_Admin_Helper::get_spectra_pro_url(),
 			)
 		);
+
+		// If the Zip AI Assets is available, add the Zip AI localizations.
+		if ( is_array( $localize )
+			&& class_exists( '\ZipAI\Classes\Helper' )
+			&& class_exists( '\ZipAI\Classes\Module' )
+			&& defined( 'ZIP_AI_CREDIT_TOPUP_URL' )
+		) {
+
+			$localize = array_merge(
+				$localize,
+				array(
+					'zip_ai_auth_middleware'  => Zip_Ai_Helper::get_auth_middleware_url( array( 'plugin' => 'spectra' ) ),
+					'zip_ai_auth_revoke_url'  => Zip_Ai_Helper::get_auth_revoke_url(),
+					'zip_ai_credit_topup_url' => ZIP_AI_CREDIT_TOPUP_URL,
+					'zip_ai_is_authorized'    => Zip_Ai_Helper::is_authorized(),
+					'zip_ai_is_chat_enabled'  => Zip_Ai_Module::is_enabled( 'ai_assistant' ),
+					'zip_ai_admin_nonce'      => wp_create_nonce( 'zip_ai_admin_nonce' ),
+					'zip_ai_credit_details'   => Zip_Ai_Helper::get_credit_details(),
+				)
+			);
+
+			// In Zip AI version 1.1.2, the ZIPWP API constant was added - if this is available, get the current plan details.
+			if ( defined( 'ZIP_AI_ZIPWP_API' ) ) {
+				$response_zipwp_plan = Zip_Ai_Helper::get_current_plan_details();
+
+				// If the response is not an error, then proceed to localize the required details.
+				if ( is_array( $response_zipwp_plan ) && 'error' !== $response_zipwp_plan['status'] ) {
+					// Create the base array to be localized.
+					$current_zipwp_plan = array();
+
+					// Add the team name if it exists.
+					if ( ! empty( $response_zipwp_plan['team']['name'] ) ) {
+						$current_zipwp_plan['team_name'] = $response_zipwp_plan['team']['name'];
+					}
+
+					// If the final array is not empty, localize it.
+					if ( ! empty( $current_zipwp_plan ) ) {
+						$localize['zip_ai_current_plan'] = $current_zipwp_plan;
+					}
+				}
+			}
+		}
 
 		$this->settings_app_scripts( $localize );
 	}
@@ -443,11 +502,11 @@ class Admin_Menu {
 				'Enjoyed %1$sSpectra%2$s? Please leave us a %3$s rating. We really appreciate your support!',
 				'ultimate-addons-for-gutenberg'
 			),
-			'<strong>', 
+			'<strong>',
 			'</strong>',
 			'<a href="https://wordpress.org/support/plugin/ultimate-addons-for-gutenberg/reviews/?rate=5#new-post" target="_blank" style="color: #6104ff; text-decoration: none;" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 		) . '</span>';
-		
+
 	}
 
 }

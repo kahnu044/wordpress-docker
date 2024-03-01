@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
 import {
     PanelBody,
     ToggleControl,
@@ -94,8 +93,8 @@ function AdvancedImage(props) {
                 imageCaption: "",
                 selectedImgIndex: "number",
                 displayCaption: false,
-                captionColor: "#ffffff",
-                captionBGColor: "rgba(174 98 209 / 0.7)",
+                captionColor: "var(--eb-global-primary-color)",
+                captionBGColor: "var(--eb-global-background-color)",
                 horizontalAlign: "center",
                 verticalAlign: "bottom",
                 verticalAlignCap2: "bottom",
@@ -180,10 +179,7 @@ function AdvancedImage(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
                             label={__("Display Caption", "essential-blocks")}
                             checked={displayCaption}
@@ -226,38 +222,27 @@ function AdvancedImage(props) {
                         <ToggleControl
                             label={__("Auto Fit Image?", "essential-blocks")}
                             checked={autoFit}
-                            onChange={(autoFit) =>
-                                handleBlockDefault({ autoFit })
-                            }
+                            onChange={(autoFit) => handleBlockDefault({ autoFit })}
                         />
 
                         <ToggleControl
                             label={__("Enable Link?", "essential-blocks")}
                             checked={enableLink}
-                            onChange={(enableLink) =>
-                                handleBlockDefault({ enableLink })
-                            }
+                            onChange={(enableLink) => handleBlockDefault({ enableLink })}
                         />
 
                         {enableLink && (
                             <TextControl
                                 label={__("Link", "essential-blocks")}
                                 value={imageLink}
-                                onChange={(link) =>
-                                    handleBlockDefault({ imageLink: link })
-                                }
+                                onChange={(link) => handleBlockDefault({ imageLink: link })}
                             />
                         )}
                         {enableLink && (
                             <ToggleControl
-                                label={__(
-                                    "Open in New Tab",
-                                    "essential-blocks"
-                                )}
+                                label={__("Open in New Tab", "essential-blocks")}
                                 checked={openInNewTab}
-                                onChange={(openInNewTab) =>
-                                    handleBlockDefault({ openInNewTab })
-                                }
+                                onChange={(openInNewTab) => handleBlockDefault({ openInNewTab })}
                             />
                         )}
 
@@ -265,79 +250,52 @@ function AdvancedImage(props) {
                             label={__("Hover Effect", "essential-blocks")}
                             value={hoverEffect}
                             options={HOVER_EFFECT}
-                            onChange={(hoverEffect) =>
-                                handleBlockDefault({ hoverEffect })
-                            }
+                            onChange={(hoverEffect) => handleBlockDefault({ hoverEffect })}
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Image Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Image Styles", "essential-blocks")} initialOpen={false}>
                         {!complexStyle && (
                             <>
                                 <BaseControl>
-                                    <h3 className="eb-control-title">
-                                        {__("Border", "essential-blocks")}
-                                    </h3>
+                                    <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <BorderShadowControl
                                     controlName={IMAGE_BORDER_SHADOW}
                                     resRequiredProps={resRequiredProps}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                             </>
                         )}
                         {complexStyle && (
                             <PanelRow>
-                                <em>
-                                    Border Style doesn't support for "
-                                    {stylePreset} style".
-                                </em>
+                                <em>Border Style doesn't support for "{stylePreset} style".</em>
                             </PanelRow>
                         )}
                     </PanelBody>
                     {displayCaption && (
-                        <PanelBody
-                            title={__("Caption Styles", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <PanelColorSettings
-                                title={__("Color Controls", "essential-blocks")}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: captionColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                captionColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Text Color",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                ]}
+                        <PanelBody title={__("Caption Styles", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Text Color", "essential-blocks")}
+                                color={captionColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        captionColor: newColor,
+                                    })
+                                }
                             />
 
-                            {displayCaption &&
-                                captionStyle != "caption-style-2" && (
-                                    <ColorControl
-                                        label={__(
-                                            "Background Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={captionBGColor}
-                                        onChange={(backgroundColor) =>
-                                            handleBlockDefault({
-                                                captionBGColor: backgroundColor,
-                                            })
-                                        }
-                                    />
-                                )}
+                            {displayCaption && captionStyle != "caption-style-2" && (
+                                <ColorControl
+                                    label={__("Background Color", "essential-blocks")}
+                                    color={captionBGColor}
+                                    onChange={(backgroundColor) =>
+                                        handleBlockDefault({
+                                            captionBGColor: backgroundColor,
+                                        })
+                                    }
+                                />
+                            )}
 
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -357,26 +315,16 @@ function AdvancedImage(props) {
 
                             {displayCaption && (
                                 <>
-                                    <BaseControl
-                                        label={__(
-                                            "Text Align",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Text Align", "essential-blocks")}>
                                         <ButtonGroup>
                                             {TEXT_ALIGN.map((item) => (
                                                 <Button
                                                     // isLarge
-                                                    isPrimary={
-                                                        textAlign === item.value
-                                                    }
-                                                    isSecondary={
-                                                        textAlign !== item.value
-                                                    }
+                                                    isPrimary={textAlign === item.value}
+                                                    isSecondary={textAlign !== item.value}
                                                     onClick={() =>
                                                         handleBlockDefault({
-                                                            textAlign:
-                                                                item.value,
+                                                            textAlign: item.value,
                                                         })
                                                     }
                                                 >
@@ -388,111 +336,63 @@ function AdvancedImage(props) {
 
                                     {captionStyle === "caption-style-1" && (
                                         <>
-                                            <BaseControl
-                                                label={__(
-                                                    "Horizontal Align",
-                                                    "essential-blocks"
-                                                )}
-                                            >
+                                            <BaseControl label={__("Horizontal Align", "essential-blocks")}>
                                                 <ButtonGroup>
-                                                    {HORIZONTAL_ALIGN.map(
-                                                        (item) => (
-                                                            <Button
-                                                                // isLarge
-                                                                isPrimary={
-                                                                    horizontalAlign ===
-                                                                    item.value
-                                                                }
-                                                                isSecondary={
-                                                                    horizontalAlign !==
-                                                                    item.value
-                                                                }
-                                                                onClick={() =>
-                                                                    handleBlockDefault(
-                                                                        {
-                                                                            horizontalAlign:
-                                                                                item.value,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        )
-                                                    )}
+                                                    {HORIZONTAL_ALIGN.map((item) => (
+                                                        <Button
+                                                            // isLarge
+                                                            isPrimary={horizontalAlign === item.value}
+                                                            isSecondary={horizontalAlign !== item.value}
+                                                            onClick={() =>
+                                                                handleBlockDefault({
+                                                                    horizontalAlign: item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    ))}
                                                 </ButtonGroup>
                                             </BaseControl>
 
-                                            <BaseControl
-                                                label={__(
-                                                    "Vertical Align",
-                                                    "essential-blocks"
-                                                )}
-                                            >
+                                            <BaseControl label={__("Vertical Align", "essential-blocks")}>
                                                 <ButtonGroup>
-                                                    {VERTICAL_ALIGN.map(
-                                                        (item) => (
-                                                            <Button
-                                                                // isLarge
-                                                                isPrimary={
-                                                                    verticalAlign ===
-                                                                    item.value
-                                                                }
-                                                                isSecondary={
-                                                                    verticalAlign !==
-                                                                    item.value
-                                                                }
-                                                                onClick={() =>
-                                                                    handleBlockDefault(
-                                                                        {
-                                                                            verticalAlign:
-                                                                                item.value,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        )
-                                                    )}
+                                                    {VERTICAL_ALIGN.map((item) => (
+                                                        <Button
+                                                            // isLarge
+                                                            isPrimary={verticalAlign === item.value}
+                                                            isSecondary={verticalAlign !== item.value}
+                                                            onClick={() =>
+                                                                handleBlockDefault({
+                                                                    verticalAlign: item.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    ))}
                                                 </ButtonGroup>
                                             </BaseControl>
                                         </>
                                     )}
 
                                     {captionStyle === "caption-style-2" && (
-                                        <BaseControl
-                                            label={__(
-                                                "Vertical Align",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <BaseControl label={__("Vertical Align", "essential-blocks")}>
                                             <ButtonGroup>
-                                                {VERTICAL_ALIGN_CAP_2.map(
-                                                    (item) => (
-                                                        <Button
-                                                            // isLarge
-                                                            isPrimary={
-                                                                verticalAlignCap2 ===
-                                                                item.value
-                                                            }
-                                                            isSecondary={
-                                                                verticalAlignCap2 !==
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                handleBlockDefault(
-                                                                    {
-                                                                        verticalAlignCap2:
-                                                                            item.value,
-                                                                    }
-                                                                )
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    )
-                                                )}
+                                                {VERTICAL_ALIGN_CAP_2.map((item) => (
+                                                    <Button
+                                                        // isLarge
+                                                        isPrimary={verticalAlignCap2 === item.value}
+                                                        isSecondary={verticalAlignCap2 !== item.value}
+                                                        onClick={() =>
+                                                            handleBlockDefault({
+                                                                verticalAlignCap2: item.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {item.label}
+                                                    </Button>
+                                                ))}
                                             </ButtonGroup>
                                         </BaseControl>
                                     )}
@@ -513,10 +413,7 @@ function AdvancedImage(props) {
                         </PanelBody>
                     )}
                     {/* Advanced */}
-                    <PanelBody
-                        title={__("Wrapper Margin & Padding")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -528,25 +425,15 @@ function AdvancedImage(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WRAPPER_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

@@ -28,7 +28,16 @@ use WPGraphQL\Data\NodeResolver;
  *
  * @package WPGraphQL
  */
+// @phpcs:ignore
+#[\AllowDynamicProperties]
 class AppContext {
+
+	/**
+	 * Stores the class to use for the connection query.
+	 *
+	 * @var \WP_Query|null
+	 */
+	public $connection_query_class = null;
 
 	/**
 	 * Stores the url string for the current site
@@ -66,7 +75,7 @@ class AppContext {
 	/**
 	 * Passes context about the current connection being resolved
 	 *
-	 * @var mixed|String|null
+	 * @var mixed|string|null
 	 */
 	public $currentConnection = null;
 
@@ -148,7 +157,7 @@ class AppContext {
 	 *
 	 * @param string $key The name of the loader to get
 	 *
-	 * @return mixed
+	 * @return \WPGraphQL\Data\Loader\AbstractDataLoader|mixed
 	 *
 	 * @deprecated Use get_loader instead.
 	 */

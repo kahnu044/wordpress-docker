@@ -59,8 +59,6 @@ import {
     ICON_SHAPE,
 } from "../../../../blocks/social-share/src/constants";
 
-import iconList from "../../../../blocks/social-share/src/iconList";
-
 function SocialShare(props) {
     const { blockDefaults, setBlockDefaults, name, deviceType } = props;
 
@@ -246,7 +244,6 @@ function SocialShare(props) {
                                 onProfileAdd={(socialDetails) =>
                                     handleBlockDefault({ socialDetails })
                                 }
-                                iconList={iconList}
                             />
                         </>
                     </PanelBody>
@@ -471,8 +468,8 @@ function SocialShare(props) {
                         <BorderShadowControl
                             controlName={WrpBdShadowConst}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

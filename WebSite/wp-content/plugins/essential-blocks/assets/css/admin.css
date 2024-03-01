@@ -262,7 +262,7 @@ textarea.eb-form-control {
 	}
 }
 
-/* Eael Tab Toggles */
+/* eb Tab Toggles */
 .eb-settings-tab {
 	display: none;
 }
@@ -735,4 +735,75 @@ textarea.eb-form-control {
 
 .eb-admin-checkbox input:disabled {
 	opacity: 0;
+}
+
+.eb-admin-promotion-message {
+    background: #5E2EFF;
+    color: white;
+    padding: 15px 10px;
+    position: relative;
+	margin-left: -20px;
+}
+
+.eb-admin-promotion-message p {
+    font-size: 14px;
+    text-align:center;
+	margin: 0;
+	color: #ffffff;
+}
+
+.eb-admin-promotion-message p a {
+    font-weight: bold;
+	color: #ffffff;
+}
+
+.eb-admin-promotion-message p i {
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+.eb-admin-promotion-message p a:focus {
+    color:inherit;
+    outline:none;
+    box-showdow:none;
+}
+.eb-admin-promotion-close {
+    top: 7px !important;
+}
+.eb-lock-style {
+    position: absolute;
+    right: 21px;
+    color: #E8AA17;
+    font-size: 12px;
+}
+
+.e-notice__dismiss {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: .8125rem;
+    text-align: center;
+    background: none;
+    display: block;
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 1px;
+    border: none;
+    margin: 0;
+    padding: 9px;
+    cursor: pointer;
+    font-style: normal;
+}
+
+.eb-admin-promotion-message i:before {
+    color:white;
+}
+
+.e-notice__dismiss:before {
+    display: inline-block;
+    width: 20px;
+	height: 20px;
+    border-radius: 20px;
+    speak: none;
+    text-align: center;
 }

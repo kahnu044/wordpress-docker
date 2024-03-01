@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
 import {
     PanelBody,
     PanelRow,
@@ -381,10 +380,7 @@ function PostGrid(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("Layout Style", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Layout Style", "essential-blocks")} initialOpen={true}>
                         <ResponsiveRangeController
                             baseLabel={__("Columns", "essential-blocks")}
                             controlName={COLUMNS}
@@ -418,10 +414,7 @@ function PostGrid(props) {
                         {showThumbnail && (
                             <>
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Thumbnail Height",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Thumbnail Height", "essential-blocks")}
                                     controlName={THUMBNAIL_IMAGE_SIZE}
                                     resRequiredProps={resRequiredProps}
                                     units={HEIGHT_UNIT_TYPES}
@@ -431,10 +424,7 @@ function PostGrid(props) {
                                 />
                                 {preset === "style-4" && (
                                     <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Thumbnail Width",
-                                            "essential-blocks"
-                                        )}
+                                        baseLabel={__("Thumbnail Width", "essential-blocks")}
                                         controlName={COLUMN_MEDIA_WIDTH}
                                         resRequiredProps={resRequiredProps}
                                         units={[{ label: "%", value: "%" }]}
@@ -454,10 +444,7 @@ function PostGrid(props) {
 
                         {(preset === "style-4" || preset === "style-5") && (
                             <BaseControl
-                                label={__(
-                                    "Content Vertical Alignment",
-                                    "essential-blocks"
-                                )}
+                                label={__("Content Vertical Alignment", "essential-blocks")}
                                 id="essential-blocks"
                             >
                                 <ButtonGroup id="essential-blocks">
@@ -465,18 +452,11 @@ function PostGrid(props) {
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                styleVerticalAlignment ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                styleVerticalAlignment !==
-                                                item.value
-                                            }
+                                            isPrimary={styleVerticalAlignment === item.value}
+                                            isSecondary={styleVerticalAlignment !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    styleVerticalAlignment:
-                                                        item.value,
+                                                    styleVerticalAlignment: item.value,
                                                 })
                                             }
                                         >
@@ -598,16 +578,10 @@ function PostGrid(props) {
                                     <PanelRow>Header Meta</PanelRow>
                                     <Select2
                                         name="select-header-meta"
-                                        value={
-                                            headerMeta.length > 0
-                                                ? JSON.parse(headerMeta)
-                                                : ""
-                                        }
+                                        value={headerMeta.length > 0 ? JSON.parse(headerMeta) : ""}
                                         onChange={(selected) =>
                                             handleBlockDefault({
-                                                headerMeta: JSON.stringify(
-                                                    selected
-                                                ),
+                                                headerMeta: JSON.stringify(selected),
                                             })
                                         }
                                         options={metaOptions}
@@ -619,16 +593,10 @@ function PostGrid(props) {
                                     <PanelRow>Footer Meta</PanelRow>
                                     <Select2
                                         name="select-footer-meta"
-                                        value={
-                                            footerMeta.length > 0
-                                                ? JSON.parse(footerMeta)
-                                                : ""
-                                        }
+                                        value={footerMeta.length > 0 ? JSON.parse(footerMeta) : ""}
                                         onChange={(selected) =>
                                             handleBlockDefault({
-                                                footerMeta: JSON.stringify(
-                                                    selected
-                                                ),
+                                                footerMeta: JSON.stringify(selected),
                                             })
                                         }
                                         options={metaOptions}
@@ -644,29 +612,16 @@ function PostGrid(props) {
                         setAttributes={handleBlockDefault}
                         initialOpen={false}
                     />
-                    <PanelBody
-                        title={__("Columns Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Columns Style", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={COLUMN_PADDING}
                             baseLabel="Padding"
                         />
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BackgroundControl
-                                controlName={COLUMN_BG}
-                                resRequiredProps={resRequiredProps}
-                                noOverlay
-                            />
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
+                            <BackgroundControl controlName={COLUMN_BG} resRequiredProps={resRequiredProps} noOverlay />
                         </PanelBody>
-                        <PanelBody
-                            title={__("Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={COLUMN_BORDER_SHADOW}
                                 resRequiredProps={resRequiredProps}
@@ -676,10 +631,7 @@ function PostGrid(props) {
                         </PanelBody>
                     </PanelBody>
                     {showThumbnail && (
-                        <PanelBody
-                            title={__("Thumbnail Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Thumbnail Style", "essential-blocks")} initialOpen={false}>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={THUMBNAIL_BORDER_RADIUS}
@@ -700,10 +652,7 @@ function PostGrid(props) {
                                 }
                             />
                             <ColorControl
-                                label={__(
-                                    "Overlay Hover Color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Overlay Hover Color", "essential-blocks")}
                                 color={thumbnailOverlayHoverColor}
                                 onChange={(color) =>
                                     handleBlockDefault({
@@ -714,21 +663,14 @@ function PostGrid(props) {
                         </PanelBody>
                     )}
                     {showTitle && (
-                        <PanelBody
-                            title={__("Title Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
                             <ButtonGroup className="eb-inspector-btn-group">
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button
                                         key={index}
                                         // isLarge
-                                        isPrimary={
-                                            titleColorStyle === item.value
-                                        }
-                                        isSecondary={
-                                            titleColorStyle !== item.value
-                                        }
+                                        isPrimary={titleColorStyle === item.value}
+                                        isSecondary={titleColorStyle !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 titleColorStyle: item.value,
@@ -741,67 +683,36 @@ function PostGrid(props) {
                             </ButtonGroup>
 
                             {titleColorStyle === "normal" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Normal Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: titleColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    titleColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Color", "essential-blocks")}
+                                    color={titleColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            titleColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
 
                             {titleColorStyle === "hover" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: titleHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    titleHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Hover Color", "essential-blocks")}
+                                    color={titleHoverColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            titleHoverColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
-                            <BaseControl
-                                label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
-                            >
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                titleTextAlign === item.value
-                                            }
-                                            isSecondary={
-                                                titleTextAlign !== item.value
-                                            }
+                                            isPrimary={titleTextAlign === item.value}
+                                            isSecondary={titleTextAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     titleTextAlign: item.value,
@@ -826,36 +737,23 @@ function PostGrid(props) {
                         </PanelBody>
                     )}
                     {showContent && (
-                        <PanelBody
-                            title={__("Excerpt Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Excerpt Style", "essential-blocks")} initialOpen={false}>
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={contentColor}
-                                onChange={(color) =>
-                                    handleBlockDefault({ contentColor: color })
-                                }
+                                onChange={(color) => handleBlockDefault({ contentColor: color })}
                             />
-                            <BaseControl
-                                label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
-                            >
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                contentTextAlign === item.value
-                                            }
-                                            isSecondary={
-                                                contentTextAlign !== item.value
-                                            }
+                                            isPrimary={contentTextAlign === item.value}
+                                            isSecondary={contentTextAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    contentTextAlign:
-                                                        item.value,
+                                                    contentTextAlign: item.value,
                                                 })
                                             }
                                         >
@@ -866,9 +764,7 @@ function PostGrid(props) {
                             </BaseControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
-                                typographyPrefixConstant={
-                                    EBPG_CONTENT_TYPOGRAPHY
-                                }
+                                typographyPrefixConstant={EBPG_CONTENT_TYPOGRAPHY}
                                 resRequiredProps={resRequiredProps}
                             />
                             <ResponsiveDimensionsControl
@@ -879,21 +775,14 @@ function PostGrid(props) {
                         </PanelBody>
                     )}
                     {showReadMore && (
-                        <PanelBody
-                            title={__("Read More Button", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Read More Button", "essential-blocks")} initialOpen={false}>
                             <ButtonGroup className="eb-inspector-btn-group">
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button
                                         key={index}
                                         // isLarge
-                                        isPrimary={
-                                            readmoreColorType === item.value
-                                        }
-                                        isSecondary={
-                                            readmoreColorType !== item.value
-                                        }
+                                        isPrimary={readmoreColorType === item.value}
+                                        isSecondary={readmoreColorType !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 readmoreColorType: item.value,
@@ -906,93 +795,61 @@ function PostGrid(props) {
                             </ButtonGroup>
 
                             {readmoreColorType === "normal" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Normal Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: readmoreColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    readmoreColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: readmoreBGColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    readmoreBGColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Background Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
-                                />
+                                <>
+                                    <ColorControl
+                                        label={__("Color", "essential-blocks")}
+                                        color={readmoreColor}
+                                        onChange={(newColor) =>
+                                            handleBlockDefault({
+                                                readmoreColor: newColor,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Background Color", "essential-blocks")}
+                                        color={readmoreBGColor}
+                                        onChange={(newColor) =>
+                                            handleBlockDefault({
+                                                readmoreBGColor: newColor,
+                                            })
+                                        }
+                                    />
+                                </>
                             )}
 
                             {readmoreColorType === "hover" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: readmoreHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    readmoreHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: readmoreBGHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    readmoreBGHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Hover Background Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
-                                />
+                                <>
+                                    <ColorControl
+                                        label={__("Hover Color", "essential-blocks")}
+                                        color={readmoreHoverColor}
+                                        onChange={(newColor) =>
+                                            handleBlockDefault({
+                                                readmoreHoverColor: newColor,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Hover Background Color", "essential-blocks")}
+                                        color={readmoreBGHoverColor}
+                                        onChange={(newColor) =>
+                                            handleBlockDefault({
+                                                readmoreBGHoverColor: newColor,
+                                            })
+                                        }
+                                    />
+                                </>
                             )}
-                            <BaseControl
-                                label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
-                            >
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                readmoreTextAlign === item.value
-                                            }
-                                            isSecondary={
-                                                readmoreTextAlign !== item.value
-                                            }
+                                            isPrimary={readmoreTextAlign === item.value}
+                                            isSecondary={readmoreTextAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    readmoreTextAlign:
-                                                        item.value,
+                                                    readmoreTextAlign: item.value,
                                                 })
                                             }
                                         >
@@ -1003,9 +860,7 @@ function PostGrid(props) {
                             </BaseControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
-                                typographyPrefixConstant={
-                                    EBPG_READMORE_TYPOGRAPHY
-                                }
+                                typographyPrefixConstant={EBPG_READMORE_TYPOGRAPHY}
                                 resRequiredProps={resRequiredProps}
                             />
                             <ResponsiveDimensionsControl
@@ -1021,34 +876,18 @@ function PostGrid(props) {
                         </PanelBody>
                     )}
                     {showMeta && (
-                        <PanelBody
-                            title={__("Meta Styles", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BaseControl
-                                label={__(
-                                    "Header Meta Alignment",
-                                    "essential-blocks"
-                                )}
-                                id="essential-blocks"
-                            >
+                        <PanelBody title={__("Meta Styles", "essential-blocks")} initialOpen={false}>
+                            <BaseControl label={__("Header Meta Alignment", "essential-blocks")} id="essential-blocks">
                                 <ButtonGroup id="essential-blocks">
                                     {CONTENT_POSITION.map((item, index) => (
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                headerMetaTextAlign ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                headerMetaTextAlign !==
-                                                item.value
-                                            }
+                                            isPrimary={headerMetaTextAlign === item.value}
+                                            isSecondary={headerMetaTextAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    headerMetaTextAlign:
-                                                        item.value,
+                                                    headerMetaTextAlign: item.value,
                                                 })
                                             }
                                         >
@@ -1058,10 +897,7 @@ function PostGrid(props) {
                                 </ButtonGroup>
                             </BaseControl>
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Header Meta Gap",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Header Meta Gap", "essential-blocks")}
                                 controlName={HEADER_META_SPACE}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -1075,30 +911,17 @@ function PostGrid(props) {
                                 baseLabel="Header Meta Margin"
                             />
 
-                            <BaseControl
-                                label={__(
-                                    "Footer Meta Alignment",
-                                    "essential-blocks"
-                                )}
-                                id="essential-blocks"
-                            >
+                            <BaseControl label={__("Footer Meta Alignment", "essential-blocks")} id="essential-blocks">
                                 <ButtonGroup id="essential-blocks">
                                     {CONTENT_POSITION.map((item, index) => (
                                         <Button
                                             key={index}
                                             // isLarge
-                                            isPrimary={
-                                                footerMetaTextAlign ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                footerMetaTextAlign !==
-                                                item.value
-                                            }
+                                            isPrimary={footerMetaTextAlign === item.value}
+                                            isSecondary={footerMetaTextAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    footerMetaTextAlign:
-                                                        item.value,
+                                                    footerMetaTextAlign: item.value,
                                                 })
                                             }
                                         >
@@ -1108,10 +931,7 @@ function PostGrid(props) {
                                 </ButtonGroup>
                             </BaseControl>
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Footer Meta Gap",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Footer Meta Gap", "essential-blocks")}
                                 controlName={FOOTER_META_SPACE}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -1131,9 +951,7 @@ function PostGrid(props) {
                                         key={index}
                                         // isLarge
                                         isPrimary={metaColorType === item.value}
-                                        isSecondary={
-                                            metaColorType !== item.value
-                                        }
+                                        isSecondary={metaColorType !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 metaColorType: item.value,
@@ -1146,212 +964,162 @@ function PostGrid(props) {
                             </ButtonGroup>
 
                             {metaColorType === "normal" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Normal Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: authorMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    authorMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Author Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: dateMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    dateMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Date Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: commonMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    commonMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Common Meta Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: commonMetaBgColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    commonMetaBgColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Common Meta BG Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: categoryMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    categoryMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Category Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: categoryMetaBgColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    categoryMetaBgColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Category BG Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: tagMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    tagMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Tag Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: tagMetaBgColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    tagMetaBgColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Tag BG Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: ReadTimeMetaColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    ReadTimeMetaColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Read Time Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
-                                />
+                                <>
+                                    <ColorControl
+                                        label={__("Author Color", "essential-blocks")}
+                                        color={authorMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                authorMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Date Color", "essential-blocks")}
+                                        color={dateMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                dateMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta Color", "essential-blocks")}
+                                        color={commonMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                commonMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta BG Color", "essential-blocks")}
+                                        color={commonMetaBgColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                commonMetaBgColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Category Color", "essential-blocks")}
+                                        color={categoryMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                categoryMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Category BG Color", "essential-blocks")}
+                                        color={categoryMetaBgColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                categoryMetaBgColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Tag Color", "essential-blocks")}
+                                        color={tagMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                tagMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Tag BG Color", "essential-blocks")}
+                                        color={tagMetaBgColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                tagMetaBgColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Read Time Color", "essential-blocks")}
+                                        color={ReadTimeMetaColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                ReadTimeMetaColor: color,
+                                            })
+                                        }
+                                    />
+                                </>
                             )}
 
                             {metaColorType === "hover" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: authorMetaHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    authorMetaHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Author Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: commonMetaHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    commonMetaHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Common Meta Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: commonMetaBgHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    commonMetaBgHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Common Meta BG Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: categoryMetaHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    categoryMetaHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Category Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: categoryMetaBgHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    categoryMetaBgHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Category BG Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: tagMetaHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    tagMetaHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Tag Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                        {
-                                            value: tagMetaBgHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    tagMetaBgHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Tag BG Hover Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
-                                />
+                                <>
+                                    <ColorControl
+                                        label={__("Author Color", "essential-blocks")}
+                                        color={authorMetaHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                authorMetaHoverColor: color,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Common Meta Color", "essential-blocks")}
+                                        color={commonMetaHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                commonMetaHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta BG Color", "essential-blocks")}
+                                        color={commonMetaBgHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                commonMetaBgHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Category Color", "essential-blocks")}
+                                        color={categoryMetaHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                categoryMetaHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Category BG Color", "essential-blocks")}
+                                        color={categoryMetaBgHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                categoryMetaBgHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Tag Color", "essential-blocks")}
+                                        color={tagMetaHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                tagMetaHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Tag BG Color", "essential-blocks")}
+                                        color={tagMetaBgHoverColor}
+                                        onChange={(color) =>
+                                            handleBlockDefault({
+                                                tagMetaBgHoverColor: color,
+                                            })
+                                        }
+                                    />
+                                </>
                             )}
 
                             <TypographyDropdown
-                                baseLabel={__(
-                                    "Meta Typography",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Meta Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_META_TYPOGRAPHY}
                                 resRequiredProps={resRequiredProps}
                             />
@@ -1365,32 +1133,19 @@ function PostGrid(props) {
                     )}
                     {loadMoreOptions && loadMoreOptions.enableMorePosts && (
                         <>
-                            <PanelBody
-                                title={__("Load More Styles")}
-                                initialOpen={false}
-                            >
+                            <PanelBody title={__("Load More Styles")} initialOpen={false}>
                                 {/* If load More type "Load More Button" */}
                                 {loadMoreOptions.loadMoreType === "1" && (
-                                    <ButtonGroup
-                                        id="essential-blocks"
-                                        className="eb-inspector-btn-group"
-                                    >
+                                    <ButtonGroup id="essential-blocks" className="eb-inspector-btn-group">
                                         {NORMAL_HOVER.map((item, index) => (
                                             <Button
                                                 key={index}
                                                 isLarge
-                                                isPrimary={
-                                                    loadMoreColorType ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    loadMoreColorType !==
-                                                    item.value
-                                                }
+                                                isPrimary={loadMoreColorType === item.value}
+                                                isSecondary={loadMoreColorType !== item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        loadMoreColorType:
-                                                            item.value,
+                                                        loadMoreColorType: item.value,
                                                     })
                                                 }
                                             >
@@ -1402,150 +1157,97 @@ function PostGrid(props) {
 
                                 {/* If load More type "Pagination" */}
                                 {loadMoreOptions.loadMoreType === "2" && (
-                                    <BaseControl
-                                        label={__("", "essential-blocks")}
-                                        id="eb-advance-heading-alignment"
-                                    >
+                                    <BaseControl label={__("", "essential-blocks")} id="eb-advance-heading-alignment">
                                         <ButtonGroup id="eb-advance-heading-alignment">
-                                            {NORMAL_HOVER_ACTIVE.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isLarge
-                                                        isPrimary={
-                                                            loadMoreColorType ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            loadMoreColorType !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                loadMoreColorType:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {NORMAL_HOVER_ACTIVE.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isLarge
+                                                    isPrimary={loadMoreColorType === item.value}
+                                                    isSecondary={loadMoreColorType !== item.value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            loadMoreColorType: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
                                 )}
 
                                 {loadMoreColorType === "normal" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Normal Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: loadMoreColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: loadMoreBgColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreBgColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Color", "essential-blocks")}
+                                            color={loadMoreColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={loadMoreBgColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreBgColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
                                 {loadMoreColorType === "hover" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Hover Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: loadMoreHoverColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreHoverColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: loadMoreHoverBgColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreHoverBgColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Hover Color", "essential-blocks")}
+                                            color={loadMoreHoverColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreHoverColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Hover Color", "essential-blocks")}
+                                            color={loadMoreHoverBgColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreHoverBgColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
                                 {loadMoreColorType === "active" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Active Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: loadMoreActiveColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreActiveColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: loadMoreActiveBgColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        loadMoreActiveBgColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Active Color", "essential-blocks")}
+                                            color={loadMoreActiveColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreActiveColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={loadMoreActiveBgColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    loadMoreActiveBgColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
 
                                 <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
-                                    )}
-                                    typographyPrefixConstant={
-                                        EBPG_LOAD_MORE_TYPOGRAPHY
-                                    }
+                                    baseLabel={__("Typography", "essential-blocks")}
+                                    typographyPrefixConstant={EBPG_LOAD_MORE_TYPOGRAPHY}
                                     resRequiredProps={resRequiredProps}
                                 />
 
@@ -1561,10 +1263,7 @@ function PostGrid(props) {
                                         baseLabel="Padding"
                                     />
                                 </PanelBody>
-                                <PanelBody
-                                    title={__("Border & Shadow")}
-                                    initialOpen={false}
-                                >
+                                <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                     <BorderShadowControl
                                         controlName={LOADMORE_BORDER_SHADOW}
                                         resRequiredProps={resRequiredProps}
@@ -1575,13 +1274,7 @@ function PostGrid(props) {
                             </PanelBody>
                         </>
                     )}
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -1593,24 +1286,11 @@ function PostGrid(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={WRAPPER_BORDER_SHADOW}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
+                        <BorderShadowControl controlName={WRAPPER_BORDER_SHADOW} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

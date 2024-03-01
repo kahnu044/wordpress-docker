@@ -23,6 +23,8 @@ const Save = ({ attributes }) => {
         arrowPrevIcon,
         dotPreset,
         isRTLEnable,
+        titleTag,
+        contentTag
     } = attributes;
 
     //Slider Settings
@@ -60,6 +62,8 @@ const Save = ({ attributes }) => {
         ],
     };
 
+    const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
+
     return (
         <div {...useBlockProps.save()}>
             <div
@@ -74,8 +78,10 @@ const Save = ({ attributes }) => {
                     data-textAlign={textAlign}
                     data-arrowNextIcon={arrowNextIcon}
                     data-arrowPrevIcon={arrowPrevIcon}
+                    data-titleTag={titleTag}
+                    data-contentTag={contentTag}
                 >
-                    <div className={sliderType}>
+                    <div className={sliderTypeClass}>
                         {images.map((image, index) => (
                             <div
                                 className={`eb-slider-item ${sliderContentType}`}
@@ -113,7 +119,7 @@ const Save = ({ attributes }) => {
                                                     <a
                                                         href={
                                                             image.buttonUrl &&
-                                                            image.isValidUrl
+                                                                image.isValidUrl
                                                                 ? image.buttonUrl
                                                                 : "#"
                                                         }
@@ -136,11 +142,11 @@ const Save = ({ attributes }) => {
                                             {image.showSecondButton &&
                                                 image.secondButtonText &&
                                                 image.secondButtonText.length >
-                                                    0 && (
+                                                0 && (
                                                     <a
                                                         href={
                                                             image.secondButtonUrl &&
-                                                            image.isValidUrl
+                                                                image.isValidUrl
                                                                 ? image.secondButtonUrl
                                                                 : "#"
                                                         }

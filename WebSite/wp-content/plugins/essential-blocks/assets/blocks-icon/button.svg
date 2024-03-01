@@ -1,21 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 66 70" style="enable-background:new 0 0 66 70;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:2.7;stroke-miterlimit:10;}
-	.st1{fill:none;stroke:url(#SVGID_2_);stroke-width:2.7;stroke-linecap:round;stroke-miterlimit:10;}
-</style>
-<desc>Created with Sketch.</desc>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-1.0872" y1="37.1691" x2="67.0872" y2="30.0895">
-	<stop  offset="0" style="stop-color:#1A6DFF"/>
-	<stop  offset="1" style="stop-color:#C822FF"/>
-</linearGradient>
-<path class="st0" d="M60.9,50.6H5.1c-2.1,0-3.8-1.7-3.8-3.8V20.4c0-2.1,1.7-3.8,3.8-3.8h55.9c2.1,0,3.8,1.7,3.8,3.8v26.4
-	C64.7,48.9,63,50.6,60.9,50.6z"/>
-<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="13.0795" y1="35.5697" x2="50.4499" y2="31.6889">
-	<stop  offset="0" style="stop-color:#1A6DFF"/>
-	<stop  offset="1" style="stop-color:#C822FF"/>
-</linearGradient>
-<line class="st1" x1="14.2" y1="33.6" x2="49.3" y2="33.6"/>
-</svg>
+<svg width="68" height="33" viewBox="0 0 68 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M6.09995 3.57854C4.5428 3.57854 3.64995 4.61901 3.64995 5.48568V28.1143C3.64995 28.9809 4.5428 30.0214 6.09995 30.0214H61.9C63.4144 30.0214 64.378 29.0079 64.45 28.0707V5.48568C64.45 4.61901 63.5571 3.57854 62 3.57854H6.09995ZM0.949951 5.48568C0.949951 2.75236 3.4571 0.87854 6.09995 0.87854H62C64.6428 0.87854 67.15 2.75236 67.15 5.48568V28.1517L67.1479 28.1891C67.0004 30.8433 64.5686 32.7214 61.9 32.7214H6.09995C3.4571 32.7214 0.949951 30.8476 0.949951 28.1143V5.48568Z" fill="#6C3BFF"/>
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M13.85 16.8C13.85 16.0544 14.4544 15.45 15.2 15.45H50.2999C51.0455 15.45 51.6499 16.0544 51.6499 16.8C51.6499 17.5456 51.0455 18.15 50.2999 18.15H15.2C14.4544 18.15 13.85 17.5456 13.85 16.8Z" fill="#6C3BFF"/>
+	</svg>

@@ -29,6 +29,7 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     AdvancedControls,
+    EBIconPicker
 } = EBControls;
 
 import { prefixWrapBg } from "./constants/backgroundsConstants";
@@ -597,7 +598,7 @@ function Inspector(props) {
                                             "General",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <PanelRow>
                                             {__("Layout", "essential-blocks")}
@@ -784,7 +785,7 @@ function Inspector(props) {
                                             "Hamburger Menu",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <BaseControl
                                             label={__(
@@ -861,7 +862,7 @@ function Inspector(props) {
                                             "Navigation",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <TypographyDropdown
                                             baseLabel="Typography"
@@ -1044,7 +1045,7 @@ function Inspector(props) {
                                                         "is-horizontal" &&
                                                         (preset == "preset-2" ||
                                                             preset ==
-                                                                "preset-3") && (
+                                                            "preset-3") && (
                                                             <ColorControl
                                                                 label={__(
                                                                     "Background",
@@ -1072,7 +1073,7 @@ function Inspector(props) {
 
                                                     {layout == "is-vertical" &&
                                                         verticalPreset ==
-                                                            "vertical-preset-2" && (
+                                                        "vertical-preset-2" && (
                                                             <ColorControl
                                                                 label={__(
                                                                     "Background",
@@ -1157,194 +1158,194 @@ function Inspector(props) {
 
                                             {activeColorSwitcher ===
                                                 "normal" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actNavTextColor
-                                                                .default
-                                                        }
-                                                        color={actNavTextColor}
-                                                        onChange={(
-                                                            actNavTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actNavTextColor,
-                                                            })
-                                                        }
-                                                    />
+                                                    <>
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Text",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actNavTextColor
+                                                                    .default
+                                                            }
+                                                            color={actNavTextColor}
+                                                            onChange={(
+                                                                actNavTextColor
+                                                            ) =>
+                                                                setAttributes({
+                                                                    actNavTextColor,
+                                                                })
+                                                            }
+                                                        />
 
-                                                    {layout ==
-                                                        "is-horizontal" &&
-                                                        (preset == "preset-2" ||
-                                                            preset ==
+                                                        {layout ==
+                                                            "is-horizontal" &&
+                                                            (preset == "preset-2" ||
+                                                                preset ==
                                                                 "preset-3") && (
-                                                            <ColorControl
-                                                                label={__(
-                                                                    "Background",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                defaultColor={
-                                                                    objAttributes
-                                                                        .actNavBgColor
-                                                                        .default
-                                                                }
-                                                                color={
-                                                                    actNavBgColor
-                                                                }
-                                                                onChange={(
-                                                                    actNavBgColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            actNavBgColor,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Background",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actNavBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actNavBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actNavBgColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                actNavBgColor,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                />
+                                                            )}
 
-                                                    {layout == "is-vertical" &&
-                                                        verticalPreset ==
+                                                        {layout == "is-vertical" &&
+                                                            verticalPreset ==
                                                             "vertical-preset-2" && (
-                                                            <ColorControl
-                                                                label={__(
-                                                                    "Background",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                defaultColor={
-                                                                    objAttributes
-                                                                        .actNavBgColor
-                                                                        .default
-                                                                }
-                                                                color={
-                                                                    actNavBgColor
-                                                                }
-                                                                onChange={(
-                                                                    actNavBgColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            actNavBgColor,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
-                                                </>
-                                            )}
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Background",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actNavBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actNavBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actNavBgColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                actNavBgColor,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                />
+                                                            )}
+                                                    </>
+                                                )}
 
                                             {activeColorSwitcher ===
                                                 "hover" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actHvNavTextColor
-                                                                .default
-                                                        }
-                                                        color={
-                                                            actHvNavTextColor
-                                                        }
-                                                        onChange={(
-                                                            actHvNavTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actHvNavTextColor,
-                                                            })
-                                                        }
-                                                    />
-
-                                                    {layout ==
-                                                        "is-horizontal" &&
-                                                        (preset == "preset-2" ||
-                                                            preset ==
-                                                                "preset-3") && (
-                                                            <ColorControl
-                                                                label={__(
-                                                                    "Backgound",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                defaultColor={
-                                                                    objAttributes
-                                                                        .actHvNavBgColor
-                                                                        .default
-                                                                }
-                                                                color={
-                                                                    actHvNavBgColor
-                                                                }
-                                                                onChange={(
-                                                                    actHvNavBgColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            actHvNavBgColor,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
-
-                                                    {layout == "is-vertical" &&
-                                                        verticalPreset ==
-                                                            "vertical-preset-2" && (
-                                                            <ColorControl
-                                                                label={__(
-                                                                    "Backgound",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                defaultColor={
-                                                                    objAttributes
-                                                                        .actHvNavBgColor
-                                                                        .default
-                                                                }
-                                                                color={
-                                                                    actHvNavBgColor
-                                                                }
-                                                                onChange={(
-                                                                    actHvNavBgColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            actHvNavBgColor,
-                                                                        }
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
-
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Transition",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <RangeControl
-                                                            value={
-                                                                actColorTransition
+                                                    <>
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Text",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actHvNavTextColor
+                                                                    .default
+                                                            }
+                                                            color={
+                                                                actHvNavTextColor
                                                             }
                                                             onChange={(
-                                                                actColorTransition
+                                                                actHvNavTextColor
                                                             ) =>
                                                                 setAttributes({
-                                                                    actColorTransition,
+                                                                    actHvNavTextColor,
                                                                 })
                                                             }
-                                                            step={0.1}
-                                                            min={0}
-                                                            max={5}
                                                         />
-                                                    </BaseControl>
-                                                </>
-                                            )}
+
+                                                        {layout ==
+                                                            "is-horizontal" &&
+                                                            (preset == "preset-2" ||
+                                                                preset ==
+                                                                "preset-3") && (
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Backgound",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actHvNavBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actHvNavBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actHvNavBgColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                actHvNavBgColor,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                />
+                                                            )}
+
+                                                        {layout == "is-vertical" &&
+                                                            verticalPreset ==
+                                                            "vertical-preset-2" && (
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Backgound",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actHvNavBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actHvNavBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actHvNavBgColor
+                                                                    ) =>
+                                                                        setAttributes(
+                                                                            {
+                                                                                actHvNavBgColor,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                />
+                                                            )}
+
+                                                        <BaseControl
+                                                            label={__(
+                                                                "Transition",
+                                                                "essential-blocks"
+                                                            )}
+                                                        >
+                                                            <RangeControl
+                                                                value={
+                                                                    actColorTransition
+                                                                }
+                                                                onChange={(
+                                                                    actColorTransition
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        actColorTransition,
+                                                                    })
+                                                                }
+                                                                step={0.1}
+                                                                min={0}
+                                                                max={5}
+                                                            />
+                                                        </BaseControl>
+                                                    </>
+                                                )}
                                         </PanelBody>
 
                                         {preset === "preset-3" && (
@@ -1363,7 +1364,7 @@ function Inspector(props) {
                                                     }
                                                     noShadow
                                                     noBdrHover
-                                                    // noBorder
+                                                // noBorder
                                                 />
                                             </PanelBody>
                                         )}
@@ -1431,8 +1432,8 @@ function Inspector(props) {
                                                 }
                                                 noBdrHover
 
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
 
@@ -1554,29 +1555,29 @@ function Inspector(props) {
 
                                                     {(preset == "preset-2" ||
                                                         preset ==
-                                                            "preset-3") && (
-                                                        <ColorControl
-                                                            label={__(
-                                                                "Background",
-                                                                "essential-blocks"
-                                                            )}
-                                                            defaultColor={
-                                                                objAttributes
-                                                                    .dropdownItemBgColor
-                                                                    .default
-                                                            }
-                                                            color={
-                                                                dropdownItemBgColor
-                                                            }
-                                                            onChange={(
-                                                                dropdownItemBgColor
-                                                            ) =>
-                                                                setAttributes({
-                                                                    dropdownItemBgColor,
-                                                                })
-                                                            }
-                                                        />
-                                                    )}
+                                                        "preset-3") && (
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Background",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                defaultColor={
+                                                                    objAttributes
+                                                                        .dropdownItemBgColor
+                                                                        .default
+                                                                }
+                                                                color={
+                                                                    dropdownItemBgColor
+                                                                }
+                                                                onChange={(
+                                                                    dropdownItemBgColor
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        dropdownItemBgColor,
+                                                                    })
+                                                                }
+                                                            />
+                                                        )}
                                                 </>
                                             )}
 
@@ -1608,7 +1609,7 @@ function Inspector(props) {
                                                         "is-horizontal" &&
                                                         (preset == "preset-2" ||
                                                             preset ==
-                                                                "preset-3") && (
+                                                            "preset-3") && (
                                                             <ColorControl
                                                                 label={__(
                                                                     "Background",
@@ -1636,7 +1637,7 @@ function Inspector(props) {
 
                                                     {layout == "is-vertical" &&
                                                         verticalPreset ==
-                                                            "vertical-preset-2" && (
+                                                        "vertical-preset-2" && (
                                                             <ColorControl
                                                                 label={__(
                                                                     "Background",
@@ -1735,56 +1736,56 @@ function Inspector(props) {
 
                                             {activeColorSwitcher ===
                                                 "normal" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actNavDropdownTextColor
-                                                                .default
-                                                        }
-                                                        color={
-                                                            actNavDropdownTextColor
-                                                        }
-                                                        onChange={(
-                                                            actNavDropdownTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actNavDropdownTextColor,
-                                                            })
-                                                        }
-                                                    />
-
-                                                    {(preset == "preset-2" ||
-                                                        preset ==
-                                                            "preset-3") && (
+                                                    <>
                                                         <ColorControl
                                                             label={__(
-                                                                "Background",
+                                                                "Text",
                                                                 "essential-blocks"
                                                             )}
                                                             defaultColor={
                                                                 objAttributes
-                                                                    .actDropdownItemBgColor
+                                                                    .actNavDropdownTextColor
                                                                     .default
                                                             }
                                                             color={
-                                                                actDropdownItemBgColor
+                                                                actNavDropdownTextColor
                                                             }
                                                             onChange={(
-                                                                actDropdownItemBgColor
+                                                                actNavDropdownTextColor
                                                             ) =>
                                                                 setAttributes({
-                                                                    actDropdownItemBgColor,
+                                                                    actNavDropdownTextColor,
                                                                 })
                                                             }
                                                         />
-                                                    )}
 
-                                                    {/* <ColorControl
+                                                        {(preset == "preset-2" ||
+                                                            preset ==
+                                                            "preset-3") && (
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Background",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actDropdownItemBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actDropdownItemBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actDropdownItemBgColor
+                                                                    ) =>
+                                                                        setAttributes({
+                                                                            actDropdownItemBgColor,
+                                                                        })
+                                                                    }
+                                                                />
+                                                            )}
+
+                                                        {/* <ColorControl
 														label={__("Icon", "essential-blocks")}
 														defaultColor={objAttributes.actIconColor.default}
 														color={actIconColor}
@@ -1792,61 +1793,61 @@ function Inspector(props) {
 															setAttributes({ actIconColor })
 														}
 													/> */}
-                                                </>
-                                            )}
+                                                    </>
+                                                )}
 
                                             {activeColorSwitcher ===
                                                 "hover" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actHvNavDropdownTextColor
-                                                                .default
-                                                        }
-                                                        color={
-                                                            actHvNavDropdownTextColor
-                                                        }
-                                                        onChange={(
-                                                            actHvNavDropdownTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actHvNavDropdownTextColor,
-                                                            })
-                                                        }
-                                                    />
-
-                                                    {(preset == "preset-2" ||
-                                                        preset ==
-                                                            "preset-3") && (
+                                                    <>
                                                         <ColorControl
                                                             label={__(
-                                                                "Background",
+                                                                "Text",
                                                                 "essential-blocks"
                                                             )}
                                                             defaultColor={
                                                                 objAttributes
-                                                                    .actHvDropdownItemBgColor
+                                                                    .actHvNavDropdownTextColor
                                                                     .default
                                                             }
                                                             color={
-                                                                actHvDropdownItemBgColor
+                                                                actHvNavDropdownTextColor
                                                             }
                                                             onChange={(
-                                                                actHvDropdownItemBgColor
+                                                                actHvNavDropdownTextColor
                                                             ) =>
                                                                 setAttributes({
-                                                                    actHvDropdownItemBgColor,
+                                                                    actHvNavDropdownTextColor,
                                                                 })
                                                             }
                                                         />
-                                                    )}
 
-                                                    {/* <ColorControl
+                                                        {(preset == "preset-2" ||
+                                                            preset ==
+                                                            "preset-3") && (
+                                                                <ColorControl
+                                                                    label={__(
+                                                                        "Background",
+                                                                        "essential-blocks"
+                                                                    )}
+                                                                    defaultColor={
+                                                                        objAttributes
+                                                                            .actHvDropdownItemBgColor
+                                                                            .default
+                                                                    }
+                                                                    color={
+                                                                        actHvDropdownItemBgColor
+                                                                    }
+                                                                    onChange={(
+                                                                        actHvDropdownItemBgColor
+                                                                    ) =>
+                                                                        setAttributes({
+                                                                            actHvDropdownItemBgColor,
+                                                                        })
+                                                                    }
+                                                                />
+                                                            )}
+
+                                                        {/* <ColorControl
 														label={__("Icon", "essential-blocks")}
 														defaultColor={objAttributes.actHvIconColor.default}
 														color={actHvIconColor}
@@ -1855,7 +1856,7 @@ function Inspector(props) {
 														}
 													/> */}
 
-                                                    {/* <BaseControl
+                                                        {/* <BaseControl
 														label={__("Transition", "essential-blocks")}
 													>
 														<RangeControl
@@ -1870,8 +1871,8 @@ function Inspector(props) {
 															max={5}
 														/>
 													</BaseControl> */}
-                                                </>
-                                            )}
+                                                    </>
+                                                )}
                                         </PanelBody>
 
                                         {preset == "preset-3" && (
@@ -1887,7 +1888,7 @@ function Inspector(props) {
                                                         resRequiredProps
                                                     }
                                                     noShadow
-                                                    // noBorder
+                                                // noBorder
                                                 />
                                             </PanelBody>
                                         )}
@@ -2243,7 +2244,7 @@ function Inspector(props) {
                                                 }
                                                 noShadow
                                                 noBdrHover
-                                                // noBorder
+                                            // noBorder
                                             />
                                         </PanelBody>
 
@@ -2339,9 +2340,9 @@ function Inspector(props) {
                                         <BackgroundControl
                                             controlName={prefixWrapBg}
                                             resRequiredProps={resRequiredProps}
-                                            // noOverlay
-                                            // noMainBgi
-                                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                        // noOverlay
+                                        // noMainBgi
+                                        // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                         />
                                     </PanelBody>
 
@@ -2352,8 +2353,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={prefixWrapBdShadow}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

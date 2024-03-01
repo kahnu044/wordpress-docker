@@ -65,7 +65,7 @@ class SessionCookieJar extends \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJar
                 $this->setCookie(new \WPMailSMTP\Vendor\GuzzleHttp\Cookie\SetCookie($cookie));
             }
         } elseif (\strlen($data)) {
-            throw new \RuntimeException("Invalid cookie data");
+            throw new \RuntimeException('Invalid cookie data');
         }
     }
 }

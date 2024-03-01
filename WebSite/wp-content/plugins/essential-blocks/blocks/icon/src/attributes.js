@@ -44,16 +44,19 @@ const attributes = {
     },
     iconPrimaryColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-primary-color)",
     },
     iconPrimaryHoverColor: {
         type: "string",
+        default: "var(--eb-global-secondary-color)",
     },
     iconSecondaryColor: {
         type: "string",
+        default: "var(--eb-global-secondary-color)",
     },
     iconSecondaryHoverColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     iconView: {
         type: "string",

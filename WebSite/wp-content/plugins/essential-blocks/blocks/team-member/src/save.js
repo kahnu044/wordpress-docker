@@ -20,6 +20,10 @@ export default function Save({ attributes }) {
         newWindow,
         showLinkNewTab,
         imageAlt,
+        preset,
+        showDesignation,
+        hoverPreset,
+        isContentOverlay,
     } = attributes;
 
     return (
@@ -27,9 +31,9 @@ export default function Save({ attributes }) {
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
-                <div className={`${blockId} eb-team-wrapper`}>
+                <div className={`${blockId} eb-team-wrapper ${preset} ${preset === 'new-preset3' ? hoverPreset : ''} ${preset === 'preset3' && isContentOverlay ? 'content-overlay' : ''}`}>
                     <div className="eb-team-inner">
-                        <div className="image">
+                        <div className="eb-team-member-image">
                             {avatarURL && (
                                 <a
                                     // className={`eb-button-anchor`}
@@ -38,7 +42,7 @@ export default function Save({ attributes }) {
                                     rel="noopener"
                                 >
                                     <img
-                                        className="avatar"
+                                        className="eb-team-member-avatar"
                                         src={imageUrl}
                                         alt={imageAlt ? imageAlt : name}
                                     />
@@ -47,7 +51,7 @@ export default function Save({ attributes }) {
 
                             {!avatarURL && (
                                 <img
-                                    className="avatar"
+                                    className="eb-team-member-avatar"
                                     src={imageUrl}
                                     alt={imageAlt ? imageAlt : name}
                                 />
@@ -58,48 +62,109 @@ export default function Save({ attributes }) {
                                     socialDetails={profilesOnly}
                                     icnEffect={icnEffect}
                                     linkNewTab={showLinkNewTab}
+                                    preset={preset}
+                                />
+                            )}
+
+                            {preset === 'new-preset1' && showDesignation && (
+                                <RichText.Content
+                                    tagName="h4"
+                                    className="eb-team-member-job-title"
+                                    value={jobTitle}
                                 />
                             )}
                         </div>
-                        <div className="contents">
-                            <div className="texts">
-                                {name && (
-                                    <RichText.Content
-                                        tagName="h3"
-                                        className="name"
-                                        value={name}
-                                    />
-                                )}
-                                {jobTitle && (
-                                    <RichText.Content
-                                        tagName="h4"
-                                        className="job_title"
-                                        value={jobTitle}
-                                    />
-                                )}
+                        <div className="eb-team-member-contents">
+                            {(preset === 'new-preset1' || preset === 'new-preset2' || preset === 'new-preset3') && (
+                                <div className="eb-team-member-contents-inner">
+                                    <div className="eb-team-member-texts">
+                                        {name && (
+                                            <RichText.Content
+                                                tagName="h3"
+                                                className="eb-team-member-name"
+                                                value={name}
+                                            />
+                                        )}
 
-                                {showCSeparator && (
-                                    <hr className="content_separator" />
-                                )}
+                                        {preset != 'new-preset1' && showDesignation && jobTitle && (
+                                            <RichText.Content
+                                                tagName="h4"
+                                                className="eb-team-member-job-title"
+                                                value={jobTitle}
+                                            />
+                                        )}
 
-                                {showDescs && description && (
-                                    <RichText.Content
-                                        tagName="p"
-                                        className="description"
-                                        value={description}
-                                    />
-                                )}
-                            </div>
-                            {!socialInImage && showSocials && (
-                                <>
-                                    {showSSeparator && (
-                                        <hr className="social_separator" />
+                                        {showCSeparator && (
+                                            <hr className="eb-team-member-content-separator" />
+                                        )}
+
+                                        {showDescs && description && (
+                                            <RichText.Content
+                                                tagName="p"
+                                                className="eb-team-member-description"
+                                                value={description}
+                                            />
+                                        )}
+                                    </div>
+                                    {!socialInImage && showSocials && (
+                                        <>
+                                            {showSSeparator && (
+                                                <hr className="eb-team-member-social-separator" />
+                                            )}
+                                            <SocialLinks
+                                                socialDetails={profilesOnly}
+                                                icnEffect={icnEffect}
+                                                linkNewTab={showLinkNewTab}
+                                                preset={preset}
+                                            />
+                                        </>
                                     )}
-                                    <SocialLinks
-                                        socialDetails={profilesOnly}
-                                        icnEffect={icnEffect}
-                                        linkNewTab={showLinkNewTab}
-                                    />
+                                </div>
+                            )}
+
+                            {(preset != 'new-preset1' && preset != 'new-preset2' && preset != 'new-preset3') && (
+                                <>
+                                    <div className="eb-team-member-texts">
+                                        {name && (
+                                            <RichText.Content
+                                                tagName="h3"
+                                                className="eb-team-member-name"
+                                                value={name}
+                                            />
+                                        )}
+                                        {showDesignation && jobTitle && (
+                                            <RichText.Content
+                                                tagName="h4"
+                                                className="eb-team-member-job-title"
+                                                value={jobTitle}
+                                            />
+                                        )}
+
+                                        {showCSeparator && (
+                                            <hr className="eb-team-member-content-separator" />
+                                        )}
+
+                                        {showDescs && description && (
+                                            <RichText.Content
+                                                tagName="p"
+                                                className="eb-team-member-description"
+                                                value={description}
+                                            />
+                                        )}
+                                    </div>
+                                    {!socialInImage && showSocials && (
+                                        <>
+                                            {showSSeparator && (
+                                                <hr className="eb-team-member-social-separator" />
+                                            )}
+                                            <SocialLinks
+                                                socialDetails={profilesOnly}
+                                                icnEffect={icnEffect}
+                                                linkNewTab={showLinkNewTab}
+                                                preset={preset}
+                                            />
+                                        </>
+                                    )}
                                 </>
                             )}
                         </div>

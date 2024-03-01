@@ -6,6 +6,7 @@ export default function save({ attributes }) {
     const {
         blockId,
         selectedIcon,
+        infoboxIcon,
         number = 0,
         media,
         imageUrl,
@@ -28,6 +29,7 @@ export default function save({ attributes }) {
 
     const requiredProps = {
         selectedIcon,
+        infoboxIcon,
         blockId,
         number,
         media,

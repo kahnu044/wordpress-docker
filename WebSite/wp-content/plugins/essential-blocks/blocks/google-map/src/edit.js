@@ -3,7 +3,9 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState, useRef } from "@wordpress/element";
-import { useBlockProps } from "@wordpress/block-editor";
+import {
+    useBlockProps
+} from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 import classnames from "classnames";
 
@@ -12,30 +14,22 @@ import classnames from "classnames";
  */
 import Inspector from "./inspector";
 const {
-    softMinifyCssStrings,
     duplicateBlockIdFix,
-    generateDimensionsControlStyles,
-    generateBorderShadowStyles,
-    generateTypographyStyles,
-    generateBackgroundControlStyles,
     NoticeComponent,
 } = EBControls;
 
 import {
-    wrapMarginConst,
-    wrapPaddingConst,
-    WrpBgConst,
-    WrpBdShadowConst,
     GOOGLE_MAP_STYLES,
     SNAZZY_MAP_STYLES,
 } from "./constants";
-import { typoPrefix_title, typoPrefix_desc } from "./constants/typographyConstants";
+
+import Style from "./style";
 
 import { GoogleMapIcon } from "./icon";
 import { Dashicon } from "@wordpress/components";
 
 const edit = (props) => {
-    const { attributes, setAttributes, className, clientId, isSelected } = props;
+    const { attributes, setAttributes, className, clientId, isSelected, name } = props;
 
     const {
         blockId,
@@ -50,9 +44,6 @@ const edit = (props) => {
         longitude,
         searchAddress,
         marker,
-        titleColor,
-        titleHoverColor,
-        descColor,
         imageSize,
         cover,
         themeSource,
@@ -77,191 +68,6 @@ const edit = (props) => {
     const blockProps = useBlockProps({
         className: classnames(className, `eb-guten-block-main-parent-wrapper`),
     });
-
-    const {
-        dimensionStylesDesktop: wrpMarginDesktop,
-        dimensionStylesTab: wrpMarginTab,
-        dimensionStylesMobile: wrpMarginMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: wrapMarginConst,
-        styleFor: "margin",
-    });
-
-    const {
-        dimensionStylesDesktop: wrpPaddingDesktop,
-        dimensionStylesTab: wrpPaddingTab,
-        dimensionStylesMobile: wrpPaddingMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: wrapPaddingConst,
-        styleFor: "padding",
-    });
-
-    const {
-        backgroundStylesDesktop: wrpBackgroundStylesDesktop,
-        hoverBackgroundStylesDesktop: wrpHoverBackgroundStylesDesktop,
-        backgroundStylesTab: wrpBackgroundStylesTab,
-        hoverBackgroundStylesTab: wrpHoverBackgroundStylesTab,
-        backgroundStylesMobile: wrpBackgroundStylesMobile,
-        hoverBackgroundStylesMobile: wrpHoverBackgroundStylesMobile,
-        overlayStylesDesktop: wrpOverlayStylesDesktop,
-        hoverOverlayStylesDesktop: wrpHoverOverlayStylesDesktop,
-        overlayStylesTab: wrpOverlayStylesTab,
-        hoverOverlayStylesTab: wrpHoverOverlayStylesTab,
-        overlayStylesMobile: wrpOverlayStylesMobile,
-        hoverOverlayStylesMobile: wrpHoverOverlayStylesMobile,
-        bgTransitionStyle: wrpBgTransitionStyle,
-        ovlTransitionStyle: wrpOvlTransitionStyle,
-    } = generateBackgroundControlStyles({
-        attributes,
-        controlName: WrpBgConst,
-        // noOverlay: true,
-        // noMainBgi: true,
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-    });
-
-    const {
-        styesDesktop: wrpBdShdStyesDesktop,
-        styesTab: wrpBdShdStyesTab,
-        styesMobile: wrpBdShdStyesMobile,
-        stylesHoverDesktop: wrpBdShdStylesHoverDesktop,
-        stylesHoverTab: wrpBdShdStylesHoverTab,
-        stylesHoverMobile: wrpBdShdStylesHoverMobile,
-        transitionStyle: wrpBdShdTransitionStyle,
-    } = generateBorderShadowStyles({
-        controlName: WrpBdShadowConst,
-        attributes,
-        // noShadow: true,
-        // noBorder: true,
-    });
-
-    const {
-        typoStylesDesktop: titleTypoStylesDesktop,
-        typoStylesTab: titleTypoStylesTab,
-        typoStylesMobile: titleTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: typoPrefix_title,
-        defaultFontSize: "14",
-    });
-
-    const {
-        typoStylesDesktop: descTypoStylesDesktop,
-        typoStylesTab: descTypoStylesTab,
-        typoStylesMobile: descTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: typoPrefix_desc,
-        defaultFontSize: "13",
-    });
-
-    const desktopStyles = `
-	.${blockId}.eb-google-map-wrapper {
-		${wrpMarginDesktop}
-		${wrpPaddingDesktop}
-		${wrpBackgroundStylesDesktop}
-		${wrpBdShdStyesDesktop}
-		transition:${wrpBgTransitionStyle}, ${wrpBdShdTransitionStyle};
-	}
-	.${blockId}.eb-google-map-wrapper:hover{
-		${wrpHoverBackgroundStylesDesktop}
-		${wrpBdShdStylesHoverDesktop}
-	}
-	.${blockId}.eb-google-map-wrapper:before{
-		${wrpOverlayStylesDesktop}
-		transition:${wrpOvlTransitionStyle};
-	}
-	.${blockId}.eb-google-map-wrapper:hover:before{
-		${wrpHoverOverlayStylesDesktop}
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-title {
-		color: ${titleColor};
-		${titleTypoStylesDesktop};
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-title:hover {
-		color: ${titleHoverColor};
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-content {
-		color: ${descColor};
-		${descTypoStylesDesktop};
-	}
-	`;
-    const tabStyles = `
-	.${blockId}.eb-google-map-wrapper {
-		${wrpMarginTab}
-		${wrpPaddingTab}
-		${wrpBackgroundStylesTab}
-		${wrpBdShdStyesTab}
-	}
-	.${blockId}.eb-google-map-wrapper:hover{
-		${wrpHoverBackgroundStylesTab}
-		${wrpBdShdStylesHoverTab}
-	}
-	.${blockId}.eb-google-map-wrapper:hover{
-		${wrpHoverBackgroundStylesMobile}
-		${wrpBdShdStylesHoverMobile}
-	}
-	.${blockId}.eb-google-map-wrapper:before{
-		${wrpOverlayStylesTab}
-	}
-	.${blockId}.eb-google-map-wrapper:hover:before{
-		${wrpHoverOverlayStylesTab}
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-title {
-		${titleTypoStylesTab};
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-content {
-		${descTypoStylesTab};
-	}
-	`;
-    const mobileStyles = `
-	.${blockId}.eb-google-map-wrapper {
-		${wrpMarginMobile}
-		${wrpPaddingMobile}
-		${wrpBackgroundStylesMobile}
-		${wrpBdShdStyesMobile}
-	}
-	.${blockId}.eb-google-map-wrapper:before{
-		${wrpOverlayStylesMobile}
-	}
-
-	.${blockId}.eb-google-map-wrapper:hover:before{
-		${wrpHoverOverlayStylesMobile}
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-title {
-		${titleTypoStylesMobile};
-	}
-	.${blockId}.eb-google-map-wrapper .eb-google-map-overview  .eb-google-map-overview-content {
-		${descTypoStylesMobile};
-	}
-	`;
-
-    // all css styles for large screen width (desktop/laptop) in strings ⬇
-    const desktopAllStyles = softMinifyCssStrings(`
-		${desktopStyles}
-	`);
-
-    // all css styles for Tab in strings ⬇
-    const tabAllStyles = softMinifyCssStrings(`
-		${tabStyles}
-	`);
-
-    // all css styles for Mobile in strings ⬇
-    const mobileAllStyles = softMinifyCssStrings(`
-		${mobileStyles}
-	`);
-    // Set All Style in "blockMeta" Attribute
-    useEffect(() => {
-        const styleObject = {
-            desktop: desktopAllStyles,
-            tab: tabAllStyles,
-            mobile: mobileAllStyles,
-        };
-        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-            setAttributes({ blockMeta: styleObject });
-        }
-    }, [attributes]);
 
     // References
     const mapRef = useRef(null);
@@ -393,34 +199,7 @@ const edit = (props) => {
                 <Inspector key="inspector" attributes={attributes} setAttributes={setAttributes} map={mapRef.current} />
             )}
             <div {...blockProps}>
-                <style>
-                    {`
-				 ${desktopAllStyles}
-
-				 /* mimmikcssStart */
-
-				 ${resOption === "Tablet" ? tabAllStyles : " "}
-				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-
-				 /* mimmikcssEnd */
-
-				 @media all and (max-width: 1024px) {
-
-					 /* tabcssStart */
-					 ${softMinifyCssStrings(tabAllStyles)}
-					 /* tabcssEnd */
-
-				 }
-
-				 @media all and (max-width: 767px) {
-
-					 /* mobcssStart */
-					 ${softMinifyCssStrings(mobileAllStyles)}
-					 /* mobcssEnd */
-
-				 }
-				 `}
-                </style>
+                <Style {...props} />
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     {!isMapInit && (
                         <NoticeComponent

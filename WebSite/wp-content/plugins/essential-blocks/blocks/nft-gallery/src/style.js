@@ -1,7 +1,3 @@
-/**
- * WordPress dependencies
- */
-import { render, useEffect, useState } from "@wordpress/element";
 
 import {
     dimensionsMargin,
@@ -24,9 +20,9 @@ import {
     buttonMargin,
     buttonPadding,
     buttonBdrSdw,
-	itemBg,
-	itemBdrSdw,
-	itemPadding,
+    itemBg,
+    itemBdrSdw,
+    itemPadding,
 } from "./constants/constants";
 
 import {
@@ -43,13 +39,14 @@ const {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateTypographyStyles,
-    generateResponsiveSelectControlStyles,
+    StyleComponent
 } = window.EBControls;
 
 export default function Style(props) {
     const {
         attributes,
-        setAttributes
+        setAttributes,
+        name
     } = props;
 
     const {
@@ -79,8 +76,8 @@ export default function Style(props) {
         buttonHoverTextColor,
         buttonHoverBgColor,
         gridOverlayBg,
-		listHorizontalAlignment,
-		listVerticalAlignment,
+        listHorizontalAlignment,
+        listVerticalAlignment,
     } = attributes;
 
 
@@ -508,7 +505,7 @@ export default function Style(props) {
                     ${ownerTypoStylesDesktop}
                 }` : ""
             }
-            
+
             ${showOwnerImage ?
                 `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
                     ${creatorImageHeightDesktop}
@@ -583,7 +580,7 @@ export default function Style(props) {
                     ${ownerTypoStylesTab}
                 }` : ""
             }
-            
+
             ${showOwnerImage ?
                 `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
                     ${creatorImageHeightTab}
@@ -653,7 +650,7 @@ export default function Style(props) {
                     ${ownerTypoStylesMobile}
                 }` : ""
             }
-            
+
             ${showOwnerImage ?
                 `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
                     ${creatorImageHeightMobile}
@@ -700,46 +697,16 @@ export default function Style(props) {
         ${contentStylesMobile}
 	`);
 
-    // Set All Style in "blockMeta" Attribute
-    useEffect(() => {
-        const styleObject = {
-            desktop: desktopAllStyles,
-            tab: tabAllStyles,
-            mobile: mobileAllStyles,
-        };
-        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-            setAttributes({ blockMeta: styleObject });
-        }
-    }, [attributes]);
-
     return (
-        <style>
-            {`
-				${desktopAllStyles}
-
-				/* mimmikcssStart */
-
-				${resOption === "Tablet" ? tabAllStyles : " "}
-				${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-
-				/* mimmikcssEnd */
-
-				@media all and (max-width: 1024px) {	
-
-					/* tabcssStart */			
-					${softMinifyCssStrings(tabAllStyles)}
-					/* tabcssEnd */			
-				
-				}
-				
-				@media all and (max-width: 767px) {
-					
-					/* mobcssStart */			
-					${softMinifyCssStrings(mobileAllStyles)}
-					/* mobcssEnd */			
-				
-				}
-				`}
-        </style>
+        <>
+            <StyleComponent
+                attributes={attributes}
+                setAttributes={setAttributes}
+                desktopAllStyles={desktopAllStyles}
+                tabAllStyles={tabAllStyles}
+                mobileAllStyles={mobileAllStyles}
+                blockName={name}
+            />
+        </>
     )
 }

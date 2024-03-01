@@ -34,7 +34,7 @@ import { ApiInfo } from "./template-components/apiInfo";
 import { isEmpty } from "lodash";
 
 export default function Edit(props) {
-    const { attributes, setAttributes, className, clientId, isSelected } = props;
+    const { attributes, setAttributes, className, clientId, isSelected, name } = props;
     const {
         resOption,
         blockId,
@@ -188,10 +188,7 @@ export default function Edit(props) {
                         setTotalPages(responseData.page_count);
                         setLoading(false);
                     } else {
-                        const error =
-                            typeof response.data === "object"
-                                ? response.data
-                                : JSON.parse(response.data);
+                        const error = response.data || 'Invalid Data'
 
                         console.log(error);
                         setOpenverseError({

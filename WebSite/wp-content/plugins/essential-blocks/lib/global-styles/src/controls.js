@@ -1,16 +1,20 @@
 import { PluginSidebar } from "@wordpress/edit-post";
 import { __ } from "@wordpress/i18n";
-import { useState, useEffect } from "@wordpress/element";
-import { PanelBody, Button, Popover, Dashicon } from "@wordpress/components";
+import { applyFilters } from "@wordpress/hooks";
+import { useState, useEffect, useRef } from "@wordpress/element";
+import { PanelBody, Button, Popover, Dashicon, TabPanel, PanelRow } from "@wordpress/components";
 
 import { dispatch, useSelect, withSelect } from "@wordpress/data";
 import {
     __experimentalColorGradientControl as ColorGradientControl,
     BlockPreview,
+    PanelColorSettings
 } from "@wordpress/block-editor";
 import { createBlock, store as blocksStore } from "@wordpress/blocks";
 
 import EBIcon from "./assets/icon";
+import ColorPalletWrapper from "./components/colorPalletWrapper"
+import GradientColorPallet from "./components/GradientColorPallet"
 import "./style.scss";
 
 import Accordion from "./block-defaults/accordion";
@@ -54,6 +58,7 @@ import WooProductGrid from "./block-defaults/woo-product-grid";
 import Wpforms from "./block-defaults/wpforms";
 import Wrapper from "./block-defaults/wrapper";
 import GoogleMap from "./block-defaults/google-map";
+import Form from "./block-defaults/form";
 
 /**
  * Global Controls Component
@@ -62,21 +67,16 @@ import GoogleMap from "./block-defaults/google-map";
  */
 function EBGlobalControls(props) {
     const {
-        // getGlobalColors,
+        getGlobalColors,
+        getCustomColors,
+        getGradientColors,
+        getCustomGradientColors,
         getBlockDefaults
     } = props;
 
-    const defaultColors = {
-        primaryColor: "#551ef7",
-        secondaryColor: "#abb8c3",
-        headingColor: "#333333",
-        linkColor: "#551ef7",
-        buttonTextColor: "#551ef7",
-        buttonBgColor: "#333333",
-        backgroundColor: "#f7f7f7",
-    };
+    const localizeColors = EssentialBlocksLocalize.globalColors || []
 
-    const components = {
+    const components = applyFilters('eb_block_defaults', {
         advanced_heading: {
             component: AdvancedHeading,
             preview: true,
@@ -90,7 +90,7 @@ function EBGlobalControls(props) {
             preview: true,
             previewData: {
                 image: {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
+                    url: EssentialBlocksLocalize?.image_url + "/gallery-images/hongkong.jpg",
                 },
                 imageCaption: "Style images in Gutenberg with advanced options.",
             },
@@ -149,48 +149,48 @@ function EBGlobalControls(props) {
             previewData: {
                 images: [
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
                     },
                 ],
 
                 sources: [
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
                         caption: "",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
                         caption: "",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
                         caption: "",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
                         caption: "",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
                         caption: "",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
                         caption: "",
                     },
                 ],
@@ -208,7 +208,7 @@ function EBGlobalControls(props) {
             component: InteractivePromo,
             preview: true,
             previewData: {
-                imageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
+                imageURL: EssentialBlocksLocalize?.image_url + "/gallery-images/china.jpg",
             },
         },
         nft_gallery: {
@@ -233,16 +233,16 @@ function EBGlobalControls(props) {
             previewData: {
                 sliderData: [
                     {
-                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
                     },
                     {
-                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
                     },
                     {
-                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
                     },
                     {
-                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
+                        src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
                     },
                 ],
             },
@@ -277,16 +277,16 @@ function EBGlobalControls(props) {
             previewData: {
                 images: [
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
                     },
                     {
-                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.png",
+                        url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
                     },
                 ],
             },
@@ -335,12 +335,19 @@ function EBGlobalControls(props) {
             component: GoogleMap,
             preview: false,
         },
-    };
+        form: {
+            component: Form,
+            preview: false,
+        },
+    });
 
     /**
      * State
      */
-    // const [globalColors, setGlobalColors] = useState({});
+    const [globalColors, setGlobalColors] = useState([]);
+    const [customColors, setCustomColors] = useState([]);
+    const [gradientColors, setGradientColors] = useState([]);
+    const [customGradientColors, setCustomGradientColors] = useState([]);
     const [blockDefaults, setBlockDefaults] = useState({});
     const [blockItemDefaults, setBlockItemDefaults] = useState({});
     const [popoverAnchor, setPopoverAnchor] = useState();
@@ -348,38 +355,129 @@ function EBGlobalControls(props) {
     const [isVisible, setIsVisible] = useState(false);
 
     //Initial UseEffect, Set Defualt color if Store is empty
-    // useEffect(() => {
-    //     if (
-    //         typeof getGlobalColors === "object" &&
-    //         Object.keys(globalColors).length === 0
-    //     ) {
-    //         setGlobalColors(defaultColors);
-    //     }
-    // }, []);
+    useEffect(() => {
+        //Set Global Colors
+        if (typeof getGlobalColors === "object" && globalColors.length === 0) {
+            setGlobalColors(localizeColors);
+        }
+
+        //Set Gradient Colors
+        if (typeof getGradientColors === "object" && gradientColors.length === 0) {
+            setGradientColors(EssentialBlocksLocalize.gradientColors || []);
+        }
+    }, []);
 
     //Set globalColors when Store "getGlobalColors" is changed
-    // useEffect(() => {
-    //     if (JSON.stringify(getGlobalColors) !== JSON.stringify(globalColors)) {
-    //         setGlobalColors(getGlobalColors);
-    //     }
-    // }, [getGlobalColors]);
+    useEffect(() => {
+        if (JSON.stringify(getGlobalColors) !== JSON.stringify(globalColors)) {
+            setGlobalColors(getGlobalColors);
+        }
+    }, [getGlobalColors]);
+
+    //Set customColors when Store "getCustomColors" is changed
+    useEffect(() => {
+        if (JSON.stringify(getCustomColors) !== JSON.stringify(customColors)) {
+            setCustomColors(getCustomColors);
+        }
+    }, [getCustomColors]);
+
+    //Set gradientColors when Store "getGradientColors" is changed
+    useEffect(() => {
+        if (JSON.stringify(getGradientColors) !== JSON.stringify(gradientColors)) {
+            setGradientColors(getGradientColors);
+        }
+    }, [getGradientColors]);
+
+    //Set customGradientColors when Store "getCustomGradientColors" is changed
+    useEffect(() => {
+        if (JSON.stringify(getCustomGradientColors) !== JSON.stringify(customGradientColors)) {
+            setCustomGradientColors(getCustomGradientColors);
+        }
+    }, [getCustomGradientColors]);
 
     //Update Store when "globalColors" is changed
-    // useEffect(() => {
-    //     if (Object.keys(globalColors).length > 0) {
-    //         dispatch("essential-blocks").setGlobalColors(globalColors);
-    //     }
-    // }, [globalColors]);
+    useEffect(() => {
+        if (globalColors.length > 0) {
+            dispatch("essential-blocks").setGlobalColors(globalColors);
+            dispatch('essential-blocks').setIsSaving(true);
+        }
+        const root = document.documentElement;
+        (globalColors.length > 0) && globalColors.map((item) => {
+            if (item.var && item.color) {
+                root.style.setProperty(item.var, item.color);
+            }
+        })
+
+    }, [globalColors]);
+
+    //Update Store when "customColors" is changed
+    useEffect(() => {
+        if (typeof customColors === 'object') {
+            dispatch("essential-blocks").setCustomColors(customColors);
+            dispatch('essential-blocks').setIsSaving(true);
+        }
+        const root = document.documentElement;
+        (customColors.length > 0) && customColors.map((item) => {
+            if (item.var && item.color) {
+                root.style.setProperty(item.var, item.color);
+            }
+        })
+    }, [customColors]);
+
+    //Update Store when "gradientColors" is changed
+    useEffect(() => {
+        if (gradientColors.length > 0) {
+            dispatch("essential-blocks").setGradientColors(gradientColors);
+            dispatch('essential-blocks').setIsSaving(true);
+        }
+        const root = document.documentElement;
+        (gradientColors.length > 0) && gradientColors.map((item) => {
+            if (item.var && item.color) {
+                root.style.setProperty(item.var, item.color);
+            }
+        })
+    }, [gradientColors]);
+
+    //Update Store when "customGradientColors" is changed
+    useEffect(() => {
+        if (typeof customGradientColors === 'object') {
+            dispatch("essential-blocks").setCustomGradientColors(customGradientColors);
+            dispatch('essential-blocks').setIsSaving(true);
+        }
+        const root = document.documentElement;
+        (customGradientColors.length > 0) && customGradientColors.map((item) => {
+            if (item.var && item.color) {
+                root.style.setProperty(item.var, item.color);
+            }
+        })
+    }, [customGradientColors]);
 
     //Update Global Colors
-    // const setGlobalColor = (colorObj) => {
-    //     const colors = { ...globalColors };
-    //     if (Object.keys(colorObj)[0] && Object.values(colorObj)[0]) {
-    //         colors[Object.keys(colorObj)[0]] = Object.values(colorObj)[0];
-    //     }
-
-    //     setGlobalColors(colors);
-    // };
+    const setGlobalColor = (index, color) => {
+        const colors = [...globalColors];
+        colors[index].color = color;
+        setGlobalColors([...colors]);
+    };
+    const setCustomColor = (index, color) => {
+        const colors = [...customColors];
+        colors[index].color = color;
+        setCustomColors([...colors]);
+    };
+    const setGradientColor = (index, color) => {
+        const colors = [...gradientColors];
+        colors[index].color = color;
+        setGradientColors([...colors]);
+    };
+    const setCustomGradientColor = (index, color) => {
+        const colors = [...customGradientColors];
+        colors[index].color = color;
+        setCustomGradientColors([...colors]);
+    };
+    const deleteCustomGradientColor = (index) => {
+        const colors = [...customGradientColors];
+        colors.splice(index, 1)
+        setCustomGradientColors([...colors]);
+    };
 
     //Get Device type from "__experimentalGetPreviewDeviceType" Function
     const deviceType = useSelect((select) => {
@@ -493,6 +591,23 @@ function EBGlobalControls(props) {
         return data;
     };
 
+    const colorPanelArray = (colors, setColor, defaults = []) => {
+        if (typeof colors !== 'object') {
+            return []
+        }
+        const colorArr = []
+        colors.map((colorObj, index) => (
+            colorArr.push({
+                label: colorObj.name || 'Color',
+                value: colorObj.color,
+                onChange: (newColor) => {
+                    setColor(index, newColor || defaults[index]?.color || '#000')
+                }
+            })
+        ))
+        return colorArr
+    }
+
     return (
         <>
             <PluginSidebar
@@ -501,89 +616,146 @@ function EBGlobalControls(props) {
                 name="eb-global-controls"
                 title={__("EB Global Controls", "essential-blocks")}
             >
-                {/* <div className="eb-panel-control">
-					<PanelBody
-						title={__("Global Colors", "essential-blocks")}
-						initialOpen={false}
-					>
-						<ColorControl
-							label={__("Primary Color", "essential-blocks")}
-							color={globalColors.primaryColor}
-							onChange={(value) => setGlobalColor({ primaryColor: value })}
-						/>
+                <div className="eb-panel-control">
+                    <PanelBody
+                        title={__("Color Settings", "essential-blocks")}
+                        initialOpen={true}
+                    >
+                        <TabPanel
+                            className="eb-global-color-tab-panel"
+                            activeClass="active-tab"
+                            tabs={[
+                                {
+                                    name: "solid",
+                                    title: "Solid",
+                                    className: "eb-tab solid",
+                                },
+                                {
+                                    name: "gradient",
+                                    title: "Gradient",
+                                    className: "eb-tab gradient",
+                                }
+                            ]}
+                        >
+                            {(tab) => (
+                                <div className={"eb-tab-controls" + tab.name}>
+                                    {tab.name === "solid" && (
+                                        <>
+                                            <PanelColorSettings
+                                                title={__(
+                                                    "Global Colors",
+                                                    "essential-blocks"
+                                                )}
+                                                className={"eb-color-panel eb-global-color-panel"}
+                                                initialOpen={true}
+                                                disableAlpha={true}
+                                                disableCustomGradients={false}
+                                                colorSettings={colorPanelArray(globalColors, setGlobalColor, localizeColors)}
+                                            />
 
-						<ColorControl
-							label={__("Secondary Color", "essential-blocks")}
-							color={globalColors.secondaryColor}
-							onChange={(value) => setGlobalColor({ secondaryColor: value })}
-						/>
+                                            {customColors && customColors.length > 0 && (
+                                                <ColorPalletWrapper
+                                                    colorPanelArray={colorPanelArray}
+                                                    customColors={customColors}
+                                                    setCustomColor={setCustomColor}
+                                                    setCustomColors={setCustomColors}
+                                                />
+                                            )}
+                                            <div className="add-custom-color">
+                                                <Button
+                                                    className="add-custom-color-btn"
+                                                    onClick={() => setCustomColors([
+                                                        ...customColors,
+                                                        {
+                                                            color: '#000000',
+                                                            name: `Custom Color ${customColors.length + 1}`,
+                                                            slug: `custom-color-${customColors.length + 1}`,
+                                                            var: `--eb-custom-color-${customColors.length + 1}`
+                                                        }
+                                                    ])}
+                                                >Add Custom Color <Dashicon icon={"plus"} /></Button>
+                                            </div>
+                                        </>
+                                    )}
+                                    {tab.name === "gradient" && (
+                                        <>
+                                            {/* Gradient Color Pallet */}
+                                            <GradientColorPallet
+                                                title={"Gradient Colors"}
+                                                colors={gradientColors}
+                                                setColor={setGradientColor}
+                                                wrapperClass={"eb-gradient-color-panel"}
+                                                resetAction={true}
+                                            />
 
-						<ColorControl
-							label={__("Heading Color", "essential-blocks")}
-							color={globalColors.headingColor}
-							onChange={(value) => setGlobalColor({ headingColor: value })}
-						/>
+                                            {/* Custom Gradient Color Pallet */}
+                                            <GradientColorPallet
+                                                title={"Custom Gradient Colors"}
+                                                colors={customGradientColors}
+                                                setColor={setCustomGradientColor}
+                                                wrapperClass={"eb-custom-gradient-color-panel"}
+                                                resetAction={true}
+                                                deleteAction={true}
+                                                onDelete={deleteCustomGradientColor}
+                                            />
 
-						<ColorControl
-							label={__("Link Color", "essential-blocks")}
-							color={globalColors.linkColor}
-							onChange={(value) => setGlobalColor({ linkColor: value })}
-						/>
-
-						<ColorControl
-							label={__("Button Text Color", "essential-blocks")}
-							color={globalColors.buttonTextColor}
-							onChange={(value) => setGlobalColor({ buttonTextColor: value })}
-						/>
-
-						<ColorControl
-							label={__("Button Background Color", "essential-blocks")}
-							color={globalColors.buttonBgColor}
-							onChange={(value) => setGlobalColor({ buttonBgColor: value })}
-						/>
-
-						<ColorControl
-							label={__("Background Color", "essential-blocks")}
-							color={globalColors.backgroundColor}
-							onChange={(value) => setGlobalColor({ backgroundColor: value })}
-						/>
-					</PanelBody>
-				</div> */}
-
-                <PanelBody
-                    title={__("Block Defaults", "essential-blocks")}
-                    initialOpen={true}
-                >
-                    <div className="eb-block-list-button">
-                        {typeof registeredBlocks === "object" &&
-                            Object.keys(components).map((item, index) => (
-                                <div className="eb-block-button" key={index}>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() =>
-                                            toggleVisible(
-                                                registeredBlocks[item].value
-                                            )
-                                        }
-                                    >
-                                        <img
-                                            className="eb-global-icon"
-                                            src={registeredBlocks[item]?.icon}
-                                            alt={registeredBlocks[item]?.label}
-                                        />
-                                        {registeredBlocks[item]?.label}
-
-                                        {getBlockDefaults[item] && (
-                                            <span className="active">
-                                                {" "}
-                                                {__(<Dashicon icon={"edit"} />)}
-                                            </span>
-                                        )}
-                                    </Button>
+                                            <div className="add-custom-color">
+                                                <Button
+                                                    className="add-custom-color-btn"
+                                                    onClick={() => setCustomGradientColors([
+                                                        ...customGradientColors,
+                                                        {
+                                                            color: 'linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%)',
+                                                            name: `Custom Color ${customGradientColors.length + 1}`,
+                                                            slug: `custom-gradient-color-${customGradientColors.length + 1}`,
+                                                            var: `--eb-custom-gradient-color-${customGradientColors.length + 1}`
+                                                        }
+                                                    ])}
+                                                >Add Custom Color <Dashicon icon={"plus"} /></Button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
-                            ))}
-                    </div>
-                </PanelBody>
+                            )}
+                        </TabPanel>
+                    </PanelBody>
+
+                    <PanelBody
+                        title={__("Block Defaults", "essential-blocks")}
+                        initialOpen={true}
+                    >
+                        <div className="eb-block-list-button">
+                            {typeof registeredBlocks === "object" &&
+                                Object.keys(components).map((item, index) => (
+                                    <div className="eb-block-button" key={index}>
+                                        <Button
+                                            variant="none"
+                                            className="eb-block-default-button"
+                                            onClick={() =>
+                                                toggleVisible(
+                                                    registeredBlocks[item].value
+                                                )
+                                            }
+                                        >
+                                            <img
+                                                className="eb-global-icon"
+                                                src={registeredBlocks[item]?.icon}
+                                                alt={registeredBlocks[item]?.label}
+                                            />
+                                            {registeredBlocks[item]?.label}
+
+                                            {getBlockDefaults[item] && (
+                                                <span className="active">
+                                                    {" "}
+                                                    {__(<Dashicon icon={"edit"} />)}
+                                                </span>
+                                            )}
+                                        </Button>
+                                    </div>
+                                ))}
+                        </div>
+                    </PanelBody>
+                </div>
             </PluginSidebar>
 
             {isVisible && (
@@ -620,7 +792,7 @@ function EBGlobalControls(props) {
                                     "true" && (
                                         <BlockPreview
                                             blocks={createBlock(
-                                                `essential-blocks/${clickedBlock.replace(
+                                                `essential-blocks/${registeredBlocks[clickedBlock]?.is_pro ? 'pro-' : ''}${clickedBlock.replace(
                                                     /_/g,
                                                     "-"
                                                 )}`,
@@ -630,7 +802,7 @@ function EBGlobalControls(props) {
                                                     ),
                                                 }
                                             )}
-                                            viewportWidth={500}
+                                            viewportWidth={1100}
                                         />
                                     )}
 
@@ -689,7 +861,10 @@ function EBGlobalControls(props) {
 
 export default withSelect((select) => {
     return {
-        // getGlobalColors: select("essential-blocks").getGlobalColors(),
+        getGlobalColors: select("essential-blocks").getGlobalColors(),
+        getCustomColors: select("essential-blocks").getCustomColors(),
+        getGradientColors: select("essential-blocks").getGradientColors(),
+        getCustomGradientColors: select("essential-blocks").getCustomGradientColors(),
         getBlockDefaults: select("essential-blocks").getBlockDefaults(),
     };
 })(EBGlobalControls);

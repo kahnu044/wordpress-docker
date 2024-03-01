@@ -46,6 +46,7 @@ class Options {
 			'pass',
 		],
 		'gmail'                => [
+			'one_click_setup_enabled',
 			'client_id',
 			'client_secret',
 		],
@@ -232,7 +233,7 @@ class Options {
 	 */
 	public static function get_defaults() {
 
-		return [
+		$defaults = [
 			'mail'    => [
 				'from_email'       => get_option( 'admin_email' ),
 				'from_name'        => get_bloginfo( 'name' ),
@@ -249,6 +250,15 @@ class Options {
 				SummaryReportEmail::SETTINGS_SLUG => ! is_multisite() ? false : true,
 			],
 		];
+
+		/**
+		 * Filters the default options.
+		 *
+		 * @since 3.11.0
+		 *
+		 * @param array $defaults Default options.
+		 */
+		return apply_filters( 'wp_mail_smtp_options_get_defaults', $defaults );
 	}
 
 	/**
@@ -775,10 +785,18 @@ class Options {
 						/** @noinspection PhpUndefinedConstantInspection */
 						$return = $this->is_const_defined( $group, $key ) ? WPMS_DO_NOT_SEND : $value;
 						break;
+
 					case SummaryReportEmail::SETTINGS_SLUG:
 						/** No inspection comment @noinspection PhpUndefinedConstantInspection */
 						$return = $this->is_const_defined( $group, $key ) ?
 							$this->parse_boolean( WPMS_SUMMARY_REPORT_EMAIL_DISABLED ) :
+							$value;
+						break;
+
+					case OptimizedEmailSending::SETTINGS_SLUG:
+						/** No inspection comment @noinspection PhpUndefinedConstantInspection */
+						$return = $this->is_const_defined( $group, $key ) ?
+							$this->parse_boolean( WPMS_OPTIMIZED_EMAIL_SENDING_ENABLED ) :
 							$value;
 						break;
 				}
@@ -1098,8 +1116,13 @@ class Options {
 						/** @noinspection PhpUndefinedConstantInspection */
 						$return = defined( 'WPMS_DO_NOT_SEND' ) && WPMS_DO_NOT_SEND;
 						break;
+
 					case SummaryReportEmail::SETTINGS_SLUG:
 						$return = defined( 'WPMS_SUMMARY_REPORT_EMAIL_DISABLED' );
+						break;
+
+					case OptimizedEmailSending::SETTINGS_SLUG:
+						$return = defined( 'WPMS_OPTIMIZED_EMAIL_SENDING_ENABLED' );
 						break;
 				}
 
@@ -1226,6 +1249,7 @@ class Options {
 							case 'uninstall':
 							case UsageTracking::SETTINGS_SLUG:
 							case SummaryReportEmail::SETTINGS_SLUG:
+							case OptimizedEmailSending::SETTINGS_SLUG:
 								$options[ $group ][ $option_name ] = (bool) $option_value;
 								break;
 						}

@@ -8,6 +8,12 @@ window.addEventListener("DOMContentLoaded", () => {
     var hashTag = window.location.hash.substring(1);
 
     for (const titleListsWrap of allTabsTitlesList) {
+        // close all tabs initially
+        let listWrap = titleListsWrap.closest(
+            ".eb-advanced-tabs-wrapper"
+        );
+        const closeAllTabs = listWrap.getAttribute('data-close-all-tabs');
+
         // select active tab
         const activeTabElement = titleListsWrap.querySelector("li.active");
         if (activeTabElement) {
@@ -49,8 +55,12 @@ window.addEventListener("DOMContentLoaded", () => {
                     "data-title-custom-id"
                 );
                 if (customId === hashTag) {
-                    titleLiTag.classList.add("active");
+                    for (const titleLiTag of tabTitlesLiTags) {
+                        titleLiTag.classList.add("inactive");
+                        titleLiTag.classList.remove("active");
+                    }
                     titleLiTag.classList.remove("inactive");
+                    titleLiTag.classList.add("active");
                     hashMatched = true;
                     const tabContentWrappers = titleListsWrap.closest(
                         ".eb-advanced-tabs-wrapper"
@@ -68,10 +78,6 @@ window.addEventListener("DOMContentLoaded", () => {
                             tabContentWrap.classList.remove("active");
                         }
                     }
-                } else {
-                    hashMatched = false;
-                    titleLiTag.classList.add("inactive");
-                    titleLiTag.classList.remove("active");
                 }
             }
 
@@ -130,8 +136,13 @@ window.addEventListener("DOMContentLoaded", () => {
             activeTabElement === null &&
             tabTitlesLiTags.length > 0
         ) {
-            tabTitlesLiTags[0].classList.add("active");
-            tabTitlesLiTags[0].classList.remove("inactive");
+            if (closeAllTabs === 'true') {
+                tabTitlesLiTags[0].classList.add("inactive");
+                tabTitlesLiTags[0].classList.remove("active");
+            } else {
+                tabTitlesLiTags[0].classList.add("active");
+                tabTitlesLiTags[0].classList.remove("inactive");
+            }
 
             const listWrap = titleListsWrap
                 .closest(".eb-advanced-tabs-wrapper")
@@ -139,8 +150,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
             listWrap.forEach((item, index) => {
                 if (index == 0) {
-                    item.classList.add("active");
-                    item.classList.remove("inactive");
+                    if (closeAllTabs === 'true') {
+                        item.classList.add("inactive");
+                        item.classList.remove("active");
+                    } else {
+                        item.classList.add("active");
+                        item.classList.remove("inactive");
+                    }
                 } else {
                     item.classList.add("inactive");
                     item.classList.remove("active");

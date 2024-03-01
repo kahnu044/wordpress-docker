@@ -25,4 +25,10 @@
 			left: 14px;
 		}
 	}
+
+	.dashicons,
+	.dashicons-before:before {
+		width: unset;
+		height: unset;
+	}
 }

@@ -27,6 +27,10 @@ ebConditionalRegisterBlockType(metadata, {
     attributes,
     edit: Edit,
     save: () => null,
-    example,
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/table-of-contents.jpeg`,
+        },
+    },
     deprecated,
 });

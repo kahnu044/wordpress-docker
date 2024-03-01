@@ -23,7 +23,7 @@ ebConditionalRegisterBlockType(metadata, {
     save: () => null,
     example: {
         attributes: {
-            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/post-carousel/image/screenshot.png`,
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/post-carousel.jpeg`,
         },
     },
 });

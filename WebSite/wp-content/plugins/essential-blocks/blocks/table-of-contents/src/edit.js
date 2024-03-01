@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useState, useEffect, useMemo } from "@wordpress/element";
+import { renderToString, useEffect, useMemo } from "@wordpress/element";
 import { compose } from "@wordpress/compose";
 import {
     BlockControls,
@@ -13,6 +13,10 @@ import {
 import { ToolbarButton, ToolbarGroup } from "@wordpress/components";
 import { select, withSelect } from "@wordpress/data";
 import { decodeEntities } from "@wordpress/html-entities";
+import {
+    safeHTML, removeInvalidHTML
+} from "@wordpress/dom";
+
 
 /*
  * External dependencies
@@ -20,40 +24,19 @@ import { decodeEntities } from "@wordpress/html-entities";
 import striptags from "striptags";
 
 const {
-    softMinifyCssStrings,
-    generateDimensionsControlStyles,
-    generateTypographyStyles,
-    generateBorderShadowStyles,
-    generateResponsiveRangeStyles,
     duplicateBlockIdFix,
     DynamicInputValueHandler,
+    EBDisplayIcon
 } = window.EBControls;
 
 import { parseTocSlug } from "./helper";
 
 import classnames from "classnames";
 import Inspector from "./inspector";
-import {
-    typoPrefix_content,
-    typoPrefix_title,
-} from "./constants/typographyPrefixConstants";
-
-import {
-    //
-    WrpMarginConst,
-    WrpPaddingConst,
-    contentPaddingConst,
-    titlePaddingConst,
-} from "./constants/dimensionsConstants";
-
-import {
-    //
-    WrpBdShadowConst,
-} from "./constants/borderShadowConstants";
-
-import { wrapMaxWidthPrefix } from "./constants/rangeNames";
 
 import List from "./list";
+
+import Style from "./style";
 
 function getHeadingsFromHeadingElements(headingElements) {
     return [...headingElements].map((heading, index) => {
@@ -78,25 +61,26 @@ function getHeadingsFromHeadingElements(headingElements) {
                 level = 6;
                 break;
         }
+        const content = heading.textContent;
 
         return {
             level: level,
-            content: heading.textContent,
-            text: heading.textContent,
-            link: parseTocSlug(striptags(heading.textContent)),
+            content: content,
+            text: content,
+            link: parseTocSlug(striptags(content)),
         };
     });
 }
 
 const getHeadersFromContent = (attributes, postContent) => {
+    const safeContent = safeHTML(decodeEntities(postContent));
+
     const tempPostContentDOM = document.createElement("div");
-    tempPostContentDOM.innerHTML = postContent;
+    tempPostContentDOM.innerHTML = safeContent;
+
+
     let queryArray = ["h1", "h2", "h3", "h4", "h5", "h6"];
-    if (
-        attributes &&
-        undefined !== attributes.visibleHeaders &&
-        undefined !== attributes.visibleHeaders[0]
-    ) {
+    if (attributes && undefined !== attributes.visibleHeaders && undefined !== attributes.visibleHeaders[0]) {
         queryArray = [];
         if (attributes.visibleHeaders[0]) {
             queryArray.push("h1");
@@ -119,24 +103,25 @@ const getHeadersFromContent = (attributes, postContent) => {
     }
     const queryString = queryArray.toString();
     if (queryString) {
-        const headingElements = tempPostContentDOM.querySelectorAll(
-            queryString
-        );
+        const headingElements = tempPostContentDOM.querySelectorAll(queryString);
         return getHeadingsFromHeadingElements(headingElements);
     }
     return [];
 };
 
-function Edit({
-    isSelected,
-    attributes,
-    setAttributes,
-    clientId,
-    className,
-    postContent,
-    blockOrder,
-    isTyping,
-}) {
+function Edit(props) {
+    const {
+        isSelected,
+        attributes,
+        setAttributes,
+        clientId,
+        className,
+        postContent,
+        blockOrder,
+        isTyping,
+        name
+    } = props;
+
     const {
         resOption,
         blockId,
@@ -145,48 +130,25 @@ function Edit({
         title,
         collapsible,
         listType,
-        titleBg = "#ff7d50",
-        titleColor = "#fff",
-        contentBg = "#fff6f3",
-        contentColor = "#707070",
-        mainBgc,
-        contentHoverColor,
         displayTitle,
-        titleAlign,
-        seperator,
-        seperatorSize,
-        seperatorColor = "#000",
-        seperatorStyle,
         scrollToTop,
-        arrowHeight,
-        arrowWidth,
-        arrowBg,
-        arrowColor,
         contentAlign,
-        isSticky,
-        topSpace,
-        contentHeight,
-        indent,
         deleteHeaderList,
-        hasUnderline,
         isMigrated,
-        contentGap = "20",
-        contentGapUnit = "px",
-        listSeperatorWidth = 3,
-        listSeperatorStyle = "solid",
-        listSeperatorColor = "#000",
-        showListSeparator,
         scrollToTopIcon,
         classHook,
+        cover,
+        enableListStyle,
+        preset,
+        itemCollapsed
     } = attributes;
-    const [visible, setVisible] = useState(true);
+
 
     const isBlockJustInserted = select(
         "core/block-editor"
     ).wasBlockJustInserted(clientId);
 
-    const headerList = useMemo(
-        () => getHeadersFromContent(attributes, postContent),
+    const headerList = useMemo(() => getHeadersFromContent(attributes, postContent),
         [blockOrder, isTyping, postContent]
     );
     const deleteHeadersLists = useMemo(() => {
@@ -209,9 +171,7 @@ function Edit({
         if (!isMigrated && !isBlockJustInserted) {
             if (JSON.stringify(headerList) !== JSON.stringify(headers)) {
                 let newHeaderList = headerList.map((item) => item.text);
-                let newHeaders = headers.map((item) =>
-                    decodeEntities(item.text)
-                );
+                let newHeaders = headers.map((item) => item.text);
                 let difference = newHeaderList.filter(
                     (x) => !newHeaders.includes(x)
                 );
@@ -249,7 +209,8 @@ function Edit({
         }
 
         const goTop = document.createElement("span");
-        goTop.innerHTML = `<i class="${scrollToTopIcon}"></i>`;
+        goTop.innerHTML = renderToString(<EBDisplayIcon icon={scrollToTopIcon} />);
+
         goTop.setAttribute("class", "eb-toc-go-top ");
         goTop.style.right = "300px";
         document.body.insertBefore(goTop, document.body.lastChild);
@@ -283,360 +244,34 @@ function Edit({
         className: classnames(className, `eb-guten-block-main-parent-wrapper`),
     });
 
-    // // styles related to generateResponsiveRangeStyles start ⬇
-    const {
-        rangeStylesDesktop: wrapMaxWidthDesktop,
-        rangeStylesTab: wrapMaxWidthTab,
-        rangeStylesMobile: wrapMaxWidthMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: wrapMaxWidthPrefix,
-        property: "max-width",
-        attributes,
-    });
 
-    // // styles related to generateTypographyStyles start ⬇
-    const {
-        typoStylesDesktop: titleTypoStylesDesktop,
-        typoStylesTab: titleTypoStylesTab,
-        typoStylesMobile: titleTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: typoPrefix_title,
-        defaultFontSize: 22,
-    });
-
-    const {
-        typoStylesDesktop: contentTypoStylesDesktop,
-        typoStylesTab: contentTypoStylesTab,
-        typoStylesMobile: contentTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: typoPrefix_content,
-        defaultFontSize: 20,
-    });
-    // // styles related to generateTypographyStyles end
-
-    // // styles related to generateDimensionsControlStyles start ⬇
-    const {
-        dimensionStylesDesktop: wrpMarginDesktop,
-        dimensionStylesTab: wrpMarginTab,
-        dimensionStylesMobile: wrpMarginMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: WrpMarginConst,
-        styleFor: "margin",
-    });
-
-    const {
-        dimensionStylesDesktop: wrpPaddingDesktop,
-        dimensionStylesTab: wrpPaddingTab,
-        dimensionStylesMobile: wrpPaddingMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: WrpPaddingConst,
-        styleFor: "padding",
-    });
-
-    const {
-        dimensionStylesDesktop: titlePaddingDesktop,
-        dimensionStylesTab: titlePaddingTab,
-        dimensionStylesMobile: titlePaddingMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: titlePaddingConst,
-        styleFor: "padding",
-    });
-
-    const {
-        dimensionStylesDesktop: contentPaddingDesktop,
-        dimensionStylesTab: contentPaddingTab,
-        dimensionStylesMobile: contentPaddingMobile,
-    } = generateDimensionsControlStyles({
-        attributes,
-        controlName: contentPaddingConst,
-        styleFor: "padding",
-    });
-
-    // // styles related to generateDimensionsControlStyles end
-
-    // // styles related to generateBorderShadowStyles start ⬇
-    const {
-        styesDesktop: wrpBdShdStyesDesktop,
-        styesTab: wrpBdShdStyesTab,
-        styesMobile: wrpBdShdStyesMobile,
-        stylesHoverDesktop: wrpBdShdStylesHoverDesktop,
-        stylesHoverTab: wrpBdShdStylesHoverTab,
-        stylesHoverMobile: wrpBdShdStylesHoverMobile,
-        transitionStyle: wrpBdShdTransitionStyle,
-    } = generateBorderShadowStyles({
-        controlName: WrpBdShadowConst,
-        attributes,
-        // noShadow: true,
-        // noBorder: true,
-    });
-
-    // // styles related to generateBorderShadowStyles end
-
-    const desktopAllStylesCommon = `
-		  ${
-              isSticky
-                  ? `
-			  .eb-parent-${blockId}.eb__animated, .eb__animated.eb__flip {
-				  -webkit-animation-fill-mode: none;
-				  animation-fill-mode: none;
-				  -webkit-animation-name: none;
-				  animation-name: none !important;
-			  }
-		  `
-                  : ""
-          }
-
-		  .${blockId}.eb-toc-container{
-			  ${wrapMaxWidthDesktop}
-
-			  ${mainBgc ? `background-color:${mainBgc};` : ""}
-
-			  ${wrpMarginDesktop}
-			  ${wrpPaddingDesktop}
-			  ${wrpBdShdStyesDesktop}
-			  ${isSticky ? "" : `transition:all 0.5s, ${wrpBdShdTransitionStyle}`};
-		  }
-
-		  .${blockId}.eb-toc-container:hover{
-			  ${wrpBdShdStylesHoverDesktop}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-title{
-			  text-align: ${titleAlign};
-			  cursor:${collapsible ? "pointer" : "default"};
-			  color: ${titleColor};
-			  background-color:${titleBg};
-			  ${
-                  seperator
-                      ? `border-bottom:${
-                            seperatorSize || 0
-                        }px ${seperatorStyle} ${seperatorColor};`
-                      : ""
-              }
-			  ${titlePaddingDesktop}
-			  ${titleTypoStylesDesktop}
-
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper{
-			  background-color:${contentBg};
-			  text-align: ${contentAlign};
-			  ${contentPaddingDesktop}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper ul,
-		  .${blockId}.eb-toc-container .eb-toc-wrapper ol
-		  {
-			  ${listType === "none" ? `list-style: none;` : ""}
-			  ${indent ? `margin-left:${indent}px;` : ""}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li {
-			  color:${contentColor};
-			  ${contentTypoStylesDesktop}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li:hover{
-			  color:${contentHoverColor};
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li a{
-			  color:inherit;
-		  }
-
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li a,
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li a:focus{
-			  ${!hasUnderline ? "text-decoration:none;" : "text-decoration:underline;"}
-			  background:none;
-		  }
-
-		  ${
-              scrollToTop
-                  ? `
-			  .eb-toc-go-top.show-scroll {
-				  ${arrowHeight ? `height: ${arrowHeight}px;` : ""}
-				  ${arrowWidth ? `width: ${arrowWidth}px;` : ""}
-				  ${arrowBg ? `background-color: ${arrowBg};` : ""}
-				  ${arrowColor ? `color: ${arrowColor};` : ""}
-			  }
-			  `
-                  : // Important N.B. : in the selector above we used ".eb-toc-go-top.show-scroll" this. It's very important to start the selector with ".eb-" if this css strings goes inside "softMinifyCssStrings" function. Always make sure to use a selector that starts with ".eb-" when using this string inside "softMinifyCssStrings" function
-                    ""
-          }
-
-        .${blockId}.eb-toc-container .eb-toc-wrapper li {
-            padding-top: ${contentGap / 2}${contentGapUnit};
-        }
-
-        .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list li:not(:last-child) {
-            padding-bottom: ${contentGap / 2}${contentGapUnit};
-        }
-
-        ${
-            showListSeparator
-                ? `
-                .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list li:first-child {
-                    border-bottom: ${listSeperatorWidth}px ${listSeperatorStyle} ${listSeperatorColor};
-                }
-        `
-                : ""
-        }
-
-	  `;
-
-    const tabAllStylesCommon = `
-		  .${blockId}.eb-toc-container{
-			  ${wrapMaxWidthTab}
-
-			  ${wrpMarginTab}
-			  ${wrpPaddingTab}
-			  ${wrpBdShdStyesTab}
-		  }
-		  .${blockId}.eb-toc-container:hover{
-			  ${wrpBdShdStylesHoverTab}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-title{
-			  ${titlePaddingTab}
-			  ${titleTypoStylesTab}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper{
-			  ${contentPaddingTab}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li{
-			  ${contentTypoStylesTab}
-		  }
-
-	  `;
-
-    const mobileAllStylesCommon = `
-		  .${blockId}.eb-toc-container{
-			  ${wrapMaxWidthMobile}
-
-
-			  ${wrpMarginMobile}
-			  ${wrpPaddingMobile}
-			  ${wrpBdShdStyesMobile}
-		  }
-
-		  .${blockId}.eb-toc-container:hover{
-			  ${wrpBdShdStylesHoverMobile}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-title{
-			  ${titlePaddingMobile}
-			  ${titleTypoStylesMobile}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper{
-			  ${contentPaddingMobile}
-		  }
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper li{
-			  ${contentTypoStylesMobile}
-		  }
-
-	  `;
-
-    //
-    const desktopAllStylesEditor = `
-		  ${desktopAllStylesCommon}
-
-
-		  .${blockId}.eb-toc-container .eb-toc-wrapper{
-			  display:${visible ? "block" : "none"};
-		  }
-		  `;
-
-    const tabAllStylesEditor = `
-		  ${tabAllStylesCommon}
-		  `;
-
-    const mobileAllStylesEditor = `
-		  ${mobileAllStylesCommon}
-	  `;
-
-    // all css styles for large screen width (desktop/laptop) in strings ⬇
-    const desktopAllStylesFrontEnd = softMinifyCssStrings(`
-		  ${desktopAllStylesCommon}
-		  ${
-              isSticky
-                  ? `
-					.${blockId}.eb-toc-container.eb-toc-sticky-right.eb-toc-is-sticky {
-						position:fixed;
-						top: ${topSpace === 0 || topSpace ? topSpace : 25}%;
-						z-index:999;
-						left: auto;
-						right: 0;
-					}
-
-					.${blockId}.eb-toc-container.eb-toc-sticky-left.eb-toc-is-sticky {
-						position:fixed;
-						top: ${topSpace === 0 || topSpace ? topSpace : 25}%;
-						z-index:999;
-						left: 0;
-					}
-
-				  .${blockId}.eb-toc-container.eb-toc-is-sticky .eb-toc-wrapper{
-					  ${contentHeight ? `min-height:${contentHeight}px;` : ""}
-				  }
-
-				  .${blockId}.eb-toc-container.eb-toc-is-sticky button.eb-toc-button{
-					  color:${titleColor};
-					  background-color:${titleBg};
-				  }
-
-				  .${blockId}.eb-toc-container.eb-toc-is-sticky button.eb-toc-button.eb-toc-button-right {
-					right: 0;
-					left: auto;
-					transform-origin: right top;
-					transform: rotate(90deg) translate(100%, 0);
-				  }
-				  `
-                  : ""
-          }
-
-
-	  `);
-
-    // all css styles for Tab in strings ⬇
-    const tabAllStylesFrontEnd = softMinifyCssStrings(`
-		  ${tabAllStylesCommon}
-
-
-	  `);
-
-    // all css styles for Mobile in strings ⬇
-    const mobileAllStylesFrontEnd = softMinifyCssStrings(`
-		  ${mobileAllStylesCommon}
-
-	  `);
-
-    //
-    // styling codes End here
-    //
-
-    // Set All Style in "blockMeta" Attribute
+    // CollapsedItem
     useEffect(() => {
-        const styleObject = {
-            desktop: desktopAllStylesFrontEnd,
-            tab: tabAllStylesFrontEnd,
-            mobile: mobileAllStylesFrontEnd,
-        };
-        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-            setAttributes({ blockMeta: styleObject });
-        }
-    }, [attributes]);
+        if (itemCollapsed) {
+            let container = document.querySelector(`.eb-toc-container.${blockId}`);
+            const items = container?.querySelectorAll(".eb-toc-wrapper .eb-toc__list-wrap > .eb-toc__list > li");
 
-    return (
+            for (let item of items) {
+                const selector = item?.querySelector("a");
+                const selectorIcon = item?.querySelector("svg");
+                const collapsedItem = item?.querySelector(".eb-toc__list");
+
+                if (collapsedItem !== null) {
+                    selectorIcon?.addEventListener("click", function () {
+                        item?.classList.toggle("hide-items");
+                    });
+                }
+
+            }
+
+        }
+    })
+
+    return cover.length ? (
+        <div>
+            <img src={cover} alt="table of content" style={{ maxWidth: "100%" }} />
+        </div>
+    ) : (
         <>
             {isSelected && (
                 <Inspector
@@ -677,38 +312,12 @@ function Edit({
             </BlockControls>
 
             <div {...blockProps}>
-                <style>
-                    {`
-				  ${desktopAllStylesEditor}
+                <Style {...props} />
 
-				  /* mimmikcssStart */
-
-				  ${resOption === "Tablet" ? tabAllStylesEditor : " "}
-				  ${resOption === "Mobile" ? tabAllStylesEditor + mobileAllStylesEditor : " "}
-
-				  /* mimmikcssEnd */
-
-				  @media all and (max-width: 1024px) {
-
-					  /* tabcssStart */
-					  ${softMinifyCssStrings(tabAllStylesEditor)}
-					  /* tabcssEnd */
-
-				  }
-
-				  @media all and (max-width: 767px) {
-
-					  /* mobcssStart */
-					  ${softMinifyCssStrings(mobileAllStylesEditor)}
-					  /* mobcssEnd */
-
-				  }
-				  `}
-                </style>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
-                    <div className={`${blockId} eb-toc-container`}>
+                    <div className={`${blockId} eb-toc-container ${preset} ${!enableListStyle ? 'list-style-none' : ''}`}>
                         <div
                             onClick={() => collapsible && setVisible(!visible)}
                         >
@@ -754,11 +363,9 @@ function Edit({
 
 export default compose([
     withSelect((select, ownProps) => {
-        const postContent = select("core/editor")
-            ? select("core/editor").getEditedPostContent()
-            : "";
+        const postContent = select("core/editor") ? select("core/editor").getEditedPostContent() : "";
         return {
-            postContent: postContent,
+            postContent: postContent.replace(/<\!--.*?-->/g, ""),
             blockOrder: select("core/block-editor").getBlockOrder(),
             isTyping: select("core/block-editor").isTyping(),
         };

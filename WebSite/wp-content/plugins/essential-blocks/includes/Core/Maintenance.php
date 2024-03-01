@@ -83,7 +83,7 @@ class Maintenance {
         //Create Table "eb_form_settings"
         $sql = 'CREATE TABLE ' . ESSENTIAL_BLOCKS_FORM_SETTINGS_TABLE . ' (
                     id INT AUTO_INCREMENT,
-                    block_id VARCHAR(255) NOT NULL,
+                    block_id VARCHAR(24) NOT NULL,
                     title TEXT NOT NULL,
                     fields TEXT NOT NULL,
                     form_options TEXT NOT NULL,

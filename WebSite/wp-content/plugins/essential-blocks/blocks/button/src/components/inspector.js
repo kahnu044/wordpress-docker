@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
@@ -16,12 +15,6 @@ import {
     RangeControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
-
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 /**
  * Internal depencencies
@@ -50,10 +43,10 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BackgroundControl,
-    faIcons,
     BorderShadowControl,
     AdvancedControls,
-    DynamicInputControl
+    DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -342,24 +335,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         />
                                         {addIcon && (
                                             <>
-                                                <BaseControl
-                                                    label={__(
-                                                        "Select Icon",
-                                                        "essential-blocks"
-                                                    )}
-                                                >
-                                                    <FontIconPicker
-                                                        icons={faIcons}
-                                                        value={icon}
-                                                        onChange={(icon) =>
-                                                            setAttributes({
-                                                                icon,
-                                                            })
-                                                        }
-                                                        appendTo="body"
-                                                        closeOnSelect
-                                                    />
-                                                </BaseControl>
+                                                <EBIconPicker
+                                                    value={icon}
+                                                    onChange={(icon) => {
+                                                        setAttributes({
+                                                            icon,
+                                                        });
+                                                    }}
+                                                />
                                                 <BaseControl
                                                     label={__(
                                                         "Icon Postion",

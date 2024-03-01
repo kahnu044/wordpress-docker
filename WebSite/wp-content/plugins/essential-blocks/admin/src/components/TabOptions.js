@@ -3,14 +3,8 @@ import { applyFilters } from "@wordpress/hooks";
 import Switch from "rc-switch";
 import "../../../assets/css/switch.css";
 import { __ } from "@wordpress/i18n";
-import { Spinner } from "@wordpress/components";
 
-import LogoGoogleFont from "../icons/options/logo-google-font.png";
-import LogoGoogleMaps from "../icons/options/logo-google-map.png";
-import LogoInstagram from "../icons/options/logo-instagram.png";
-import LogoOpenverse from "../icons/options/logo-openverse.png";
-import LogoOpensea from "../icons/options/logo-opensea.png";
-import { EditIcon } from "../icons/options/icon-edit";
+import { EditIcon } from "../icons/icon-edit";
 import EBLoader from "./Loader";
 
 const { fetchEBSettingsData, saveEBSettingsData } = window.EBControls;
@@ -18,12 +12,14 @@ import GoogleMaps from "./modal/googleMaps";
 import Instagram from "./modal/instagram";
 import OpenseaNft from "./modal/openseaNft";
 import Openverse from "./modal/openverse";
+import ResponsiveBreakPoints from "./modal/responsiveBreakPoints";
 
 /**
  * TabOptions Components
  * @returns
  */
 export default function TabOptions() {
+    const [responsiveModal, setResponsiveModal] = useState(false);
     const [optionModal, setOptionModal] = useState(false);
     const [clickedItem, setClickedItem] = useState("");
     const [settingsData, setSettingsData] = useState({});
@@ -36,16 +32,17 @@ export default function TabOptions() {
 
     useEffect(() => {
         /**
-         * fetch settings data using AJAX
+         * fetch eb_settings data using AJAX
          */
         fetchEBSettingsData("eb_settings").then((data) => {
             setSettingsData(data ?? {});
         });
+
     }, []);
 
     const optimizations = {
         googleFont: {
-            logo: LogoGoogleFont,
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-google-font.png`,
             title: "Google Fonts",
             description: __(
                 "Enable Google Fonts to get access to 1400+ exclusive fonts for all the fully customizable blocks of Essential Blocks.",
@@ -53,15 +50,16 @@ export default function TabOptions() {
             ),
             doc: "https://essential-blocks.com/docs/configure-google-fonts/",
         },
-        // fontAwesome: {
-        // 	logo: LogoGoogleFont,
-        // 	title: "Font Awesome",
-        // },
+        enableFontawesome: {
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-fontawesome.png`,
+            title: "Font Awesome",
+            description: __("Enable Font Awesome to get access to 2,000+ exclusive icon library and toolkit for all the fully customizable blocks of Essential Blocks.", "essential-blocks"),
+        },
     };
 
     const apiIntegrations = applyFilters('eb_admin_option_integrations', {
         googleMapApi: {
-            logo: LogoGoogleMaps,
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-google-map.png`,
             title: __("Google Maps", "essential-blocks"),
             description: __(
                 __(
@@ -74,7 +72,7 @@ export default function TabOptions() {
             component: GoogleMaps,
         },
         instagramToken: {
-            logo: LogoInstagram,
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-instagram.png`,
             title: __("Instagram", "essential-blocks"),
             description: __(
                 "To showcase your Instagram feed on your website, collect Instagram access tokens.",
@@ -85,7 +83,7 @@ export default function TabOptions() {
             component: Instagram,
         },
         openseaApi: {
-            logo: LogoOpensea,
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-opensea.png`,
             title: "Opensea NFT",
             description: __(
                 "To display your OpenSea NFT items, collections, wallets, etc. connect the API key here.",
@@ -95,7 +93,7 @@ export default function TabOptions() {
             component: OpenseaNft,
         },
         openverseApi: {
-            logo: LogoOpenverse,
+            logo: `${EssentialBlocksLocalize.image_url}/admin/logo-openverse.png`,
             title: "Openverse",
             description: __(
                 "To get unlimited access to Openverse images, provide your email & project name to generate API keys.",
@@ -113,6 +111,10 @@ export default function TabOptions() {
     const handleEditBtnClick = (item) => {
         setOptionModal(true);
         setClickedItem(item);
+    };
+
+    const handelResponsiveBreakPoints = () => {
+        setResponsiveModal(true);
     };
 
     /**
@@ -302,16 +304,18 @@ export default function TabOptions() {
                                 <p className="eb-admin-block__text mp0">
                                     {optimizations[item].description}
                                 </p>
-                                <a
-                                    target="_blank"
-                                    href={optimizations[item].doc}
-                                    className="eb-admin-block__link"
-                                >
-                                    {__(
-                                        "API Documentation",
-                                        "essential-blocks"
-                                    )}
-                                </a>
+                                {optimizations[item]?.doc && (
+                                    <a
+                                        target="_blank"
+                                        href={optimizations[item].doc}
+                                        className="eb-admin-block__link"
+                                    >
+                                        {__(
+                                            "API Documentation",
+                                            "essential-blocks"
+                                        )}
+                                    </a>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -346,6 +350,34 @@ export default function TabOptions() {
                 </div>
             </div>
 
+            <div className="eb-admin-grid">
+                <div className="eb-col-12">
+                    <h2 className="eb-admin-block-title">
+                        {__("Responsive Breakpoints", "essential-blocks")}
+                    </h2>
+                    <div className="eb-admin-block regenerate-asset-block eb-block-xs">
+                        <div className="content">
+                            <h5 className="eb-admin-block__title">
+                                {__("Responsive Breakpoints", "essential-blocks")}
+                            </h5>
+                            <p>
+                                {__(
+                                    "Adjust the “Responsive Breakpoint” settings to define the screen widths at which your site will adapt for optimal viewing on tablets and mobile devices.",
+                                    "essential-blocks"
+                                )}
+                            </p>
+                        </div>
+
+                        <button
+                            className="eb-btn eb-btn-border"
+                            onClick={() => handelResponsiveBreakPoints()}
+                        >
+                            {__("Configure Breakpoints", "essential-blocks")}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {optionModal && (
                 <div className="option-modal">
                     <div className="option-modal__inner">
@@ -358,6 +390,25 @@ export default function TabOptions() {
                         <ClickedComponent
                             setTrigger={setOptionModal}
                             settingsKey={clickedItem}
+                            settingsData={settingsData}
+                            setSettingsData={setSettingsData}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {responsiveModal && (
+                <div className="option-modal">
+                    <div className="option-modal__inner">
+                        <button
+                            className="close-btn"
+                            onClick={() => setResponsiveModal(false)}
+                        >
+                            <span className="dashicons dashicons-no"></span>
+                        </button>
+
+                        <ResponsiveBreakPoints
+                            setTrigger={setResponsiveModal}
                             settingsData={settingsData}
                             setSettingsData={setSettingsData}
                         />

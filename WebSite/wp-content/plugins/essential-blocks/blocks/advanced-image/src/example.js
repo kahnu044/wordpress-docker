@@ -1,7 +1,7 @@
 const example = {
     attributes: {
         image: {
-            url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
+            url: EssentialBlocksLocalize?.image_url + "/gallery-images/hongkong.jpg",
         },
         displayCaption: true,
         imageCaption: "Style images in Gutenberg with advanced options.",

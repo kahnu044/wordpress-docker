@@ -3,15 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import {
-    PanelBody,
-    PanelRow,
-    ToggleControl,
-    Button,
-    ButtonGroup,
-    RangeControl,
-    ColorPalette,
-} from "@wordpress/components";
+import { PanelBody, PanelRow, ToggleControl, Button, ButtonGroup, RangeControl } from "@wordpress/components";
 
 /**
  * Internal dependencies
@@ -87,12 +79,12 @@ function ParallaxSlider(props) {
                 isCustomHeight: true,
                 current: 1,
                 titleColorType: "normal",
-                titleColor: "#ffffff",
-                titleBackgroundColor: "rgba(135,92,255,0)",
+                titleColor: "var(--eb-global-heading-color)",
+                titleBackgroundColor: "var(--eb-global-background-color)",
                 buttonColorType: "normal",
-                buttonBackgroundColor: "rgba(135,92,255,.8)",
-                buttonColor: "#fffff",
-                buttonHoverBackgroundColor: "rgba(135,92,255,.95)",
+                buttonBackgroundColor: "var(--eb-global-button-background-color)",
+                buttonColor: "var(--eb-global-button-text-color)",
+                buttonHoverBackgroundColor: "var(--eb-global-tertiary-color)",
                 horizontalAlign: "center",
                 verticalAlign: "center",
                 [`${CUSTOM_HEIGHT}Unit`]: "px",
@@ -167,9 +159,7 @@ function ParallaxSlider(props) {
                             label={__("Parallax Softness", "essential-blocks")}
                             value={intensity}
                             allowReset
-                            onChange={(intensity) =>
-                                handleBlockDefault({ intensity })
-                            }
+                            onChange={(intensity) => handleBlockDefault({ intensity })}
                             min={0}
                             max={100}
                         />
@@ -185,10 +175,7 @@ function ParallaxSlider(props) {
 
                         {isCustomHeight && (
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Slider Size",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Slider Size", "essential-blocks")}
                                 controlName={CUSTOM_HEIGHT}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -208,10 +195,7 @@ function ParallaxSlider(props) {
                             step={1}
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Slides Style", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Slides Style", "essential-blocks")} initialOpen={true}>
                         <PanelRow>Content Horizontal Align</PanelRow>
                         <ButtonGroup>
                             {HORIZONTAL_ALIGN.map((item, index) => (
@@ -253,10 +237,7 @@ function ParallaxSlider(props) {
                             baseLabel="Content Padding"
                         />
                         <ResponsiveRangeController
-                            baseLabel={__(
-                                "Slide Border Radius",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Slide Border Radius", "essential-blocks")}
                             controlName={SLIDE_BORDER_RADIUS}
                             resRequiredProps={resRequiredProps}
                             units={GAP_UNIT_TYPES}
@@ -266,18 +247,13 @@ function ParallaxSlider(props) {
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Title Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <PanelRow>Color</PanelRow>
-                        <ColorPalette
-                            colors={COLORS}
-                            value={titleColor}
-                            onChange={(color) =>
-                                handleBlockDefault({ titleColor: color })
-                            }
+                    <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
+                        <ColorControl
+                            label={__("Color", "essential-blocks")}
+                            color={titleColor}
+                            onChange={(color) => handleBlockDefault({ titleColor: color })}
                         />
+
                         <ColorControl
                             label={__("Background Color", "essential-blocks")}
                             color={titleBackgroundColor}
@@ -300,10 +276,7 @@ function ParallaxSlider(props) {
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Button Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Button Styles", "essential-blocks")} initialOpen={false}>
                         <ButtonGroup className="eb-inspector-btn-group">
                             {NORMAL_HOVER.map((item, index) => (
                                 <Button
@@ -323,10 +296,9 @@ function ParallaxSlider(props) {
 
                         {buttonColorType === "normal" && (
                             <>
-                                <PanelRow>Color</PanelRow>
-                                <ColorPalette
-                                    colors={COLORS}
-                                    value={buttonColor}
+                                <ColorControl
+                                    label={__("Color", "essential-blocks")}
+                                    color={buttonColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
                                             buttonColor: color,
@@ -334,10 +306,7 @@ function ParallaxSlider(props) {
                                     }
                                 />
                                 <ColorControl
-                                    label={__(
-                                        "Background Color",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Background Color", "essential-blocks")}
                                     color={buttonBackgroundColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
@@ -350,21 +319,18 @@ function ParallaxSlider(props) {
 
                         {buttonColorType === "hover" && (
                             <>
-                                <PanelRow>Hover Color</PanelRow>
-                                <ColorPalette
-                                    colors={COLORS}
-                                    value={buttonHoverColor}
+                                <ColorControl
+                                    label={__("Hover Color", "essential-blocks")}
+                                    color={buttonHoverColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
                                             buttonHoverColor: color,
                                         })
                                     }
                                 />
+
                                 <ColorControl
-                                    label={__(
-                                        "Hover Background Color",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Hover Background Color", "essential-blocks")}
                                     color={buttonHoverBackgroundColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
@@ -375,10 +341,7 @@ function ParallaxSlider(props) {
                             </>
                         )}
                         <PanelRow>Button Border & Shadow</PanelRow>
-                        <BorderShadowControl
-                            controlName={BUTTON_BORDER_SHADOW}
-                            resRequiredProps={resRequiredProps}
-                        />
+                        <BorderShadowControl controlName={BUTTON_BORDER_SHADOW} resRequiredProps={resRequiredProps} />
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={BUTTON_TYPOGRAPHY}
@@ -395,13 +358,7 @@ function ParallaxSlider(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -413,24 +370,11 @@ function ParallaxSlider(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={WRAPPER_BORDER_SHADOW}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
+                        <BorderShadowControl controlName={WRAPPER_BORDER_SHADOW} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

@@ -15,13 +15,6 @@ import {
     TabPanel,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
-
-/**
- * Internal dependencies
- */
-
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
 import { wrpBdShadow, btnBdShd } from "./constants/borderShadowConstants";
@@ -40,6 +33,7 @@ const {
     faIcons,
     AdvancedControls,
     DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 import {
@@ -109,7 +103,7 @@ function Inspector(props) {
         imageAlt,
 
         //
-        selectedIcon,
+        infoboxIcon,
 
         //
         flexDirection,
@@ -255,7 +249,7 @@ function Inspector(props) {
                                             "Infobox Settings",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <SelectControl
                                             label={__(
@@ -338,91 +332,91 @@ function Inspector(props) {
                                             <>
                                                 {(flexDirection === "row" ||
                                                     flexDirection ===
-                                                        "row-reverse") && (
-                                                    <BaseControl
-                                                        id="eb-infobox-alignments"
-                                                        label="Media alignments"
-                                                    >
-                                                        <ButtonGroup id="eb-infobox-alignments">
-                                                            {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
-                                                                (
-                                                                    {
-                                                                        value,
-                                                                        label,
-                                                                    },
-                                                                    index
-                                                                ) => (
-                                                                    <Button
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        isSecondary={
-                                                                            mediaAlignment !==
-                                                                            value
-                                                                        }
-                                                                        isPrimary={
-                                                                            mediaAlignment ===
-                                                                            value
-                                                                        }
-                                                                        onClick={() =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    mediaAlignment: value,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        {label}
-                                                                    </Button>
-                                                                )
-                                                            )}
-                                                        </ButtonGroup>
-                                                    </BaseControl>
-                                                )}
+                                                    "row-reverse") && (
+                                                        <BaseControl
+                                                            id="eb-infobox-alignments"
+                                                            label="Media alignments"
+                                                        >
+                                                            <ButtonGroup id="eb-infobox-alignments">
+                                                                {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
+                                                                    (
+                                                                        {
+                                                                            value,
+                                                                            label,
+                                                                        },
+                                                                        index
+                                                                    ) => (
+                                                                        <Button
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            isSecondary={
+                                                                                mediaAlignment !==
+                                                                                value
+                                                                            }
+                                                                            isPrimary={
+                                                                                mediaAlignment ===
+                                                                                value
+                                                                            }
+                                                                            onClick={() =>
+                                                                                setAttributes(
+                                                                                    {
+                                                                                        mediaAlignment: value,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            {label}
+                                                                        </Button>
+                                                                    )
+                                                                )}
+                                                            </ButtonGroup>
+                                                        </BaseControl>
+                                                    )}
 
                                                 {(flexDirection === "column" ||
                                                     flexDirection ===
-                                                        "column-reverse") && (
-                                                    <BaseControl
-                                                        id="eb-infobox-alignments"
-                                                        label="Media alignments"
-                                                    >
-                                                        <ButtonGroup id="eb-infobox-alignments">
-                                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
-                                                                (
-                                                                    {
-                                                                        value,
-                                                                        label,
-                                                                    },
-                                                                    index
-                                                                ) => (
-                                                                    <Button
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        isSecondary={
-                                                                            mediaAlignment !==
-                                                                            value
-                                                                        }
-                                                                        isPrimary={
-                                                                            mediaAlignment ===
-                                                                            value
-                                                                        }
-                                                                        onClick={() =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    mediaAlignment: value,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        {label}
-                                                                    </Button>
-                                                                )
-                                                            )}
-                                                        </ButtonGroup>
-                                                    </BaseControl>
-                                                )}
+                                                    "column-reverse") && (
+                                                        <BaseControl
+                                                            id="eb-infobox-alignments"
+                                                            label="Media alignments"
+                                                        >
+                                                            <ButtonGroup id="eb-infobox-alignments">
+                                                                {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
+                                                                    (
+                                                                        {
+                                                                            value,
+                                                                            label,
+                                                                        },
+                                                                        index
+                                                                    ) => (
+                                                                        <Button
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            isSecondary={
+                                                                                mediaAlignment !==
+                                                                                value
+                                                                            }
+                                                                            isPrimary={
+                                                                                mediaAlignment ===
+                                                                                value
+                                                                            }
+                                                                            onClick={() =>
+                                                                                setAttributes(
+                                                                                    {
+                                                                                        mediaAlignment: value,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            {label}
+                                                                        </Button>
+                                                                    )
+                                                                )}
+                                                            </ButtonGroup>
+                                                        </BaseControl>
+                                                    )}
                                             </>
                                         )}
 
@@ -518,7 +512,7 @@ function Inspector(props) {
                                             />
 
                                             <DynamicInputControl
-                                                label="Link URL (use https:// at the beginning)"
+                                                label={__("Button Link", "essential-blocks")}
                                                 placeholder="https://your-site.com"
                                                 attrName="infoboxLink"
                                                 inputValue={infoboxLink}
@@ -528,6 +522,7 @@ function Inspector(props) {
                                                         infoboxLink: text,
                                                     })
                                                 }
+                                                help={__("Link URL (use https:// at the beginning)", "essential-blocks")}
                                             />
 
                                             <ToggleControl
@@ -582,28 +577,18 @@ function Inspector(props) {
                                         {media !== "none" && (
                                             <>
                                                 {media === "icon" && (
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Select Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            onChange={(icon) =>
-                                                                setAttributes({
-                                                                    selectedIcon: icon,
-                                                                })
-                                                            }
-                                                            value={selectedIcon}
-                                                            appendTo="body"
-                                                            isMulti={false}
-                                                        />
-                                                    </BaseControl>
+                                                    <EBIconPicker
+                                                        value={infoboxIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                infoboxIcon: icon,
+                                                            })
+                                                        }
+                                                    />
                                                 )}
 
                                                 {media === "icon" &&
-                                                    selectedIcon && (
+                                                    infoboxIcon && (
                                                         <ResponsiveRangeController
                                                             baseLabel={__(
                                                                 "Icon Size",
@@ -658,144 +643,144 @@ function Inspector(props) {
 
                                                 {(media === "number" ||
                                                     media === "icon") && (
-                                                    <>
-                                                        <ColorControl
-                                                            label={__(
-                                                                "Color",
-                                                                "essential-blocks"
-                                                            )}
-                                                            color={numIconColor}
-                                                            onChange={(
-                                                                numIconColor
-                                                            ) =>
-                                                                setAttributes({
-                                                                    numIconColor,
-                                                                })
-                                                            }
-                                                        />
+                                                        <>
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={numIconColor}
+                                                                onChange={(
+                                                                    numIconColor
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        numIconColor,
+                                                                    })
+                                                                }
+                                                            />
 
-                                                        <ResponsiveDimensionsControl
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
-                                                            controlName={
-                                                                mediaBackground
-                                                            }
-                                                            baseLabel="Padding"
-                                                        />
+                                                            <ResponsiveDimensionsControl
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                controlName={
+                                                                    mediaBackground
+                                                                }
+                                                                baseLabel="Padding"
+                                                            />
 
-                                                        <ToggleControl
-                                                            label={__(
-                                                                "Use Background",
-                                                                "essential-blocks"
-                                                            )}
-                                                            checked={
-                                                                useNumIconBg
-                                                            }
-                                                            onChange={() =>
-                                                                setAttributes({
-                                                                    useNumIconBg: !useNumIconBg,
-                                                                })
-                                                            }
-                                                        />
+                                                            <ToggleControl
+                                                                label={__(
+                                                                    "Use Background",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                checked={
+                                                                    useNumIconBg
+                                                                }
+                                                                onChange={() =>
+                                                                    setAttributes({
+                                                                        useNumIconBg: !useNumIconBg,
+                                                                    })
+                                                                }
+                                                            />
 
-                                                        {useNumIconBg && (
-                                                            <>
-                                                                <BaseControl
-                                                                    label={__(
-                                                                        "Background Type",
-                                                                        "essential-blocks"
-                                                                    )}
-                                                                >
-                                                                    <ButtonGroup id="eb-infobox-infobox-background">
-                                                                        {ICON_IMAGE_BG_TYPES.map(
-                                                                            (
-                                                                                {
-                                                                                    value,
-                                                                                    label,
-                                                                                },
-                                                                                index
-                                                                            ) => (
-                                                                                <Button
-                                                                                    key={
-                                                                                        index
+                                                            {useNumIconBg && (
+                                                                <>
+                                                                    <BaseControl
+                                                                        label={__(
+                                                                            "Background Type",
+                                                                            "essential-blocks"
+                                                                        )}
+                                                                    >
+                                                                        <ButtonGroup id="eb-infobox-infobox-background">
+                                                                            {ICON_IMAGE_BG_TYPES.map(
+                                                                                (
+                                                                                    {
+                                                                                        value,
+                                                                                        label,
+                                                                                    },
+                                                                                    index
+                                                                                ) => (
+                                                                                    <Button
+                                                                                        key={
+                                                                                            index
+                                                                                        }
+                                                                                        isPrimary={
+                                                                                            numIconBgType ===
+                                                                                            value
+                                                                                        }
+                                                                                        isSecondary={
+                                                                                            numIconBgType !==
+                                                                                            value
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            setAttributes(
+                                                                                                {
+                                                                                                    numIconBgType: value,
+                                                                                                }
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            label
+                                                                                        }
+                                                                                    </Button>
+                                                                                )
+                                                                            )}
+                                                                        </ButtonGroup>
+                                                                    </BaseControl>
+
+                                                                    {numIconBgType ===
+                                                                        "fill" && (
+                                                                            <ColorControl
+                                                                                label={__(
+                                                                                    "Background Color",
+                                                                                    "essential-blocks"
+                                                                                )}
+                                                                                color={
+                                                                                    numIconBgColor
+                                                                                }
+                                                                                onChange={(
+                                                                                    numIconBgColor
+                                                                                ) =>
+                                                                                    setAttributes(
+                                                                                        {
+                                                                                            numIconBgColor,
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                            />
+                                                                        )}
+
+                                                                    {numIconBgType ===
+                                                                        "gradient" && (
+                                                                            <PanelBody
+                                                                                title={__(
+                                                                                    "Gradient",
+                                                                                    "essential-blocks"
+                                                                                )}
+                                                                            // initialOpen={false}
+                                                                            >
+                                                                                <GradientColorControl
+                                                                                    gradientColor={
+                                                                                        numIconBgGradient
                                                                                     }
-                                                                                    isPrimary={
-                                                                                        numIconBgType ===
-                                                                                        value
-                                                                                    }
-                                                                                    isSecondary={
-                                                                                        numIconBgType !==
-                                                                                        value
-                                                                                    }
-                                                                                    onClick={() =>
+                                                                                    onChange={(
+                                                                                        numIconBgGradient
+                                                                                    ) =>
                                                                                         setAttributes(
                                                                                             {
-                                                                                                numIconBgType: value,
+                                                                                                numIconBgGradient,
                                                                                             }
                                                                                         )
                                                                                     }
-                                                                                >
-                                                                                    {
-                                                                                        label
-                                                                                    }
-                                                                                </Button>
-                                                                            )
+                                                                                />
+                                                                            </PanelBody>
                                                                         )}
-                                                                    </ButtonGroup>
-                                                                </BaseControl>
-
-                                                                {numIconBgType ===
-                                                                    "fill" && (
-                                                                    <ColorControl
-                                                                        label={__(
-                                                                            "Background Color",
-                                                                            "essential-blocks"
-                                                                        )}
-                                                                        color={
-                                                                            numIconBgColor
-                                                                        }
-                                                                        onChange={(
-                                                                            numIconBgColor
-                                                                        ) =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    numIconBgColor,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                )}
-
-                                                                {numIconBgType ===
-                                                                    "gradient" && (
-                                                                    <PanelBody
-                                                                        title={__(
-                                                                            "Gradient",
-                                                                            "essential-blocks"
-                                                                        )}
-                                                                        // initialOpen={false}
-                                                                    >
-                                                                        <GradientColorControl
-                                                                            gradientColor={
-                                                                                numIconBgGradient
-                                                                            }
-                                                                            onChange={(
-                                                                                numIconBgGradient
-                                                                            ) =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        numIconBgGradient,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                    </PanelBody>
-                                                                )}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                )}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    )}
 
                                                 {media === "image" &&
                                                     !imageUrl && (
@@ -1249,9 +1234,9 @@ function Inspector(props) {
                                                         resRequiredProps
                                                     }
                                                     forButton
-                                                    // noOverlay
-                                                    // noMainBgi
-                                                    // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                                // noOverlay
+                                                // noMainBgi
+                                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                                 />
                                             </PanelBody>
 
@@ -1264,8 +1249,8 @@ function Inspector(props) {
                                                     resRequiredProps={
                                                         resRequiredProps
                                                     }
-                                                    // noShadow
-                                                    // noBorder
+                                                // noShadow
+                                                // noBorder
                                                 />
                                             </PanelBody>
                                             <PanelBody
@@ -1339,9 +1324,9 @@ function Inspector(props) {
                                         <BackgroundControl
                                             controlName={infoWrapBg}
                                             resRequiredProps={resRequiredProps}
-                                            // noOverlay
-                                            // noMainBgi
-                                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                        // noOverlay
+                                        // noMainBgi
+                                        // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                         />
                                     </PanelBody>
 
@@ -1352,8 +1337,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={wrpBdShadow}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

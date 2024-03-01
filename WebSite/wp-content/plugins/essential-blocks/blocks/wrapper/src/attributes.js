@@ -7,6 +7,8 @@ import {
     SHAPE_DIVIDER,
     SHAPE_DIVIDER_TOP,
     SHAPE_DIVIDER_BOTTOM,
+    HEIGHT_UNIT_TYPES,
+    WRAPPER_HEIGHT,
 } from "./constants";
 
 // import {
@@ -52,8 +54,17 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    useCustomHeight: {
+        type: "boolean",
+        default: false,
+    },
+    contentAlign: {
+        type: "string",
+        default: "flex-start",
+    },
     // responsive range controller
     ...generateResponsiveRangeAttributes(WRAPPER_WIDTH),
+    ...generateResponsiveRangeAttributes(WRAPPER_HEIGHT),
     // background control
     ...generateBackgroundAttributes(WRAPPER_BACKGROUND),
     // border shadow control

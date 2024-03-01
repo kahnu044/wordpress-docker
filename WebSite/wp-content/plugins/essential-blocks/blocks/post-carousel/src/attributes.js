@@ -105,11 +105,11 @@ const attributes = {
     },
     titleColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-heading-color)",
     },
     titleHoverColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-link-color)",
     },
     titleColorStyle: {
         type: "string",
@@ -132,7 +132,7 @@ const attributes = {
     },
     contentColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-text-color)",
     },
     contentTextAlign: {
         type: "string",
@@ -156,7 +156,7 @@ const attributes = {
     },
     readmoreColor: {
         type: "string",
-        default: "#3d8fd4",
+        default: "var(--eb-global-tertiary-color)",
     },
     readmoreBGColor: {
         type: "string",
@@ -167,7 +167,7 @@ const attributes = {
     },
     readmoreHoverColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-secondary-color)",
     },
     readmoreBGHoverColor: {
         type: "string",
@@ -214,11 +214,11 @@ const attributes = {
     },
     authorMetaColor: {
         type: "string",
-        default: "#3d8fd4",
+        default: "var(--eb-global-secondary-color)",
     },
     authorMetaHoverColor: {
         type: "string",
-        default: "#549edc",
+        default: "var(--eb-global-primary-color)",
     },
     metaColorType: {
         type: "string",
@@ -226,11 +226,11 @@ const attributes = {
     },
     commonMetaColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-text-color)",
     },
     commonMetaHoverColor: {
         type: "string",
-        default: "#2673FF",
+        default: "var(--eb-global-text-color)",
     },
     commonMetaDividerColor: {
         type: "string",
@@ -238,38 +238,40 @@ const attributes = {
     },
     categoryMetaColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-button-text-color)",
     },
     categoryMetaHoverColor: {
         type: "string",
-        default: "#2673FF",
+        default: "var(--eb-global-button-text-color)",
     },
     categoryMetaDividerColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-secondary-text-color)",
     },
     tagMetaColor: {
         type: "string",
-        default: "#3f6ddc",
+        default: "var(--eb-global-button-text-color)",
     },
     tagMetaHoverColor: {
         type: "string",
-        default: "#333",
+        default: "var(--eb-global-button-text-color)",
     },
     tagMetaBgColor: {
         type: "string",
+        default: "var(--eb-global-tertiary-color)",
     },
     tagMetaBgHoverColor: {
         type: "string",
+        default: "var(--eb-global-secondary-color)",
     },
     tagMetaDividerColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-secondary-color)",
     },
 
     dateMetaColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-tertiary-color)",
     },
 
     // slider
@@ -326,19 +328,19 @@ const attributes = {
     },
     arrowColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-secondary-color)",
     },
     arrowHoverColor: {
         type: "string",
-        default: "#000000",
+        default: "var(--eb-global-primary-color)",
     },
     dotsColor: {
         type: "string",
-        default: "#61b6f1",
+        default: "var(--eb-global-secondary-color)",
     },
     dotsActiveColor: {
         type: "string",
-        default: "#2673FF",
+        default: "var(--eb-global-primary-color)",
     },
 
     dotPreset: {

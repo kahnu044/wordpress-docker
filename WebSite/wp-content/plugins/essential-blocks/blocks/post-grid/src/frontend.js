@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import apiFetch from "@wordpress/api-fetch";
+import { conPaddingConst } from "../../accordion/src/constants/dimensionsConstants";
 const rootURL = EssentialBlocksLocalize
     ? EssentialBlocksLocalize.rest_rootURL
     : false;
@@ -62,6 +63,9 @@ function ebPaginationFunc(queryParamString) {
                             ? queryParamString
                             : "";
 
+                        const attributes = JSON.parse(queryString.attributes);
+                        const version = attributes?.version ? attributes?.version : '';
+
                         apiFetch({
                             path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryFilter}&pageNumber=${pageNumber}`,
                         }).then((result) => {
@@ -79,14 +83,21 @@ function ebPaginationFunc(queryParamString) {
                                         ".ebpostgrid-pagination"
                                     ).innerHTML = "";
                                 } else {
-                                    this.closest(".ebpostgrid-pagination")
-                                        ? this.closest(
-                                              ".ebpostgrid-pagination"
-                                          ).insertAdjacentHTML(
-                                              "beforebegin",
-                                              result
-                                          )
-                                        : "";
+                                    if ('v2' === version) {
+                                        const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper');
+                                        if (selector) {
+                                            selector.insertAdjacentHTML("beforeend", result);
+                                        }
+                                    } else {
+                                        this.closest(".ebpostgrid-pagination")
+                                            ? this.closest(
+                                                ".ebpostgrid-pagination"
+                                            ).insertAdjacentHTML(
+                                                "beforebegin",
+                                                result
+                                            )
+                                            : "";
+                                    }
                                 }
                             } else {
                                 this.closest(".eb-post-grid-wrapper")
@@ -94,14 +105,21 @@ function ebPaginationFunc(queryParamString) {
                                     .forEach((post) => {
                                         post.remove();
                                     });
-                                this.closest(".ebpostgrid-pagination")
-                                    ? this.closest(
-                                          ".ebpostgrid-pagination"
-                                      ).insertAdjacentHTML(
-                                          "beforebegin",
-                                          result
-                                      )
-                                    : "";
+                                if ('v2' === version) {
+                                    const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper')
+                                    if (selector) {
+                                        selector.innerHTML = result;
+                                    }
+                                } else {
+                                    this.closest(".ebpostgrid-pagination")
+                                        ? this.closest(
+                                            ".ebpostgrid-pagination"
+                                        ).insertAdjacentHTML(
+                                            "beforebegin",
+                                            result
+                                        )
+                                        : "";
+                                }
                                 if (eb_hasClass(this, "ebpg-pagination-item")) {
                                     this.closest(".ebpostgrid-pagination")
                                         .querySelectorAll(
@@ -271,9 +289,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
             `.ebpg-category-filter-list li`
         );
         filterItems.forEach((item) => {
-            if (item.dataset.ebpgcategory === "all") {
-                item.classList.add("active");
-            }
             item.addEventListener("click", function (event) {
                 const category = event.target.getAttribute("data-ebpgCategory");
                 let queryParamString = "";
@@ -283,8 +298,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     queryParamString = `&taxonomy=${taxonomy}&category=${category}`;
                 }
 
-                const queryString = this.closest(".eb-post-grid-wrapper")
-                    .dataset;
+                const queryString = this.closest(".eb-post-grid-wrapper").dataset;
+                const attributes = JSON.parse(queryString.attributes);
+                const version = attributes?.version ? attributes?.version : '';
 
                 apiFetch({
                     path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryParamString}`,
@@ -330,29 +346,33 @@ window.addEventListener("DOMContentLoaded", (event) => {
                             apiFetch({
                                 path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryParamString}`,
                             }).then((result) => {
-                                this.closest(".eb-post-grid-wrapper")
-                                    .querySelectorAll(".ebpg-grid-post")
+                                this.closest(".eb-post-grid-wrapper").querySelectorAll(".ebpg-grid-post")
                                     .forEach((post) => {
                                         post.remove();
                                     });
                                 if (
-                                    this.closest(
-                                        ".eb-post-grid-wrapper"
-                                    ).querySelector("p")
+                                    this.closest(".eb-post-grid-wrapper").querySelector("p")
                                 ) {
-                                    this.closest(".eb-post-grid-wrapper")
-                                        .querySelector("p")
-                                        .remove();
+                                    this.closest(".eb-post-grid-wrapper").querySelector("p").remove();
+                                }
+                                // need to change for v2
+                                if ('v2' === version) {
+                                    const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper')
+                                    if (selector) {
+                                        selector.innerHTML = result;
+                                    }
+                                    else {
+                                        const newSelector = document.createElement("div");
+                                        newSelector.className = "eb-post-grid-posts-wrapper";
+                                        newSelector.innerHTML = result;
+                                        this.closest(".eb-post-grid-category-filter").insertAdjacentHTML("afterend", newSelector.outerHTML);
+                                    }
+                                } else {
+                                    this.closest(".eb-post-grid-category-filter").insertAdjacentHTML("afterend", result);
                                 }
 
-                                this.closest(
-                                    ".eb-post-grid-category-filter"
-                                ).insertAdjacentHTML("afterend", result);
-
                                 this.closest(".eb-post-grid-category-filter")
-                                    .querySelectorAll(
-                                        ".ebpg-category-filter-list-item"
-                                    )
+                                    .querySelectorAll(".ebpg-category-filter-list-item")
                                     .forEach((item) => {
                                         item.classList.remove("active");
                                     });

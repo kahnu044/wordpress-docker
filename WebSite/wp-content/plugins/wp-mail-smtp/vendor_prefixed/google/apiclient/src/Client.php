@@ -301,9 +301,10 @@ class Client
      * The authorization endpoint allows the user to first
      * authenticate, and then grant/deny the access request.
      * @param string|array $scope The scope is expressed as an array or list of space-delimited strings.
+     * @param array $queryParams Querystring params to add to the authorization URL.
      * @return string
      */
-    public function createAuthUrl($scope = null)
+    public function createAuthUrl($scope = null, array $queryParams = [])
     {
         if (empty($scope)) {
             $scope = $this->prepareScopes();
@@ -315,7 +316,7 @@ class Client
         $approvalPrompt = $this->config['prompt'] ? null : $this->config['approval_prompt'];
         // include_granted_scopes should be string "true", string "false", or null
         $includeGrantedScopes = $this->config['include_granted_scopes'] === null ? null : \var_export($this->config['include_granted_scopes'], \true);
-        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'redirect_uri' => $this->config['redirect_uri'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]);
+        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'redirect_uri' => $this->config['redirect_uri'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]) + $queryParams;
         // If the list of scopes contains plus.login, add request_visible_actions
         // to auth URL.
         $rva = $this->config['request_visible_actions'];

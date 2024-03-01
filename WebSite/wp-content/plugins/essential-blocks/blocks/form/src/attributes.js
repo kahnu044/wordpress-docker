@@ -103,10 +103,7 @@ const attributes = {
     },
     notificationType: {
         type: "string",
-        default:
-            EssentialBlocksLocalize?.is_pro_active === "true"
-                ? "emailsave"
-                : "email",
+        default: EssentialBlocksLocalize?.is_pro_active === "true" ? "emailsave" : "email",
     },
     confirmationType: {
         type: "string",
@@ -139,7 +136,7 @@ const attributes = {
     },
     labelColor: {
         type: "string",
-        default: "#1D2939",
+        default: "var(--eb-global-heading-color)",
     },
     labelAlign: {
         type: "string",
@@ -150,18 +147,17 @@ const attributes = {
         type: "string",
         default: "#D92D20",
     },
-
     fieldsColor: {
         type: "string",
-        default: "#495057",
+        default: "var(--eb-global-text-color)"
     },
     fieldsPlaceholderColor: {
         type: "string",
-        default: "#D0D5DD",
+        default: "var(--eb-global-tertiary-color)",
     },
     fieldsBgColor: {
         type: "string",
-        default: "#fff",
+        default: "var(--eb-global-background-color)",
     },
 
     buttonType: {
@@ -170,19 +166,19 @@ const attributes = {
     },
     btnColor: {
         type: "string",
-        default: "#fff",
+        default: "var(--eb-global-button-text-color)",
     },
     btnHvColor: {
         type: "string",
-        default: "#fff",
+        default: "var(--eb-global-button-text-color)",
     },
     btnBgColor: {
         type: "string",
-        default: "#475467",
+        default: "var(--eb-global-button-background-color)",
     },
     btnBgHvColor: {
         type: "string",
-        default: "#5a677b",
+        default: "var(--eb-global-tertiary-color)",
     },
     buttonText: {
         type: "string",
@@ -243,7 +239,7 @@ const attributes = {
     },
     errorBgColor: {
         type: "string",
-        default: "#FFECEA",
+        default: "var(--eb-global-background-color)",
     },
 
     radioType: {
@@ -252,7 +248,7 @@ const attributes = {
     },
     radioColor: {
         type: "string",
-        default: "#172B4D",
+        default: "var(--eb-global-primary-color)",
     },
     radioBgColor: {
         type: "string",
@@ -260,11 +256,11 @@ const attributes = {
     },
     radioBrColor: {
         type: "string",
-        default: "#98A2B3",
+        default: "var(--eb-global-primary-color)",
     },
     radioBrCheckedColor: {
         type: "string",
-        default: "#000",
+        default: "var(--eb-global-primary-color)",
     },
     radioBorder: {
         type: "number",
@@ -277,7 +273,7 @@ const attributes = {
     },
     checkboxColor: {
         type: "string",
-        default: "#172B4D",
+        default: "var(--eb-global-primary-color)",
     },
     checkboxBgColor: {
         type: "string",
@@ -285,11 +281,11 @@ const attributes = {
     },
     checkboxBrColor: {
         type: "string",
-        default: "#98A2B3",
+        default: "var(--eb-global-primary-color)",
     },
     checkboxBrCheckedColor: {
         type: "string",
-        default: "#000",
+        default: "var(--eb-global-primary-color)",
     },
     checkboxBorder: {
         type: "number",
@@ -297,7 +293,7 @@ const attributes = {
     },
     dateBgColor: {
         type: "string",
-        default: "#7A5AF8",
+        default: "var(--eb-global-background-color)",
     },
     dateSelectedColor: {
         type: "string",
@@ -310,7 +306,7 @@ const attributes = {
     },
     fieldsValidationColor: {
         type: "string",
-        default: "#ca3521",
+        default: "var(--eb-global-secondary-color)",
     },
     fieldsValidationBorderColor: {
         type: "string",
@@ -335,7 +331,7 @@ const attributes = {
     },
     inputIconColor: {
         type: "string",
-        default: "#CBCBCB",
+        default: "var(--eb-global-primary-color)",
     },
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(prefixObjs)),
@@ -353,7 +349,7 @@ const attributes = {
 
     ...generateDimensionsAttributes(BTN_PADDING),
     ...generateBorderShadowAttributes(BTN_BORDER, {
-        defaultBdrColor: "#475467",
+        defaultBdrColor: "var(--eb-global-tertiary-color)",
         defaultBdrStyle: "solid",
         bdrDefaults: {
             top: 0,
@@ -405,7 +401,7 @@ const attributes = {
         isLinked: true,
     }),
     ...generateBorderShadowAttributes(FIELDS_BORDER, {
-        defaultBdrColor: "#98A2B3",
+        defaultBdrColor: "var(--eb-global-tertiary-color)",
         defaultBdrStyle: "solid",
         bdrDefaults: {
             top: 1,

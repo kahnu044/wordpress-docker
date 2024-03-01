@@ -29,10 +29,8 @@ const {
     TypographyDropdown,
     AdvancedControls,
     SortableControl,
-    faIcons,
+    EBIconPicker
 } = EBControls;
-
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 import objAttributes from "./attributes";
 
@@ -257,24 +255,14 @@ function Inspector(props) {
 
                                         {isIcon && (
                                             <>
-                                                <BaseControl
-                                                    label={__(
-                                                        "Select Icon",
-                                                        "essential-blocks"
-                                                    )}
-                                                >
-                                                    <FontIconPicker
-                                                        icons={faIcons}
-                                                        value={icon}
-                                                        onChange={(icon) =>
-                                                            setAttributes({
-                                                                icon,
-                                                            })
-                                                        }
-                                                        appendTo="body"
-                                                        closeOnSelect
-                                                    />
-                                                </BaseControl>
+                                                <EBIconPicker
+                                                    value={icon}
+                                                    onChange={(icon) =>
+                                                        setAttributes({
+                                                            icon,
+                                                        })
+                                                    }
+                                                />
                                             </>
                                         )}
                                     </PanelBody>

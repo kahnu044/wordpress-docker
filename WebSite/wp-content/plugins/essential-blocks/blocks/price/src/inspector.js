@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     Button,
@@ -122,18 +122,9 @@ function Inspector(props) {
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "Settings",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                    >
+                                    <PanelBody title={__("Settings", "essential-blocks")} initialOpen={true}>
                                         <TextControl
-                                            label={__(
-                                                "Price",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Price", "essential-blocks")}
                                             value={mainPrice}
                                             onChange={(newPrice) =>
                                                 setAttributes({
@@ -144,9 +135,7 @@ function Inspector(props) {
                                         <TextControl
                                             label={__("Price Period (per)")}
                                             value={pricePeriod}
-                                            onChange={(pricePeriod) =>
-                                                setAttributes({ pricePeriod })
-                                            }
+                                            onChange={(pricePeriod) => setAttributes({ pricePeriod })}
                                         />
                                         <ToggleControl
                                             label={__("On Sale?")}
@@ -160,10 +149,7 @@ function Inspector(props) {
                                         {showOnSale && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Sale Price",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Sale Price", "essential-blocks")}
                                                     value={salePrice}
                                                     onChange={(newsalePrice) =>
                                                         setAttributes({
@@ -172,13 +158,9 @@ function Inspector(props) {
                                                     }
                                                 />
                                                 <TextControl
-                                                    label={__(
-                                                        "Sale Price Period (per)"
-                                                    )}
+                                                    label={__("Sale Price Period (per)")}
                                                     value={salePricePeriod}
-                                                    onChange={(
-                                                        salePricePeriod
-                                                    ) =>
+                                                    onChange={(salePricePeriod) =>
                                                         setAttributes({
                                                             salePricePeriod,
                                                         })
@@ -188,10 +170,7 @@ function Inspector(props) {
                                             </>
                                         )}
                                         <TextControl
-                                            label={__(
-                                                "Price Currency",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Price Currency", "essential-blocks")}
                                             value={priceCurrency}
                                             onChange={(newPriceCurrency) =>
                                                 setAttributes({
@@ -200,10 +179,7 @@ function Inspector(props) {
                                             }
                                         />
                                         <SelectControl
-                                            label={__(
-                                                "Currency Placement",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Currency Placement", "essential-blocks")}
                                             value={currencyPlacement}
                                             options={[
                                                 {
@@ -223,10 +199,7 @@ function Inspector(props) {
                                         />
                                         <Divider />
                                         <SelectControl
-                                            label={__(
-                                                "Price View",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Price View", "essential-blocks")}
                                             value={priceView}
                                             options={PRICE_VIEW}
                                             onChange={(newPriceView) =>
@@ -241,57 +214,34 @@ function Inspector(props) {
 
                             {tab.name === "styles" && (
                                 <>
-                                    <PanelBody
-                                        title={__("Styles", "essential-blocks")}
-                                        initialOpen={true}
-                                    >
+                                    <PanelBody title={__("Styles", "essential-blocks")} initialOpen={true}>
                                         <BaseControl>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "Alignment",
-                                                    "essential-blocks"
-                                                )}
-                                            </h3>
+                                            <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
                                             <ButtonGroup>
-                                                {ALIGNMENT.map(
-                                                    (item, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isPrimary={
-                                                                priceAlignment ===
-                                                                item.value
-                                                            }
-                                                            isSecondary={
-                                                                priceAlignment !==
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    priceAlignment:
-                                                                        item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    )
-                                                )}
+                                                {ALIGNMENT.map((item, index) => (
+                                                    <Button
+                                                        key={index}
+                                                        isPrimary={priceAlignment === item.value}
+                                                        isSecondary={priceAlignment !== item.value}
+                                                        onClick={() =>
+                                                            setAttributes({
+                                                                priceAlignment: item.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {item.label}
+                                                    </Button>
+                                                ))}
                                             </ButtonGroup>
                                         </BaseControl>
                                         <Divider />
                                         <BaseControl>
                                             <h3 className="eb-control-title">
-                                                {__(
-                                                    "Original Price",
-                                                    "essential-blocks"
-                                                )}
+                                                {__("Original Price", "essential-blocks")}
                                             </h3>
                                         </BaseControl>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={priceTextColor}
                                             onChange={(priceTextColor) =>
                                                 setAttributes({
@@ -300,47 +250,29 @@ function Inspector(props) {
                                             }
                                         />
                                         <TypographyDropdown
-                                            baseLabel={__(
-                                                "Typography",
-                                                "essential-blocks"
-                                            )}
-                                            typographyPrefixConstant={
-                                                typoPrefix_original_price
-                                            }
+                                            baseLabel={__("Typography", "essential-blocks")}
+                                            typographyPrefixConstant={typoPrefix_original_price}
                                             resRequiredProps={resRequiredProps}
                                         />
                                         <Divider />
                                         <BaseControl>
                                             <h3 className="eb-control-title">
-                                                {__(
-                                                    "Pricing Period",
-                                                    "essential-blocks"
-                                                )}
+                                                {__("Pricing Period", "essential-blocks")}
                                             </h3>
                                         </BaseControl>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={pricingPeriodTextColor}
                                             F
-                                            onChange={(
-                                                pricingPeriodTextColor
-                                            ) =>
+                                            onChange={(pricingPeriodTextColor) =>
                                                 setAttributes({
                                                     pricingPeriodTextColor,
                                                 })
                                             }
                                         />
                                         <TypographyDropdown
-                                            baseLabel={__(
-                                                "Typography",
-                                                "essential-blocks"
-                                            )}
-                                            typographyPrefixConstant={
-                                                typoPrefix_pricing_period
-                                            }
+                                            baseLabel={__("Typography", "essential-blocks")}
+                                            typographyPrefixConstant={typoPrefix_pricing_period}
                                             resRequiredProps={resRequiredProps}
                                         />
                                         {showOnSale && (
@@ -348,75 +280,43 @@ function Inspector(props) {
                                                 <Divider />
                                                 <BaseControl>
                                                     <h3 className="eb-control-title">
-                                                        {__(
-                                                            "Sale Price",
-                                                            "essential-blocks"
-                                                        )}
+                                                        {__("Sale Price", "essential-blocks")}
                                                     </h3>
                                                 </BaseControl>
                                                 <ColorControl
-                                                    label={__(
-                                                        "Color",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Color", "essential-blocks")}
                                                     color={salePriceTextColor}
-                                                    onChange={(
-                                                        salePriceTextColor
-                                                    ) =>
+                                                    onChange={(salePriceTextColor) =>
                                                         setAttributes({
                                                             salePriceTextColor,
                                                         })
                                                     }
                                                 />
                                                 <TypographyDropdown
-                                                    baseLabel={__(
-                                                        "Typography",
-                                                        "essential-blocks"
-                                                    )}
-                                                    typographyPrefixConstant={
-                                                        typoPrefix_saleprice
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    baseLabel={__("Typography", "essential-blocks")}
+                                                    typographyPrefixConstant={typoPrefix_saleprice}
+                                                    resRequiredProps={resRequiredProps}
                                                 />
                                                 <Divider />
                                                 <BaseControl>
                                                     <h3 className="eb-control-title">
-                                                        {__(
-                                                            "Sale Pricing Period",
-                                                            "essential-blocks"
-                                                        )}
+                                                        {__("Sale Pricing Period", "essential-blocks")}
                                                     </h3>
                                                 </BaseControl>
                                                 <ColorControl
-                                                    label={__(
-                                                        "Color",
-                                                        "essential-blocks"
-                                                    )}
-                                                    color={
-                                                        salePricingPeriodTextColor
-                                                    }
+                                                    label={__("Color", "essential-blocks")}
+                                                    color={salePricingPeriodTextColor}
                                                     F
-                                                    onChange={(
-                                                        salePricingPeriodTextColor
-                                                    ) =>
+                                                    onChange={(salePricingPeriodTextColor) =>
                                                         setAttributes({
                                                             salePricingPeriodTextColor,
                                                         })
                                                     }
                                                 />
                                                 <TypographyDropdown
-                                                    baseLabel={__(
-                                                        "Typography",
-                                                        "essential-blocks"
-                                                    )}
-                                                    typographyPrefixConstant={
-                                                        typoPrefix_sale_pricing_period
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    baseLabel={__("Typography", "essential-blocks")}
+                                                    typographyPrefixConstant={typoPrefix_sale_pricing_period}
+                                                    resRequiredProps={resRequiredProps}
                                                 />
                                             </>
                                         )}
@@ -438,22 +338,13 @@ function Inspector(props) {
                                             baseLabel="Padding"
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__(
-                                            "Background",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WRAPPER_BG}
                                             resRequiredProps={resRequiredProps}
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
@@ -462,10 +353,7 @@ function Inspector(props) {
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

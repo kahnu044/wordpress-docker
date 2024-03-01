@@ -13,7 +13,7 @@ class Pagination extends ThirdPartyIntegration {
     }
 
     /**
-     * Get Google Map API
+     * Get Post Grid Pagination
      */
     public function post_grid_block_pagination_callback() {
         if ( ! wp_verify_nonce( $_POST['post_grid_pagination_nonce'], 'eb-pagination-nonce' ) ) {

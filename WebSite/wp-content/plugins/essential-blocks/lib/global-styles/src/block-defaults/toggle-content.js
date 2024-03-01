@@ -3,15 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
-import {
-    PanelBody,
-    RadioControl,
-    RangeControl,
-    SelectControl,
-    ToggleControl,
-    TabPanel,
-} from "@wordpress/components";
+import { PanelBody, RadioControl, RangeControl, SelectControl, ToggleControl, TabPanel } from "@wordpress/components";
 /**
  * Internal dependencies
  *
@@ -160,79 +152,31 @@ function ToggleContent(props) {
         objAttributes,
     };
 
-    let labelColors = [
-        {
-            value: primaryLabelColor,
-            onChange: (primaryLabelColor) =>
-                handleBlockDefault({ primaryLabelColor }),
-            label: "Primary Text",
-        },
-        {
-            value: secondaryLabelColor,
-            onChange: (secondaryLabelColor) =>
-                handleBlockDefault({ secondaryLabelColor }),
-            label: "Secondary Text",
-        },
-        {
-            value: activeColor,
-            onChange: (activeColor) => handleBlockDefault({ activeColor }),
-            label: "Active Text Color",
-        },
-    ];
-
-    // Add active background color controller for text type switch
-    if (switchStyle === "text") {
-        labelColors = [
-            ...labelColors,
-            {
-                value: backgroundColor,
-                onChange: (backgroundColor) =>
-                    handleBlockDefault({ backgroundColor }),
-                label: "Background",
-            },
-            {
-                value: activeBg,
-                onChange: (activeBg) => handleBlockDefault({ activeBg }),
-                label: "Active Background",
-            },
-        ];
-    }
-
     return (
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         <RadioControl
                             label={__("Initial Content", "essential-blocks")}
                             selected={initialContent}
-                            onChange={(initialContent) =>
-                                handleBlockDefault({ initialContent })
-                            }
+                            onChange={(initialContent) => handleBlockDefault({ initialContent })}
                             options={INITIAL_CONTENT}
                         />
 
                         <SelectControl
                             label={__("Switch Type", "essential-blocks")}
                             value={switchStyle}
-                            onChange={(switchStyle) =>
-                                handleBlockDefault({ switchStyle })
-                            }
+                            onChange={(switchStyle) => handleBlockDefault({ switchStyle })}
                             options={SWITCH_STYLES}
                         />
 
-                        {(switchStyle === "rounded" ||
-                            switchStyle === "reactangle") && (
+                        {(switchStyle === "rounded" || switchStyle === "reactangle") && (
                             <SelectControl
                                 label={__("Switch Size", "essential-blocks")}
                                 value={switchSize}
                                 options={SWITCH_SIZE}
-                                onChange={(switchSize) =>
-                                    handleBlockDefault({ switchSize })
-                                }
+                                onChange={(switchSize) => handleBlockDefault({ switchSize })}
                             />
                         )}
 
@@ -240,10 +184,7 @@ function ToggleContent(props) {
                             <>
                                 <ResponsiveRangeController
                                     noUnits
-                                    baseLabel={__(
-                                        "Button Height",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Button Height", "essential-blocks")}
                                     controlName={rangeButtonHeight}
                                     resRequiredProps={resRequiredProps}
                                     min={10}
@@ -252,10 +193,7 @@ function ToggleContent(props) {
                                 />
 
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Button Width",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Button Width", "essential-blocks")}
                                     controlName={rangeButtonWidth}
                                     resRequiredProps={resRequiredProps}
                                     min={10}
@@ -270,9 +208,7 @@ function ToggleContent(props) {
                                 label={__("Sepetator Type", "essential-blocks")}
                                 value={seperatorType}
                                 options={SEPERATOR_TYPE}
-                                onChange={(seperatorType) =>
-                                    handleBlockDefault({ seperatorType })
-                                }
+                                onChange={(seperatorType) => handleBlockDefault({ seperatorType })}
                             />
                         )}
 
@@ -285,8 +221,7 @@ function ToggleContent(props) {
                             step={1}
                         />
 
-                        {(switchStyle === "rectangle" ||
-                            switchStyle === "rounded") && (
+                        {(switchStyle === "rectangle" || switchStyle === "rounded") && (
                             <>
                                 <UnitControl
                                     selectedUnit={labelSpaceUnit}
@@ -294,20 +229,13 @@ function ToggleContent(props) {
                                         { label: "px", value: "px" },
                                         { label: "%", value: "%" },
                                     ]}
-                                    onClick={(labelSpaceUnit) =>
-                                        handleBlockDefault({ labelSpaceUnit })
-                                    }
+                                    onClick={(labelSpaceUnit) => handleBlockDefault({ labelSpaceUnit })}
                                 />
 
                                 <RangeControl
-                                    label={__(
-                                        "Label Space",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Label Space", "essential-blocks")}
                                     value={labelSpace}
-                                    onChange={(labelSpace) =>
-                                        handleBlockDefault({ labelSpace })
-                                    }
+                                    onChange={(labelSpace) => handleBlockDefault({ labelSpace })}
                                 />
                             </>
                         )}
@@ -319,78 +247,71 @@ function ToggleContent(props) {
                         />
                     </PanelBody>
                     <PanelBody
-                        title={__(
-                            `${
-                                switchStyle === "text"
-                                    ? "Colors Style"
-                                    : "Label Colors Style"
-                            }`
-                        )}
+                        title={__(`${switchStyle === "text" ? "Colors Style" : "Label Colors Style"}`)}
                         initialOpen={false}
                     >
-                        <PanelColorSettings
-                            initialOpen={false}
-                            colorSettings={labelColors}
+                        <ColorControl
+                            label={__("Primary Text", "essential-blocks")}
+                            color={primaryLabelColor}
+                            onChange={(primaryLabelColor) => handleBlockDefault({ primaryLabelColor })}
                         />
+                        <ColorControl
+                            label={__("Secondary Text", "essential-blocks")}
+                            color={secondaryLabelColor}
+                            onChange={(secondaryLabelColor) => handleBlockDefault({ secondaryLabelColor })}
+                        />
+                        <ColorControl
+                            label={__("Active Text Color", "essential-blocks")}
+                            color={activeColor}
+                            onChange={(activeColor) => handleBlockDefault({ activeColor })}
+                        />
+                        {switchStyle === "text" && (
+                            <>
+                                <ColorControl
+                                    label={__("Background", "essential-blocks")}
+                                    color={backgroundColor}
+                                    onChange={(backgroundColor) => handleBlockDefault({ backgroundColor })}
+                                />
+                                <ColorControl
+                                    label={__("Active Background", "essential-blocks")}
+                                    color={activeBg}
+                                    onChange={(activeBg) => handleBlockDefault({ activeBg })}
+                                />
+                            </>
+                        )}
                     </PanelBody>
 
                     {switchStyle !== "text" && (
-                        <PanelBody
-                            title={__(
-                                "Switch Background Style",
-                                "essential-blocks"
-                            )}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Switch Background Style", "essential-blocks")} initialOpen={false}>
                             <ToggleControl
-                                label={__(
-                                    "Gradient Background",
-                                    "essential-blocks"
-                                )}
+                                label={__("Gradient Background", "essential-blocks")}
                                 checked={backgroundType === "gradient"}
                                 onChange={() =>
                                     handleBlockDefault({
-                                        backgroundType:
-                                            backgroundType === "solid"
-                                                ? "gradient"
-                                                : "solid",
+                                        backgroundType: backgroundType === "solid" ? "gradient" : "solid",
                                     })
                                 }
                             />
 
                             {backgroundType === "solid" && (
-                                <PanelColorSettings
-                                    title={__(
-                                        "Background Color",
-                                        "essential-blocks"
-                                    )}
-                                    // initialOpen={false}
-                                    colorSettings={[
-                                        {
-                                            value: backgroundColor,
-                                            onChange: (backgroundColor) =>
-                                                handleBlockDefault({
-                                                    backgroundColor,
-                                                }),
-                                            label: "",
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Background Color", "essential-blocks")}
+                                    color={backgroundColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            backgroundColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
 
                             {backgroundType === "gradient" && (
                                 <PanelBody
-                                    title={__(
-                                        "Background Gradient",
-                                        "essential-blocks"
-                                    )}
+                                    title={__("Background Gradient", "essential-blocks")}
                                     // initialOpen={false}
                                 >
                                     <GradientColorControl
-                                        gradientColor={
-                                            backgroundGradient ||
-                                            "linear-gradient(45deg,#eef2f3,#8e92ab)"
-                                        }
+                                        gradientColor={backgroundGradient || "linear-gradient(45deg,#eef2f3,#8e92ab)"}
                                         onChange={(backgroundGradient) =>
                                             handleBlockDefault({
                                                 backgroundGradient,
@@ -403,62 +324,36 @@ function ToggleContent(props) {
                     )}
 
                     {switchStyle !== "text" && (
-                        <PanelBody
-                            title={__(
-                                "Controller Background",
-                                "essential-blocks"
-                            )}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Controller Background", "essential-blocks")} initialOpen={false}>
                             <ToggleControl
-                                label={__(
-                                    "Gradient Controller",
-                                    "essential-blocks"
-                                )}
+                                label={__("Gradient Controller", "essential-blocks")}
                                 checked={controllerType === "gradient"}
                                 onChange={() =>
                                     handleBlockDefault({
-                                        controllerType:
-                                            controllerType === "solid"
-                                                ? "gradient"
-                                                : "solid",
+                                        controllerType: controllerType === "solid" ? "gradient" : "solid",
                                     })
                                 }
                             />
 
                             {controllerType === "solid" && (
-                                <PanelColorSettings
-                                    title={__(
-                                        "Controller Color",
-                                        "essential-blocks"
-                                    )}
-                                    // initialOpen={false}
-                                    colorSettings={[
-                                        {
-                                            value: controllerColor,
-                                            onChange: (controllerColor) =>
-                                                handleBlockDefault({
-                                                    controllerColor,
-                                                }),
-                                            label: "",
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Controller Color", "essential-blocks")}
+                                    color={controllerColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            controllerColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
 
                             {controllerType === "gradient" && (
                                 <PanelBody
-                                    title={__(
-                                        "Controller Gradient",
-                                        "essential-blocks"
-                                    )}
+                                    title={__("Controller Gradient", "essential-blocks")}
                                     // initialOpen={false}
                                 >
                                     <GradientColorControl
-                                        gradientColor={
-                                            controllerGradient ||
-                                            "linear-gradient(45deg,#eef2f3,#8e92ab)"
-                                        }
+                                        gradientColor={controllerGradient || "linear-gradient(45deg,#eef2f3,#8e92ab)"}
                                         onChange={(controllerGradient) =>
                                             handleBlockDefault({
                                                 controllerGradient,
@@ -470,33 +365,24 @@ function ToggleContent(props) {
                         </PanelBody>
                     )}
 
-                    <PanelBody
-                        title={__("Border Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Border Style", "essential-blocks")} initialOpen={false}>
                         <SelectControl
                             label={__("Border Style", "essential-blocks")}
                             value={borderStyle}
                             options={BORDER_STYLES}
-                            onChange={(borderStyle) =>
-                                handleBlockDefault({ borderStyle })
-                            }
+                            onChange={(borderStyle) => handleBlockDefault({ borderStyle })}
                         />
 
                         <ColorControl
                             label={__("Border Color", "essential-blocks")}
                             color={borderColor}
-                            onChange={(borderColor) =>
-                                handleBlockDefault({ borderColor })
-                            }
+                            onChange={(borderColor) => handleBlockDefault({ borderColor })}
                         />
 
                         <RangeControl
                             label={__("Border Width", "essential-blocks")}
                             value={borderWidth}
-                            onChange={(borderWidth) =>
-                                handleBlockDefault({ borderWidth })
-                            }
+                            onChange={(borderWidth) => handleBlockDefault({ borderWidth })}
                             min={0}
                             max={17}
                         />
@@ -505,9 +391,7 @@ function ToggleContent(props) {
                             <RangeControl
                                 label={__("Border Radius", "essential-blocks")}
                                 value={borderRadius}
-                                onChange={(borderRadius) =>
-                                    handleBlockDefault({ borderRadius })
-                                }
+                                onChange={(borderRadius) => handleBlockDefault({ borderRadius })}
                                 min={0}
                                 max={100}
                             />
@@ -515,83 +399,48 @@ function ToggleContent(props) {
                     </PanelBody>
 
                     {switchStyle !== "text" && (
-                        <PanelBody
-                            title={__("Shadow", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Shadow", "essential-blocks")} initialOpen={false}>
                             <ColorControl
                                 label={__("Shadow Color", "essential-blocks")}
                                 color={shadowColor}
-                                onChange={(shadowColor) =>
-                                    handleBlockDefault({ shadowColor })
-                                }
+                                onChange={(shadowColor) => handleBlockDefault({ shadowColor })}
                             />
 
-                            <ResetControl
-                                onReset={() =>
-                                    handleBlockDefault({ hOffset: undefined })
-                                }
-                            >
+                            <ResetControl onReset={() => handleBlockDefault({ hOffset: undefined })}>
                                 <RangeControl
-                                    label={__(
-                                        "Horizontal Offset",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Horizontal Offset", "essential-blocks")}
                                     value={hOffset}
-                                    onChange={(hOffset) =>
-                                        handleBlockDefault({ hOffset })
-                                    }
+                                    onChange={(hOffset) => handleBlockDefault({ hOffset })}
                                     min={0}
                                     max={10}
                                 />
                             </ResetControl>
 
-                            <ResetControl
-                                onReset={() =>
-                                    handleBlockDefault({ vOffset: undefined })
-                                }
-                            >
+                            <ResetControl onReset={() => handleBlockDefault({ vOffset: undefined })}>
                                 <RangeControl
-                                    label={__(
-                                        "Vertical Offset",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Vertical Offset", "essential-blocks")}
                                     value={vOffset}
-                                    onChange={(vOffset) =>
-                                        handleBlockDefault({ vOffset })
-                                    }
+                                    onChange={(vOffset) => handleBlockDefault({ vOffset })}
                                     min={0}
                                     max={10}
                                 />
                             </ResetControl>
 
-                            <ResetControl
-                                onReset={() =>
-                                    handleBlockDefault({ blur: undefined })
-                                }
-                            >
+                            <ResetControl onReset={() => handleBlockDefault({ blur: undefined })}>
                                 <RangeControl
                                     label={__("Blur", "essential-blocks")}
                                     value={blur}
-                                    onChange={(blur) =>
-                                        handleBlockDefault({ blur })
-                                    }
+                                    onChange={(blur) => handleBlockDefault({ blur })}
                                     min={0}
                                     max={10}
                                 />
                             </ResetControl>
 
-                            <ResetControl
-                                onReset={() =>
-                                    handleBlockDefault({ spread: undefined })
-                                }
-                            >
+                            <ResetControl onReset={() => handleBlockDefault({ spread: undefined })}>
                                 <RangeControl
                                     label={__(" Spread", "essential-blocks")}
                                     value={spread}
-                                    onChange={(spread) =>
-                                        handleBlockDefault({ spread })
-                                    }
+                                    onChange={(spread) => handleBlockDefault({ spread })}
                                     min={0}
                                     max={10}
                                 />
@@ -600,16 +449,11 @@ function ToggleContent(props) {
                             <ToggleControl
                                 label={__("Inset", "essential-blocks")}
                                 checked={inset}
-                                onChange={() =>
-                                    handleBlockDefault({ inset: !inset })
-                                }
+                                onChange={() => handleBlockDefault({ inset: !inset })}
                             />
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__("Wrapper Margin & Padding")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={tglWrapMarginConst}
@@ -622,24 +466,12 @@ function ToggleContent(props) {
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Background ", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WrpBgConst}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Background ", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WrpBgConst} resRequiredProps={resRequiredProps} />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={WrpBdShadowConst}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
+                        <BorderShadowControl controlName={WrpBdShadowConst} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

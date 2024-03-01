@@ -29,7 +29,7 @@ if (eb_conditional_localize && eb_conditional_localize.editor_type !== 'edit-wid
         save: Save,
         example: {
             attributes: {
-                cover: `${EssentialBlocksLocalize?.eb_plugins_url}assets/images/form-block-preview.jpeg`
+                cover: `${EssentialBlocksLocalize?.image_url}/block-preview/form-block.jpeg`
             }
         }
     });

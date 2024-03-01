@@ -219,22 +219,24 @@ span.coupon-code {
 
 
 /* EB Pro Launching Campaign Notice */
-#wpnotice-essential_blocks-pro_launching_campaign {
-	grid-template-columns: 200px 1fr !important;
-	border-left-color: #D047DF;
+.eb-notice {
+	border-left-color: #D047DF !important;
+	border-color: #c3c4c7;
+	border-left-width: 4px;
 	padding: 10px;
+	max-width: 100%;
 }
 
-#wpnotice-essential_blocks-pro_launching_campaign .wpnotice-thumbnail-wrapper {
-	margin-left: 20px;
+.eb-notice .wpnotice-thumbnail-wrapper {
+	margin-left: 15px;
 }
 
-#wpnotice-essential_blocks-pro_launching_campaign .wpnotice-thumbnail-wrapper img {
+.eb-notice .wpnotice-thumbnail-wrapper img {
 	height: 35px;
 	width: auto;
 }
 
-.pro_launching_campaign_content {
+.eb_notice_content {
 	color: #222249;
 	font-size: 14px;
 	line-height: 16px;
@@ -244,11 +246,11 @@ span.coupon-code {
 	text-align: left;
 }
 
-.pro_launching_campaign_content strong {
+.eb_notice_content strong {
 	font-weight: 700;
 }
 
-#wpnotice-essential_blocks-pro_launching_campaign .notice-links a {
+.eb-notice .notice-links a {
 	text-transform: capitalize;
 }
 

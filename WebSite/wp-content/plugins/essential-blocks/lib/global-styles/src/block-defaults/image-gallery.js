@@ -3,15 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
-import {
-    PanelBody,
-    ToggleControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
-    PanelRow,
-} from "@wordpress/components";
+import { PanelBody, ToggleControl, Button, ButtonGroup, BaseControl, PanelRow } from "@wordpress/components";
 
 /**
  * External depencencies
@@ -219,10 +211,7 @@ function ImageGallery(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
                             label={__("Display Caption", "essential-blocks")}
                             checked={displayCaption}
@@ -235,10 +224,7 @@ function ImageGallery(props) {
 
                         {displayCaption && styleNumber === "0" && (
                             <ToggleControl
-                                label={__(
-                                    "Display Caption on Hover",
-                                    "essential-blocks"
-                                )}
+                                label={__("Display Caption on Hover", "essential-blocks")}
                                 checked={captionOnHover}
                                 onChange={() =>
                                     handleBlockDefault({
@@ -278,10 +264,7 @@ function ImageGallery(props) {
                             }
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Filter", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Filter", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label={__("Enable Filter", "essential-blocks")}
                             checked={enableFilter}
@@ -293,35 +276,20 @@ function ImageGallery(props) {
                         />
                     </PanelBody>
                     {/* Styles */}
-                    <PanelBody
-                        title={__("Image Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Image Styles", "essential-blocks")} initialOpen={false}>
                         {layouts === "grid" && (
                             <>
                                 {!enableFilter && (
-                                    <BaseControl
-                                        label={__(
-                                            "Alignment",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Alignment", "essential-blocks")}>
                                         <ButtonGroup>
                                             {FLEX_ALIGN.map((item, index) => (
                                                 <Button
                                                     key={index}
-                                                    isPrimary={
-                                                        imageAlignment ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        imageAlignment !==
-                                                        item.value
-                                                    }
+                                                    isPrimary={imageAlignment === item.value}
+                                                    isSecondary={imageAlignment !== item.value}
                                                     onClick={() =>
                                                         handleBlockDefault({
-                                                            imageAlignment:
-                                                                item.value,
+                                                            imageAlignment: item.value,
                                                         })
                                                     }
                                                 >
@@ -332,23 +300,16 @@ function ImageGallery(props) {
                                     </BaseControl>
                                 )}
 
-                                <BaseControl
-                                    label={__("Image Size", "essential-blocks")}
-                                >
+                                <BaseControl label={__("Image Size", "essential-blocks")}>
                                     <ButtonGroup>
                                         {IMAGE_SIZE_TYPE.map((item, index) => (
                                             <Button
                                                 key={index}
-                                                isPrimary={
-                                                    imageSizeType === item.value
-                                                }
-                                                isSecondary={
-                                                    imageSizeType !== item.value
-                                                }
+                                                isPrimary={imageSizeType === item.value}
+                                                isSecondary={imageSizeType !== item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        imageSizeType:
-                                                            item.value,
+                                                        imageSizeType: item.value,
                                                     })
                                                 }
                                             >
@@ -361,10 +322,7 @@ function ImageGallery(props) {
                                 {imageSizeType === "fixed" && (
                                     <>
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Image Height",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Height", "essential-blocks")}
                                             controlName={IMAGE_HEIGHT}
                                             resRequiredProps={resRequiredProps}
                                             units={IMAGE_UNIT_TYPES}
@@ -373,10 +331,7 @@ function ImageGallery(props) {
                                             step={1}
                                         />
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Image Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Width", "essential-blocks")}
                                             controlName={IMAGE_WIDTH}
                                             resRequiredProps={resRequiredProps}
                                             units={IMAGE_UNIT_TYPES}
@@ -390,10 +345,7 @@ function ImageGallery(props) {
                                 {imageSizeType === "adaptive" && (
                                     <>
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Image Max Height",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Max Height", "essential-blocks")}
                                             controlName={IMAGE_MAX_HEIGHT}
                                             resRequiredProps={resRequiredProps}
                                             units={IMAGE_UNIT_TYPES}
@@ -402,10 +354,7 @@ function ImageGallery(props) {
                                             step={1}
                                         />
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Image Max Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Max Width", "essential-blocks")}
                                             controlName={IMAGE_MAX_WIDTH}
                                             resRequiredProps={resRequiredProps}
                                             units={IMAGE_UNIT_TYPES}
@@ -418,10 +367,7 @@ function ImageGallery(props) {
                             </>
                         )}
 
-                        <PanelBody
-                            title={__("Border", "essential-blocks")}
-                            initialOpen={true}
-                        >
+                        <PanelBody title={__("Border", "essential-blocks")} initialOpen={true}>
                             <BorderShadowControl
                                 controlName={IMAGE_BORDER_SHADOW}
                                 resRequiredProps={resRequiredProps}
@@ -432,48 +378,28 @@ function ImageGallery(props) {
                     </PanelBody>
 
                     {styleNumber === "2" && (
-                        <PanelBody
-                            title={__("Overlay Styles", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Overlay Styles", "essential-blocks")} initialOpen={false}>
                             <ColorControl
                                 label={__("Overlay Color", "essential-blocks")}
                                 color={overlayColor}
-                                onChange={(color) =>
-                                    handleBlockDefault({ overlayColor: color })
-                                }
+                                onChange={(color) => handleBlockDefault({ overlayColor: color })}
                             />
                         </PanelBody>
                     )}
                     {displayCaption && (
-                        <PanelBody
-                            title={__("Caption Styles", "essential-blocks")}
-                        >
-                            <PanelColorSettings
-                                title={__("Color Controls", "essential-blocks")}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: captionColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                captionColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Text Color",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                ]}
+                        <PanelBody title={__("Caption Styles", "essential-blocks")}>
+                            <ColorControl
+                                label={__("Text Color", "essential-blocks")}
+                                color={captionColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        captionColor: newColor,
+                                    })
+                                }
                             />
 
                             <ColorControl
-                                label={__(
-                                    "Background Color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Background Color", "essential-blocks")}
                                 color={captionBGColor}
                                 onChange={(backgroundColor) =>
                                     handleBlockDefault({
@@ -500,26 +426,16 @@ function ImageGallery(props) {
 
                             {displayCaption && (
                                 <>
-                                    <BaseControl
-                                        label={__(
-                                            "Text Align",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Text Align", "essential-blocks")}>
                                         <ButtonGroup>
                                             {TEXT_ALIGN.map((item, index) => (
                                                 <Button
                                                     key={index}
-                                                    isPrimary={
-                                                        textAlign === item.value
-                                                    }
-                                                    isSecondary={
-                                                        textAlign !== item.value
-                                                    }
+                                                    isPrimary={textAlign === item.value}
+                                                    isSecondary={textAlign !== item.value}
                                                     onClick={() =>
                                                         handleBlockDefault({
-                                                            textAlign:
-                                                                item.value,
+                                                            textAlign: item.value,
                                                         })
                                                     }
                                                 >
@@ -529,69 +445,41 @@ function ImageGallery(props) {
                                         </ButtonGroup>
                                     </BaseControl>
 
-                                    <BaseControl
-                                        label={__(
-                                            "Horizontal Align",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Horizontal Align", "essential-blocks")}>
                                         <ButtonGroup>
-                                            {HORIZONTAL_ALIGN.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isPrimary={
-                                                            horizontalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            horizontalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                horizontalAlign:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {HORIZONTAL_ALIGN.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isPrimary={horizontalAlign === item.value}
+                                                    isSecondary={horizontalAlign !== item.value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            horizontalAlign: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
 
-                                    <BaseControl
-                                        label={__(
-                                            "Vertical Align",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Vertical Align", "essential-blocks")}>
                                         <ButtonGroup>
-                                            {VERTICAL_ALIGN.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isPrimary={
-                                                            verticalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            verticalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                verticalAlign:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {VERTICAL_ALIGN.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isPrimary={verticalAlign === item.value}
+                                                    isSecondary={verticalAlign !== item.value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            verticalAlign: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
 
@@ -612,10 +500,7 @@ function ImageGallery(props) {
                     )}
 
                     {enableFilter && (
-                        <PanelBody
-                            title={__("Filter", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Filter", "essential-blocks")} initialOpen={false}>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={FILTER_MARGIN}
@@ -636,12 +521,8 @@ function ImageGallery(props) {
                                     {NORMAL_HOVER.map((item, index) => (
                                         <Button
                                             key={index}
-                                            isPrimary={
-                                                filterColorType === item.value
-                                            }
-                                            isSecondary={
-                                                filterColorType !== item.value
-                                            }
+                                            isPrimary={filterColorType === item.value}
+                                            isSecondary={filterColorType !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     filterColorType: item.value,
@@ -654,108 +535,72 @@ function ImageGallery(props) {
                                 </ButtonGroup>
 
                                 {filterColorType === "normal" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Normal Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: filterColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: filterBGColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterBGColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Color", "essential-blocks")}
+                                            color={filterColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={filterBGColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterBGColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
 
                                 {filterColorType === "hover" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Hover Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: filterHoverColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterHoverColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: filterHoverBGColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterHoverBGColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Color", "essential-blocks")}
+                                            color={filterHoverColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterHoverColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={filterHoverBGColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterHoverBGColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
 
                                 {filterColorType === "active" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Active Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: filterActColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterActColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: filterActBGColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        filterActBGColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Color", "essential-blocks")}
+                                            color={filterActColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterActColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={filterActBGColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    filterActBGColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
                             </BaseControl>
 
@@ -770,13 +615,7 @@ function ImageGallery(props) {
                     )}
 
                     {/* Advanced */}
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -788,20 +627,10 @@ function ImageGallery(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WRAPPER_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}

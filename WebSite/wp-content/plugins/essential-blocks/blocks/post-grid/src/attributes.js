@@ -82,7 +82,9 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
-
+    version: {
+        type: "string",
+    },
     queryData: {
         type: "object",
     },
@@ -123,11 +125,11 @@ const attributes = {
     },
     titleColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-heading-color)",
     },
     titleHoverColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-link-color)",
     },
     titleColorStyle: {
         type: "string",
@@ -150,7 +152,7 @@ const attributes = {
     },
     contentColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-text-color)",
     },
     contentTextAlign: {
         type: "string",
@@ -174,7 +176,7 @@ const attributes = {
     },
     readmoreColor: {
         type: "string",
-        default: "#3d8fd4",
+        default: "var(--eb-global-tertiary-color)",
     },
     readmoreBGColor: {
         type: "string",
@@ -185,7 +187,7 @@ const attributes = {
     },
     readmoreHoverColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-secondary-color)",
     },
     readmoreBGHoverColor: {
         type: "string",
@@ -225,11 +227,11 @@ const attributes = {
     },
     authorMetaColor: {
         type: "string",
-        default: "#3d8fd4",
+        default: "var(--eb-global-secondary-color)",
     },
     authorMetaHoverColor: {
         type: "string",
-        default: "#549edc",
+        default: "var(--eb-global-primary-color)",
     },
     metaColorType: {
         type: "string",
@@ -237,55 +239,55 @@ const attributes = {
     },
     commonMetaColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-text-color)",
     },
     commonMetaHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-text-color)",
     },
     commonMetaBgColor: {
         type: "string",
-        default: "#c668f2",
+        default: "var(--eb-global-secondary-color)",
     },
     commonMetaBgHoverColor: {
         type: "string",
-        default: "#ac61d0",
+        default: "var(--eb-global-primary-color)",
     },
     categoryMetaColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     categoryMetaHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     categoryMetaBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-secondary-color)",
     },
     categoryMetaBgHoverColor: {
         type: "string",
-        default: "#ac61d0",
+        default: "var(--eb-global-primary-color)",
     },
     tagMetaColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     tagMetaHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     tagMetaBgColor: {
         type: "string",
-        default: "#3f6ddc",
+        default: "var(--eb-global-tertiary-color)",
     },
     tagMetaBgHoverColor: {
         type: "string",
-        default: "#2d59c3",
+        default: "var(--eb-global-secondary-color)",
     },
     dateMetaColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-tertiary-color)",
     },
 
     //Load More Attributes
@@ -298,35 +300,35 @@ const attributes = {
     },
     loadMoreColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreBgColor: {
         type: "string",
-        default: "#e3e3e3",
+        default: "var(--eb-global-button-background-color)",
     },
     loadMoreHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreHoverBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-tertiary-color)",
     },
     loadMoreActiveColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreActiveBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-tertiary-color)",
     },
     ReadTimeMetaColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-secondary-color)",
     },
     dynamicMetaColor: {
         type: "string",
-        default: "#9e9e9e",
+        default: "var(--eb-global-secondary-color)",
     },
     dynamicMetaBgColor: {
         type: "string",
@@ -350,27 +352,27 @@ const attributes = {
     },
     filterBgColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-background-color)",
     },
     filterTextColor: {
         type: "string",
-        default: "#b469d7",
+        default: "var(--eb-global-primary-color)",
     },
     filterActiveBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-primary-color)",
     },
     filterActiveTextColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     filterHoverBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-primary-color)",
     },
     filterHoverTextColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     showSearch: {
         type: "boolean",
@@ -439,10 +441,6 @@ const attributes = {
         type: "string",
         default: "#5959E8",
     },
-    contentColor: {
-        type: "string",
-        default: "#b2b9c6",
-    },
     contentHoverColor: {
         type: "string",
         default: "#b2b9c6",
@@ -479,7 +477,9 @@ const attributes = {
         type: "boolean",
         default: true,
     },
-
+    defaultFilter: {
+        type: "string"
+    },
     ...generateDimensionsAttributes(SEARCH_CONTENT_PADDING, {
         top: 0,
         bottom: 0,
@@ -746,6 +746,7 @@ const attributes = {
         // noBorder: true,
     }),
     ...generateBorderShadowAttributes(FILTER_ITEM_BORDER_SHADOW, {
+        // defaultBdrColor: "var(--eb-global-tertiary-color)",
         // noShadow: true,
         // noBorder: true,
     }),

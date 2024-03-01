@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps, RichText } from "@wordpress/block-editor";
+import { __ } from "@wordpress/i18n";
+import { useBlockProps } from "@wordpress/block-editor";
 import { useEffect, useState } from "@wordpress/element";
 import { select } from "@wordpress/data";
 /**
@@ -12,14 +13,16 @@ import classnames from "classnames";
 import Inspector from "./inspector";
 import Style from "./style";
 
-const { duplicateBlockIdFix } = window.EBControls;
+const { duplicateBlockIdFix, NoticeComponent } = window.EBControls;
 
 import Items from "./template-components/items";
 import Collections from "./template-components/collections";
 import Loading from "./template-components/loading";
+import { NFTGalleryIcon } from "./icon";
+import { Dashicon } from "@wordpress/components";
 
 export default function Edit(props) {
-    const { attributes, setAttributes, className, clientId, isSelected } = props;
+    const { attributes, setAttributes, className, clientId, isSelected, name } = props;
     const {
         blockId,
         blockMeta,
@@ -33,6 +36,7 @@ export default function Edit(props) {
 
     const [nftData, setNftData] = useState({});
     const [nftError, setNftError] = useState({ status: false });
+    const [nftErrorType, setNftErrorType] = useState('');
     const [loading, setLoading] = useState(true);
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
@@ -78,6 +82,7 @@ export default function Edit(props) {
                         status: true,
                         message: "Please insert a valid collection slug.",
                     });
+                    setNftErrorType("slug");
                     setLoading(false);
                     return;
                 } else if (settings.opensea.filterBy === "wallet" && !settings.opensea.itemWalletId) {
@@ -85,8 +90,11 @@ export default function Edit(props) {
                         status: true,
                         message: "Please insert a valid wallet Address.",
                     });
+                    setNftErrorType("wallet");
                     setLoading(false);
                     return;
+                } else {
+                    setNftErrorType("");
                 }
             }
 
@@ -99,6 +107,7 @@ export default function Edit(props) {
                     status: true,
                     message: "Please insert a valid wallet Address.",
                 });
+                setNftErrorType("wallet");
                 setLoading(false);
                 return;
             }
@@ -114,7 +123,6 @@ export default function Edit(props) {
             data.append("openseaItemLimit", settings.opensea.itemLimit);
             data.append("openseaItemOrderBy", settings.opensea.orderBy);
             data.append("openseaCollectionLimit", settings.opensea.collectionLimit);
-
             fetch(EssentialBlocksLocalize.ajax_url, {
                 method: "POST",
                 body: data,
@@ -128,17 +136,19 @@ export default function Edit(props) {
                         setNftError({
                             status: false,
                         });
+                        setNftErrorType("");
                     } else {
                         const error =
                             typeof response.data === "object"
                                 ? response.data
                                 : isJsonStr(response.data)
-                                ? JSON.parse(response.data)
-                                : response.data;
+                                    ? JSON.parse(response.data)
+                                    : response.data;
                         setNftError({
                             status: true,
                             message: typeof error === "string" ? error : "Invalid Wallet Address/Collection Slug",
                         });
+                        setNftErrorType("");
                         setLoading(false);
                     }
                 })
@@ -161,8 +171,32 @@ export default function Edit(props) {
                         {loading && <Loading attributes={attributes} />}
                         {!loading && (
                             <>
-                                {nftError.status && <span className="nft-error">{nftError.message}</span>}
-
+                                {nftError.status && <>
+                                    <NoticeComponent
+                                        Icon={NFTGalleryIcon}
+                                        title={__("NFT Gallery", "essential-blocks")}
+                                        description={
+                                            <>
+                                                <span style={{ color: "#cc1818" }}><Dashicon icon="warning" /> <strong>Error: {nftError.message}.</strong></span><br />
+                                                {nftErrorType == '' && <span>Please add proper NFT API&nbsp;
+                                                    <a
+                                                        target="_blank"
+                                                        href={`${EssentialBlocksLocalize?.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
+                                                    >
+                                                        Here
+                                                    </a>
+                                                    &nbsp;to display NFT Gallery Block</span>}
+                                                {nftErrorType !== '' && <span>To add <strong>collection slug/wallet.</strong> Go to General Tab of block settings.</span>}
+                                            </>
+                                        }
+                                        externalDocLink={"https://essential-blocks.com/docs/retrieve-opensea-nft-api/"}
+                                        externalDocText={
+                                            <>
+                                                Learn more about NFT Gallery Block <Dashicon icon="external" />
+                                            </>
+                                        }
+                                    />
+                                </>}
                                 {!nftError.status && (
                                     <>
                                         {settings.opensea.type === "items" && (

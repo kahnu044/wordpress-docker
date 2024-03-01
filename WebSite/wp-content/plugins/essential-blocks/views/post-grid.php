@@ -65,8 +65,15 @@
                 'footerMeta' => ! empty( $footerMeta ) ? json_decode( $footerMeta ) : []
             ]
         );
+        if ( $version === 'v2' ) {
+            echo '<div class="eb-post-grid-posts-wrapper">';
+        }
 
         $helper::views( 'post-partials/grid-markup', $_params );
+
+        if ( $version === 'v2' ) {
+            echo '</div>';
+        }
     }
 
     /**

@@ -4,8 +4,8 @@ Donate link: https://www.paypal.me/BrainstormForce
 Tags: gutenberg, blocks, gutenberg blocks, editor, block
 Requires at least: 5.6
 Requires PHP: 7.4
-Tested up to: 6.4.1
-Stable tag: 2.10.1
+Tested up to: 6.4.3
+Stable tag: 2.12.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -214,6 +214,124 @@ When you use the Spectra along with the free Astra theme, you get a huge library
 Our external packages use [Rating Star Component](https://github.com/n49/react-stars) that are distributed under the terms of the ISC. While [Slick](https://github.com/akiran/react-slick), [Lottie](https://github.com/chenqingspring/react-lottie) and [Striptags](https://github.com/ericnorris/striptags) is distributed under the terms of the MIT.
 
 == Changelog ==
+
+= 2.12.4 - WEDNESDAY, 28th FEBRUARY 2024 =
+* Improvement: Image - Added a title settings for images.
+* Improvement: Countdown - Added role and aria-live to Countdown for better accessibility.
+* Improvement: Modal - Improved the accessibility of the opened Modal.
+* Improvement: Popup Builder - Added a setting for close icon hover color and improved accessibility.
+* Improvement: Inline Notice - Added support for paragraph tags instead of line breaks for an improved semantic HTML structure.
+* Fix: Post Grid - Resolved an issue wherein the read-more button background hover color would not work as intended.
+* Fix: Star Rating - Resolved an issue wherein the title would not be editable in some cases.
+
+= 2.12.3 - SATURDAY, 17th FEBRUARY 2024 =
+* Improvement: Image - Added a toggle to enable or disable lazy loading.
+* Improvement: Buttons - Implemented page scroll-to-top when an empty hash link is added.
+* Improvement: Buttons - Added aria-label to icon-only buttons.
+* Improvement: Image Gallery - Added a toggle to enable or disable lazy loading.
+* Fix: Container - Resolved an issue wherein the Header template would not load as intended when Sticky Container is enabled.
+* Fix: Container - Resolved an issue wherein the justify-content options would not work as intended in the frontend for mobile devices. 
+* Fix: Container - Resolved an issue wherein the container would move to the right when zooming out on a boxed-width page.
+* Fix: Image - Resolved an issue wherein an empty anchor tag would be rendered on the frontend when a link was not added.
+* Fix: Buttons - Resolved an issue wherein the button-child margins would not work as intended on the frontend when inherit-from-theme is selected.
+* Fix: Buttons - Resolved an issue wherein the button responsive border-radius would not work as intended. 
+* Fix: Forms - Resolved an issue wherein the block would not load as intended in the editor when the confirmation type was set to URL text.
+* Fix: Image Gallery - Resolved an issue wherein the page would not be scrollable when the masonry layout was selected.
+* Fix: Post Grid - Resolved an issue wherein the read-more link hover color would not work as intended on the frontend.
+* Fix: Table Of Contents - Resolved an issue wherein the headings would not work as intended when translated with the Chrome translator extension.
+* Fix: Table Of Contents - Added compatibility with translation plugins.
+* Fix: Tabs - Resolved an issue wherein the block would break in the editor when icons are enabled and a new tab is added.
+* Fix: Popup Builder - Resolved an issue wherein the Popup Builder would not work as intended when all blocks were deactivated.
+
+= 2.12.2 - TUESDAY, 30th JANUARY 2024 =
+* Improvement: Quick Action Bar - Removed the Quick Action Bar when in Distraction-free mode and when not in Full-screen mode.
+* Fix: Image Gallery - Resolved an issue wherein the images would not load as intended due to lazy loading.
+* Fix: Tabs - Resolved an issue wherein the border width would not work as intended for mobile devices.
+
+= 2.12.1 - MONDAY, 22nd JANUARY 2024 =
+* Fix: AI Assistant - Fixed the fatal error issue that would occur with a few other plugins.
+
+= 2.12.0 - MONDAY, 22nd JANUARY 2024 =
+* New: Introducing a Quick Action Bar - Keep all your essential Spectra blocks right at your fingertips!
+* Feature: AI Assistant - Now you can use the AI Assistant outside the editor!
+* Feature: AI Assistant - Now you can select any text and use it as context when outside the editor!
+* Fix: Forms - Resolved an issue wherein forms would not be submittable when used on a page as well as in the footer.
+
+= 2.11.4 - THURSDAY, 18th JANUARY 2024 =
+* Improvement: Buttons - Handled the inherit-from-theme secondary-button option for Astra child themes.
+* Improvement: Global - Added a filter to modify the icons in the Spectra Icon Picker.
+* Improvement: Global - Added a negative value range to linear-gradient location for background styles.
+* Fix: Image Gallery - Resolved an issue where block was showing error when Lightbox preview was enabled in editor.
+* Fix: Image Gallery - Resolved the stacking issue on Safari during the initial load when choosing the masonry layout.
+* Fix: Popup Builder - Resolved an issue wherein dynamic blocks inside popups would not be visible on the fronted.
+* Fix: Tabs - Resolved an issue wherein the layout on the frontend would appear inconsistently when a title with bold text is present.
+* Fix: Global - Resolved an issue wherein all icons would appear enlarged in the Twenty Sixteen Theme.
+* Fix: Global - Resolved an issue wherein the template styles for some WooCommerce templates would not load as intended in FSE themes.
+
+= 2.11.3 - MONDAY, 8th JANUARY 2024 =
+* Feature: Transform to - Added transform to option from Core Media & Text to Spectra Image.
+* Feature: Transform to - Added transform to option from Core Buttons to Spectra Buttons.
+* Feature: Transform to - Added transform to option from Core Media & Text to Spectra Infobox.
+* Feature: Transform to - Added transform to option from Core Pullquote to Spectra Blockquote and Core List to Spectra Iconlist.
+* Feature: Global - Added a rename option in the list view to customize Spectra block names.
+* Improvement: Core - Updated asset URL generation logic to prevent caching issues.
+* Fix: Container - Resolved the background overlay glitches in the style settings.
+* Fix: Icon - Resolved an issue wherein the icon would appear enlarged in the Twenty Seventeen theme.
+* Fix: Info Box - Resolved an issue wherein the page would reload upon clicking on the Info Box with the call-to-action set as complete box.
+* Fix: FAQ - Resolved an issue in which the answer tab would be opened by default if the content had a paragraph or break tag.
+* Fix: Post Grid - Resolved an issue wherein the featured image border-radius would not be applied and the image would overflow.
+* Fix: Global - Resolved an issue in which the Customizer responsive buttons would not work as intended.
+
+= 2.11.2 - WEDNESDAY, 3rd JANUARY 2024 =
+* Security Fix: Hardened the security of the plugin.
+
+= 2.11.1 - SATURDAY, 30th DECEMBER 2023 =
+* Fix: Gutenberg Template - Resolved an issue where 503 error occurs in some cases.
+
+= 2.11.0 - WEDNESDAY, 27th DECEMBER 2023 =
+* New: All new AI based Template Kit library
+* Feature: Transform to - Added transform to option for Core Gallery to Spectra Image Gallery.
+* Improvement: Caching - Added compatibility with Cloudway's caching - Breeze plugin.
+* Fix: FAQ - Resolved an issue wherein FAQ blocks inside an inner-container would shrink when minimized.
+* Fix: Google Maps - Resolved an issue where the eye icon to hide the page title disappears when importing Google Maps in the editor.
+* Fix: Slider - Resolved an issue where slides per view ( pro feature ) was not working in editor.
+* Fix: Tabs - Resolved an issue wherein the nested tab does not shows the content on the frontend.
+* Fix: Global - Resolved an issue wherein the template styles for static page selected as front-page would not load as intended in FSE themes.
+
+= 2.10.5 - MONDAY, 18th DECEMBER 2023 =
+* Fix: Global - Resolved an issue wherein the Astra customizer typography settings would not appear as expected.
+* Fix: Global - Resolved an issue wherein the template styles for the front-page and single-post templates would not load as intended in FSE themes.
+
+= 2.10.4 - TUESDAY, 12th DECEMBER 2023 =
+* Security Fix: Hardened the security of the plugin. Props: Wordfence.
+* Feature: Container - Added new auto-width and equal-width options to the Container block.
+* Improvement: Buttons - Added an option to inherit the secondary styles when using the Astra theme.
+* Improvement: Inline Notice - Added accessibility for the close button.
+* Improvement: Global - Added viewport width as a typography size option.
+* Fix: Container - Resolved an issue wherein the fallback image would appear repeatedly when the Container background was set to video.
+* Fix: Form - Resolved an issue wherein form submissions would not work as intended when a ReCaptcha version is used and ReCaptcha is disabled.
+* Fix: Image Gallery - Resolved an issue wherein the images in the paginated masonry layout would not be clickable.
+* Fix: Popup Builder - Resolved an issue wherein only the latest 10 popups would be visible on the frontend when enabled.
+* Fix: Taxonomy List - Resolved an issue wherein the hierarchy would not be displayed as intended in the list layout.
+
+= 2.10.3 - SATURDAY, 2nd DECEMBER 2023 =
+* Improvement: FAQ - Added block margin and padding settings.
+
+= 2.10.2 - THURSDAY, 30th NOVEMBER 2023 =
+* Fix: Container - Resolved an issue wherein the gradient overlay would not work as intended.
+* Fix: Container - Resolved an issue wherein the slide-right animation would not work as intended with the Testimonial block in Firefox browser.
+* Fix: Image - Resolved an issue in which images would not load as intended after migration.
+* Fix: Buttons - Resolved an issue wherein the padding would be overridden by Astra's default padding styles.
+* Fix: Info Box - Resolved an issue wherein adding a dynamic link to the CTA complete box would result in a recovery issue.
+* Fix: Info Box - Resolved an issue in which the CTA would not work as expected with the dynamic link and complete box settings.
+* Fix: Content Timeline - Resolved an issue in which the block's styling would be applied to other nested blocks in the editor.
+* Fix: FAQ - Resolved an issue wherein the block content padding would appear differently in the editor and the front-end.
+* Fix: Icon List - Resolved an issue in which the vertical layout alignment would not appear as intended in the editor's tablet view.
+* Fix: Inline Notice - Resolved an issue wherein the title would not appear to be full-width in the Firefox browser.
+* Fix: Modal - Resolved an issue wherein the link component would appear behind the Modal in the editor.
+* Fix: Tabs - Resolved an issue in which the tabs wrapper margin would appear differently in the editor and the front-end.
+* Fix: Global - Resolved an issue wherein the WooCommerce and custom template-styles would not load as intended in FSE themes.
+* Fix: Global - Resolved an issue wherein the template styles for custom post types would not load as intended in FSE themes.
 
 = 2.10.1 - SATURDAY, 11th NOVEMBER 2023 =
 * Improvement: Zip AI - Added an option to disable Zip AI.

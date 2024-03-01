@@ -15,16 +15,17 @@ import AccordionIcon from "./icon";
 import deprecated from "./deprecated";
 const { ebConditionalRegisterBlockType } = EBControls;
 
+
 ebConditionalRegisterBlockType(metadata, {
-	icon: AccordionIcon,
-	attributes,
-	keywords: [
-		__("accordion", "essential-blocks"),
-		__("toggle", "essential-blocks"),
-		__("eb essential", "essential-blocks"),
-	],
-	edit: Edit,
-	save: Save,
-	example: example,
-	deprecated,
+    icon: AccordionIcon,
+    attributes,
+    keywords: [
+        __("accordion", "essential-blocks"),
+        __("toggle", "essential-blocks"),
+        __("eb essential", "essential-blocks"),
+    ],
+    edit: Edit,
+    save: Save,
+    example: example,
+    deprecated,
 });

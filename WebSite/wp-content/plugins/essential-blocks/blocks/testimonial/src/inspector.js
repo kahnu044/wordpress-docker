@@ -1,12 +1,10 @@
 /**
  * WordPress dependencies
  */
-/**
- * WordPress dependencies
- */
+
 import { __ } from "@wordpress/i18n";
 import { useEffect } from "@wordpress/element";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     ToggleControl,
@@ -52,6 +50,7 @@ const {
     BackgroundControl,
     ResponsiveRangeController,
     AdvancedControls,
+    ColorControl
 } = window.EBControls;
 
 function Inspector(props) {
@@ -656,52 +655,43 @@ function Inspector(props) {
                             )}
                             {tab.name === "styles" && (
                                 <>
-                                    <PanelColorSettings
-                                        title={__("Colors", "essential-blocks")}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: userNameColor,
-                                                onChange: (userNameColor) =>
-                                                    setAttributes({
-                                                        userNameColor,
-                                                    }),
-                                                label: __("Username", "essential-blocks"),
-                                            },
-                                            {
-                                                value: companyColor,
-                                                onChange: (companyColor) =>
-                                                    setAttributes({
-                                                        companyColor,
-                                                    }),
-                                                label: __("Company", "essential-blocks"),
-                                            },
-                                            {
-                                                value: descriptionColor,
-                                                onChange: (descriptionColor) =>
-                                                    setAttributes({
-                                                        descriptionColor,
-                                                    }),
-                                                label: __("Description", "essential-blocks"),
-                                            },
-                                            {
-                                                value: quoteColor,
-                                                onChange: (quoteColor) =>
-                                                    setAttributes({
-                                                        quoteColor,
-                                                    }),
-                                                label: __("Quote", "essential-blocks"),
-                                            },
-                                            {
-                                                value: ratingColor,
-                                                onChange: (ratingColor) =>
-                                                    setAttributes({
-                                                        ratingColor,
-                                                    }),
-                                                label: __("Rating", "essential-blocks"),
-                                            },
-                                        ]}
-                                    />
+                                    <PanelBody title={__("Color", "essential-blocks")} initialOpen={true}>
+                                        <ColorControl
+                                            label={__("Username Color", "essential-blocks")}
+                                            color={userNameColor}
+                                            onChange={(userNameColor) => setAttributes({
+                                                userNameColor,
+                                            })}
+                                        />
+                                        <ColorControl
+                                            label={__("Company Color", "essential-blocks")}
+                                            color={companyColor}
+                                            onChange={(companyColor) => setAttributes({
+                                                companyColor,
+                                            })}
+                                        />
+                                        <ColorControl
+                                            label={__("Description Color", "essential-blocks")}
+                                            color={descriptionColor}
+                                            onChange={(descriptionColor) => setAttributes({
+                                                descriptionColor,
+                                            })}
+                                        />
+                                        <ColorControl
+                                            label={__("Quote Color", "essential-blocks")}
+                                            color={quoteColor}
+                                            onChange={(quoteColor) => setAttributes({
+                                                quoteColor,
+                                            })}
+                                        />
+                                        <ColorControl
+                                            label={__("Rating Color", "essential-blocks")}
+                                            color={ratingColor}
+                                            onChange={(ratingColor) => setAttributes({
+                                                ratingColor,
+                                            })}
+                                        />
+                                    </PanelBody>
 
                                     <PanelBody title={__("Typography", "essential-blocks")} initialOpen={false}>
                                         <TypographyDropdown
@@ -745,21 +735,14 @@ function Inspector(props) {
 
                                     <PanelBody title={__("Image", "essential-blocks")} initialOpen={false}>
                                         {layoutPreset == "layout-preset-2" && (
-                                            <PanelColorSettings
-                                                className={"eb-subpanel"}
-                                                title={__("Color", "essential-blocks")}
-                                                initialOpen={true}
-                                                colorSettings={[
-                                                    {
-                                                        value: imageOverlayColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({
-                                                                imageOverlayColor: newColor,
-                                                            }),
-                                                        label: __("Overlay Color", "essential-blocks"),
-                                                    },
-                                                ]}
+                                            <ColorControl
+                                                label={__("Overlay Color", "essential-blocks")}
+                                                color={imageOverlayColor}
+                                                onChange={(newColor) => setAttributes({
+                                                    imageOverlayColor: newColor,
+                                                })}
                                             />
+
                                         )}
                                         <ResponsiveRangeController
                                             baseLabel={__("Width", "essential-blocks")}
@@ -818,8 +801,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={WrpBdShadow}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

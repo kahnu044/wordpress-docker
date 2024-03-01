@@ -17,6 +17,11 @@ $footerMeta = array_map(
     $footerMeta
 );
 
+$thumbnail_inside_content_wpr = false;
+if ( $enableThumbnailSort && in_array( $preset, ['style-1', 'style-2', 'style-3'] ) ) {
+    $thumbnail_inside_content_wpr = true;
+}
+
 /**
  * @var string $source
  */
@@ -58,15 +63,15 @@ foreach ( $posts as $result ) {
     $html .= sprintf( '<article class="ebpg-grid-post ebpg-post-grid-column" data-id="%1$s">', $result->ID );
     $html .= '<div class="ebpg-grid-post-holder">';
     $wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper" href="%1$s"></a>', get_permalink( $result->ID ) );
-    if ( $preset === 'style-5' ) {
+    if ( $preset === 'style-5' || $preset === 'style-6' ) {
         $html .= $wrapper_link_html;
         $wrapper_link_html = '';
     }
-    if ( ! $enableThumbnailSort ) {
+    if ( ! $thumbnail_inside_content_wpr ) {
         $html .= require __DIR__ . '/post-thumbnail.php';
     }
     $html .= '<div class="ebpg-entry-wrapper">';
-    if ( $enableThumbnailSort ) {
+    if ( $thumbnail_inside_content_wpr ) {
         $html .= require __DIR__ . '/post-thumbnail.php';
     }
     $html .= require __DIR__ . '/title.php';

@@ -151,7 +151,7 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
      */
     private function getDefaultConf(\WPMailSMTP\Vendor\GuzzleHttp\Handler\EasyHandle $easy) : array
     {
-        $conf = ['_headers' => $easy->request->getHeaders(), \CURLOPT_CUSTOMREQUEST => $easy->request->getMethod(), \CURLOPT_URL => (string) $easy->request->getUri()->withFragment(''), \CURLOPT_RETURNTRANSFER => \false, \CURLOPT_HEADER => \false, \CURLOPT_CONNECTTIMEOUT => 150];
+        $conf = ['_headers' => $easy->request->getHeaders(), \CURLOPT_CUSTOMREQUEST => $easy->request->getMethod(), \CURLOPT_URL => (string) $easy->request->getUri()->withFragment(''), \CURLOPT_RETURNTRANSFER => \false, \CURLOPT_HEADER => \false, \CURLOPT_CONNECTTIMEOUT => 300];
         if (\defined('CURLOPT_PROTOCOLS')) {
             $conf[\CURLOPT_PROTOCOLS] = \CURLPROTO_HTTP | \CURLPROTO_HTTPS;
         }
@@ -175,7 +175,7 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
         }
         $method = $easy->request->getMethod();
         if ($method === 'PUT' || $method === 'POST') {
-            // See https://tools.ietf.org/html/rfc7230#section-3.3.2
+            // See https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.2
             if (!$easy->request->hasHeader('Content-Length')) {
                 $conf[\CURLOPT_HTTPHEADER][] = 'Content-Length: 0';
             }
@@ -334,10 +334,37 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
                 $scheme = $easy->request->getUri()->getScheme();
                 if (isset($options['proxy'][$scheme])) {
                     $host = $easy->request->getUri()->getHost();
-                    if (!isset($options['proxy']['no']) || !\WPMailSMTP\Vendor\GuzzleHttp\Utils::isHostInNoProxy($host, $options['proxy']['no'])) {
+                    if (isset($options['proxy']['no']) && \WPMailSMTP\Vendor\GuzzleHttp\Utils::isHostInNoProxy($host, $options['proxy']['no'])) {
+                        unset($conf[\CURLOPT_PROXY]);
+                    } else {
                         $conf[\CURLOPT_PROXY] = $options['proxy'][$scheme];
                     }
                 }
+            }
+        }
+        if (isset($options['crypto_method'])) {
+            if (\STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT === $options['crypto_method']) {
+                if (!\defined('CURL_SSLVERSION_TLSv1_0')) {
+                    throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.0 not supported by your version of cURL');
+                }
+                $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_0;
+            } elseif (\STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT === $options['crypto_method']) {
+                if (!\defined('CURL_SSLVERSION_TLSv1_1')) {
+                    throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.1 not supported by your version of cURL');
+                }
+                $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_1;
+            } elseif (\STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT === $options['crypto_method']) {
+                if (!\defined('CURL_SSLVERSION_TLSv1_2')) {
+                    throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.2 not supported by your version of cURL');
+                }
+                $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_2;
+            } elseif (\defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
+                if (!\defined('CURL_SSLVERSION_TLSv1_3')) {
+                    throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.3 not supported by your version of cURL');
+                }
+                $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_3;
+            } else {
+                throw new \InvalidArgumentException('Invalid crypto_method request option: unknown version provided');
             }
         }
         if (isset($options['cert'])) {
@@ -349,8 +376,8 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
             if (!\file_exists($cert)) {
                 throw new \InvalidArgumentException("SSL certificate not found: {$cert}");
             }
-            # OpenSSL (versions 0.9.3 and later) also support "P12" for PKCS#12-encoded files.
-            # see https://curl.se/libcurl/c/CURLOPT_SSLCERTTYPE.html
+            // OpenSSL (versions 0.9.3 and later) also support "P12" for PKCS#12-encoded files.
+            // see https://curl.se/libcurl/c/CURLOPT_SSLCERTTYPE.html
             $ext = \pathinfo($cert, \PATHINFO_EXTENSION);
             if (\preg_match('#^(der|p12)$#i', $ext)) {
                 $conf[\CURLOPT_SSLCERTTYPE] = \strtoupper($ext);
@@ -416,7 +443,7 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
             $ctx['error'] = 'The cURL request was retried 3 times ' . 'and did not succeed. The most likely reason for the failure ' . 'is that cURL was unable to rewind the body of the request ' . 'and subsequent retries resulted in the same error. Turn on ' . 'the debug option to see what went wrong. See ' . 'https://bugs.php.net/bug.php?id=47204 for more information.';
             return self::createRejection($easy, $ctx);
         } else {
-            $easy->options['_curl_retries']++;
+            ++$easy->options['_curl_retries'];
         }
         return $handler($easy->request, $easy->options);
     }
@@ -458,5 +485,12 @@ class CurlFactory implements \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlFactoryIn
             }
             return \strlen($h);
         };
+    }
+    public function __destruct()
+    {
+        foreach ($this->handles as $id => $handle) {
+            \curl_close($handle);
+            unset($this->handles[$id]);
+        }
     }
 }

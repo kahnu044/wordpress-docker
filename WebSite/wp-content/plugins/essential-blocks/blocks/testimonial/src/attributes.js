@@ -46,7 +46,7 @@ const attributes = {
     },
     imageOverlayColor: {
         type: "string",
-        default: "#F6A681",
+        default: "var(--eb-global-primary-color)",
     },
     avaterContainerFontSize: {
         type: "number",
@@ -116,11 +116,11 @@ const attributes = {
     },
     userNameColor: {
         type: "string",
-        default: "#7967ff",
+        default: "var(--eb-global-primary-color)",
     },
     descriptionColor: {
         type: "string",
-        default: "#4a5059",
+        default: "var(--eb-global-text-color)",
     },
     enableQuote: {
         type: "boolean",
@@ -199,7 +199,7 @@ const attributes = {
     },
     companyColor: {
         type: "string",
-        default: "#4a5059",
+        default: "var(--eb-global-heading-color)",
     },
 
     bgPositon: {

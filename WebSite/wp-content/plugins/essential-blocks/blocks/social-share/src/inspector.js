@@ -61,8 +61,6 @@ import {
 
 import { IconsHzAligns, HOVER_EFFECT, ICON_SHAPE } from "./constants";
 
-import iconList from "./iconList";
-
 function Inspector({ attributes, setAttributes }) {
     const {
         resOption,
@@ -178,7 +176,7 @@ function Inspector({ attributes, setAttributes }) {
                                             "Share Buttons",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <>
                                             <ToggleControl
@@ -213,7 +211,6 @@ function Inspector({ attributes, setAttributes }) {
                                                         socialDetails,
                                                     })
                                                 }
-                                                iconList={iconList}
                                             />
                                         </>
                                     </PanelBody>
@@ -491,8 +488,8 @@ function Inspector({ attributes, setAttributes }) {
                                         <BorderShadowControl
                                             controlName={prefixSocialBdShadow}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
                                 </>
@@ -501,7 +498,7 @@ function Inspector({ attributes, setAttributes }) {
                                 <>
                                     <PanelBody
                                         title={__("Margin & Padding")}
-                                        // initialOpen={true}
+                                    // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
@@ -535,8 +532,8 @@ function Inspector({ attributes, setAttributes }) {
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

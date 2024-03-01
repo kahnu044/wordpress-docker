@@ -21,6 +21,26 @@ window.addEventListener("DOMContentLoaded", function () {
         return decodeURIComponent(encodeURIComponent(parsedSlug));
     };
 
+    let ebGetIconType = (value) => {
+        if (value.includes('fa-')) {
+            return 'fontawesome';
+        }
+        return 'dashicon';
+    }
+
+    let ebRenderIcon = (iconType, className, icon) => {
+        if (iconType === 'dashicon') {
+            // Render Dashicon
+            return '<span class="dashicon dashicons ' + icon + ' ' + className + '"></span>';
+        } else if (iconType === 'fontawesome') {
+            // Render FontAwesome icon
+            return '<i class="' + icon + ' ' + className + '"></i>';
+        }
+
+        // Handle other icon types or return an error message if needed.
+        return 'Invalid icon type';
+    }
+
     const EBTableOfContents = {
         init: function () {
             this._run();
@@ -32,6 +52,7 @@ window.addEventListener("DOMContentLoaded", function () {
             this._hideOnMobileView();
             this._hideOnDevice();
             this._tooltip();
+            this._itemCollapsed();
         },
 
         _tooltip: function () {
@@ -100,6 +121,31 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
             }
         },
+        _itemCollapsed: function () {
+            let containers = document.querySelectorAll(".eb-toc-container");
+
+            for (let container of containers) {
+                const isItemCollapsed =
+                    container.getAttribute("data-itemCollapsed") === "true";
+
+                if (isItemCollapsed) {
+                    const items = container.querySelectorAll(".eb-toc-wrapper .eb-toc__list-wrap > .eb-toc__list > li");
+
+                    for (let item of items) {
+                        const selector = item.querySelector("a");
+                        const selectorIcon = item.querySelector("svg");
+                        const collapsedItem = item.querySelector(".eb-toc__list");
+
+                        if (collapsedItem !== null) {
+                            selectorIcon.addEventListener("click", function () {
+                                item.classList.toggle("hide-items");
+                            });
+                        }
+                    }
+
+                }
+            }
+        },
 
         _scrollToTop: function () {
             let container = document.querySelector(".eb-toc-container");
@@ -117,8 +163,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 // Create go to top element
                 const goTop = document.createElement("span");
                 goTop.setAttribute("class", "eb-toc-go-top");
-                // goTop.setAttribute("class", " ");
-                goTop.innerHTML = `<i class="${scrollIcon}"></i>`;
+                goTop.innerHTML = ebRenderIcon(ebGetIconType(scrollIcon), '', scrollIcon);
                 document.body.insertBefore(goTop, document.body.lastChild);
 
                 // Add click event
@@ -155,7 +200,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 function onScrollPage() {
                     document.body.scrollTop > 30 ||
-                    document.documentElement.scrollTop > 20
+                        document.documentElement.scrollTop > 20
                         ? showScroll()
                         : hideScroll();
                 }
@@ -192,13 +237,14 @@ window.addEventListener("DOMContentLoaded", function () {
                     node.getAttribute("data-top-offset")
                 );
                 if (isSmooth) {
-                    node.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                        anchor.addEventListener("click", function (e) {
+                    const listItems = node.querySelectorAll('a[href^="#"]');
+                    listItems.forEach((anchor) => {
+                        anchor.addEventListener("click", function (event) {
                             let selector = this.getAttribute("href").replace(
                                 "#",
                                 ""
                             );
-                            e.preventDefault();
+                            event.preventDefault();
                             if (
                                 typeof wrapperOffset === "number" &&
                                 wrapperOffset
@@ -223,6 +269,19 @@ window.addEventListener("DOMContentLoaded", function () {
                                     .scrollIntoView({
                                         behavior: "smooth",
                                     });
+                            }
+
+                            // Remove active class from all list items
+                            listItems.forEach(function (li) {
+                                li.parentNode.classList.remove('eb-toc-active', 'recent');
+                            });
+
+                            this.parentNode.classList.add('recent');
+
+                            let currentListItem = event.target.closest('li');
+                            while (currentListItem) {
+                                currentListItem.classList.add('eb-toc-active');
+                                currentListItem = currentListItem.parentElement.closest('li');
                             }
                         });
                     });
@@ -322,11 +381,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
                     let all_header =
                         undefined !== allowed_h_tags_str &&
-                        "" !== allowed_h_tags_str
+                            "" !== allowed_h_tags_str
                             ? document.body.querySelectorAll(allowed_h_tags_str)
                             : document.body.querySelectorAll(
-                                  "h1, h2, h3, h4, h5, h6"
-                              );
+                                "h1, h2, h3, h4, h5, h6"
+                            );
 
                     if (undefined !== headers && 0 !== all_header.length) {
                         headers.forEach((element, headerIndex) => {
@@ -348,16 +407,14 @@ window.addEventListener("DOMContentLoaded", function () {
                                         if (isValidHtmlId(element.link)) {
                                             new ClipboardJS(`#${element.link}`);
                                         }
-                                        item.innerHTML = `${
-                                            item.innerHTML
-                                        }<span id="${element.link}"
-                                    class="eb-toc__heading-anchor" data-clipboard-text="${
-                                        location.protocol +
-                                        "//" +
-                                        location.host +
-                                        location.pathname +
-                                        (location.search ? location.search : "")
-                                    }#${element.link}">${copyLinkHtml}</span>`;
+                                        item.innerHTML = `${item.innerHTML
+                                            }<span id="${element.link}"
+                                    class="eb-toc__heading-anchor" data-clipboard-text="${location.protocol +
+                                            "//" +
+                                            location.host +
+                                            location.pathname +
+                                            (location.search ? location.search : "")
+                                            }#${element.link}">${copyLinkHtml}</span>`;
                                     }
                                 });
                             } else {

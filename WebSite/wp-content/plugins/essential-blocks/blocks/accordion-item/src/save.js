@@ -1,5 +1,5 @@
 import { InnerBlocks, RichText } from "@wordpress/block-editor";
-
+const { getIconClass } = window.EBControls;
 const save = ({ attributes }) => {
     const {
         title,
@@ -20,7 +20,7 @@ const save = ({ attributes }) => {
                     {inheritedDisplayIcon && (
                         <span className="eb-accordion-icon-wrapper">
                             <span
-                                className={`${inheritedTabIcon} eb-accordion-icon`}
+                                className={`${getIconClass(inheritedTabIcon)} eb-accordion-icon`}
                             ></span>
                         </span>
                     )}

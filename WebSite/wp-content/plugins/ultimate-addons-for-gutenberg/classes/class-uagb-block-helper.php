@@ -46,10 +46,10 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			$border_css_tablet = self::uag_generate_border_css( $attr, 'btn', 'tablet' );
 			$border_css_mobile = self::uag_generate_border_css( $attr, 'btn', 'mobile' );
 
-			$top_padding    = isset( $attr['topPadding'] ) ? $attr['topPadding'] : $attr['vPadding'];
-			$bottom_padding = isset( $attr['bottomPadding'] ) ? $attr['bottomPadding'] : $attr['vPadding'];
-			$left_padding   = isset( $attr['leftPadding'] ) ? $attr['leftPadding'] : $attr['hPadding'];
-			$right_padding  = isset( $attr['rightPadding'] ) ? $attr['rightPadding'] : $attr['hPadding'];
+			$top_padding    = isset( $attr['topPadding'] ) ? $attr['topPadding'] : '';
+			$bottom_padding = isset( $attr['bottomPadding'] ) ? $attr['bottomPadding'] : '';
+			$left_padding   = isset( $attr['leftPadding'] ) ? $attr['leftPadding'] : '';
+			$right_padding  = isset( $attr['rightPadding'] ) ? $attr['rightPadding'] : '';
 
 			$attr['sizeType']       = isset( $attr['sizeType'] ) ? $attr['sizeType'] : 'px';
 			$attr['lineHeightType'] = isset( $attr['lineHeightType'] ) ? $attr['lineHeightType'] : 'em';
@@ -176,8 +176,6 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 
 				};
 				$selectors[ $wrapper . '.wp-block-button__link' ]       = $border_css;
-				$m_selectors[ $wrapper . '.wp-block-button__link' ]     = $border_css_mobile;
-				$t_selectors[ $wrapper . '.wp-block-button__link' ]     = $border_css_tablet;
 				$selectors[ $wrapper . '.wp-block-button__link:hover' ] = array(
 					'border-color' => ! empty( $attr['btnBorderHColor'] ) ? $attr['btnBorderHColor'] : $attr['borderHColor'],
 				);
@@ -215,30 +213,43 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 					'font-size'   => UAGB_Helper::get_css_value( $attr['sizeTablet'], $attr['sizeType'] ),
 					'line-height' => UAGB_Helper::get_css_value( $attr['lineHeightTablet'], $attr['lineHeightType'] ),
 				);
-				$m_selectors[ $wrapper . '.wp-block-button__link' ]  = array(
-					'padding-top'    => UAGB_Helper::get_css_value( $attr['topMobilePadding'], $attr['mobilePaddingUnit'] ),
-					'padding-bottom' => UAGB_Helper::get_css_value( $attr['bottomMobilePadding'], $attr['mobilePaddingUnit'] ),
-					'padding-left'   => UAGB_Helper::get_css_value( $attr['leftMobilePadding'], $attr['mobilePaddingUnit'] ),
-					'padding-right'  => UAGB_Helper::get_css_value( $attr['rightMobilePadding'], $attr['mobilePaddingUnit'] ),
-					'margin-top'     => UAGB_Helper::get_css_value( $attr['topMarginMobile'], $attr['marginType'] ),
-					'margin-bottom'  => UAGB_Helper::get_css_value( $attr['bottomMarginMobile'], $attr['marginType'] ),
-					'margin-left'    => UAGB_Helper::get_css_value( $attr['leftMarginMobile'], $attr['marginType'] ),
-					'margin-right'   => UAGB_Helper::get_css_value( $attr['rightMarginMobile'], $attr['marginType'] ),
-
+				$m_selectors[ $wrapper . '.wp-block-button__link' ]  = array_merge(
+					array(
+						'padding-top'    => UAGB_Helper::get_css_value( $attr['topMobilePadding'], $attr['mobilePaddingUnit'] ),
+						'padding-bottom' => UAGB_Helper::get_css_value( $attr['bottomMobilePadding'], $attr['mobilePaddingUnit'] ),
+						'padding-left'   => UAGB_Helper::get_css_value( $attr['leftMobilePadding'], $attr['mobilePaddingUnit'] ),
+						'padding-right'  => UAGB_Helper::get_css_value( $attr['rightMobilePadding'], $attr['mobilePaddingUnit'] ),
+						'margin-top'     => UAGB_Helper::get_css_value( $attr['topMarginMobile'], $attr['marginType'] ),
+						'margin-bottom'  => UAGB_Helper::get_css_value( $attr['bottomMarginMobile'], $attr['marginType'] ),
+						'margin-left'    => UAGB_Helper::get_css_value( $attr['leftMarginMobile'], $attr['marginType'] ),
+						'margin-right'   => UAGB_Helper::get_css_value( $attr['rightMarginMobile'], $attr['marginType'] ),
+					),
+					$border_css_mobile
 				);
 
-				$t_selectors[ $wrapper . '.wp-block-button__link' ] = array(
-					'padding-top'    => UAGB_Helper::get_css_value( $attr['topTabletPadding'], $attr['tabletPaddingUnit'] ),
-					'padding-bottom' => UAGB_Helper::get_css_value( $attr['bottomTabletPadding'], $attr['tabletPaddingUnit'] ),
-					'padding-left'   => UAGB_Helper::get_css_value( $attr['leftTabletPadding'], $attr['tabletPaddingUnit'] ),
-					'padding-right'  => UAGB_Helper::get_css_value( $attr['rightTabletPadding'], $attr['tabletPaddingUnit'] ),
-					'margin-top'     => UAGB_Helper::get_css_value( $attr['topMarginTablet'], $attr['marginType'] ),
-					'margin-bottom'  => UAGB_Helper::get_css_value( $attr['bottomMarginTablet'], $attr['marginType'] ),
-					'margin-left'    => UAGB_Helper::get_css_value( $attr['leftMarginTablet'], $attr['marginType'] ),
-					'margin-right'   => UAGB_Helper::get_css_value( $attr['rightMarginTablet'], $attr['marginType'] ),
+				$t_selectors[ $wrapper . '.wp-block-button__link' ] = array_merge(
+					array(
+						'padding-top'    => UAGB_Helper::get_css_value( $attr['topTabletPadding'], $attr['tabletPaddingUnit'] ),
+						'padding-bottom' => UAGB_Helper::get_css_value( $attr['bottomTabletPadding'], $attr['tabletPaddingUnit'] ),
+						'padding-left'   => UAGB_Helper::get_css_value( $attr['leftTabletPadding'], $attr['tabletPaddingUnit'] ),
+						'padding-right'  => UAGB_Helper::get_css_value( $attr['rightTabletPadding'], $attr['tabletPaddingUnit'] ),
+						'margin-top'     => UAGB_Helper::get_css_value( $attr['topMarginTablet'], $attr['marginType'] ),
+						'margin-bottom'  => UAGB_Helper::get_css_value( $attr['bottomMarginTablet'], $attr['marginType'] ),
+						'margin-left'    => UAGB_Helper::get_css_value( $attr['leftMarginTablet'], $attr['marginType'] ),
+						'margin-right'   => UAGB_Helper::get_css_value( $attr['rightMarginTablet'], $attr['marginType'] ),
 
+					),
+					$border_css_tablet
 				);
 			}
+			$selectors[ ' .uagb-button__wrapper ' . $wrapper . '.wp-block-button__link' ] = array(
+				'margin-top'    => UAGB_Helper::get_css_value( $attr['topMargin'], $attr['marginType'] ),
+				'margin-bottom' => UAGB_Helper::get_css_value( $attr['bottomMargin'], $attr['marginType'] ),
+				'margin-left'   => UAGB_Helper::get_css_value( $attr['leftMargin'], $attr['marginType'] ),
+				'margin-right'  => UAGB_Helper::get_css_value( $attr['rightMargin'], $attr['marginType'] ),
+				'box-shadow'    => $box_shadow_css,
+			);
+			
 			$m_selectors[ ' .uagb-button__wrapper ' . $wrapper . '.wp-block-button__link' ] = array(
 				'margin-top'    => UAGB_Helper::get_css_value( $attr['topMarginMobile'], $attr['marginType'] ),
 				'margin-bottom' => UAGB_Helper::get_css_value( $attr['bottomMarginMobile'], $attr['marginType'] ),
@@ -699,10 +710,11 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			);
 			$selectors['.uagb-post-grid .wp-block-button.uagb-post__text.uagb-post__cta:hover .uagb-text-link.wp-block-button__link'] = array(
 				'border-color' => $attr['btnBorderHColor'],
+				'color'        => $attr['ctaHColor'],
+				'background'   => ( 'color' === $attr['ctaBgHType'] ) ? $attr['ctaBgHColor'] : 'transparent',
 			);
 			$selectors[' .uagb-post__text.uagb-post__cta:hover a.uagb-text-link'] = array(
 				'color'        => $attr['ctaHColor'],
-				'background'   => ( 'color' === $attr['ctaBgHType'] ) ? $attr['ctaBgHColor'] : 'transparent',
 				'border-color' => $attr['btnBorderHColor'],
 			);
 			$selectors[' .uagb-post__text.uagb-post__cta a.uagb-text-link:focus'] = array(
@@ -1491,11 +1503,11 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * Background Control CSS Generator Function.
 		 *
 		 * @param array  $bg_obj          The background object with all CSS properties.
-		 * @param string $css_for_pseudo  A string indicating whether the pseudo-element CSS is required or not. Default is an empty string for elements that don't use the pseudo-element.
+		 * @param string $css_for_overlay The overlay option ('no' or 'yes') to determine whether to include overlay CSS. Leave empty for blocks that do not use the '::before' overlay.
 		 *
 		 * @return array                  The formatted CSS properties for the background.
 		 */
-		public static function uag_get_background_obj( $bg_obj, $css_for_pseudo = '' ) {
+		public static function uag_get_background_obj( $bg_obj, $css_for_overlay = '' ) {
 
 			$gen_bg_css         = array();
 			$gen_bg_overlay_css = array();
@@ -1589,7 +1601,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 							$gen_bg_css['background-attachment'] = esc_attr( $attachment );
 						}
 						if ( 'color' === $overlay_type && '' !== $bg_img && '' !== $bg_image_color ) {
-							if ( ! empty( $css_for_pseudo ) ) {
+							if ( ! empty( $css_for_overlay ) ) {
 								$gen_bg_css['background-image']   = 'url(' . $bg_img . ');';
 								$gen_bg_overlay_css['background'] = $bg_image_color;
 								$gen_bg_overlay_css['opacity']    = $overlay_opacity;
@@ -1598,7 +1610,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 							}
 						}
 						if ( 'gradient' === $overlay_type && '' !== $bg_img && '' !== $gradient ) {
-							if ( ! empty( $css_for_pseudo ) ) {
+							if ( ! empty( $css_for_overlay ) ) {
 								$gen_bg_css['background-image']         = 'url(' . $bg_img . ');';
 								$gen_bg_overlay_css['background-image'] = $gradient;
 								$gen_bg_overlay_css['opacity']          = $overlay_opacity;
@@ -1669,7 +1681,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 				$gen_bg_overlay_css['opacity']         = $overlay_opacity;
 			};
 			
-			return 'yes' === $css_for_pseudo ? $gen_bg_overlay_css : $gen_bg_css;
+			return 'yes' === $css_for_overlay ? $gen_bg_overlay_css : $gen_bg_css;
 		}
 
 		/**

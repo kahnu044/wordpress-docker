@@ -93,15 +93,15 @@ const attributes = {
     },
     titleColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-heading-color)",
     },
     ownerTextColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-text-color)",
     },
     ownerLinkColor: {
         type: "string",
-        default: "#7967ff",
+        default: "var(--eb-global-link-color)",
     },
     showOwnerImage: {
         type: "boolean",
@@ -125,19 +125,19 @@ const attributes = {
     },
     buttonTextColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     buttonBgColor: {
         type: "string",
-        default: "#7967ff",
+        default: "var(--eb-global-button-background-color)",
     },
     buttonHoverTextColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     buttonHoverBgColor: {
         type: "string",
-        default: "#5c4bd9",
+        default: "var(--eb-global-tertiary-color)",
     },
     buttonText: {
         type: "string",

@@ -2,26 +2,17 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    TextControl,
-    TextareaControl,
     Button,
     ButtonGroup,
     BaseControl,
     TabPanel,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
-import { doAction, applyFilters } from "@wordpress/hooks";
-
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
+import { applyFilters } from "@wordpress/hooks";
 
 /**
  * Internal depencencies
@@ -38,7 +29,6 @@ import {
     SEPARATOR_ICON_SIZE,
     SEPARATOR_WIDTH,
     SEPARATOR_POSITION,
-    NORMAL_HOVER,
     UNIT_TYPES,
     SEPARATOR_UNIT_TYPES,
     PRESETS,
@@ -49,14 +39,15 @@ import {
 } from "./constants/constants";
 import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
 const {
-    faIcons,
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BorderShadowControl,
     ResponsiveRangeController,
     BackgroundControl,
     AdvancedControls,
-    DynamicInputControl
+    DynamicInputControl,
+    ColorControl,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -75,7 +66,6 @@ function Inspector(props) {
         displaySeperator,
         titleColor,
         titleHoverColor,
-        titleColorType,
         subtitleColor,
         subtitleHoverColor,
         subtitleColorType,
@@ -92,13 +82,13 @@ function Inspector(props) {
         setAttributes,
         resOption,
         attributes,
-        objAttributes
+        objAttributes,
     };
 
     const changePreset = (selected) => {
         setAttributes({ preset: selected });
         switch (selected) {
-            case 'preset-0':
+            case "preset-0":
                 setAttributes({
                     displaySubtitle: false,
                     displaySeperator: false,
@@ -117,7 +107,7 @@ function Inspector(props) {
                     wrprBgbackgroundType: "classic",
                 });
                 break;
-            case 'preset-1':
+            case "preset-1":
                 setAttributes({
                     displaySubtitle: true,
                     displaySeperator: true,
@@ -136,7 +126,7 @@ function Inspector(props) {
                     wrprBgbackgroundType: "classic",
                 });
                 break;
-            case 'preset-2':
+            case "preset-2":
                 setAttributes({
                     displaySubtitle: true,
                     displaySeperator: true,
@@ -154,10 +144,9 @@ function Inspector(props) {
                     wrpPaddingRight: "0",
                     wrprBgbackgroundColor: "rgba(255,255,255,1)",
                     wrprBgbackgroundType: "classic",
-
                 });
                 break;
-            case 'preset-3':
+            case "preset-3":
                 setAttributes({
                     displaySubtitle: true,
                     displaySeperator: true,
@@ -185,45 +174,44 @@ function Inspector(props) {
     return (
         <InspectorControls key="controls">
             <div className="eb-panel-control">
-
                 <TabPanel
                     className="eb-parent-tab-panel"
                     activeClass="active-tab"
                     // onSelect={onSelect}
                     tabs={[
                         {
-                            name: 'general',
-                            title: 'General',
-                            className: 'eb-tab general',
+                            name: "general",
+                            title: "General",
+                            className: "eb-tab general",
                         },
                         {
-                            name: 'styles',
-                            title: 'Style',
-                            className: 'eb-tab styles',
+                            name: "styles",
+                            title: "Style",
+                            className: "eb-tab styles",
                         },
                         {
-                            name: 'advance',
-                            title: 'Advanced',
-                            className: 'eb-tab advance',
+                            name: "advance",
+                            title: "Advanced",
+                            className: "eb-tab advance",
                         },
                     ]}
                 >
-                    {(tab) =>
+                    {(tab) => (
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <PanelBody
-                                        title={__("General", "essential-blocks")}
-                                        initialOpen={true}
-                                    >
+                                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                                         <SelectControl
                                             label={__("Preset Designs", "essential-blocks")}
                                             value={preset}
-                                            options={applyFilters('eb_advanced_heading_preset', PRESETS)}
+                                            options={applyFilters("eb_advanced_heading_preset", PRESETS)}
                                             onChange={(selected) => changePreset(selected)}
                                         />
 
-                                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-advance-heading-alignment">
+                                        <BaseControl
+                                            label={__("Alignment", "essential-blocks")}
+                                            id="eb-advance-heading-alignment"
+                                        >
                                             <ButtonGroup id="eb-advance-heading-alignment">
                                                 {TEXT_ALIGN.map((item, key) => (
                                                     <Button
@@ -242,7 +230,10 @@ function Inspector(props) {
                                                 ))}
                                             </ButtonGroup>
                                         </BaseControl>
-                                        <BaseControl label={__("Title Level", "essential-blocks")} id="eb-advance-heading-alignment">
+                                        <BaseControl
+                                            label={__("Title Level", "essential-blocks")}
+                                            id="eb-advance-heading-alignment"
+                                        >
                                             <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                                 {HEADING.map((item, key) => (
                                                     <Button
@@ -268,13 +259,14 @@ function Inspector(props) {
                                         <ToggleControl
                                             label={__("Display Subtilte", "essential-blocks")}
                                             checked={displaySubtitle}
-                                            onChange={() =>
-                                                setAttributes({ displaySubtitle: !displaySubtitle })
-                                            }
+                                            onChange={() => setAttributes({ displaySubtitle: !displaySubtitle })}
                                         />
                                         {displaySubtitle && (
                                             <>
-                                                <BaseControl label={__("Subtitle Level", "essential-blocks")} id="eb-advance-heading-alignment">
+                                                <BaseControl
+                                                    label={__("Subtitle Level", "essential-blocks")}
+                                                    id="eb-advance-heading-alignment"
+                                                >
                                                     <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                                         {HEADING.map((item, key) => (
                                                             <Button
@@ -282,7 +274,9 @@ function Inspector(props) {
                                                                 // isLarge
                                                                 isPrimary={subtitleTagName === item.value}
                                                                 isSecondary={subtitleTagName !== item.value}
-                                                                onClick={() => setAttributes({ subtitleTagName: item.value })}
+                                                                onClick={() =>
+                                                                    setAttributes({ subtitleTagName: item.value })
+                                                                }
                                                             >
                                                                 {item.label}
                                                             </Button>
@@ -301,9 +295,7 @@ function Inspector(props) {
                                         <ToggleControl
                                             label={__("Display Separator", "essential-blocks")}
                                             checked={displaySeperator}
-                                            onChange={() =>
-                                                setAttributes({ displaySeperator: !displaySeperator })
-                                            }
+                                            onChange={() => setAttributes({ displaySeperator: !displaySeperator })}
                                         />
                                     </PanelBody>
                                 </>
@@ -318,51 +310,16 @@ function Inspector(props) {
                                             resRequiredProps={resRequiredProps}
                                         />
 
-                                        <ButtonGroup className="eb-inspector-btn-group">
-                                            {NORMAL_HOVER.map((item, key) => (
-                                                <Button
-                                                    key={key}
-                                                    // isLarge
-                                                    isPrimary={titleColorType === item.value}
-                                                    isSecondary={titleColorType !== item.value}
-                                                    onClick={() => setAttributes({ titleColorType: item.value })}
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-
-                                        {titleColorType === "normal" && (
-                                            <PanelColorSettings
-                                                className={"eb-subpanel"}
-                                                title={__("Normal Color", "essential-blocks")}
-                                                initialOpen={true}
-                                                colorSettings={[
-                                                    {
-                                                        value: titleColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({ titleColor: newColor }),
-                                                        label: __("Title Color", "essential-blocks"),
-                                                    }
-                                                ]}
-                                            />
-                                        )}
-
-                                        {titleColorType === "hover" && (
-                                            <PanelColorSettings
-                                                className={"eb-subpanel"}
-                                                title={__("Hover Color", "essential-blocks")}
-                                                initialOpen={true}
-                                                colorSettings={[
-                                                    {
-                                                        value: titleHoverColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({ titleHoverColor: newColor }),
-                                                        label: __("Title Hover Color", "essential-blocks"),
-                                                    }
-                                                ]}
-                                            />
-                                        )}
+                                        <ColorControl
+                                            label={__("Title Color", "essential-blocks")}
+                                            color={titleColor}
+                                            onChange={(color) => setAttributes({ titleColor: color })}
+                                        />
+                                        <ColorControl
+                                            label={__("Title Hover Color", "essential-blocks")}
+                                            color={titleHoverColor}
+                                            onChange={(color) => setAttributes({ titleHoverColor: color })}
+                                        />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={TITLE_MARGIN}
@@ -370,57 +327,23 @@ function Inspector(props) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody title={__("Sub Title", "essential-blocks")} initialOpen={false}>
+                                    <PanelBody title={__("Subtitle", "essential-blocks")} initialOpen={false}>
                                         <TypographyDropdown
                                             baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={SUBTITLE_TYPOGRAPHY}
                                             resRequiredProps={resRequiredProps}
                                         />
 
-                                        <ButtonGroup className="eb-inspector-btn-group">
-                                            {NORMAL_HOVER.map((item, key) => (
-                                                <Button
-                                                    key={key}
-                                                    // isLarge
-                                                    isPrimary={subtitleColorType === item.value}
-                                                    isSecondary={subtitleColorType !== item.value}
-                                                    onClick={() => setAttributes({ subtitleColorType: item.value })}
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                        {subtitleColorType === "normal" && (
-                                            <PanelColorSettings
-                                                className={"eb-subpanel"}
-                                                title={__("Normal Color", "essential-blocks")}
-                                                initialOpen={true}
-                                                colorSettings={[
-                                                    {
-                                                        value: subtitleColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({ subtitleColor: newColor }),
-                                                        label: __("Subtitle Color", "essential-blocks"),
-                                                    }
-                                                ]}
-                                            />
-                                        )}
-
-                                        {subtitleColorType === "hover" && (
-                                            <PanelColorSettings
-                                                className={"eb-subpanel"}
-                                                title={__("Hover Color", "essential-blocks")}
-                                                initialOpen={true}
-                                                colorSettings={[
-                                                    {
-                                                        value: subtitleHoverColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({ subtitleHoverColor: newColor }),
-                                                        label: __("Subtitle Hover Color", "essential-blocks"),
-                                                    }
-                                                ]}
-                                            />
-                                        )}
+                                        <ColorControl
+                                            label={__("Subtitle Color", "essential-blocks")}
+                                            color={subtitleColor}
+                                            onChange={(color) => setAttributes({ subtitleColor: color })}
+                                        />
+                                        <ColorControl
+                                            label={__("Subtitle Hover Color", "essential-blocks")}
+                                            color={subtitleHoverColor}
+                                            onChange={(color) => setAttributes({ subtitleHoverColor: color })}
+                                        />
 
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
@@ -437,7 +360,10 @@ function Inspector(props) {
                                                 options={SEPARATOR_POSITION}
                                                 onChange={(seperatorPosition) => setAttributes({ seperatorPosition })}
                                             />
-                                            <BaseControl label={__("Separator Type", "essential-blocks")} id="eb-advance-heading-alignment">
+                                            <BaseControl
+                                                label={__("Separator Type", "essential-blocks")}
+                                                id="eb-advance-heading-alignment"
+                                            >
                                                 <ButtonGroup id="eb-advance-heading-alignment">
                                                     {SEPARATOR_TYPE.map((item, key) => (
                                                         <Button
@@ -479,14 +405,14 @@ function Inspector(props) {
 
                                             {seperatorType === "icon" && (
                                                 <>
-                                                    <BaseControl label={__("Icon", "essential-blocks")}>
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            value={separatorIcon}
-                                                            onChange={(icon) => setAttributes({ separatorIcon: icon })}
-                                                            appendTo="body"
-                                                        />
-                                                    </BaseControl>
+                                                    <EBIconPicker
+                                                        value={separatorIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                separatorIcon: icon,
+                                                            })
+                                                        }
+                                                    />
                                                     <ResponsiveRangeController
                                                         baseLabel={__("Icon Size", "essential-blocks")}
                                                         controlName={SEPARATOR_ICON_SIZE}
@@ -508,53 +434,16 @@ function Inspector(props) {
                                                 step={1}
                                             />
 
-                                            <ButtonGroup className="eb-inspector-btn-group">
-                                                {NORMAL_HOVER.map((item, key) => (
-                                                    <Button
-                                                        key={key}
-                                                        // isLarge
-                                                        isPrimary={separatorColorType === item.value}
-                                                        isSecondary={separatorColorType !== item.value}
-                                                        onClick={() => setAttributes({ separatorColorType: item.value })}
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-
-                                            {separatorColorType === "normal" && (
-                                                <PanelColorSettings
-                                                    title={__("Separator Color", "essential-blocks")}
-                                                    className={"eb-subpanel"}
-                                                    separator={__("Normal Color", "essential-blocks")}
-                                                    initialOpen={true}
-                                                    colorSettings={[
-                                                        {
-                                                            value: separatorColor,
-                                                            onChange: (newColor) =>
-                                                                setAttributes({ separatorColor: newColor }),
-                                                            label: __("Color", "essential-blocks"),
-                                                        }
-                                                    ]}
-                                                />
-                                            )}
-
-                                            {separatorColorType === "hover" && (
-                                                <PanelColorSettings
-                                                    title={__("Separator Hover Color", "essential-blocks")}
-                                                    className={"eb-subpanel"}
-                                                    separator={__("Hover Color", "essential-blocks")}
-                                                    initialOpen={true}
-                                                    colorSettings={[
-                                                        {
-                                                            value: separatorHoverColor,
-                                                            onChange: (newColor) =>
-                                                                setAttributes({ separatorHoverColor: newColor }),
-                                                            label: __("Color", "essential-blocks"),
-                                                        }
-                                                    ]}
-                                                />
-                                            )}
+                                            <ColorControl
+                                                label={__("Separator Color", "essential-blocks")}
+                                                color={separatorColor}
+                                                onChange={(color) => setAttributes({ separatorColor: color })}
+                                            />
+                                            <ColorControl
+                                                label={__("Separator Hover Color", "essential-blocks")}
+                                                color={separatorHoverColor}
+                                                onChange={(color) => setAttributes({ separatorHoverColor: color })}
+                                            />
 
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={resRequiredProps}
@@ -598,11 +487,8 @@ function Inspector(props) {
                                     <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
-
                         </div>
-                    }
-
-
+                    )}
                 </TabPanel>
             </div>
         </InspectorControls>

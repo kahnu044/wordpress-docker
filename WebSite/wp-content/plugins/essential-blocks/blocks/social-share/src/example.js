@@ -9,7 +9,7 @@ const example = {
                 isExpanded: false,
             },
             {
-                icon: "fab fa-twitter",
+                icon: "fab fa-x-twitter",
                 iconText: __("Twitter", "essential-blocks"),
                 isExpanded: false,
             },
@@ -19,6 +19,10 @@ const example = {
                 isExpanded: false,
             },
         ],
+        sclBdSd_Rds_Bottom: "10",
+        sclBdSd_Rds_Left: "10",
+        sclBdSd_Rds_Right: "10",
+        sclBdSd_Rds_Top: "10",
     },
 };
 

@@ -50,6 +50,7 @@
 		display: flex;
 		flex-direction: column;
 	}
+
 	.ebpg-entry-content {
 		display: flex;
 		flex-direction: column;
@@ -205,6 +206,7 @@
 		}
 
 		&.prev-next-btn {
+
 			.ebpg-pagination-item,
 			.ebpg-pagination-item-separator {
 				display: none !important;
@@ -220,7 +222,7 @@
 		}
 
 		.ebpg-pagination-item-separator {
-			background-color: transparent !important;
+			// background-color: transparent !important;
 			border: none !important;
 		}
 	}

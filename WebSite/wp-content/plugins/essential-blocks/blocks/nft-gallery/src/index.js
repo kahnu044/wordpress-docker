@@ -2,7 +2,6 @@
  * WordPress dependeincies
  */
 import { __ } from "@wordpress/i18n";
-import { registerBlockType } from "@wordpress/blocks";
 
 /**
  * Internal dependencies
@@ -28,7 +27,7 @@ ebConditionalRegisterBlockType(metadata, {
     save: Save,
     example: {
         attributes: {
-            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/nft-gallery/image/screenshot.png`,
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/nft-gallery.jpeg`,
         },
     },
 });

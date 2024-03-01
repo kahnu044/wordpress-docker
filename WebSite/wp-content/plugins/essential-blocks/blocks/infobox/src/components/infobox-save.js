@@ -1,9 +1,9 @@
 import { RichText } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 export default function InfoboxContainer({ requiredProps }) {
     const {
         blockId,
-        selectedIcon,
+        infoboxIcon,
         media,
         number,
         imageUrl,
@@ -31,10 +31,7 @@ export default function InfoboxContainer({ requiredProps }) {
                     {media === "icon" ? (
                         <div className="icon-img-wrapper">
                             <div className="eb-icon number-or-icon">
-                                <span
-                                    data-icon={selectedIcon}
-                                    className={`eb-infobox-icon-data-selector  ${selectedIcon}`}
-                                ></span>
+                                <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
                             </div>
                         </div>
                     ) : null}
@@ -90,9 +87,8 @@ export default function InfoboxContainer({ requiredProps }) {
                                     href={infoboxLink}
                                     target={linkNewTab ? "_blank" : "_self"}
                                     rel="noopener noreferrer"
-                                    className={`infobox-btn  ${
-                                        btnEffect || " "
-                                    }`}
+                                    className={`infobox-btn  ${btnEffect || " "
+                                        }`}
                                 >
                                     {buttonText}
                                 </a>

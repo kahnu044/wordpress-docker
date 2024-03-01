@@ -80,19 +80,13 @@ class CookieJar implements \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJarInterfa
         }
         return null;
     }
-    /**
-     * @inheritDoc
-     */
     public function toArray() : array
     {
         return \array_map(static function (\WPMailSMTP\Vendor\GuzzleHttp\Cookie\SetCookie $cookie) : array {
             return $cookie->toArray();
         }, $this->getIterator()->getArrayCopy());
     }
-    /**
-     * @inheritDoc
-     */
-    public function clear(?string $domain = null, ?string $path = null, ?string $name = null) : void
+    public function clear(string $domain = null, string $path = null, string $name = null) : void
     {
         if (!$domain) {
             $this->cookies = [];
@@ -111,18 +105,12 @@ class CookieJar implements \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJarInterfa
             });
         }
     }
-    /**
-     * @inheritDoc
-     */
     public function clearSessionCookies() : void
     {
         $this->cookies = \array_filter($this->cookies, static function (\WPMailSMTP\Vendor\GuzzleHttp\Cookie\SetCookie $cookie) : bool {
             return !$cookie->getDiscard() && $cookie->getExpires();
         });
     }
-    /**
-     * @inheritDoc
-     */
     public function setCookie(\WPMailSMTP\Vendor\GuzzleHttp\Cookie\SetCookie $cookie) : bool
     {
         // If the name string is empty (but not 0), ignore the set-cookie
@@ -204,7 +192,7 @@ class CookieJar implements \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJarInterfa
     /**
      * Computes cookie path following RFC 6265 section 5.1.4
      *
-     * @link https://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @see https://datatracker.ietf.org/doc/html/rfc6265#section-5.1.4
      */
     private function getCookiePathFromRequest(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request) : string
     {

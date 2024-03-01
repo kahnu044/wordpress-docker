@@ -45,11 +45,7 @@ const {
 
 import objAttributes from "./attributes";
 
-import {
-    typoPrefix_descs,
-    typoPrefix_name,
-    typoPrefix_job,
-} from "./constants/typographyPrefixConstants";
+import { typoPrefix_descs, typoPrefix_name, typoPrefix_job } from "./constants/typographyPrefixConstants";
 
 import {
     wrapperWidth,
@@ -82,18 +78,9 @@ import {
     contentsMargin,
 } from "./constants/dimensionsConstants";
 
-import {
-    WrpBgConst,
-    imgTopBgPrefix,
-    socialWrpBg,
-} from "./constants/backgroundsConstants";
+import { WrpBgConst, imgTopBgPrefix, socialWrpBg } from "./constants/backgroundsConstants";
 
-import {
-    WrpBdShadowConst,
-    prefixSocialBdShadow,
-    prefixImgBd,
-    ovlBdPrefix,
-} from "./constants/borderShadowConstants";
+import { WrpBdShadowConst, prefixSocialBdShadow, prefixImgBd, ovlBdPrefix } from "./constants/borderShadowConstants";
 
 import {
     sizeUnitTypes,
@@ -103,6 +90,7 @@ import {
     separatorTypes,
     ContentsVerticalAligns,
     HOVER_EFFECT,
+    HOVER_ALIGN
 } from "./constants";
 
 const defaultPresetAttrsObj = {
@@ -199,6 +187,9 @@ function Inspector({ attributes, setAttributes }) {
         descsColor,
         jobColor,
         nameColor,
+        name,
+        jobTitle,
+        description,
 
         // social profiles
         showSocials,
@@ -250,6 +241,12 @@ function Inspector({ attributes, setAttributes }) {
         avatarURL,
         newWindow,
         showLinkNewTab,
+
+        hoverPreset,
+        showDesignation,
+        showSocialTitle,
+        isContentOverlay,
+        socialInImage
     } = attributes;
 
     //
@@ -269,70 +266,152 @@ function Inspector({ attributes, setAttributes }) {
     };
 
     const handlePresetChange = (preset) => {
-        applyFilters(
-            "eb_team_member_preset_change",
-            preset,
-            attributes,
-            setAttributes,
-            defaultPresetAttrsObj
-        );
+        applyFilters("eb_team_member_preset_change", preset, attributes, setAttributes, defaultPresetAttrsObj);
 
         switch (preset) {
             case "default":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                });
-                break;
-
-            case "preset4":
+                const newsocialDetailsDefault = socialDetails.map(item => {
+                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+                })
                 setAttributes({
                     ...defaultPresetAttrsObj,
 
-                    conBgGradient:
-                        "linear-gradient(45deg, #7967ff 0% , rgba(194,119,242,0.8) 100%)",
-                    imgW_Unit: "%",
-                    isImgHeightAuto: true,
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-                });
-                break;
+                    showDescs: true,
+                    showDesignation: true,
+                    showSSeparator: false,
+                    showSocialTitle: false,
+                    showCSeparator: false,
+                    isIconsDevider: false,
+                    imgBeforeEl: false,
+                    contentsAlign: 'center',
+                    iconsJustify: 'center',
 
-            case "preset3":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                    socialInImage: true,
+                    isConBgGradient: false,
+                    nameColor: '#4b4b4b',
+                    jobColor: '#4b4b4b',
+                    descsColor: '#9f9f9f',
+                    hvIcnColor: '#fff',
+                    hvIcnBgc: '#909AA9',
 
-                    hov_sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
-                    icnWp_Bottom: "50",
-                    icnWp_Left: "50",
-                    icnWp_Right: "50",
-                    icnWp_Top: "50",
-                    iconsVAlign: "flex-end",
-                    imgW_Unit: "%",
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-                    isImgHeightAuto: true,
-                    sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
-                    socialInImage: true,
+                    name_FontSize: 20,
+                    name_SizeUnit: "px",
+                    job_FontSize: 16,
+                    job_FontWeight: 700,
+                    job_SizeUnit: "px",
+                    dscs_FontSize: 16,
+
+                    nameP_Bottom: "15",
+                    nameP_Top: "20",
+                    dscP_Top: "15",
+                    dscP_Bottom: "20",
+                    dscP_Left: "0",
+                    dscP_Right: "0",
+                    jobP_Left: "0",
+                    jobP_Right: "0",
+                    jobP_Top: "0",
+                    jobP_Bottom: "0",
+                    jobP_isLinked: true,
+
+                    icnZ_Range: 20,
+                    icnSp_Range: 20,
+                    icnPd_Range: 1,
+                    icnSepH: 38,
+                    icnWp_Bottom: "0",
+                    icnWp_Left: "0",
+                    icnWp_Right: "0",
+                    icnWp_Top: "10",
+                    icnWp_isLinked: false,
+                    socialDetails: newsocialDetailsDefault,
+
+                    imgBd_Bdr_Bottom: "0",
+                    imgBd_Bdr_Left: "0",
+                    imgBd_Bdr_Right: "0",
+                    imgBd_Bdr_Top: "0",
+                    imgBd_Rds_Bottom: "0",
+                    imgBd_Rds_Left: "0",
+                    imgBd_Rds_Right: "0",
+                    imgBd_Rds_Top: "0",
+                    imgBd_Rds_Unit: "%",
+                    imgBd_borderColor: "rgba(255,255,255,1)",
+                    imgBd_borderStyle: "none",
+
+                    sclBdSd_Rds_Bottom: "0",
+                    sclBdSd_Rds_Left: "0",
+                    sclBdSd_Rds_Right: "0",
+                    sclBdSd_Rds_Top: "0",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "solid",
+
+                    wrpBdSd_blur: 20,
+                    wrpBdSd_hOffset: 0,
+                    wrpBdSd_shadowColor: "rgba(0,0,0,0)",
+                    wrpBdSd_spread: 0,
+                    wrpBdSd_vOffset: 5,
+                    wrpMrg_isLinked: false,
+                    wrpPad_isLinked: false,
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
                 });
                 break;
 
             case "preset1":
+                const newsocialDetails1 = socialDetails.map(item => {
+                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+                })
+
                 setAttributes({
                     ...defaultPresetAttrsObj,
-                    WrpBg_backgroundColor: "rgba(255,255,255,1)",
-                    cSepColor: "rgba(132,175,255,1)",
+
+                    showDescs: true,
+                    showDesignation: true,
+                    showSSeparator: true,
+                    showSocialTitle: false,
+                    showCSeparator: true,
+                    isIconsDevider: true,
+                    imgBeforeEl: true,
+                    contentsAlign: 'center',
+                    iconsJustify: 'center',
+
+                    isConBgGradient: false,
+                    nameColor: '#4b4b4b',
+                    jobColor: '#4b4b4b',
+                    descsColor: '#9f9f9f',
+                    sSepColor: "#E1E7F1",
+                    hvIcnColor: '#fff',
+                    hvIcnBgc: '#909AA9',
+
+                    name_FontSize: 20,
+                    name_SizeUnit: "px",
+                    job_FontSize: 16,
+                    job_FontWeight: 700,
+                    job_SizeUnit: "px",
+                    dscs_FontSize: 16,
+
+                    nameP_Bottom: "15",
+                    nameP_Top: "20",
                     dscP_Left: "20",
                     dscP_Right: "20",
-                    hov_imgBgP_gradientColor:
-                        "linear-gradient(45deg, rgba(0,0,0,0.8) 0% , rgba(0,0,0,0.4) 100%)",
-                    icnSepH: 38,
+                    dscP_Top: "15",
+                    dscP_Bottom: "20",
+                    jobP_Bottom: "15",
+                    jobP_isLinked: false,
+
+                    icnZ_Range: 20,
                     icnSp_Range: 50,
+                    icnPd_Range: 1,
+                    icnSepH: 38,
                     icnWp_Bottom: "20",
                     icnWp_Left: "40",
                     icnWp_Right: "40",
                     icnWp_Top: "20",
                     icnWp_isLinked: false,
+                    socialDetails: newsocialDetails1,
+
                     imgBd_Bdr_Bottom: "5",
                     imgBd_Bdr_Left: "5",
                     imgBd_Bdr_Right: "5",
@@ -344,17 +423,27 @@ function Inspector({ attributes, setAttributes }) {
                     imgBd_Rds_Unit: "%",
                     imgBd_borderColor: "rgba(255,255,255,1)",
                     imgBd_borderStyle: "solid",
-                    imgBeforeEl: true,
                     imgBgP_gradientColor:
                         "linear-gradient(45deg, rgba(120,102,255,0.49) 0% , rgba(195,120,242,0.52) 100%)",
                     imgMrg_Top: "-100",
                     imgMrg_isLinked: false,
-                    isIconsDevider: true,
-                    jobP_Bottom: "15",
-                    jobP_isLinked: false,
-                    sSepColor: "rgba(202,202,202,1)",
-                    showCSeparator: true,
-                    showSSeparator: true,
+
+                    WrpBg_backgroundColor: "rgba(255,255,255,1)",
+                    hov_imgBgP_gradientColor:
+                        "linear-gradient(45deg, rgba(0,0,0,0.8) 0% , rgba(0,0,0,0.4) 100%)",
+                    cSepColor: "#E1E7F1",
+
+                    sclBdSd_Rds_Bottom: "0",
+                    sclBdSd_Rds_Left: "0",
+                    sclBdSd_Rds_Right: "0",
+                    sclBdSd_Rds_Top: "0",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "solid",
+
+
+
                     wrpBdSd_blur: 20,
                     wrpBdSd_hOffset: 0,
                     wrpBdSd_shadowColor: "rgba(0,0,0,0.3)",
@@ -362,8 +451,480 @@ function Inspector({ attributes, setAttributes }) {
                     wrpBdSd_vOffset: 5,
                     wrpMrg_isLinked: false,
                     wrpPad_isLinked: false,
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
                 });
                 break;
+
+            case "preset3":
+                const newsocialDetailspreset3 = socialDetails.map(item => {
+                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+                })
+                setAttributes({
+                    ...defaultPresetAttrsObj,
+                    socialInImage: true,
+                    showDescs: true,
+                    showDesignation: true,
+                    showSSeparator: false,
+                    showSocialTitle: false,
+                    showCSeparator: false,
+                    isIconsDevider: false,
+                    imgBeforeEl: false,
+                    contentsAlign: 'center',
+                    iconsJustify: 'center',
+
+                    isConBgGradient: true,
+                    conBgGradient: "linear-gradient(211deg, #C8D2E3 0%, #DAE2F0 100%)",
+                    conBgColor: '#fff',
+                    nameColor: '#4b4b4b',
+                    jobColor: '#4b4b4b',
+                    descsColor: '#9f9f9f',
+                    hvIcnColor: '#fff',
+                    hvIcnBgc: '#909AA9',
+
+                    name_FontSize: 20,
+                    name_SizeUnit: "px",
+                    job_FontSize: 16,
+                    job_FontWeight: 700,
+                    job_SizeUnit: "px",
+                    dscs_FontSize: 16,
+                    name_SizeUnit: "px",
+
+                    nameP_Bottom: "15",
+                    nameP_Top: "20",
+                    dscP_Bottom: "20",
+                    dscP_Top: "15",
+                    dscP_Left: "0",
+                    dscP_Right: "0",
+                    dscP_isLinked: false,
+                    jobP_Bottom: "0",
+                    jobP_isLinked: true,
+
+                    icnZ_Range: 20,
+                    icnSp_Range: 20,
+                    icnPd_Range: 1,
+                    icnWp_Bottom: "0",
+                    icnWp_Left: "0",
+                    icnWp_Right: "0",
+                    icnWp_Top: "0",
+                    iconsVAlign: "flex-end",
+                    socialDetails: newsocialDetailspreset3,
+
+                    imgBd_Bdr_Bottom: "0",
+                    imgBd_Bdr_Left: "0",
+                    imgBd_Bdr_Right: "0",
+                    imgBd_Bdr_Top: "0",
+                    imgBd_Rds_Bottom: "0",
+                    imgBd_Rds_Left: "0",
+                    imgBd_Rds_Right: "0",
+                    imgBd_Rds_Top: "0",
+                    imgBd_Rds_Unit: "%",
+                    imgBd_borderColor: "rgba(255,255,255,1)",
+                    imgBd_borderStyle: "none",
+
+                    // hov_sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
+                    imgW_Unit: "%",
+                    wrpW_Range: 400,
+                    wrpW_Unit: "px",
+                    isImgHeightAuto: true,
+                    // sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
+
+                    cpd_Bottom: "50",
+                    cpd_Left: "50",
+                    cpd_Right: "50",
+                    cpd_Top: "50",
+                    cpd_Unit: "px",
+                    cpd_isLinked: true,
+
+                    cmrg_Bottom: "20",
+                    cmrg_Left: "20",
+                    cmrg_Right: "20",
+                    cmrg_Top: "20",
+                    cmrg_Unit: "px",
+                    cmrg_isLinked: true,
+
+
+
+                    sclBdSd_Bdr_Bottom: "1",
+                    sclBdSd_Bdr_Left: "1",
+                    sclBdSd_Bdr_Right: "1",
+                    sclBdSd_Bdr_Top: "1",
+                    sclBdSd_Bdr_Unit: "px",
+                    sclBdSd_Bdr_isLinked: true,
+                    sclBdSd_BorderType: "normal",
+
+                    sclBdSd_Rds_Bottom: "0",
+                    sclBdSd_Rds_Left: "0",
+                    sclBdSd_Rds_Right: "0",
+                    sclBdSd_Rds_Top: "0",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "solid",
+
+                    ovlBd_Rds_Bottom: "0",
+                    ovlBd_Rds_Left: "0",
+                    ovlBd_Rds_Right: "0",
+                    ovlBd_Rds_Top: "0",
+                    ovlBd_Rds_Unit: "px",
+
+
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
+
+                });
+                break;
+
+            case "new-preset1":
+                const newsocialDetails = socialDetails.map(item => {
+                    return { ...item, color: '#A0A8BD', bgColor: '#fff' }
+                })
+
+                setAttributes({
+                    ...defaultPresetAttrsObj,
+
+                    showDescs: true,
+                    showDesignation: true,
+                    showSSeparator: false,
+                    showSocialTitle: false,
+                    showCSeparator: false,
+                    isIconsDevider: false,
+                    imgBeforeEl: false,
+                    contentsAlign: 'left',
+                    iconsJustify: 'flex-start',
+
+                    isConBgGradient: false,
+                    conBgColor: '#fff',
+                    nameColor: '#1C1B1F',
+                    jobColor: '#CAD2DF',
+                    descsColor: '#768399',
+                    hvIcnColor: '#fff',
+                    hvIcnBgc: '#A0A8BD',
+
+                    name_FontSize: 24,
+                    name_SizeUnit: "px",
+                    job_FontSize: 32,
+                    job_SizeUnit: "px",
+                    job_FontWeight: 700,
+                    dscs_FontSize: 16,
+
+                    nameP_Bottom: "10",
+                    nameP_Top: "10",
+                    dscP_Bottom: "10",
+                    dscP_Top: "10",
+                    dscP_Left: "0",
+                    dscP_Right: "0",
+                    dscP_isLinked: false,
+                    jobP_Bottom: "0",
+                    jobP_isLinked: true,
+
+                    icnZ_Range: 17,
+                    icnSp_Range: 8,
+                    icnPd_Range: 1,
+                    icnWp_Bottom: "0",
+                    icnWp_Left: "0",
+                    icnWp_Right: "0",
+                    icnWp_Top: "0",
+                    socialDetails: newsocialDetails,
+
+                    imgW_Range: 424,
+                    imgW_Unit: "px",
+                    imgH_Range: 558,
+                    imgH_Unit: "px",
+                    wrpW_Range: 424,
+                    wrpW_Unit: "px",
+
+                    cpd_Bottom: "24",
+                    cpd_Left: "24",
+                    cpd_Right: "24",
+                    cpd_Top: "24",
+                    cpd_Unit: "px",
+                    cpd_isLinked: true,
+
+                    cmrg_Bottom: "20",
+                    cmrg_Left: "20",
+                    cmrg_Right: "20",
+                    cmrg_Top: "20",
+                    cmrg_Unit: "px",
+                    cmrg_isLinked: true,
+
+                    sclBdSd_Bdr_Bottom: "1",
+                    sclBdSd_Bdr_Left: "1",
+                    sclBdSd_Bdr_Right: "1",
+                    sclBdSd_Bdr_Top: "1",
+                    sclBdSd_Bdr_Unit: "px",
+                    sclBdSd_Bdr_isLinked: true,
+                    sclBdSd_BorderType: "normal",
+
+                    sclBdSd_Rds_Bottom: "50",
+                    sclBdSd_Rds_Left: "50",
+                    sclBdSd_Rds_Right: "50",
+                    sclBdSd_Rds_Top: "50",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "solid",
+
+                    ovlBd_Rds_Bottom: "5",
+                    ovlBd_Rds_Left: "5",
+                    ovlBd_Rds_Right: "5",
+                    ovlBd_Rds_Top: "5",
+                    ovlBd_Rds_Unit: "px",
+
+                    imgBd_Bdr_Bottom: "0",
+                    imgBd_Bdr_Left: "0",
+                    imgBd_Bdr_Right: "0",
+                    imgBd_Bdr_Top: "0",
+                    imgBd_Rds_Bottom: "5",
+                    imgBd_Rds_Left: "5",
+                    imgBd_Rds_Right: "5",
+                    imgBd_Rds_Top: "5",
+                    imgBd_Rds_Unit: "px",
+                    imgBd_borderColor: "rgba(255,255,255,1)",
+                    imgBd_borderStyle: "none",
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
+                });
+                break;
+
+            case "new-preset2":
+                const newsocialDetails2 = socialDetails.map(item => {
+                    return { ...item, color: '#D5D5D5', bgColor: '#909AA9' }
+                })
+
+                setAttributes({
+                    ...defaultPresetAttrsObj,
+
+                    showDescs: false,
+                    showDesignation: true,
+                    showSSeparator: false,
+                    showSocialTitle: false,
+                    showCSeparator: false,
+                    isIconsDevider: false,
+                    imgBeforeEl: false,
+                    contentsAlign: 'center',
+                    iconsJustify: 'center',
+
+                    isConBgGradient: true,
+                    conBgGradient: "linear-gradient(214deg, #949CAA -14.68% , #606977 103.07%)",
+                    conBgColor: '#949CAA',
+                    nameColor: '#fff',
+                    jobColor: '#D5D5D5',
+                    descsColor: '#fff',
+                    hvIcnColor: '#fff',
+                    hvIcnBgc: '#909AA9',
+
+                    name_FontSize: 24,
+                    name_SizeUnit: "px",
+                    job_FontSize: 16,
+                    job_FontWeight: 400,
+                    job_SizeUnit: "px",
+                    dscs_FontSize: 16,
+
+                    nameP_Bottom: "10",
+                    nameP_Top: "10",
+                    dscP_Bottom: "10",
+                    dscP_Top: "10",
+                    jobP_Bottom: "0",
+                    jobP_Top: "0",
+                    jobP_isLinked: true,
+
+                    icnZ_Range: 14,
+                    icnSp_Range: 8,
+                    icnPd_Range: 0.9,
+                    icnWp_Bottom: "0",
+                    icnWp_Left: "0",
+                    icnWp_Right: "0",
+                    icnWp_Top: "10",
+                    socialDetails: newsocialDetails2,
+
+                    imgBd_Rds_Bottom: "8",
+                    imgBd_Rds_Left: "8",
+                    imgBd_Rds_Right: "8",
+                    imgBd_Rds_Top: "8",
+                    imgBd_Rds_Unit: "px",
+                    imgBd_Bdr_Bottom: "0",
+                    imgBd_Bdr_Left: "0",
+                    imgBd_Bdr_Right: "0",
+                    imgBd_Bdr_Top: "0",
+                    imgBd_borderColor: "rgba(255,255,255,1)",
+                    imgBd_borderStyle: "none",
+
+                    imgW_Range: 424,
+                    imgW_Unit: "px",
+                    imgH_Range: 558,
+                    imgH_Unit: "px",
+                    wrpW_Range: 424,
+                    wrpW_Unit: "px",
+
+                    cpd_Bottom: "24",
+                    cpd_Left: "24",
+                    cpd_Right: "24",
+                    cpd_Top: "24",
+                    cpd_Unit: "px",
+                    cpd_isLinked: true,
+
+                    cmrg_Bottom: "24",
+                    cmrg_Left: "24",
+                    cmrg_Right: "24",
+                    cmrg_Top: "24",
+                    cmrg_Unit: "px",
+                    cmrg_isLinked: true,
+
+                    sclBdSd_Bdr_Bottom: "1",
+                    sclBdSd_Bdr_Left: "1",
+                    sclBdSd_Bdr_Right: "1",
+                    sclBdSd_Bdr_Top: "1",
+                    sclBdSd_Bdr_Unit: "px",
+                    sclBdSd_Bdr_isLinked: true,
+                    sclBdSd_BorderType: "normal",
+
+                    sclBdSd_Rds_Bottom: "50",
+                    sclBdSd_Rds_Left: "50",
+                    sclBdSd_Rds_Right: "50",
+                    sclBdSd_Rds_Top: "50",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "solid",
+
+                    ovlBd_Rds_Bottom: "8",
+                    ovlBd_Rds_Left: "8",
+                    ovlBd_Rds_Right: "8",
+                    ovlBd_Rds_Top: "8",
+                    ovlBd_Rds_Unit: "px",
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0.16)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
+                });
+                break;
+
+            case "new-preset3":
+                const newsocialDetails3 = socialDetails.map(item => {
+                    return { ...item, color: '#645F7D', bgColor: 'rgba(0,0,0,0)' }
+                })
+                setAttributes({
+                    ...defaultPresetAttrsObj,
+
+                    showDescs: true,
+                    showDesignation: true,
+                    showSSeparator: true,
+                    showSocialTitle: true,
+                    showCSeparator: false,
+                    isIconsDevider: false,
+                    imgBeforeEl: false,
+                    contentsAlign: 'left',
+                    iconsJustify: 'flex-start',
+
+                    isConBgGradient: false,
+                    conBgColor: '#EBF0F8',
+                    nameColor: '#342E4C',
+                    jobColor: '#736D8B',
+                    descsColor: '#342E4C',
+                    hvIcnColor: '#000',
+                    hvIcnBgc: 'rgba(0,0,0,0)',
+
+                    name_FontSize: 24,
+                    name_SizeUnit: "px",
+                    job_FontSize: 16,
+                    job_FontWeight: 400,
+                    job_SizeUnit: "px",
+                    dscs_FontSize: 16,
+
+                    nameP_Bottom: "10",
+                    nameP_Top: "10",
+                    dscP_Bottom: "50",
+                    dscP_Top: "10",
+                    jobP_Bottom: "",
+                    jobP_Top: "0",
+                    jobP_Left: "0",
+                    jobP_Right: "0",
+                    jobP_isLinked: false,
+
+                    icnZ_Range: 13,
+                    icnSp_Range: 8,
+                    icnPd_Range: 0,
+                    icnWp_Bottom: "0",
+                    icnWp_Left: "0",
+                    icnWp_Right: "0",
+                    icnWp_Top: "20",
+                    socialDetails: newsocialDetails3,
+
+                    imgBd_Rds_Bottom: "0",
+                    imgBd_Rds_Left: "0",
+                    imgBd_Rds_Right: "0",
+                    imgBd_Rds_Top: "0",
+                    imgBd_Rds_Unit: "px",
+                    imgBd_Bdr_Bottom: "0",
+                    imgBd_Bdr_Left: "0",
+                    imgBd_Bdr_Right: "0",
+                    imgBd_Bdr_Top: "0",
+                    imgBd_borderColor: "rgba(255,255,255,1)",
+                    imgBd_borderStyle: "none",
+
+                    imgW_Range: 400,
+                    imgW_Unit: "px",
+                    imgH_Range: 400,
+                    imgH_Unit: "px",
+                    wrpW_Range: 400,
+                    wrpW_Unit: "px",
+
+                    cpd_Bottom: "34",
+                    cpd_Left: "34",
+                    cpd_Right: "34",
+                    cpd_Top: "34",
+                    cpd_Unit: "px",
+                    cpd_isLinked: true,
+
+                    cmrg_Bottom: "0",
+                    cmrg_Left: "0",
+                    cmrg_Right: "0",
+                    cmrg_Top: "0",
+                    cmrg_Unit: "px",
+                    cmrg_isLinked: true,
+
+                    sclBdSd_Bdr_Bottom: "1",
+                    sclBdSd_Bdr_Left: "1",
+                    sclBdSd_Bdr_Right: "1",
+                    sclBdSd_Bdr_Top: "1",
+                    sclBdSd_Bdr_Unit: "px",
+                    sclBdSd_Bdr_isLinked: true,
+                    sclBdSd_BorderType: "normal",
+
+                    sclBdSd_Rds_Bottom: "0",
+                    sclBdSd_Rds_Left: "0",
+                    sclBdSd_Rds_Right: "0",
+                    sclBdSd_Rds_Top: "0",
+                    sclBdSd_Rds_Unit: "px",
+                    sclBdSd_Rds_isLinked: true,
+                    sclBdSd_borderColor: "#A0A8BD",
+                    sclBdSd_borderStyle: "none",
+                    sSepW_Range: 100,
+
+                    ovlBd_Rds_Bottom: "0",
+                    ovlBd_Rds_Left: "0",
+                    ovlBd_Rds_Right: "0",
+                    ovlBd_Rds_Top: "0",
+                    ovlBd_Rds_Unit: "px",
+
+                    ovlBd_shadowColor: "rgba(0,0,0,0)",
+                    ovlBd_vOffset: 5,
+                    ovlBd_hOffset: 2,
+                    ovlBd_blur: 17,
+                });
+                break;
+
 
             case "preset2":
                 setAttributes({
@@ -407,10 +968,45 @@ function Inspector({ attributes, setAttributes }) {
                     ...defaultPresetAttrsObj,
                 });
                 break;
+
+            case "preset4":
+                setAttributes({
+                    ...defaultPresetAttrsObj,
+
+                    conBgGradient:
+                        "linear-gradient(45deg, #7967ff 0% , rgba(194,119,242,0.8) 100%)",
+                    imgW_Unit: "%",
+                    isImgHeightAuto: true,
+                    wrpW_Range: 400,
+                    wrpW_Unit: "px",
+                });
+                break;
         }
 
         setAttributes({ preset });
     };
+
+    useEffect(() => {
+        if (preset === 'preset3') {
+            if (isContentOverlay) {
+                setAttributes({
+                    socialInImage: false,
+                    nameColor: '#fff',
+                    jobColor: '#fff',
+                    descsColor: '#fff',
+                })
+            } else {
+                setAttributes({
+                    socialInImage: true,
+                    nameColor: '#4b4b4b',
+                    jobColor: '#4b4b4b',
+                    descsColor: '#9f9f9f',
+                })
+            }
+
+        }
+
+    }, [isContentOverlay, preset]);
 
     return (
         <InspectorControls key="controls">
@@ -442,18 +1038,10 @@ function Inspector({ attributes, setAttributes }) {
                             {tab.name === "general" && (
                                 <>
                                     <PanelBody
-                                        title={__(
-                                            "Presets",
-                                            "essential-blocks"
-                                        )}
-                                        // initialOpen={false}
+                                        title={__("Presets", "essential-blocks")}
+                                    // initialOpen={false}
                                     >
-                                        <BaseControl
-                                            label={__(
-                                                "Design Preset",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <BaseControl label={__("Design Preset", "essential-blocks")}>
                                             <SelectControl
                                                 // label={__("Design Preset", "essential-blocks")}
                                                 value={preset}
@@ -466,10 +1054,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {preset === "preset5" && (
                                             <>
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Reverse Layout",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Reverse Layout", "essential-blocks")}
                                                     checked={isP9reverse}
                                                     onChange={() =>
                                                         setAttributes({
@@ -480,25 +1065,83 @@ function Inspector({ attributes, setAttributes }) {
 
                                                 <ResponsiveRangeController
                                                     // noUnits
-                                                    baseLabel={__(
-                                                        "Gap",
-                                                        "essential-blocks"
-                                                    )}
+                                                    baseLabel={__("Gap", "essential-blocks")}
                                                     controlName={p9LGap}
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
                                                     min={0}
                                                     max={100}
                                                     step={1}
                                                 />
                                             </>
                                         )}
+
+
+                                        {preset === "new-preset3" && (
+                                            <SelectControl
+                                                label={__("Hover Alignment", "essential-blocks")}
+                                                value={hoverPreset}
+                                                options={HOVER_ALIGN}
+                                                onChange={(hoverPreset) => setAttributes({ hoverPreset })}
+                                            />
+                                        )}
+
+                                        {preset === "preset3" && (
+                                            <ToggleControl
+                                                label={__(
+                                                    "Content Overlay",
+                                                    "essential-blocks"
+                                                )}
+                                                checked={isContentOverlay}
+                                                onChange={() =>
+                                                    setAttributes({
+                                                        isContentOverlay: !isContentOverlay,
+                                                    })
+                                                }
+                                            />
+                                        )}
+
+
+                                        <ToggleControl
+                                            label={__(
+                                                "Enable Designation",
+                                                "essential-blocks"
+                                            )}
+                                            checked={showDesignation}
+                                            onChange={() =>
+                                                setAttributes({
+                                                    showDesignation: !showDesignation,
+                                                })
+                                            }
+                                        />
+                                        <ToggleControl
+                                            label={__(
+                                                "Enable Description",
+                                                "essential-blocks"
+                                            )}
+                                            checked={showDescs}
+                                            onChange={() =>
+                                                setAttributes({
+                                                    showDescs: !showDescs,
+                                                })
+                                            }
+                                        />
+                                        <ToggleControl
+                                            label={__(
+                                                "Enable Social Profiles",
+                                                "essential-blocks"
+                                            )}
+                                            checked={showSocials}
+                                            onChange={() =>
+                                                setAttributes({
+                                                    showSocials: !showSocials,
+                                                })
+                                            }
+                                        />
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Avatar", "essential-blocks")}
-                                        // initialOpen={false}
+                                        title={__("Content", "essential-blocks")}
+                                        initialOpen={false}
                                     >
                                         {!imageUrl && (
                                             <MediaUpload
@@ -515,10 +1158,7 @@ function Inspector({ attributes, setAttributes }) {
                                                     return (
                                                         <Button
                                                             className="eb-background-control-inspector-panel-img-btn components-button"
-                                                            label={__(
-                                                                "Upload Image",
-                                                                "essential-blocks"
-                                                            )}
+                                                            label={__("Upload Image", "essential-blocks")}
                                                             icon="format-image"
                                                             onClick={open}
                                                         />
@@ -537,19 +1177,6 @@ function Inspector({ attributes, setAttributes }) {
                                                         })
                                                     }
                                                 />
-
-                                                {/* <TextControl
-                                                    label={__(
-                                                        "URL",
-                                                        "essential-blocks"
-                                                    )}
-                                                    value={avatarURL}
-                                                    onChange={(newURL) =>
-                                                        setAttributes({
-                                                            avatarURL: newURL,
-                                                        })
-                                                    }
-                                                /> */}
                                                 <DynamicInputControl
                                                     label={__(
                                                         "URL",
@@ -566,12 +1193,58 @@ function Inspector({ attributes, setAttributes }) {
                                                         })
                                                     }
                                                 />
+                                                <DynamicInputControl
+                                                    label={__(
+                                                        "Title",
+                                                        "essential-blocks"
+                                                    )}
+                                                    attrName="name"
+                                                    inputValue={name}
+                                                    setAttributes={
+                                                        setAttributes
+                                                    }
+                                                    onChange={(newName) =>
+                                                        setAttributes({
+                                                            name: newName,
+                                                        })
+                                                    }
+                                                />
+                                                <DynamicInputControl
+                                                    label={__(
+                                                        "Designation",
+                                                        "essential-blocks"
+                                                    )}
+                                                    attrName="jobTitle"
+                                                    inputValue={jobTitle}
+                                                    setAttributes={
+                                                        setAttributes
+                                                    }
+                                                    onChange={(newJobTitle) =>
+                                                        setAttributes({
+                                                            jobTitle: newJobTitle,
+                                                        })
+                                                    }
+                                                />
+                                                <DynamicInputControl
+                                                    label={__(
+                                                        "Description",
+                                                        "essential-blocks"
+                                                    )}
+                                                    attrName="description"
+                                                    inputValue={description}
+                                                    setAttributes={
+                                                        setAttributes
+                                                    }
+                                                    onChange={(newDescription) =>
+                                                        setAttributes({
+                                                            description: newDescription,
+                                                        })
+                                                    }
+                                                    isTextarea={true}
+                                                />
                                                 {avatarURL && (
                                                     <ToggleControl
-                                                        label={__(
-                                                            "Open in New Tab",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Open in New Tab", "essential-blocks")}
                                                         checked={newWindow}
                                                         onChange={() =>
                                                             setAttributes({
@@ -589,28 +1262,14 @@ function Inspector({ attributes, setAttributes }) {
                                             "Social Profiles",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <>
-                                            <ToggleControl
-                                                label={__(
-                                                    "Enable Social Profiles",
-                                                    "essential-blocks"
-                                                )}
-                                                checked={showSocials}
-                                                onChange={() =>
-                                                    setAttributes({
-                                                        showSocials: !showSocials,
-                                                    })
-                                                }
-                                            />
+
                                             {showSocials && (
                                                 <>
                                                     <ToggleControl
-                                                        label={__(
-                                                            "Show link in new tab",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Show link in new tab", "essential-blocks")}
                                                         checked={showLinkNewTab}
                                                         onChange={() =>
                                                             setAttributes({
@@ -620,14 +1279,13 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
                                                     <DealSocialProfiles
                                                         profiles={socialDetails}
-                                                        onProfileAdd={(
-                                                            socialDetails
-                                                        ) =>
+                                                        onProfileAdd={(socialDetails) =>
                                                             setAttributes({
                                                                 socialDetails,
                                                             })
                                                         }
                                                         iconList={IconList}
+                                                        showLinkNewTab={showLinkNewTab}
                                                     />
                                                 </>
                                             )}
@@ -639,13 +1297,10 @@ function Inspector({ attributes, setAttributes }) {
                                             "Separators",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <ToggleControl
-                                            label={__(
-                                                "Enable Content Separator",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Enable Content Separator", "essential-blocks")}
                                             checked={showCSeparator}
                                             onChange={() =>
                                                 setAttributes({
@@ -656,10 +1311,7 @@ function Inspector({ attributes, setAttributes }) {
 
                                         {showSocials && "preset3" !== preset && (
                                             <ToggleControl
-                                                label={__(
-                                                    "Enable Social Separator",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Enable Social Separator", "essential-blocks")}
                                                 checked={showSSeparator}
                                                 onChange={() =>
                                                     setAttributes({
@@ -678,14 +1330,11 @@ function Inspector({ attributes, setAttributes }) {
                                             "Container width",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <ResponsiveRangeController
                                             // noUnits
-                                            baseLabel={__(
-                                                "Max Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Max Width", "essential-blocks")}
                                             controlName={wrapperWidth}
                                             resRequiredProps={resRequiredProps}
                                             min={100}
@@ -694,158 +1343,157 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    {/preset[2,3,4]|pro-preset7/i.test(
+                                    {/preset[2,3,4,8,9]|new-preset1|new-preset2|new-preset3/i.test(
                                         preset || ""
                                     ) && (
-                                        <PanelBody
-                                            title={__(
-                                                "Overlay Contents",
-                                                "essential-blocks"
-                                            )}
+                                            <PanelBody
+                                                title={__(
+                                                    "Overlay Contents",
+                                                    "essential-blocks"
+                                                )}
                                             // initialOpen={false}
-                                        >
-                                            {/preset[3,4]|pro-preset7/i.test(
-                                                preset || ""
-                                            ) && (
-                                                <>
-                                                    <ResponsiveDimensionsControl
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
-                                                        controlName={
-                                                            contentsMargin
-                                                        }
-                                                        baseLabel="margin"
-                                                    />
+                                            >
+                                                {/preset[3,4,]|new-preset1|new-preset2|new-preset3/i.test(
+                                                    preset || ""
+                                                ) && (
+                                                        <>
+                                                            <ResponsiveDimensionsControl
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                controlName={
+                                                                    contentsMargin
+                                                                }
+                                                                baseLabel="margin"
+                                                            />
 
-                                                    <ResponsiveDimensionsControl
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
-                                                        controlName={
-                                                            contentsPad
-                                                        }
-                                                        baseLabel="Padding"
-                                                    />
+                                                            <ResponsiveDimensionsControl
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                controlName={
+                                                                    contentsPad
+                                                                }
+                                                                baseLabel="Padding"
+                                                            />
 
-                                                    {preset === "preset4" &&
-                                                        preset ===
-                                                            "pro-preset7" && (
-                                                            <>
-                                                                <BaseControl
-                                                                    id="eb-team-content-vertical-alignments"
-                                                                    label="Vertical alignments"
-                                                                >
-                                                                    <ButtonGroup id="eb-team-content-vertical-alignments">
-                                                                        {ContentsVerticalAligns.map(
-                                                                            (
-                                                                                {
-                                                                                    value,
-                                                                                    label,
-                                                                                },
-                                                                                index
-                                                                            ) => (
-                                                                                <Button
-                                                                                    key={
+                                                            {preset === "preset4" &&
+                                                                preset ===
+                                                                "new-preset1" && (
+                                                                    <>
+                                                                        <BaseControl
+                                                                            id="eb-team-content-vertical-alignments"
+                                                                            label="Vertical alignments"
+                                                                        >
+                                                                            <ButtonGroup id="eb-team-content-vertical-alignments">
+                                                                                {ContentsVerticalAligns.map(
+                                                                                    (
+                                                                                        {
+                                                                                            value,
+                                                                                            label,
+                                                                                        },
                                                                                         index
-                                                                                    }
-                                                                                    isSecondary={
-                                                                                        conVtAlign !==
-                                                                                        value
-                                                                                    }
-                                                                                    isPrimary={
-                                                                                        conVtAlign ===
-                                                                                        value
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        setAttributes(
-                                                                                            {
-                                                                                                conVtAlign: value,
+                                                                                    ) => (
+                                                                                        <Button
+                                                                                            key={
+                                                                                                index
                                                                                             }
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        label
-                                                                                    }
-                                                                                </Button>
-                                                                            )
-                                                                        )}
-                                                                    </ButtonGroup>
-                                                                </BaseControl>
-                                                            </>
-                                                        )}
+                                                                                            isSecondary={
+                                                                                                conVtAlign !==
+                                                                                                value
+                                                                                            }
+                                                                                            isPrimary={
+                                                                                                conVtAlign ===
+                                                                                                value
+                                                                                            }
+                                                                                            onClick={() =>
+                                                                                                setAttributes(
+                                                                                                    {
+                                                                                                        conVtAlign: value,
+                                                                                                    }
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            {
+                                                                                                label
+                                                                                            }
+                                                                                        </Button>
+                                                                                    )
+                                                                                )}
+                                                                            </ButtonGroup>
+                                                                        </BaseControl>
+                                                                    </>
+                                                                )}
 
-                                                    <BorderShadowControl
-                                                        controlName={
-                                                            ovlBdPrefix
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
-                                                        noShadow
-                                                        noBdrHover
-                                                        // noBorder
-                                                        // noShdowHover
-                                                    />
-                                                </>
-                                            )}
-                                            <BaseControl
-                                                label={__(
-                                                    "Background",
-                                                    "essential-blocks"
-                                                )}
-                                            ></BaseControl>
-                                            <ToggleControl
-                                                label={__(
-                                                    "Use Background Gradient",
-                                                    "essential-blocks"
-                                                )}
-                                                checked={isConBgGradient}
-                                                onChange={() =>
-                                                    setAttributes({
-                                                        isConBgGradient: !isConBgGradient,
-                                                    })
-                                                }
-                                            />
-
-                                            {isConBgGradient ? (
-                                                <GradientColorControl
-                                                    gradientColor={
-                                                        conBgGradient
-                                                    }
-                                                    onChange={(conBgGradient) =>
-                                                        setAttributes({
-                                                            conBgGradient,
-                                                        })
-                                                    }
-                                                />
-                                            ) : (
-                                                <ColorControl
+                                                            <BorderShadowControl
+                                                                controlName={
+                                                                    ovlBdPrefix
+                                                                }
+                                                                resRequiredProps={
+                                                                    resRequiredProps
+                                                                }
+                                                                // noShadow
+                                                                noBdrHover
+                                                            // noBorder
+                                                            // noShdowHover
+                                                            />
+                                                        </>
+                                                    )}
+                                                <BaseControl
                                                     label={__(
-                                                        "Color",
+                                                        "Background",
                                                         "essential-blocks"
                                                     )}
-                                                    color={conBgColor}
-                                                    onChange={(conBgColor) =>
+                                                ></BaseControl>
+                                                <ToggleControl
+                                                    label={__(
+                                                        "Use Background Gradient",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={isConBgGradient}
+                                                    onChange={() =>
                                                         setAttributes({
-                                                            conBgColor,
+                                                            isConBgGradient: !isConBgGradient,
                                                         })
                                                     }
                                                 />
-                                            )}
 
-                                            {applyFilters(
-                                                "eb_team_member_preset8_shadow",
-                                                "",
-                                                attributes,
-                                                setAttributes,
-                                                resRequiredProps
-                                            )}
+                                                {isConBgGradient ? (
+                                                    <GradientColorControl
+                                                        gradientColor={
+                                                            conBgGradient
+                                                        }
+                                                        onChange={(conBgGradient) =>
+                                                            setAttributes({
+                                                                conBgGradient,
+                                                            })
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <ColorControl
+                                                        label={__(
+                                                            "Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={conBgColor}
+                                                        onChange={(conBgColor) =>
+                                                            setAttributes({
+                                                                conBgColor,
+                                                            })
+                                                        }
+                                                    />
+                                                )}
 
-                                            <style>
-                                                {`${
-                                                    preset === "preset2"
+                                                {applyFilters(
+                                                    "eb_team_member_preset8_shadow",
+                                                    "",
+                                                    attributes,
+                                                    setAttributes,
+                                                    resRequiredProps
+                                                )}
+
+                                                <style>
+                                                    {`${preset === "preset2"
                                                         ? `
 
 					div.${blockId}.eb-team-wrapper div.contents{
@@ -854,34 +1502,32 @@ function Inspector({ attributes, setAttributes }) {
 
 				`
                                                         : ""
-                                                }
+                                                        }
 
 
-												${
-                                                    preset === "preset3"
-                                                        ? `
+												${preset === "preset3"
+                                                            ? `
 				div.${blockId}.eb-team-wrapper ul.socials {
 					opacity: 1;
 				}
 														`
-                                                        : ""
-                                                }
+                                                            : ""
+                                                        }
 
 
-												${
-                                                    preset === "preset4"
-                                                        ? `
+												${preset === "preset4"
+                                                            ? `
 				div.${blockId}.eb-team-wrapper div.contents {
 					opacity: 1;
 				}
 														`
-                                                        : ""
-                                                }
+                                                            : ""
+                                                        }
 
 												`}
-                                            </style>
-                                        </PanelBody>
-                                    )}
+                                                </style>
+                                            </PanelBody>
+                                        )}
                                     <PanelBody
                                         title={__(
                                             "Alignments",
@@ -896,9 +1542,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 <SelectControl
                                                     // label={__("Icons Horizontal Alignment", "essential-blocks")}
                                                     value={imgCnVtAlign}
-                                                    options={
-                                                        ContentsVerticalAligns
-                                                    }
+                                                    options={ContentsVerticalAligns}
                                                     onChange={(imgCnVtAlign) =>
                                                         setAttributes({
                                                             imgCnVtAlign,
@@ -917,15 +1561,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <LeftAlignIcon
                                                                 color={
                                                                     imageAlign ===
-                                                                        "left" &&
+                                                                    "left" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                imageAlign:
-                                                                    "left",
+                                                                imageAlign: "left",
                                                             })
                                                         }
                                                     />
@@ -934,15 +1577,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <CenterAlignIcon
                                                                 color={
                                                                     imageAlign ===
-                                                                        "center" &&
+                                                                    "center" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                imageAlign:
-                                                                    "center",
+                                                                imageAlign: "center",
                                                             })
                                                         }
                                                     />
@@ -951,15 +1593,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <RightAlignIcon
                                                                 color={
                                                                     imageAlign ===
-                                                                        "right" &&
+                                                                    "right" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                imageAlign:
-                                                                    "right",
+                                                                imageAlign: "right",
                                                             })
                                                         }
                                                     />
@@ -977,15 +1618,14 @@ function Inspector({ attributes, setAttributes }) {
                                                         <LeftAlignIcon
                                                             color={
                                                                 contentsAlign ===
-                                                                    "left" &&
+                                                                "left" &&
                                                                 "#6c40f7"
                                                             }
                                                         />
                                                     )}
                                                     onClick={() =>
                                                         setAttributes({
-                                                            contentsAlign:
-                                                                "left",
+                                                            contentsAlign: "left",
                                                         })
                                                     }
                                                 />
@@ -994,15 +1634,14 @@ function Inspector({ attributes, setAttributes }) {
                                                         <CenterAlignIcon
                                                             color={
                                                                 contentsAlign ===
-                                                                    "center" &&
+                                                                "center" &&
                                                                 "#6c40f7"
                                                             }
                                                         />
                                                     )}
                                                     onClick={() =>
                                                         setAttributes({
-                                                            contentsAlign:
-                                                                "center",
+                                                            contentsAlign: "center",
                                                         })
                                                     }
                                                 />
@@ -1011,15 +1650,14 @@ function Inspector({ attributes, setAttributes }) {
                                                         <RightAlignIcon
                                                             color={
                                                                 contentsAlign ===
-                                                                    "right" &&
+                                                                "right" &&
                                                                 "#6c40f7"
                                                             }
                                                         />
                                                     )}
                                                     onClick={() =>
                                                         setAttributes({
-                                                            contentsAlign:
-                                                                "right",
+                                                            contentsAlign: "right",
                                                         })
                                                     }
                                                 />
@@ -1036,9 +1674,7 @@ function Inspector({ attributes, setAttributes }) {
                                                         // label={__("Icons Horizontal Alignment", "essential-blocks")}
                                                         value={iconsJustify}
                                                         options={IconsHzAligns}
-                                                        onChange={(
-                                                            iconsJustify
-                                                        ) =>
+                                                        onChange={(iconsJustify) =>
                                                             setAttributes({
                                                                 iconsJustify,
                                                             })
@@ -1054,12 +1690,8 @@ function Inspector({ attributes, setAttributes }) {
                                                         <SelectControl
                                                             // label={__("Icons Horizontal Alignment", "essential-blocks")}
                                                             value={iconsVAlign}
-                                                            options={
-                                                                ContentsVerticalAligns
-                                                            }
-                                                            onChange={(
-                                                                iconsVAlign
-                                                            ) =>
+                                                            options={ContentsVerticalAligns}
+                                                            onChange={(iconsVAlign) =>
                                                                 setAttributes({
                                                                     iconsVAlign,
                                                                 })
@@ -1081,15 +1713,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <LeftAlignIcon
                                                                 color={
                                                                     cSepAlign ===
-                                                                        "left" &&
+                                                                    "left" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                cSepAlign:
-                                                                    "left",
+                                                                cSepAlign: "left",
                                                             })
                                                         }
                                                     />
@@ -1098,15 +1729,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <CenterAlignIcon
                                                                 color={
                                                                     cSepAlign ===
-                                                                        "center" &&
+                                                                    "center" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                cSepAlign:
-                                                                    "center",
+                                                                cSepAlign: "center",
                                                             })
                                                         }
                                                     />
@@ -1115,15 +1745,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <RightAlignIcon
                                                                 color={
                                                                     cSepAlign ===
-                                                                        "right" &&
+                                                                    "right" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                cSepAlign:
-                                                                    "right",
+                                                                cSepAlign: "right",
                                                             })
                                                         }
                                                     />
@@ -1142,15 +1771,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <LeftAlignIcon
                                                                 color={
                                                                     sSepAlign ===
-                                                                        "left" &&
+                                                                    "left" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                sSepAlign:
-                                                                    "left",
+                                                                sSepAlign: "left",
                                                             })
                                                         }
                                                     />
@@ -1159,15 +1787,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <CenterAlignIcon
                                                                 color={
                                                                     sSepAlign ===
-                                                                        "center" &&
+                                                                    "center" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                sSepAlign:
-                                                                    "center",
+                                                                sSepAlign: "center",
                                                             })
                                                         }
                                                     />
@@ -1176,15 +1803,14 @@ function Inspector({ attributes, setAttributes }) {
                                                             <RightAlignIcon
                                                                 color={
                                                                     sSepAlign ===
-                                                                        "right" &&
+                                                                    "right" &&
                                                                     "#6c40f7"
                                                                 }
                                                             />
                                                         )}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                sSepAlign:
-                                                                    "right",
+                                                                sSepAlign: "right",
                                                             })
                                                         }
                                                     />
@@ -1192,10 +1818,7 @@ function Inspector({ attributes, setAttributes }) {
                                             </BaseControl>
                                         )}
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__("Avatar", "essential-blocks")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Avatar", "essential-blocks")} initialOpen={false}>
                                         {!imageUrl && (
                                             <MediaUpload
                                                 onSelect={({ id, url }) =>
@@ -1211,10 +1834,7 @@ function Inspector({ attributes, setAttributes }) {
                                                     return (
                                                         <Button
                                                             className="eb-background-control-inspector-panel-img-btn components-button"
-                                                            label={__(
-                                                                "Upload Image",
-                                                                "essential-blocks"
-                                                            )}
+                                                            label={__("Upload Image", "essential-blocks")}
                                                             icon="format-image"
                                                             onClick={open}
                                                         />
@@ -1225,22 +1845,14 @@ function Inspector({ attributes, setAttributes }) {
                                         {imageUrl && (
                                             <>
                                                 <ResponsiveRangeController
-                                                    baseLabel={__(
-                                                        "Image Width",
-                                                        "essential-blocks"
-                                                    )}
+                                                    baseLabel={__("Image Width", "essential-blocks")}
                                                     controlName={imageWidth}
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
                                                     units={sizeUnitTypes}
                                                     max={2000}
                                                 />
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Auto Image Height",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Auto Image Height", "essential-blocks")}
                                                     checked={isImgHeightAuto}
                                                     onChange={() =>
                                                         setAttributes({
@@ -1251,38 +1863,23 @@ function Inspector({ attributes, setAttributes }) {
 
                                                 {!isImgHeightAuto && (
                                                     <ResponsiveRangeController
-                                                        baseLabel={__(
-                                                            "Image Height",
-                                                            "essential-blocks"
-                                                        )}
-                                                        controlName={
-                                                            imageHeight
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        baseLabel={__("Image Height", "essential-blocks")}
+                                                        controlName={imageHeight}
+                                                        resRequiredProps={resRequiredProps}
                                                         units={sizeUnitTypes}
                                                         max={2000}
                                                     />
                                                 )}
 
                                                 <ResponsiveDimensionsControl
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
-                                                    controlName={
-                                                        imageMarginConst
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
+                                                    controlName={imageMarginConst}
                                                     baseLabel="Margin"
                                                 />
 
                                                 <ResponsiveDimensionsControl
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
-                                                    controlName={
-                                                        imagePaddingConst
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
+                                                    controlName={imagePaddingConst}
                                                     baseLabel="Padding"
                                                 />
 
@@ -1291,15 +1888,12 @@ function Inspector({ attributes, setAttributes }) {
                                                     resRequiredProps={
                                                         resRequiredProps
                                                     }
-                                                    // noShadow
-                                                    // noBorder
+                                                // noShadow
+                                                // noBorder
                                                 />
 
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Enable Background before Image",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Enable Background before Image", "essential-blocks")}
                                                     checked={imgBeforeEl}
                                                     onChange={() =>
                                                         setAttributes({
@@ -1313,26 +1907,15 @@ function Inspector({ attributes, setAttributes }) {
                                                         <BackgroundControl
                                                             noOverlay
                                                             noMainBgi
-                                                            controlName={
-                                                                imgTopBgPrefix
-                                                            }
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
+                                                            controlName={imgTopBgPrefix}
+                                                            resRequiredProps={resRequiredProps}
                                                         />
 
                                                         <ResponsiveRangeController
                                                             noUnits
-                                                            baseLabel={__(
-                                                                "Height",
-                                                                "essential-blocks"
-                                                            )}
-                                                            controlName={
-                                                                imgTopBgHeight
-                                                            }
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
+                                                            baseLabel={__("Height", "essential-blocks")}
+                                                            controlName={imgTopBgHeight}
+                                                            resRequiredProps={resRequiredProps}
                                                             min={0}
                                                             max={300}
                                                             step={1}
@@ -1342,25 +1925,19 @@ function Inspector({ attributes, setAttributes }) {
                                             </>
                                         )}
                                     </PanelBody>
+
                                     <PanelBody
                                         title={__("Name", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={nameColor}
-                                            onChange={(nameColor) =>
-                                                setAttributes({ nameColor })
-                                            }
+                                            onChange={(nameColor) => setAttributes({ nameColor })}
                                         />
                                         <TypographyDropdown
                                             baseLabel="Typography"
-                                            typographyPrefixConstant={
-                                                typoPrefix_name
-                                            }
+                                            typographyPrefixConstant={typoPrefix_name}
                                             resRequiredProps={resRequiredProps}
                                         />
 
@@ -1370,28 +1947,15 @@ function Inspector({ attributes, setAttributes }) {
                                             baseLabel="Padding"
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__(
-                                            "Job Title",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Job Title", "essential-blocks")} initialOpen={false}>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={jobColor}
-                                            onChange={(jobColor) =>
-                                                setAttributes({ jobColor })
-                                            }
+                                            onChange={(jobColor) => setAttributes({ jobColor })}
                                         />
                                         <TypographyDropdown
                                             baseLabel="Typography"
-                                            typographyPrefixConstant={
-                                                typoPrefix_job
-                                            }
+                                            typographyPrefixConstant={typoPrefix_job}
                                             resRequiredProps={resRequiredProps}
                                         />
 
@@ -1408,26 +1972,12 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                         initialOpen={false}
                                     >
-                                        <ToggleControl
-                                            label={__(
-                                                "Enable Description",
-                                                "essential-blocks"
-                                            )}
-                                            checked={showDescs}
-                                            onChange={() =>
-                                                setAttributes({
-                                                    showDescs: !showDescs,
-                                                })
-                                            }
-                                        />
+
 
                                         {showDescs && (
                                             <>
                                                 <ColorControl
-                                                    label={__(
-                                                        "Color",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Color", "essential-blocks")}
                                                     color={descsColor}
                                                     onChange={(descsColor) =>
                                                         setAttributes({
@@ -1438,39 +1988,22 @@ function Inspector({ attributes, setAttributes }) {
 
                                                 <TypographyDropdown
                                                     baseLabel="Typography"
-                                                    typographyPrefixConstant={
-                                                        typoPrefix_descs
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    typographyPrefixConstant={typoPrefix_descs}
+                                                    resRequiredProps={resRequiredProps}
                                                 />
 
                                                 <ResponsiveDimensionsControl
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
-                                                    controlName={
-                                                        tmbDescsPaddingConst
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
+                                                    controlName={tmbDescsPaddingConst}
                                                     baseLabel="Padding"
                                                 />
                                             </>
                                         )}
                                     </PanelBody>
                                     {showSocials && (
-                                        <PanelBody
-                                            title={__(
-                                                "Social Icons",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Social Icons", "essential-blocks")} initialOpen={false}>
                                             <ColorControl
-                                                label={__(
-                                                    "Hover Color",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Hover Color", "essential-blocks")}
                                                 color={hvIcnColor}
                                                 onChange={(hvIcnColor) =>
                                                     setAttributes({
@@ -1480,26 +2013,16 @@ function Inspector({ attributes, setAttributes }) {
                                             />
 
                                             <ColorControl
-                                                label={__(
-                                                    "Hover Background",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Hover Background", "essential-blocks")}
                                                 color={hvIcnBgc}
-                                                onChange={(hvIcnBgc) =>
-                                                    setAttributes({ hvIcnBgc })
-                                                }
+                                                onChange={(hvIcnBgc) => setAttributes({ hvIcnBgc })}
                                             />
 
                                             <ResponsiveRangeController
                                                 noUnits
-                                                baseLabel={__(
-                                                    "Size",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Size", "essential-blocks")}
                                                 controlName={rangeIconSize}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={5}
                                                 max={300}
                                                 step={1}
@@ -1507,14 +2030,9 @@ function Inspector({ attributes, setAttributes }) {
 
                                             <ResponsiveRangeController
                                                 noUnits
-                                                baseLabel={__(
-                                                    "Padding",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Padding", "essential-blocks")}
                                                 controlName={rangeIconPadding}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={6}
                                                 step={0.1}
@@ -1522,14 +2040,9 @@ function Inspector({ attributes, setAttributes }) {
 
                                             <ResponsiveRangeController
                                                 noUnits
-                                                baseLabel={__(
-                                                    "Spacing",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Spacing", "essential-blocks")}
                                                 controlName={rangeIconDistance}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={100}
                                                 step={1}
@@ -1537,14 +2050,9 @@ function Inspector({ attributes, setAttributes }) {
 
                                             <ResponsiveRangeController
                                                 noUnits
-                                                baseLabel={__(
-                                                    "Rows Gap",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Rows Gap", "essential-blocks")}
                                                 controlName={rangeIconRowGap}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={100}
                                                 step={1}
@@ -1557,19 +2065,13 @@ function Inspector({ attributes, setAttributes }) {
                                                 }}
                                             >
                                                 <i>
-                                                    N.B. 'Rows Gap' is used when
-                                                    you have multiple rows of
-                                                    social profiles. Normally in
-                                                    case of only one row, it's
-                                                    not needed
+                                                    N.B. 'Rows Gap' is used when you have multiple rows of social
+                                                    profiles. Normally in case of only one row, it's not needed
                                                 </i>
                                             </label>
 
                                             <ToggleControl
-                                                label={__(
-                                                    "Icons Devider",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Icons Devider", "essential-blocks")}
                                                 checked={isIconsDevider}
                                                 onChange={() =>
                                                     setAttributes({
@@ -1581,14 +2083,9 @@ function Inspector({ attributes, setAttributes }) {
                                             {isIconsDevider && (
                                                 <>
                                                     <ColorControl
-                                                        label={__(
-                                                            "Color",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Color", "essential-blocks")}
                                                         color={icnsDevideColor}
-                                                        onChange={(
-                                                            icnsDevideColor
-                                                        ) =>
+                                                        onChange={(icnsDevideColor) =>
                                                             setAttributes({
                                                                 icnsDevideColor,
                                                             })
@@ -1596,10 +2093,7 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
 
                                                     <RangeControl
-                                                        label={__(
-                                                            "Width",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Width", "essential-blocks")}
                                                         value={icnSepW}
                                                         onChange={(icnSepW) =>
                                                             setAttributes({
@@ -1612,10 +2106,7 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
 
                                                     <RangeControl
-                                                        label={__(
-                                                            "Height",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Height", "essential-blocks")}
                                                         value={icnSepH}
                                                         onChange={(icnSepH) =>
                                                             setAttributes({
@@ -1628,16 +2119,9 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
 
                                                     <ResponsiveRangeController
-                                                        baseLabel={__(
-                                                            "Position From Right",
-                                                            "essential-blocks"
-                                                        )}
-                                                        controlName={
-                                                            sclDeviderPosRight
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        baseLabel={__("Position From Right", "essential-blocks")}
+                                                        controlName={sclDeviderPosRight}
+                                                        resRequiredProps={resRequiredProps}
                                                         min={0}
                                                         max={80}
                                                         step={1}
@@ -1646,10 +2130,7 @@ function Inspector({ attributes, setAttributes }) {
                                             )}
 
                                             <SelectControl
-                                                label={__(
-                                                    "Icon Hover Effect",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Icon Hover Effect", "essential-blocks")}
                                                 value={icnEffect}
                                                 options={HOVER_EFFECT}
                                                 // onChange={(preset) => setAttributes({ preset })}
@@ -1661,64 +2142,41 @@ function Inspector({ attributes, setAttributes }) {
                                             />
 
                                             <PanelBody
-                                                title={__(
-                                                    "Icons Border",
-                                                    "essential-blocks"
-                                                )}
+                                                title={__("Icons Border", "essential-blocks")}
                                                 initialOpen={false}
                                             >
                                                 <BorderShadowControl
-                                                    controlName={
-                                                        prefixSocialBdShadow
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    controlName={prefixSocialBdShadow}
+                                                    resRequiredProps={resRequiredProps}
                                                     noShadow
-                                                    // noBorder
+                                                // noBorder
                                                 />
                                             </PanelBody>
 
                                             <PanelBody
-                                                title={__(
-                                                    "Container Background ",
-                                                    "essential-blocks"
-                                                )}
+                                                title={__("Container Background ", "essential-blocks")}
                                                 initialOpen={false}
                                             >
                                                 <BackgroundControl
                                                     controlName={socialWrpBg}
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
                                                     noMainBgi
                                                     noOverlay
                                                 />
                                             </PanelBody>
                                             <PanelBody
-                                                title={__(
-                                                    "Container Margin Padding ",
-                                                    "essential-blocks"
-                                                )}
+                                                title={__("Container Margin Padding ", "essential-blocks")}
                                                 initialOpen={false}
                                             >
                                                 <ResponsiveDimensionsControl
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
-                                                    controlName={
-                                                        iconsWrapMargin
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
+                                                    controlName={iconsWrapMargin}
                                                     baseLabel="Margin"
                                                 />
 
                                                 <ResponsiveDimensionsControl
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
-                                                    controlName={
-                                                        iconsWrapPadding
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
+                                                    controlName={iconsWrapPadding}
                                                     baseLabel="Padding"
                                                 />
                                             </PanelBody>
@@ -1726,57 +2184,34 @@ function Inspector({ attributes, setAttributes }) {
                                     )}
                                     {showCSeparator && (
                                         <PanelBody
-                                            title={__(
-                                                "Content Separator",
-                                                "essential-blocks"
-                                            )}
+                                            title={__("Content Separator", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <ColorControl
-                                                label={__(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Color", "essential-blocks")}
                                                 color={cSepColor}
-                                                onChange={(cSepColor) =>
-                                                    setAttributes({ cSepColor })
-                                                }
+                                                onChange={(cSepColor) => setAttributes({ cSepColor })}
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Width",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Width", "essential-blocks")}
                                                 controlName={cSepWPrefix}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={800}
                                                 step={1}
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Height",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Height", "essential-blocks")}
                                                 controlName={cSepHPrefix}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={20}
                                                 step={1}
                                             />
 
-                                            <BaseControl
-                                                label={__(
-                                                    "Separator Type",
-                                                    "essential-blocks"
-                                                )}
-                                            >
+                                            <BaseControl label={__("Separator Type", "essential-blocks")}>
                                                 <SelectControl
                                                     // label={__("Design Preset", "essential-blocks")}
                                                     value={cSepType}
@@ -1793,57 +2228,34 @@ function Inspector({ attributes, setAttributes }) {
                                     )}
                                     {showSocials && showSSeparator && (
                                         <PanelBody
-                                            title={__(
-                                                "Social Separator",
-                                                "essential-blocks"
-                                            )}
+                                            title={__("Social Separator", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <ColorControl
-                                                label={__(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Color", "essential-blocks")}
                                                 color={sSepColor}
-                                                onChange={(sSepColor) =>
-                                                    setAttributes({ sSepColor })
-                                                }
+                                                onChange={(sSepColor) => setAttributes({ sSepColor })}
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Width",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Width", "essential-blocks")}
                                                 controlName={sSepWPrefix}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={800}
                                                 step={1}
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Height",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Height", "essential-blocks")}
                                                 controlName={sSepHPrefix}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={0}
                                                 max={20}
                                                 step={1}
                                             />
 
-                                            <BaseControl
-                                                label={__(
-                                                    "Separator Type",
-                                                    "essential-blocks"
-                                                )}
-                                            >
+                                            <BaseControl label={__("Separator Type", "essential-blocks")}>
                                                 <SelectControl
                                                     // label={__("Design Preset", "essential-blocks")}
                                                     value={sSepType}
@@ -1864,7 +2276,7 @@ function Inspector({ attributes, setAttributes }) {
                                 <>
                                     <PanelBody
                                         title={__("Margin & Padding")}
-                                        // initialOpen={true}
+                                    // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
@@ -1878,35 +2290,23 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__(
-                                            "Background ",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background ", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WrpBgConst}
                                             resRequiredProps={resRequiredProps}
                                         />
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

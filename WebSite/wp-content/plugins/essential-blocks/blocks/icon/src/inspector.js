@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     Button,
@@ -12,11 +12,6 @@ import {
     SelectControl,
     RangeControl,
 } from "@wordpress/components";
-
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 /**
  * Internal depencencies
@@ -44,6 +39,7 @@ const {
     BackgroundControl,
     ColorControl,
     AdvancedControls,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -100,35 +96,17 @@ function Inspector(props) {
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "General",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                    >
-                                        <BaseControl
-                                            label={__(
-                                                "Icon",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <FontIconPicker
-                                                icons={faIcons}
-                                                value={icon}
-                                                onChange={(value) =>
-                                                    setAttributes({
-                                                        icon: value,
-                                                    })
-                                                }
-                                                appendTo="body"
-                                            />
-                                        </BaseControl>
+                                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
+                                        <EBIconPicker
+                                            value={icon}
+                                            onChange={(icon) =>
+                                                setAttributes({
+                                                    icon,
+                                                })
+                                            }
+                                        />
                                         <SelectControl
-                                            label={__(
-                                                "Icon View",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Icon View", "essential-blocks")}
                                             value={iconView}
                                             options={SHAPE_VIEW}
                                             onChange={(newIconView) =>
@@ -139,10 +117,7 @@ function Inspector(props) {
                                         />
                                         {iconView !== "default" && (
                                             <SelectControl
-                                                label={__(
-                                                    "Icon Shape",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Icon Shape", "essential-blocks")}
                                                 value={iconShape}
                                                 options={ICON_SHAPE}
                                                 onChange={(newIconShape) =>
@@ -153,10 +128,7 @@ function Inspector(props) {
                                             />
                                         )}
                                         <BaseControl
-                                            label={__(
-                                                "Alignment",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Alignment", "essential-blocks")}
                                             id="eb-advance-heading-alignment"
                                         >
                                             <ButtonGroup id="eb-advance-heading-alignment">
@@ -164,18 +136,11 @@ function Inspector(props) {
                                                     <Button
                                                         key={key}
                                                         // isLarge
-                                                        isPrimary={
-                                                            iconAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            iconAlign !==
-                                                            item.value
-                                                        }
+                                                        isPrimary={iconAlign === item.value}
+                                                        isSecondary={iconAlign !== item.value}
                                                         onClick={() =>
                                                             setAttributes({
-                                                                iconAlign:
-                                                                    item.value,
+                                                                iconAlign: item.value,
                                                             })
                                                         }
                                                     >
@@ -196,18 +161,11 @@ function Inspector(props) {
                                                 <Button
                                                     key={key}
                                                     // isLarge
-                                                    isPrimary={
-                                                        iconColorType ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        iconColorType !==
-                                                        item.value
-                                                    }
+                                                    isPrimary={iconColorType === item.value}
+                                                    isSecondary={iconColorType !== item.value}
                                                     onClick={() =>
                                                         setAttributes({
-                                                            iconColorType:
-                                                                item.value,
+                                                            iconColorType: item.value,
                                                         })
                                                     }
                                                 >
@@ -217,121 +175,56 @@ function Inspector(props) {
                                         </ButtonGroup>
                                         {iconColorType === "normal" && (
                                             <>
-                                                <PanelColorSettings
-                                                    className={"eb-subpanel"}
-                                                    title={__(
-                                                        "Primary Color",
-                                                        "essential-blocks"
-                                                    )}
-                                                    initialOpen={true}
-                                                    colorSettings={[
-                                                        {
-                                                            value: iconPrimaryColor,
-                                                            onChange: (
-                                                                newColor
-                                                            ) =>
-                                                                setAttributes({
-                                                                    iconPrimaryColor: newColor,
-                                                                }),
-                                                            label: __(
-                                                                "Primary Color",
-                                                                "essential-blocks"
-                                                            ),
-                                                        },
-                                                    ]}
+                                                <ColorControl
+                                                    label={__("Primary Color", "essential-blocks")}
+                                                    color={iconPrimaryColor}
+                                                    onChange={(newColor) =>
+                                                        setAttributes({
+                                                            iconPrimaryColor: newColor,
+                                                        })
+                                                    }
                                                 />
+
                                                 {iconView != "default" && (
-                                                    <PanelColorSettings
-                                                        className={
-                                                            "eb-subpanel"
+                                                    <ColorControl
+                                                        label={__("Secondary Color", "essential-blocks")}
+                                                        color={iconSecondaryColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                iconSecondaryColor: newColor,
+                                                            })
                                                         }
-                                                        title={__(
-                                                            "Secondary Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: iconSecondaryColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            iconSecondaryColor: newColor,
-                                                                        }
-                                                                    ),
-                                                                label: __(
-                                                                    "Secondary Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                        ]}
                                                     />
                                                 )}
                                             </>
                                         )}
                                         {iconColorType === "hover" && (
                                             <>
-                                                <PanelColorSettings
-                                                    className={"eb-subpanel"}
-                                                    title={__(
-                                                        "Primary Color",
-                                                        "essential-blocks"
-                                                    )}
-                                                    initialOpen={true}
-                                                    colorSettings={[
-                                                        {
-                                                            value: iconPrimaryHoverColor,
-                                                            onChange: (
-                                                                newColor
-                                                            ) =>
-                                                                setAttributes({
-                                                                    iconPrimaryHoverColor: newColor,
-                                                                }),
-                                                            label: __(
-                                                                "Primary Color",
-                                                                "essential-blocks"
-                                                            ),
-                                                        },
-                                                    ]}
+                                                <ColorControl
+                                                    label={__("Primary Color", "essential-blocks")}
+                                                    color={iconPrimaryHoverColor}
+                                                    onChange={(newColor) =>
+                                                        setAttributes({
+                                                            iconPrimaryHoverColor: newColor,
+                                                        })
+                                                    }
                                                 />
+
                                                 {iconView != "default" && (
-                                                    <PanelColorSettings
-                                                        className={
-                                                            "eb-subpanel"
+                                                    <ColorControl
+                                                        label={__("Secondary Color", "essential-blocks")}
+                                                        color={iconSecondaryHoverColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                iconSecondaryHoverColor: newColor,
+                                                            })
                                                         }
-                                                        title={__(
-                                                            "Secondary Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: iconSecondaryHoverColor,
-                                                                onChange: (
-                                                                    newColor
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            iconSecondaryHoverColor: newColor,
-                                                                        }
-                                                                    ),
-                                                                label: __(
-                                                                    "Secondary Color",
-                                                                    "essential-blocks"
-                                                                ),
-                                                            },
-                                                        ]}
                                                     />
                                                 )}
                                             </>
                                         )}
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Icon Size",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Icon Size", "essential-blocks")}
                                             controlName={ICON_SIZE}
                                             resRequiredProps={resRequiredProps}
                                             min={10}
@@ -339,10 +232,7 @@ function Inspector(props) {
                                             step={1}
                                         />
                                         <RangeControl
-                                            label={__(
-                                                "Padding",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Padding", "essential-blocks")}
                                             value={iconPadding}
                                             onChange={(iconPadding) =>
                                                 setAttributes({
@@ -356,9 +246,7 @@ function Inspector(props) {
                                         />
                                         {iconView === "framed" && (
                                             <ResponsiveDimensionsControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 controlName={BORDER_WIDTH}
                                                 baseLabel="Border Width"
                                             />
@@ -387,34 +275,22 @@ function Inspector(props) {
                                             baseLabel="Padding"
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__(
-                                            "Background",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WRAPPER_BG}
                                             resRequiredProps={resRequiredProps}
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

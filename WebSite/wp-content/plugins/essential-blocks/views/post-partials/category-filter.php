@@ -5,8 +5,8 @@
              * @var array $categories
              */
             array_map(
-                function ( $item ) {
-                    $activeClass = $item->value === 'all' ? 'active' : '';
+                function ( $item ) use ($essentialAttr){
+                    $activeClass = $item->value === $essentialAttr['defaultFilter'] ? 'active' : '';
                     echo wp_kses(
                         sprintf(
                             '<li class="ebpg-category-filter-list-item %1$s" data-ebpgCategory="%2$s">%3$s</li>',

@@ -9,14 +9,14 @@ const nonce = EssentialBlocksLocalize.admin_nonce;
 
 /**
  * Function for Update Global Settings
- * @param {*} value 
+ * @param {*} value
  * @returns {object}
  */
-export const updateGlobalStyle = (value) => {
+export const updateGlobalStyle = (value, key = 'global_colors') => {
     let data = new FormData();
     data.append("action", updateGlobalStyleAction);
     data.append("admin_nonce", nonce);
-    data.append("eb_global_style_key", 'global_colors');
+    data.append("eb_global_style_key", key);
     data.append("eb_global_style_value", JSON.stringify(value));
 
     return fetch(EssentialBlocksLocalize.ajax_url, {
@@ -30,7 +30,7 @@ export const updateGlobalStyle = (value) => {
                 return response.data
             }
             else {
-                console.log("failed update", data)
+                console.log("Update failed! ", response.data)
             }
         })
         .catch(err => console.log(err));
@@ -38,7 +38,7 @@ export const updateGlobalStyle = (value) => {
 
 /**
  * Function for Get Global Settings
- * @returns 
+ * @returns
  */
 export const getGlobalSettings = () => {
     let data = new FormData();
@@ -64,7 +64,7 @@ export const getGlobalSettings = () => {
 
 /**
  * Function for Update block defaults
- * @param {*} value 
+ * @param {*} value
  * @returns {Object}
  */
 export const updateBlockDefaults = (value) => {
@@ -92,7 +92,7 @@ export const updateBlockDefaults = (value) => {
 
 /**
  * Function for Get Block Defaults
- * @returns 
+ * @returns
  */
 export const getBlockDefaults = () => {
     let data = new FormData();

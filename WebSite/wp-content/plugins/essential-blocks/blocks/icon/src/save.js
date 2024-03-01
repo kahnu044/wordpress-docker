@@ -1,5 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 const Save = ({ attributes }) => {
     const { blockId, icon, iconView, iconShape, classHook } = attributes;
     const viewClass = iconView !== "default" ? " eb-icon-view-" + iconView : "";
@@ -16,7 +16,7 @@ const Save = ({ attributes }) => {
                     data-id={blockId}
                 >
                     <div className="eb-icon-container">
-                        <i className={icon}></i>
+                        <EBDisplayIcon icon={icon} />
                     </div>
                 </div>
             </div>

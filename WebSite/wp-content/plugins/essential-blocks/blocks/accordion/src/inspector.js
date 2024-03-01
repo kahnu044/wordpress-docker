@@ -17,11 +17,6 @@ import {
 } from "@wordpress/components";
 
 /**
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/**
  * Internal dependencies
  */
 import {
@@ -33,8 +28,6 @@ import {
 } from "./constants";
 
 const {
-    //
-    faIcons: iconList,
     ColorControl,
     TypographyDropdown,
     ResponsiveDimensionsControl,
@@ -42,6 +35,7 @@ const {
     BorderShadowControl,
     BackgroundControl,
     AdvancedControls,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -271,7 +265,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                 <>
                                     <PanelBody
                                         title={__("Icon", "essential-blocks")}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <ToggleControl
                                             label={__(
@@ -287,44 +281,30 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         />
                                         {displayIcon && (
                                             <>
-                                                <BaseControl
-                                                    label={__(
+                                                <EBIconPicker
+                                                    title={__(
                                                         "Tab Icon",
                                                         "essential-blocks"
                                                     )}
-                                                >
-                                                    <FontIconPicker
-                                                        icons={iconList}
-                                                        value={tabIcon}
-                                                        onChange={(tabIcon) =>
-                                                            setAttributes({
-                                                                tabIcon,
-                                                            })
-                                                        }
-                                                        appendTo="body"
-                                                    />
-                                                </BaseControl>
-
-                                                <BaseControl
-                                                    label={__(
+                                                    value={tabIcon}
+                                                    onChange={(icon) =>
+                                                        setAttributes({
+                                                            tabIcon: icon,
+                                                        })
+                                                    }
+                                                />
+                                                <EBIconPicker
+                                                    title={__(
                                                         "Expanded Icon",
                                                         "essential-blocks"
                                                     )}
-                                                >
-                                                    <FontIconPicker
-                                                        icons={iconList}
-                                                        value={expandedIcon}
-                                                        onChange={(
-                                                            expandedIcon
-                                                        ) =>
-                                                            setAttributes({
-                                                                expandedIcon,
-                                                            })
-                                                        }
-                                                        appendTo="body"
-                                                    />
-                                                </BaseControl>
-
+                                                    value={expandedIcon}
+                                                    onChange={(icon) =>
+                                                        setAttributes({
+                                                            expandedIcon: icon,
+                                                        })
+                                                    }
+                                                />
                                                 <BaseControl
                                                     label={__(
                                                         "Icon Position",
@@ -393,7 +373,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                     title={__(
                                                         "Margin & Padding"
                                                     )}
-                                                    // initialOpen={true}
+                                                // initialOpen={true}
                                                 >
                                                     <ResponsiveDimensionsControl
                                                         resRequiredProps={
@@ -420,7 +400,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                         "Background ",
                                                         "essential-blocks"
                                                     )}
-                                                    // initialOpen={false}
+                                                // initialOpen={false}
                                                 >
                                                     <BackgroundControl
                                                         controlName={
@@ -438,7 +418,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                     title={__(
                                                         "Border & Shadow"
                                                     )}
-                                                    // initialOpen={false}
+                                                // initialOpen={false}
                                                 >
                                                     <BorderShadowControl
                                                         controlName={
@@ -453,8 +433,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                         defaultBdrStyle={
                                                             "solid"
                                                         }
-                                                        // noShadow
-                                                        // noBorder
+                                                    // noShadow
+                                                    // noBorder
                                                     />
                                                 </PanelBody>
                                             </>
@@ -533,7 +513,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                         <PanelBody
                                             title={__("Margin & Padding")}
-                                            // initialOpen={true}
+                                        // initialOpen={true}
                                         >
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
@@ -556,7 +536,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                 "Background ",
                                                 "essential-blocks"
                                             )}
-                                            // initialOpen={false}
+                                        // initialOpen={false}
                                         >
                                             <BackgroundControl
                                                 controlName={tabBgConst}
@@ -573,7 +553,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                 "Expanded Tab Colors",
                                                 "essential-blocks"
                                             )}
-                                            // initialOpen={false}
+                                        // initialOpen={false}
                                         >
                                             <ColorControl
                                                 label={__(
@@ -612,15 +592,15 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                         <PanelBody
                                             title={__("Border & Shadow")}
-                                            // initialOpen={false}
+                                        // initialOpen={false}
                                         >
                                             <BorderShadowControl
                                                 controlName={tabBdShadowConst}
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>
@@ -687,7 +667,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                         <PanelBody
                                             title={__("Margin & Padding")}
-                                            // initialOpen={true}
+                                        // initialOpen={true}
                                         >
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
@@ -710,7 +690,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                 "Background ",
                                                 "essential-blocks"
                                             )}
-                                            // initialOpen={false}
+                                        // initialOpen={false}
                                         >
                                             <BackgroundControl
                                                 controlName={conBgConst}
@@ -724,15 +704,15 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                         <PanelBody
                                             title={__("Border & Shadow")}
-                                            // initialOpen={false}
+                                        // initialOpen={false}
                                         >
                                             <BorderShadowControl
                                                 controlName={conBdShadowConst}
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>
@@ -745,7 +725,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                             "Margin & Padding",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={true}
+                                    // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
@@ -779,8 +759,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

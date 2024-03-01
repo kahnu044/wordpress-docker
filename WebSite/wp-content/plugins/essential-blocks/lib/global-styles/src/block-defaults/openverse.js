@@ -2,22 +2,15 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { PanelColorSettings } from "@wordpress/block-editor";
 import { useEffect, useState } from "@wordpress/element";
-import {
-    PanelBody,
-    ToggleControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
-    PanelRow,
-} from "@wordpress/components";
+import { PanelBody, ToggleControl, Button, ButtonGroup, BaseControl, PanelRow } from "@wordpress/components";
 
 /**
  * External depencencies
  */
 
 const {
+    ColorControl,
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BorderShadowControl,
@@ -55,14 +48,7 @@ function Openverse(props) {
     const [defaultValues, setDefaultValues] = useState({});
     const [isDefaultSet, setDefaultSet] = useState(false);
 
-    const {
-        displayAttribution,
-        attributionColor,
-        textAlign,
-        stylePreset,
-        complexStyle,
-        autoFit,
-    } = defaultValues;
+    const { displayAttribution, attributionColor, textAlign, stylePreset, complexStyle, autoFit } = defaultValues;
 
     /**
      * Update block defaults
@@ -196,16 +182,10 @@ function Openverse(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         {stylePreset === "circle" && (
                             <PanelRow>
-                                <em>
-                                    Please use equal "Height" &#38; "Width" for
-                                    perfect Circle shape.
-                                </em>
+                                <em>Please use equal "Height" &#38; "Width" for perfect Circle shape.</em>
                             </PanelRow>
                         )}
 
@@ -232,33 +212,21 @@ function Openverse(props) {
                         <ToggleControl
                             label={__("Auto Fit Image?", "essential-blocks")}
                             checked={autoFit}
-                            onChange={(autoFit) =>
-                                handleBlockDefault({ autoFit })
-                            }
+                            onChange={(autoFit) => handleBlockDefault({ autoFit })}
                         />
 
                         <ToggleControl
-                            label={__(
-                                "Display Attribution",
-                                "essential-blocks"
-                            )}
+                            label={__("Display Attribution", "essential-blocks")}
                             checked={displayAttribution}
-                            onChange={() =>
-                                checkAttribution(!displayAttribution)
-                            }
+                            onChange={() => checkAttribution(!displayAttribution)}
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Image Settings", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Image Settings", "essential-blocks")} initialOpen={false}>
                         {!complexStyle && (
                             <>
                                 <BaseControl>
-                                    <h3 className="eb-control-title">
-                                        {__("Border", "essential-blocks")}
-                                    </h3>
+                                    <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <BorderShadowControl
                                     controlName={IMAGE_BORDER_SHADOW}
@@ -270,44 +238,26 @@ function Openverse(props) {
                         )}
                         {complexStyle && (
                             <PanelRow>
-                                <em>
-                                    Border Style doesn't support for "
-                                    {stylePreset} style".
-                                </em>
+                                <em>Border Style doesn't support for "{stylePreset} style".</em>
                             </PanelRow>
                         )}
                     </PanelBody>
 
                     {displayAttribution && (
-                        <PanelBody
-                            title={__("Caption Styles", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <PanelColorSettings
-                                title={__("Color Controls", "essential-blocks")}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: attributionColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                attributionColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Text Color",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                ]}
+                        <PanelBody title={__("Caption Styles", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Color Controls", "essential-blocks")}
+                                color={attributionColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        attributionColor: newColor,
+                                    })
+                                }
                             />
 
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
-                                typographyPrefixConstant={
-                                    ATTRIBUTION_TYPOGRAPHY
-                                }
+                                typographyPrefixConstant={ATTRIBUTION_TYPOGRAPHY}
                                 resRequiredProps={resRequiredProps}
                             />
 
@@ -323,26 +273,16 @@ function Openverse(props) {
 
                             {displayAttribution && (
                                 <>
-                                    <BaseControl
-                                        label={__(
-                                            "Text Align",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Text Align", "essential-blocks")}>
                                         <ButtonGroup>
                                             {TEXT_ALIGN.map((item) => (
                                                 <Button
                                                     // isLarge
-                                                    isPrimary={
-                                                        textAlign === item.value
-                                                    }
-                                                    isSecondary={
-                                                        textAlign !== item.value
-                                                    }
+                                                    isPrimary={textAlign === item.value}
+                                                    isSecondary={textAlign !== item.value}
                                                     onClick={() =>
                                                         handleBlockDefault({
-                                                            textAlign:
-                                                                item.value,
+                                                            textAlign: item.value,
                                                         })
                                                     }
                                                 >
@@ -369,13 +309,7 @@ function Openverse(props) {
                     )}
 
                     {/* Advanced */}
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -387,20 +321,10 @@ function Openverse(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WRAPPER_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}

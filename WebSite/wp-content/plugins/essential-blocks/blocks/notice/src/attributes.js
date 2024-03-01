@@ -75,9 +75,11 @@ const attributes = {
     },
     titleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     textColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     noticeId: {
         type: "string",
@@ -120,8 +122,8 @@ const attributes = {
 
     // background attributes ⬇
     ...generateBackgroundAttributes(wrapBg, {
-        defaultFillColor: "#3074ff",
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
+        defaultFillColor: "var(--eb-global-background-color)",
+        defaultBgGradient: "var(--eb-gradient-background-color)",
     }),
     ...generateResponsiveAlignAttributes(NOTICE_ALIGNMENT, {
         defaultAlign: "left",

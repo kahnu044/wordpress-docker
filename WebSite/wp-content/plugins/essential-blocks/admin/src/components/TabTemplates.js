@@ -1,9 +1,7 @@
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { select, dispatch } from "@wordpress/data";
-import apiFetch from "@wordpress/api-fetch";
 
-import { getTemplates, getTemplateCount } from "./helpers/getTemplates";
+import { getTemplates } from "./helpers/getTemplates";
 
 import ReactPlayer from "react-player";
 
@@ -11,7 +9,6 @@ import templatelyLogo from "../icons/templately-logo.svg";
 import iconMan from "../icons/iconMan.svg";
 import iconBlueCheck from "../icons/iconBlueCheck.svg";
 import { LayerRedIcon } from "../icons/layer-red-icon.js";
-import templatelyOverlay from "../icons/templately-overlay.jpg";
 import playIcon from "../icons/play-icon.svg";
 
 const { installPlugin, ebJsonStringCheck } = window.EBControls;
@@ -180,7 +177,7 @@ export default function TabTemplates() {
                                         muted={true}
                                         playing={true}
                                         controls={false}
-                                        light={templatelyOverlay}
+                                        light={`${EssentialBlocksLocalize.image_url}/admin/templately-overlay.jpeg`}
                                         playIcon={videoPlayIcon}
                                         className="eb-react-player"
                                         width="100%"

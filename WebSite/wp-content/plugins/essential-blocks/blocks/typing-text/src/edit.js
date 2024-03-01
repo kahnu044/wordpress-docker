@@ -9,25 +9,7 @@ import {
 } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 
-import {
-    dimensionsMargin,
-    dimensionsPadding,
-} from "./constants/dimensionsNames";
-import {
-    typoPrefix_prefixText,
-    typoPrefix_suffixText,
-    typoPrefix_typedText,
-} from "./constants/typographyPrefixConstants";
-import { WrpBdShadow } from "./constants/borderShadowConstants";
-import { backgroundWrapper } from "./constants/backgroundsConstants";
-
 const {
-    softMinifyCssStrings,
-    generateTypographyStyles,
-    generateDimensionsControlStyles,
-    generateBorderShadowStyles,
-    generateBackgroundControlStyles,
-    // mimmikCssForPreviewBtnClick,
     duplicateBlockIdFix,
 } = window.EBControls;
 
@@ -51,6 +33,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         blockId,
@@ -69,9 +52,6 @@ export default function Edit(props) {
         loop,
         showCursor,
         suffix,
-        prefixColor,
-        typedTextColor,
-        suffixTextColor,
         textAlign,
         classHook,
     } = attributes;

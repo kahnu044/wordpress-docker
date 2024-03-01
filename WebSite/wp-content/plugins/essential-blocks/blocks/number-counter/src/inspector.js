@@ -17,11 +17,6 @@ import {
 import { select } from "@wordpress/data";
 
 /**
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/**
  * Internal dependencies
  */
 
@@ -38,6 +33,7 @@ const {
     GradientColorControl,
     ImageAvatar,
     faIcons,
+    EBIconPicker,
     AdvancedControls,
 } = window.EBControls;
 
@@ -314,7 +310,7 @@ const Inspector = (props) => {
                                             "Counter Settings",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <BaseControl id="eb-counter-start-value">
                                             <TextControl
@@ -516,24 +512,14 @@ const Inspector = (props) => {
                                         >
                                             {media === "icon" && (
                                                 <>
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Select Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            onChange={(icon) =>
-                                                                setAttributes({
-                                                                    selectedIcon: icon,
-                                                                })
-                                                            }
-                                                            value={selectedIcon}
-                                                            appendTo="body"
-                                                            isMulti={false}
-                                                        />
-                                                    </BaseControl>
+                                                    <EBIconPicker
+                                                        value={selectedIcon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                selectedIcon: icon,
+                                                            })
+                                                        }
+                                                    />
 
                                                     {selectedIcon && (
                                                         <ResponsiveRangeController
@@ -637,51 +623,51 @@ const Inspector = (props) => {
 
                                                             {iconBgType ===
                                                                 "fill" && (
-                                                                <ColorControl
-                                                                    label={__(
-                                                                        "Background Color",
-                                                                        "essential-blocks"
-                                                                    )}
-                                                                    color={
-                                                                        iconBgColor
-                                                                    }
-                                                                    onChange={(
-                                                                        iconBgColor
-                                                                    ) =>
-                                                                        setAttributes(
-                                                                            {
-                                                                                iconBgColor,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                />
-                                                            )}
-
-                                                            {iconBgType ===
-                                                                "gradient" && (
-                                                                <PanelBody
-                                                                    title={__(
-                                                                        "Gradient",
-                                                                        "essential-blocks"
-                                                                    )}
-                                                                    // initialOpen={false}
-                                                                >
-                                                                    <GradientColorControl
-                                                                        gradientColor={
-                                                                            iconBgGradient
+                                                                    <ColorControl
+                                                                        label={__(
+                                                                            "Background Color",
+                                                                            "essential-blocks"
+                                                                        )}
+                                                                        color={
+                                                                            iconBgColor
                                                                         }
                                                                         onChange={(
-                                                                            iconBgGradient
+                                                                            iconBgColor
                                                                         ) =>
                                                                             setAttributes(
                                                                                 {
-                                                                                    iconBgGradient,
+                                                                                    iconBgColor,
                                                                                 }
                                                                             )
                                                                         }
                                                                     />
-                                                                </PanelBody>
-                                                            )}
+                                                                )}
+
+                                                            {iconBgType ===
+                                                                "gradient" && (
+                                                                    <PanelBody
+                                                                        title={__(
+                                                                            "Gradient",
+                                                                            "essential-blocks"
+                                                                        )}
+                                                                    // initialOpen={false}
+                                                                    >
+                                                                        <GradientColorControl
+                                                                            gradientColor={
+                                                                                iconBgGradient
+                                                                            }
+                                                                            onChange={(
+                                                                                iconBgGradient
+                                                                            ) =>
+                                                                                setAttributes(
+                                                                                    {
+                                                                                        iconBgGradient,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    </PanelBody>
+                                                                )}
                                                         </>
                                                     )}
                                                 </>
@@ -810,14 +796,104 @@ const Inspector = (props) => {
                                             <>
                                                 {(rootFlexDirection === "row" ||
                                                     rootFlexDirection ===
-                                                        "row-reverse") && (
-                                                    <>
+                                                    "row-reverse") && (
+                                                        <>
+                                                            <BaseControl
+                                                                id="eb-infobox-alignments"
+                                                                label="Media Vertical alignments"
+                                                            >
+                                                                <ButtonGroup id="eb-infobox-alignments">
+                                                                    {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
+                                                                        (
+                                                                            {
+                                                                                value,
+                                                                                label,
+                                                                            },
+                                                                            index
+                                                                        ) => (
+                                                                            <Button
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                isSecondary={
+                                                                                    mediaAlignSelf !==
+                                                                                    value
+                                                                                }
+                                                                                isPrimary={
+                                                                                    mediaAlignSelf ===
+                                                                                    value
+                                                                                }
+                                                                                onClick={() =>
+                                                                                    setAttributes(
+                                                                                        {
+                                                                                            mediaAlignSelf: value,
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    label
+                                                                                }
+                                                                            </Button>
+                                                                        )
+                                                                    )}
+                                                                </ButtonGroup>
+                                                            </BaseControl>
+
+                                                            <BaseControl
+                                                                id="eb-infobox-alignments"
+                                                                label="Content Vertical alignments"
+                                                            >
+                                                                <ButtonGroup id="eb-infobox-alignments">
+                                                                    {CONTENTS_ALIGNMENTS_ON_FLEX_ROW.map(
+                                                                        (
+                                                                            {
+                                                                                value,
+                                                                                label,
+                                                                            },
+                                                                            index
+                                                                        ) => (
+                                                                            <Button
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                isSecondary={
+                                                                                    contentsAlignSelf !==
+                                                                                    value
+                                                                                }
+                                                                                isPrimary={
+                                                                                    contentsAlignSelf ===
+                                                                                    value
+                                                                                }
+                                                                                onClick={() =>
+                                                                                    setAttributes(
+                                                                                        {
+                                                                                            contentsAlignSelf: value,
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    label
+                                                                                }
+                                                                            </Button>
+                                                                        )
+                                                                    )}
+                                                                </ButtonGroup>
+                                                            </BaseControl>
+                                                        </>
+                                                    )}
+
+                                                {(rootFlexDirection ===
+                                                    "column" ||
+                                                    rootFlexDirection ===
+                                                    "column-reverse") && (
                                                         <BaseControl
                                                             id="eb-infobox-alignments"
-                                                            label="Media Vertical alignments"
+                                                            label="Media alignments"
                                                         >
                                                             <ButtonGroup id="eb-infobox-alignments">
-                                                                {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
+                                                                {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
                                                                     (
                                                                         {
                                                                             value,
@@ -845,103 +921,13 @@ const Inspector = (props) => {
                                                                                 )
                                                                             }
                                                                         >
-                                                                            {
-                                                                                label
-                                                                            }
+                                                                            {label}
                                                                         </Button>
                                                                     )
                                                                 )}
                                                             </ButtonGroup>
                                                         </BaseControl>
-
-                                                        <BaseControl
-                                                            id="eb-infobox-alignments"
-                                                            label="Content Vertical alignments"
-                                                        >
-                                                            <ButtonGroup id="eb-infobox-alignments">
-                                                                {CONTENTS_ALIGNMENTS_ON_FLEX_ROW.map(
-                                                                    (
-                                                                        {
-                                                                            value,
-                                                                            label,
-                                                                        },
-                                                                        index
-                                                                    ) => (
-                                                                        <Button
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            isSecondary={
-                                                                                contentsAlignSelf !==
-                                                                                value
-                                                                            }
-                                                                            isPrimary={
-                                                                                contentsAlignSelf ===
-                                                                                value
-                                                                            }
-                                                                            onClick={() =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        contentsAlignSelf: value,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                label
-                                                                            }
-                                                                        </Button>
-                                                                    )
-                                                                )}
-                                                            </ButtonGroup>
-                                                        </BaseControl>
-                                                    </>
-                                                )}
-
-                                                {(rootFlexDirection ===
-                                                    "column" ||
-                                                    rootFlexDirection ===
-                                                        "column-reverse") && (
-                                                    <BaseControl
-                                                        id="eb-infobox-alignments"
-                                                        label="Media alignments"
-                                                    >
-                                                        <ButtonGroup id="eb-infobox-alignments">
-                                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
-                                                                (
-                                                                    {
-                                                                        value,
-                                                                        label,
-                                                                    },
-                                                                    index
-                                                                ) => (
-                                                                    <Button
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        isSecondary={
-                                                                            mediaAlignSelf !==
-                                                                            value
-                                                                        }
-                                                                        isPrimary={
-                                                                            mediaAlignSelf ===
-                                                                            value
-                                                                        }
-                                                                        onClick={() =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    mediaAlignSelf: value,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        {label}
-                                                                    </Button>
-                                                                )
-                                                            )}
-                                                        </ButtonGroup>
-                                                    </BaseControl>
-                                                )}
+                                                    )}
                                             </>
                                         )}
 

@@ -1,10 +1,4 @@
-import {
-    WRAPPER_MARGIN,
-    WRAPPER_PADDING,
-    WRAPPER_BORDER_SHADOW,
-    WRAPPER_BG,
-    SHAPE_DIVIDER,
-} from "./constants";
+import { WRAPPER_MARGIN, WRAPPER_PADDING, WRAPPER_BORDER_SHADOW, WRAPPER_BG, SHAPE_DIVIDER } from "./constants";
 
 const {
     generateDimensionsAttributes,
@@ -48,6 +42,7 @@ const attributes = {
     // shape divider
     ...generateShapeDividerAttributes(SHAPE_DIVIDER, {
         dividerType: "style_1",
+        defaultColor: "var(--eb-global-primary-color)",
     }),
     shapeDividerPosition: {
         type: "string",

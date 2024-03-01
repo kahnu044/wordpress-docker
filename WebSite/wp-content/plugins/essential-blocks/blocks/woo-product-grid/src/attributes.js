@@ -24,6 +24,12 @@ import {
     LOADMORE_PADDING,
     LOADMORE_MARGIN,
     LOADMORE_BORDER_SHADOW,
+    SOLD_COUNT_SPACE,
+    FILTER_ITEM_GAP,
+    FILTER_MARGIN,
+    FILTER_ITEM_PADDING,
+    FILTER_ITEM_BORDER_SHADOW,
+    PROGRESSBAR_HEIGHT,
 } from "./constants";
 
 const {
@@ -53,6 +59,10 @@ const attributes = {
     },
     blockMeta: {
         type: "object",
+    },
+    cover: {
+        type: "string",
+        default: "",
     },
     queryData: {
         type: "object",
@@ -90,15 +100,19 @@ const attributes = {
     },
     titleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     titleHoverColor: {
         type: "string",
+        default: "var(--eb-global-link-color)",
     },
     priceColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     salePriceColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     ratingColor: {
         type: "string",
@@ -113,9 +127,11 @@ const attributes = {
     },
     saleTextColor: {
         type: "string",
+        default: "var(--eb-global-secondary-color)",
     },
     saleTextBackgroundColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     contentAlignment: {
         type: "string",
@@ -129,18 +145,22 @@ const attributes = {
     },
     btnColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
     btnHoverColor: {
         type: "string",
     },
     btnBackgroundColor: {
         type: "string",
+        default: "var(--eb-global-button-background-color)",
     },
     btnBackgroundHoverColor: {
         type: "string",
+        default: "var(--eb-global-tertiary-color)",
     },
     descColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     autoHeight: {
         type: "boolean",
@@ -190,27 +210,108 @@ const attributes = {
     },
     loadMoreColor: {
         type: "string",
-        default: "#333333",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreBgColor: {
         type: "string",
-        default: "#e3e3e3",
+        default: "var(--eb-global-button-background-color)",
     },
     loadMoreHoverColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreHoverBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-tertiary-color)",
     },
     loadMoreActiveColor: {
         type: "string",
-        default: "#ffffff",
+        default: "var(--eb-global-button-text-color)",
     },
     loadMoreActiveBgColor: {
         type: "string",
-        default: "#d18df1",
+        default: "var(--eb-global-primary-color)",
+    },
+
+    ratingStyle: {
+        type: "string",
+        default: "star",
+    },
+    showSoldCount: {
+        type: "boolean",
+        default: false,
+    },
+    showSoldCountBar: {
+        type: "boolean",
+        default: false,
+    },
+    soldCountPrefix: {
+        type: "string",
+        default: "Sold ",
+    },
+    soldCountSuffix: {
+        type: "string",
+        default: "+",
+    },
+    stockPercent: {
+        type: "number",
+        default: 50,
+    },
+    soldCountColor: {
+        type: "string",
+    },
+    progressbarBackgroundColor: {
+        type: "string",
+    },
+    progressbarFillColor: {
+        type: "string",
+    },
+    showTaxonomyFilter: {
+        type: "boolean",
+        default: false,
+    },
+    selectedTaxonomy: {
+        type: "string",
+    },
+    selectedTaxonomyItems: {
+        type: "string",
+        default: '[{"value":"all","label":"All"}]',
+    },
+    filterColorStyle: {
+        type: "stroing",
+        default: "normal",
+    },
+    filterBgColor: {
+        type: "string",
+        default: "var(--eb-global-background-color)",
+    },
+    filterTextColor: {
+        type: "string",
+        default: "var(--eb-global-text-color)",
+    },
+    filterActiveBgColor: {
+        type: "string",
+        default: "var(--eb-global-button-background-color)",
+    },
+    filterActiveTextColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    filterHoverBgColor: {
+        type: "string",
+        default: "var(--eb-global-primary-color)",
+    },
+    filterHoverTextColor: {
+        type: "string",
+        default: "var(--eb-global-tertiary-color)",
+    },
+    contentLists: {
+        type: "array",
+        default: ["rating", "title", "price", "sold_count"],
+    },
+    enableContents: {
+        type: "array",
+        default: ["rating", "title", "price"],
     },
     ...generateTypographyAttributes(Object.values(typoPrefixs)),
     ...generateResponsiveRangeAttributes(RATING_ICON_SIZE),
@@ -277,6 +378,7 @@ const attributes = {
         left: 5,
         isLinked: false,
     }),
+    ...generateDimensionsAttributes(SOLD_COUNT_SPACE),
     // border shadow attributes ⬇
     ...generateBorderShadowAttributes(LOADMORE_BORDER_SHADOW, {
         noShadow: true,
@@ -296,11 +398,31 @@ const attributes = {
         },
         // noBorder: true,
     }),
-
-    cover: {
-        type: "string",
-        default: "",
-    },
+    ...generateResponsiveRangeAttributes(FILTER_ITEM_GAP, {
+        defaultRange: 10,
+    }),
+    ...generateDimensionsAttributes(FILTER_MARGIN, {
+        top: 0,
+        bottom: 20,
+        right: 0,
+        left: 0,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(FILTER_ITEM_PADDING, {
+        top: 10,
+        bottom: 10,
+        right: 20,
+        left: 20,
+        isLinked: false,
+    }),
+    ...generateBorderShadowAttributes(FILTER_ITEM_BORDER_SHADOW, {
+        defaultBdrColor: "var(--eb-global-primary-color)",
+        defaultBdrStyle: "solid",
+    }),
+    ...generateResponsiveRangeAttributes(PROGRESSBAR_HEIGHT, {
+        defaultRange: 10,
+        noUnits: true,
+    }),
 };
 
 export default attributes;

@@ -62,7 +62,6 @@ import {
 
 import objAttributes from "./attributes";
 import SortableFeatures from "./sortable-features";
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 const {
     faIcons,
@@ -74,6 +73,7 @@ const {
     BorderShadowControl,
     AdvancedControls,
     DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -361,24 +361,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         />
 
                                         {showHeaderIcon && (
-                                            <BaseControl
-                                                label={__(
-                                                    "Icon",
-                                                    "essential-blocks"
-                                                )}
-                                            >
-                                                <FontIconPicker
-                                                    icons={faIcons}
-                                                    value={headerIcon}
-                                                    onChange={(headerIcon) =>
-                                                        setAttributes({
-                                                            headerIcon,
-                                                        })
-                                                    }
-                                                    appendTo="body"
-                                                    closeOnSelect
-                                                />
-                                            </BaseControl>
+                                            <EBIconPicker
+                                                value={headerIcon}
+                                                onChange={(icon) =>
+                                                    setAttributes({
+                                                        headerIcon: icon,
+                                                    })
+                                                }
+                                                title={__("Icon", "essential-blocks")}
+                                            />
                                         )}
 
                                         {pricingStyle !== "style-4" && (
@@ -559,24 +550,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 });
                                             }}
                                         />
-                                        <BaseControl
-                                            label={__(
-                                                "Button Icon",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <FontIconPicker
-                                                icons={faIcons}
-                                                value={buttonIcon}
-                                                onChange={(buttonIcon) =>
-                                                    setAttributes({
-                                                        buttonIcon,
-                                                    })
-                                                }
-                                                appendTo="body"
-                                                closeOnSelect
-                                            />
-                                        </BaseControl>
+                                        <EBIconPicker
+                                            value={buttonIcon}
+                                            onChange={(icon) =>
+                                                setAttributes({
+                                                    buttonIcon: icon,
+                                                })
+                                            }
+                                            title={__("Button Icon", "essential-blocks")}
+                                        />
                                         <BaseControl
                                             label={__(
                                                 "Icon Position",

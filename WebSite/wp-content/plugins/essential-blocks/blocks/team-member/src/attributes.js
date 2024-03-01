@@ -14,18 +14,9 @@ import {
     contentsMargin,
 } from "./constants/dimensionsConstants";
 
-import {
-    WrpBgConst,
-    imgTopBgPrefix,
-    socialWrpBg,
-} from "./constants/backgroundsConstants";
+import { WrpBgConst, imgTopBgPrefix, socialWrpBg } from "./constants/backgroundsConstants";
 
-import {
-    WrpBdShadowConst,
-    prefixSocialBdShadow,
-    prefixImgBd,
-    ovlBdPrefix,
-} from "./constants/borderShadowConstants";
+import { WrpBdShadowConst, prefixSocialBdShadow, prefixImgBd, ovlBdPrefix } from "./constants/borderShadowConstants";
 
 import {
     wrapperWidth,
@@ -100,6 +91,10 @@ const attributes = {
         type: "boolean",
         default: true,
     },
+    showDesignation: {
+        type: "boolean",
+        default: true,
+    },
 
     // member description
     description: {
@@ -111,7 +106,7 @@ const attributes = {
     //
     imageUrl: {
         source: "attribute",
-        selector: ".avatar",
+        selector: ".eb-team-member-avatar",
         attribute: "src",
         default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/user.jpg",
     },
@@ -138,12 +133,15 @@ const attributes = {
     //
     descsColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     nameColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     jobColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
 
     // social profiles
@@ -272,7 +270,7 @@ const attributes = {
 
     conBgGradient: {
         type: "string",
-        default: "linear-gradient(45deg, #7967ff, rgba(194,119,242,0.8))",
+        default: "linear-gradient(211deg, #C8D2E3 0%, rgb(154 164 182 / 60%) 100%)",
     },
     conBgColor: {
         type: "string",
@@ -295,6 +293,20 @@ const attributes = {
     newWindow: {
         type: "boolean",
         default: false,
+    },
+
+
+    isContentOverlay: {
+        type: "boolean",
+        default: false,
+    },
+    showSocialTitle: {
+        type: "boolean",
+        default: false,
+    },
+    hoverPreset: {
+        type: "string",
+        default: "hover-left",
     },
 
     // typography attributes
@@ -325,7 +337,7 @@ const attributes = {
     }),
 
     ...generateResponsiveRangeAttributes(rangeIconRowGap, {
-        // defaultRange: 10,
+        defaultRange: 4,
         noUnits: true,
     }),
 
@@ -375,7 +387,7 @@ const attributes = {
         noOverlay: true,
     }),
     ...generateBackgroundAttributes(imgTopBgPrefix, {
-        defaultFillColor: "#84AFFF",
+        defaultFillColor: "var(--eb-global-primary-color)",
         defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
         // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
@@ -408,7 +420,7 @@ const attributes = {
         // noBorder: true,
     }),
     ...generateBorderShadowAttributes(ovlBdPrefix, {
-        noShadow: true,
+        // noShadow: true,
         noBdrHover: true,
         // bdrDefaults: {
         // 	top: 1,

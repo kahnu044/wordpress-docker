@@ -21,16 +21,14 @@
 	}
 
 	&.img-style-octagon .image-wrapper {
-		clip-path: polygon(
-			30% 0%,
-			70% 0%,
-			100% 30%,
-			100% 70%,
-			70% 100%,
-			30% 100%,
-			0% 70%,
-			0% 30%
-		);
+		clip-path: polygon(30% 0%,
+				70% 0%,
+				100% 30%,
+				100% 70%,
+				70% 100%,
+				30% 100%,
+				0% 70%,
+				0% 30%);
 	}
 
 	&.attribution-style-1 {
@@ -57,6 +55,7 @@
 		overflow: hidden;
 		position: relative;
 	}
+
 	img {
 		display: block;
 		width: 100%;
@@ -90,6 +89,7 @@
 			transform: scale(1.3);
 		}
 	}
+
 	&.zoom-out {
 		img {
 			transform: scale(1.5);
@@ -99,6 +99,7 @@
 			transform: scale(1);
 		}
 	}
+
 	&.slide {
 		img {
 			margin-left: 30px !important;
@@ -110,6 +111,7 @@
 			margin-left: 0 !important;
 		}
 	}
+
 	&.blur {
 		img {
 			filter: blur(3px);
@@ -133,6 +135,7 @@
 .search-key {
 	margin: 0 0 10px;
 }
+
 .editor-styles-wrapper .search-filter h4,
 .search-filter h4 {
 	font-size: 16px;
@@ -231,6 +234,7 @@
 .openverse-search-input:focus {
 	box-shadow: inset 0px 0px 0 1px #2673ff !important;
 }
+
 .openverse-search-input {
 	background-image: url("data:image/svg+xml; base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0xNS44NTMgMTYuNTZjLTEuNjgzIDEuNTE3LTMuOTExIDIuNDQtNi4zNTMgMi40NC01LjI0MyAwLTkuNS00LjI1Ny05LjUtOS41czQuMjU3LTkuNSA5LjUtOS41IDkuNSA0LjI1NyA5LjUgOS41YzAgMi40NDItLjkyMyA0LjY3LTIuNDQgNi4zNTNsNy40NCA3LjQ0LS43MDcuNzA3LTcuNDQtNy40NHptLTYuMzUzLTE1LjU2YzQuNjkxIDAgOC41IDMuODA5IDguNSA4LjVzLTMuODA5IDguNS04LjUgOC41LTguNS0zLjgwOS04LjUtOC41IDMuODA5LTguNSA4LjUtOC41eiIvPjwvc3ZnPg==");
 	background-color: #fff;
@@ -289,13 +293,15 @@
 	transition: box-shadow 0.1s linear;
 }
 
-@media all and (max-width: 767px) {
+@media (max-width: 767px) {
 	.eb-openverse-grid {
 		--size: calc(70vw / 4) !important;
 	}
+
 	.openverse-search-section {
 		display: block;
 	}
+
 	.openverse-search-input {
 		margin-bottom: 15px;
 	}
@@ -320,6 +326,7 @@
 	}
 
 	.search-section {
+
 		.openverse-search-input,
 		.openverse-search-btn {
 			width: auto;
@@ -353,6 +360,7 @@
 		width: 100%;
 		height: 50px;
 	}
+
 	.openverse-api-btn {
 		min-width: 150px;
 		margin: 0 auto;
@@ -410,6 +418,7 @@
 		margin-top: 5px;
 	}
 }
+
 .eb-alert-error {
 	font-size: 13px;
 	font-weight: 400;
@@ -468,6 +477,7 @@
 		color: black;
 		display: block;
 	}
+
 	span {
 		font-size: 13px;
 		font-weight: 400;

@@ -1,6 +1,6 @@
 const example = {
-	attributes: {
-		imageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/advanced-images.jpeg",
-	},
+    attributes: {
+        imageURL: EssentialBlocksLocalize?.image_url + "/gallery-images/china.jpg",
+    },
 };
 export default example;

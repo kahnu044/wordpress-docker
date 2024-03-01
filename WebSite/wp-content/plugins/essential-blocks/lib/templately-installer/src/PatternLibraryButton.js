@@ -1,12 +1,10 @@
 /**
  * WordPress dependencies
  */
-import { createBlock } from "@wordpress/blocks";
 import { useState, useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { useCallback } from "@wordpress/element";
 import { Button, Popover } from "@wordpress/components";
-import patternLibrary from "../../..//images/patternLibrary.jpg";
+
 
 import { LoadAssets } from '../../../src/components/LoadAssets';
 
@@ -103,7 +101,7 @@ const PatternLibraryButton = () => {
                             </Button>
                         </div>
                         <div className="pattern-img">
-                            <img src={patternLibrary} alt="Pattern Library" />
+                            <img src={`${EssentialBlocksLocalize.image_url}//patternLibrary.jpg`} alt="Pattern Library" />
                         </div>
                     </div>
                     <a

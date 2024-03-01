@@ -151,13 +151,13 @@ function AdvancedTabs(props) {
                 tabChildCount: 3,
                 isMediaOn: true,
                 isFillTitle: true,
-                textColor: "#555555",
-                iconColor: "#555555",
-                actTextColor: "#ffffff",
-                actIconColor: "#ffffff",
+                textColor: "var(--eb-global-heading-color)",
+                iconColor: "var(--eb-global-heading-color)",
+                actTextColor: "var(--eb-global-background-color)",
+                actIconColor: "var(--eb-global-background-color)",
                 actColorTransition: "number",
                 showCaret: true,
-                caretColor: "#7967ff",
+                caretColor: "var(--eb-global-primary-color)",
                 [`${prefixTitleMinWidth}Unit`]: "px",
                 [`${prefixTitlePadding}Unit`]: "px",
                 [`${prefixTitlePadding}isLinked`]: true,
@@ -249,7 +249,7 @@ function AdvancedTabs(props) {
                 <div className="eb-panel-control">
                     <PanelBody
                         title={__("Tabs Settings", "essential-blocks")}
-                        // initialOpen={false}
+                    // initialOpen={false}
                     >
                         <SelectControl
                             label={__("Tabs Layout", "essential-blocks")}
@@ -264,18 +264,13 @@ function AdvancedTabs(props) {
                                     value: "vertical",
                                 },
                             ]}
-                            onChange={(layout) =>
-                                handleBlockDefault({ layout: layout })
-                            }
+                            onChange={(layout) => handleBlockDefault({ layout: layout })}
                         />
 
                         {layout === "horizontal" && (
                             <>
                                 <ToggleControl
-                                    label={__(
-                                        "Fill Titles' Wrapper",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Fill Titles' Wrapper", "essential-blocks")}
                                     checked={isFillTitle}
                                     onChange={() =>
                                         handleBlockDefault({
@@ -289,72 +284,46 @@ function AdvancedTabs(props) {
                         <ToggleControl
                             label={__("Enable Icon", "essential-blocks")}
                             checked={isMediaOn}
-                            onChange={() =>
-                                handleBlockDefault({ isMediaOn: !isMediaOn })
-                            }
+                            onChange={() => handleBlockDefault({ isMediaOn: !isMediaOn })}
                         />
                         {isMediaOn && (
                             <>
                                 <SelectControl
-                                    label={__(
-                                        "Icon Layout",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Icon Layout", "essential-blocks")}
                                     value={mediaPositon}
                                     options={[
                                         {
-                                            label: __(
-                                                "Stacked",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Stacked", "essential-blocks"),
                                             value: "stacked",
                                         },
                                         {
-                                            label: __(
-                                                "Inline",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Inline", "essential-blocks"),
                                             value: "inline",
                                         },
                                     ]}
-                                    onChange={(mediaPositon) =>
-                                        handleBlockDefault({ mediaPositon })
-                                    }
+                                    onChange={(mediaPositon) => handleBlockDefault({ mediaPositon })}
                                 />
                                 {mediaPositon === "inline" && (
                                     <>
                                         <ButtonGroup id="eb-advTabs-type-btgrp">
                                             {[
                                                 {
-                                                    label: __(
-                                                        "Left",
-                                                        "essential-blocks"
-                                                    ),
+                                                    label: __("Left", "essential-blocks"),
                                                     value: "left",
                                                 },
                                                 {
-                                                    label: __(
-                                                        "Right",
-                                                        "essential-blocks"
-                                                    ),
+                                                    label: __("Right", "essential-blocks"),
                                                     value: "right",
                                                 },
                                             ].map((item, index) => (
                                                 <Button
                                                     key={index}
                                                     // isLarge
-                                                    isSecondary={
-                                                        mediaAlign !==
-                                                        item.value
-                                                    }
-                                                    isPrimary={
-                                                        mediaAlign ===
-                                                        item.value
-                                                    }
+                                                    isSecondary={mediaAlign !== item.value}
+                                                    isPrimary={mediaAlign === item.value}
                                                     onClick={() =>
                                                         handleBlockDefault({
-                                                            mediaAlign:
-                                                                item.value,
+                                                            mediaAlign: item.value,
                                                         })
                                                     }
                                                 >
@@ -364,20 +333,14 @@ function AdvancedTabs(props) {
                                         </ButtonGroup>
 
                                         <label style={{ display: "block" }}>
-                                            <i>
-                                                Set icon position before/after
-                                                the tab title.
-                                            </i>
+                                            <i>Set icon position before/after the tab title.</i>
                                         </label>
                                     </>
                                 )}
                             </>
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Tab Title Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Tab Title Style", "essential-blocks")} initialOpen={false}>
                         <TypographyDropdown
                             baseLabel="Typography"
                             typographyPrefixConstant={typoPrefixTabTitle}
@@ -385,10 +348,7 @@ function AdvancedTabs(props) {
                         />
 
                         <ResponsiveRangeController
-                            baseLabel={__(
-                                "Title Min Width",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Title Min Width", "essential-blocks")}
                             controlName={prefixTitleMinWidth}
                             resRequiredProps={resRequiredProps}
                             min={0}
@@ -433,25 +393,16 @@ function AdvancedTabs(props) {
                             baseLabel="Margin"
                         />
 
-                        <PanelBody
-                            title={__("Colors", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Colors", "essential-blocks")} initialOpen={false}>
                             <BaseControl>
                                 <ButtonGroup>
                                     {[
                                         {
-                                            label: __(
-                                                "Normal",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Normal", "essential-blocks"),
                                             value: "normal",
                                         },
                                         {
-                                            label: __(
-                                                "Hover",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Hover", "essential-blocks"),
                                             value: "hover",
                                         },
                                     ].map(({ value, label }, index) => (
@@ -459,12 +410,8 @@ function AdvancedTabs(props) {
                                             key={index}
                                             // isLarge
                                             isPrimary={colorSwitcher === value}
-                                            isSecondary={
-                                                colorSwitcher !== value
-                                            }
-                                            onClick={() =>
-                                                setColorSwitcher(value)
-                                            }
+                                            isSecondary={colorSwitcher !== value}
+                                            onClick={() => setColorSwitcher(value)}
                                         >
                                             {label}
                                         </Button>
@@ -476,24 +423,16 @@ function AdvancedTabs(props) {
                                 <>
                                     <ColorControl
                                         label={__("Text", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.textColor.default
-                                        }
+                                        defaultColor={objAttributes.textColor.default}
                                         color={textColor}
-                                        onChange={(textColor) =>
-                                            handleBlockDefault({ textColor })
-                                        }
+                                        onChange={(textColor) => handleBlockDefault({ textColor })}
                                     />
 
                                     <ColorControl
                                         label={__("Icon", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.iconColor.default
-                                        }
+                                        defaultColor={objAttributes.iconColor.default}
                                         color={iconColor}
-                                        onChange={(iconColor) =>
-                                            handleBlockDefault({ iconColor })
-                                        }
+                                        onChange={(iconColor) => handleBlockDefault({ iconColor })}
                                     />
                                 </>
                             )}
@@ -502,24 +441,16 @@ function AdvancedTabs(props) {
                                 <>
                                     <ColorControl
                                         label={__("Text", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.hvTextColor.default
-                                        }
+                                        defaultColor={objAttributes.hvTextColor.default}
                                         color={hvTextColor}
-                                        onChange={(hvTextColor) =>
-                                            handleBlockDefault({ hvTextColor })
-                                        }
+                                        onChange={(hvTextColor) => handleBlockDefault({ hvTextColor })}
                                     />
 
                                     <ColorControl
                                         label={__("Icon", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.hvIconColor.default
-                                        }
+                                        defaultColor={objAttributes.hvIconColor.default}
                                         color={hvIconColor}
-                                        onChange={(hvIconColor) =>
-                                            handleBlockDefault({ hvIconColor })
-                                        }
+                                        onChange={(hvIconColor) => handleBlockDefault({ hvIconColor })}
                                     />
 
                                     <RangeControl
@@ -537,50 +468,35 @@ function AdvancedTabs(props) {
                             )}
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
                                 controlName={prefixTitleBg}
                                 resRequiredProps={resRequiredProps}
                                 noOverlay
-                                // noMainBgi
-                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            // noMainBgi
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={prefixTitleBdShadow}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Active Colors", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Active Colors", "essential-blocks")} initialOpen={false}>
                             <BaseControl>
                                 <ButtonGroup>
                                     {[
                                         {
-                                            label: __(
-                                                "Normal",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Normal", "essential-blocks"),
                                             value: "normal",
                                         },
                                         {
-                                            label: __(
-                                                "Hover",
-                                                "essential-blocks"
-                                            ),
+                                            label: __("Hover", "essential-blocks"),
                                             value: "hover",
                                         },
                                     ].map(({ value, label }, index) => (
@@ -588,15 +504,9 @@ function AdvancedTabs(props) {
                                             key={index}
                                             // isSmall
                                             // isLarge
-                                            isPrimary={
-                                                activeColorSwitcher === value
-                                            }
-                                            isSecondary={
-                                                activeColorSwitcher !== value
-                                            }
-                                            onClick={() =>
-                                                setActiveColorSwitcher(value)
-                                            }
+                                            isPrimary={activeColorSwitcher === value}
+                                            isSecondary={activeColorSwitcher !== value}
+                                            onClick={() => setActiveColorSwitcher(value)}
                                         >
                                             {label}
                                         </Button>
@@ -608,24 +518,16 @@ function AdvancedTabs(props) {
                                 <>
                                     <ColorControl
                                         label={__("Text", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.actTextColor.default
-                                        }
+                                        defaultColor={objAttributes.actTextColor.default}
                                         color={actTextColor}
-                                        onChange={(actTextColor) =>
-                                            handleBlockDefault({ actTextColor })
-                                        }
+                                        onChange={(actTextColor) => handleBlockDefault({ actTextColor })}
                                     />
 
                                     <ColorControl
                                         label={__("Icon", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.actIconColor.default
-                                        }
+                                        defaultColor={objAttributes.actIconColor.default}
                                         color={actIconColor}
-                                        onChange={(actIconColor) =>
-                                            handleBlockDefault({ actIconColor })
-                                        }
+                                        onChange={(actIconColor) => handleBlockDefault({ actIconColor })}
                                     />
                                 </>
                             )}
@@ -634,9 +536,7 @@ function AdvancedTabs(props) {
                                 <>
                                     <ColorControl
                                         label={__("Text", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.actHvTextColor.default
-                                        }
+                                        defaultColor={objAttributes.actHvTextColor.default}
                                         color={actHvTextColor}
                                         onChange={(actHvTextColor) =>
                                             handleBlockDefault({
@@ -647,9 +547,7 @@ function AdvancedTabs(props) {
 
                                     <ColorControl
                                         label={__("Icon", "essential-blocks")}
-                                        defaultColor={
-                                            objAttributes.actHvIconColor.default
-                                        }
+                                        defaultColor={objAttributes.actHvIconColor.default}
                                         color={actHvIconColor}
                                         onChange={(actHvIconColor) =>
                                             handleBlockDefault({
@@ -658,12 +556,7 @@ function AdvancedTabs(props) {
                                         }
                                     />
 
-                                    <BaseControl
-                                        label={__(
-                                            "Transition",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <BaseControl label={__("Transition", "essential-blocks")}>
                                         <RangeControl
                                             value={actColorTransition}
                                             onChange={(actColorTransition) =>
@@ -680,41 +573,27 @@ function AdvancedTabs(props) {
                             )}
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Active Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Active Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
                                 controlName={prefixActTitleBg}
                                 resRequiredProps={resRequiredProps}
                                 noOverlay
-                                // noMainBgi
-                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            // noMainBgi
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Active Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Active Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={prefixActTitleBdShadow}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
                     </PanelBody>
-                    <PanelBody
-                        title={__(
-                            "Tab Titles' Wrapper Style",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <PanelBody
-                            title={__("Margin Padding", "essential-blocks")}
-                        >
+                    <PanelBody title={__("Tab Titles' Wrapper Style", "essential-blocks")} initialOpen={false}>
+                        <PanelBody title={__("Margin Padding", "essential-blocks")}>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={prefixTtlWrpMargin}
@@ -727,35 +606,27 @@ function AdvancedTabs(props) {
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
                                 controlName={prefixTtlWrpBg}
                                 resRequiredProps={resRequiredProps}
                                 noOverlay
-                                // noMainBgi
-                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            // noMainBgi
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={prefixTtlWrpBdShadow}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
                     </PanelBody>
                     <PanelBody title={__("Content Style")} initialOpen={false}>
-                        <PanelBody
-                            title={__("Margin Padding", "essential-blocks")}
-                        >
+                        <PanelBody title={__("Margin Padding", "essential-blocks")}>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
                                 controlName={prefixContentMargin}
@@ -768,53 +639,36 @@ function AdvancedTabs(props) {
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
                                 controlName={prefixContentBg}
                                 resRequiredProps={resRequiredProps}
                                 noOverlay
-                                // noMainBgi
-                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            // noMainBgi
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </PanelBody>
 
-                        <PanelBody
-                            title={__("Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={prefixContentBdShadow}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
                     </PanelBody>
-                    <PanelBody
-                        title={__("Caret Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Caret Style", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
-                            label={__(
-                                "Show Caret on Active Tab",
-                                "essential-blocks"
-                            )}
+                            label={__("Show Caret on Active Tab", "essential-blocks")}
                             checked={showCaret}
-                            onChange={() =>
-                                handleBlockDefault({ showCaret: !showCaret })
-                            }
+                            onChange={() => handleBlockDefault({ showCaret: !showCaret })}
                         />
 
                         {showCaret && (
                             <>
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Caret Size",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Caret Size", "essential-blocks")}
                                     controlName={prefixCaretSize}
                                     resRequiredProps={resRequiredProps}
                                     min={0}
@@ -824,28 +678,15 @@ function AdvancedTabs(props) {
                                 />
 
                                 <ColorControl
-                                    label={__(
-                                        "Caret Color",
-                                        "essential-blocks"
-                                    )}
-                                    defaultColor={
-                                        objAttributes.caretColor.default
-                                    }
+                                    label={__("Caret Color", "essential-blocks")}
+                                    defaultColor={objAttributes.caretColor.default}
                                     color={caretColor}
-                                    onChange={(caretColor) =>
-                                        handleBlockDefault({ caretColor })
-                                    }
+                                    onChange={(caretColor) => handleBlockDefault({ caretColor })}
                                 />
                             </>
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={prefixWrapperMargin}
@@ -858,28 +699,22 @@ function AdvancedTabs(props) {
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
                         <BackgroundControl
                             controlName={prefixWrapBg}
                             resRequiredProps={resRequiredProps}
-                            // noOverlay
-                            // noMainBgi
-                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                        // noOverlay
+                        // noMainBgi
+                        // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={prefixWrapBdShadow}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

@@ -33,6 +33,16 @@ class GoogleMap extends Block {
         return 'google-map';
     }
 
+    private $api_key = '';
+
+    public function __construct(){
+        $settings = get_option( 'eb_settings', [] );
+
+        if ( is_array( $settings ) && ! empty( $settings['googleMapApi'] ) ) {
+            $this->api_key = $settings['googleMapApi'];
+        }
+    }
+
     /**
      * Register all other scripts
      *
@@ -44,18 +54,11 @@ class GoogleMap extends Block {
             $this->path() . '/frontend/index.js'
         );
 
-        $map_api  = '';
-        $settings = get_option( 'eb_settings', [] );
-
-        if ( is_array( $settings ) && ! empty( $settings['googleMapApi'] ) ) {
-            $map_api = $settings['googleMapApi'];
-        }
-
-        if ( $map_api ) {
+        if ( !empty($this->api_key) ) {
             // Only for editor
             $this->assets_manager->register(
                 'google-map-script-editor',
-                'https://maps.googleapis.com/maps/api/js?key=' . $map_api . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
+                'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
                 ['essential-blocks-editor-script'],
                 [
                     'is_js' => true
@@ -64,12 +67,27 @@ class GoogleMap extends Block {
             // For frontend
             $this->assets_manager->register(
                 'google-map-script',
-                'https://maps.googleapis.com/maps/api/js?key=' . $map_api . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
+                'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
                 [],
                 [
                     'is_js' => true
                 ]
             );
         }
+    }
+
+    public function render_callback($attributes, $content ){
+        if(empty($this->api_key) ){
+            if(get_current_user_id()){
+                $html = __( 'Please add your Google Map API to display Google Maps Block', 'essential-blocks' );
+
+                return $html;
+            } else {
+                return;
+            }
+
+        }
+
+        return $content;
     }
 }

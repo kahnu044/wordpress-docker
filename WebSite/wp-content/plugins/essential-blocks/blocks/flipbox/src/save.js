@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { useBlockProps, RichText } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -39,8 +39,8 @@ const Save = ({ attributes }) => {
         contentPosition === "center"
             ? " eb-flipbox-align-center"
             : contentPosition === "right"
-            ? " eb-flipbox-align-right"
-            : "";
+                ? " eb-flipbox-align-right"
+                : "";
     const flipModeClass =
         flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
@@ -59,9 +59,8 @@ const Save = ({ attributes }) => {
                         : {})}
                 >
                     <div
-                        className={`eb-flipper${
-                            "hover" === flipMode ? " " + flipType : ""
-                        }`}
+                        className={`eb-flipper${"hover" === flipMode ? " " + flipType : ""
+                            }`}
                     >
                         <div className="eb-flipbox-front">
                             <div className="eb-flipbox-items-container">
@@ -82,9 +81,7 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-front"
                                                     data-icon={frontIcon}
                                                 >
-                                                    <span
-                                                        className={frontIcon}
-                                                    />
+                                                    <EBDisplayIcon icon={frontIcon} />
                                                 </div>
                                             )}
                                     </div>
@@ -129,8 +126,8 @@ const Save = ({ attributes }) => {
                                 linkType === "box" && link && linkOpenNewTab
                                     ? `window.open('${link}', '_blank');`
                                     : linkType === "box" && link
-                                    ? `window.location='${link}'`
-                                    : undefined
+                                        ? `window.location='${link}'`
+                                        : undefined
                             }
                         >
                             <div className="eb-flipbox-items-container">
@@ -151,9 +148,7 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-back"
                                                     data-icon={backIcon}
                                                 >
-                                                    <span
-                                                        className={backIcon}
-                                                    />
+                                                    <EBDisplayIcon icon={backIcon} />
                                                 </div>
                                             )}
                                     </div>
@@ -210,9 +205,7 @@ const Save = ({ attributes }) => {
                                             <div className="eb-flipbox-button-content">
                                                 <span>{buttonText}</span>
                                                 {buttonIcon && (
-                                                    <i
-                                                        className={`${buttonIcon} eb-flipbox-button-icon`}
-                                                    ></i>
+                                                    <EBDisplayIcon icon={buttonIcon} className="eb-flipbox-button-icon" />
                                                 )}
                                             </div>
                                         </a>

@@ -5,13 +5,13 @@ import { Button } from "@wordpress/components";
 /**
  * Internal dependencies
  */
-const { DynamicInputValueHandler } = window.EBControls;
+const { DynamicInputValueHandler, EBDisplayIcon } = window.EBControls;
 
 export default function InfoboxContainer({ attributes, setAttributes }) {
     const {
         blockId,
         media,
-        selectedIcon,
+        infoboxIcon,
         number,
         imageUrl,
         imageId,
@@ -38,10 +38,7 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                     {media === "icon" ? (
                         <div className="icon-img-wrapper">
                             <div className="eb-icon number-or-icon">
-                                <span
-                                    data-icon={selectedIcon}
-                                    className={`eb-infobox-icon-data-selector  ${selectedIcon}`}
-                                ></span>
+                                <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
                             </div>
                         </div>
                     ) : null}
@@ -130,9 +127,8 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                             <div className="eb-infobox-btn-wrapper">
                                 <DynamicInputValueHandler
                                     tagName="a"
-                                    className={`infobox-btn ${
-                                        btnEffect || " "
-                                    }`}
+                                    className={`infobox-btn ${btnEffect || " "
+                                        }`}
                                     value={buttonText}
                                     allowedFormats={[
                                         "core/bold",

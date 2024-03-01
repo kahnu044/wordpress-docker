@@ -3,6 +3,7 @@
  *
  */
 import { useBlockProps } from "@wordpress/block-editor";
+const { EBDisplayIcon } = window.EBControls;
 
 const save = ({ attributes }) => {
     const {
@@ -45,9 +46,7 @@ const save = ({ attributes }) => {
                     )}
 
                     <div className="eb-field-input-wrap">
-                        {isIcon && icon && (
-                            <i className={`${icon} eb-input-icon`}></i>
-                        )}
+                        {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
                         <input
                             type={isHidden ? "hidden" : "text"}
                             id={fieldName}

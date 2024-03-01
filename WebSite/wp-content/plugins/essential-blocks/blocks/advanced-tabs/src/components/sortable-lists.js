@@ -20,9 +20,8 @@ import {
     SortableHandle,
 } from "react-sortable-hoc";
 
-const { ImageAvatar, faIcons } = EBControls;
+const { ImageAvatar, EBIconPicker } = EBControls;
 
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 import { addTab } from "../helpers";
 
 const TrashIcon = ({ deleteProps: { deleteProfile, index } }) => (
@@ -151,14 +150,12 @@ const SortableItem = SortableElement(
                         {tab.media === "icon" && (
                             <div>
                                 <label>Icon</label>
-                                <FontIconPicker
-                                    icons={faIcons}
+                                <EBIconPicker
                                     value={tab.icon}
                                     onChange={(icon) => {
-                                        //
                                         handleIconChange({ icon, id: tab.id });
                                     }}
-                                    appendTo="body"
+                                    title={""}
                                 />
                             </div>
                         )}

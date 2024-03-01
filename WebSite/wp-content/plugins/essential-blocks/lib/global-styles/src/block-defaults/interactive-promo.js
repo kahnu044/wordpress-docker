@@ -3,13 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import {
-    PanelBody,
-    Button,
-    ButtonGroup,
-    BaseControl,
-    ToggleControl,
-} from "@wordpress/components";
+import { PanelBody, Button, ButtonGroup, BaseControl, ToggleControl } from "@wordpress/components";
 
 /**
  * External depencencies
@@ -70,12 +64,12 @@ function InteractivePromo(props) {
                 imageID: null,
                 imageAltTag: "image",
                 newWindow: false,
-                headerColor: "#ffffff",
-                contentColor: "#ffffff",
+                headerColor: "var(--eb-global-primary-color)",
+                contentColor: "var(--eb-global-heading-color)",
                 link: "",
                 imageAlignment: "center",
                 isBackgroundGradient: false,
-                backgroundColor: "",
+                backgroundColor: "var(--eb-global-background-color)",
                 backgroundGradient: "",
 
                 [`${wrapperPadding}Unit`]: "px",
@@ -134,10 +128,7 @@ function InteractivePromo(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General ", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General ", "essential-blocks")} initialOpen={true}>
                         <ResponsiveRangeController
                             baseLabel={__("Height", "essential-blocks")}
                             controlName={imageHeight}
@@ -158,19 +149,13 @@ function InteractivePromo(props) {
                         />
 
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Alignment", "essential-blocks")}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isPrimary={
-                                            imageAlignment === item.value
-                                        }
-                                        isSecondary={
-                                            imageAlignment !== item.value
-                                        }
+                                        isPrimary={imageAlignment === item.value}
+                                        isSecondary={imageAlignment !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 imageAlignment: item.value,
@@ -184,20 +169,12 @@ function InteractivePromo(props) {
                         </BaseControl>
                     </PanelBody>
                     {/* Styles */}
-                    <PanelBody
-                        title={__("General Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("General Styles", "essential-blocks")} initialOpen={false}>
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Background Color", "essential-blocks")}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Background Color", "essential-blocks")}</h3>
                         </BaseControl>
                         <ToggleControl
-                            label={__(
-                                "Show Gradient Color",
-                                "essential-blocks"
-                            )}
+                            label={__("Show Gradient Color", "essential-blocks")}
                             checked={isBackgroundGradient}
                             onChange={() => {
                                 handleBlockDefault({
@@ -209,18 +186,13 @@ function InteractivePromo(props) {
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={backgroundColor}
-                                onChange={(backgroundColor) =>
-                                    handleBlockDefault({ backgroundColor })
-                                }
+                                onChange={(backgroundColor) => handleBlockDefault({ backgroundColor })}
                             />
                         )}
                         {isBackgroundGradient && (
                             <>
                                 <GradientColorControl
-                                    label={__(
-                                        "Gradient Color",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Gradient Color", "essential-blocks")}
                                     gradientColor={backgroundGradient}
                                     onChange={(backgroundGradient) =>
                                         handleBlockDefault({
@@ -231,10 +203,7 @@ function InteractivePromo(props) {
                             </>
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Header Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Header Styles", "essential-blocks")} initialOpen={false}>
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -244,16 +213,11 @@ function InteractivePromo(props) {
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={headerColor}
-                                onChange={(headerColor) =>
-                                    handleBlockDefault({ headerColor })
-                                }
+                                onChange={(headerColor) => handleBlockDefault({ headerColor })}
                             />
                         </>
                     </PanelBody>
-                    <PanelBody
-                        title={__("Content Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Content Styles", "essential-blocks")} initialOpen={false}>
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -263,21 +227,13 @@ function InteractivePromo(props) {
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={contentColor}
-                                onChange={(contentColor) =>
-                                    handleBlockDefault({ contentColor })
-                                }
+                                onChange={(contentColor) => handleBlockDefault({ contentColor })}
                             />
                         </>
                     </PanelBody>
                     {/* Advanced */}
 
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={wrapperMargin}
@@ -289,17 +245,8 @@ function InteractivePromo(props) {
                             baseLabel={__("Padding", "essential-blocks")}
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__(
-                            "Wrapper Border & Shadow",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={imageBorderShadow}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow", "essential-blocks")} initialOpen={false}>
+                        <BorderShadowControl controlName={imageBorderShadow} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

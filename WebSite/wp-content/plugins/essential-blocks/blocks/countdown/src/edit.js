@@ -25,6 +25,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
 
     const daysRef = useRef(null);
@@ -54,48 +55,6 @@ export default function Edit(props) {
 
         //
         preset,
-
-        //
-        showSeparator,
-        separatorType,
-        // sepPositionRight,
-        // sepPositionTop,
-        separatorColor = "#4c457b",
-
-        //
-        contentsAlign,
-
-        //
-        contentsDirection,
-
-        //
-        contentsJustify,
-
-        //
-        flexDirection,
-
-        //
-        digitsColor = "#fff",
-        dayDgColor,
-        hourDgColor,
-        minuteDgColor,
-        secondDgColor,
-
-        //
-        labelsColor = "#fff",
-        dayLbColor,
-        hourLbColor,
-        minuteLbColor,
-        secondLbColor,
-
-        //
-        dayBdrColor,
-        hourBdrColor,
-        minuteBdrColor,
-        secondBdrColor,
-
-        //
-        boxsBds_borderStyle,
         classHook,
         isEvergreenTimer,
         evergreenTimerHours,

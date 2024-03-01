@@ -13,19 +13,14 @@ import {
     ToggleControl,
 } from "@wordpress/components";
 
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
 const {
-    faIcons: iconList,
     ColorControl,
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BackgroundControl,
     BorderShadowControl,
     ResponsiveRangeController,
+    EBIconPicker
 } = window.EBControls;
 
 /**
@@ -94,19 +89,19 @@ function CallToAction(props) {
         } else {
             setDefaultValues({
                 titleTag: "h3",
-                titleColor: "",
+                titleColor: "var(--eb-global-heading-color)",
                 showSubtitle: false,
                 subtitleTag: "h3",
-                subtitleColor: "",
-                descriptionColor: "",
+                subtitleColor: "var(--eb-global-text-color)",
+                descriptionColor: "var(--eb-global-text-color)",
                 showIcon: true,
                 icon: "fas fa-glass-martini",
                 showButton: true,
                 buttonSize: "large",
-                buttonBackgroundColor: "#4a5059",
-                buttonHoverBackgroundColor: "#3074ff",
-                buttonTextColor: "",
-                buttonHoverTextColor: "#edf1f7",
+                buttonBackgroundColor: "var(--eb-global-button-background-color)",
+                buttonHoverBackgroundColor: "var(--eb-global-tertiary-color)",
+                buttonTextColor: "var(--eb-global-button-text-color)",
+                buttonHoverTextColor: "var(--eb-global-button-text-color)",
                 buttonPosition: "center",
                 btnHoverEffect: "",
                 buttonURL: "",
@@ -190,20 +185,11 @@ function CallToAction(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     {showIcon && (
-                        <PanelBody
-                            title={__("Icon Settings", "essential-blocks")}
-                            initialOpen={true}
-                        >
-                            <BaseControl>
-                                <FontIconPicker
-                                    icons={iconList}
-                                    value={icon}
-                                    onChange={(icon) =>
-                                        handleBlockDefault({ icon })
-                                    }
-                                    appendTo="body"
-                                />
-                            </BaseControl>
+                        <PanelBody title={__("Icon Settings", "essential-blocks")} initialOpen={true}>
+                            <EBIconPicker
+                                value={icon}
+                                onChange={(icon) => handleBlockDefault({ icon })}
+                            />
                             <ResponsiveRangeController
                                 baseLabel={__("Size", "essential-blocks")}
                                 controlName={ICON_SIZE}
@@ -216,24 +202,14 @@ function CallToAction(props) {
                         </PanelBody>
                     )}
 
-                    <PanelBody
-                        title={__("Button Settings", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BaseControl
-                            label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
-                        >
+                    <PanelBody title={__("Button Settings", "essential-blocks")} initialOpen={false}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-button-group-alignment">
                             <ButtonGroup id="eb-button-group-alignment">
                                 {BUTTON_POSITION.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isPrimary={
-                                            buttonPosition === item.value
-                                        }
-                                        isSecondary={
-                                            buttonPosition !== item.value
-                                        }
+                                        isPrimary={buttonPosition === item.value}
+                                        isSecondary={buttonPosition !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 buttonPosition: item.value,
@@ -266,16 +242,11 @@ function CallToAction(props) {
                             label={__("Button Link", "essential-blocks")}
                             value={buttonURL}
                             help={__("Use https or http", "essential-blocks")}
-                            onChange={(link) =>
-                                handleBlockDefault({ buttonURL: link })
-                            }
+                            onChange={(link) => handleBlockDefault({ buttonURL: link })}
                         />
                         {buttonURL && (
                             <ToggleControl
-                                label={__(
-                                    "Open in New Tab",
-                                    "essential-blocks"
-                                )}
+                                label={__("Open in New Tab", "essential-blocks")}
                                 checked={linkNewTab}
                                 onChange={() =>
                                     handleBlockDefault({
@@ -296,13 +267,8 @@ function CallToAction(props) {
                             }
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Title Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BaseControl
-                            label={__("Title Tag", "essential-blocks")}
-                        >
+                    <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
+                        <BaseControl label={__("Title Tag", "essential-blocks")}>
                             <ButtonGroup>
                                 {HEADER_TAGS.map((header, index) => (
                                     <Button
@@ -328,9 +294,7 @@ function CallToAction(props) {
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={titleColor}
-                            onChange={(titleColor) =>
-                                handleBlockDefault({ titleColor })
-                            }
+                            onChange={(titleColor) => handleBlockDefault({ titleColor })}
                         />
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
@@ -339,10 +303,7 @@ function CallToAction(props) {
                         />
                     </PanelBody>
                     {showSubtitle && (
-                        <PanelBody
-                            title={__("Subtitle Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Subtitle Style", "essential-blocks")} initialOpen={false}>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={typoPrefix_subtitle}
@@ -351,9 +312,7 @@ function CallToAction(props) {
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={subtitleColor}
-                                onChange={(subtitleColor) =>
-                                    handleBlockDefault({ subtitleColor })
-                                }
+                                onChange={(subtitleColor) => handleBlockDefault({ subtitleColor })}
                             />
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
@@ -362,10 +321,7 @@ function CallToAction(props) {
                             />
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__("Description Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Description Style", "essential-blocks")} initialOpen={false}>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={typoPrefix_desc}
@@ -374,9 +330,7 @@ function CallToAction(props) {
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={descriptionColor}
-                            onChange={(descriptionColor) =>
-                                handleBlockDefault({ descriptionColor })
-                            }
+                            onChange={(descriptionColor) => handleBlockDefault({ descriptionColor })}
                         />
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
@@ -385,16 +339,11 @@ function CallToAction(props) {
                         />
                     </PanelBody>
                     {showIcon && (
-                        <PanelBody
-                            title={__("Icon Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Icon Style", "essential-blocks")} initialOpen={false}>
                             <ColorControl
                                 label={__("Icon Color", "essential-blocks")}
                                 color={iconColor}
-                                onChange={(iconColor) =>
-                                    handleBlockDefault({ iconColor })
-                                }
+                                onChange={(iconColor) => handleBlockDefault({ iconColor })}
                             />
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
@@ -404,40 +353,24 @@ function CallToAction(props) {
                         </PanelBody>
                     )}
                     {showButton && (
-                        <PanelBody
-                            title={__("Button Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Button Style", "essential-blocks")} initialOpen={false}>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={typoPrefix_btn}
                                 resRequiredProps={resRequiredProps}
                             />
                             <ColorControl
-                                label={__(
-                                    "Button Text Color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Button Text Color", "essential-blocks")}
                                 color={buttonTextColor}
-                                onChange={(buttonTextColor) =>
-                                    handleBlockDefault({ buttonTextColor })
-                                }
+                                onChange={(buttonTextColor) => handleBlockDefault({ buttonTextColor })}
                             />
                             <ColorControl
-                                label={__(
-                                    "Button Hover Text Color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Button Hover Text Color", "essential-blocks")}
                                 color={buttonHoverTextColor}
-                                onChange={(buttonHoverTextColor) =>
-                                    handleBlockDefault({ buttonHoverTextColor })
-                                }
+                                onChange={(buttonHoverTextColor) => handleBlockDefault({ buttonHoverTextColor })}
                             />
                             <ColorControl
-                                label={__(
-                                    "Button Background",
-                                    "essential-blocks"
-                                )}
+                                label={__("Button Background", "essential-blocks")}
                                 color={buttonBackgroundColor}
                                 onChange={(buttonBackgroundColor) =>
                                     handleBlockDefault({
@@ -446,10 +379,7 @@ function CallToAction(props) {
                                 }
                             />
                             <ColorControl
-                                label={__(
-                                    "Button Hover Background",
-                                    "essential-blocks"
-                                )}
+                                label={__("Button Hover Background", "essential-blocks")}
                                 color={buttonHoverBackgroundColor}
                                 onChange={(buttonHoverBackgroundColor) =>
                                     handleBlockDefault({
@@ -458,21 +388,13 @@ function CallToAction(props) {
                                 }
                             />
                             <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__("Border", "essential-blocks")}
-                                </h3>
+                                <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                             </BaseControl>
-                            <BorderShadowControl
-                                controlName={BUTTON_BORDER}
-                                resRequiredProps={resRequiredProps}
-                            />
+                            <BorderShadowControl controlName={BUTTON_BORDER} resRequiredProps={resRequiredProps} />
                         </PanelBody>
                     )}
 
-                    <PanelBody
-                        title={__("Advanced", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Advanced", "essential-blocks")} initialOpen={true}>
                         <PanelBody>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
@@ -485,23 +407,11 @@ function CallToAction(props) {
                                 baseLabel={__("Padding", "essential-blocks")}
                             />
                         </PanelBody>
-                        <PanelBody
-                            title={__("Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BackgroundControl
-                                controlName={WRAPPER_BACK}
-                                resRequiredProps={resRequiredProps}
-                            />
+                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
+                            <BackgroundControl controlName={WRAPPER_BACK} resRequiredProps={resRequiredProps} />
                         </PanelBody>
-                        <PanelBody
-                            title={__("Border", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BorderShadowControl
-                                controlName={WRAPPER_BORDER}
-                                resRequiredProps={resRequiredProps}
-                            />
+                        <PanelBody title={__("Border", "essential-blocks")} initialOpen={false}>
+                            <BorderShadowControl controlName={WRAPPER_BORDER} resRequiredProps={resRequiredProps} />
                         </PanelBody>
                     </PanelBody>
                 </div>

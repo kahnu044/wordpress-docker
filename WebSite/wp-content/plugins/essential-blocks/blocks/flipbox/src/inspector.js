@@ -19,11 +19,6 @@ import {
 } from "@wordpress/components";
 
 /*
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/*
  * Internal dependencies
  */
 import objAttributes from "./attributes";
@@ -51,6 +46,7 @@ const {
     BackgroundControl,
     AdvancedControls,
     DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 import {
@@ -245,9 +241,9 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             help={
                                                 flipMode === "click"
                                                     ? __(
-                                                          "Click mode only available in frontend.",
-                                                          "essential-blocks"
-                                                      )
+                                                        "Click mode only available in frontend.",
+                                                        "essential-blocks"
+                                                    )
                                                     : ""
                                             }
                                         />
@@ -444,27 +440,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 initialOpen={false}
                                             >
                                                 <>
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Select Front Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            value={frontIcon}
-                                                            onChange={(
-                                                                frontIcon
-                                                            ) =>
-                                                                setAttributes({
-                                                                    frontIcon,
-                                                                })
-                                                            }
-                                                            appendTo="body"
-                                                            closeOnSelect
-                                                        />
-                                                    </BaseControl>
-
+                                                    <EBIconPicker
+                                                        value={frontIcon}
+                                                        onChange={(frontIcon) =>
+                                                            setAttributes({
+                                                                frontIcon,
+                                                            })
+                                                        }
+                                                        title={__("Select Front Icon", "essential-blocks")}
+                                                    />
                                                     {frontIcon && (
                                                         <ResponsiveRangeController
                                                             baseLabel={__(
@@ -601,28 +585,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 initialOpen={false}
                                             >
                                                 <>
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Select Back Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                        id="eb-flipbox-back-icon"
-                                                    >
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            value={backIcon}
-                                                            onChange={(
-                                                                backIcon
-                                                            ) =>
-                                                                setAttributes({
-                                                                    backIcon,
-                                                                })
-                                                            }
-                                                            appendTo="body"
-                                                            closeOnSelect
-                                                        />
-                                                    </BaseControl>
-
+                                                    <EBIconPicker
+                                                        value={backIcon}
+                                                        onChange={(backIcon) =>
+                                                            setAttributes({
+                                                                backIcon,
+                                                            })
+                                                        }
+                                                        title={__("Select Back Icon", "essential-blocks")}
+                                                    />
                                                     {backIcon && (
                                                         <ResponsiveRangeController
                                                             baseLabel={__(
@@ -802,17 +773,13 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     }}
                                                 />
                                                 {showFrontContent && (
-                                                    <TextareaControl
-                                                        label={__(
-                                                            "Front Content",
-                                                            "essential-blocks"
-                                                        )}
-                                                        value={frontContent}
-                                                        onChange={(newText) =>
-                                                            setAttributes({
-                                                                frontContent: newText,
-                                                            })
-                                                        }
+                                                    <DynamicInputControl
+                                                        label={__("Front Content", "essential-blocks")}
+                                                        attrName="frontContent"
+                                                        inputValue={frontContent}
+                                                        setAttributes={setAttributes}
+                                                        onChange={(text) => setAttributes({ frontContent: text })}
+                                                        isTextarea={true}
                                                     />
                                                 )}
                                             </>
@@ -862,17 +829,13 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     }}
                                                 />
                                                 {showBackContent && (
-                                                    <TextareaControl
-                                                        label={__(
-                                                            "Back Content",
-                                                            "essential-blocks"
-                                                        )}
-                                                        value={backContent}
-                                                        onChange={(newText) =>
-                                                            setAttributes({
-                                                                backContent: newText,
-                                                            })
-                                                        }
+                                                    <DynamicInputControl
+                                                        label={__("Back Content", "essential-blocks")}
+                                                        attrName="backContent"
+                                                        inputValue={backContent}
+                                                        setAttributes={setAttributes}
+                                                        onChange={(text) => setAttributes({ backContent: text })}
+                                                        isTextarea={true}
                                                     />
                                                 )}
                                             </>
@@ -1577,35 +1540,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         }
                                                     />
                                                     {displayButtonIcon && (
-                                                        <BaseControl
-                                                            label={__(
-                                                                "Select Icon",
-                                                                "essential-blocks"
-                                                            )}
-                                                            id="eb-flipbox-link-icon"
-                                                            help={__(
-                                                                "Add icon with button (optional)",
-                                                                "essential-blocks"
-                                                            )}
-                                                        >
-                                                            <FontIconPicker
-                                                                icons={faIcons}
-                                                                value={
-                                                                    buttonIcon
-                                                                }
-                                                                onChange={(
-                                                                    buttonIcon
-                                                                ) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            buttonIcon,
-                                                                        }
-                                                                    )
-                                                                }
-                                                                appendTo="body"
-                                                                closeOnSelect
-                                                            />
-                                                        </BaseControl>
+                                                        <EBIconPicker
+                                                            value={buttonIcon}
+                                                            onChange={(buttonIcon) =>
+                                                                setAttributes({
+                                                                    buttonIcon,
+                                                                })
+                                                            }
+                                                            title={__("Select Icon", "essential-blocks")}
+                                                        />
                                                     )}
                                                     {displayButtonIcon &&
                                                         buttonIcon && (

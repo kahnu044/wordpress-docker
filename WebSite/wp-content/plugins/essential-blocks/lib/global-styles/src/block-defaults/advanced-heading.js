@@ -14,16 +14,9 @@ import {
     BaseControl,
     TabPanel,
     ColorPicker,
-    ColorPalette,
 } from "@wordpress/components";
 
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
 const {
-    faIcons,
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BorderShadowControl,
@@ -31,6 +24,7 @@ const {
     BackgroundControl,
     AdvancedControls,
     ColorControl,
+    EBIconPicker
 } = window.EBControls;
 
 /**
@@ -99,11 +93,11 @@ function AdvancedHeading(props) {
             setDefaultValues({
                 tagName: "h2",
                 subtitleTagName: "p",
-                titleColor: "#551ef7",
+                titleColor: "var(--eb-global-heading-color)",
                 titleHoverColor: "",
-                subtitleColor: "#555555",
+                subtitleColor: "var(--eb-global-text-color)",
                 subtitleHoverColor: "",
-                separatorColor: "#551ef7",
+                separatorColor: "var(--eb-global-primary-color)",
                 separatorHoverColor: "",
                 align: "left",
                 displaySubtitle: false,
@@ -195,14 +189,8 @@ function AdvancedHeading(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
-                        <BaseControl
-                            label={__("Alignment", "essential-blocks")}
-                            id="eb-advance-heading-alignment"
-                        >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-advance-heading-alignment">
                             <ButtonGroup id="eb-advance-heading-alignment">
                                 {TEXT_ALIGN.map((item, key) => (
                                     <Button
@@ -221,10 +209,7 @@ function AdvancedHeading(props) {
                                 ))}
                             </ButtonGroup>
                         </BaseControl>
-                        <BaseControl
-                            label={__("Title Level", "essential-blocks")}
-                            id="eb-advance-heading-alignment"
-                        >
+                        <BaseControl label={__("Title Level", "essential-blocks")} id="eb-advance-heading-alignment">
                             <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                 {HEADING.map((item, key) => (
                                     <Button
@@ -255,10 +240,7 @@ function AdvancedHeading(props) {
                         {displaySubtitle && (
                             <>
                                 <BaseControl
-                                    label={__(
-                                        "Subtitle Level",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Subtitle Level", "essential-blocks")}
                                     id="eb-advance-heading-alignment"
                                 >
                                     <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
@@ -266,18 +248,11 @@ function AdvancedHeading(props) {
                                             <Button
                                                 key={key}
                                                 // isLarge
-                                                isPrimary={
-                                                    subtitleTagName ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    subtitleTagName !==
-                                                    item.value
-                                                }
+                                                isPrimary={subtitleTagName === item.value}
+                                                isSecondary={subtitleTagName !== item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        subtitleTagName:
-                                                            item.value,
+                                                        subtitleTagName: item.value,
                                                     })
                                                 }
                                             >
@@ -298,32 +273,22 @@ function AdvancedHeading(props) {
                             }
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Title Styles", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Title Styles", "essential-blocks")} initialOpen={true}>
                         <TypographyDropdown
-                            baseLabel={__(
-                                "Title Typography",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Title Typography", "essential-blocks")}
                             typographyPrefixConstant={TITLE_TYPOGRAPHY}
                             resRequiredProps={resRequiredProps}
                         />
                         <ColorControl
                             label={"Title Color"}
                             color={titleColor}
-                            onChange={(value) =>
-                                handleBlockDefault({ titleColor: value })
-                            }
+                            onChange={(value) => handleBlockDefault({ titleColor: value })}
                             defaultValue={titleColor}
                         />
                         <ColorControl
                             label={"Title Hover Color"}
                             color={titleHoverColor}
-                            onChange={(value) =>
-                                handleBlockDefault({ titleHoverColor: value })
-                            }
+                            onChange={(value) => handleBlockDefault({ titleHoverColor: value })}
                             defaultValue={titleHoverColor}
                         />
                         <ResponsiveDimensionsControl
@@ -334,24 +299,16 @@ function AdvancedHeading(props) {
                     </PanelBody>
 
                     {displaySubtitle && (
-                        <PanelBody
-                            title={__("Subtitle Styles", "essential-blocks")}
-                            initialOpen={true}
-                        >
+                        <PanelBody title={__("Subtitle Styles", "essential-blocks")} initialOpen={true}>
                             <TypographyDropdown
-                                baseLabel={__(
-                                    "Subtitle Typography",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Subtitle Typography", "essential-blocks")}
                                 typographyPrefixConstant={SUBTITLE_TYPOGRAPHY}
                                 resRequiredProps={resRequiredProps}
                             />
                             <ColorControl
                                 label={"Subtitle Color"}
                                 color={subtitleColor}
-                                onChange={(value) =>
-                                    handleBlockDefault({ subtitleColor: value })
-                                }
+                                onChange={(value) => handleBlockDefault({ subtitleColor: value })}
                                 defaultValue={subtitleColor}
                             />
                             <ColorControl
@@ -373,20 +330,12 @@ function AdvancedHeading(props) {
                     )}
 
                     {displaySeperator && (
-                        <PanelBody
-                            title={__("Separator", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Separator", "essential-blocks")} initialOpen={false}>
                             <SelectControl
-                                label={__(
-                                    "Separator Position",
-                                    "essential-blocks"
-                                )}
+                                label={__("Separator Position", "essential-blocks")}
                                 value={seperatorPosition}
                                 options={SEPARATOR_POSITION}
-                                onChange={(seperatorPosition) =>
-                                    handleBlockDefault({ seperatorPosition })
-                                }
+                                onChange={(seperatorPosition) => handleBlockDefault({ seperatorPosition })}
                             />
                             <BaseControl
                                 label={__("Separator Type", "essential-blocks")}
@@ -397,12 +346,8 @@ function AdvancedHeading(props) {
                                         <Button
                                             key={key}
                                             // isLarge
-                                            isPrimary={
-                                                seperatorType === item.value
-                                            }
-                                            isSecondary={
-                                                seperatorType !== item.value
-                                            }
+                                            isPrimary={seperatorType === item.value}
+                                            isSecondary={seperatorType !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     seperatorType: item.value,
@@ -418,10 +363,7 @@ function AdvancedHeading(props) {
                             {seperatorType === "line" && (
                                 <>
                                     <SelectControl
-                                        label={__(
-                                            "Separator Style",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Separator Style", "essential-blocks")}
                                         value={seperatorStyle}
                                         options={SEPERATOR_STYLES}
                                         onChange={(seperatorStyle) =>
@@ -431,10 +373,7 @@ function AdvancedHeading(props) {
                                         }
                                     />
                                     <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Separator Height",
-                                            "essential-blocks"
-                                        )}
+                                        baseLabel={__("Separator Height", "essential-blocks")}
                                         controlName={SEPARATOR_LINE_SIZE}
                                         resRequiredProps={resRequiredProps}
                                         units={UNIT_TYPES}
@@ -447,25 +386,20 @@ function AdvancedHeading(props) {
 
                             {seperatorType === "icon" && (
                                 <>
-                                    <BaseControl
-                                        label={__("Icon", "essential-blocks")}
-                                    >
-                                        <FontIconPicker
-                                            icons={faIcons}
-                                            value={separatorIcon}
-                                            onChange={(icon) =>
-                                                handleBlockDefault({
-                                                    separatorIcon: icon,
-                                                })
-                                            }
-                                            appendTo="body"
-                                        />
-                                    </BaseControl>
-                                    <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Icon Size",
-                                            "essential-blocks"
+                                    <EBIconPicker
+                                        value={separatorIcon}
+                                        onChange={(icon) =>
+                                            handleBlockDefault({
+                                                separatorIcon: icon,
+                                            })
+                                        }
+                                        title={__(
+                                            "Select Icon",
+                                            "essential-blocks-pro"
                                         )}
+                                    />
+                                    <ResponsiveRangeController
+                                        baseLabel={__("Icon Size", "essential-blocks")}
                                         controlName={SEPARATOR_ICON_SIZE}
                                         resRequiredProps={resRequiredProps}
                                         units={UNIT_TYPES}
@@ -476,10 +410,7 @@ function AdvancedHeading(props) {
                                 </>
                             )}
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Separator Width",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Separator Width", "essential-blocks")}
                                 controlName={SEPARATOR_WIDTH}
                                 resRequiredProps={resRequiredProps}
                                 units={SEPARATOR_UNIT_TYPES}
@@ -516,10 +447,7 @@ function AdvancedHeading(props) {
                             />
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__("Advanced", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Advanced", "essential-blocks")} initialOpen={true}>
                         <PanelBody>
                             <ResponsiveDimensionsControl
                                 resRequiredProps={resRequiredProps}
@@ -532,24 +460,15 @@ function AdvancedHeading(props) {
                                 baseLabel="Wrapper Padding"
                             />
                         </PanelBody>
-                        <PanelBody
-                            title={__("Wrapper Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BackgroundControl
-                                controlName={WRAPPER_BG}
-                                resRequiredProps={resRequiredProps}
-                            />
+                        <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                            <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} />
                         </PanelBody>
-                        <PanelBody
-                            title={__("Wrapper Border & Shadow")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                             <BorderShadowControl
                                 controlName={WRAPPER_BORDER_SHADOW}
                                 resRequiredProps={resRequiredProps}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </PanelBody>
                     </PanelBody>

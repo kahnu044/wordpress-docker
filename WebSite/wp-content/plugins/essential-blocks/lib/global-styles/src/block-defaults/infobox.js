@@ -15,20 +15,9 @@ import {
     TabPanel,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-/**
- * Internal dependencies
- */
 
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-import {
-    infoWrapBg,
-    infoBtnBg,
-} from "../../../../blocks/infobox/src/constants/backgroundsConstants";
-import {
-    wrpBdShadow,
-    btnBdShd,
-} from "../../../../blocks/infobox/src/constants/borderShadowConstants";
+import { infoWrapBg, infoBtnBg } from "../../../../blocks/infobox/src/constants/backgroundsConstants";
+import { wrpBdShadow, btnBdShd } from "../../../../blocks/infobox/src/constants/borderShadowConstants";
 
 import objAttributes from "../../../../blocks/infobox/src/attributes";
 
@@ -41,8 +30,7 @@ const {
     ResponsiveRangeController,
     ResponsiveDimensionsControl,
     TypographyDropdown,
-    faIcons,
-    AdvancedControls,
+    EBIconPicker,
 } = window.EBControls;
 
 import {
@@ -138,8 +126,8 @@ function Infobox(props) {
                 layoutPreset: "preset1",
                 media: "icon",
                 useNumIconBg: true,
-                numIconBgType: "gradient",
-                numIconBgColor: "#0003",
+                numIconBgType: "fill",
+                numIconBgColor: "var(--eb-global-primary-color)",
                 numIconBgGradient: "linear-gradient(45deg,#ffc2de,#ff46a1)",
                 mediaImgWidthUnit: "px",
                 mediaImgWidth: 300,
@@ -235,7 +223,7 @@ function Infobox(props) {
                 <div className="eb-panel-control">
                     <PanelBody
                         title={__("Infobox Settings", "essential-blocks")}
-                        // initialOpen={false}
+                    // initialOpen={false}
                     >
                         <ToggleControl
                             label={__("Clickable Infobox", "essential-blocks")}
@@ -251,20 +239,13 @@ function Infobox(props) {
                             <>
                                 <TextControl
                                     // id={`info-link-input-${blockId}`}
-                                    label={__(
-                                        "URL (use https:// at the beginning)"
-                                    )}
+                                    label={__("URL (use https:// at the beginning)")}
                                     placeholder="https://your-link.com"
                                     value={infoboxLink}
-                                    onChange={(infoboxLink) =>
-                                        handleBlockDefault({ infoboxLink })
-                                    }
+                                    onChange={(infoboxLink) => handleBlockDefault({ infoboxLink })}
                                 />
                                 <ToggleControl
-                                    label={__(
-                                        "Open in New Tab",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Open in New Tab", "essential-blocks")}
                                     checked={linkNewTab}
                                     onChange={() =>
                                         handleBlockDefault({
@@ -287,143 +268,95 @@ function Infobox(props) {
                             />
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Alignments", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Alignments", "essential-blocks")} initialOpen={false}>
                         {media !== "none" && (
                             <>
-                                {(flexDirection === "row" ||
-                                    flexDirection === "row-reverse") && (
-                                    <BaseControl
-                                        id="eb-infobox-alignments"
-                                        label="Media alignments"
-                                    >
+                                {(flexDirection === "row" || flexDirection === "row-reverse") && (
+                                    <BaseControl id="eb-infobox-alignments" label="Media alignments">
                                         <ButtonGroup id="eb-infobox-alignments">
-                                            {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
-                                                ({ value, label }, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={
-                                                            mediaAlignment !==
-                                                            value
-                                                        }
-                                                        isPrimary={
-                                                            mediaAlignment ===
-                                                            value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                mediaAlignment: value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(({ value, label }, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isSecondary={mediaAlignment !== value}
+                                                    isPrimary={mediaAlignment === value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            mediaAlignment: value,
+                                                        })
+                                                    }
+                                                >
+                                                    {label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
                                 )}
 
-                                {(flexDirection === "column" ||
-                                    flexDirection === "column-reverse") && (
-                                    <BaseControl
-                                        id="eb-infobox-alignments"
-                                        label="Media alignments"
-                                    >
+                                {(flexDirection === "column" || flexDirection === "column-reverse") && (
+                                    <BaseControl id="eb-infobox-alignments" label="Media alignments">
                                         <ButtonGroup id="eb-infobox-alignments">
-                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
-                                                ({ value, label }, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={
-                                                            mediaAlignment !==
-                                                            value
-                                                        }
-                                                        isPrimary={
-                                                            mediaAlignment ===
-                                                            value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                mediaAlignment: value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(({ value, label }, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isSecondary={mediaAlignment !== value}
+                                                    isPrimary={mediaAlignment === value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            mediaAlignment: value,
+                                                        })
+                                                    }
+                                                >
+                                                    {label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </BaseControl>
                                 )}
                             </>
                         )}
 
-                        <BaseControl
-                            id="eb-infobox-alignments"
-                            label="Contents alignments"
-                        >
+                        <BaseControl id="eb-infobox-alignments" label="Contents alignments">
                             <ButtonGroup id="eb-infobox-alignments">
-                                {CONTENTS_ALIGNMENTS.map(
-                                    ({ value, label }, index) => (
+                                {CONTENTS_ALIGNMENTS.map(({ value, label }, index) => (
+                                    <Button
+                                        key={index}
+                                        isSecondary={contentsAlignment !== value}
+                                        isPrimary={contentsAlignment === value}
+                                        onClick={() =>
+                                            handleBlockDefault({
+                                                contentsAlignment: value,
+                                            })
+                                        }
+                                    >
+                                        {label}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                        </BaseControl>
+
+                        {enableButton && !isInfoClick && (
+                            <BaseControl id="eb-infobox-alignments" label="Button alignments">
+                                <ButtonGroup id="eb-infobox-alignments">
+                                    {CONTENTS_ALIGNMENTS.map(({ value, label }, index) => (
                                         <Button
                                             key={index}
-                                            isSecondary={
-                                                contentsAlignment !== value
-                                            }
-                                            isPrimary={
-                                                contentsAlignment === value
-                                            }
+                                            isSecondary={btnAlignment !== value}
+                                            isPrimary={btnAlignment === value}
                                             onClick={() =>
                                                 handleBlockDefault({
-                                                    contentsAlignment: value,
+                                                    btnAlignment: value,
                                                 })
                                             }
                                         >
                                             {label}
                                         </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
-
-                        {enableButton && !isInfoClick && (
-                            <BaseControl
-                                id="eb-infobox-alignments"
-                                label="Button alignments"
-                            >
-                                <ButtonGroup id="eb-infobox-alignments">
-                                    {CONTENTS_ALIGNMENTS.map(
-                                        ({ value, label }, index) => (
-                                            <Button
-                                                key={index}
-                                                isSecondary={
-                                                    btnAlignment !== value
-                                                }
-                                                isPrimary={
-                                                    btnAlignment === value
-                                                }
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        btnAlignment: value,
-                                                    })
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
+                                    ))}
                                 </ButtonGroup>
                             </BaseControl>
                         )}
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Media Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Media Style", "essential-blocks")} initialOpen={false}>
                         <BaseControl id="eb-infobox-image-icon">
                             <ButtonGroup id="eb-infobox-image-icon">
                                 {MEDIA_TYPES.map(({ label, value }, index) => (
@@ -431,9 +364,7 @@ function Infobox(props) {
                                         key={index}
                                         isSecondary={media !== value}
                                         isPrimary={media === value}
-                                        onClick={() =>
-                                            handleBlockDefault({ media: value })
-                                        }
+                                        onClick={() => handleBlockDefault({ media: value })}
                                     >
                                         {label}
                                     </Button>
@@ -444,32 +375,20 @@ function Infobox(props) {
                         {media !== "none" && (
                             <>
                                 {media === "icon" && (
-                                    <BaseControl
-                                        label={__(
-                                            "Select Icon",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <FontIconPicker
-                                            icons={faIcons}
-                                            onChange={(icon) =>
-                                                handleBlockDefault({
-                                                    selectedIcon: icon,
-                                                })
-                                            }
-                                            value={selectedIcon}
-                                            appendTo="body"
-                                            isMulti={false}
-                                        />
-                                    </BaseControl>
+                                    <EBIconPicker
+                                        value={selectedIcon}
+                                        onChange={(icon) =>
+                                            handleBlockDefault({
+                                                selectedIcon: icon,
+                                            })
+                                        }
+                                        title={__("Select Icon", "essential-blocks")}
+                                    />
                                 )}
 
                                 {media === "icon" && selectedIcon && (
                                     <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Icon Size",
-                                            "essential-blocks"
-                                        )}
+                                        baseLabel={__("Icon Size", "essential-blocks")}
                                         controlName={mediaIconSize}
                                         resRequiredProps={resRequiredProps}
                                         min={8}
@@ -480,13 +399,7 @@ function Infobox(props) {
 
                                 {media === "number" && (
                                     <>
-                                        <BaseControl
-                                            label={__(
-                                                "Text",
-                                                "essential-blocks"
-                                            )}
-                                            id="eb-infobox-number-id"
-                                        >
+                                        <BaseControl label={__("Text", "essential-blocks")} id="eb-infobox-number-id">
                                             <input
                                                 type="text"
                                                 value={`${number}`}
@@ -501,9 +414,7 @@ function Infobox(props) {
 
                                         <TypographyDropdown
                                             baseLabel="Text Typography"
-                                            typographyPrefixConstant={
-                                                typoPrefix_number
-                                            }
+                                            typographyPrefixConstant={typoPrefix_number}
                                             resRequiredProps={resRequiredProps}
                                         />
                                     </>
@@ -512,10 +423,7 @@ function Infobox(props) {
                                 {(media === "number" || media === "icon") && (
                                     <>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={numIconColor}
                                             onChange={(numIconColor) =>
                                                 handleBlockDefault({
@@ -531,10 +439,7 @@ function Infobox(props) {
                                         />
 
                                         <ToggleControl
-                                            label={__(
-                                                "Use Background",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Use Background", "essential-blocks")}
                                             checked={useNumIconBg}
                                             onChange={() =>
                                                 handleBlockDefault({
@@ -545,56 +450,30 @@ function Infobox(props) {
 
                                         {useNumIconBg && (
                                             <>
-                                                <BaseControl
-                                                    label={__(
-                                                        "Background Type",
-                                                        "essential-blocks"
-                                                    )}
-                                                >
+                                                <BaseControl label={__("Background Type", "essential-blocks")}>
                                                     <ButtonGroup id="eb-infobox-infobox-background">
-                                                        {ICON_IMAGE_BG_TYPES.map(
-                                                            (
-                                                                {
-                                                                    value,
-                                                                    label,
-                                                                },
-                                                                index
-                                                            ) => (
-                                                                <Button
-                                                                    key={index}
-                                                                    isPrimary={
-                                                                        numIconBgType ===
-                                                                        value
-                                                                    }
-                                                                    isSecondary={
-                                                                        numIconBgType !==
-                                                                        value
-                                                                    }
-                                                                    onClick={() =>
-                                                                        handleBlockDefault(
-                                                                            {
-                                                                                numIconBgType: value,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {label}
-                                                                </Button>
-                                                            )
-                                                        )}
+                                                        {ICON_IMAGE_BG_TYPES.map(({ value, label }, index) => (
+                                                            <Button
+                                                                key={index}
+                                                                isPrimary={numIconBgType === value}
+                                                                isSecondary={numIconBgType !== value}
+                                                                onClick={() =>
+                                                                    handleBlockDefault({
+                                                                        numIconBgType: value,
+                                                                    })
+                                                                }
+                                                            >
+                                                                {label}
+                                                            </Button>
+                                                        ))}
                                                     </ButtonGroup>
                                                 </BaseControl>
 
                                                 {numIconBgType === "fill" && (
                                                     <ColorControl
-                                                        label={__(
-                                                            "Background Color",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Background Color", "essential-blocks")}
                                                         color={numIconBgColor}
-                                                        onChange={(
-                                                            numIconBgColor
-                                                        ) =>
+                                                        onChange={(numIconBgColor) =>
                                                             handleBlockDefault({
                                                                 numIconBgColor,
                                                             })
@@ -602,27 +481,17 @@ function Infobox(props) {
                                                     />
                                                 )}
 
-                                                {numIconBgType ===
-                                                    "gradient" && (
+                                                {numIconBgType === "gradient" && (
                                                     <PanelBody
-                                                        title={__(
-                                                            "Gradient",
-                                                            "essential-blocks"
-                                                        )}
-                                                        // initialOpen={false}
+                                                        title={__("Gradient", "essential-blocks")}
+                                                    // initialOpen={false}
                                                     >
                                                         <GradientColorControl
-                                                            gradientColor={
-                                                                numIconBgGradient
-                                                            }
-                                                            onChange={(
-                                                                numIconBgGradient
-                                                            ) =>
-                                                                handleBlockDefault(
-                                                                    {
-                                                                        numIconBgGradient,
-                                                                    }
-                                                                )
+                                                            gradientColor={numIconBgGradient}
+                                                            onChange={(numIconBgGradient) =>
+                                                                handleBlockDefault({
+                                                                    numIconBgGradient,
+                                                                })
                                                             }
                                                         />
                                                     </PanelBody>
@@ -646,10 +515,7 @@ function Infobox(props) {
                                             return (
                                                 <Button
                                                     className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Upload Image", "essential-blocks")}
                                                     icon="format-image"
                                                     onClick={open}
                                                 />
@@ -669,10 +535,7 @@ function Infobox(props) {
                                             }
                                         />
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Image Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Width", "essential-blocks")}
                                             controlName={mediaImageWidth}
                                             resRequiredProps={resRequiredProps}
                                             units={sizeUnitTypes}
@@ -681,10 +544,7 @@ function Infobox(props) {
                                             step={1}
                                         />
                                         <ToggleControl
-                                            label={__(
-                                                "Auto Image Height",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Auto Image Height", "essential-blocks")}
                                             checked={isMediaImgHeightAuto}
                                             onChange={() =>
                                                 handleBlockDefault({
@@ -696,16 +556,9 @@ function Infobox(props) {
                                         {!isMediaImgHeightAuto && (
                                             <>
                                                 <ResponsiveRangeController
-                                                    baseLabel={__(
-                                                        "Image Height",
-                                                        "essential-blocks"
-                                                    )}
-                                                    controlName={
-                                                        mediaImageHeight
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    baseLabel={__("Image Height", "essential-blocks")}
+                                                    controlName={mediaImageHeight}
+                                                    resRequiredProps={resRequiredProps}
                                                     units={imgHeightUnits}
                                                     min={0}
                                                     max={500}
@@ -721,10 +574,7 @@ function Infobox(props) {
                                 {media !== "none" && (
                                     <>
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Media & content spacing",
-                                                "Infobox"
-                                            )}
+                                            baseLabel={__("Media & content spacing", "Infobox")}
                                             controlName={mediaContentGap}
                                             resRequiredProps={resRequiredProps}
                                             min={0}
@@ -751,13 +601,8 @@ function Infobox(props) {
                         )}
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Title Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BaseControl
-                            label={__("Title Tag", "essential-blocks")}
-                        >
+                    <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
+                        <BaseControl label={__("Title Tag", "essential-blocks")}>
                             <ButtonGroup className="infobox-button-group">
                                 {HEADER_TAGS.map((header, index) => (
                                     <Button
@@ -791,16 +636,11 @@ function Infobox(props) {
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={titleColor}
-                            onChange={(titleColor) =>
-                                handleBlockDefault({ titleColor })
-                            }
+                            onChange={(titleColor) => handleBlockDefault({ titleColor })}
                         />
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Subtitle Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Subtitle Style", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label={__("Enable", "essential-blocks")}
                             checked={enableSubTitle}
@@ -813,22 +653,13 @@ function Infobox(props) {
 
                         {enableSubTitle && (
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Subtitle Tag",
-                                        "essential-blocks"
-                                    )}
-                                >
+                                <BaseControl label={__("Subtitle Tag", "essential-blocks")}>
                                     <ButtonGroup className="infobox-button-group">
                                         {HEADER_TAGS.map((header, index) => (
                                             <Button
                                                 key={index}
-                                                isSecondary={
-                                                    subTitleTag !== header
-                                                }
-                                                isPrimary={
-                                                    subTitleTag === header
-                                                }
+                                                isSecondary={subTitleTag !== header}
+                                                isPrimary={subTitleTag === header}
                                                 onClick={() =>
                                                     handleBlockDefault({
                                                         subTitleTag: header,
@@ -843,9 +674,7 @@ function Infobox(props) {
 
                                 <TypographyDropdown
                                     baseLabel="Typography"
-                                    typographyPrefixConstant={
-                                        typoPrefix_subTitle
-                                    }
+                                    typographyPrefixConstant={typoPrefix_subTitle}
                                     resRequiredProps={resRequiredProps}
                                 />
 
@@ -858,18 +687,13 @@ function Infobox(props) {
                                 <ColorControl
                                     label={__("Color", "essential-blocks")}
                                     color={subTitleColor}
-                                    onChange={(subTitleColor) =>
-                                        handleBlockDefault({ subTitleColor })
-                                    }
+                                    onChange={(subTitleColor) => handleBlockDefault({ subTitleColor })}
                                 />
                             </>
                         )}
                     </PanelBody>
 
-                    <PanelBody
-                        title={__("Content Style", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Content Style", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label={__("Show content", "essential-blocks")}
                             checked={enableDescription}
@@ -884,9 +708,7 @@ function Infobox(props) {
                             <>
                                 <TypographyDropdown
                                     baseLabel="Typography"
-                                    typographyPrefixConstant={
-                                        typoPrefix_content
-                                    }
+                                    typographyPrefixConstant={typoPrefix_content}
                                     resRequiredProps={resRequiredProps}
                                 />
 
@@ -899,43 +721,29 @@ function Infobox(props) {
                                 <ColorControl
                                     label={__("Color", "essential-blocks")}
                                     color={descriptionColor}
-                                    onChange={(descriptionColor) =>
-                                        handleBlockDefault({ descriptionColor })
-                                    }
+                                    onChange={(descriptionColor) => handleBlockDefault({ descriptionColor })}
                                 />
                             </>
                         )}
                     </PanelBody>
 
                     {enableButton && !isInfoClick && (
-                        <PanelBody
-                            title={__("Button Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Button Style", "essential-blocks")} initialOpen={false}>
                             <TextControl
                                 label={__("Button Text", "essential-blocks")}
                                 value={buttonText}
-                                onChange={(buttonText) =>
-                                    handleBlockDefault({ buttonText })
-                                }
+                                onChange={(buttonText) => handleBlockDefault({ buttonText })}
                             />
 
                             <TextControl
-                                label={__(
-                                    "Link URL (use https:// at the beginning)"
-                                )}
+                                label={__("Link URL (use https:// at the beginning)")}
                                 placeholder="https://your-site.com"
                                 value={infoboxLink}
-                                onChange={(infoboxLink) =>
-                                    handleBlockDefault({ infoboxLink })
-                                }
+                                onChange={(infoboxLink) => handleBlockDefault({ infoboxLink })}
                             />
 
                             <ToggleControl
-                                label={__(
-                                    "Open in New Tab",
-                                    "essential-blocks"
-                                )}
+                                label={__("Open in New Tab", "essential-blocks")}
                                 checked={linkNewTab}
                                 onChange={() =>
                                     handleBlockDefault({
@@ -959,54 +767,32 @@ function Infobox(props) {
                             <ColorControl
                                 label={__("Text color", "essential-blocks")}
                                 color={buttonTextColor}
-                                onChange={(buttonTextColor) =>
-                                    handleBlockDefault({ buttonTextColor })
-                                }
+                                onChange={(buttonTextColor) => handleBlockDefault({ buttonTextColor })}
                             />
 
                             <ColorControl
-                                label={__(
-                                    "Hover text color",
-                                    "essential-blocks"
-                                )}
+                                label={__("Hover text color", "essential-blocks")}
                                 color={buttonHvrTextColor}
-                                onChange={(buttonHvrTextColor) =>
-                                    handleBlockDefault({ buttonHvrTextColor })
-                                }
+                                onChange={(buttonHvrTextColor) => handleBlockDefault({ buttonHvrTextColor })}
                             />
 
-                            <PanelBody
-                                title={__("Background", "essential-blocks")}
-                                initialOpen={false}
-                            >
+                            <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                 <BackgroundControl
                                     controlName={infoBtnBg}
                                     resRequiredProps={resRequiredProps}
                                     forButton
-                                    // noOverlay
-                                    // noMainBgi
-                                    // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                // noOverlay
+                                // noMainBgi
+                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                 />
                             </PanelBody>
 
-                            <PanelBody
-                                title={__("Border & Shadow")}
-                                initialOpen={false}
-                            >
-                                <BorderShadowControl
-                                    controlName={btnBdShd}
-                                    resRequiredProps={resRequiredProps}
-                                />
+                            <PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                                <BorderShadowControl controlName={btnBdShd} resRequiredProps={resRequiredProps} />
                             </PanelBody>
-                            <PanelBody
-                                title={__("More Effects", "essential-blocks")}
-                                initialOpen={false}
-                            >
+                            <PanelBody title={__("More Effects", "essential-blocks")} initialOpen={false}>
                                 <SelectControl
-                                    label={__(
-                                        "Button Hover Effect",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Button Hover Effect", "essential-blocks")}
                                     value={btnEffect}
                                     options={HOVER_EFFECT}
                                     // onChange={(preset) => handleBlockDefault({ preset })}
@@ -1017,13 +803,7 @@ function Infobox(props) {
                             </PanelBody>
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={wrapperMargin}
@@ -1035,23 +815,11 @@ function Infobox(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={infoWrapBg}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={infoWrapBg} resRequiredProps={resRequiredProps} />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
-                        <BorderShadowControl
-                            controlName={wrpBdShadow}
-                            resRequiredProps={resRequiredProps}
-                        />
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
+                        <BorderShadowControl controlName={wrpBdShadow} resRequiredProps={resRequiredProps} />
                     </PanelBody>
                 </div>
             )}

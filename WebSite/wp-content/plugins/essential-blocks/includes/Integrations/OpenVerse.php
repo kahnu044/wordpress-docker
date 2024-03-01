@@ -82,7 +82,7 @@ class OpenVerse extends ThirdPartyIntegration {
         $response_array = is_object( $response ) ? get_object_vars( $response ) : $response;
 
         if ( isset( $response_array['client_id'], $response_array['client_secret'], $response_array['name'] ) ) {
-            $this->settings()->save(
+            $this->settings()->save_eb_settings(
                 'openverseApi',
                 [
                     'client_id'     => $response_array['client_id'],
@@ -210,8 +210,6 @@ class OpenVerse extends ThirdPartyIntegration {
         if ( ! is_array( $settings ) || ! isset( $settings['openverseApi'] ) ) {
             wp_send_json_error( "Couldn't found data" );
         }
-
-        error_log( print_r( $settings['openverseApi'], 1 ) );
 
         $client_id     = $settings['openverseApi']['client_id'];
         $client_secret = $settings['openverseApi']['client_secret'];

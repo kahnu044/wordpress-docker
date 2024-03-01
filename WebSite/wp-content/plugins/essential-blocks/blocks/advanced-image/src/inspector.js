@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     SelectControl,
@@ -189,43 +189,24 @@ function Inspector(props) {
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "General",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                    >
+                                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                                         <SelectControl
-                                            label={__(
-                                                "Styles",
-                                                "essential-blocks"
-                                            )}
-                                            description={__(
-                                                "Border won't work",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Styles", "essential-blocks")}
+                                            description={__("Border won't work", "essential-blocks")}
                                             value={stylePreset}
                                             options={STYLES}
-                                            onChange={(stylePreset) =>
-                                                changeStyle(stylePreset)
-                                            }
+                                            onChange={(stylePreset) => changeStyle(stylePreset)}
                                         />
                                         {stylePreset === "circle" && (
                                             <PanelRow>
                                                 <em>
-                                                    Please use equal "Height"
-                                                    &#38; "Width" for perfect
-                                                    Circle shape.
+                                                    Please use equal "Height" &#38; "Width" for perfect Circle shape.
                                                 </em>
                                             </PanelRow>
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Display Caption",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Display Caption", "essential-blocks")}
                                             checked={displayCaption}
                                             onChange={() =>
                                                 setAttributes({
@@ -236,17 +217,10 @@ function Inspector(props) {
 
                                         {displayCaption && (
                                             <SelectControl
-                                                label={__(
-                                                    "Caption Styles",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Caption Styles", "essential-blocks")}
                                                 value={captionStyle}
                                                 options={CAPTION_STYLES}
-                                                onChange={(captionStyle) =>
-                                                    changCaptionStyle(
-                                                        captionStyle
-                                                    )
-                                                }
+                                                onChange={(captionStyle) => changCaptionStyle(captionStyle)}
                                             />
                                         )}
 
@@ -257,10 +231,7 @@ function Inspector(props) {
                                         />
 
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Width", "essential-blocks")}
                                             controlName={IMAGE_WIDTH}
                                             resRequiredProps={resRequiredProps}
                                             min={1}
@@ -297,39 +268,24 @@ function Inspector(props) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Auto Fit Image?",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Auto Fit Image?", "essential-blocks")}
                                             checked={autoFit}
-                                            onChange={(autoFit) =>
-                                                setAttributes({ autoFit })
-                                            }
+                                            onChange={(autoFit) => setAttributes({ autoFit })}
                                         />
 
                                         {autoFit && (
                                             <SelectControl
-                                                label={__(
-                                                    "Image Fit Options",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Image Fit Options", "essential-blocks")}
                                                 value={fitStyles}
                                                 options={FIT_STYLES}
-                                                onChange={(fitStyles) =>
-                                                    setAttributes({ fitStyles })
-                                                }
+                                                onChange={(fitStyles) => setAttributes({ fitStyles })}
                                             />
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Enable Link?",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Enable Link?", "essential-blocks")}
                                             checked={enableLink}
-                                            onChange={(enableLink) =>
-                                                setAttributes({ enableLink })
-                                            }
+                                            onChange={(enableLink) => setAttributes({ enableLink })}
                                         />
 
                                         {enableLink && (
@@ -366,10 +322,7 @@ function Inspector(props) {
                                         )}
                                         {enableLink && (
                                             <ToggleControl
-                                                label={__(
-                                                    "Open in New Tab",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Open in New Tab", "essential-blocks")}
                                                 checked={openInNewTab}
                                                 onChange={(openInNewTab) =>
                                                     setAttributes({
@@ -380,15 +333,10 @@ function Inspector(props) {
                                         )}
 
                                         <SelectControl
-                                            label={__(
-                                                "Hover Effect",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Hover Effect", "essential-blocks")}
                                             value={hoverEffect}
                                             options={HOVER_EFFECT}
-                                            onChange={(hoverEffect) =>
-                                                setAttributes({ hoverEffect })
-                                            }
+                                            onChange={(hoverEffect) => setAttributes({ hoverEffect })}
                                         />
                                     </PanelBody>
                                 </>
@@ -396,17 +344,9 @@ function Inspector(props) {
 
                             {tab.name === "styles" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "Image Settings",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <PanelBody title={__("Image Settings", "essential-blocks")}>
                                         <ResponsiveAlignControl
-                                            baseLabel={__(
-                                                "Image Align",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Image Align", "essential-blocks")}
                                             controlName={IMAGE_ALIGNMENT}
                                             resRequiredProps={resRequiredProps}
                                             options={IMAGE_ALIGN}
@@ -417,19 +357,12 @@ function Inspector(props) {
                                             <>
                                                 <BaseControl>
                                                     <h3 className="eb-control-title">
-                                                        {__(
-                                                            "Border",
-                                                            "essential-blocks"
-                                                        )}
+                                                        {__("Border", "essential-blocks")}
                                                     </h3>
                                                 </BaseControl>
                                                 <BorderShadowControl
-                                                    controlName={
-                                                        IMAGE_BORDER_SHADOW
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    controlName={IMAGE_BORDER_SHADOW}
+                                                    resRequiredProps={resRequiredProps}
                                                     // noShadow
                                                     // noBorder
                                                 />
@@ -437,85 +370,46 @@ function Inspector(props) {
                                         )}
                                         {complexStyle && (
                                             <PanelRow>
-                                                <em>
-                                                    Border Style doesn't support
-                                                    for "{stylePreset} style".
-                                                </em>
+                                                <em>Border Style doesn't support for "{stylePreset} style".</em>
                                             </PanelRow>
                                         )}
                                     </PanelBody>
 
                                     {displayCaption && (
-                                        <PanelBody
-                                            title={__(
-                                                "Caption Styles",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <PanelColorSettings
-                                                title={__(
-                                                    "Color Controls",
-                                                    "essential-blocks"
-                                                )}
-                                                className={"eb-subpanel"}
-                                                initialOpen={true}
-                                                disableAlpha={false}
-                                                colorSettings={[
-                                                    {
-                                                        value: captionColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({
-                                                                captionColor: newColor,
-                                                            }),
-                                                        label: __(
-                                                            "Text Color",
-                                                            "essential-blocks"
-                                                        ),
-                                                    },
-                                                ]}
+                                        <PanelBody title={__("Caption Styles", "essential-blocks")}>
+                                            <ColorControl
+                                                label={__("Text Color", "essential-blocks")}
+                                                color={captionColor}
+                                                onChange={(newColor) =>
+                                                    setAttributes({
+                                                        captionColor: newColor,
+                                                    })
+                                                }
                                             />
 
-                                            {displayCaption &&
-                                                captionStyle !=
-                                                    "caption-style-2" && (
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Background Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        color={captionBGColor}
-                                                        onChange={(
-                                                            backgroundColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                captionBGColor: backgroundColor,
-                                                            })
-                                                        }
-                                                    />
-                                                )}
+                                            {displayCaption && captionStyle != "caption-style-2" && (
+                                                <ColorControl
+                                                    label={__("Background Color", "essential-blocks")}
+                                                    color={captionBGColor}
+                                                    onChange={(backgroundColor) =>
+                                                        setAttributes({
+                                                            captionBGColor: backgroundColor,
+                                                        })
+                                                    }
+                                                    isGradient={true}
+                                                />
+                                            )}
 
                                             <TypographyDropdown
-                                                baseLabel={__(
-                                                    "Typography",
-                                                    "essential-blocks"
-                                                )}
-                                                typographyPrefixConstant={
-                                                    CAPTION_TYPOGRAPHY
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                baseLabel={__("Typography", "essential-blocks")}
+                                                typographyPrefixConstant={CAPTION_TYPOGRAPHY}
+                                                resRequiredProps={resRequiredProps}
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Width",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Width", "essential-blocks")}
                                                 controlName={CAPTION_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 units={UNIT_TYPES}
                                                 min={0}
                                                 max={300}
@@ -525,160 +419,89 @@ function Inspector(props) {
                                             {displayCaption && (
                                                 <>
                                                     <ResponsiveAlignControl
-                                                        baseLabel={__(
-                                                            "Text Align",
-                                                            "essential-blocks"
-                                                        )}
-                                                        controlName={
-                                                            TEXT_ALIGNMENT
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        baseLabel={__("Text Align", "essential-blocks")}
+                                                        controlName={TEXT_ALIGNMENT}
+                                                        resRequiredProps={resRequiredProps}
                                                         options={TEXT_ALIGN}
                                                         resOption={resOption}
                                                     />
 
-                                                    {captionStyle ===
-                                                        "caption-style-1" && (
+                                                    {captionStyle === "caption-style-1" && (
                                                         <>
                                                             <BaseControl
-                                                                label={__(
-                                                                    "Horizontal Align",
-                                                                    "essential-blocks"
-                                                                )}
+                                                                label={__("Horizontal Align", "essential-blocks")}
                                                             >
                                                                 <ButtonGroup>
-                                                                    {HORIZONTAL_ALIGN.map(
-                                                                        (
-                                                                            item
-                                                                        ) => (
-                                                                            <Button
-                                                                                // isLarge
-                                                                                isPrimary={
-                                                                                    horizontalAlign ===
-                                                                                    item.value
-                                                                                }
-                                                                                isSecondary={
-                                                                                    horizontalAlign !==
-                                                                                    item.value
-                                                                                }
-                                                                                onClick={() =>
-                                                                                    setAttributes(
-                                                                                        {
-                                                                                            horizontalAlign:
-                                                                                                item.value,
-                                                                                        }
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    item.label
-                                                                                }
-                                                                            </Button>
-                                                                        )
-                                                                    )}
+                                                                    {HORIZONTAL_ALIGN.map((item) => (
+                                                                        <Button
+                                                                            // isLarge
+                                                                            isPrimary={horizontalAlign === item.value}
+                                                                            isSecondary={horizontalAlign !== item.value}
+                                                                            onClick={() =>
+                                                                                setAttributes({
+                                                                                    horizontalAlign: item.value,
+                                                                                })
+                                                                            }
+                                                                        >
+                                                                            {item.label}
+                                                                        </Button>
+                                                                    ))}
                                                                 </ButtonGroup>
                                                             </BaseControl>
 
                                                             <BaseControl
-                                                                label={__(
-                                                                    "Vertical Align",
-                                                                    "essential-blocks"
-                                                                )}
+                                                                label={__("Vertical Align", "essential-blocks")}
                                                             >
                                                                 <ButtonGroup>
-                                                                    {VERTICAL_ALIGN.map(
-                                                                        (
-                                                                            item
-                                                                        ) => (
-                                                                            <Button
-                                                                                // isLarge
-                                                                                isPrimary={
-                                                                                    verticalAlign ===
-                                                                                    item.value
-                                                                                }
-                                                                                isSecondary={
-                                                                                    verticalAlign !==
-                                                                                    item.value
-                                                                                }
-                                                                                onClick={() =>
-                                                                                    setAttributes(
-                                                                                        {
-                                                                                            verticalAlign:
-                                                                                                item.value,
-                                                                                        }
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    item.label
-                                                                                }
-                                                                            </Button>
-                                                                        )
-                                                                    )}
+                                                                    {VERTICAL_ALIGN.map((item) => (
+                                                                        <Button
+                                                                            // isLarge
+                                                                            isPrimary={verticalAlign === item.value}
+                                                                            isSecondary={verticalAlign !== item.value}
+                                                                            onClick={() =>
+                                                                                setAttributes({
+                                                                                    verticalAlign: item.value,
+                                                                                })
+                                                                            }
+                                                                        >
+                                                                            {item.label}
+                                                                        </Button>
+                                                                    ))}
                                                                 </ButtonGroup>
                                                             </BaseControl>
                                                         </>
                                                     )}
 
-                                                    {captionStyle ===
-                                                        "caption-style-2" && (
-                                                        <BaseControl
-                                                            label={__(
-                                                                "Vertical Align",
-                                                                "essential-blocks"
-                                                            )}
-                                                        >
+                                                    {captionStyle === "caption-style-2" && (
+                                                        <BaseControl label={__("Vertical Align", "essential-blocks")}>
                                                             <ButtonGroup>
-                                                                {VERTICAL_ALIGN_CAP_2.map(
-                                                                    (item) => (
-                                                                        <Button
-                                                                            // isLarge
-                                                                            isPrimary={
-                                                                                verticalAlignCap2 ===
-                                                                                item.value
-                                                                            }
-                                                                            isSecondary={
-                                                                                verticalAlignCap2 !==
-                                                                                item.value
-                                                                            }
-                                                                            onClick={() =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        verticalAlignCap2:
-                                                                                            item.value,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                item.label
-                                                                            }
-                                                                        </Button>
-                                                                    )
-                                                                )}
+                                                                {VERTICAL_ALIGN_CAP_2.map((item) => (
+                                                                    <Button
+                                                                        // isLarge
+                                                                        isPrimary={verticalAlignCap2 === item.value}
+                                                                        isSecondary={verticalAlignCap2 !== item.value}
+                                                                        onClick={() =>
+                                                                            setAttributes({
+                                                                                verticalAlignCap2: item.value,
+                                                                            })
+                                                                        }
+                                                                    >
+                                                                        {item.label}
+                                                                    </Button>
+                                                                ))}
                                                             </ButtonGroup>
                                                         </BaseControl>
                                                     )}
 
                                                     <ResponsiveDimensionsControl
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
-                                                        controlName={
-                                                            CAPTION_MARGIN
-                                                        }
+                                                        resRequiredProps={resRequiredProps}
+                                                        controlName={CAPTION_MARGIN}
                                                         baseLabel="Margin"
                                                     />
 
                                                     <ResponsiveDimensionsControl
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
-                                                        controlName={
-                                                            CAPTION_PADDING
-                                                        }
+                                                        resRequiredProps={resRequiredProps}
+                                                        controlName={CAPTION_PADDING}
                                                         baseLabel="Padding"
                                                     />
                                                 </>
@@ -702,23 +525,14 @@ function Inspector(props) {
                                             baseLabel="Padding"
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__(
-                                            "Background",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WRAPPER_BG}
                                             resRequiredProps={resRequiredProps}
                                             noOverlay
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
@@ -727,10 +541,7 @@ function Inspector(props) {
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

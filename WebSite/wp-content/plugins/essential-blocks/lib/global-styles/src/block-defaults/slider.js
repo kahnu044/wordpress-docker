@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
 import {
     PanelBody,
     PanelRow,
@@ -15,7 +14,6 @@ import {
     RangeControl,
     TextControl,
     TextareaControl,
-    ColorPalette,
 } from "@wordpress/components";
 
 /*
@@ -130,19 +128,19 @@ function Slider(props) {
                 slidesToShow: 1,
                 speed: 500,
                 initialSlide: 0,
-                titleColor: "#333333",
-                subtitleColor: "#333333",
+                titleColor: "var(--eb-global-heading-color)",
+                subtitleColor: "var(--eb-global-text-color)",
                 buttonColorType: "normal",
-                buttonColor: "#ffffff",
-                buttonHoverColor: "#ffffff",
-                buttonBGColor: "#333333",
-                buttonHoverBGColor: "#333333",
+                buttonColor: "var(--eb-global-button-text-color)",
+                buttonHoverColor: "var(--eb-global-button-text-color)",
+                buttonBGColor: "var(--eb-global-button-background-color)",
+                buttonHoverBGColor: "var(--eb-global-tertiary-color)",
                 overlayColor: "rgb(184 133 228 / 75%)",
                 arrowColorType: "normal",
-                arrowColor: "#333333",
-                arrowHoverColor: "#000000",
-                dotsColor: "#777777",
-                dotsActiveColor: "#000000",
+                arrowColor: "var(--eb-global-primary-color)",
+                arrowHoverColor: "var(--eb-global-tertiary-color)",
+                dotsColor: "var(--eb-global-secondary-color)",
+                dotsActiveColor: "var(--eb-global-primary-color)",
                 textAlign: "left",
                 verticalAlign: "center",
                 [`${CUSTOM_HEIGHT}Unit`]: "px",
@@ -210,9 +208,7 @@ function Slider(props) {
                             label={__("Slider Type", "essential-blocks")}
                             value={sliderType}
                             options={SLIDER_TYPE}
-                            onChange={(value) =>
-                                handleBlockDefault({ sliderType: value })
-                            }
+                            onChange={(value) => handleBlockDefault({ sliderType: value })}
                         />
 
                         <ToggleControl
@@ -236,9 +232,7 @@ function Slider(props) {
                             label={__("Autoplay", "essential-blocks")}
                             checked={autoplay}
                             onChange={() => {
-                                autoplay
-                                    ? slider.current.slickPlay()
-                                    : slider.current.slickPause();
+                                autoplay ? slider.current.slickPlay() : slider.current.slickPause();
                                 handleBlockDefault({ autoplay: !autoplay });
                             }}
                         />
@@ -258,17 +252,13 @@ function Slider(props) {
                         <ToggleControl
                             label={__("Infinite", "essential-blocks")}
                             checked={infinite}
-                            onChange={() =>
-                                handleBlockDefault({ infinite: !infinite })
-                            }
+                            onChange={() => handleBlockDefault({ infinite: !infinite })}
                         />
 
                         <ToggleControl
                             label={__("Vertical Slide", "essential-blocks")}
                             checked={vertical}
-                            onChange={() =>
-                                handleBlockDefault({ vertical: !vertical })
-                            }
+                            onChange={() => handleBlockDefault({ vertical: !vertical })}
                         />
 
                         <ToggleControl
@@ -293,10 +283,7 @@ function Slider(props) {
 
                         {isCustomHeight && (
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Image Height",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Image Height", "essential-blocks")}
                                 controlName={CUSTOM_HEIGHT}
                                 resRequiredProps={resRequiredProps}
                                 units={HEIGHT_UNIT_TYPES}
@@ -308,10 +295,7 @@ function Slider(props) {
 
                         {!fade && (
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Slides to Show",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Slides to Show", "essential-blocks")}
                                 controlName={SLIDE_TO_SHOW}
                                 resRequiredProps={resRequiredProps}
                                 units={[]}
@@ -325,9 +309,7 @@ function Slider(props) {
                             <RangeControl
                                 label={__("Autoplay Speed", "essential-blocks")}
                                 value={autoplaySpeed}
-                                onChange={(autoplaySpeed) =>
-                                    handleBlockDefault({ autoplaySpeed })
-                                }
+                                onChange={(autoplaySpeed) => handleBlockDefault({ autoplaySpeed })}
                                 min={0}
                                 max={8000}
                             />
@@ -341,10 +323,7 @@ function Slider(props) {
                             max={3000}
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Settings", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Settings", "essential-blocks")} initialOpen={false}>
                         <ResponsiveRangeController
                             baseLabel={__("Slides Gap", "essential-blocks")}
                             controlName={SLIDES_GAP}
@@ -355,21 +334,17 @@ function Slider(props) {
                             step={1}
                         />
 
-                        {sliderType === "content" &&
-                            sliderContentType === "content-1" && (
-                                <ColorControl
-                                    label={__(
-                                        "Overlay Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={overlayColor}
-                                    onChange={(color) =>
-                                        handleBlockDefault({
-                                            overlayColor: color,
-                                        })
-                                    }
-                                />
-                            )}
+                        {sliderType === "content" && sliderContentType === "content-1" && (
+                            <ColorControl
+                                label={__("Overlay Color", "essential-blocks")}
+                                color={overlayColor}
+                                onChange={(color) =>
+                                    handleBlockDefault({
+                                        overlayColor: color,
+                                    })
+                                }
+                            />
+                        )}
                         {sliderType === "content" && (
                             <>
                                 <PanelRow>Text Align</PanelRow>
@@ -378,9 +353,7 @@ function Slider(props) {
                                         <Button
                                             key={index}
                                             isPrimary={textAlign === item.value}
-                                            isSecondary={
-                                                textAlign !== item.value
-                                            }
+                                            isSecondary={textAlign !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     textAlign: item.value,
@@ -396,29 +369,20 @@ function Slider(props) {
                                     <>
                                         <PanelRow>Vertical Align</PanelRow>
                                         <ButtonGroup>
-                                            {VERTICAL_ALIGN.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isPrimary={
-                                                            verticalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            verticalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                verticalAlign:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
+                                            {VERTICAL_ALIGN.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isPrimary={verticalAlign === item.value}
+                                                    isSecondary={verticalAlign !== item.value}
+                                                    onClick={() =>
+                                                        handleBlockDefault({
+                                                            verticalAlign: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
                                     </>
                                 )}
@@ -428,14 +392,10 @@ function Slider(props) {
 
                     {sliderType === "content" && (
                         <>
-                            <PanelBody
-                                title={__("Title Style", "essential-blocks")}
-                                initialOpen={false}
-                            >
-                                <PanelRow>Color</PanelRow>
-                                <ColorPalette
-                                    colors={COLORS}
-                                    value={titleColor}
+                            <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
+                                <ColorControl
+                                    label={__("Color", "essential-blocks")}
+                                    color={titleColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
                                             titleColor: color,
@@ -443,10 +403,7 @@ function Slider(props) {
                                     }
                                 />
                                 <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Typography", "essential-blocks")}
                                     typographyPrefixConstant={TITLE_TYPOGRAPHY}
                                     resRequiredProps={resRequiredProps}
                                 />
@@ -457,14 +414,10 @@ function Slider(props) {
                                 />
                             </PanelBody>
 
-                            <PanelBody
-                                title={__("Subtitle Style", "essential-blocks")}
-                                initialOpen={false}
-                            >
-                                <PanelRow>Color</PanelRow>
-                                <ColorPalette
-                                    colors={COLORS}
-                                    value={subtitleColor}
+                            <PanelBody title={__("Subtitle Style", "essential-blocks")} initialOpen={false}>
+                                <ColorControl
+                                    label={__("Color", "essential-blocks")}
+                                    color={subtitleColor}
                                     onChange={(color) =>
                                         handleBlockDefault({
                                             subtitleColor: color,
@@ -472,13 +425,8 @@ function Slider(props) {
                                     }
                                 />
                                 <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
-                                    )}
-                                    typographyPrefixConstant={
-                                        SUBTITLE_TYPOGRAPHY
-                                    }
+                                    baseLabel={__("Typography", "essential-blocks")}
+                                    typographyPrefixConstant={SUBTITLE_TYPOGRAPHY}
                                     resRequiredProps={resRequiredProps}
                                 />
                                 <ResponsiveDimensionsControl
@@ -488,20 +436,13 @@ function Slider(props) {
                                 />
                             </PanelBody>
 
-                            <PanelBody
-                                title={__("Button Style", "essential-blocks")}
-                                initialOpen={false}
-                            >
+                            <PanelBody title={__("Button Style", "essential-blocks")} initialOpen={false}>
                                 <ButtonGroup className="eb-inspector-btn-group">
                                     {NORMAL_HOVER.map((item, index) => (
                                         <Button
                                             key={index}
-                                            isPrimary={
-                                                buttonColorType === item.value
-                                            }
-                                            isSecondary={
-                                                buttonColorType !== item.value
-                                            }
+                                            isPrimary={buttonColorType === item.value}
+                                            isSecondary={buttonColorType !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     buttonColorType: item.value,
@@ -514,86 +455,59 @@ function Slider(props) {
                                 </ButtonGroup>
 
                                 {buttonColorType === "normal" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Normal Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: buttonColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        buttonColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: buttonBGColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        buttonBGColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Color", "essential-blocks")}
+                                            color={buttonColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    buttonColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={buttonBGColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    buttonBGColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
 
                                 {buttonColorType === "hover" && (
-                                    <PanelColorSettings
-                                        className={"eb-subpanel"}
-                                        title={__(
-                                            "Hover Color",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                        colorSettings={[
-                                            {
-                                                value: buttonHoverColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        buttonHoverColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                            {
-                                                value: buttonHoverBGColor,
-                                                onChange: (newColor) =>
-                                                    handleBlockDefault({
-                                                        buttonHoverBGColor: newColor,
-                                                    }),
-                                                label: __(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                ),
-                                            },
-                                        ]}
-                                    />
+                                    <>
+                                        <ColorControl
+                                            label={__("Hover Color", "essential-blocks")}
+                                            color={buttonHoverColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    buttonHoverColor: newColor,
+                                                })
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={buttonHoverBGColor}
+                                            onChange={(newColor) =>
+                                                handleBlockDefault({
+                                                    buttonHoverBGColor: newColor,
+                                                })
+                                            }
+                                        />
+                                    </>
                                 )}
                                 <PanelRow>Button Border & Shadow</PanelRow>
                                 <BorderShadowControl
                                     controlName={BUTTON_BORDER_SHADOW}
                                     resRequiredProps={resRequiredProps}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                                 <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Typography", "essential-blocks")}
                                     typographyPrefixConstant={BUTTON_TYPOGRAPHY}
                                     resRequiredProps={resRequiredProps}
                                 />
@@ -612,20 +526,13 @@ function Slider(props) {
                     )}
 
                     {arrows && (
-                        <PanelBody
-                            title={__("Arrow Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Arrow Style", "essential-blocks")} initialOpen={false}>
                             <ButtonGroup className="eb-inspector-btn-group">
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isPrimary={
-                                            arrowColorType === item.value
-                                        }
-                                        isSecondary={
-                                            arrowColorType !== item.value
-                                        }
+                                        isPrimary={arrowColorType === item.value}
+                                        isSecondary={arrowColorType !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 arrowColorType: item.value,
@@ -638,50 +545,26 @@ function Slider(props) {
                             </ButtonGroup>
 
                             {arrowColorType === "normal" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Normal Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: arrowColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    arrowColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Arrow Color", "essential-blocks")}
+                                    color={arrowColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            arrowColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
 
                             {arrowColorType === "hover" && (
-                                <PanelColorSettings
-                                    className={"eb-subpanel"}
-                                    title={__(
-                                        "Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    initialOpen={true}
-                                    colorSettings={[
-                                        {
-                                            value: arrowHoverColor,
-                                            onChange: (newColor) =>
-                                                handleBlockDefault({
-                                                    arrowHoverColor: newColor,
-                                                }),
-                                            label: __(
-                                                "Color",
-                                                "essential-blocks"
-                                            ),
-                                        },
-                                    ]}
+                                <ColorControl
+                                    label={__("Hover Color", "essential-blocks")}
+                                    color={arrowHoverColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            arrowHoverColor: newColor,
+                                        })
+                                    }
                                 />
                             )}
 
@@ -696,10 +579,7 @@ function Slider(props) {
                             />
 
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Arrow Position",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Arrow Position", "essential-blocks")}
                                 controlName={ARROW_POSITION}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -711,22 +591,15 @@ function Slider(props) {
                     )}
 
                     {dots && (
-                        <PanelBody
-                            title={__("Dot Style", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <PanelRow>Color</PanelRow>
-                            <ColorPalette
-                                colors={COLORS}
-                                value={dotsColor}
-                                onChange={(color) =>
-                                    handleBlockDefault({ dotsColor: color })
-                                }
+                        <PanelBody title={__("Dot Style", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={dotsColor}
+                                onChange={(color) => handleBlockDefault({ dotsColor: color })}
                             />
-                            <PanelRow>Active Color</PanelRow>
-                            <ColorPalette
-                                colors={COLORS}
-                                value={dotsActiveColor}
+                            <ColorControl
+                                label={__("Active Color", "essential-blocks")}
+                                color={dotsActiveColor}
                                 onChange={(color) =>
                                     handleBlockDefault({
                                         dotsActiveColor: color,
@@ -753,10 +626,7 @@ function Slider(props) {
                                 step={1}
                             />
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Dots Position",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Dots Position", "essential-blocks")}
                                 controlName={DOTS_POSITION}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -766,10 +636,7 @@ function Slider(props) {
                             />
                         </PanelBody>
                     )}
-                    <PanelBody
-                        title={__("Wrapper Margin & Padding")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -781,25 +648,15 @@ function Slider(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WRAPPER_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

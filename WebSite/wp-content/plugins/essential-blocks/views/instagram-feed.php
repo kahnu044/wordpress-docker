@@ -13,7 +13,7 @@
 
 ?>
 <div class="eb-parent-wrapper<?php echo esc_attr( implode( ' ', $_parent_wrapper_classes ) );?>">
-	<div class="eb-instagram-wrapper	                                 <?php echo esc_attr( implode( ' ', $_wrapper_classes ) );?>">
+	<div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) );?> eb-instagram-wrapper">
 		<div class="eb-instagram__gallery">
 
 			<?php

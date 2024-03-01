@@ -36,6 +36,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         resOption,
@@ -73,7 +74,10 @@ export default function Edit(props) {
         imgBorderShadowRds_Bottom,
         imgBorderShadowRds_Left,
         imgBorderShadowRds_Right,
-        imgBorderShadowRds_Top
+        imgBorderShadowRds_Top,
+        enableIsotope,
+        loadmoreBtnText,
+        enableLoadMore,
     } = attributes;
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
@@ -151,17 +155,13 @@ export default function Edit(props) {
     }, []);
 
     // isotopeEA filter
-    const isotopeEA = useRef(null);
+    const isotopeEA = useRef();
     // store the filter keyword in a state
     const [filterKey, setFilterKey] = useState("*");
 
     // initialize an Isotope object with configs
     useEffect(() => {
-        if (
-            isotopeEA.current &&
-            typeof isotopeEA.current === "object" &&
-            Object.keys(isotopeEA.current).length === 0
-        ) {
+        if (isotopeEA.current && typeof isotopeEA.current === "object" && Object.keys(isotopeEA.current).length === 0) {
             return;
         }
 
@@ -172,7 +172,6 @@ export default function Edit(props) {
                     if (layouts == "grid") {
                         isotopeEA.current = new Isotope(`.${blockId}`, {
                             itemSelector: ".eb-gallery-img-content",
-                            layoutMode: "fitRows",
                             percentPosition: true,
                         });
                     } else {
@@ -192,7 +191,41 @@ export default function Edit(props) {
                 });
             }
         }
+        if (enableIsotope) {
+            const imageGallery = document.querySelector(`.${blockId}`);
+            if (imageGallery) {
+                imagesLoaded(imageGallery, function () {
+                    if (layouts == "grid") {
+                        isotopeEA.current = new Isotope(`.${blockId}`, {
+                            itemSelector: ".eb-gallery-img-content",
+                            percentPosition: true,
+                        });
+                    } else {
+                        isotopeEA.current = new Isotope(`.${blockId}`, {
+                            itemSelector: ".eb-gallery-img-content",
+                            percentPosition: true,
+                            masonry: {
+                                columnWidth: ".eb-gallery-img-content",
+                            },
+                        });
+                    }
+
+                    // cleanup
+                    if (resOption === "Desktop") {
+                        return () => isotopeEA.current.destroy();
+                    }
+                });
+            }
+        } else {
+            const imageGallery = document.querySelector(`.${blockId}`);
+            if (imageGallery) {
+                isotopeEA.current = new Isotope(`.${blockId}`);
+                isotopeEA.current.destroy();
+            }
+        }
+
     }, [
+        enableIsotope,
         enableFilter,
         layouts,
         images,
@@ -363,7 +396,7 @@ export default function Edit(props) {
                                     } ${enableFilter
                                         ? "eb-filterable-img-gallery"
                                         : ""
-                                    }`}
+                                    } ${enableIsotope ? 'enable-isotope' : 'no-isotope'} ${enableLoadMore ? 'show-loadmore' : ''}`}
                                 data-id={blockId}
                             >
                                 {sources.map((source, index) => {
@@ -415,6 +448,11 @@ export default function Edit(props) {
                                     );
                                 })}
                             </div>
+
+                            {enableLoadMore && (
+                                <button className="eb-img-gallery-loadmore">{loadmoreBtnText}</button>
+                            )}
+
                         </div>
 
                         <MediaUpload

@@ -29,7 +29,7 @@ ebConditionalRegisterBlockType(metadata, {
     save: Save,
     example: {
         attributes: {
-            cover: `${EssentialBlocksLocalize?.eb_plugins_url}/blocks/google-map/image/screenshot.png`,
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/google-map.jpeg`,
         },
     },
     deprecated,

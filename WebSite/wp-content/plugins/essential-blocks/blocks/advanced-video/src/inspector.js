@@ -2,11 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import {
-    InspectorControls,
-    PanelColorSettings,
-    MediaUpload,
-} from "@wordpress/block-editor";
+import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
     SelectControl,
@@ -19,13 +15,7 @@ import {
     PanelRow,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { useEffect } from "@wordpress/element";
-import { select } from "@wordpress/data";
-
-/**
- * External Dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
+import { useEffect, useState } from "@wordpress/element";
 
 /**
  * Internal depencencies
@@ -42,7 +32,6 @@ import {
     SIZE_UNIT_TYPES,
     VIDEO_BORDER_SHADOW,
     OPTIONS,
-    OVERLAY,
     PLAY_ICON_WIDTH,
     LIGHTBOX_WIDTH,
     LIGHTBOX_HEIGHT,
@@ -57,19 +46,21 @@ import {
     STICKY_POSITION,
     ALIGNMENT,
     ICON_TYPE,
+    stickyVisibility,
+    STICKY_VISIBILITY,
 } from "./constants";
-import { sizeUnitTypes } from "../../advanced-tabs/src/constants";
 
 const {
     faIcons: iconList,
     ResponsiveDimensionsControl,
-    TypographyDropdown,
     BorderShadowControl,
     ImageAvatar,
     ResponsiveRangeController,
     BackgroundControl,
     ColorControl,
     AdvancedControls,
+    ResponsiveSelectController,
+    EBIconPicker
 } = window.EBControls;
 
 function Inspector(props) {
@@ -102,6 +93,7 @@ function Inspector(props) {
         lightboxPlayIconType,
         lightboxPlayIconlib,
         lightboxPlayIconlibColor,
+        showDownload,
     } = attributes;
 
     useEffect(() => {
@@ -118,6 +110,21 @@ function Inspector(props) {
         attributes,
         objAttributes,
     };
+
+    const [selfhostVideo, setSelfhostVideo] = useState(false);
+
+    useEffect(() => {
+        if (videoURL) {
+            const extension = videoURL.split(".").pop();
+            const fileFormats = ["mp4", "webm", "ogg"];
+
+            if (fileFormats.indexOf(extension) === -1) {
+                setSelfhostVideo(false);
+            } else {
+                setSelfhostVideo(true);
+            }
+        }
+    }, [videoURL]);
 
     return (
         <InspectorControls key="controls">
@@ -148,36 +155,20 @@ function Inspector(props) {
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "General",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                    >
+                                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                                         <TextControl
-                                            label={__(
-                                                "URL",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("URL", "essential-blocks")}
                                             value={videoURL}
-                                            onChange={(videoURL) =>
-                                                setAttributes({ videoURL })
-                                            }
+                                            onChange={(videoURL) => setAttributes({ videoURL })}
                                         />
                                         <Divider />
-                                        <PanelRow>Video Options</PanelRow>
+                                        <PanelRow> {__("Video Options", "essential-blocks")} </PanelRow>
 
                                         {videoOptions != "lightbox" && (
                                             <>
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Autoplay",
-                                                        "essential-blocks"
-                                                    )}
-                                                    checked={
-                                                        videoConfig.autoplay
-                                                    }
+                                                    label={__("Autoplay", "essential-blocks")}
+                                                    checked={videoConfig.autoplay}
                                                     onChange={(autoplay) =>
                                                         setAttributes({
                                                             videoConfig: {
@@ -189,19 +180,12 @@ function Inspector(props) {
                                                 />
                                                 {videoConfig.autoplay && (
                                                     <PanelRow>
-                                                        <em>
-                                                            Audio will be muted
-                                                            by default if
-                                                            autoplay is enabled.
-                                                        </em>
+                                                        <em>Audio will be muted by default if autoplay is enabled.</em>
                                                     </PanelRow>
                                                 )}
 
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Mute",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Mute", "essential-blocks")}
                                                     checked={videoConfig.muted}
                                                     onChange={(muted) =>
                                                         setAttributes({
@@ -216,10 +200,7 @@ function Inspector(props) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Loop",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Loop", "essential-blocks")}
                                             checked={videoConfig.loop}
                                             onChange={(loop) =>
                                                 setAttributes({
@@ -231,25 +212,25 @@ function Inspector(props) {
                                             }
                                         />
                                         <ToggleControl
-                                            label={__(
-                                                "Show Controls",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Show Controls", "essential-blocks")}
                                             checked={showBar}
-                                            onChange={(showBar) =>
-                                                setAttributes({ showBar })
-                                            }
+                                            onChange={(showBar) => setAttributes({ showBar })}
                                         />
+
+                                        {showBar && selfhostVideo && (
+                                            <ToggleControl
+                                                label={__("Show Download", "essential-blocks")}
+                                                checked={showDownload}
+                                                onChange={(showDownload) => setAttributes({ showDownload })}
+                                            />
+                                        )}
 
                                         {videoOptions != "lightbox" && (
                                             <>
                                                 <Divider />
 
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Image Overlay",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Image Overlay", "essential-blocks")}
                                                     checked={imageOverlay}
                                                     onChange={(imageOverlay) =>
                                                         setAttributes({
@@ -262,24 +243,15 @@ function Inspector(props) {
                                                     <>
                                                         {!previewImage && (
                                                             <MediaUpload
-                                                                onSelect={({
-                                                                    id,
-                                                                    url,
-                                                                }) =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            previewImage: url,
-                                                                            previewImageId: id,
-                                                                        }
-                                                                    )
+                                                                onSelect={({ id, url }) =>
+                                                                    setAttributes({
+                                                                        previewImage: url,
+                                                                        previewImageId: id,
+                                                                    })
                                                                 }
                                                                 type="image"
-                                                                value={
-                                                                    previewImageId
-                                                                }
-                                                                render={({
-                                                                    open,
-                                                                }) => {
+                                                                value={previewImageId}
+                                                                render={({ open }) => {
                                                                     return (
                                                                         <Button
                                                                             className="eb-background-control-inspector-panel-img-btn components-button"
@@ -288,9 +260,7 @@ function Inspector(props) {
                                                                                 "essential-blocks"
                                                                             )}
                                                                             icon="format-image"
-                                                                            onClick={
-                                                                                open
-                                                                            }
+                                                                            onClick={open}
                                                                         />
                                                                     );
                                                                 }}
@@ -298,30 +268,19 @@ function Inspector(props) {
                                                         )}
                                                         {previewImage && (
                                                             <ImageAvatar
-                                                                imageUrl={
-                                                                    previewImage
-                                                                }
+                                                                imageUrl={previewImage}
                                                                 onDeleteImage={() =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            previewImage: null,
-                                                                        }
-                                                                    )
+                                                                    setAttributes({
+                                                                        previewImage: null,
+                                                                    })
                                                                 }
                                                             />
                                                         )}
 
                                                         <ToggleControl
-                                                            label={__(
-                                                                "Custom Play Icon",
-                                                                "essential-blocks"
-                                                            )}
-                                                            checked={
-                                                                customPlayIcon
-                                                            }
-                                                            onChange={(
-                                                                customPlayIcon
-                                                            ) =>
+                                                            label={__("Custom Play Icon", "essential-blocks")}
+                                                            checked={customPlayIcon}
+                                                            onChange={(customPlayIcon) =>
                                                                 setAttributes({
                                                                     customPlayIcon,
                                                                 })
@@ -331,90 +290,58 @@ function Inspector(props) {
                                                         {customPlayIcon && (
                                                             <>
                                                                 <BaseControl
-                                                                    label={__(
-                                                                        "Icon Type",
-                                                                        "essential-blocks"
-                                                                    )}
+                                                                    label={__("Icon Type", "essential-blocks")}
                                                                 >
                                                                     <ButtonGroup>
-                                                                        {ICON_TYPE.map(
-                                                                            (
-                                                                                item
-                                                                            ) => (
-                                                                                <Button
-                                                                                    // isLarge
-                                                                                    isPrimary={
-                                                                                        placeholderCustomPlayIconType ===
-                                                                                        item.value
-                                                                                    }
-                                                                                    isSecondary={
-                                                                                        placeholderCustomPlayIconType !==
-                                                                                        item.value
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        setAttributes(
-                                                                                            {
-                                                                                                placeholderCustomPlayIconType:
-                                                                                                    item.value,
-                                                                                            }
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        item.label
-                                                                                    }
-                                                                                </Button>
-                                                                            )
-                                                                        )}
+                                                                        {ICON_TYPE.map((item) => (
+                                                                            <Button
+                                                                                // isLarge
+                                                                                isPrimary={
+                                                                                    placeholderCustomPlayIconType ===
+                                                                                    item.value
+                                                                                }
+                                                                                isSecondary={
+                                                                                    placeholderCustomPlayIconType !==
+                                                                                    item.value
+                                                                                }
+                                                                                onClick={() =>
+                                                                                    setAttributes({
+                                                                                        placeholderCustomPlayIconType:
+                                                                                            item.value,
+                                                                                    })
+                                                                                }
+                                                                            >
+                                                                                {item.label}
+                                                                            </Button>
+                                                                        ))}
                                                                     </ButtonGroup>
                                                                 </BaseControl>
 
-                                                                {placeholderCustomPlayIconType ===
-                                                                    "icon" && (
+                                                                {placeholderCustomPlayIconType === "icon" && (
                                                                     <BaseControl>
-                                                                        <FontIconPicker
-                                                                            icons={
-                                                                                iconList
+                                                                        <EBIconPicker
+                                                                            value={customPlayIconlib}
+                                                                            onChange={(icon) =>
+                                                                                setAttributes({
+                                                                                    customPlayIconlib: icon,
+                                                                                })
                                                                             }
-                                                                            value={
-                                                                                customPlayIconlib
-                                                                            }
-                                                                            onChange={(
-                                                                                customPlayIconlib
-                                                                            ) =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        customPlayIconlib,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                            appendTo="body"
                                                                         />
                                                                     </BaseControl>
                                                                 )}
-                                                                {placeholderCustomPlayIconType ===
-                                                                    "image" && (
+                                                                {placeholderCustomPlayIconType === "image" && (
                                                                     <>
                                                                         {!customPlayIconURL && (
                                                                             <MediaUpload
-                                                                                onSelect={({
-                                                                                    id,
-                                                                                    url,
-                                                                                }) =>
-                                                                                    setAttributes(
-                                                                                        {
-                                                                                            customPlayIconURL: url,
-                                                                                            customPlayIconId: id,
-                                                                                        }
-                                                                                    )
+                                                                                onSelect={({ id, url }) =>
+                                                                                    setAttributes({
+                                                                                        customPlayIconURL: url,
+                                                                                        customPlayIconId: id,
+                                                                                    })
                                                                                 }
                                                                                 type="image"
-                                                                                value={
-                                                                                    customPlayIconId
-                                                                                }
-                                                                                render={({
-                                                                                    open,
-                                                                                }) => {
+                                                                                value={customPlayIconId}
+                                                                                render={({ open }) => {
                                                                                     return (
                                                                                         <Button
                                                                                             className="eb-background-control-inspector-panel-img-btn components-button"
@@ -423,9 +350,7 @@ function Inspector(props) {
                                                                                                 "essential-blocks"
                                                                                             )}
                                                                                             icon="format-image"
-                                                                                            onClick={
-                                                                                                open
-                                                                                            }
+                                                                                            onClick={open}
                                                                                         />
                                                                                     );
                                                                                 }}
@@ -434,15 +359,11 @@ function Inspector(props) {
 
                                                                         {customPlayIconURL && (
                                                                             <ImageAvatar
-                                                                                imageUrl={
-                                                                                    customPlayIconURL
-                                                                                }
+                                                                                imageUrl={customPlayIconURL}
                                                                                 onDeleteImage={() =>
-                                                                                    setAttributes(
-                                                                                        {
-                                                                                            customPlayIconURL: null,
-                                                                                        }
-                                                                                    )
+                                                                                    setAttributes({
+                                                                                        customPlayIconURL: null,
+                                                                                    })
                                                                                 }
                                                                             />
                                                                         )}
@@ -458,86 +379,62 @@ function Inspector(props) {
                                         <Divider />
 
                                         <SelectControl
-                                            label={__(
-                                                "Additional Option",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Additional Option", "essential-blocks")}
                                             value={videoOptions}
                                             options={OPTIONS}
-                                            onChange={(videoOptions) =>
-                                                setAttributes({ videoOptions })
-                                            }
+                                            onChange={(videoOptions) => setAttributes({ videoOptions })}
                                         />
 
                                         {videoOptions == "eb-sticky" && (
-                                            <BaseControl
-                                                label={__(
-                                                    "Sticky Position",
-                                                    "essential-blocks"
-                                                )}
-                                            >
-                                                <ButtonGroup>
-                                                    {STICKY_POSITION.map(
-                                                        (item) => (
+                                            <>
+                                                <BaseControl label={__("Sticky Position", "essential-blocks")}>
+                                                    <ButtonGroup>
+                                                        {STICKY_POSITION.map((item) => (
                                                             <Button
                                                                 // isLarge
-                                                                isPrimary={
-                                                                    stickyPosition ===
-                                                                    item.value
-                                                                }
-                                                                isSecondary={
-                                                                    stickyPosition !==
-                                                                    item.value
-                                                                }
+                                                                isPrimary={stickyPosition === item.value}
+                                                                isSecondary={stickyPosition !== item.value}
                                                                 onClick={() =>
-                                                                    setAttributes(
-                                                                        {
-                                                                            stickyPosition:
-                                                                                item.value,
-                                                                        }
-                                                                    )
+                                                                    setAttributes({
+                                                                        stickyPosition: item.value,
+                                                                    })
                                                                 }
                                                             >
                                                                 {item.label}
                                                             </Button>
-                                                        )
-                                                    )}
-                                                </ButtonGroup>
-                                            </BaseControl>
+                                                        ))}
+                                                    </ButtonGroup>
+                                                </BaseControl>
+                                                <ResponsiveSelectController
+                                                    baseLabel={"Visibility"}
+                                                    controlName={stickyVisibility}
+                                                    resRequiredProps={resRequiredProps}
+                                                    options={STICKY_VISIBILITY}
+                                                    resOption={resOption}
+                                                />
+                                            </>
                                         )}
 
                                         {videoOptions == "lightbox" && (
                                             <>
-                                                <PanelRow>
-                                                    Placeholder Image
-                                                </PanelRow>
+                                                <PanelRow>Placeholder Image</PanelRow>
                                                 {!placeholderImage && (
                                                     <MediaUpload
-                                                        onSelect={({
-                                                            id,
-                                                            url,
-                                                        }) =>
+                                                        onSelect={({ id, url }) =>
                                                             setAttributes({
                                                                 placeholderImage: url,
                                                                 placeholderImageId: id,
                                                             })
                                                         }
                                                         type="image"
-                                                        value={
-                                                            placeholderImageId
-                                                        }
+                                                        value={placeholderImageId}
                                                         render={({ open }) => {
                                                             return (
                                                                 <Button
                                                                     className="eb-background-control-inspector-panel-img-btn components-button"
-                                                                    label={__(
-                                                                        "Upload Image",
-                                                                        "essential-blocks"
-                                                                    )}
+                                                                    label={__("Upload Image", "essential-blocks")}
                                                                     icon="format-image"
-                                                                    onClick={
-                                                                        open
-                                                                    }
+                                                                    onClick={open}
                                                                 />
                                                             );
                                                         }}
@@ -546,9 +443,7 @@ function Inspector(props) {
 
                                                 {placeholderImage && (
                                                     <ImageAvatar
-                                                        imageUrl={
-                                                            placeholderImage
-                                                        }
+                                                        imageUrl={placeholderImage}
                                                         onDeleteImage={() =>
                                                             setAttributes({
                                                                 placeholderImage: null,
@@ -559,14 +454,9 @@ function Inspector(props) {
 
                                                 <PanelRow>Play Icon</PanelRow>
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Show Play Icon",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Show Play Icon", "essential-blocks")}
                                                     checked={lightboxPlayIcon}
-                                                    onChange={(
-                                                        lightboxPlayIcon
-                                                    ) =>
+                                                    onChange={(lightboxPlayIcon) =>
                                                         setAttributes({
                                                             lightboxPlayIcon,
                                                         })
@@ -575,90 +465,53 @@ function Inspector(props) {
 
                                                 {lightboxPlayIcon && (
                                                     <>
-                                                        <BaseControl
-                                                            label={__(
-                                                                "Icon Type",
-                                                                "essential-blocks"
-                                                            )}
-                                                        >
+                                                        <BaseControl label={__("Icon Type", "essential-blocks")}>
                                                             <ButtonGroup>
-                                                                {ICON_TYPE.map(
-                                                                    (item) => (
-                                                                        <Button
-                                                                            // isLarge
-                                                                            isPrimary={
-                                                                                lightboxPlayIconType ===
-                                                                                item.value
-                                                                            }
-                                                                            isSecondary={
-                                                                                lightboxPlayIconType !==
-                                                                                item.value
-                                                                            }
-                                                                            onClick={() =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        lightboxPlayIconType:
-                                                                                            item.value,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                item.label
-                                                                            }
-                                                                        </Button>
-                                                                    )
-                                                                )}
+                                                                {ICON_TYPE.map((item) => (
+                                                                    <Button
+                                                                        // isLarge
+                                                                        isPrimary={lightboxPlayIconType === item.value}
+                                                                        isSecondary={
+                                                                            lightboxPlayIconType !== item.value
+                                                                        }
+                                                                        onClick={() =>
+                                                                            setAttributes({
+                                                                                lightboxPlayIconType: item.value,
+                                                                            })
+                                                                        }
+                                                                    >
+                                                                        {item.label}
+                                                                    </Button>
+                                                                ))}
                                                             </ButtonGroup>
                                                         </BaseControl>
 
-                                                        {lightboxPlayIconType ===
-                                                            "icon" && (
+                                                        {lightboxPlayIconType === "icon" && (
                                                             <BaseControl>
-                                                                <FontIconPicker
-                                                                    icons={
-                                                                        iconList
+                                                                <EBIconPicker
+                                                                    value={lightboxPlayIconlib}
+                                                                    onChange={(icon) =>
+                                                                        setAttributes({
+                                                                            lightboxPlayIconlib: icon,
+                                                                        })
                                                                     }
-                                                                    value={
-                                                                        lightboxPlayIconlib
-                                                                    }
-                                                                    onChange={(
-                                                                        lightboxPlayIconlib
-                                                                    ) =>
-                                                                        setAttributes(
-                                                                            {
-                                                                                lightboxPlayIconlib,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    appendTo="body"
                                                                 />
                                                             </BaseControl>
                                                         )}
 
-                                                        {lightboxPlayIconType ===
-                                                            "image" && (
+                                                        {lightboxPlayIconType === "image" && (
                                                             <>
                                                                 {!placeholderPlayIconURL && (
                                                                     <MediaUpload
-                                                                        onSelect={({
-                                                                            id,
-                                                                            url,
-                                                                        }) =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    placeholderPlayIconURL: url,
-                                                                                    placeholderPlayIconId: id,
-                                                                                }
-                                                                            )
+                                                                        onSelect={({ id, url }) =>
+                                                                            setAttributes({
+                                                                                placeholderPlayIconURL: url,
+                                                                                placeholderPlayIconId: id,
+                                                                            })
                                                                         }
                                                                         type="image"
-                                                                        value={
-                                                                            placeholderPlayIconId
-                                                                        }
-                                                                        render={({
-                                                                            open,
-                                                                        }) => {
+                                                                        value={placeholderPlayIconId}
+                                                                        render={({ open }) => {
                                                                             return (
                                                                                 <Button
                                                                                     className="eb-background-control-inspector-panel-img-btn components-button"
@@ -667,9 +520,7 @@ function Inspector(props) {
                                                                                         "essential-blocks"
                                                                                     )}
                                                                                     icon="format-image"
-                                                                                    onClick={
-                                                                                        open
-                                                                                    }
+                                                                                    onClick={open}
                                                                                 />
                                                                             );
                                                                         }}
@@ -678,15 +529,11 @@ function Inspector(props) {
 
                                                                 {placeholderPlayIconURL && (
                                                                     <ImageAvatar
-                                                                        imageUrl={
-                                                                            placeholderPlayIconURL
-                                                                        }
+                                                                        imageUrl={placeholderPlayIconURL}
                                                                         onDeleteImage={() =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    placeholderPlayIconURL: null,
-                                                                                }
-                                                                            )
+                                                                            setAttributes({
+                                                                                placeholderPlayIconURL: null,
+                                                                            })
                                                                         }
                                                                     />
                                                                 )}
@@ -702,60 +549,34 @@ function Inspector(props) {
 
                             {tab.name === "styles" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "Video Styles",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <PanelBody title={__("Video Styles", "essential-blocks")}>
                                         {videoOptions != "lightbox" && (
                                             <>
                                                 <ResponsiveRangeController
-                                                    baseLabel={__(
-                                                        "Width",
-                                                        "essential-blocks"
-                                                    )}
+                                                    baseLabel={__("Width", "essential-blocks")}
                                                     controlName={VIDEO_WIDTH}
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    resRequiredProps={resRequiredProps}
                                                     min={1}
                                                     max={1000}
                                                     step={1}
                                                     units={SIZE_UNIT_TYPES}
                                                 />
-                                                <BaseControl
-                                                    label={__(
-                                                        "Alignment",
-                                                        "essential-blocks"
-                                                    )}
-                                                >
+                                                <BaseControl label={__("Alignment", "essential-blocks")}>
                                                     <ButtonGroup>
-                                                        {ALIGNMENT.map(
-                                                            (item) => (
-                                                                <Button
-                                                                    // isLarge
-                                                                    isPrimary={
-                                                                        videoAlignment ===
-                                                                        item.value
-                                                                    }
-                                                                    isSecondary={
-                                                                        videoAlignment !==
-                                                                        item.value
-                                                                    }
-                                                                    onClick={() =>
-                                                                        setAttributes(
-                                                                            {
-                                                                                videoAlignment:
-                                                                                    item.value,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {item.label}
-                                                                </Button>
-                                                            )
-                                                        )}
+                                                        {ALIGNMENT.map((item) => (
+                                                            <Button
+                                                                // isLarge
+                                                                isPrimary={videoAlignment === item.value}
+                                                                isSecondary={videoAlignment !== item.value}
+                                                                onClick={() =>
+                                                                    setAttributes({
+                                                                        videoAlignment: item.value,
+                                                                    })
+                                                                }
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        ))}
                                                     </ButtonGroup>
                                                 </BaseControl>
                                             </>
@@ -765,83 +586,46 @@ function Inspector(props) {
                                             <>
                                                 {lightboxPlayIcon && (
                                                     <>
-                                                        <PanelRow>
-                                                            Play Icon
-                                                        </PanelRow>
-                                                        {lightboxPlayIconType ==
-                                                            "icon" && (
+                                                        <PanelRow>Play Icon</PanelRow>
+                                                        {lightboxPlayIconType == "icon" && (
                                                             <>
                                                                 <ColorControl
-                                                                    label={__(
-                                                                        "Icon Color",
-                                                                        "essential-blocks"
-                                                                    )}
-                                                                    color={
-                                                                        lightboxPlayIconlibColor
-                                                                    }
-                                                                    onChange={(
-                                                                        lightboxPlayIconlibColor
-                                                                    ) =>
-                                                                        setAttributes(
-                                                                            {
-                                                                                lightboxPlayIconlibColor,
-                                                                            }
-                                                                        )
+                                                                    label={__("Icon Color", "essential-blocks")}
+                                                                    color={lightboxPlayIconlibColor}
+                                                                    onChange={(lightboxPlayIconlibColor) =>
+                                                                        setAttributes({
+                                                                            lightboxPlayIconlibColor,
+                                                                        })
                                                                     }
                                                                 />
                                                             </>
                                                         )}
                                                         <ResponsiveRangeController
-                                                            baseLabel={__(
-                                                                "Size",
-                                                                "essential-blocks"
-                                                            )}
-                                                            controlName={
-                                                                PLACEHOLDER_PLAY_ICON_WIDTH
-                                                            }
-                                                            resRequiredProps={
-                                                                resRequiredProps
-                                                            }
+                                                            baseLabel={__("Size", "essential-blocks")}
+                                                            controlName={PLACEHOLDER_PLAY_ICON_WIDTH}
+                                                            resRequiredProps={resRequiredProps}
                                                             min={1}
                                                             max={400}
                                                             step={1}
-                                                            units={
-                                                                SIZE_UNIT_TYPES
-                                                            }
+                                                            units={SIZE_UNIT_TYPES}
                                                         />
                                                     </>
                                                 )}
 
-                                                <PanelRow>
-                                                    Placeholder Image
-                                                </PanelRow>
+                                                <PanelRow>Placeholder Image</PanelRow>
                                                 <ResponsiveRangeController
-                                                    baseLabel={__(
-                                                        "Width",
-                                                        "essential-blocks"
-                                                    )}
-                                                    controlName={
-                                                        PLACEHOLDER_IMAGE_WIDTH
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    baseLabel={__("Width", "essential-blocks")}
+                                                    controlName={PLACEHOLDER_IMAGE_WIDTH}
+                                                    resRequiredProps={resRequiredProps}
                                                     min={1}
                                                     max={1000}
                                                     step={1}
                                                     units={SIZE_UNIT_TYPES}
                                                 />
                                                 <ResponsiveRangeController
-                                                    baseLabel={__(
-                                                        "Height",
-                                                        "essential-blocks"
-                                                    )}
-                                                    controlName={
-                                                        PLACEHOLDER_IMAGE_HEIGHT
-                                                    }
-                                                    resRequiredProps={
-                                                        resRequiredProps
-                                                    }
+                                                    baseLabel={__("Height", "essential-blocks")}
+                                                    controlName={PLACEHOLDER_IMAGE_HEIGHT}
+                                                    resRequiredProps={resRequiredProps}
                                                     min={1}
                                                     max={1000}
                                                     step={1}
@@ -853,58 +637,34 @@ function Inspector(props) {
                                         )}
 
                                         <BaseControl>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "Border",
-                                                    "essential-blocks"
-                                                )}
-                                            </h3>
+                                            <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                                         </BaseControl>
                                         <BorderShadowControl
                                             controlName={VIDEO_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 
                                     {imageOverlay && customPlayIcon && (
-                                        <PanelBody
-                                            title={__(
-                                                "Image Overlay",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Image Overlay", "essential-blocks")} initialOpen={false}>
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Play Icon Size",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Play Icon Size", "essential-blocks")}
                                                 controlName={PLAY_ICON_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={400}
                                                 step={1}
                                                 units={SIZE_UNIT_TYPES}
                                             />
 
-                                            {placeholderCustomPlayIconType ==
-                                                "icon" && (
+                                            {placeholderCustomPlayIconType == "icon" && (
                                                 <>
                                                     <ColorControl
-                                                        label={__(
-                                                            "Icon Color",
-                                                            "essential-blocks"
-                                                        )}
-                                                        color={
-                                                            customPlayIconlibColor
-                                                        }
-                                                        onChange={(
-                                                            customPlayIconlibColor
-                                                        ) =>
+                                                        label={__("Icon Color", "essential-blocks")}
+                                                        color={customPlayIconlibColor}
+                                                        onChange={(customPlayIconlibColor) =>
                                                             setAttributes({
                                                                 customPlayIconlibColor,
                                                             })
@@ -915,18 +675,10 @@ function Inspector(props) {
                                         </PanelBody>
                                     )}
                                     {videoOptions == "lightbox" && (
-                                        <PanelBody
-                                            title={__(
-                                                "Lightbox",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <PanelBody title={__("Lightbox", "essential-blocks")}>
                                             <PanelRow>Lightbox</PanelRow>
                                             <ColorControl
-                                                label={__(
-                                                    "Overlay Color",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Overlay Color", "essential-blocks")}
                                                 color={lightboxBGColor}
                                                 onChange={(backgroundColor) =>
                                                     setAttributes({
@@ -936,99 +688,55 @@ function Inspector(props) {
                                             />
 
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Content Width",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Content Width", "essential-blocks")}
                                                 controlName={LIGHTBOX_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={1000}
                                                 step={1}
                                                 units={SIZE_UNIT_TYPES}
                                             />
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Content Height",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Content Height", "essential-blocks")}
                                                 controlName={LIGHTBOX_HEIGHT}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={1000}
                                                 step={1}
                                                 units={LIGHTBOX_UNIT_TYPES}
                                             />
                                             <BorderShadowControl
-                                                controlName={
-                                                    LIGHTBOX_BORDER_SHADOW
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                controlName={LIGHTBOX_BORDER_SHADOW}
+                                                resRequiredProps={resRequiredProps}
                                                 noShadow
                                                 noBdrHover
-                                                // noBorder
+                                            // noBorder
                                             />
 
                                             <PanelRow>Close Icon</PanelRow>
-                                            <PanelColorSettings
-                                                title={__(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                )}
-                                                className={"eb-subpanel"}
-                                                initialOpen={true}
-                                                disableAlpha={false}
-                                                colorSettings={[
-                                                    {
-                                                        value: closeIconBgColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({
-                                                                closeIconBgColor: newColor,
-                                                            }),
-                                                        label: __(
-                                                            "Color",
-                                                            "essential-blocks"
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                            <PanelColorSettings
-                                                title={__(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                )}
-                                                className={"eb-subpanel"}
-                                                initialOpen={true}
-                                                disableAlpha={false}
-                                                colorSettings={[
-                                                    {
-                                                        value: closeIconColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({
-                                                                closeIconColor: newColor,
-                                                            }),
-                                                        label: __(
-                                                            "Color",
-                                                            "essential-blocks"
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Size (PX)",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={CLOSE_ICON_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
+                                            <ColorControl
+                                                label={__("Background Color", "essential-blocks")}
+                                                color={closeIconBgColor}
+                                                onChange={(newColor) =>
+                                                    setAttributes({
+                                                        closeIconBgColor: newColor,
+                                                    })
                                                 }
+                                            />
+                                            <ColorControl
+                                                label={__("Color", "essential-blocks")}
+                                                color={closeIconColor}
+                                                onChange={(newColor) =>
+                                                    setAttributes({
+                                                        closeIconColor: newColor,
+                                                    })
+                                                }
+                                            />
+
+                                            <ResponsiveRangeController
+                                                baseLabel={__("Size (PX)", "essential-blocks")}
+                                                controlName={CLOSE_ICON_WIDTH}
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={100}
                                                 step={1}
@@ -1037,38 +745,20 @@ function Inspector(props) {
                                         </PanelBody>
                                     )}
                                     {videoOptions == "eb-sticky" && (
-                                        <PanelBody
-                                            title={__(
-                                                "Sticky",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Sticky", "essential-blocks")} initialOpen={false}>
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Width",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Width", "essential-blocks")}
                                                 controlName={STICKY_VIDEO_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={1000}
                                                 step={1}
                                                 units={SIZE_UNIT_TYPES}
                                             />
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Height",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    STICKY_VIDEO_HEIGHT
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                baseLabel={__("Height", "essential-blocks")}
+                                                controlName={STICKY_VIDEO_HEIGHT}
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={1000}
                                                 step={1}
@@ -1076,37 +766,19 @@ function Inspector(props) {
                                             />
 
                                             <PanelRow>Close Icon</PanelRow>
-                                            <PanelColorSettings
-                                                title={__(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                )}
-                                                className={"eb-subpanel"}
-                                                initialOpen={true}
-                                                disableAlpha={false}
-                                                colorSettings={[
-                                                    {
-                                                        value: closeIconColor,
-                                                        onChange: (newColor) =>
-                                                            setAttributes({
-                                                                closeIconColor: newColor,
-                                                            }),
-                                                        label: __(
-                                                            "Color",
-                                                            "essential-blocks"
-                                                        ),
-                                                    },
-                                                ]}
+                                            <ColorControl
+                                                label={__("Color", "essential-blocks")}
+                                                color={closeIconColor}
+                                                onChange={(newColor) =>
+                                                    setAttributes({
+                                                        closeIconColor: newColor,
+                                                    })
+                                                }
                                             />
                                             <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Size",
-                                                    "essential-blocks"
-                                                )}
+                                                baseLabel={__("Size", "essential-blocks")}
                                                 controlName={CLOSE_ICON_WIDTH}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 min={1}
                                                 max={1000}
                                                 step={1}
@@ -1131,35 +803,23 @@ function Inspector(props) {
                                             baseLabel="Padding"
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__(
-                                            "Background",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WRAPPER_BG}
                                             resRequiredProps={resRequiredProps}
                                             noOverlay
                                         />
                                     </PanelBody>
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

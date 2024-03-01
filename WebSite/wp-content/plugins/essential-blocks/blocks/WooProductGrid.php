@@ -58,21 +58,30 @@ class WooProductGrid extends Block {
         }
 
         $_essential_attributes = [
-            'layout'            => 'grid',
-            'gridPreset'        => 'grid-preset-1',
-            'listPreset'        => 'list-preset-1',
-            'saleBadgeAlign'    => 'align-left',
-            'saleText'          => 'sale',
-            'showRating'        => true,
-            'showPrice'         => true,
-            'showSaleBadge'     => true,
-            'productDescLength' => 5,
-            'isCustomCartBtn'   => false,
-            'simpleCartText'    => 'Buy Now',
-            'variableCartText'  => 'Select Options',
-            'groupedCartText'   => 'View Products',
-            'externalCartText'  => 'Buy Now',
-            'defaultCartText'   => 'Read More'
+            'layout'                => 'grid',
+            'gridPreset'            => 'grid-preset-1',
+            'listPreset'            => 'list-preset-1',
+            'saleBadgeAlign'        => 'align-left',
+            'saleText'              => 'sale',
+            'showRating'            => true,
+            'ratingStyle'           => 'star',
+            'showSoldCount'         => false,
+            'showSoldCountBar'      => false,
+            "soldCountPrefix"       => __( "Sold ", "essential-blocks" ),
+            "soldCountSuffix"       => "+",
+            "stockPercent"          => 50,
+            "showTaxonomyFilter"    => false,
+            "selectedTaxonomy"      => "",
+            "selectedTaxonomyItems" => '[{"value":"all","label":"All"}]',
+            'showPrice'             => true,
+            'showSaleBadge'         => true,
+            'productDescLength'     => 5,
+            'isCustomCartBtn'       => false,
+            'simpleCartText'        => 'Buy Now',
+            'variableCartText'      => 'Select Options',
+            'groupedCartText'       => 'View Products',
+            'externalCartText'      => 'Buy Now',
+            'defaultCartText'       => 'Read More'
         ];
 
         foreach ( $_essential_attributes as $key => $value ) {
@@ -139,6 +148,8 @@ class WooProductGrid extends Block {
             $loadMoreOptions               = $attributes['loadMoreOptions'];
             $loadMoreOptions['totalPosts'] = $query->found_posts ?? 0;
         }
+
+        $_essential_attributes['loadMoreOptions'] = $loadMoreOptions;
 
         ob_start();
 

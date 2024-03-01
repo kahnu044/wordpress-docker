@@ -1,5 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
-
+const { EBDisplayIcon } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -41,13 +41,7 @@ const Save = ({ attributes }) => {
                         <div className="eb-button-group__midldeInner">
                             {connectorType === "icon" && (
                                 <span>
-                                    <i
-                                        className={`${
-                                            innerButtonIcon
-                                                ? innerButtonIcon
-                                                : "fas fa-arrows-alt-h"
-                                        }`}
-                                    ></i>
+                                    <EBDisplayIcon icon={innerButtonIcon} />
                                 </span>
                             )}
 

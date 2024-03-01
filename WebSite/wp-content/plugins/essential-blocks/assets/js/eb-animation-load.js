@@ -42,13 +42,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
 var isInViewport = function (elem) {
     var distance = elem.getBoundingClientRect();
     return (
-        distance.top >= 0 &&
-        distance.top <=
-            (window.innerHeight || document.documentElement.clientHeight) &&
-        distance.left >= 0 &&
-        // distance.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        distance.right <=
-            (window.innerWidth || document.documentElement.clientWidth)
+        distance.bottom > 0 &&
+        distance.top < (window.innerHeight || document.documentElement.clientHeight) &&
+        distance.right > 0 &&
+        distance.left < (window.innerWidth || document.documentElement.clientWidth)
     );
 };
 

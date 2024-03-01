@@ -9,6 +9,7 @@
 	.eb-form-validation {
 		display: none;
 	}
+
 	.eb-field-input-wrap {
 		position: relative;
 
@@ -18,5 +19,11 @@
 			transform: translateY(-50%);
 			left: 14px;
 		}
+	}
+
+	.dashicons,
+	.dashicons-before:before {
+		width: unset;
+		height: unset;
 	}
 }

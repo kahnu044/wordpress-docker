@@ -11,12 +11,7 @@ import {
     conPaddingConst,
 } from "./constants/dimensionsConstants";
 
-import {
-    WrpBgConst,
-    iconBgConst,
-    tabBgConst,
-    conBgConst,
-} from "./constants/backgroundsConstants";
+import { WrpBgConst, iconBgConst, tabBgConst, conBgConst } from "./constants/backgroundsConstants";
 
 import {
     WrpBdShadowConst,
@@ -87,13 +82,16 @@ const attributes = {
     },
     titleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     contentColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
 
     iconColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
 
     iconPosition: {
@@ -103,6 +101,7 @@ const attributes = {
 
     hoverTitleColor: {
         type: "string",
+        default: "var(--eb-global-link-color)",
     },
     activeBgColor: {
         type: "string",
@@ -149,44 +148,26 @@ const attributes = {
     // boxs background attributes ⬇
 
     ...generateBackgroundAttributes(WrpBgConst, {
-        // defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        defaultBgGradient:
-            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+        // defaultFillColor: "var(--eb-gradient-background-color)",
     }),
     ...generateBackgroundAttributes(iconBgConst, {
-        // defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        defaultBgGradient:
-            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+        // defaultFillColor: "var(--eb-gradient-secondary-color)",
         noOverlay: true,
         noMainBgi: true,
     }),
     ...generateBackgroundAttributes(tabBgConst, {
-        isBgDefaultGradient: true,
+        // isBgDefaultGradient: true,
         noMainBgi: true,
-        defaultFillColor: "#8672ff",
-        // defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        defaultBgGradient:
-            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+        defaultFillColor: "var(--eb-global-background-color)",
         noOverlay: true,
         noMainBgi: true,
     }),
     ...generateBackgroundAttributes(conBgConst, {
         noMainBgi: true,
-        // defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-        defaultBgGradient:
-            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+        // defaultFillColor: "var(--eb-gradient-background-color)",
         noOverlay: true,
         noMainBgi: true,
     }),
-
-    // ...generateBackgroundAttributes(cdBoxsBgConst, {
-    // 	// defaultFillColor: "#7967ff",
-    // 	isBgDefaultGradient: true,
-    // 	noOverlay: true,
-    // 	noMainBgi: true,
-    // 	defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
-    // 	// noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-    // }),
 
     // boxs background attributes ends
 
@@ -199,23 +180,6 @@ const attributes = {
         defaultBdrColor: "#aaaaaa",
         defaultBdrStyle: "solid",
     }),
-
-    // ...generateBorderShadowAttributes(cdBoxsBdShadowConst, {
-    // 	// bdrDefaults: {
-    // 	// 	top: 0,
-    // 	// 	bottom: 0,
-    // 	// 	right: 0,
-    // 	// 	left: 0,
-    // 	// },
-    // 	rdsDefaults: {
-    // 		top: 10,
-    // 		bottom: 10,
-    // 		right: 10,
-    // 		left: 10,
-    // 	},
-    // 	// noShadow: true,
-    // 	// noBorder: true,
-    // }),
 
     // boxs BorderShadow attributes ends
 
@@ -241,12 +205,6 @@ const attributes = {
         right: 15,
         // isLinked: false,
     }),
-
-    // ...generateDimensionsAttributes(iconsWrapMargin, {
-    // 	// top: 10,
-    // 	// bottom: 20,
-    // 	// isLinked: false,
-    // }),
 
     // dimensions Control related Attributes ends
 };

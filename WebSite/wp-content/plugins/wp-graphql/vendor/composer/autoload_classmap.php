@@ -212,6 +212,7 @@ return array(
     'GraphQL\\Validator\\SDLValidationContext' => $vendorDir . '/webonyx/graphql-php/src/Validator/SDLValidationContext.php',
     'GraphQL\\Validator\\ValidationContext' => $vendorDir . '/webonyx/graphql-php/src/Validator/ValidationContext.php',
     'WPGraphQL\\Admin\\Admin' => $baseDir . '/src/Admin/Admin.php',
+    'WPGraphQL\\Admin\\AdminNotices' => $baseDir . '/src/Admin/AdminNotices.php',
     'WPGraphQL\\Admin\\GraphiQL\\GraphiQL' => $baseDir . '/src/Admin/GraphiQL/GraphiQL.php',
     'WPGraphQL\\Admin\\Settings\\Settings' => $baseDir . '/src/Admin/Settings/Settings.php',
     'WPGraphQL\\Admin\\Settings\\SettingsRegistry' => $baseDir . '/src/Admin/Settings/SettingsRegistry.php',

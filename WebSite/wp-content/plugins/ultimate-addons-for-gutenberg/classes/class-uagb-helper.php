@@ -45,7 +45,7 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 		 * Store Json variable
 		 *
 		 * @since 1.8.1
-		 * @var instance
+		 * @var array
 		 */
 		public static $icon_json;
 
@@ -271,6 +271,7 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 
 		/**
 		 * Get Json Data.
+		 * Customize and add icons via 'uagb_icons_chunks' filter.
 		 *
 		 * @since 1.8.1
 		 * @return array
@@ -289,8 +290,10 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 				}
 			}
 
-			if ( empty( $icons_chunks ) ) {
-				return array();
+			$icons_chunks = apply_filters( 'uagb_icons_chunks', $icons_chunks );
+			
+			if ( ! is_array( $icons_chunks ) || empty( $icons_chunks ) ) {
+				$icons_chunks = array();
 			}
 
 			self::$icon_json = $icons_chunks;
@@ -1480,12 +1483,8 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 			delete_post_meta( $post_id, '_uag_css_file_name' );
 			delete_post_meta( $post_id, '_uag_js_file_name' );
 
-			$does_post_contain_reusable_blocks = self::does_post_contain_reusable_blocks( $post_id );
-
-			if ( true === $does_post_contain_reusable_blocks || 'wp_block' === $current_post_type ) {
-				/* Update the asset version */
-				update_option( '__uagb_asset_version', time() );
-			}
+			/* Update the asset version */
+			UAGB_Admin_Helper::update_admin_settings_option( '__uagb_asset_version', time() );
 
 			do_action( 'uagb_delete_page_assets' );
 		}

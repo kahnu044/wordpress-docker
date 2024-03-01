@@ -18,6 +18,7 @@ export const STICKY_VIDEO_HEIGHT = "stickyVideoHeight";
 export const PLACEHOLDER_IMAGE_WIDTH = "placeholderImageWidth";
 export const PLACEHOLDER_IMAGE_HEIGHT = "placeholderImageHeight";
 export const PLACEHOLDER_PLAY_ICON_WIDTH = "placeholderPlayIconWidth";
+export const stickyVisibility = "stickyVisibility";
 
 export const SOURCE = [
     { label: __("YouTube", "essential-blocks"), value: "youtube" },
@@ -66,4 +67,9 @@ export const ALIGNMENT = [
 export const ICON_TYPE = [
     { label: "Image", value: "image" },
     { label: "Icon", value: "icon" },
+];
+
+export const STICKY_VISIBILITY = [
+    { label: __("Visible", "essential-blocks"), value: "visible" },
+    { label: __("Hidden", "essential-blocks"), value: "hidden" },
 ];

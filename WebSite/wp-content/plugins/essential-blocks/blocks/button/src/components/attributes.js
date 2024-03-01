@@ -75,6 +75,7 @@ const attributes = {
     },
     textColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
     buttonURL: {
         type: "string",
@@ -101,6 +102,7 @@ const attributes = {
     },
     hoverTextColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
     hoverTransition: {
         type: "number",
@@ -136,6 +138,8 @@ const attributes = {
     ...generateBackgroundAttributes(BUTTON_BACKGROUND, {
         noOverlay: true,
         noMainBgi: true,
+        defaultFillColor: "var(--eb-global-button-background-color)",
+        defaultHovFillColor: "var(--eb-global-tertiary-color)",
     }),
     // border shadow
     ...generateBorderShadowAttributes(BUTTON_BORDER),

@@ -25,6 +25,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         blockId,
@@ -110,11 +111,10 @@ export default function Edit(props) {
                                 </>
                             )}
                             <h3
-                                className={`eb-original-price-wrapper${
-                                    showOnSale === true
+                                className={`eb-original-price-wrapper${showOnSale === true
                                         ? " eb-line-through"
                                         : ""
-                                }`}
+                                    }`}
                             >
                                 <span className="eb-original-price">
                                     {currencyPlacement === "left" && (

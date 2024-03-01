@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect } from "@wordpress/element";
-import { useBlockProps, MediaUpload, RichText } from "@wordpress/block-editor";
+import { useBlockProps, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
 import { select } from "@wordpress/data";
 /**
@@ -11,15 +11,8 @@ import { select } from "@wordpress/data";
  */
 
 const {
-    //
-    softMinifyCssStrings,
-    generateBackgroundControlStyles,
-    generateDimensionsControlStyles,
-    generateTypographyStyles,
-    generateBorderShadowStyles,
-    generateResponsiveRangeStyles,
-    // mimmikCssForPreviewBtnClick,
     duplicateBlockIdFix,
+    DynamicInputValueHandler
 } = window.EBControls;
 
 import classnames from "classnames";
@@ -47,42 +40,18 @@ export default function Edit(props) {
         showDescs,
         imageUrl,
         imageId,
-        isImgHeightAuto,
-        descsColor = "#9f9f9f",
-        jobColor = "#4b4b4b",
-        nameColor = "#4b4b4b",
         showSocials,
         socialDetails,
         profilesOnly,
-        iconsJustify,
-        iconsVAlign,
-        contentsAlign,
-        imageAlign,
-        cSepAlign,
-        sSepAlign,
-        preset,
         socialInImage,
-        imgBeforeEl,
         showCSeparator,
         showSSeparator,
-        cSepType = "solid",
-        sSepType = "solid",
-        cSepColor = "#84AFFF",
-        sSepColor = "#CACACA",
-        isIconsDevider,
-        icnsDevideColor = "#cacaca",
-        icnSepW = 1,
-        icnSepH = 30,
-        hvIcnColor,
-        hvIcnBgc,
-        conVtAlign,
-        isConBgGradient,
-        conBgGradient,
-        conBgColor = "rgba(0,0,0,.4)",
-        imgCnVtAlign,
-        isP9reverse,
         icnEffect,
         classHook,
+        hoverPreset,
+        showDesignation,
+        isContentOverlay,
+        preset,
     } = attributes;
 
     //
@@ -98,37 +67,37 @@ export default function Edit(props) {
 
         const newSclDtails = [
             {
-                title: "",
+                title: "Facebook",
                 icon: "fab fa-facebook-f",
                 color: "#fff",
-                bgColor: "#3b5998",
+                bgColor: "#A0A8BD",
                 link: "",
                 linkOpenNewTab: false,
                 isExpanded: false,
             },
             {
-                title: "",
-                icon: "fab fa-twitter",
+                title: "Twitter",
+                icon: "fab fa-x-twitter",
                 color: "#fff",
-                bgColor: "#1da1f2",
+                bgColor: "#A0A8BD",
                 link: "",
                 linkOpenNewTab: false,
                 isExpanded: false,
             },
             {
-                title: "",
+                title: "LinkedIn",
                 icon: "fab fa-linkedin-in",
                 color: "#fff",
-                bgColor: "#0077b5",
+                bgColor: "#A0A8BD",
                 link: "",
                 linkOpenNewTab: false,
                 isExpanded: false,
             },
             {
-                title: "",
+                title: "YouTube",
                 icon: "fab fa-youtube",
                 color: "#fff",
-                bgColor: "#cd201f",
+                bgColor: "#A0A8BD",
                 link: "",
                 linkOpenNewTab: false,
                 isExpanded: false,
@@ -151,6 +120,8 @@ export default function Edit(props) {
 
         setAttributes({ profilesOnly });
     }, [socialDetails]);
+
+
 
     useEffect(() => {
         // this codes is for creating a unique blockId for each block's unique className
@@ -189,9 +160,9 @@ export default function Edit(props) {
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
-                    <div className={`${blockId} eb-team-wrapper`}>
+                    <div className={`${blockId} eb-team-wrapper ${preset} ${preset === 'new-preset3' ? hoverPreset : ''} ${preset === 'preset3' && isContentOverlay ? 'content-overlay' : ''}  `}>
                         <div className="eb-team-inner">
-                            <div className="image">
+                            <div className="eb-team-member-image">
                                 <MediaUpload
                                     onSelect={({ id, url }) =>
                                         setAttributes({
@@ -217,7 +188,7 @@ export default function Edit(props) {
                                         } else {
                                             return (
                                                 <img
-                                                    className="avatar"
+                                                    className="eb-team-member-avatar"
                                                     alt="member"
                                                     src={imageUrl}
                                                 />
@@ -229,63 +200,142 @@ export default function Edit(props) {
                                     <SocialLinks
                                         socialDetails={profilesOnly}
                                         icnEffect={icnEffect}
+                                        preset={preset}
+                                    />
+                                )}
+
+                                {preset === 'new-preset1' && showDesignation && (
+                                    <DynamicInputValueHandler
+                                        value={jobTitle}
+                                        tagName="h4"
+                                        className="eb-team-member-job-title"
+                                        onChange={(jobTitle) =>
+                                            setAttributes({
+                                                jobTitle,
+                                            })
+                                        }
+                                        readOnly={true}
                                     />
                                 )}
                             </div>
-                            <div className="contents">
-                                <div className="texts">
-                                    <RichText
-                                        tagName="h3"
-                                        className="name"
-                                        value={name}
-                                        onChange={(name) =>
-                                            setAttributes({ name })
-                                        }
-                                        placeholder={__(
-                                            "Add name here",
-                                            "team-member-block"
-                                        )}
-                                    />
-                                    <RichText
-                                        tagName="h4"
-                                        className="job_title"
-                                        value={jobTitle}
-                                        onChange={(jobTitle) =>
-                                            setAttributes({ jobTitle })
-                                        }
-                                        placeholder={__(
-                                            "Add job title",
-                                            "team-member-block"
-                                        )}
-                                    />
-                                    {showCSeparator && (
-                                        <hr className="content_separator" />
-                                    )}
-
-                                    {showDescs && (
-                                        <RichText
-                                            tagName="p"
-                                            className="description"
-                                            value={description}
-                                            onChange={(description) =>
-                                                setAttributes({ description })
-                                            }
-                                            placeholder={__(
-                                                "Add description",
-                                                "team-member-block"
+                            <div className="eb-team-member-contents">
+                                {(preset === 'new-preset1' || preset === 'new-preset2' || preset === 'new-preset3') && (
+                                    <div className="eb-team-member-contents-inner">
+                                        <div className="eb-team-member-texts">
+                                            <DynamicInputValueHandler
+                                                value={name}
+                                                tagName="h3"
+                                                className="eb-team-member-name"
+                                                onChange={(name) =>
+                                                    setAttributes({
+                                                        name,
+                                                    })
+                                                }
+                                                readOnly={true}
+                                            />
+                                            {preset != 'new-preset1' && showDesignation && (
+                                                <DynamicInputValueHandler
+                                                    value={jobTitle}
+                                                    tagName="h4"
+                                                    className="eb-team-member-job-title"
+                                                    onChange={(jobTitle) =>
+                                                        setAttributes({
+                                                            jobTitle,
+                                                        })
+                                                    }
+                                                    readOnly={true}
+                                                />
                                             )}
-                                        />
-                                    )}
-                                </div>
-                                {!socialInImage && showSocials && (
-                                    <>
-                                        {showSSeparator && (
-                                            <hr className="social_separator" />
+                                            {showCSeparator && (
+                                                <hr className="eb-team-member-content-separator" />
+                                            )}
+                                            {showDescs && (
+                                                <DynamicInputValueHandler
+                                                    value={description}
+                                                    tagName="p"
+                                                    className="eb-team-member-description"
+                                                    onChange={(description) =>
+                                                        setAttributes({
+                                                            description,
+                                                        })
+                                                    }
+                                                    readOnly={true}
+                                                />
+                                            )}
+                                        </div>
+                                        {!socialInImage && showSocials && (
+                                            <>
+                                                {showSSeparator && (
+                                                    <hr className="eb-team-member-social-separator" />
+                                                )}
+                                                <SocialLinks
+                                                    socialDetails={profilesOnly}
+                                                    icnEffect={icnEffect}
+                                                    preset={preset}
+                                                />
+                                            </>
                                         )}
-                                        <SocialLinks
-                                            socialDetails={profilesOnly}
-                                            icnEffect={icnEffect}
-                                        />
+                                    </div>
+                                )}
+
+                                {(preset != 'new-preset1' && preset != 'new-preset2' && preset != 'new-preset3') && (
+                                    <>
+                                        <div className="eb-team-member-texts">
+                                            <DynamicInputValueHandler
+                                                value={name}
+                                                tagName="h3"
+                                                className="eb-team-member-name"
+                                                onChange={(name) =>
+                                                    setAttributes({
+                                                        name,
+                                                    })
+                                                }
+                                                readOnly={true}
+                                            />
+                                            {preset != 'new-preset1' && showDesignation && (
+                                                <DynamicInputValueHandler
+                                                    value={jobTitle}
+                                                    tagName="h4"
+                                                    className="eb-team-member-job-title"
+                                                    onChange={(jobTitle) =>
+                                                        setAttributes({
+                                                            jobTitle,
+                                                        })
+                                                    }
+                                                    readOnly={true}
+                                                />
+                                            )}
+
+                                            {showCSeparator && (
+                                                <hr className="eb-team-member-content-separator" />
+                                            )}
+
+                                            {showDescs && (
+                                                <DynamicInputValueHandler
+                                                    value={description}
+                                                    tagName="p"
+                                                    className="eb-team-member-description"
+                                                    onChange={(description) =>
+                                                        setAttributes({
+                                                            description,
+                                                        })
+                                                    }
+                                                    readOnly={true}
+                                                />
+                                            )}
+                                        </div>
+                                        {!socialInImage && showSocials && (
+                                            <>
+                                                {showSSeparator && (
+                                                    <hr className="eb-team-member-social-separator" />
+                                                )}
+                                                <SocialLinks
+                                                    socialDetails={profilesOnly}
+                                                    icnEffect={icnEffect}
+                                                    preset={preset}
+                                                />
+                                            </>
+                                        )}
                                     </>
                                 )}
                             </div>

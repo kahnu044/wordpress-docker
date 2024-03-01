@@ -49,7 +49,7 @@ class RetryMiddleware
      */
     public static function exponentialDelay(int $retries) : int
     {
-        return (int) \pow(2, $retries - 1) * 1000;
+        return (int) 2 ** ($retries - 1) * 1000;
     }
     public function __invoke(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
     {
@@ -85,7 +85,7 @@ class RetryMiddleware
     }
     private function doRetry(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
     {
-        $options['delay'] = ($this->delay)(++$options['retries'], $response);
+        $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);
     }
 }

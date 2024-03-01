@@ -9,15 +9,14 @@ import fileGreen from "../icons/file-icon-green.svg";
 import fileBlue from "../icons/file-icon-blue.svg";
 import iconCommunity from "../icons/icon-community.svg";
 import iconReveiw from "../icons/icon-review.svg";
-import introVideoThumb from "../icons/intro-video-thmb.png";
 import playIcon from "../icons/play-icon.svg";
 import iconHelp from "../icons/icon-help.svg";
 import iconMinus from "../icons/icon-minus.svg";
 import iconPlus from "../icons/icon-plus.svg";
 
 import eblogo from "../../../assets/images/eb-logo.svg";
-import ebProTeaser from "../icons/pro-teaser.png";
-import ebProTeaserArrow from "../icons/teaser-arrow.png";
+
+
 
 export default function TabGeneral() {
     let videoPlayIcon = <img src={playIcon} />;
@@ -80,7 +79,7 @@ export default function TabGeneral() {
 
                                 <div className="teaser-box">
                                     <img
-                                        src={ebProTeaser}
+                                        src={`${EssentialBlocksLocalize.image_url}/admin/teaser-arrow.png`}
                                         alt={__(
                                             "Upgrade to pro",
                                             "essential-blocks"
@@ -89,7 +88,7 @@ export default function TabGeneral() {
 
                                     <div className="teaser-cta">
                                         <img
-                                            src={ebProTeaserArrow}
+                                            src={`${EssentialBlocksLocalize.image_url}/admin/teaser-arrow.png`}
                                             alt={__(
                                                 "Upgrade to pro",
                                                 "essential-blocks"
@@ -129,7 +128,7 @@ export default function TabGeneral() {
                                 muted={true}
                                 playing={true}
                                 controls={false}
-                                light={introVideoThumb}
+                                light={`${EssentialBlocksLocalize.image_url}/admin/intro-video-thmb.jpg`}
                                 playIcon={videoPlayIcon}
                                 className="eb-react-player"
                                 width="100%"
@@ -278,15 +277,57 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 4.3.9", "essential-blocks")}
+                                    {__("Version: 4.5.2", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("20/11/2023", "essential-blocks")}
+                                        {__("27/02/2024", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Fixed: Form Block issue with FSE",
+                                            "Fixed: **Form block** not loading when used inside patterns",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Fixed: **Pricing Table** block feature icon color not updating properly",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Fixed: Images not loading properly on *Image slider** block",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Fixed: Font loading issue",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved: Security enhancement",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved: Gradient color opacity default value in all blocks",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved: Reduce dynamic query",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved: Updated new fonts in Google font library",
                                             "essential-blocks"
                                         )}
                                     </li>

@@ -16,6 +16,7 @@ import {
     LIGHTBOX_BORDER_SHADOW,
     CLOSE_ICON_WIDTH,
     STICKY_POSITION,
+    stickyVisibility,
 } from "./constants";
 
 const {
@@ -24,6 +25,7 @@ const {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    generateResponsiveSelectControlAttributes,
 } = window.EBControls;
 
 const attributes = {
@@ -63,6 +65,10 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    showDownload: {
+        type: "boolean",
+        default: false,
+    },
     videoConfig: {
         type: "object",
         default: {
@@ -78,7 +84,7 @@ const attributes = {
 
     previewImage: {
         type: "string",
-        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
+        default: `${EssentialBlocksLocalize?.image_url}/adv-video-placeholder.png`,
     },
     previewImageId: {
         type: "string",
@@ -87,7 +93,7 @@ const attributes = {
 
     placeholderImage: {
         type: "string",
-        default: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
+        default: `${EssentialBlocksLocalize?.image_url}/adv-video-placeholder.png`,
     },
     placeholderImageId: {
         type: "string",
@@ -298,6 +304,8 @@ const attributes = {
     ...generateResponsiveRangeAttributes(CLOSE_ICON_WIDTH, {
         defaultRange: 30,
     }),
+
+    ...generateResponsiveSelectControlAttributes(stickyVisibility),
 };
 
 export default attributes;

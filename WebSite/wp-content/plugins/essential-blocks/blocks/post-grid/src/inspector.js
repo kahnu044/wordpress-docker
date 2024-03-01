@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState, useRef } from "@wordpress/element";
-import { InspectorControls, PanelColorSettings } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
     PanelRow,
@@ -23,7 +23,6 @@ import { doAction, applyFilters } from "@wordpress/hooks";
  * External Dependencies
  */
 import Select2 from "react-select";
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 import SortableContents from "./sortable-content";
 
 /**
@@ -102,10 +101,11 @@ const {
     ProSelectControl,
     faIcons,
     DynamicInputControl,
+    EBIconPicker
 } = window.EBControls;
 
 function Inspector(props) {
-    const { attributes, setAttributes, taxonomyData, isContentEnabled } = props;
+    const { attributes, setAttributes, taxonomyData, setQueryResults } = props;
     const { terms, taxonomies } = taxonomyData;
     const {
         resOption,
@@ -188,10 +188,15 @@ function Inspector(props) {
         contentLists,
         enableContents,
         enableThumbnailSort,
+        defaultFilter,
     } = attributes;
 
     const [metaOptions, setMetaOptions] = useState([]);
+    const [defaultFilterOptions, setDefaultFilterOptions] = useState('');
 
+    /**
+     * Prepare Post Terms
+     */
     useEffect(() => {
         const meta = [
             { value: "date", label: "Published Date" },
@@ -710,7 +715,7 @@ function Inspector(props) {
                         <div className={"eb-tab-controls" + tab.name}>
                             {tab.name === "general" && (
                                 <>
-                                    <CustomQuery attributes={attributes} setAttributes={setAttributes} />
+                                    <CustomQuery attributes={attributes} setAttributes={setAttributes} setQueryResults={setQueryResults} />
                                     <PanelBody title={__("Layout Style", "essential-blocks")} initialOpen={false}>
                                         <ProSelectControl
                                             label={__("Template", "essential-blocks")}
@@ -932,19 +937,14 @@ function Inspector(props) {
                                                     />
                                                     {addIcon && (
                                                         <>
-                                                            <BaseControl label={__("Select Icon", "essential-blocks")}>
-                                                                <FontIconPicker
-                                                                    icons={faIcons}
-                                                                    value={icon}
-                                                                    onChange={(icon) =>
-                                                                        setAttributes({
-                                                                            icon,
-                                                                        })
-                                                                    }
-                                                                    appendTo="body"
-                                                                    closeOnSelect
-                                                                />
-                                                            </BaseControl>
+                                                            <EBIconPicker
+                                                                value={icon}
+                                                                onChange={(icon) =>
+                                                                    setAttributes({
+                                                                        icon,
+                                                                    })
+                                                                }
+                                                            />
                                                             <BaseControl label={__("Icon Postion", "essential-blocks")}>
                                                                 <ButtonGroup id="eb-button-group-alignment">
                                                                     {ICON_POSITION.map((item, index) => (
@@ -1127,25 +1127,38 @@ function Inspector(props) {
                                                     />
                                                 </div>
                                                 {selectedTaxonomy && selectedTaxonomy.length > 0 && (
-                                                    <div className="eb-control-item-wrapper">
-                                                        <PanelRow>Select Taxonomy</PanelRow>
-                                                        <Select2
-                                                            name="select-header-meta"
-                                                            value={
-                                                                selectedTaxonomyItems &&
-                                                                    selectedTaxonomyItems.length > 0
-                                                                    ? JSON.parse(selectedTaxonomyItems)
-                                                                    : ""
-                                                            }
+                                                    <>
+                                                        <SelectControl
+                                                            label={__(
+                                                                "Default Selected Filter",
+                                                                "essential-blocks"
+                                                            )}
+                                                            value={defaultFilter}
+                                                            options={defaultFilterOptions}
                                                             onChange={(selected) =>
-                                                                setAttributes({
-                                                                    selectedTaxonomyItems: JSON.stringify(selected),
-                                                                })
+                                                                setAttributes({ defaultFilter: selected })
                                                             }
-                                                            options={terms}
-                                                            isMulti="true"
                                                         />
-                                                    </div>
+                                                        <div className="eb-control-item-wrapper">
+                                                            <PanelRow>Select Taxonomy</PanelRow>
+                                                            <Select2
+                                                                name="select-header-meta"
+                                                                value={
+                                                                    selectedTaxonomyItems &&
+                                                                        selectedTaxonomyItems.length > 0
+                                                                        ? JSON.parse(selectedTaxonomyItems)
+                                                                        : ""
+                                                                }
+                                                                onChange={(selected) =>
+                                                                    setAttributes({
+                                                                        selectedTaxonomyItems: JSON.stringify(selected),
+                                                                    })
+                                                                }
+                                                                options={terms}
+                                                                isMulti="true"
+                                                            />
+                                                        </div>
+                                                    </>
                                                 )}
                                             </>
                                         )}
@@ -1280,9 +1293,11 @@ function Inspector(props) {
                                                         >
                                                             {item.label}
                                                         </Button>
-                                                    ))}
+                                                    )
+                                                    )}
                                                 </ButtonGroup>
                                             </BaseControl>
+
                                             <TypographyDropdown
                                                 baseLabel={__("Typography", "essential-blocks")}
                                                 typographyPrefixConstant={EBPG_TITLE_TYPOGRAPHY}
@@ -1410,26 +1425,41 @@ function Inspector(props) {
                                                     />
                                                 </>
                                             )}
+
                                             <BaseControl
-                                                label={__("Alignment", "essential-blocks")}
+                                                label={__(
+                                                    "Alignment",
+                                                    "essential-blocks"
+                                                )}
                                                 id="essential-blocks"
                                             >
                                                 <ButtonGroup id="essential-blocks">
-                                                    {TEXT_ALIGN.map((item, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            // isLarge
-                                                            isPrimary={readmoreTextAlign === item.value}
-                                                            isSecondary={readmoreTextAlign !== item.value}
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    readmoreTextAlign: item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ))}
+                                                    {TEXT_ALIGN.map(
+                                                        (item, index) => (
+                                                            <Button
+                                                                key={index}
+                                                                // isLarge
+                                                                isPrimary={
+                                                                    readmoreTextAlign ===
+                                                                    item.value
+                                                                }
+                                                                isSecondary={
+                                                                    readmoreTextAlign !==
+                                                                    item.value
+                                                                }
+                                                                onClick={() =>
+                                                                    setAttributes(
+                                                                        {
+                                                                            readmoreTextAlign:
+                                                                                item.value,
+                                                                        }
+                                                                    )
+                                                                }
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        )
+                                                    )}
                                                 </ButtonGroup>
                                             </BaseControl>
                                             <TypographyDropdown
@@ -1555,7 +1585,10 @@ function Inspector(props) {
                                             {metaColorType === "normal" && (
                                                 <>
                                                     <ColorControl
-                                                        label={__("Author Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Author Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={authorMetaColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1564,7 +1597,10 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Date Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Date Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={dateMetaColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1573,7 +1609,10 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Common Meta Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Common Meta Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={commonMetaColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1582,8 +1621,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Common Meta BG Color", "essential-blocks")}
-                                                        color={commonMetaBgColor}
+                                                        label={__(
+                                                            "Common Meta BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            commonMetaBgColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 commonMetaBgColor: color,
@@ -1591,8 +1635,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Category Color", "essential-blocks")}
-                                                        color={categoryMetaColor}
+                                                        label={__(
+                                                            "Category Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            categoryMetaColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 categoryMetaColor: color,
@@ -1600,8 +1649,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Category BG Color", "essential-blocks")}
-                                                        color={categoryMetaBgColor}
+                                                        label={__(
+                                                            "Category BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            categoryMetaBgColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 categoryMetaBgColor: color,
@@ -1609,7 +1663,10 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Tag Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Tag Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={tagMetaColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1618,7 +1675,10 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Tag BG Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Tag BG Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={tagMetaBgColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1627,8 +1687,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Read Time Color", "essential-blocks")}
-                                                        color={ReadTimeMetaColor}
+                                                        label={__(
+                                                            "Read Time Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            ReadTimeMetaColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 ReadTimeMetaColor: color,
@@ -1636,7 +1701,10 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Dynamic Data Color", "essential-blocks")}
+                                                        label={__(
+                                                            "Dynamic Data Color",
+                                                            "essential-blocks"
+                                                        )}
                                                         color={dynamicMetaColor}
                                                         onChange={(color) =>
                                                             setAttributes({
@@ -1645,8 +1713,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Dynamic Data BG Color", "essential-blocks")}
-                                                        color={dynamicMetaBgColor}
+                                                        label={__(
+                                                            "Dynamic Data BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            dynamicMetaBgColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 dynamicMetaBgColor: color,
@@ -1659,8 +1732,13 @@ function Inspector(props) {
                                             {metaColorType === "hover" && (
                                                 <>
                                                     <ColorControl
-                                                        label={__("Author Color", "essential-blocks")}
-                                                        color={authorMetaHoverColor}
+                                                        label={__(
+                                                            "Author Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            authorMetaHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 authorMetaHoverColor: color,
@@ -1669,8 +1747,13 @@ function Inspector(props) {
                                                     />
 
                                                     <ColorControl
-                                                        label={__("Common Meta Color", "essential-blocks")}
-                                                        color={commonMetaHoverColor}
+                                                        label={__(
+                                                            "Common Meta Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            commonMetaHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 commonMetaHoverColor: color,
@@ -1678,8 +1761,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Common Meta BG Color", "essential-blocks")}
-                                                        color={commonMetaBgHoverColor}
+                                                        label={__(
+                                                            "Common Meta BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            commonMetaBgHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 commonMetaBgHoverColor: color,
@@ -1687,8 +1775,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Category Color", "essential-blocks")}
-                                                        color={categoryMetaHoverColor}
+                                                        label={__(
+                                                            "Category Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            categoryMetaHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 categoryMetaHoverColor: color,
@@ -1696,8 +1789,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Category BG Color", "essential-blocks")}
-                                                        color={categoryMetaBgHoverColor}
+                                                        label={__(
+                                                            "Category BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            categoryMetaBgHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 categoryMetaBgHoverColor: color,
@@ -1705,8 +1803,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Tag Color", "essential-blocks")}
-                                                        color={tagMetaHoverColor}
+                                                        label={__(
+                                                            "Tag Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            tagMetaHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 tagMetaHoverColor: color,
@@ -1714,8 +1817,13 @@ function Inspector(props) {
                                                         }
                                                     />
                                                     <ColorControl
-                                                        label={__("Tag BG Color", "essential-blocks")}
-                                                        color={tagMetaBgHoverColor}
+                                                        label={__(
+                                                            "Tag BG Color",
+                                                            "essential-blocks"
+                                                        )}
+                                                        color={
+                                                            tagMetaBgHoverColor
+                                                        }
                                                         onChange={(color) =>
                                                             setAttributes({
                                                                 tagMetaBgHoverColor: color,
@@ -1804,8 +1912,13 @@ function Inspector(props) {
                                                             }
                                                         />
                                                         <ColorControl
-                                                            label={__("Background Color", "essential-blocks")}
-                                                            color={loadMoreBgColor}
+                                                            label={__(
+                                                                "Background Color",
+                                                                "essential-blocks"
+                                                            )}
+                                                            color={
+                                                                loadMoreBgColor
+                                                            }
                                                             onChange={(color) =>
                                                                 setAttributes({
                                                                     loadMoreBgColor: color,
@@ -1814,58 +1927,80 @@ function Inspector(props) {
                                                         />
                                                     </>
                                                 )}
-                                                {loadMoreColorType === "hover" && (
-                                                    <>
-                                                        <PanelColorSettings
-                                                            className={"eb-subpanel"}
-                                                            title={__("Hover Color", "essential-blocks")}
-                                                            initialOpen={true}
-                                                            colorSettings={[
-                                                                {
-                                                                    value: loadMoreHoverColor,
-                                                                    onChange: (newColor) =>
-                                                                        setAttributes({
-                                                                            loadMoreHoverColor: newColor,
-                                                                        }),
-                                                                    label: __("Color", "essential-blocks"),
-                                                                },
-                                                                {
-                                                                    value: loadMoreHoverBgColor,
-                                                                    onChange: (newColor) =>
-                                                                        setAttributes({
-                                                                            loadMoreHoverBgColor: newColor,
-                                                                        }),
-                                                                    label: __("Background Color", "essential-blocks"),
-                                                                },
-                                                            ]}
-                                                        />
-                                                    </>
-                                                )}
-                                                {loadMoreColorType === "active" && (
-                                                    <PanelColorSettings
-                                                        className={"eb-subpanel"}
-                                                        title={__("Active Color", "essential-blocks")}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: loadMoreActiveColor,
-                                                                onChange: (newColor) =>
+                                                {loadMoreColorType ===
+                                                    "hover" && (
+                                                        <>
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    loadMoreHoverColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        loadMoreHoverColor: newColor,
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Background Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    loadMoreHoverBgColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        loadMoreHoverBgColor: newColor,
+                                                                    })
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                {loadMoreColorType ===
+                                                    "active" && (
+                                                        <>
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    loadMoreActiveColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         loadMoreActiveColor: newColor,
-                                                                    }),
-                                                                label: __("Color", "essential-blocks"),
-                                                            },
-                                                            {
-                                                                value: loadMoreActiveBgColor,
-                                                                onChange: (newColor) =>
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Background Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    loadMoreHoverBgColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         loadMoreActiveBgColor: newColor,
-                                                                    }),
-                                                                label: __("Background Color", "essential-blocks"),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
+                                                                    })
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
 
                                                 <TypographyDropdown
                                                     baseLabel={__("Typography", "essential-blocks")}
@@ -1917,75 +2052,112 @@ function Inspector(props) {
                                                         </Button>
                                                     ))}
                                                 </ButtonGroup>
-                                                {filterColorStyle === "normal" && (
-                                                    <PanelColorSettings
-                                                        className={"eb-subpanel"}
-                                                        title={__("Normal Color", "essential-blocks")}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: filterBgColor,
-                                                                onChange: (newColor) =>
+                                                {filterColorStyle ===
+                                                    "normal" && (
+                                                        <>
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Background Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    filterBgColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         filterBgColor: newColor,
-                                                                    }),
-                                                                label: __("Background Color", "essential-blocks"),
-                                                            },
-                                                            {
-                                                                value: filterTextColor,
-                                                                onChange: (newColor) =>
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Text Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    filterTextColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         filterTextColor: newColor,
-                                                                    }),
-                                                                label: __("Text Color", "essential-blocks"),
-                                                            },
-                                                            {
-                                                                value: filterActiveBgColor,
-                                                                onChange: (newColor) =>
-                                                                    setAttributes({
-                                                                        filterActiveBgColor: newColor,
-                                                                    }),
-                                                                label: __(
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
                                                                     "Active Background Color",
                                                                     "essential-blocks"
-                                                                ),
-                                                            },
-                                                            {
-                                                                value: filterActiveTextColor,
-                                                                onChange: (newColor) =>
+                                                                )}
+                                                                color={
+                                                                    filterActiveBgColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        filterActiveBgColor: newColor,
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Active Text Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    filterActiveTextColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         filterActiveTextColor: newColor,
-                                                                    }),
-                                                                label: __("Active Text Color", "essential-blocks"),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
-                                                {filterColorStyle === "hover" && (
-                                                    <PanelColorSettings
-                                                        className={"eb-subpanel"}
-                                                        title={__("Normal Color", "essential-blocks")}
-                                                        initialOpen={true}
-                                                        colorSettings={[
-                                                            {
-                                                                value: filterHoverBgColor,
-                                                                onChange: (newColor) =>
+                                                                    })
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                {filterColorStyle ===
+                                                    "hover" && (
+                                                        <>
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Hover Background Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    filterHoverBgColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         filterHoverBgColor: newColor,
-                                                                    }),
-                                                                label: __("Hover Background Color", "essential-blocks"),
-                                                            },
-                                                            {
-                                                                value: filterHoverTextColor,
-                                                                onChange: (newColor) =>
+                                                                    })
+                                                                }
+                                                            />
+                                                            <ColorControl
+                                                                label={__(
+                                                                    "Hover Text Color",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                color={
+                                                                    filterHoverTextColor
+                                                                }
+                                                                onChange={(
+                                                                    newColor
+                                                                ) =>
                                                                     setAttributes({
                                                                         filterHoverTextColor: newColor,
-                                                                    }),
-                                                                label: __("Hover Text Color", "essential-blocks"),
-                                                            },
-                                                        ]}
-                                                    />
-                                                )}
+                                                                    })
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
                                                 <ResponsiveRangeController
                                                     baseLabel={__("Items Gap", "essential-blocks")}
                                                     controlName={FILTER_ITEM_GAP}
@@ -2073,37 +2245,52 @@ function Inspector(props) {
 }
 
 export default withSelect((select, ownProps) => {
-    const { queryData, selectedTaxonomy, selectedTaxonomyItems } = ownProps.attributes;
+    const {
+        queryData,
+        selectedTaxonomy,
+        showTaxonomyFilter
+    } = ownProps.attributes;
 
-    //Get Taxonomies by post type
-    const postTypes = select("core").getPostTypes();
+    if (showTaxonomyFilter) {
+        //Get Taxonomies by post type
+        const postTypes = select("core").getPostTypes();
 
-    //Get Terms
-    const selectedTax = selectedTaxonomy ? JSON.parse(selectedTaxonomy).value : "category";
-    const terms = select("core").getEntityRecords("taxonomy", selectedTax, {
-        per_page: -1,
-    });
-    const termArr = [
-        {
-            label: "All",
-            value: "all",
-        },
-    ];
-    if (terms && typeof terms === "object" && terms.length > 0) {
-        terms.map((term, index) => {
-            termArr.push({
-                label: term.name,
-                value: term.slug,
-            });
+        //Get Terms
+        const selectedTax = selectedTaxonomy ? JSON.parse(selectedTaxonomy).value : "category";
+        const terms = select("core").getEntityRecords("taxonomy", selectedTax, {
+            per_page: -1,
         });
+        const termArr = [
+            {
+                label: "All",
+                value: "all",
+            },
+        ];
+        if (terms && typeof terms === "object" && terms.length > 0) {
+            terms.map((term, index) => {
+                termArr.push({
+                    label: term.name,
+                    value: term.slug,
+                });
+            });
+        }
+
+        return {
+            taxonomyData: {
+                taxonomies: taxonomyFilter(postTypes, queryData),
+                terms: termArr,
+            },
+        };
+    }
+    else {
+        return {
+            taxonomyData: {
+                taxonomies: [],
+                terms: [],
+            },
+        };
     }
 
-    return {
-        taxonomyData: {
-            taxonomies: taxonomyFilter(postTypes, queryData),
-            terms: termArr,
-        },
-    };
 })(Inspector);
 
 //Function for filter taxonomies

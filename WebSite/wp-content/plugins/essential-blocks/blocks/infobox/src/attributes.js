@@ -74,6 +74,7 @@ const attributes = {
     //
     numIconColor: {
         type: "string",
+        default: "var(--eb-global-background-color)",
     },
 
     // should icon number background
@@ -85,19 +86,19 @@ const attributes = {
     //
     numIconBgType: {
         type: "string",
-        default: "gradient",
+        default: "fill",
     },
 
     //
     numIconBgColor: {
         type: "string",
-        default: "#0003",
+        default: "var(--eb-global-primary-color)",
     },
 
     //
     numIconBgGradient: {
         type: "string",
-        default: "linear-gradient(45deg,#ffc2de,#ff46a1)",
+        default: "var(--eb-global-background-color)",
     },
 
     //
@@ -152,7 +153,7 @@ const attributes = {
         type: "number",
     },
 
-    //
+    // cant delete it as we migrate it to infoboxIcon attribute
     selectedIcon: {
         type: "string",
         source: "attribute",
@@ -160,6 +161,10 @@ const attributes = {
         attribute: "data-icon",
         default: "far fa-gem",
         // default: "far fa-sun",
+    },
+    infoboxIcon: {
+        type: "string",
+        default: "far fa-gem",
     },
 
     //
@@ -200,11 +205,13 @@ const attributes = {
     //
     buttonTextColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
 
     //
     buttonHvrTextColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
 
     // //
@@ -236,6 +243,7 @@ const attributes = {
     //
     titleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
 
     //
@@ -248,6 +256,7 @@ const attributes = {
     //
     subTitleColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
 
     //
@@ -261,6 +270,7 @@ const attributes = {
     //
     descriptionColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
 
     //
@@ -433,7 +443,7 @@ const attributes = {
     // background attributes ⬇
     ...generateBackgroundAttributes(infoWrapBg, {
         isBgDefaultGradient: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
+        defaultBgGradient: "linear-gradient(90deg, rgba(249,250,251,1) 0% , rgba(250,250,250,1) 100%)",
         // noOverlay: true,
         // noMainBgi: true,
         // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
@@ -441,14 +451,10 @@ const attributes = {
 
     // background attributes ⬇
     ...generateBackgroundAttributes(infoBtnBg, {
-        defaultFillColor: "#E1D8FF",
-        defaultBgGradient:
-            "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
-        forButton: true,
-        // noOverlay: true,
-        // noMainBgi: true,
-        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
-        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-button-background-color)",
+        defaultHovFillColor: "var(--eb-global-secondary-color)",
+        defaultBgGradient: "var(--eb-gradient-background-color)",
+        forButton: true
     }),
 };
 

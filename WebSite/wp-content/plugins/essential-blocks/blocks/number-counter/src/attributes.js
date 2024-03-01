@@ -109,19 +109,19 @@ export default {
     // color attributes ⬇
     titleColor: {
         type: "string",
-        // default: "#566162",
+        default: "var(--eb-global-heading-color)",
     },
     numberColor: {
         type: "string",
-        // default: "#3074ff",
+        default: "var(--eb-global-heading-color)",
     },
     numPrefixColor: {
         type: "string",
-        // default: "#3074ff",
+        default: "var(--eb-global-text-color)",
     },
     numSuffixColor: {
         type: "string",
-        // default: "#3074ff",
+        default: "var(--eb-global-text-color)",
     },
 
     //
@@ -176,6 +176,7 @@ export default {
     //
     iconColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
 
     //
@@ -187,18 +188,19 @@ export default {
     //
     iconBgType: {
         type: "string",
-        default: "gradient",
+        default: "fill",
     },
 
     //
     iconBgColor: {
         type: "string",
+        default: "var(--eb-global-background-color)",
     },
 
     //
     iconBgGradient: {
         type: "string",
-        default: "linear-gradient(45deg,#ffc2de,#ff46a1)",
+        default: "var(--eb-global-background-color)",
     },
 
     //
@@ -253,8 +255,9 @@ export default {
     }),
     // Background attributes ⬇
     ...generateBackgroundAttributes(WrapBg, {
-        isBgDefaultGradient: true,
-        defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
+        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-background-color)",
+        defaultBgGradient: "var(--eb-gradient-background-color)",
     }),
     // border & shadow attributes ⬇
     ...generateBorderShadowAttributes(wrpBdShadow),

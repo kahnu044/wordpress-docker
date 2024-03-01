@@ -1,9 +1,11 @@
-import { useState } from "@wordpress/element";
+import { useState, useEffect, useRef } from "@wordpress/element";
 
 export default () => {
-    const [isSelected, setIsSelected] = useState(false);
-    const handleClick = () => {
-        const svgParentElement = document.getElementById("eb-icon")?.parentNode;
+
+    const [isSelected, setIsSelected] = useState(false)
+
+    useEffect(() => {
+        const svgParentElement = document.getElementById('eb-icon')?.parentNode;
         setTimeout(() => {
             if (
                 svgParentElement &&
@@ -13,8 +15,9 @@ export default () => {
             } else {
                 setIsSelected(false);
             }
-        }, 100);
-    };
+        }, 100)
+    })
+
     return (
         <svg
             id="eb-icon"
@@ -23,7 +26,6 @@ export default () => {
             viewBox="0 0 179 200"
             fill={isSelected ? "#f5f5f5" : "#ffffff"}
             xmlns="http://www.w3.org/2000/svg"
-            onClick={() => handleClick()}
         >
             <g clipPath="url(#clip0_2_27)">
                 <path

@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+use \ZipAI\Classes\Module as Zip_Ai_Module;
+
 if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 
 	/**
@@ -44,6 +46,14 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 		 */
 		public static function get_admin_settings_shareable_data() {
 
+			// Prepare to get the Zip AI Co-pilot modules.
+			$zip_ai_modules = array();
+
+			// If the Zip AI Helper is available, get the required modules and their states.
+			if ( class_exists( '\ZipAI\Classes\Module' ) ) {
+				$zip_ai_modules = Zip_Ai_Module::get_all_modules();
+			}
+
 			$content_width = self::get_global_content_width();
 
 			$options = array(
@@ -54,6 +64,7 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 				'uag_enable_on_page_css_button'     => self::get_admin_settings_option( 'uag_enable_on_page_css_button', 'yes' ),
 				'uag_enable_block_condition'        => self::get_admin_settings_option( 'uag_enable_block_condition', 'disabled' ),
 				'uag_enable_masonry_gallery'        => self::get_admin_settings_option( 'uag_enable_masonry_gallery', 'enabled' ),
+				'uag_enable_quick_action_sidebar'   => self::get_admin_settings_option( 'uag_enable_quick_action_sidebar', 'enabled' ),
 				'uag_enable_animations_extension'   => self::get_admin_settings_option( 'uag_enable_animations_extension', 'enabled' ),
 				'uag_enable_gbs_extension'          => self::get_admin_settings_option( 'uag_enable_gbs_extension', 'enabled' ),
 				'uag_enable_block_responsive'       => self::get_admin_settings_option( 'uag_enable_block_responsive', 'enabled' ),
@@ -82,9 +93,11 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 						'info-box',
 						'call-to-action',
 						'countdown',
+						'popup-builder',
 					)
 				),
 				'wp_is_block_theme'                 => self::is_block_theme(),
+				'zip_ai_modules'                    => $zip_ai_modules,
 			);
 
 			return $options;

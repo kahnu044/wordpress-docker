@@ -16,11 +16,6 @@ import {
 } from "@wordpress/components";
 
 /**
- * External dependencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
-/**
  * Internal dependencies
  */
 import {
@@ -53,6 +48,7 @@ const {
     ResponsiveRangeController,
     BorderShadowControl,
     BackgroundControl,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "../../../../blocks/popup/src/attributes";
@@ -282,23 +278,15 @@ function Popup(props) {
                                                 })
                                             }
                                         />
-                                        <BaseControl
-                                            label={__(
-                                                "Button Icon",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <FontIconPicker
-                                                icons={iconList}
-                                                value={btnIcon}
-                                                onChange={(btnIcon) =>
-                                                    handleBlockDefault({
-                                                        btnIcon,
-                                                    })
-                                                }
-                                                appendTo="body"
-                                            />
-                                        </BaseControl>
+                                        <EBIconPicker
+                                            value={btnIcon}
+                                            onChange={(btnIcon) =>
+                                                handleBlockDefault({
+                                                    btnIcon,
+                                                })
+                                            }
+                                            title={__("Select Icon", "essential-blocks")}
+                                        />
                                         <BaseControl
                                             label={__(
                                                 "Icon Position",
@@ -338,23 +326,15 @@ function Popup(props) {
                                 )}
                                 {"icon" === btnType && (
                                     <>
-                                        <BaseControl
-                                            label={__(
-                                                "Trigger Icon",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <FontIconPicker
-                                                icons={iconList}
-                                                value={triggerIcon}
-                                                onChange={(triggerIcon) =>
-                                                    handleBlockDefault({
-                                                        triggerIcon,
-                                                    })
-                                                }
-                                                appendTo="body"
-                                            />
-                                        </BaseControl>
+                                        <EBIconPicker
+                                            value={triggerIcon}
+                                            onChange={(triggerIcon) =>
+                                                handleBlockDefault({
+                                                    triggerIcon,
+                                                })
+                                            }
+                                            title={__("Trigger Icon", "essential-blocks")}
+                                        />
                                     </>
                                 )}
                                 <BaseControl

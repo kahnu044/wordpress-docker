@@ -1,9 +1,15 @@
+.eb-row-wrapper {
+	* {
+		box-sizing: border-box;
+	}
+}
+
 .eb-row-wrapper:not(.for-editor-page) {
 	box-sizing: border-box;
 	margin-left: auto !important;
 	margin-right: auto !important;
 
-	& > .eb-row-inner {
+	&>.eb-row-inner {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: nowrap;
@@ -14,12 +20,7 @@
 	}
 }
 
-.eb-row-root-container
-	> div.eb-row-wrapper:not(.for-editor-page)
-	> div.eb-row-inner
-	> div.eb-column-wrapper
-	> div.eb-column-inner
-	> div:not(.eb-instagram-wrapper):not(.eb-toc-container),
+.eb-row-root-container>div.eb-row-wrapper:not(.for-editor-page)>div.eb-row-inner>div.eb-column-wrapper>div.eb-column-inner>div:not(.eb-instagram-wrapper):not(.eb-toc-container),
 .wp-block-essential-blocks-row {
 	margin-top: 0;
 	margin-bottom: 0;
@@ -27,20 +28,18 @@
 	padding-bottom: 0;
 }
 
-.eb-row-root-container
-	> .eb-row-wrapper:not(.for-editor-page)
-	> .eb-row-inner
-	> .eb-column-wrapper {
+.eb-row-root-container>.eb-row-wrapper:not(.for-editor-page)>.eb-row-inner>.eb-column-wrapper {
 	box-sizing: border-box;
 }
 
-@media all and (max-width: 1024px) {
-	.eb-row-wrapper:not(.for-editor-page) > .eb-row-inner {
+@media (max-width: 1024px) {
+	.eb-row-wrapper:not(.for-editor-page)>.eb-row-inner {
 		flex-wrap: wrap;
 	}
+
 	.eb-row-wrapper:not(.for-editor-page) {
-	
-		& > .eb-row-inner {
+
+		&>.eb-row-inner {
 			justify-content: flex-start;
 		}
 	}

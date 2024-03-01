@@ -1,5 +1,5 @@
 /**
- * fetchEBSettingsData
+ * get_eb_admin_templates
  * @param {*} slug
  * @param {*} file
  */
@@ -23,7 +23,7 @@ export const getTemplates = () => {
 };
 
 /**
- * fetchEBSettingsData
+ * get_eb_admin_template_count
  * @param {*} slug
  * @param {*} file
  */

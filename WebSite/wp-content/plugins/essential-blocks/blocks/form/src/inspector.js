@@ -35,9 +35,8 @@ const {
     ProSelectControl,
     DynamicInputControl,
     faIcons,
+    EBIconPicker
 } = EBControls;
-
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
 
 import {
     WRAPPER_BG,
@@ -99,6 +98,8 @@ import {
     CHECKBOX_TEXT,
     FIELDS_TEXT_VALIDATION,
 } from "./constants/typographyPrefixConstants";
+
+import { contactForm1, contactForm2, subscriptionForm1, subscriptionForm2, rsvpForm, blankForm } from "./helpers";
 
 function Inspector(props) {
     const {
@@ -211,12 +212,114 @@ function Inspector(props) {
         }
     }, [formType]);
 
+
+    const formTypeAttr = (formType, template) => {
+        let formAttr;
+
+        if (formType === "contact_form") {
+            if (template === "contact_form_1") {
+                formAttr = contactForm1;
+            } else if (template === "contact_form_2") {
+                formAttr = contactForm2;
+            }
+
+        } else if (formType === "subscription_form") {
+            if (template === "subscription_form_1") {
+                formAttr = subscriptionForm1;
+            } else if (template === "subscription_form_2") {
+                formAttr = subscriptionForm2;
+            }
+
+        } else if (formType === "rsvp_form") {
+            formAttr = rsvpForm;
+        } else if (formType === "blank") {
+            formAttr = blankForm;
+        }
+
+        return formAttr;
+    }
+
     const changeFormType = (selected) => {
         setAttributes({ formType: selected });
+
+        setAttributes(formTypeAttr(formType, template));
+    };
+    const changeFormTemplate = (selected) => {
+        setAttributes({ template: selected });
+
+        setAttributes(formTypeAttr(formType, template));
     };
 
     const changeFormStyle = (selected) => {
         setAttributes({ formStyle: selected });
+
+        if (formStyle === "form-style-modern") {
+            setAttributes({
+                inputIconSizeRange: "20",
+                fieldsBorderHBdr_Bottom: "1",
+                fieldsBorderHBdr_Left: "1",
+                fieldsBorderHBdr_Right: "1",
+                fieldsBorderHBdr_Top: "1",
+                fieldsBorderHBdr_Unit: "px",
+                fieldsBorderHborderColor: "#000",
+                fieldsBorderHborderStyle: "solid",
+
+                fieldsPaddingisLinked: false,
+                fieldsPaddingUnit: "px",
+                fieldsPaddingTop: "25",
+                fieldsPaddingBottom: "15",
+                fieldsPaddingLeft: "15",
+                fieldsPaddingRight: "15",
+            });
+
+            if (
+                formType === "subscription_form" &&
+                template === "subscription_form_1"
+            ) {
+                setAttributes({
+                    inputIconSizeRange: "15",
+                    fieldsPaddingLeft: "20",
+                    fieldsPaddingRight: "220",
+                    fieldsPaddingTop: "25",
+                    fieldsPaddingBottom: "25",
+                    fieldsPaddingisLinked: false,
+                });
+            }
+        } else if (formStyle === "form-style-classic") {
+            setAttributes({
+                inputIconSizeRange: "15",
+                fieldsBorderHBdr_Bottom: "1",
+                fieldsBorderHBdr_Left: "1",
+                fieldsBorderHBdr_Right: "1",
+                fieldsBorderHBdr_Top: "1",
+                fieldsBorderHBdr_Unit: "px",
+                fieldsBorderHborderColor: "",
+                fieldsBorderHborderStyle: "none",
+            });
+
+            if (
+                formType === "subscription_form" &&
+                template === "subscription_form_1"
+            ) {
+                setAttributes({
+                    fieldsPaddingLeft: "20",
+                    fieldsPaddingRight: "220",
+                    fieldsPaddingTop: "25",
+                    fieldsPaddingBottom: "25",
+                    fieldsPaddingisLinked: false,
+                });
+            } else {
+                setAttributes({
+                    fieldsPaddingisLinked: true,
+                    fieldsPaddingUnit: "px",
+                    fieldsPaddingTop: "15",
+                    fieldsPaddingBottom: "15",
+                    fieldsPaddingLeft: "15",
+                    fieldsPaddingRight: "15",
+                });
+            }
+        }
+
     };
 
     const handleIntegrationChange = (selected) => {
@@ -323,9 +426,7 @@ function Inspector(props) {
                                                 value={template}
                                                 options={formTemplates}
                                                 onChange={(selected) =>
-                                                    setAttributes({
-                                                        template: selected,
-                                                    })
+                                                    changeFormTemplate(selected)
                                                 }
                                             />
                                         )}
@@ -692,24 +793,14 @@ function Inspector(props) {
                                             />
                                             {btnAddIcon && (
                                                 <>
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Select Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <FontIconPicker
-                                                            icons={faIcons}
-                                                            value={icon}
-                                                            onChange={(icon) =>
-                                                                setAttributes({
-                                                                    icon,
-                                                                })
-                                                            }
-                                                            appendTo="body"
-                                                            closeOnSelect
-                                                        />
-                                                    </BaseControl>
+                                                    <EBIconPicker
+                                                        value={icon}
+                                                        onChange={(icon) =>
+                                                            setAttributes({
+                                                                icon,
+                                                            })
+                                                        }
+                                                    />
                                                 </>
                                             )}
                                         </>
@@ -729,7 +820,7 @@ function Inspector(props) {
                                             )}
                                             controlName={ROWS_GAP}
                                             resRequiredProps={resRequiredProps}
-                                            min={1}
+                                            min={0}
                                             max={100}
                                             step={1}
                                             noUnits

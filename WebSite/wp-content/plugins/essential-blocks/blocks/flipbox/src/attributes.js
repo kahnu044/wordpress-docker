@@ -50,10 +50,7 @@ const {
     generateBorderShadowAttributes,
 } = window.EBControls;
 
-import {
-    flipboxFrontWrapper,
-    flipboxBackWrapper,
-} from "./constants/backgroundsConstants";
+import { flipboxFrontWrapper, flipboxBackWrapper } from "./constants/backgroundsConstants";
 
 const attributes = {
     // responsive control attributes ⬇
@@ -194,21 +191,27 @@ const attributes = {
     },
     frontTitleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     backTitleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     frontContentColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     backContentColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     frontIconColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     backIconColor: {
         type: "string",
+        default: "var(--eb-global-primary-color)",
     },
     buttonStyle: {
         type: "string",
@@ -220,9 +223,11 @@ const attributes = {
     },
     buttonBackground: {
         type: "string",
+        default: "var(--eb-global-button-background-color)",
     },
     buttonColor: {
         type: "string",
+        default: "var(--eb-global-button-text-color)",
     },
     frontIconBackground: {
         type: "string",
@@ -315,14 +320,14 @@ const attributes = {
     ...generateBorderShadowAttributes(borderShadowBackIcon, { noShadow: true }),
     // background Attributes
     ...generateBackgroundAttributes(flipboxFrontWrapper, {
-        isBgDefaultGradient: true,
-        defaultFillColor: "#7967ff",
-        defaultBgGradient: "linear-gradient(90deg,#4919f6,#7529f9)",
+        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-background-color)",
+        // defaultBgGradient: "linear-gradient(90deg,#4919f6,#7529f9)",
     }),
     ...generateBackgroundAttributes(flipboxBackWrapper, {
-        isBgDefaultGradient: true,
-        defaultFillColor: "#3074ff",
-        defaultBgGradient: "linear-gradient(90deg,#7529f9,#4919f6)",
+        // isBgDefaultGradient: true,
+        defaultFillColor: "var(--eb-global-background-color)",
+        // defaultBgGradient: "linear-gradient(90deg,#7529f9,#4919f6)",
     }),
 };
 

@@ -42,7 +42,7 @@ class NFT extends ThirdPartyIntegration {
         $limit = 6;
 
         if ( isset( $_POST['nft_source'] ) && sanitize_text_field( $_POST['nft_source'] ) === 'opensea' ) {
-            $opensea_api = 'b61c8a54123d4dcb9acc1b9c26a01cd1';
+            $opensea_api = '58e12cdaed664ad3806393f7fe3e1066';
             $settings    = get_option( 'eb_settings' );
 
             if ( isset( $_POST['openseaApiKey'] ) ) {

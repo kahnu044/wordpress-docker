@@ -1,8 +1,3 @@
-/**
- * WordPress dependencies
- */
-import { useEffect } from "@wordpress/element";
-
 import {
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
@@ -25,10 +20,11 @@ const {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
+    StyleComponent
 } = window.EBControls;
 
 export default function Style(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, name } = props;
     const {
         parentBlockId,
         blockId,
@@ -290,46 +286,16 @@ export default function Style(props) {
 		${checkboxMobile}
 	`);
 
-    // Set All Style in "blockMeta" Attribute
-    useEffect(() => {
-        const styleObject = {
-            desktop: desktopAllStyles,
-            tab: tabAllStyles,
-            mobile: mobileAllStyles,
-        };
-        if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-            setAttributes({ blockMeta: styleObject });
-        }
-    }, [attributes]);
-
     return (
-        <style>
-            {`
-				${desktopAllStyles}
-
-				/* mimmikcssStart */
-
-				${resOption === "Tablet" ? tabAllStyles : " "}
-				${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-
-				/* mimmikcssEnd */
-
-				@media all and (max-width: 1024px) {
-
-					/* tabcssStart */
-					${softMinifyCssStrings(tabAllStyles)}
-					/* tabcssEnd */
-
-				}
-
-				@media all and (max-width: 767px) {
-
-					/* mobcssStart */
-					${softMinifyCssStrings(mobileAllStyles)}
-					/* mobcssEnd */
-
-				}
-				`}
-        </style>
+        <>
+            <StyleComponent
+                attributes={attributes}
+                setAttributes={setAttributes}
+                desktopAllStyles={desktopAllStyles}
+                tabAllStyles={tabAllStyles}
+                mobileAllStyles={mobileAllStyles}
+                blockName={name}
+            />
+        </>
     );
 }

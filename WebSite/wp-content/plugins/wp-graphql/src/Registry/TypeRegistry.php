@@ -2,6 +2,7 @@
 
 namespace WPGraphQL\Registry;
 
+use GraphQL\Error\Error;
 use GraphQL\Type\Definition\Type;
 use WPGraphQL\Data\DataSource;
 use WPGraphQL\Mutation\CommentCreate;
@@ -147,7 +148,7 @@ class TypeRegistry {
 	/**
 	 * The loaders needed to register types
 	 *
-	 * @var array<string,Callable>
+	 * @var array<string,callable():(mixed|array<string,mixed>|\GraphQL\Type\Definition\Type|null)>
 	 */
 	protected $type_loaders;
 
@@ -839,8 +840,7 @@ class TypeRegistry {
 	 *
 	 * @param string $type_name The name of the Type to get from the registry
 	 *
-	 * @return mixed
-	 * |null
+	 * @return mixed|array<string,mixed>|\GraphQL\Type\Definition\Type|null
 	 */
 	public function get_type( string $type_name ) {
 		$key = $this->format_key( $type_name );
@@ -889,13 +889,11 @@ class TypeRegistry {
 	 */
 	public function prepare_fields( array $fields, string $type_name ): array {
 		$prepared_fields = [];
-		if ( ! empty( $fields ) && is_array( $fields ) ) {
-			foreach ( $fields as $field_name => $field_config ) {
-				if ( is_array( $field_config ) && isset( $field_config['type'] ) ) {
-					$prepared_field = $this->prepare_field( $field_name, $field_config, $type_name );
-					if ( ! empty( $prepared_field ) ) {
-						$prepared_fields[ $this->format_key( $field_name ) ] = $prepared_field;
-					}
+		foreach ( $fields as $field_name => $field_config ) {
+			if ( is_array( $field_config ) && isset( $field_config['type'] ) ) {
+				$prepared_field = $this->prepare_field( $field_name, $field_config, $type_name );
+				if ( ! empty( $prepared_field ) ) {
+					$prepared_fields[ $this->format_key( $field_name ) ] = $prepared_field;
 				}
 			}
 		}
@@ -946,8 +944,21 @@ class TypeRegistry {
 				return null;
 			}
 
-			$field_config['type'] = function () use ( $field_config ) {
-				return $this->get_type( $field_config['type'] );
+			$field_config['type'] = function () use ( $field_config, $type_name ) {
+				$type = $this->get_type( $field_config['type'] );
+				if ( ! $type ) {
+					$message = sprintf(
+					/* translators: %1$s is the Field name, %2$s is the type name the field belongs to. %3$s is the non-existent type name being referenced. */
+						__( 'The field \'%1$s\' on Type \'%2$s\' is configured to return \'%3$s\' which is a non-existent Type in the Schema. Make sure to define a valid type for all fields. This might occur if there was a typo with \'%3$s\', or it needs to be registered to the Schema.', 'wp-graphql' ),
+						$field_config['name'],
+						$type_name,
+						$field_config['type']
+					);
+					// We throw an error here instead of graphql_debug message, as an error would already be thrown if a type didn't exist at this point,
+					// but now it will have a more helpful error message.
+					throw new Error( esc_html( $message ) );
+				}
+				return $type;
 			};
 		}
 
@@ -1001,7 +1012,7 @@ class TypeRegistry {
 	 *
 	 * @param mixed|string|array<string,mixed> $type The type definition to process.
 	 *
-	 * @return mixed
+	 * @return \GraphQL\Type\Definition\Type|string|array<string,mixed>|mixed
 	 * @throws \Exception
 	 */
 	public function setup_type_modifiers( $type ) {
@@ -1218,7 +1229,7 @@ class TypeRegistry {
 	/**
 	 * Given a Type, this returns an instance of a NonNull of that type
 	 *
-	 * @param mixed $type The Type being wrapped
+	 * @param string|callable|\GraphQL\Type\Definition\NullableType $type The Type being wrapped
 	 *
 	 * @return \GraphQL\Type\Definition\NonNull
 	 */
@@ -1235,7 +1246,7 @@ class TypeRegistry {
 	/**
 	 * Given a Type, this returns an instance of a listOf of that type
 	 *
-	 * @param mixed $type The Type being wrapped
+	 * @param string|\GraphQL\Type\Definition\Type $type The Type being wrapped
 	 *
 	 * @return \GraphQL\Type\Definition\ListOfType
 	 */

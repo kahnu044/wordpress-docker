@@ -1,97 +1,20 @@
 export default function () {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			x="0"
-			y="0"
-			enableBackground="new 0 0 70 70"
-			version="1.1"
-			viewBox="0 0 70 70"
-			xmlSpace="preserve"
-		>
-			<linearGradient
-				x1="-68.872"
-				x2="-62.187"
-				y1="35.19"
-				y2="35.19"
-				gradientTransform="matrix(-1 0 0 1 1.128 0)"
-				gradientUnits="userSpaceOnUse"
-				id="SVGID_1_SLIDER"
-			>
-				<stop offset="0" stopColor="#1A6DFF" />
-				<stop offset="1" stopColor="#C822FF" />
-			</linearGradient>
-			<path
-				fill="url(#SVGID_1_SLIDER)"
-				d="M64.8 40.6c-.4 0-.7-.1-1-.4-.6-.6-.6-1.5 0-2.1l2.4-2.5-2.3-3.4c-.5-.7-.3-1.6.4-2.1s1.6-.3 2.1.4l3.6 5.4-4.1 4.3c-.3.2-.7.4-1.1.4z"
-			/>
-			<g>
-				<linearGradient
-					x1="-132.008"
-					x2="-125.322"
-					y1="35.19"
-					y2="35.19"
-					gradientTransform="translate(132.008)"
-					gradientUnits="userSpaceOnUse"
-					id="SVGID_2_SLIDER"
-				>
-					<stop offset="0" stopColor="#1A6DFF" />
-					<stop offset="1" stopColor="#C822FF" />
-				</linearGradient>
-				<path
-					fill="url(#SVGID_2_SLIDER)"
-					d="M5.2 40.6c-.4 0-.8-.2-1.1-.5L0 35.8l3.6-5.4c.5-.7 1.4-.9 2.1-.4.7.5.9 1.4.4 2.1l-2.3 3.4L6.3 38c.6.6.6 1.5 0 2.1-.4.3-.7.5-1.1.5z"
-				/>
-			</g>
-			<g>
-				<linearGradient
-					x1="10.48"
-					x2="59.603"
-					y1="35"
-					y2="35"
-					gradientUnits="userSpaceOnUse"
-					id="SVGID_3_SLIDER"
-				>
-					<stop offset="0" stopColor="#1A6DFF" />
-					<stop offset="1" stopColor="#C822FF" />
-				</linearGradient>
-				<path
-					fill="url(#SVGID_3_SLIDER)"
-					d="M53 65.2H17.1c-3.6 0-6.6-3-6.6-6.6V11.4c0-3.6 3-6.6 6.6-6.6H53c3.6 0 6.6 3 6.6 6.6v47.2c0 3.6-3 6.6-6.6 6.6zM17.1 7.8c-2 0-3.6 1.6-3.6 3.6v47.2c0 2 1.6 3.6 3.6 3.6H53c2 0 3.6-1.6 3.6-3.6V11.4c0-2-1.6-3.6-3.6-3.6H17.1z"
-				/>
-				<linearGradient
-					x1="10.809"
-					x2="59.152"
-					y1="40.508"
-					y2="40.508"
-					gradientUnits="userSpaceOnUse"
-					id="SVGID_4_SLIDER"
-				>
-					<stop offset="0" stopColor="#1A6DFF" />
-					<stop offset="1" stopColor="#C822FF" />
-				</linearGradient>
-				<path
-					fill="url(#SVGID_4_SLIDER)"
-					d="M33.2 53.8L23 41.3 13.2 53.7 10.8 51.8 23 36.6 33.5 49.4 57.1 27.2 59.2 29.4z"
-				/>
-				<g>
-					<linearGradient
-						x1="39.404"
-						x2="49.259"
-						y1="21.195"
-						y2="21.195"
-						gradientUnits="userSpaceOnUse"
-						id="SVGID_5_SLIDER"
-					>
-						<stop offset="0" stopColor="#1A6DFF" />
-						<stop offset="1" stopColor="#C822FF" />
-					</linearGradient>
-					<path
-						fill="url(#SVGID_5_SLIDER)"
-						d="M44.3 26.1c-2.7 0-4.9-2.2-4.9-4.9s2.2-4.9 4.9-4.9 4.9 2.2 4.9 4.9c.1 2.7-2.2 4.9-4.9 4.9zm0-7c-1.2 0-2.1 1-2.1 2.1 0 1.2 1 2.1 2.1 2.1s2.1-1 2.1-2.1c.1-1.2-.9-2.1-2.1-2.1z"
-					/>
-				</g>
-			</g>
-		</svg>
-	);
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+            fill="none"
+            viewBox="0 0 60 60"
+        >
+            <path
+                fill="#6C3BFF"
+                d="M55.543 34.8c-.343 0-.6-.086-.857-.343a1.243 1.243 0 010-1.8l2.057-2.143L54.77 27.6c-.428-.6-.257-1.371.343-1.8.6-.429 1.372-.257 1.8.343L60 30.77l-3.514 3.686c-.257.172-.6.343-.943.343zM4.457 34.8c-.343 0-.686-.171-.943-.429L0 30.686l3.086-4.629c.428-.6 1.2-.771 1.8-.343.6.429.771 1.2.343 1.8L3.257 30.43 5.4 32.57a1.243 1.243 0 010 1.8c-.343.258-.6.429-.943.429zM45.429 55.886H14.657C11.571 55.886 9 53.314 9 50.229V9.77c0-3.085 2.571-5.657 5.657-5.657H45.43c3.085 0 5.657 2.572 5.657 5.657V50.23c0 3.085-2.572 5.657-5.657 5.657zm-30.772-49.2a3.073 3.073 0 00-3.086 3.085V50.23a3.073 3.073 0 003.086 3.085H45.43a3.073 3.073 0 003.085-3.085V9.77a3.073 3.073 0 00-3.085-3.085H14.657z"
+            ></path>
+            <path
+                fill="#6C3BFF"
+                d="M28.457 46.114L19.714 35.4l-8.4 10.629L9.257 44.4l10.457-13.029 9 10.972 20.229-19.029 1.8 1.886-22.286 20.914zM37.971 22.371a4.207 4.207 0 01-4.2-4.2c0-2.314 1.886-4.2 4.2-4.2 2.315 0 4.2 1.886 4.2 4.2.086 2.315-1.885 4.2-4.2 4.2zm0-6c-1.028 0-1.8.858-1.8 1.8 0 1.029.858 1.8 1.8 1.8.943 0 1.8-.857 1.8-1.8.086-1.028-.771-1.8-1.8-1.8z"
+            ></path>
+        </svg>
+    );
 }

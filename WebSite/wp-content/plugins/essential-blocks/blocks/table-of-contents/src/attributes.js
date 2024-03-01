@@ -13,8 +13,9 @@ import {
 // 	WrpBgConst,
 // } from "./constants/backgroundsConstants";
 import {
-    //
     WrpBdShadowConst,
+    ItemBdShadow,
+    CLOSE_BORDER
 } from "./constants/borderShadowConstants";
 
 import {
@@ -66,6 +67,10 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
+    cover: {
+        type: "string",
+        default: "",
+    },
 
     //
     headers: {
@@ -102,29 +107,31 @@ const attributes = {
     },
     mainBgc: {
         type: "string",
-        // default: "#ff7d50",
+        default: "var(--eb-global-background-color)",
     },
     titleBg: {
         type: "string",
-        // default: "#ff7d50",
+        default: "",
     },
     titleColor: {
         type: "string",
-        // default: "white",
+        default: "var(--eb-global-heading-color)",
     },
     contentBg: {
         type: "string",
-        // default: "#fff6f3",
+        default: "",
     },
     contentColor: {
         type: "string",
-        // default: "#707070",
+        default: "var(--eb-global-text-color)",
     },
     contentHoverColor: {
         type: "string",
+        default: "var(--eb-global-link-color)",
     },
     contentGap: {
         type: "number",
+        default: 10,
     },
     contentGapUnit: {
         type: "string",
@@ -214,7 +221,7 @@ const attributes = {
     },
     seperatorColor: {
         type: "string",
-        // default: "black",
+        default: "var(--eb-global-tertiary-color)",
     },
     seperatorSize: {
         type: "number",
@@ -361,6 +368,7 @@ const attributes = {
     },
     topOffset: {
         type: "string",
+        default: "-50",
     },
     scrollTarget: {
         type: "string",
@@ -379,6 +387,31 @@ const attributes = {
         default: "fas fa-angle-up",
     },
     listStyle: { type: "string", default: "ul" },
+
+    closeBtnColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    closeBtnHoverColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    closeBtnBgColor: {
+        type: "string",
+        default: "var(--eb-global-button-background-color)",
+    },
+    closeBtnBgHvColor: {
+        type: "string",
+        default: "var(--eb-global-button-background-color)",
+    },
+    closeIconSize: {
+        type: "number",
+        default: 12,
+    },
+    closeBtnSize: {
+        type: "number",
+        default: 28,
+    },
     // typography attributes
     ...generateTypographyAttributes(Object.values(typoPrefixs)),
 
@@ -392,6 +425,23 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    enableListStyle: {
+        type: "boolean",
+        default: false,
+    },
+    itemCollapsed: {
+        type: "boolean",
+        default: false,
+    },
+    preset: {
+        type: "string",
+        default: "style-1",
+    },
+    contentItemBg: {
+        type: "string",
+        default: "#fff",
+    },
+
     // //
     // ...generateBackgroundAttributes(WrpBgConst, {
     // 	defaultBgGradient: "linear-gradient(45deg,#7967ff,#c277f2)",
@@ -400,18 +450,42 @@ const attributes = {
 
     //
     ...generateBorderShadowAttributes(WrpBdShadowConst, {
+        rdsDefaults: {
+            top: 4,
+            bottom: 4,
+            right: 4,
+            left: 4,
+        },
+        // noShadow: true,
+        // noBorder: true,
+    }),
+    ...generateBorderShadowAttributes(ItemBdShadow, {
+        rdsDefaults: {
+            top: 4,
+            bottom: 4,
+            right: 4,
+            left: 4,
+        },
         // noShadow: true,
         // noBorder: true,
     }),
 
     //
     ...generateDimensionsAttributes(WrpMarginConst),
-    ...generateDimensionsAttributes(WrpPaddingConst),
+    ...generateDimensionsAttributes(WrpPaddingConst, {
+        top: 30,
+        bottom: 30,
+        right: 30,
+        left: 30,
+        isLinked: true,
+    }),
     ...generateDimensionsAttributes(titlePaddingConst, {
-        left: 10,
+        // left: 10,
         isLinked: false,
     }),
     ...generateDimensionsAttributes(contentPaddingConst),
+    ...generateBorderShadowAttributes(CLOSE_BORDER),
+
 };
 
 export default attributes;

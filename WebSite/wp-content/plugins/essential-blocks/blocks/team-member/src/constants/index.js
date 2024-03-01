@@ -25,16 +25,19 @@ export const ContentsVerticalAligns = [
 export const STYLE_PRESETS = [
     { label: __("Default", "essential-blocks"), value: "default" },
     { label: __("Preset 1", "essential-blocks"), value: "preset1" },
-    { label: __("Preset 2 (hover overlay)"), value: "preset2" }, // this was preset 3
-    { label: __("Preset 3  (hover overlay)"), value: "preset3" }, // this was preset 5
-    { label: __("Preset 4 (hover overlay)"), value: "preset4" }, // this was preset 8
-    { label: __("Preset 5", "essential-blocks"), value: "preset5" }, // this was preset 9
-    { label: __("Preset 6", "essential-blocks"), value: "preset6" }, // this was preset 15
-    // {
-    //     label: __("Preset 7 (Pro)", "essential-blocks"),
-    //     value: "pro-preset7",
-    //     isPro: true,
-    // },
+    // { label: __("Preset 2 (hover overlay)"), value: "preset2" }, // this was preset 3
+    { label: __("Preset 2  (hover overlay)"), value: "preset3" }, // this was preset 5
+    // { label: __("Preset 4 (hover overlay)"), value: "preset4" }, // this was preset 8
+    // { label: __("Preset 5", "essential-blocks"), value: "preset5" }, // this was preset 9
+    // { label: __("Preset 6", "essential-blocks"), value: "preset6" }, // this was preset 15
+    { label: __("Preset 3", "essential-blocks"), value: "new-preset1", isPro: true },
+    { label: __("Preset 4", "essential-blocks"), value: "new-preset2", isPro: true },
+    { label: __("Preset 5", "essential-blocks"), value: "new-preset3", isPro: true },
+];
+export const HOVER_ALIGN = [
+    { label: __("Left", "essential-blocks"), value: "hover-left" },
+    { label: __("Right", "essential-blocks"), value: "hover-right" },
+
 ];
 
 export const separatorTypes = [

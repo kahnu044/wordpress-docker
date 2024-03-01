@@ -153,4 +153,28 @@ class Helpers {
 
 		return 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) . '; WPMailSMTP/' . $license_type . '-' . WPMS_PLUGIN_VER;
 	}
+
+	/**
+	 * Import Plugin_Upgrader class from core.
+	 *
+	 * @since 3.11.0
+	 */
+	public static function include_plugin_upgrader() {
+
+		/** \WP_Upgrader class */
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		/** \Plugin_Upgrader class */
+		require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+	}
+
+	/**
+	 * Whether the current request is a WP CLI request.
+	 *
+	 * @since 4.0.0
+	 */
+	public static function is_wp_cli() {
+
+		return defined( 'WP_CLI' ) && WP_CLI;
+	}
 }

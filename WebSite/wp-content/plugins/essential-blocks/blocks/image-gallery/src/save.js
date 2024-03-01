@@ -19,6 +19,10 @@ const Save = ({ attributes }) => {
         filterAllTitle,
         addCustomLink,
         defaultFilter,
+        enableIsotope,
+        enableLoadMore,
+        loadmoreBtnText,
+        imagesPerPage,
     } = attributes;
 
     if (sources.length === 0) return null;
@@ -68,9 +72,8 @@ const Save = ({ attributes }) => {
                     </ul>
                 )}
                 <div
-                    className={`eb-gallery-img-wrapper ${blockId} ${layouts} ${overlayStyle} caption-style-${styleNumber} ${
-                        captionOnHover ? "caption-on-hover" : ""
-                    } ${enableFilter ? "eb-filterable-img-gallery" : ""}`}
+                    className={`eb-gallery-img-wrapper ${blockId} ${layouts} ${overlayStyle} caption-style-${styleNumber} ${captionOnHover ? "caption-on-hover" : ""
+                        } ${enableFilter ? "eb-filterable-img-gallery" : ""} ${enableIsotope ? 'enable-isotope' : 'no-isotope'} ${enableLoadMore ? 'show-loadmore' : ''}`}
                     data-id={blockId}
                     data-default-filter={defaultFilter}
                 >
@@ -141,16 +144,16 @@ const Save = ({ attributes }) => {
                                         !disableLightBox
                                             ? source.url
                                             : addCustomLink &&
-                                              source.customLink &&
-                                              source.isValidUrl
-                                            ? source.customLink
-                                            : "#"
+                                                source.customLink &&
+                                                source.isValidUrl
+                                                ? source.customLink
+                                                : "#"
                                     }
                                     {...lightBoxHtml}
                                     target={
                                         disableLightBox &&
-                                        addCustomLink &&
-                                        source.openNewTab
+                                            addCustomLink &&
+                                            source.openNewTab
                                             ? "_blank"
                                             : "_self"
                                     }
@@ -163,6 +166,10 @@ const Save = ({ attributes }) => {
                         }
                     })}
                 </div>
+
+                {enableLoadMore && (
+                    <button data-images-per-page={imagesPerPage} data-loadmore={enableLoadMore} className="eb-img-gallery-loadmore">{loadmoreBtnText}</button>
+                )}
             </div>
         </div>
     );

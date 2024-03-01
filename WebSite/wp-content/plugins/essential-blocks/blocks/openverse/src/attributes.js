@@ -77,7 +77,7 @@ const attributes = {
     },
     attributionColor: {
         type: "string",
-        default: "#211C70",
+        default: "var(--eb-global-text-color)",
     },
     attributionBGColor: {
         type: "string",
@@ -167,7 +167,7 @@ const attributes = {
             right: 1,
             left: 1,
         },
-        defaultBdrColor: "#C1CDE1",
+        defaultBdrColor: "var(--eb-global-secondary-color)",
         defaultBdrStyle: "solid",
         rdsDefaults: {
             top: 15,
@@ -179,7 +179,7 @@ const attributes = {
         // noBorder: true,
     }),
     ...generateBorderShadowAttributes(IMAGE_BORDER_SHADOW, {
-        defaultBdrColor: "#AE62D1",
+        defaultBdrColor: "var(--eb-global-tertiary-color)",
         bdrDefaults: {
             top: 0,
             bottom: 0,
@@ -198,7 +198,7 @@ const attributes = {
 
     // background attributes ⬇
     ...generateBackgroundAttributes(WRAPPER_BG, {
-        defaultBgGradient: "linear-gradient(45deg,#ffffff,#ffffff)",
+        defaultBgGradient: "var(--eb-gradient-background-color)",
         noOverlay: true,
     }),
 

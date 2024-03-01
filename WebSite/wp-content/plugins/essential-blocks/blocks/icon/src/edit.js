@@ -28,16 +28,8 @@ import {
  * External depencencies
  */
 const {
-    // classnames,
-    softMinifyCssStrings,
-    generateTypographyStyles,
-    generateDimensionsControlStyles,
-    generateBorderShadowStyles,
-    generateResponsiveRangeStyles,
-    generateBackgroundControlStyles,
-    // mimmikCssForPreviewBtnClick,
     duplicateBlockIdFix,
-    DynamicInputValueHandler,
+    EBDisplayIcon
 } = window.EBControls;
 
 export default function Edit(props) {
@@ -47,6 +39,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         resOption,
@@ -98,7 +91,7 @@ export default function Edit(props) {
                         data-id={blockId}
                     >
                         <div className="eb-icon-container">
-                            <i className={icon}></i>
+                            <EBDisplayIcon icon={icon} />
                         </div>
                     </div>
                 </div>

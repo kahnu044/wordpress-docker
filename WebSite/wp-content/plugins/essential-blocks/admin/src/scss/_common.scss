@@ -106,7 +106,7 @@ body {
 	font-weight: 700;
 	font-size: 21px;
 	line-height: 27px;
-	margin: 0 0 16px 0;
+	margin: 0 0 16px 0 !important;
 	padding: 0;
 	color: #211c70;
 }
@@ -291,6 +291,12 @@ body {
 		display: block;
 		width: max-content;
 		margin: 0 auto !important;
+	}
+
+	&-reset {
+		margin: 0 15px;
+		color: #e41c1c;
+		background-color: #fdf2f2;
 	}
 
 	display: inline-flex;

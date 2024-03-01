@@ -4,22 +4,19 @@
 import { __ } from "@wordpress/i18n";
 import {
     useBlockProps,
-    RichText,
     InnerBlocks,
     store as blockEditorStore,
 } from "@wordpress/block-editor";
-import { Button, Snackbar } from '@wordpress/components';
 import { useEffect, useState, useRef, useCallback } from "@wordpress/element";
 import {
     select,
-    useSelect,
     dispatch,
     useDispatch,
     subscribe,
 } from "@wordpress/data";
-import { doAction, applyFilters } from "@wordpress/hooks";
+import { applyFilters } from "@wordpress/hooks";
 import { createBlocksFromInnerBlocksTemplate } from "@wordpress/blocks";
-import { times } from "lodash";
+
 
 /**
  * Internal dependencies
@@ -29,6 +26,8 @@ const {
     duplicateBlockIdFix,
     fetchFormBlockData,
     saveFormBlockData,
+    getAllBlockClientIds,
+    EBDisplayIcon
 } = EBControls;
 
 import classnames from "classnames";
@@ -61,6 +60,7 @@ export default function Edit(props) {
         className,
         clientId,
         isSelected,
+        name
     } = props;
     const {
         resOption,
@@ -212,38 +212,6 @@ export default function Edit(props) {
             return;
         }
         if (formStyle === "form-style-modern") {
-            setAttributes({
-                inputIconSizeRange: "20",
-                fieldsBorderHBdr_Bottom: "1",
-                fieldsBorderHBdr_Left: "1",
-                fieldsBorderHBdr_Right: "1",
-                fieldsBorderHBdr_Top: "1",
-                fieldsBorderHBdr_Unit: "px",
-                fieldsBorderHborderColor: "#000",
-                fieldsBorderHborderStyle: "solid",
-
-                fieldsPaddingisLinked: false,
-                fieldsPaddingUnit: "px",
-                fieldsPaddingTop: "25",
-                fieldsPaddingBottom: "15",
-                fieldsPaddingLeft: "15",
-                fieldsPaddingRight: "15",
-            });
-
-            if (
-                formType === "subscription_form" &&
-                template === "subscription_form_1"
-            ) {
-                setAttributes({
-                    inputIconSizeRange: "15",
-                    fieldsPaddingLeft: "20",
-                    fieldsPaddingRight: "220",
-                    fieldsPaddingTop: "25",
-                    fieldsPaddingBottom: "25",
-                    fieldsPaddingisLinked: false,
-                });
-            }
-
             const formWrapper = document.querySelector(`.${blockId}`);
             if (formWrapper) {
                 const inputs = formWrapper.getElementsByClassName("eb-field-input");
@@ -266,39 +234,6 @@ export default function Edit(props) {
                         }
                     });
                 }
-            }
-        } else {
-            setAttributes({
-                inputIconSizeRange: "15",
-                fieldsBorderHBdr_Bottom: "1",
-                fieldsBorderHBdr_Left: "1",
-                fieldsBorderHBdr_Right: "1",
-                fieldsBorderHBdr_Top: "1",
-                fieldsBorderHBdr_Unit: "px",
-                fieldsBorderHborderColor: "",
-                fieldsBorderHborderStyle: "none",
-            });
-
-            if (
-                formType === "subscription_form" &&
-                template === "subscription_form_1"
-            ) {
-                setAttributes({
-                    fieldsPaddingLeft: "20",
-                    fieldsPaddingRight: "220",
-                    fieldsPaddingTop: "25",
-                    fieldsPaddingBottom: "25",
-                    fieldsPaddingisLinked: false,
-                });
-            } else {
-                setAttributes({
-                    fieldsPaddingisLinked: true,
-                    fieldsPaddingUnit: "px",
-                    fieldsPaddingTop: "15",
-                    fieldsPaddingBottom: "15",
-                    fieldsPaddingLeft: "15",
-                    fieldsPaddingRight: "15",
-                });
             }
         }
     }, [formStyle]);
@@ -325,90 +260,7 @@ export default function Edit(props) {
                 );
 
                 setAttributes({
-                    formStyle: "form-style-classic",
-                    formLayout: "block",
-                    inlineFormWidthRange: 80,
-                    rowsGapRange: "15",
-
-                    showLabel: true,
-                    labelColor: "#1D2939",
-                    requiredColor: "#D92D20",
-
                     showInputIcon: true,
-                    inputIconColor: "#CBCBCB",
-
-                    fieldAlign: "left",
-                    fields_FontFamily: "Poppins",
-                    fields_FontSize: 14,
-                    fields_FontStyle: "normal",
-                    fields_FontTransform: "uppercase",
-                    fields_FontWeight: "400",
-                    fields_LetterSpacingUnit: "px",
-                    fields_LineHeightUnit: "em",
-                    fields_SizeUnit: "px",
-
-                    fieldsBorderRds_Top: "4",
-                    fieldsBorderRds_Left: "4",
-                    fieldsBorderRds_Bottom: "4",
-                    fieldsBorderRds_Right: "4",
-                    fieldsBorderRds_isLinked: true,
-
-                    fieldsBorderBdr_Top: "1",
-                    fieldsBorderBdr_Left: "1",
-                    fieldsBorderBdr_Bottom: "1",
-                    fieldsBorderBdr_Right: "1",
-                    fieldsBorderBdr_isLinked: false,
-                    fieldsPaddingLeft: "15",
-                    fieldsPaddingRight: "15",
-                    fieldsPaddingTop: "15",
-                    fieldsPaddingBottom: "15",
-                    fieldsPaddingisLinked: false,
-
-                    buttonText: "Submit",
-                    btnColor: "#fff",
-                    btnBgColor: "#475467",
-                    btnText_FontFamily: "",
-                    btnText_FontSize: 16,
-                    btnText_FontWeight: "400",
-                    btnText_LetterSpacingUnit: "px",
-                    btnText_LineHeightUnit: "em",
-                    btnText_SizeUnit: "px",
-                    btnText_TextTransform: "capitalize",
-                    buttonWidth: "full",
-                    btnHorizontalPositionRange: "",
-                    btnVerticalPositionRange: "",
-                    btnAddIcon: false,
-                    btnBorderRds_Bottom: "4",
-                    btnBorderRds_Left: "4",
-                    btnBorderRds_Right: "4",
-                    btnBorderRds_Top: "4",
-                    btnBorderBdr_Bottom: "0",
-                    btnBorderBdr_Left: "0",
-                    btnBorderBdr_Right: "0",
-                    btnBorderBdr_Top: "0",
-                    btnTopSpecingRange: "20",
-
-                    wrpPaddingisLinked: true,
-                    wrpPaddingUnit: "px",
-                    wrpPaddingTop: "0",
-                    wrpPaddingBottom: "0",
-                    wrpPaddingLeft: "0",
-                    wrpPaddingRight: "0",
-
-                    wrpBorderShadowRds_Bottom: "0",
-                    wrpBorderShadowRds_Left: "0",
-                    wrpBorderShadowRds_Right: "0",
-                    wrpBorderShadowRds_Top: "0",
-                    wrpBorderShadowRds_Unit: "px",
-                    wrpBorderShadowRds_isLinked: true,
-
-                    wrpBorderShadowblur: 0,
-                    wrpBorderShadowvOffset: 0,
-                    wrpBorderShadowhOffset: 0,
-                    wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.00)",
-
-                    wrprBgbackgroundColor: "#FFFFFF",
-                    wrprBgbackgroundType: "classic",
                 });
             } else if (template === "contact_form_2") {
                 replaceInnerBlocks(
@@ -416,63 +268,7 @@ export default function Edit(props) {
                     createBlocksFromInnerBlocksTemplate(CONTACT_FORM_TEMPLATE_2)
                 );
 
-                setAttributes({
-                    formLayout: "block",
-                    formStyle: "form-style-modern",
-                    inlineFormWidthRange: 100,
-                    rowsGapRange: "15",
 
-                    showLabel: true,
-                    labelColor: "#C2C6C8",
-                    requiredColor: "#6E6C6C",
-
-                    fieldAlign: "left",
-                    fieldsBorderRds_Bottom: "0",
-                    fieldsBorderRds_Left: "0",
-                    fieldsBorderRds_Right: "0",
-                    fieldsBorderRds_Top: "0",
-                    fieldsBorderRds_Unit: "px",
-
-                    buttonText: "Send",
-                    btnText_FontFamily: "Manrope",
-                    btnText_FontSize: 18,
-                    btnText_FontWeight: "500",
-                    btnText_LetterSpacingUnit: "px",
-                    btnText_LineHeightUnit: "em",
-                    btnText_SizeUnit: "px",
-                    btnText_TextTransform: "capitalize",
-                    buttonWidth: "full",
-                    btnAddIcon: false,
-                    iconSize: "12px",
-                    btnBorderRds_Bottom: "0",
-                    btnBorderRds_Left: "0",
-                    btnBorderRds_Right: "0",
-                    btnBorderRds_Top: "0",
-                    btnBorderRds_Unit: "px",
-                    btnTopSpecingRange: "20",
-
-                    wrpPaddingisLinked: false,
-                    wrpPaddingUnit: "px",
-                    wrpPaddingTop: "30",
-                    wrpPaddingBottom: "30",
-                    wrpPaddingLeft: "0",
-                    wrpPaddingRight: "0",
-
-                    wrpBorderShadowRds_Bottom: "0",
-                    wrpBorderShadowRds_Left: "0",
-                    wrpBorderShadowRds_Right: "0",
-                    wrpBorderShadowRds_Top: "0",
-                    wrpBorderShadowRds_Unit: "px",
-                    wrpBorderShadowRds_isLinked: true,
-
-                    wrpBorderShadowblur: 0,
-                    wrpBorderShadowvOffset: 0,
-                    wrpBorderShadowhOffset: 0,
-                    wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.09)",
-
-                    wrprBgbackgroundColor: "#fff",
-                    wrprBgbackgroundType: "classic",
-                });
             }
         } else if (formType === "subscription_form") {
             if (!formTitle) {
@@ -487,89 +283,7 @@ export default function Edit(props) {
                 );
 
                 setAttributes({
-                    formStyle: "form-style-classic",
-                    formLayout: "inline",
-                    inlineFormWidthRange: 100,
                     showInputIcon: false,
-
-                    showLabel: false,
-                    fieldAlign: "left",
-                    requiredColor: "#D92D20",
-
-                    fieldsBgColor: "#fff",
-                    fieldsColor: "#787878",
-                    fields_FontFamily: "Manrope",
-                    fields_FontSize: 18,
-                    fields_FontStyle: "normal",
-                    fields_FontWeight: "400",
-                    fields_LineHeight: 1.2,
-                    fields_LineHeightUnit: "em",
-
-                    fieldsPaddingLeft: "20",
-                    fieldsPaddingRight: "220",
-                    fieldsPaddingTop: "25",
-                    fieldsPaddingBottom: "25",
-                    fieldsPaddingisLinked: false,
-
-                    fieldsBorderBdr_Top: "1",
-                    fieldsBorderBdr_Left: "1",
-                    fieldsBorderBdr_Bottom: "1",
-                    fieldsBorderBdr_Right: "1",
-                    fieldsBorderBdr_isLinked: false,
-
-                    fieldsBorderRds_Top: "4",
-                    fieldsBorderRds_Left: "4",
-                    fieldsBorderRds_Bottom: "4",
-                    fieldsBorderRds_Right: "4",
-                    fieldsBorderRds_isLinked: true,
-
-                    buttonText: "Subscribe",
-                    btnColor: "#fff",
-                    btnBgColor: "#475467",
-                    btnText_FontFamily: "Manrope",
-                    btnText_FontSize: 18,
-                    btnText_FontWeight: "500",
-                    btnText_LetterSpacingUnit: "px",
-                    btnText_LineHeightUnit: "em",
-                    btnText_SizeUnit: "px",
-                    btnText_TextTransform: "capitalize",
-
-                    btnBorderRds_Top: "4",
-                    btnBorderRds_Left: "4",
-                    btnBorderRds_Bottom: "4",
-                    btnBorderRds_Right: "4",
-                    btnBorderRds_isLinked: true,
-
-                    buttonWidth: "fixed",
-                    btnWidthRange: "200",
-                    btnHorizontalPositionRange: 210,
-                    btnVerticalPositionRange: 10,
-                    btnAddIcon: false,
-                    iconSize: "12px",
-                    btnTopSpecingRange: "",
-                    rowsGapRange: "30",
-
-                    wrpPaddingisLinked: false,
-                    wrpPaddingUnit: "%",
-                    wrpPaddingTop: "10",
-                    wrpPaddingBottom: "10",
-                    wrpPaddingLeft: "15",
-                    wrpPaddingRight: "15",
-
-                    wrpBorderShadowRds_Bottom: "0",
-                    wrpBorderShadowRds_Left: "0",
-                    wrpBorderShadowRds_Right: "0",
-                    wrpBorderShadowRds_Top: "0",
-                    wrpBorderShadowRds_Unit: "px",
-                    wrpBorderShadowRds_isLinked: true,
-
-                    wrpBorderShadowblur: 0,
-                    wrpBorderShadowvOffset: 0,
-                    wrpBorderShadowhOffset: 0,
-                    wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.09)",
-
-                    wrprBgbackgroundColor: "#eaeaea",
-                    wrprBgbackgroundType: "classic",
                 });
             } else if (template === "subscription_form_2") {
                 replaceInnerBlocks(
@@ -579,65 +293,7 @@ export default function Edit(props) {
                     )
                 );
 
-                setAttributes({
-                    formStyle: "form-style-classic",
-                    formLayout: "block",
-                    inlineFormWidthRange: 80,
 
-                    showLabel: false,
-                    requiredColor: "#D92D20",
-
-                    fieldAlign: "center",
-                    fields_FontFamily: "Poppins",
-                    fields_FontSize: 20,
-                    fields_FontStyle: "normal",
-                    fields_FontWeight: "400",
-                    fields_LetterSpacingUnit: "px",
-                    fields_LineHeightUnit: "em",
-                    fields_SizeUnit: "px",
-
-                    fieldsBorderRds_Top: "4",
-                    fieldsBorderRds_Left: "4",
-                    fieldsBorderRds_Bottom: "4",
-                    fieldsBorderRds_Right: "4",
-                    fieldsBorderRds_isLinked: true,
-
-                    buttonText: "Subscribe",
-                    btnText_FontFamily: "Poppins",
-                    btnText_FontSize: 24,
-                    btnText_FontWeight: "500",
-                    btnText_LetterSpacingUnit: "px",
-                    btnText_LineHeightUnit: "em",
-                    btnText_SizeUnit: "px",
-                    btnText_TextTransform: "uppercase",
-                    buttonWidth: "full",
-                    btnHorizontalPositionRange: "",
-                    btnVerticalPositionRange: "",
-                    btnAddIcon: false,
-                    btnTopSpecingRange: "25",
-
-                    wrpPaddingisLinked: false,
-                    wrpPaddingUnit: "%",
-                    wrpPaddingTop: "10",
-                    wrpPaddingBottom: "10",
-                    wrpPaddingLeft: "20",
-                    wrpPaddingRight: "20",
-
-                    wrpBorderShadowRds_Bottom: "15",
-                    wrpBorderShadowRds_Left: "15",
-                    wrpBorderShadowRds_Right: "15",
-                    wrpBorderShadowRds_Top: "15",
-                    wrpBorderShadowRds_Unit: "px",
-                    wrpBorderShadowRds_isLinked: true,
-
-                    wrpBorderShadowblur: 45,
-                    wrpBorderShadowvOffset: 0,
-                    wrpBorderShadowhOffset: 0,
-                    wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.09)",
-
-                    wrprBgbackgroundColor: "#FFFFFF",
-                    wrprBgbackgroundType: "classic",
-                });
             }
         } else if (formType === "rsvp_form") {
             if (!formTitle) {
@@ -649,83 +305,7 @@ export default function Edit(props) {
             );
 
             setAttributes({
-                formStyle: "form-style-classic",
                 showInputIcon: false,
-                formLayout: "block",
-                inlineFormWidthRange: 80,
-                rowsGapRange: "15",
-
-                showLabel: false,
-                requiredColor: "#D92D20",
-
-                fieldAlign: "left",
-                fields_FontFamily: "Poppins",
-                fields_FontSize: 20,
-                fields_FontStyle: "normal",
-                fields_FontTransform: "uppercase",
-                fields_FontWeight: "400",
-                fields_LetterSpacingUnit: "px",
-                fields_LineHeightUnit: "em",
-                fields_SizeUnit: "px",
-                fieldsBorderRds_Top: "0",
-                fieldsBorderRds_Left: "0",
-                fieldsBorderRds_Bottom: "0",
-                fieldsBorderRds_Right: "0",
-                fieldsBorderRds_isLinked: true,
-                fieldsBorderBdr_Top: "0",
-                fieldsBorderBdr_Left: "0",
-                fieldsBorderBdr_Bottom: "1",
-                fieldsBorderBdr_Right: "0",
-                fieldsBorderBdr_isLinked: false,
-                fieldsPaddingLeft: "0",
-                fieldsPaddingRight: "0",
-                fieldsPaddingisLinked: false,
-
-                buttonText: "Send RSVP",
-                btnColor: "#475467",
-                btnBgColor: "#fff",
-                btnText_FontFamily: "Poppins",
-                btnText_FontSize: 18,
-                btnText_FontWeight: "500",
-                btnText_LetterSpacingUnit: "px",
-                btnText_LineHeightUnit: "em",
-                btnText_SizeUnit: "px",
-                btnText_TextTransform: "uppercase",
-                buttonWidth: "full",
-                btnHorizontalPositionRange: "",
-                btnVerticalPositionRange: "",
-                btnAddIcon: false,
-                btnBorderRds_Bottom: "0",
-                btnBorderRds_Left: "0",
-                btnBorderRds_Right: "0",
-                btnBorderRds_Top: "0",
-                btnBorderBdr_Bottom: "1",
-                btnBorderBdr_Left: "1",
-                btnBorderBdr_Right: "1",
-                btnBorderBdr_Top: "1",
-                btnTopSpecingRange: "40",
-
-                wrpPaddingisLinked: false,
-                wrpPaddingUnit: "%",
-                wrpPaddingTop: "10",
-                wrpPaddingBottom: "10",
-                wrpPaddingLeft: "20",
-                wrpPaddingRight: "20",
-
-                wrpBorderShadowRds_Bottom: "15",
-                wrpBorderShadowRds_Left: "15",
-                wrpBorderShadowRds_Right: "15",
-                wrpBorderShadowRds_Top: "15",
-                wrpBorderShadowRds_Unit: "px",
-                wrpBorderShadowRds_isLinked: true,
-
-                wrpBorderShadowblur: 45,
-                wrpBorderShadowvOffset: 0,
-                wrpBorderShadowhOffset: 0,
-                wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.09)",
-
-                wrprBgbackgroundColor: "#FFFFFF",
-                wrprBgbackgroundType: "classic",
             });
         } else if (formType === "blank") {
             if (!formTitle) {
@@ -737,86 +317,7 @@ export default function Edit(props) {
             );
 
             setAttributes({
-                formStyle: "form-style-classic",
                 showInputIcon: false,
-                formLayout: "block",
-                inlineFormWidthRange: 80,
-                rowsGapRange: "15",
-
-                showLabel: true,
-                labelColor: "#1D2939",
-                requiredColor: "#D92D20",
-
-                fieldAlign: "left",
-                fields_FontFamily: "Poppins",
-                fields_FontSize: 14,
-                fields_FontStyle: "normal",
-                fields_FontTransform: "uppercase",
-                fields_FontWeight: "400",
-                fields_LetterSpacingUnit: "px",
-                fields_LineHeightUnit: "em",
-                fields_SizeUnit: "px",
-                fieldsBorderRds_Top: "4",
-                fieldsBorderRds_Left: "4",
-                fieldsBorderRds_Bottom: "4",
-                fieldsBorderRds_Right: "4",
-                fieldsBorderRds_isLinked: true,
-                fieldsBorderBdr_Top: "1",
-                fieldsBorderBdr_Left: "1",
-                fieldsBorderBdr_Bottom: "1",
-                fieldsBorderBdr_Right: "1",
-                fieldsBorderBdr_isLinked: false,
-                fieldsPaddingLeft: "15",
-                fieldsPaddingRight: "15",
-                fieldsPaddingTop: "15",
-                fieldsPaddingBottom: "15",
-                fieldsPaddingisLinked: false,
-
-                buttonText: "Submit",
-                btnColor: "#fff",
-                btnBgColor: "#475467",
-                btnText_FontFamily: "",
-                btnText_FontSize: 16,
-                btnText_FontWeight: "400",
-                btnText_LetterSpacingUnit: "px",
-                btnText_LineHeightUnit: "em",
-                btnText_SizeUnit: "px",
-                btnText_TextTransform: "capitalize",
-                buttonWidth: "full",
-                btnHorizontalPositionRange: "",
-                btnVerticalPositionRange: "",
-                btnAddIcon: false,
-                btnBorderRds_Bottom: "4",
-                btnBorderRds_Left: "4",
-                btnBorderRds_Right: "4",
-                btnBorderRds_Top: "4",
-                btnBorderBdr_Bottom: "0",
-                btnBorderBdr_Left: "0",
-                btnBorderBdr_Right: "0",
-                btnBorderBdr_Top: "0",
-                btnTopSpecingRange: "20",
-
-                wrpPaddingisLinked: true,
-                wrpPaddingUnit: "px",
-                wrpPaddingTop: "0",
-                wrpPaddingBottom: "0",
-                wrpPaddingLeft: "0",
-                wrpPaddingRight: "0",
-
-                wrpBorderShadowRds_Bottom: "0",
-                wrpBorderShadowRds_Left: "0",
-                wrpBorderShadowRds_Right: "0",
-                wrpBorderShadowRds_Top: "0",
-                wrpBorderShadowRds_Unit: "px",
-                wrpBorderShadowRds_isLinked: true,
-
-                wrpBorderShadowblur: 0,
-                wrpBorderShadowvOffset: 0,
-                wrpBorderShadowhOffset: 0,
-                wrpBorderShadowshadowColor: "rgba(111, 159, 140, 0.00)",
-
-                wrprBgbackgroundColor: "#FFFFFF",
-                wrprBgbackgroundType: "classic",
             });
         }
     }, [formType, template]);
@@ -845,19 +346,18 @@ export default function Edit(props) {
     const formSettingsSave = useCallback(() => {
         const isSavingPost = select("core/editor").isSavingPost();
         const isAutosavingPost = select("core/editor").isAutosavingPost();
+        const isSavingTemplate = select("core/editor").isSavingNonPostEntityChanges();
 
         /**
          * Action
-         */
-        if (isSavingPost && !isAutosavingPost) {
-            if (typeof formSettings === "object" && Object.keys(formSettings).length > 0) {
-                const rules = getValidationRules(
-                    select("core/block-editor").getBlock(clientId)
-                );
+        */
+        if ((isSavingPost && !isAutosavingPost) || isSavingTemplate) {
+            const allBlocks = getAllBlockClientIds()
+            if (allBlocks.includes(clientId) && typeof formSettings === "object" && Object.keys(formSettings).length > 0) {
+                const blockObj = select("core/block-editor").getBlock(clientId)
+                const rules = getValidationRules(blockObj);
+                const fields = getFormFields(blockObj);
 
-                const fields = getFormFields(
-                    select("core/block-editor").getBlock(clientId)
-                );
                 const otherSettings = {
                     validationRules: { ...rules },
                     messages: {
@@ -1028,20 +528,14 @@ export default function Edit(props) {
                                             type="button"
                                             className="btn btn-primary eb-form-submit-button"
                                         >
-                                            {btnAddIcon &&
-                                                iconPosition === "left" ? (
-                                                <i
-                                                    className={`${icon} eb-button-icon`}
-                                                ></i>
+                                            {btnAddIcon && iconPosition === "left" ? (
+                                                <EBDisplayIcon className={"eb-button-icon"} icon={icon} />
                                             ) : (
                                                 ""
                                             )}
                                             {buttonText}
-                                            {btnAddIcon &&
-                                                iconPosition === "right" ? (
-                                                <i
-                                                    className={`${icon} eb-button-icon`}
-                                                ></i>
+                                            {btnAddIcon && iconPosition === "right" ? (
+                                                <EBDisplayIcon className={"eb-button-icon"} icon={icon} />
                                             ) : (
                                                 ""
                                             )}

@@ -60,12 +60,15 @@ const attributes = {
     },
     titleColor: {
         type: "string",
+        default: "var(--eb-global-heading-color)",
     },
     titleHoverColor: {
         type: "string",
+        default: "var(--eb-global-link-color)",
     },
     descColor: {
         type: "string",
+        default: "var(--eb-global-text-color)",
     },
     descHoverColor: {
         type: "string",

@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
-import { useEffect, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import {
     PanelBody,
     SelectControl,
@@ -99,6 +99,7 @@ function Inspector(props) {
         caretColor,
         isFillTitle,
         tagName,
+        closeAllTabs
     } = attributes;
 
     //
@@ -256,6 +257,18 @@ function Inspector(props) {
                                                 })
                                             }
                                         />
+                                        <ToggleControl
+                                            label={__(
+                                                "Close All Tabs Initially",
+                                                "essential-blocks"
+                                            )}
+                                            checked={closeAllTabs}
+                                            onChange={() =>
+                                                setAttributes({
+                                                    closeAllTabs: !closeAllTabs,
+                                                })
+                                            }
+                                        />
                                         {isMediaOn && (
                                             <>
                                                 <SelectControl
@@ -368,7 +381,7 @@ function Inspector(props) {
                                             "Tab Title",
                                             "essential-blocks"
                                         )}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
                                         <TypographyDropdown
                                             baseLabel="Typography"
@@ -598,8 +611,8 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 noOverlay
-                                                // noMainBgi
-                                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                            // noMainBgi
+                                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                             />
                                         </PanelBody>
 
@@ -614,8 +627,8 @@ function Inspector(props) {
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
 
@@ -673,116 +686,116 @@ function Inspector(props) {
 
                                             {activeColorSwitcher ===
                                                 "normal" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actTextColor
-                                                                .default
-                                                        }
-                                                        color={actTextColor}
-                                                        onChange={(
-                                                            actTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actTextColor,
-                                                            })
-                                                        }
-                                                    />
+                                                    <>
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Text",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actTextColor
+                                                                    .default
+                                                            }
+                                                            color={actTextColor}
+                                                            onChange={(
+                                                                actTextColor
+                                                            ) =>
+                                                                setAttributes({
+                                                                    actTextColor,
+                                                                })
+                                                            }
+                                                        />
 
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actIconColor
-                                                                .default
-                                                        }
-                                                        color={actIconColor}
-                                                        onChange={(
-                                                            actIconColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actIconColor,
-                                                            })
-                                                        }
-                                                    />
-                                                </>
-                                            )}
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Icon",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actIconColor
+                                                                    .default
+                                                            }
+                                                            color={actIconColor}
+                                                            onChange={(
+                                                                actIconColor
+                                                            ) =>
+                                                                setAttributes({
+                                                                    actIconColor,
+                                                                })
+                                                            }
+                                                        />
+                                                    </>
+                                                )}
 
                                             {activeColorSwitcher ===
                                                 "hover" && (
-                                                <>
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Text",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actHvTextColor
-                                                                .default
-                                                        }
-                                                        color={actHvTextColor}
-                                                        onChange={(
-                                                            actHvTextColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actHvTextColor,
-                                                            })
-                                                        }
-                                                    />
-
-                                                    <ColorControl
-                                                        label={__(
-                                                            "Icon",
-                                                            "essential-blocks"
-                                                        )}
-                                                        defaultColor={
-                                                            objAttributes
-                                                                .actHvIconColor
-                                                                .default
-                                                        }
-                                                        color={actHvIconColor}
-                                                        onChange={(
-                                                            actHvIconColor
-                                                        ) =>
-                                                            setAttributes({
-                                                                actHvIconColor,
-                                                            })
-                                                        }
-                                                    />
-
-                                                    <BaseControl
-                                                        label={__(
-                                                            "Transition",
-                                                            "essential-blocks"
-                                                        )}
-                                                    >
-                                                        <RangeControl
-                                                            value={
-                                                                actColorTransition
+                                                    <>
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Text",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actHvTextColor
+                                                                    .default
                                                             }
+                                                            color={actHvTextColor}
                                                             onChange={(
-                                                                actColorTransition
+                                                                actHvTextColor
                                                             ) =>
                                                                 setAttributes({
-                                                                    actColorTransition,
+                                                                    actHvTextColor,
                                                                 })
                                                             }
-                                                            step={0.1}
-                                                            min={0}
-                                                            max={5}
                                                         />
-                                                    </BaseControl>
-                                                </>
-                                            )}
+
+                                                        <ColorControl
+                                                            label={__(
+                                                                "Icon",
+                                                                "essential-blocks"
+                                                            )}
+                                                            defaultColor={
+                                                                objAttributes
+                                                                    .actHvIconColor
+                                                                    .default
+                                                            }
+                                                            color={actHvIconColor}
+                                                            onChange={(
+                                                                actHvIconColor
+                                                            ) =>
+                                                                setAttributes({
+                                                                    actHvIconColor,
+                                                                })
+                                                            }
+                                                        />
+
+                                                        <BaseControl
+                                                            label={__(
+                                                                "Transition",
+                                                                "essential-blocks"
+                                                            )}
+                                                        >
+                                                            <RangeControl
+                                                                value={
+                                                                    actColorTransition
+                                                                }
+                                                                onChange={(
+                                                                    actColorTransition
+                                                                ) =>
+                                                                    setAttributes({
+                                                                        actColorTransition,
+                                                                    })
+                                                                }
+                                                                step={0.1}
+                                                                min={0}
+                                                                max={5}
+                                                            />
+                                                        </BaseControl>
+                                                    </>
+                                                )}
                                         </PanelBody>
 
                                         <PanelBody
@@ -798,8 +811,8 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 noOverlay
-                                                // noMainBgi
-                                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                            // noMainBgi
+                                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                             />
                                         </PanelBody>
 
@@ -814,8 +827,8 @@ function Inspector(props) {
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>

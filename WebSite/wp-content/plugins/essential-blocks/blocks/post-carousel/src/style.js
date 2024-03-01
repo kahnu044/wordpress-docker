@@ -1,8 +1,3 @@
-/**
- * WordPress dependencies
- */
-import { useEffect, useState } from "@wordpress/element";
-
 import {
     WRAPPER_MARGIN,
     WRAPPER_PADDING,

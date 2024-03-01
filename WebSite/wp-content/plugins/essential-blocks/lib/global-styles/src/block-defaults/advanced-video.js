@@ -3,11 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import {
-    InspectorControls,
-    PanelColorSettings,
-    MediaUpload,
-} from "@wordpress/block-editor";
+import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
     SelectControl,
@@ -110,15 +106,16 @@ function AdvancedVideo(prpos) {
                     loop: false,
                 },
                 imageOverlay: false,
-                previewImage: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
+                previewImage: `${EssentialBlocksLocalize?.image_url}/adv-video-placeholder.jpg`,
                 previewImageId: null,
 
-                placeholderImage: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-placeholder.png",
+                placeholderImage: `${EssentialBlocksLocalize?.image_url}/adv-video-placeholder.jpg`,
                 placeholderImageId: null,
                 customPlayIcon: true,
                 customPlayIconURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
                 customPlayIconId: null,
-                placeholderPlayIconURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
+                placeholderPlayIconURL:
+                    EssentialBlocksLocalize?.eb_plugins_url + "assets/images/adv-video-playicon.svg",
                 lightboxPlayIcon: true,
                 placeholderPlayIconId: null,
                 videoOptions: "none",
@@ -205,10 +202,7 @@ function AdvancedVideo(prpos) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         {videoOptions != "lightbox" && (
                             <>
                                 <ToggleControl
@@ -225,10 +219,7 @@ function AdvancedVideo(prpos) {
                                 />
                                 {videoConfig.autoplay && (
                                     <PanelRow>
-                                        <em>
-                                            Audio will be muted by default if
-                                            autoplay is enabled.
-                                        </em>
+                                        <em>Audio will be muted by default if autoplay is enabled.</em>
                                     </PanelRow>
                                 )}
 
@@ -262,9 +253,7 @@ function AdvancedVideo(prpos) {
                         <ToggleControl
                             label={__("Show Controls", "essential-blocks")}
                             checked={showBar}
-                            onChange={(showBar) =>
-                                handleBlockDefault({ showBar })
-                            }
+                            onChange={(showBar) => handleBlockDefault({ showBar })}
                         />
 
                         {videoOptions != "lightbox" && (
@@ -272,14 +261,9 @@ function AdvancedVideo(prpos) {
                                 <Divider />
 
                                 <ToggleControl
-                                    label={__(
-                                        "Image Overlay",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Image Overlay", "essential-blocks")}
                                     checked={imageOverlay}
-                                    onChange={(imageOverlay) =>
-                                        handleBlockDefault({ imageOverlay })
-                                    }
+                                    onChange={(imageOverlay) => handleBlockDefault({ imageOverlay })}
                                 />
 
                                 {imageOverlay && (
@@ -298,10 +282,7 @@ function AdvancedVideo(prpos) {
                                                     return (
                                                         <Button
                                                             className="eb-background-control-inspector-panel-img-btn components-button"
-                                                            label={__(
-                                                                "Upload Image",
-                                                                "essential-blocks"
-                                                            )}
+                                                            label={__("Upload Image", "essential-blocks")}
                                                             icon="format-image"
                                                             onClick={open}
                                                         />
@@ -321,10 +302,7 @@ function AdvancedVideo(prpos) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Custom Play Icon",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Custom Play Icon", "essential-blocks")}
                                             checked={customPlayIcon}
                                             onChange={(customPlayIcon) =>
                                                 handleBlockDefault({
@@ -347,10 +325,7 @@ function AdvancedVideo(prpos) {
                                                     return (
                                                         <Button
                                                             className="eb-background-control-inspector-panel-img-btn components-button"
-                                                            label={__(
-                                                                "Upload Image",
-                                                                "essential-blocks"
-                                                            )}
+                                                            label={__("Upload Image", "essential-blocks")}
                                                             icon="format-image"
                                                             onClick={open}
                                                         />
@@ -375,22 +350,13 @@ function AdvancedVideo(prpos) {
                         )}
 
                         {videoOptions == "eb-sticky" && (
-                            <BaseControl
-                                label={__(
-                                    "Sticky Position",
-                                    "essential-blocks"
-                                )}
-                            >
+                            <BaseControl label={__("Sticky Position", "essential-blocks")}>
                                 <ButtonGroup>
                                     {STICKY_POSITION.map((item) => (
                                         <Button
                                             // isLarge
-                                            isPrimary={
-                                                stickyPosition === item.value
-                                            }
-                                            isSecondary={
-                                                stickyPosition !== item.value
-                                            }
+                                            isPrimary={stickyPosition === item.value}
+                                            isSecondary={stickyPosition !== item.value}
                                             onClick={() =>
                                                 handleBlockDefault({
                                                     stickyPosition: item.value,
@@ -421,10 +387,7 @@ function AdvancedVideo(prpos) {
                                             return (
                                                 <Button
                                                     className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Upload Image", "essential-blocks")}
                                                     icon="format-image"
                                                     onClick={open}
                                                 />
@@ -446,14 +409,9 @@ function AdvancedVideo(prpos) {
 
                                 <PanelRow>Play Icon</PanelRow>
                                 <ToggleControl
-                                    label={__(
-                                        "Show Play Icon",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Show Play Icon", "essential-blocks")}
                                     checked={lightboxPlayIcon}
-                                    onChange={(lightboxPlayIcon) =>
-                                        handleBlockDefault({ lightboxPlayIcon })
-                                    }
+                                    onChange={(lightboxPlayIcon) => handleBlockDefault({ lightboxPlayIcon })}
                                 />
                                 {!placeholderPlayIconURL && lightboxPlayIcon && (
                                     <MediaUpload
@@ -469,10 +427,7 @@ function AdvancedVideo(prpos) {
                                             return (
                                                 <Button
                                                     className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Upload Image", "essential-blocks")}
                                                     icon="format-image"
                                                     onClick={open}
                                                 />
@@ -495,10 +450,7 @@ function AdvancedVideo(prpos) {
                         )}
                     </PanelBody>
                     {/* Styles */}
-                    <PanelBody
-                        title={__("Video Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Video Styles", "essential-blocks")} initialOpen={false}>
                         {videoOptions != "lightbox" && (
                             <ResponsiveRangeController
                                 baseLabel={__("Width", "essential-blocks")}
@@ -517,13 +469,8 @@ function AdvancedVideo(prpos) {
                                     <>
                                         <PanelRow>Play Icon</PanelRow>
                                         <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Size",
-                                                "essential-blocks"
-                                            )}
-                                            controlName={
-                                                PLACEHOLDER_PLAY_ICON_WIDTH
-                                            }
+                                            baseLabel={__("Size", "essential-blocks")}
+                                            controlName={PLACEHOLDER_PLAY_ICON_WIDTH}
                                             resRequiredProps={resRequiredProps}
                                             min={1}
                                             max={400}
@@ -558,28 +505,20 @@ function AdvancedVideo(prpos) {
                         )}
 
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Border", "essential-blocks")}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                         </BaseControl>
                         <BorderShadowControl
                             controlName={VIDEO_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
 
                     {imageOverlay && customPlayIcon && (
-                        <PanelBody
-                            title={__("Image Overlay", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Image Overlay", "essential-blocks")} initialOpen={false}>
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Play Icon Size",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Play Icon Size", "essential-blocks")}
                                 controlName={PLAY_ICON_WIDTH}
                                 resRequiredProps={resRequiredProps}
                                 min={1}
@@ -603,10 +542,7 @@ function AdvancedVideo(prpos) {
                             />
 
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Content Width",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Content Width", "essential-blocks")}
                                 controlName={LIGHTBOX_WIDTH}
                                 resRequiredProps={resRequiredProps}
                                 min={1}
@@ -615,10 +551,7 @@ function AdvancedVideo(prpos) {
                                 units={SIZE_UNIT_TYPES}
                             />
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Content Height",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Content Height", "essential-blocks")}
                                 controlName={LIGHTBOX_HEIGHT}
                                 resRequiredProps={resRequiredProps}
                                 min={1}
@@ -631,45 +564,29 @@ function AdvancedVideo(prpos) {
                                 resRequiredProps={resRequiredProps}
                                 noShadow
                                 noBdrHover
-                                // noBorder
+                            // noBorder
                             />
 
                             <PanelRow>Close Icon</PanelRow>
-                            <PanelColorSettings
-                                title={__(
-                                    "Background Color",
-                                    "essential-blocks"
-                                )}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: closeIconBgColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                closeIconBgColor: newColor,
-                                            }),
-                                        label: __("Color", "essential-blocks"),
-                                    },
-                                ]}
+                            <ColorControl
+                                label={__("Background Color", "essential-blocks")}
+                                color={closeIconBgColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        closeIconBgColor: newColor,
+                                    })
+                                }
                             />
-                            <PanelColorSettings
-                                title={__("Color", "essential-blocks")}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: closeIconColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                closeIconColor: newColor,
-                                            }),
-                                        label: __("Color", "essential-blocks"),
-                                    },
-                                ]}
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={closeIconColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        closeIconColor: newColor,
+                                    })
+                                }
                             />
+
                             <ResponsiveRangeController
                                 baseLabel={__("Size (PX)", "essential-blocks")}
                                 controlName={CLOSE_ICON_WIDTH}
@@ -682,10 +599,7 @@ function AdvancedVideo(prpos) {
                         </PanelBody>
                     )}
                     {videoOptions == "eb-sticky" && (
-                        <PanelBody
-                            title={__("Sticky", "essential-blocks")}
-                            initialOpen={false}
-                        >
+                        <PanelBody title={__("Sticky", "essential-blocks")} initialOpen={false}>
                             <ResponsiveRangeController
                                 baseLabel={__("Width", "essential-blocks")}
                                 controlName={STICKY_VIDEO_WIDTH}
@@ -706,22 +620,16 @@ function AdvancedVideo(prpos) {
                             />
 
                             <PanelRow>Close Icon</PanelRow>
-                            <PanelColorSettings
-                                title={__("Color", "essential-blocks")}
-                                className={"eb-subpanel"}
-                                initialOpen={true}
-                                disableAlpha={false}
-                                colorSettings={[
-                                    {
-                                        value: closeIconColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                closeIconColor: newColor,
-                                            }),
-                                        label: __("Color", "essential-blocks"),
-                                    },
-                                ]}
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={closeIconColor}
+                                onChange={(newColor) =>
+                                    handleBlockDefault({
+                                        closeIconColor: newColor,
+                                    })
+                                }
                             />
+
                             <ResponsiveRangeController
                                 baseLabel={__("Size", "essential-blocks")}
                                 controlName={CLOSE_ICON_WIDTH}
@@ -735,13 +643,7 @@ function AdvancedVideo(prpos) {
                     )}
 
                     {/* Advanced */}
-                    <PanelBody
-                        title={__(
-                            "Wrapper Margin & Padding",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Margin & Padding", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}
@@ -753,25 +655,15 @@ function AdvancedVideo(prpos) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Background", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <BackgroundControl
-                            controlName={WRAPPER_BG}
-                            resRequiredProps={resRequiredProps}
-                            noOverlay
-                        />
+                    <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
+                        <BackgroundControl controlName={WRAPPER_BG} resRequiredProps={resRequiredProps} noOverlay />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Wrapper Border & Shadow")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={WRAPPER_BORDER_SHADOW}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

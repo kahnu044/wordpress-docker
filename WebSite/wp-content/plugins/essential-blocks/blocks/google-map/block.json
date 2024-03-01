@@ -6,5 +6,11 @@
   "description": "Display locations from Google Maps seamlessly and style how they look to match your site design.",
   "apiVersion": 2,
   "textdomain": "essential-blocks",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
   "editorScript": "essential-blocks-editor-script"
 }

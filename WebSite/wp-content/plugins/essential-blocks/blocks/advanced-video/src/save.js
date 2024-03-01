@@ -24,17 +24,16 @@ const save = ({ attributes }) => {
         lightboxPlayIconlib,
         customPlayIconlib,
         placeholderCustomPlayIconType,
+        stickyVisibilityOption,
+        TABstickyVisibilityOption,
+        MOBstickyVisibilityOption,
+        showDownload,
     } = attributes;
 
     return (
         <div {...useBlockProps.save()}>
-            <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-            >
-                <div
-                    className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`}
-                    data-id={blockId}
-                >
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                <div className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`} data-id={blockId}>
                     {videoOptions != "lightbox" && (
                         <div className={`eb-player-wrapper ${blockId}`}>
                             <div
@@ -47,22 +46,17 @@ const save = ({ attributes }) => {
                                 data-muted={videoConfig.muted}
                                 data-playing={videoConfig.autoplay}
                                 data-overlay={imageOverlay}
-                                data-light={
-                                    previewImage && previewImage.length > 0
-                                        ? previewImage
-                                        : false
-                                }
-                                data-customPlayIconType={
-                                    placeholderCustomPlayIconType
-                                }
+                                data-light={previewImage && previewImage.length > 0 ? previewImage : false}
+                                data-customPlayIconType={placeholderCustomPlayIconType}
                                 data-customPlayIconLib={customPlayIconlib}
                                 data-customPlayIcon={customPlayIcon}
                                 data-playicon={
-                                    customPlayIconURL &&
-                                    customPlayIconURL.length > 0
-                                        ? customPlayIconURL
-                                        : null
+                                    customPlayIconURL && customPlayIconURL.length > 0 ? customPlayIconURL : null
                                 }
+                                data-stickyVisibility={stickyVisibilityOption}
+                                data-stickyVisibilityTAB={TABstickyVisibilityOption}
+                                data-stickyVisibilityMOB={MOBstickyVisibilityOption}
+                                data-download={showDownload}
                             ></div>
                         </div>
                     )}
@@ -73,37 +67,22 @@ const save = ({ attributes }) => {
                                 id={`myBtn-${blockId}`}
                                 className="player-placeholder"
                                 style={{
-                                    backgroundImage:
-                                        "url( " + placeholderImage + ")",
+                                    backgroundImage: "url( " + placeholderImage + ")",
                                 }}
                             >
                                 {lightboxPlayIcon && (
                                     <>
-                                        {lightboxPlayIconType == "icon" && (
-                                            <i
-                                                className={lightboxPlayIconlib}
-                                            />
+                                        {lightboxPlayIconType == "icon" && <i className={lightboxPlayIconlib} />}
+                                        {lightboxPlayIconType == "image" && placeholderPlayIconURL && (
+                                            <img src={placeholderPlayIconURL} alt="" />
                                         )}
-                                        {lightboxPlayIconType == "image" &&
-                                            placeholderPlayIconURL && (
-                                                <img
-                                                    src={placeholderPlayIconURL}
-                                                    alt=""
-                                                />
-                                            )}
                                     </>
                                 )}
                             </div>
 
-                            <div
-                                id={`eb-modal-${blockId}`}
-                                className="eb-modal-player"
-                            >
+                            <div id={`eb-modal-${blockId}`} className="eb-modal-player">
                                 <div className="eb-player-wrapper">
-                                    <span
-                                        id={`close-${blockId}`}
-                                        className="eb-modal-close"
-                                    >
+                                    <span id={`close-${blockId}`} className="eb-modal-close">
                                         &times;
                                     </span>
                                     <div

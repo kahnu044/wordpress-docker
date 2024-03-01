@@ -35,18 +35,9 @@ const {
 
 import objAttributes from "./attributes";
 
-import {
-    typoPrefix_digits,
-    typoPrefix_labels,
-    typoPrefix_separator,
-} from "./constants/typographyPrefixConstants";
+import { typoPrefix_digits, typoPrefix_labels, typoPrefix_separator } from "./constants/typographyPrefixConstants";
 
-import {
-    wrapperWidth,
-    boxsSpaceConst,
-    separatorPosTop,
-    separatorPosRight,
-} from "./constants/rangeNames";
+import { wrapperWidth, boxsSpaceConst, separatorPosTop, separatorPosRight } from "./constants/rangeNames";
 
 import {
     cdBoxsPaddingConst,
@@ -65,10 +56,7 @@ import {
     WrpBgConst,
 } from "./constants/backgroundsConstants";
 
-import {
-    cdBoxsBdShadowConst,
-    WrpBdShadowConst,
-} from "./constants/borderShadowConstants";
+import { cdBoxsBdShadowConst, WrpBdShadowConst } from "./constants/borderShadowConstants";
 
 import {
     STYLE_PRESETS,
@@ -227,12 +215,7 @@ function Inspector({ attributes, setAttributes }) {
     };
 
     const handlePresetChange = (preset) => {
-        applyFilters(
-            "eb_countdown_preset_change",
-            preset,
-            attributes,
-            setAttributes
-        );
+        applyFilters("eb_countdown_preset_change", preset, attributes, setAttributes);
         switch (preset) {
             case "default":
                 setAttributes({
@@ -441,34 +424,20 @@ function Inspector({ attributes, setAttributes }) {
                             {tab.name === "general" && (
                                 <>
                                     <PanelBody
-                                        title={__(
-                                            "Countdown Settings",
-                                            "essential-blocks"
-                                        )}
+                                        title={__("Countdown Settings", "essential-blocks")}
                                         // initialOpen={false}
                                     >
-                                        <BaseControl
-                                            label={__(
-                                                "Design Preset",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <BaseControl label={__("Design Preset", "essential-blocks")}>
                                             <ProSelectControl
                                                 // label={__("Design Preset", "essential-blocks")}
                                                 value={preset}
-                                                options={applyFilters(
-                                                    "eb_countdown_preset",
-                                                    STYLE_PRESETS
-                                                )}
+                                                options={applyFilters("eb_countdown_preset", STYLE_PRESETS)}
                                                 // onChange={(preset) => setAttributes({ preset })}
                                                 onChange={handlePresetChange}
                                             />
                                         </BaseControl>
                                         <ToggleControl
-                                            label={__(
-                                                "Evergreen Timer?",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Evergreen Timer?", "essential-blocks")}
                                             checked={isEvergreenTimer}
                                             onChange={() =>
                                                 setAttributes({
@@ -480,25 +449,12 @@ function Inspector({ attributes, setAttributes }) {
                                             <>
                                                 <style>{`.customDatePickerStyle .components-datetime__timezone{display:none;}`}</style>
                                                 <BaseControl
-                                                    label={__(
-                                                        "Countdown Due Date",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Countdown Due Date", "essential-blocks")}
                                                     className="customDatePickerStyle"
                                                 >
                                                     <DateTimePicker
-                                                        currentDate={
-                                                            endTimeStamp
-                                                                ? new Date(
-                                                                      endTimeStamp
-                                                                  )
-                                                                : new Date()
-                                                        }
-                                                        onChange={(newDate) =>
-                                                            handleDateChange(
-                                                                newDate
-                                                            )
-                                                        }
+                                                        currentDate={endTimeStamp ? new Date(endTimeStamp) : new Date()}
+                                                        onChange={(newDate) => handleDateChange(newDate)}
                                                         is12Hour={true}
                                                     />
                                                 </BaseControl>
@@ -507,42 +463,27 @@ function Inspector({ attributes, setAttributes }) {
                                         {isEvergreenTimer && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Hours",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Hours", "essential-blocks")}
                                                     value={evergreenTimerHours}
                                                     type="number"
-                                                    onChange={(
-                                                        evergreenTimerHours
-                                                    ) =>
+                                                    onChange={(evergreenTimerHours) =>
                                                         setAttributes({
                                                             evergreenTimerHours,
                                                         })
                                                     }
                                                 />
                                                 <TextControl
-                                                    label={__(
-                                                        "Minutes",
-                                                        "essential-blocks"
-                                                    )}
-                                                    value={
-                                                        evergreenTimerMinutes
-                                                    }
+                                                    label={__("Minutes", "essential-blocks")}
+                                                    value={evergreenTimerMinutes}
                                                     type="text"
-                                                    onChange={(
-                                                        evergreenTimerMinutes
-                                                    ) =>
+                                                    onChange={(evergreenTimerMinutes) =>
                                                         setAttributes({
                                                             evergreenTimerMinutes,
                                                         })
                                                     }
                                                 />
                                                 <ToggleControl
-                                                    label={__(
-                                                        "Recurring Countdown",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Recurring Countdown", "essential-blocks")}
                                                     checked={recurringCountdown}
                                                     onChange={() =>
                                                         setAttributes({
@@ -557,15 +498,10 @@ function Inspector({ attributes, setAttributes }) {
                                                 {recurringCountdown && (
                                                     <>
                                                         <TextControl
-                                                            label={__(
-                                                                "Restart After(In Hours)",
-                                                                "essential-blocks"
-                                                            )}
+                                                            label={__("Restart After(In Hours)", "essential-blocks")}
                                                             value={restartTime}
                                                             type="text"
-                                                            onChange={(
-                                                                restartTime
-                                                            ) =>
+                                                            onChange={(restartTime) =>
                                                                 setAttributes({
                                                                     restartTime,
                                                                 })
@@ -582,17 +518,11 @@ function Inspector({ attributes, setAttributes }) {
                                                             <DateTimePicker
                                                                 currentDate={
                                                                     recurringCountdownEnd
-                                                                        ? new Date(
-                                                                              recurringCountdownEnd
-                                                                          )
+                                                                        ? new Date(recurringCountdownEnd)
                                                                         : recurringDefaultDate
                                                                 }
-                                                                onChange={(
-                                                                    newDate
-                                                                ) =>
-                                                                    handleRecurringEndDateChange(
-                                                                        newDate
-                                                                    )
+                                                                onChange={(newDate) =>
+                                                                    handleRecurringEndDateChange(newDate)
                                                                 }
                                                                 is12Hour={true}
                                                             />
@@ -603,18 +533,9 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__(
-                                            "Content Settings",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Content Settings", "essential-blocks")} initialOpen={false}>
                                         <ToggleControl
-                                            label={__(
-                                                "Display Days",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Display Days", "essential-blocks")}
                                             checked={showDays}
                                             onChange={() =>
                                                 setAttributes({
@@ -626,10 +547,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showDays && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Custom Label For Days",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Custom Label For Days", "essential-blocks")}
                                                     value={daysLabel}
                                                     type="text"
                                                     onChange={(daysLabel) =>
@@ -650,10 +568,7 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Display Hours",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Display Hours", "essential-blocks")}
                                             checked={showHours}
                                             onChange={() =>
                                                 setAttributes({
@@ -665,10 +580,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showHours && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Custom Label For Hours",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Custom Label For Hours", "essential-blocks")}
                                                     value={hoursLabel}
                                                     type="text"
                                                     onChange={(hoursLabel) =>
@@ -689,10 +601,7 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Display Minutes",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Display Minutes", "essential-blocks")}
                                             checked={showMinutes}
                                             onChange={() =>
                                                 setAttributes({
@@ -704,10 +613,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showMinutes && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Custom Label For Minutes",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Custom Label For Minutes", "essential-blocks")}
                                                     value={minutesLabel}
                                                     type="text"
                                                     onChange={(minutesLabel) =>
@@ -728,10 +634,7 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
 
                                         <ToggleControl
-                                            label={__(
-                                                "Display Seconds",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Display Seconds", "essential-blocks")}
                                             checked={showSeconds}
                                             onChange={() =>
                                                 setAttributes({
@@ -743,10 +646,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showSeconds && (
                                             <>
                                                 <TextControl
-                                                    label={__(
-                                                        "Custom Label For Seconds",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Custom Label For Seconds", "essential-blocks")}
                                                     value={secondsLabel}
                                                     type="text"
                                                     onChange={(secondsLabel) =>
@@ -770,48 +670,29 @@ function Inspector({ attributes, setAttributes }) {
                             )}
                             {tab.name === "styles" && (
                                 <>
-                                    <PanelBody
-                                        title={__(
-                                            "Boxes Styles",
-                                            "essential-blocks"
-                                        )}
-                                    >
+                                    <PanelBody title={__("Boxes Styles", "essential-blocks")}>
                                         <BaseControl label="Layout">
                                             <ButtonGroup>
-                                                {LAYOUT_TYPES.map(
-                                                    (
-                                                        { value, label },
-                                                        index
-                                                    ) => (
-                                                        <Button
-                                                            key={index}
-                                                            isSecondary={
-                                                                flexDirection !==
-                                                                value
-                                                            }
-                                                            isPrimary={
-                                                                flexDirection ===
-                                                                value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    flexDirection: value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    )
-                                                )}
+                                                {LAYOUT_TYPES.map(({ value, label }, index) => (
+                                                    <Button
+                                                        key={index}
+                                                        isSecondary={flexDirection !== value}
+                                                        isPrimary={flexDirection === value}
+                                                        onClick={() =>
+                                                            setAttributes({
+                                                                flexDirection: value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {label}
+                                                    </Button>
+                                                ))}
                                             </ButtonGroup>
                                         </BaseControl>
 
                                         <ResponsiveRangeController
                                             noUnits
-                                            baseLabel={__(
-                                                "Container Max Width",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Container Max Width", "essential-blocks")}
                                             controlName={wrapperWidth}
                                             resRequiredProps={resRequiredProps}
                                             min={100}
@@ -821,10 +702,7 @@ function Inspector({ attributes, setAttributes }) {
 
                                         <ResponsiveRangeController
                                             noUnits
-                                            baseLabel={__(
-                                                "Space Between Boxs",
-                                                "essential-blocks"
-                                            )}
+                                            baseLabel={__("Space Between Boxs", "essential-blocks")}
                                             controlName={boxsSpaceConst}
                                             resRequiredProps={resRequiredProps}
                                             min={0}
@@ -832,12 +710,7 @@ function Inspector({ attributes, setAttributes }) {
                                             step={1}
                                         />
 
-                                        <BaseControl
-                                            label={__(
-                                                "Contents Direction",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <BaseControl label={__("Contents Direction", "essential-blocks")}>
                                             <SelectControl
                                                 value={contentsDirection}
                                                 options={FLEX_DIRECTIONS}
@@ -852,19 +725,12 @@ function Inspector({ attributes, setAttributes }) {
                                         {contentsDirection.includes("row") && (
                                             <>
                                                 <BaseControl
-                                                    label={__(
-                                                        "Contents Justify Position",
-                                                        "essential-blocks"
-                                                    )}
+                                                    label={__("Contents Justify Position", "essential-blocks")}
                                                 >
                                                     <SelectControl
                                                         value={contentsJustify}
-                                                        options={
-                                                            JUSTIFY_CONTENTS
-                                                        }
-                                                        onChange={(
-                                                            contentsJustify
-                                                        ) =>
+                                                        options={JUSTIFY_CONTENTS}
+                                                        onChange={(contentsJustify) =>
                                                             setAttributes({
                                                                 contentsJustify,
                                                             })
@@ -874,111 +740,62 @@ function Inspector({ attributes, setAttributes }) {
                                             </>
                                         )}
 
-                                        <BaseControl
-                                            label={__(
-                                                "Contents Alignment",
-                                                "essential-blocks"
-                                            )}
-                                        >
+                                        <BaseControl label={__("Contents Alignment", "essential-blocks")}>
                                             <ButtonGroup>
-                                                {ALIGN_ITEMS.map(
-                                                    (
-                                                        { value, label },
-                                                        index
-                                                    ) => (
-                                                        <Button
-                                                            key={index}
-                                                            isSecondary={
-                                                                contentsAlign !==
-                                                                value
-                                                            }
-                                                            isPrimary={
-                                                                contentsAlign ===
-                                                                value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    contentsAlign: value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    )
-                                                )}
+                                                {ALIGN_ITEMS.map(({ value, label }, index) => (
+                                                    <Button
+                                                        key={index}
+                                                        isSecondary={contentsAlign !== value}
+                                                        isPrimary={contentsAlign === value}
+                                                        onClick={() =>
+                                                            setAttributes({
+                                                                contentsAlign: value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {label}
+                                                    </Button>
+                                                ))}
                                             </ButtonGroup>
                                         </BaseControl>
 
-                                        <PanelBody
-                                            title={__(
-                                                "Background",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                                             <BackgroundControl
                                                 controlName={cdBoxsBgConst}
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 noOverlay
                                                 noMainBgi
                                                 // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                             />
                                         </PanelBody>
 
-                                        <PanelBody
-                                            title={__(
-                                                "Padding",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Padding", "essential-blocks")} initialOpen={false}>
                                             <ResponsiveDimensionsControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 controlName={cdBoxsPaddingConst}
                                                 baseLabel="Padding"
                                             />
                                         </PanelBody>
-                                        <PanelBody
-                                            title={__("Border & Shadow")}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                             <BorderShadowControl
-                                                controlName={
-                                                    cdBoxsBdShadowConst
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                controlName={cdBoxsBdShadowConst}
+                                                resRequiredProps={resRequiredProps}
                                                 // noShadow
                                                 // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__("Digits", "essential-blocks")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Digits", "essential-blocks")} initialOpen={false}>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={digitsColor}
-                                            onChange={(digitsColor) =>
-                                                setAttributes({ digitsColor })
-                                            }
+                                            onChange={(digitsColor) => setAttributes({ digitsColor })}
                                         />
 
                                         <TypographyDropdown
                                             baseLabel="Typography"
-                                            typographyPrefixConstant={
-                                                typoPrefix_digits
-                                            }
+                                            typographyPrefixConstant={typoPrefix_digits}
                                             resRequiredProps={resRequiredProps}
                                         />
 
@@ -989,19 +806,11 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__("Labels", "essential-blocks")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Labels", "essential-blocks")} initialOpen={false}>
                                         <ColorControl
-                                            label={__(
-                                                "Color",
-                                                "essential-blocks"
-                                            )}
+                                            label={__("Color", "essential-blocks")}
                                             color={labelsColor}
-                                            onChange={(labelsColor) =>
-                                                setAttributes({ labelsColor })
-                                            }
+                                            onChange={(labelsColor) => setAttributes({ labelsColor })}
                                         />
 
                                         {applyFilters(
@@ -1013,9 +822,7 @@ function Inspector({ attributes, setAttributes }) {
 
                                         <TypographyDropdown
                                             baseLabel="Typography"
-                                            typographyPrefixConstant={
-                                                typoPrefix_labels
-                                            }
+                                            typographyPrefixConstant={typoPrefix_labels}
                                             resRequiredProps={resRequiredProps}
                                         />
                                         <ResponsiveDimensionsControl
@@ -1026,18 +833,9 @@ function Inspector({ attributes, setAttributes }) {
                                     </PanelBody>
 
                                     {flexDirection === "row" && (
-                                        <PanelBody
-                                            title={__(
-                                                "Separator",
-                                                "essential-blocks"
-                                            )}
-                                            initialOpen={false}
-                                        >
+                                        <PanelBody title={__("Separator", "essential-blocks")} initialOpen={false}>
                                             <ToggleControl
-                                                label={__(
-                                                    "Show Separator",
-                                                    "essential-blocks"
-                                                )}
+                                                label={__("Show Separator", "essential-blocks")}
                                                 checked={showSeparator}
                                                 onChange={() =>
                                                     setAttributes({
@@ -1049,17 +847,10 @@ function Inspector({ attributes, setAttributes }) {
                                             {showSeparator && (
                                                 <>
                                                     <SelectControl
-                                                        label={__(
-                                                            "Separator Type",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Separator Type", "essential-blocks")}
                                                         value={separatorType}
-                                                        options={
-                                                            SEPARATOR_TYPES
-                                                        }
-                                                        onChange={(
-                                                            separatorType
-                                                        ) =>
+                                                        options={SEPARATOR_TYPES}
+                                                        onChange={(separatorType) =>
                                                             setAttributes({
                                                                 separatorType,
                                                             })
@@ -1067,46 +858,27 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
 
                                                     <ResponsiveRangeController
-                                                        baseLabel={__(
-                                                            "Position Top",
-                                                            "essential-blocks"
-                                                        )}
-                                                        controlName={
-                                                            separatorPosTop
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        baseLabel={__("Position Top", "essential-blocks")}
+                                                        controlName={separatorPosTop}
+                                                        resRequiredProps={resRequiredProps}
                                                         min={0}
                                                         max={900}
                                                         step={1}
                                                     />
 
                                                     <ResponsiveRangeController
-                                                        baseLabel={__(
-                                                            "Position Right",
-                                                            "essential-blocks"
-                                                        )}
-                                                        controlName={
-                                                            separatorPosRight
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        baseLabel={__("Position Right", "essential-blocks")}
+                                                        controlName={separatorPosRight}
+                                                        resRequiredProps={resRequiredProps}
                                                         min={0}
                                                         max={900}
                                                         step={1}
                                                     />
 
                                                     <ColorControl
-                                                        label={__(
-                                                            "Color",
-                                                            "essential-blocks"
-                                                        )}
+                                                        label={__("Color", "essential-blocks")}
                                                         color={separatorColor}
-                                                        onChange={(
-                                                            separatorColor
-                                                        ) =>
+                                                        onChange={(separatorColor) =>
                                                             setAttributes({
                                                                 separatorColor,
                                                             })
@@ -1115,12 +887,8 @@ function Inspector({ attributes, setAttributes }) {
 
                                                     <TypographyDropdown
                                                         baseLabel="Typography"
-                                                        typographyPrefixConstant={
-                                                            typoPrefix_separator
-                                                        }
-                                                        resRequiredProps={
-                                                            resRequiredProps
-                                                        }
+                                                        typographyPrefixConstant={typoPrefix_separator}
+                                                        resRequiredProps={resRequiredProps}
                                                     />
                                                 </>
                                             )}
@@ -1128,17 +896,12 @@ function Inspector({ attributes, setAttributes }) {
                                     )}
 
                                     <PanelBody
-                                        title={__(
-                                            "Individual Box Styling",
-                                            "essential-blocks"
-                                        )}
+                                        title={__("Individual Box Styling", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         {showDays && (
                                             <SingleBoxControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 heading="Days"
                                                 bgControlName={cdDayBoxBgConst}
                                                 dgColorAttrString="dayDgColor"
@@ -1148,9 +911,7 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                         {showHours && (
                                             <SingleBoxControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 heading="Hours"
                                                 bgControlName={cdHourBoxBgConst}
                                                 dgColorAttrString="hourDgColor"
@@ -1160,13 +921,9 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                         {showMinutes && (
                                             <SingleBoxControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 heading="Minutes"
-                                                bgControlName={
-                                                    cdMinuteBoxBgConst
-                                                }
+                                                bgControlName={cdMinuteBoxBgConst}
                                                 dgColorAttrString="minuteDgColor"
                                                 lbColorAttrString="minuteLbColor"
                                                 bdColorAttrString="minuteBdrColor"
@@ -1174,13 +931,9 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                         {showSeconds && (
                                             <SingleBoxControl
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
+                                                resRequiredProps={resRequiredProps}
                                                 heading="Seconds"
-                                                bgControlName={
-                                                    cdSecondBoxBgConst
-                                                }
+                                                bgControlName={cdSecondBoxBgConst}
                                                 dgColorAttrString="secondDgColor"
                                                 lbColorAttrString="secondLbColor"
                                                 bdColorAttrString="secondBdrColor"
@@ -1207,23 +960,14 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__(
-                                            "Background ",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Background ", "essential-blocks")} initialOpen={false}>
                                         <BackgroundControl
                                             controlName={WrpBgConst}
                                             resRequiredProps={resRequiredProps}
                                         />
                                     </PanelBody>
 
-                                    <PanelBody
-                                        title={__("Border & Shadow")}
-                                        initialOpen={false}
-                                    >
+                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}
@@ -1232,10 +976,7 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    <AdvancedControls
-                                        attributes={attributes}
-                                        setAttributes={setAttributes}
-                                    />
+                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
                                 </>
                             )}
                         </div>

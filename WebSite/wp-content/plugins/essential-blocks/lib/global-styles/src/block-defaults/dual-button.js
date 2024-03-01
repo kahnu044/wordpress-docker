@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { PanelColorSettings } from "@wordpress/block-editor";
 import {
     PanelBody,
     SelectControl,
@@ -14,19 +13,14 @@ import {
     BaseControl,
 } from "@wordpress/components";
 
-/**
- * External depencencies
- */
-import FontIconPicker from "@fonticonpicker/react-fonticonpicker";
-
 const {
-    faIcons,
     ColorControl,
     ResponsiveDimensionsControl,
     TypographyDropdown,
     BorderShadowControl,
     ResponsiveRangeController,
     BackgroundControl,
+    EBIconPicker
 } = window.EBControls;
 
 /**
@@ -102,12 +96,12 @@ function DualButton(props) {
                 buttonTextTwo: "Button Two",
                 buttonOneColor: "#7967ff",
                 hoverButtonOneColor: "#513fd4",
-                textOneColor: "#fff",
-                hoverTextOneColor: "",
+                textOneColor: "var(--eb-global-button-text-color)",
+                hoverTextOneColor: "var(--eb-global-button-text-color)",
                 buttonTwoColor: "#309bff",
                 hoverButtonTwoColor: "#2587e2",
-                textTwoColor: "#fff",
-                hoverTextTwoColor: "",
+                textTwoColor: "var(--eb-global-button-text-color)",
+                hoverTextTwoColor: "var(--eb-global-button-text-color)",
                 buttonURLOne: "#",
                 buttonURLTwo: "#",
                 buttonTextAlign: "center",
@@ -205,24 +199,14 @@ function DualButton(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     {/*  General */}
-                    <PanelBody
-                        title={__("General", "essential-blocks")}
-                        initialOpen={true}
-                    >
-                        <BaseControl
-                            label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
-                        >
+                    <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-button-group-alignment">
                             <ButtonGroup id="eb-button-group-alignment">
                                 {CONTENT_POSITION.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isPrimary={
-                                            contentPosition === item.value
-                                        }
-                                        isSecondary={
-                                            contentPosition !== item.value
-                                        }
+                                        isPrimary={contentPosition === item.value}
+                                        isSecondary={contentPosition !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 contentPosition: item.value,
@@ -237,17 +221,12 @@ function DualButton(props) {
                         <TextControl
                             label={__("Button One Text", "essential-blocks")}
                             value={buttonTextOne}
-                            onChange={(text) =>
-                                handleBlockDefault({ buttonTextOne: text })
-                            }
+                            onChange={(text) => handleBlockDefault({ buttonTextOne: text })}
                         />
 
                         {buttonURLOne && (
                             <ToggleControl
-                                label={__(
-                                    "Open in New Tab",
-                                    "essential-blocks"
-                                )}
+                                label={__("Open in New Tab", "essential-blocks")}
                                 checked={buttonOneNewWindow}
                                 onChange={() =>
                                     handleBlockDefault({
@@ -260,17 +239,12 @@ function DualButton(props) {
                         <TextControl
                             label={__("Button Two Text", "essential-blocks")}
                             value={buttonTextTwo}
-                            onChange={(text) =>
-                                handleBlockDefault({ buttonTextTwo: text })
-                            }
+                            onChange={(text) => handleBlockDefault({ buttonTextTwo: text })}
                         />
 
                         {buttonURLTwo && (
                             <ToggleControl
-                                label={__(
-                                    "Open in New Tab",
-                                    "essential-blocks"
-                                )}
+                                label={__("Open in New Tab", "essential-blocks")}
                                 checked={buttonTwoNewWindow}
                                 onChange={() =>
                                     handleBlockDefault({
@@ -280,13 +254,8 @@ function DualButton(props) {
                             />
                         )}
                     </PanelBody>
-                    <PanelBody
-                        title={__("Buttons Settings", "essential-blocks")}
-                        initialOpen={true}
-                    >
-                        <BaseControl
-                            label={__("Button Width Type", "essential-blocks")}
-                        >
+                    <PanelBody title={__("Buttons Settings", "essential-blocks")} initialOpen={true}>
+                        <BaseControl label={__("Button Width Type", "essential-blocks")}>
                             <SelectControl
                                 value={buttonsWidthType}
                                 options={BUTTON_WIDTH_TYPE}
@@ -299,10 +268,7 @@ function DualButton(props) {
                         </BaseControl>
                         {buttonsWidthType === "custom" && (
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Buttons Width",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Buttons Width", "essential-blocks")}
                                 controlName={BUTTONS_WIDTH}
                                 resRequiredProps={resRequiredProps}
                                 units={UNIT_TYPES}
@@ -322,20 +288,13 @@ function DualButton(props) {
                             step={1}
                         />
 
-                        <BaseControl
-                            label={__("Text Align", "essential-blocks")}
-                            id="eb-button-group-text-align"
-                        >
+                        <BaseControl label={__("Text Align", "essential-blocks")} id="eb-button-group-text-align">
                             <ButtonGroup id="eb-button-group-text-align">
                                 {TEXT_ALIGN.map((item, index) => (
                                     <Button
                                         key={index}
-                                        isPrimary={
-                                            buttonTextAlign === item.value
-                                        }
-                                        isSecondary={
-                                            buttonTextAlign !== item.value
-                                        }
+                                        isPrimary={buttonTextAlign === item.value}
+                                        isSecondary={buttonTextAlign !== item.value}
                                         onClick={() =>
                                             handleBlockDefault({
                                                 buttonTextAlign: item.value,
@@ -348,10 +307,7 @@ function DualButton(props) {
                             </ButtonGroup>
                         </BaseControl>
                     </PanelBody>
-                    <PanelBody
-                        title={__("Connector Settings", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Connector Settings", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
                             label={__("Show Connector?")}
                             checked={showConnector}
@@ -363,26 +319,16 @@ function DualButton(props) {
                         />
                         {showConnector && (
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Connector Type",
-                                        "essential-blocks"
-                                    )}
-                                >
+                                <BaseControl label={__("Connector Type", "essential-blocks")}>
                                     <ButtonGroup id="eb-button-group-connector-type">
                                         {CONNECTOR_TYPE.map((item, index) => (
                                             <Button
                                                 key={index}
-                                                isPrimary={
-                                                    connectorType === item.value
-                                                }
-                                                isSecondary={
-                                                    connectorType !== item.value
-                                                }
+                                                isPrimary={connectorType === item.value}
+                                                isSecondary={connectorType !== item.value}
                                                 onClick={() =>
                                                     handleBlockDefault({
-                                                        connectorType:
-                                                            item.value,
+                                                        connectorType: item.value,
                                                     })
                                                 }
                                             >
@@ -393,39 +339,19 @@ function DualButton(props) {
                                 </BaseControl>
 
                                 {connectorType === "icon" && (
-                                    <PanelBody
-                                        title={__(
-                                            "Icon Settings",
-                                            "essential-blocks"
-                                        )}
-                                        initialOpen={true}
-                                    >
-                                        <BaseControl
-                                            label={__(
-                                                "Icon",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <FontIconPicker
-                                                icons={faIcons}
-                                                value={innerButtonIcon}
-                                                onChange={(icon) =>
-                                                    handleBlockDefault({
-                                                        innerButtonIcon: icon,
-                                                    })
-                                                }
-                                                appendTo="body"
-                                            />
-                                        </BaseControl>
-
-                                        <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Icon Size",
-                                                "essential-blocks"
-                                            )}
-                                            controlName={
-                                                BUTTONS_CONNECTOR_ICON_SIZE
+                                    <PanelBody title={__("Icon Settings", "essential-blocks")} initialOpen={true}>
+                                        <EBIconPicker
+                                            value={innerButtonIcon}
+                                            onChange={(icon) =>
+                                                handleBlockDefault({
+                                                    innerButtonIcon: icon,
+                                                })
                                             }
+                                            title={__("Icon", "essential-blocks")}
+                                        />
+                                        <ResponsiveRangeController
+                                            baseLabel={__("Icon Size", "essential-blocks")}
+                                            controlName={BUTTONS_CONNECTOR_ICON_SIZE}
                                             resRequiredProps={resRequiredProps}
                                             units={UNIT_TYPES}
                                             min={0}
@@ -448,10 +374,7 @@ function DualButton(props) {
                                 )}
 
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Connector Size",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Connector Size", "essential-blocks")}
                                     controlName={BUTTONS_CONNECTOR_SIZE}
                                     resRequiredProps={resRequiredProps}
                                     units={UNIT_TYPES}
@@ -463,10 +386,7 @@ function DualButton(props) {
                         )}
                     </PanelBody>
                     {/*  styles */}
-                    <PanelBody
-                        title={__("Buttons Styles", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Buttons Styles", "essential-blocks")} initialOpen={true}>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={BUTTONS_TYPOGRAPHY}
@@ -474,12 +394,7 @@ function DualButton(props) {
                         />
 
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__(
-                                    "Button One Background",
-                                    "essential-blocks"
-                                )}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Button One Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl
                             controlName={BUTTON_ONE_BACKGROUND}
@@ -489,12 +404,7 @@ function DualButton(props) {
                         />
 
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__(
-                                    "Button Two Background",
-                                    "essential-blocks"
-                                )}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Button Two Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl
                             controlName={BUTTON_TWO_BACKGROUND}
@@ -504,9 +414,7 @@ function DualButton(props) {
                         />
 
                         <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Text Color", "essential-blocks")}
-                            </h3>
+                            <h3 className="eb-control-title">{__("Text Color", "essential-blocks")}</h3>
                         </BaseControl>
 
                         <ButtonGroup className="eb-inspector-btn-group">
@@ -514,9 +422,7 @@ function DualButton(props) {
                                 <Button
                                     key={index}
                                     isPrimary={buttonsColorType === item.value}
-                                    isSecondary={
-                                        buttonsColorType !== item.value
-                                    }
+                                    isSecondary={buttonsColorType !== item.value}
                                     onClick={() =>
                                         handleBlockDefault({
                                             buttonsColorType: item.value,
@@ -529,67 +435,49 @@ function DualButton(props) {
                         </ButtonGroup>
 
                         {buttonsColorType === "normal" && (
-                            <PanelColorSettings
-                                className={"eb-subpanel"}
-                                title={__("Normal Colors", "essential-blocks")}
-                                initialOpen={true}
-                                colorSettings={[
-                                    {
-                                        value: textOneColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                textOneColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Button One",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                    {
-                                        value: textTwoColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                textTwoColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Button Two",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                ]}
-                            />
+                            <>
+                                <ColorControl
+                                    label={__("Button One", "essential-blocks")}
+                                    color={textOneColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            textOneColor: newColor,
+                                        })
+                                    }
+                                />
+                                <ColorControl
+                                    label={__("Button Two", "essential-blocks")}
+                                    color={textTwoColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            textTwoColor: newColor,
+                                        })
+                                    }
+                                />
+                            </>
                         )}
 
                         {buttonsColorType === "hover" && (
-                            <PanelColorSettings
-                                className={"eb-subpanel"}
-                                title={__("Hover Colors", "essential-blocks")}
-                                initialOpen={true}
-                                colorSettings={[
-                                    {
-                                        value: hoverTextOneColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                hoverTextOneColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Button One Hover",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                    {
-                                        value: hoverTextTwoColor,
-                                        onChange: (newColor) =>
-                                            handleBlockDefault({
-                                                hoverTextTwoColor: newColor,
-                                            }),
-                                        label: __(
-                                            "Button Two Hover",
-                                            "essential-blocks"
-                                        ),
-                                    },
-                                ]}
-                            />
+                            <>
+                                <ColorControl
+                                    label={__("Button One Hover", "essential-blocks")}
+                                    color={hoverTextOneColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            hoverTextOneColor: newColor,
+                                        })
+                                    }
+                                />
+                                <ColorControl
+                                    label={__("Button Two Hover", "essential-blocks")}
+                                    color={hoverTextTwoColor}
+                                    onChange={(newColor) =>
+                                        handleBlockDefault({
+                                            hoverTextTwoColor: newColor,
+                                        })
+                                    }
+                                />
+                            </>
                         )}
 
                         <PanelBody
@@ -622,39 +510,27 @@ function DualButton(props) {
                             baseLabel="Padding"
                         />
                     </PanelBody>
-                    <PanelBody
-                        title={__("Connector Styles", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    <PanelBody title={__("Connector Styles", "essential-blocks")} initialOpen={false}>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
-                            typographyPrefixConstant={
-                                BUTTONS_CONNECTOR_TYPOGRAPHY
-                            }
+                            typographyPrefixConstant={BUTTONS_CONNECTOR_TYPOGRAPHY}
                             resRequiredProps={resRequiredProps}
                         />
 
                         <ColorControl
                             label={__("Background Color", "essential-blocks")}
                             color={innerButtonColor}
-                            onChange={(innerButtonColor) =>
-                                handleBlockDefault({ innerButtonColor })
-                            }
+                            onChange={(innerButtonColor) => handleBlockDefault({ innerButtonColor })}
                         />
 
                         <ColorControl
                             label={__("Text/ Icon Color")}
                             color={innerButtonTextColor}
-                            onChange={(innerButtonTextColor) =>
-                                handleBlockDefault({ innerButtonTextColor })
-                            }
+                            onChange={(innerButtonTextColor) => handleBlockDefault({ innerButtonTextColor })}
                         />
                     </PanelBody>
                     {/*  advance */}
-                    <PanelBody
-                        title={__("Wrapper Margin", "essential-blocks")}
-                        initialOpen={true}
-                    >
+                    <PanelBody title={__("Wrapper Margin", "essential-blocks")} initialOpen={true}>
                         <ResponsiveDimensionsControl
                             resRequiredProps={resRequiredProps}
                             controlName={WRAPPER_MARGIN}

@@ -22,6 +22,10 @@ export const FILTER_MARGIN = "filterMargin";
 export const FILTER_PADDING = "filterPadding";
 export const FILTER_BORDER_SHADOW = "filterBorderShadow";
 
+export const LOADMORE_PADDING = "loadmorePadding";
+export const LOADMORE_BORDER = "loadmoreBorderShadow";
+
+
 export const VERTICAL_ALIGN = [
 	{ label: __("Top", "essential-blocks"), value: "top" },
 	{ label: __("Middle", "essential-blocks"), value: "middle" },

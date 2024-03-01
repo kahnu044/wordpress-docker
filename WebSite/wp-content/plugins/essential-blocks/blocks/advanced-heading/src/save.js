@@ -1,4 +1,5 @@
 import { RichText, useBlockProps } from "@wordpress/block-editor";
+const { EBDisplayIcon } = window.EBControls;
 
 const Save = ({ attributes }) => {
     const {
@@ -16,6 +17,7 @@ const Save = ({ attributes }) => {
         classHook,
     } = attributes;
 
+
     return (
         <div {...useBlockProps.save()}>
             <div
@@ -28,12 +30,13 @@ const Save = ({ attributes }) => {
                     {displaySeperator && seperatorPosition === "top" && (
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
-                                <i
-                                    className={`${separatorIcon
-                                            ? separatorIcon
-                                            : "fas fa-arrow-circle-down"
-                                        }`}
-                                ></i>
+                                // <i
+                                //     className={`${separatorIcon
+                                //         ? separatorIcon
+                                //         : "fas fa-arrow-circle-down"
+                                //         }`}
+                                // ></i>
+                                <EBDisplayIcon icon={separatorIcon} />
                             )}
                         </div>
                     )}
@@ -52,12 +55,13 @@ const Save = ({ attributes }) => {
                     {displaySeperator && seperatorPosition === "bottom" && (
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
-                                <i
-                                    className={`${separatorIcon
-                                            ? separatorIcon
-                                            : "fas fa-arrow-circle-down"
-                                        }`}
-                                ></i>
+                                // <i
+                                //     className={`${separatorIcon
+                                //         ? separatorIcon
+                                //         : "fas fa-arrow-circle-down"
+                                //         }`}
+                                // ></i>
+                                <EBDisplayIcon icon={separatorIcon} />
                             )}
                         </div>
                     )}
