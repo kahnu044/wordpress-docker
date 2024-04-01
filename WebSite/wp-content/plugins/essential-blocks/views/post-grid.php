@@ -13,13 +13,12 @@
 ?>
 
 <div class="<?php echo esc_attr( implode( ' ', $_parent_classes ) ); ?>">
-    <div
-        class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-grid-wrapper"
+    <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-grid-wrapper"
         data-id="<?php echo esc_attr( $blockId ); ?>"
         data-querydata="<?php echo esc_attr( json_encode( $queryData ) ); ?>"
         data-attributes="<?php echo esc_attr( json_encode( $essentialAttr ) ); ?>">
 
-		<?php
+        <?php
             /**
              * Category Filter Views
              */
@@ -39,7 +38,7 @@
         ?>
 
 
-<?php
+        <?php
     if ( ! $showTaxonomyFilter ) {
         /**
          * Add search form

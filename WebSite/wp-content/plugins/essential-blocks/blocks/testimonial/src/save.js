@@ -19,7 +19,12 @@ const Save = ({ attributes }) => {
         rating,
         ratingIndivisual,
         imageUrl,
+        showBlockContent
     } = attributes;
+
+    if (!showBlockContent) {
+        return
+    }
 
     const replaceString = (str, find, replace) => {
         if (!str) {

@@ -2,7 +2,7 @@ import { __ } from "@wordpress/i18n";
 
 import "./style.scss";
 import Edit from "./edit";
-import icon from "./icon";
+import PostGridIcon from "./icon";
 import attributes from "./attributes";
 import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBControls;
@@ -13,7 +13,7 @@ ebConditionalRegisterBlockType(metadata, {
         __("post grid", "essential-blocks"),
         __("posts block", "essential-blocks"),
     ],
-    icon,
+    icon: PostGridIcon,
     attributes,
     edit: Edit,
     save: () => null,

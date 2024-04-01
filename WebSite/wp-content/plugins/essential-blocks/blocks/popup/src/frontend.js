@@ -5,6 +5,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // Return if there is no popup block
     if (!eb_popups) return;
 
+    var stopVideo = (item) => {
+        var iframe = item.querySelector('iframe');
+        var video = item.querySelector('video');
+        if (iframe) {
+            var iframeSrc = iframe.src;
+            iframe.src = iframeSrc;
+        }
+        if (video) {
+            video.pause();
+        }
+    };
+
     for (let x = 0; x < eb_popups.length; x++) {
         let close_btn = eb_popups[x].getAttribute("data-close-btn");
 
@@ -116,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             eb_popups[x].querySelector(".eb-popup-close-icon").onclick = function () {
                 eb_popups[x].querySelector(".eb-popup-overlay").style.display = "none";
                 eb_popups[x].querySelector(".modal-main-wrap").style.display = "none";
+
+                stopVideo(eb_popups[x].querySelector(".modal-main-wrap"));
             };
         }
 
@@ -134,6 +148,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                     [...eb_popups[x].querySelectorAll(".modal-main-wrap")].map((item) => {
                         item.style.display = "none";
+
+                        stopVideo(item);
                     });
                 }
             };
@@ -154,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                         [...document.querySelectorAll(".modal-main-wrap")].map((item) => {
                             item.style.display = "none";
+
+                            stopVideo(item);
                         });
                     }
                 };

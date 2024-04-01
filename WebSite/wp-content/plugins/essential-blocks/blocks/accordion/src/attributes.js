@@ -20,7 +20,7 @@ import {
     conBdShadowConst,
 } from "./constants/borderShadowConstants";
 
-import { rangeIconSize, accGapRange } from "./constants/rangeNames";
+import { rangeIconSize, accGapRange, titlePrefixIconSize, titlePrefixImgWidth, titlePrefixGap, titleSuffixIconSize, titleSuffixImgWidth, titleSuffixGap } from "./constants/rangeNames";
 
 const {
     generateDimensionsAttributes,
@@ -123,6 +123,39 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+
+
+    titlePrefixColor: {
+        type: "string",
+        default: "#000",
+    },
+    titleSuffixColor: {
+        type: "string",
+        default: "#000",
+    },
+    
+
+    ...generateResponsiveRangeAttributes(titlePrefixIconSize, {
+        defaultRange: 20,
+    }),
+
+    ...generateResponsiveRangeAttributes(titlePrefixImgWidth, {
+        defaultRange: 30,
+    }),
+    ...generateResponsiveRangeAttributes(titlePrefixGap, {
+        defaultRange: 15,
+    }),
+
+    ...generateResponsiveRangeAttributes(titleSuffixIconSize, {
+        defaultRange: 20,
+    }),
+
+    ...generateResponsiveRangeAttributes(titleSuffixImgWidth, {
+        defaultRange: 30,
+    }),
+    ...generateResponsiveRangeAttributes(titleSuffixGap, {
+        defaultRange: 15,
+    }),
 
     // typography attributes
     ...generateTypographyAttributes(Object.values(typoPrefixs)),

@@ -43,14 +43,30 @@
         }
 
         /**
+         * Get Active Plugins List
+         */
+        public static function get_active_plugin_list()
+        {
+            $active_plugins = get_option( 'active_plugins' );
+            if ( is_multisite() ) {
+                $all = wp_get_active_network_plugins();
+                if ( $all ) {
+                    $active_plugins = array_merge( $active_plugins, array_map( function ( $each ) {
+                        $arr = explode( '/', $each );
+                        return $arr[ count( $arr ) - 2 ] . DIRECTORY_SEPARATOR . end( $arr );
+                    }, $all ) );
+                }
+            }
+            return $active_plugins;
+        }
+
+        /**
          * Get Plugins List for Localize
          */
         public static function get_plugin_list_for_localize()
         {
-            $all_plugins = self::get_plugins();
-
-            $active_plugins = get_option( 'active_plugins' );
-
+            $all_plugins    = self::get_plugins();
+            $active_plugins = self::get_active_plugin_list();
             if ( is_array( $all_plugins ) ) {
                 foreach ( $all_plugins as $key => $plugin ) {
                     $data                 = [  ];
@@ -60,12 +76,10 @@
                     } else {
                         $data[ 'active' ] = false;
                     }
-
                     // Assign
                     $all_plugins[ $key ] = $data;
                 }
             }
-
             return $all_plugins;
         }
 

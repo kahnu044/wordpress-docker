@@ -277,57 +277,21 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 4.5.2", "essential-blocks")}
+                                    {__("Version: 4.5.6", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("27/02/2024", "essential-blocks")}
+                                        {__("27/03/2024", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Fixed: **Form block** not loading when used inside patterns",
+                                            "Fixed: Post Grid & Post Carousel block is not working in editor",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: **Pricing Table** block feature icon color not updating properly",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Images not loading properly on *Image slider** block",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Font loading issue",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Security enhancement",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Gradient color opacity default value in all blocks",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Reduce dynamic query",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Updated new fonts in Google font library",
+                                            "Fixed: Testimonial block is not working in editor",
                                             "essential-blocks"
                                         )}
                                     </li>

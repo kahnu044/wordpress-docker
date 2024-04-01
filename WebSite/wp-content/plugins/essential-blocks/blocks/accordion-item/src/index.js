@@ -6,6 +6,7 @@ import { __ } from "@wordpress/i18n";
 /**
  * Internal dependencies
  */
+import "./style.scss";
 import Edit from "./edit";
 import Save from "./save";
 import Icon from "./icon";
@@ -17,9 +18,9 @@ import attributes from "./attributes";
 const { ebConditionalRegisterBlockType } = EBControls;
 
 ebConditionalRegisterBlockType(metadata, {
-	icon: Icon,
-	attributes,
-	edit: Edit,
-	save: Save,
-	deprecated,
+    icon: Icon,
+    attributes,
+    edit: Edit,
+    save: Save,
+    deprecated,
 });

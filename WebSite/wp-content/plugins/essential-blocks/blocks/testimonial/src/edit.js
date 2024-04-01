@@ -13,9 +13,12 @@ import { select } from "@wordpress/data";
 import classnames from "classnames";
 
 import Inspector from "./inspector";
+import TestimonialIcon from "./icon";
+import { Templates } from './templates/templates'
 
 const {
     duplicateBlockIdFix,
+    BrowseTemplate
 } = window.EBControls;
 
 import Style from "./style";
@@ -39,6 +42,7 @@ const Edit = (props) => {
         showRating,
         rating,
         ratingIndivisual,
+        showBlockContent
     } = attributes;
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
@@ -66,63 +70,99 @@ const Edit = (props) => {
 
     return (
         <>
-            {isSelected && <Inspector attributes={attributes} setAttributes={setAttributes} />}
+            {isSelected && showBlockContent && <Inspector attributes={attributes} setAttributes={setAttributes} />}
             <div {...blockProps}>
                 <Style {...props} />
 
-                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                    <div className={`eb-testimonial-wrapper ${blockId} ${layoutPreset}`} data-id={blockId}>
-                        <div className="eb-testimonial-container">
-                            <div className="eb-avatar-container">
-                                <div className="image-container">
-                                    <div className="eb-avatar-style" />
-                                    <MediaUpload
-                                        onSelect={(media) =>
-                                            setAttributes({
-                                                imageUrl: media.url,
-                                                imageId: media.id,
-                                            })
-                                        }
-                                        type="image"
-                                        value={imageId}
-                                        render={({ open }) =>
-                                            !imageUrl && (
-                                                <Button
-                                                    className="eb-testimonial-image components-button"
-                                                    label={__("Upload Image", "essential-blocks")}
-                                                    icon="format-image"
-                                                    onClick={open}
+                <BrowseTemplate
+                    {...props}
+                    Icon={TestimonialIcon}
+                    title={"Testimonial"}
+                    description={"Choose a template for the Testimonial or start blank."}
+                    patterns={Templates}
+                />
+
+                {showBlockContent && (
+                    <>
+                        <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                            <div className={`eb-testimonial-wrapper ${blockId} ${layoutPreset}`} data-id={blockId}>
+                                <div className="eb-testimonial-container">
+                                    <div className="eb-avatar-container">
+                                        <div className="image-container">
+                                            <div className="eb-avatar-style" />
+                                            <MediaUpload
+                                                onSelect={(media) =>
+                                                    setAttributes({
+                                                        imageUrl: media.url,
+                                                        imageId: media.id,
+                                                    })
+                                                }
+                                                type="image"
+                                                value={imageId}
+                                                render={({ open }) =>
+                                                    !imageUrl && (
+                                                        <Button
+                                                            className="eb-testimonial-image components-button"
+                                                            label={__("Upload Image", "essential-blocks")}
+                                                            icon="format-image"
+                                                            onClick={open}
+                                                        />
+                                                    )
+                                                }
+                                            />
+                                        </div>
+
+                                        {layoutPreset !== "layout-preset-3" && (
+                                            <div className="eb-userinfo-container">
+                                                <RichText
+                                                    tagName="p"
+                                                    className="eb-testimonial-username"
+                                                    value={userName}
+                                                    onChange={(newName) =>
+                                                        setAttributes({
+                                                            userName: newName,
+                                                        })
+                                                    }
                                                 />
-                                            )
-                                        }
-                                    />
-                                </div>
 
-                                {layoutPreset !== "layout-preset-3" && (
-                                    <div className="eb-userinfo-container">
+                                                <RichText
+                                                    tagName="p"
+                                                    className="eb-testimonial-company"
+                                                    value={companyName}
+                                                    onChange={(newName) =>
+                                                        setAttributes({
+                                                            companyName: newName,
+                                                        })
+                                                    }
+                                                />
+
+                                                {showRating && !ratingIndivisual && rating != 0 && (
+                                                    <div className={`eb-testimonial-rating rating-${rating}`}>
+                                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="eb-description-container">
+                                        {enableQuote && (
+                                            <div className="eb-testimonial-quote-style">
+                                                <QuoteSVG />
+                                            </div>
+                                        )}
+
                                         <RichText
                                             tagName="p"
-                                            className="eb-testimonial-username"
-                                            value={userName}
-                                            onChange={(newName) =>
-                                                setAttributes({
-                                                    userName: newName,
-                                                })
-                                            }
+                                            className="eb-testimonial-description"
+                                            value={description}
+                                            onChange={(newText) => setAttributes({ description: newText })}
                                         />
-
-                                        <RichText
-                                            tagName="p"
-                                            className="eb-testimonial-company"
-                                            value={companyName}
-                                            onChange={(newName) =>
-                                                setAttributes({
-                                                    companyName: newName,
-                                                })
-                                            }
-                                        />
-
-                                        {showRating && !ratingIndivisual && rating != 0 && (
+                                        {showRating && ratingIndivisual && rating != 0 && (
                                             <div className={`eb-testimonial-rating rating-${rating}`}>
                                                 <i className="fa fa-star" aria-hidden="true"></i>
                                                 <i className="fa fa-star" aria-hidden="true"></i>
@@ -132,67 +172,44 @@ const Edit = (props) => {
                                             </div>
                                         )}
                                     </div>
-                                )}
-                            </div>
 
-                            <div className="eb-description-container">
-                                {enableQuote && (
-                                    <div className="eb-testimonial-quote-style">
-                                        <QuoteSVG />
-                                    </div>
-                                )}
+                                    {layoutPreset == "layout-preset-3" && (
+                                        <div className="eb-userinfo-container">
+                                            <RichText
+                                                tagName="p"
+                                                className="eb-testimonial-username"
+                                                value={userName}
+                                                onChange={(newName) => setAttributes({ userName: newName })}
+                                            />
 
-                                <RichText
-                                    tagName="p"
-                                    className="eb-testimonial-description"
-                                    value={description}
-                                    onChange={(newText) => setAttributes({ description: newText })}
-                                />
-                                {showRating && ratingIndivisual && rating != 0 && (
-                                    <div className={`eb-testimonial-rating rating-${rating}`}>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                    </div>
-                                )}
-                            </div>
+                                            <RichText
+                                                tagName="p"
+                                                className="eb-testimonial-company"
+                                                value={companyName}
+                                                onChange={(newName) =>
+                                                    setAttributes({
+                                                        companyName: newName,
+                                                    })
+                                                }
+                                            />
 
-                            {layoutPreset == "layout-preset-3" && (
-                                <div className="eb-userinfo-container">
-                                    <RichText
-                                        tagName="p"
-                                        className="eb-testimonial-username"
-                                        value={userName}
-                                        onChange={(newName) => setAttributes({ userName: newName })}
-                                    />
-
-                                    <RichText
-                                        tagName="p"
-                                        className="eb-testimonial-company"
-                                        value={companyName}
-                                        onChange={(newName) =>
-                                            setAttributes({
-                                                companyName: newName,
-                                            })
-                                        }
-                                    />
-
-                                    {showRating && !ratingIndivisual && rating != 0 && (
-                                        <div className={`eb-testimonial-rating rating-${rating}`}>
-                                            <i className="fa fa-star" aria-hidden="true"></i>
-                                            <i className="fa fa-star" aria-hidden="true"></i>
-                                            <i className="fa fa-star" aria-hidden="true"></i>
-                                            <i className="fa fa-star" aria-hidden="true"></i>
-                                            <i className="fa fa-star" aria-hidden="true"></i>
+                                            {showRating && !ratingIndivisual && rating != 0 && (
+                                                <div className={`eb-testimonial-rating rating-${rating}`}>
+                                                    <i className="fa fa-star" aria-hidden="true"></i>
+                                                    <i className="fa fa-star" aria-hidden="true"></i>
+                                                    <i className="fa fa-star" aria-hidden="true"></i>
+                                                    <i className="fa fa-star" aria-hidden="true"></i>
+                                                    <i className="fa fa-star" aria-hidden="true"></i>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
+
             </div>
         </>
     );

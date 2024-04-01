@@ -116,6 +116,7 @@ export default function Edit(props) {
 
                         <DynamicInputValueHandler
                             value={titleText}
+                            placeholder={'Add your text here'}
                             tagName={tagName}
                             className="eb-ah-title"
                             allowedFormats={[

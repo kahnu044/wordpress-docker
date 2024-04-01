@@ -3,7 +3,7 @@ import { registerBlockType } from "@wordpress/blocks";
 
 import "./style.scss";
 import Edit from "./edit";
-import icon from "./icon";
+import PostCarouselIcon from "./icon";
 import attributes from "./attributes";
 import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBControls;
@@ -17,7 +17,7 @@ ebConditionalRegisterBlockType(metadata, {
         __("slider", "essential-blocks"),
         __("post slider", "essential-blocks"),
     ],
-    icon,
+    icon: PostCarouselIcon,
     attributes,
     edit: Edit,
     save: () => null,

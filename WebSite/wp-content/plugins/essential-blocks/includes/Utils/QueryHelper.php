@@ -28,8 +28,10 @@ class QueryHelper {
             'order'            => $queryData['order'],
             'orderby'          => $queryData['orderby'],
             'offset'           => $queryData['offset'],
-            'suppress_filters' => false
+            'suppress_filters' => false,
         ];
+
+
 
         if ( isset( $queryData['taxonomies'] ) && is_array( $queryData['taxonomies'] ) && count( $queryData['taxonomies'] ) > 0 ) {
             $tax_query = [];
@@ -89,6 +91,8 @@ class QueryHelper {
             }
         }
 
+
+
         if ( isset( $queryData['author'] ) && strlen( $queryData['author'] ) > 0 ) {
             $authorJsonDecode = json_decode( $queryData['author'] );
             $authorArray      = [];
@@ -134,8 +138,12 @@ class QueryHelper {
         if ( isset( $queryData['s'] ) && $queryData['s'] ) {
             $args['s'] = $queryData['s'];
         }
+        
+        if ( isset( $queryData['ignore_sticky_posts'] ) && $queryData['ignore_sticky_posts'] ) {
+            $args['ignore_sticky_posts'] = $queryData['ignore_sticky_posts'];
+            $args['post__not_in'] = get_option( 'sticky_posts' );
+        }
 
-        // $posts = get_posts( $args );
         $posts = new \WP_Query( $args );
         return $posts;
     }

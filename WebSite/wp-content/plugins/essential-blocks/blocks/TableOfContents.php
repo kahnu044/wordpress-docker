@@ -10,7 +10,7 @@ class TableOfContents extends Block
     protected $frontend_styles  = [
         'essential-blocks-frontend-style',
         'essential-blocks-fontawesome'
-    ];
+     ];
 
     /**
      * headings that are used, prevent duplicates.
@@ -283,7 +283,7 @@ class TableOfContents extends Block
         }
 
         $attributes         = wp_parse_args( $attributes, $this->default_attributes );
-        $blockId            = esc_attr($attributes['blockId']);
+        $blockId            = esc_attr( $attributes[ 'blockId' ] );
         $scrollToTop        = $attributes[ 'scrollToTop' ] ? 'true' : 'false';
         $scrollToTopIcon    = $attributes[ 'scrollToTopIcon' ];
         $listStyle          = $attributes[ 'listStyle' ];
@@ -393,6 +393,6 @@ class TableOfContents extends Block
         $output .= '</div>'; // parent wrapper
         $output .= "</div>"; // block
 
-        return $output;
+        return wp_kses_post( $output );
     }
 }

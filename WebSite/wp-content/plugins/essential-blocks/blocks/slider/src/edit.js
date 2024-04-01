@@ -97,8 +97,13 @@ export default function Edit(props) {
             select,
             clientId,
         });
-        const { isRTL } = select("core/editor").getEditorSettings();
-        setAttributes({ isRTLEnable: isRTL });
+        if (eb_conditional_localize && eb_conditional_localize.editor_type == 'edit-site') {
+            const { isRTL } = wp.data.select('core/edit-site').getSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        } else {
+            const { isRTL } = select("core/editor").getEditorSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        }
 
         // Default value for old version
         if (titleTag == undefined) { setAttributes({ titleTag: 'h2' }) }

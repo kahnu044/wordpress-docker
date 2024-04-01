@@ -129,7 +129,7 @@ function Edit(props) {
         headers,
         title,
         collapsible,
-        listType,
+        listStyle,
         displayTitle,
         scrollToTop,
         contentAlign,
@@ -291,22 +291,22 @@ function Edit(props) {
                     <ToolbarButton
                         title="Unordered"
                         icon="editor-ul"
-                        isActive={listType === "ul"}
-                        onClick={() => setAttributes({ listType: "ul" })}
+                        isActive={listStyle === "ul"}
+                        onClick={() => setAttributes({ listStyle: "ul" })}
                     />
 
                     <ToolbarButton
                         title="Ordered"
                         icon="editor-ol"
-                        isActive={listType === "ol"}
-                        onClick={() => setAttributes({ listType: "ol" })}
+                        isActive={listStyle === "ol"}
+                        onClick={() => setAttributes({ listStyle: "ol" })}
                     />
 
                     <ToolbarButton
                         title="None"
                         icon="minus"
-                        isActive={listType === "none"}
-                        onClick={() => setAttributes({ listType: "none" })}
+                        isActive={listStyle === "none"}
+                        onClick={() => setAttributes({ listStyle: "none" })}
                     />
                 </ToolbarGroup>
             </BlockControls>

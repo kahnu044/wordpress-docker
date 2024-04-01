@@ -247,7 +247,7 @@ const attributes = {
     },
     hvHamburgerItemBgColor: {
         type: "string",
-        default: "var(--eb-global-background-color)",
+        default: "",
     },
     actNavHamburgerTextColor: {
         type: "string",
@@ -477,10 +477,10 @@ const attributes = {
         isLinked: false,
     }),
     ...generateDimensionsAttributes(prefixHamburgerItemPadding, {
-        top: 5,
-        bottom: 5,
-        left: 5,
-        right: 5,
+        top: 15,
+        bottom: 15,
+        left: 15,
+        right: 15,
         isLinked: false,
     }),
 

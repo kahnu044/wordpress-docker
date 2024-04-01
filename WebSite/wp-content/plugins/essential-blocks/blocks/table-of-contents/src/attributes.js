@@ -89,10 +89,6 @@ const attributes = {
         type: "boolean",
         default: false,
     },
-    listType: {
-        type: "string",
-        default: "ul",
-    },
     title: {
         type: "string",
         default: "Table of Contents",
@@ -386,7 +382,10 @@ const attributes = {
         type: "string",
         default: "fas fa-angle-up",
     },
-    listStyle: { type: "string", default: "ul" },
+    listStyle: {
+        type: "string",
+        default: "ul"
+    },
 
     closeBtnColor: {
         type: "string",

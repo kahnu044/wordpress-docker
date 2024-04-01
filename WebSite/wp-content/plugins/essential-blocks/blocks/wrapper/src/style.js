@@ -136,12 +136,10 @@ export default function Style(props) {
     });
 
     const contentHeightDesktop = `
-        .wp-block .eb-parent-${blockId} {
+        .eb-parent-${blockId} {
             overflow-y: auto;
         }
         .eb-parent-${blockId} {
-            display: flex !important;
-            flex-wrap: wrap;
             ${wrapperHeightDesktop}
         }
         .eb-wrapper-outer.${blockId} {
@@ -149,6 +147,8 @@ export default function Style(props) {
             align-items: ${contentAlign};
             justify-content: center;
             width: 100%;
+            box-sizing: border-box;
+            ${useCustomHeight && 'height: 100%;'}
         }
 
         .eb-wrapper-outer.${blockId} .eb-wrapper-inner {

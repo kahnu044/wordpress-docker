@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
         );
 
         const mediaQuery = window.matchMedia("(max-width: 767px)");
-        if (mediaQuery.matches) {
+        // if (mediaQuery.matches) {
             anchors.forEach((anchor) => {
                 anchor.addEventListener("click", function (e) {
                     if (anchor.hash !== "") {
@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             });
-        }
+        // }
 
         // anchor nav active class
         anchors.forEach((anchor) => {

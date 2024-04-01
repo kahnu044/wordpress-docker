@@ -52,7 +52,7 @@ import {
     WrpPaddingConst,
     titlePaddingConst,
     contentPaddingConst,
-    
+
 } from "./constants/dimensionsConstants";
 
 import {

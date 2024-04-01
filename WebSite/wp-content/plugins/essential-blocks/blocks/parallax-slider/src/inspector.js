@@ -78,6 +78,16 @@ const Inspector = ({ attributes, setAttributes }) => {
         objAttributes,
     };
 
+    const validUrl = (type, value, index) => {
+        let updatedData = [...sliderData];
+        if ('link' === type) {
+            value = value.toLowerCase().replace('javascript:', '');
+        }
+        updatedData[index][type] = value;
+
+        setAttributes({ sliderData: updatedData });
+    }
+
     const handleTextChange = (type, value, index) => {
         let updatedData = [...sliderData];
         updatedData[index][type] = value;
@@ -190,6 +200,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     label={__("Button Link", "essential-blocks")}
                                                     value={slide.link}
                                                     onChange={(link) => handleTextChange("link", link, index)}
+                                                    onBlur={(val) => validUrl('link', val.target.value, index)}
                                                 />
 
                                                 <ToggleControl
@@ -360,8 +371,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         <BorderShadowControl
                                             controlName={BUTTON_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                         <TypographyDropdown
                                             baseLabel={__("Typography", "essential-blocks")}
@@ -407,8 +418,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

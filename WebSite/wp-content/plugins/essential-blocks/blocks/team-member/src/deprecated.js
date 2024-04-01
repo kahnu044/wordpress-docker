@@ -40,7 +40,6 @@ const deprecated = [
                 hoverPreset,
                 isContentOverlay,
             } = props.attributes;
-            console.log('deprecated', imageUrl)
 
             return (
                 <div {...useBlockProps.save()}>

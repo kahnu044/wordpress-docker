@@ -3,6 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useState, useEffect } from "@wordpress/element";
+import { safeHTML } from "@wordpress/dom"
 
 const List = (props) => {
     const {
@@ -73,7 +74,7 @@ const List = (props) => {
         let toc = `<${listStyle} class="eb-toc__list">`;
         let stack = [];
         let counter = 0;
-        for (let i = 0;i < data.length;i++) {
+        for (let i = 0; i < data.length; i++) {
             const { level, content, link } = data[i];
 
 
@@ -108,7 +109,7 @@ const List = (props) => {
 
         toc += `</${listStyle}>`;
 
-        return toc;
+        return safeHTML(toc);
     };
 
     if (

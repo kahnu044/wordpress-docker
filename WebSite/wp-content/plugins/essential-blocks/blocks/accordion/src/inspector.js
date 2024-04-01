@@ -14,6 +14,7 @@ import {
     ToggleControl,
     RangeControl,
     TabPanel,
+    __experimentalDivider as Divider,
 } from "@wordpress/components";
 
 /**
@@ -25,6 +26,7 @@ import {
     TITLE_ALIGNMENT,
     CONTENT_ALIGN,
     HEADING,
+    sizeUnitTypes,
 } from "./constants";
 
 const {
@@ -43,9 +45,14 @@ import objAttributes from "./attributes";
 import {
     typoPrefix_title,
     typoPrefix_content,
+    titlePrefixText,
+    titleSuffixText
 } from "./constants/typographyPrefixConstants";
 
-import { rangeIconSize, accGapRange } from "./constants/rangeNames";
+import {
+    rangeIconSize, accGapRange, titlePrefixIconSize, titlePrefixGap, titlePrefixImgWidth,
+    titleSuffixIconSize, titleSuffixImgWidth
+} from "./constants/rangeNames";
 
 import {
     wrapMarginConst,
@@ -91,6 +98,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
         activeTitleColor,
         tagName,
         faqSchema,
+        titlePrefixColor,
+        titleSuffixColor
     } = attributes;
 
     const resRequiredProps = {
@@ -264,8 +273,151 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                             {tab.name === "styles" && (
                                 <>
                                     <PanelBody
+                                        title={__("Title", "essential-blocks")}
+                                    >
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Prefix Suffix Spacing", "essential-blocks"
+                                            )}
+                                            controlName={
+                                                titlePrefixGap
+                                            }
+                                            resRequiredProps={
+                                                resRequiredProps
+                                            }
+                                            min={0}
+                                            max={500}
+                                            step={1}
+                                            noUnits
+                                        />
+                                        <PanelBody
+                                            title={__("Title Prefix", "essential-blocks")}
+                                        >
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Icon Size",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titlePrefixIconSize
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                min={8}
+                                                max={200}
+                                                step={1}
+                                            />
+
+                                            <TypographyDropdown
+                                                baseLabel="Text Typography"
+                                                typographyPrefixConstant={
+                                                    titlePrefixText
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                            />
+
+                                            <ColorControl
+                                                label={__(
+                                                    "Text / Icon Color",
+                                                    "essential-blocks"
+                                                )}
+                                                color={titlePrefixColor}
+                                                onChange={(
+                                                    titlePrefixColor
+                                                ) =>
+                                                    setAttributes({
+                                                        titlePrefixColor,
+                                                    })
+                                                }
+                                            />
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Image Width",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titlePrefixImgWidth
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                units={
+                                                    sizeUnitTypes
+                                                }
+                                                min={0}
+                                                max={500}
+                                                step={1}
+                                            />
+                                        </PanelBody>
+                                        <PanelBody
+                                            title={__("Title Suffix", "essential-blocks")}
+                                        >
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Icon Size",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titleSuffixIconSize
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                min={8}
+                                                max={200}
+                                                step={1}
+                                            />
+
+                                            <TypographyDropdown
+                                                baseLabel="Text Typography"
+                                                typographyPrefixConstant={
+                                                    titleSuffixText
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                            />
+                                            <ColorControl
+                                                label={__(
+                                                    "Text / Icon Color",
+                                                    "essential-blocks"
+                                                )}
+                                                color={titleSuffixColor}
+                                                onChange={(
+                                                    titleSuffixColor
+                                                ) =>
+                                                    setAttributes({
+                                                        titleSuffixColor,
+                                                    })
+                                                }
+                                            />
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Image Width",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titleSuffixImgWidth
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                units={
+                                                    sizeUnitTypes
+                                                }
+                                                min={0}
+                                                max={500}
+                                                step={1}
+                                            />
+                                        </PanelBody>
+                                    </PanelBody>
+
+                                    <PanelBody
                                         title={__("Icon", "essential-blocks")}
-                                    // initialOpen={false}
+                                        initialOpen={false}
                                     >
                                         <ToggleControl
                                             label={__(
@@ -773,8 +925,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                         </div>
                     )}
                 </TabPanel>
-            </div>
-        </InspectorControls>
+            </div >
+        </InspectorControls >
     );
 };
 

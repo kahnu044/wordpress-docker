@@ -96,7 +96,7 @@ class Form extends Block {
         $submit_button_html = sprintf(
             '<button type="submit" class="%1$s" %2$s>
                 %4$s%3$s%5$s
-                <img class="eb-form-submit-loader" src="%6$s/assets/images/loading.svg" />
+                <img class="eb-form-submit-loader" src="%6$sassets/images/loading.svg" />
             </button>',
             $submit_btn_classes,
             http_build_query( $submit_btn_attr, '', ' ' ),

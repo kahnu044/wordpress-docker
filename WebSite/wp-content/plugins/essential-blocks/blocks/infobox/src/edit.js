@@ -40,6 +40,7 @@ const Edit = (props) => {
         number,
         enableButton,
         isInfoClick,
+        btnEffect
     } = attributes;
 
     useEffect(() => {
@@ -56,6 +57,10 @@ const Edit = (props) => {
         //
         if (number === undefined) {
             setAttributes({ number: "01" });
+        }
+        //set "btnEffect" to "hvr-fade" if not selected
+        if (btnEffect === undefined) {
+            setAttributes({ btnEffect: "hvr-fade" });
         }
     }, []);
 

@@ -221,7 +221,7 @@ const attributes = {
 
     //
     btnEffect: {
-        type: "string",
+        type: "string"
     },
 
     //
@@ -452,7 +452,7 @@ const attributes = {
     // background attributes ⬇
     ...generateBackgroundAttributes(infoBtnBg, {
         defaultFillColor: "var(--eb-global-button-background-color)",
-        defaultHovFillColor: "var(--eb-global-secondary-color)",
+        // defaultHovFillColor: "var(--eb-global-secondary-color)",
         defaultBgGradient: "var(--eb-gradient-background-color)",
         forButton: true
     }),

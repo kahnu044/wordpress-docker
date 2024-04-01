@@ -156,7 +156,7 @@ const attributes = {
     },
     filterColor: {
         type: "string",
-        default: "var(--eb-global-button-text-color)",
+        default: "var(--eb-global-text-color)",
     },
     filterActColor: {
         type: "string",

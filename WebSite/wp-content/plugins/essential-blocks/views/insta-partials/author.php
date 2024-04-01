@@ -2,7 +2,7 @@
 	<?php if ( $showProfileImg && ! empty( $profileImg ) ) : ?>
 		<div class="author__thumb">
 			<a href="//www.instagram.com/<?php echo esc_attr( $username ); ?>" target="_blank">
-				<img src="<?php echo esc_attr( $profileImg ); ?>" alt="<?php echo esc_attr( $username ); ?>" />
+				<img src="<?php echo esc_url( $profileImg ); ?>" alt="<?php echo esc_attr( $username ); ?>" />
 			</a>
 		</div>
 	<?php endif; ?>

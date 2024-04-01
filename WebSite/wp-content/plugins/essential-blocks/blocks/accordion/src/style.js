@@ -5,9 +5,11 @@
 import {
     typoPrefix_title,
     typoPrefix_content,
+    titlePrefixText,
+    titleSuffixText
 } from "./constants/typographyPrefixConstants";
 
-import { rangeIconSize, accGapRange } from "./constants/rangeNames";
+import { rangeIconSize, accGapRange, titlePrefixIconSize, titlePrefixImgWidth, titlePrefixGap, titleSuffixIconSize, titleSuffixImgWidth, titleSuffixGap } from "./constants/rangeNames";
 
 import {
     wrapMarginConst,
@@ -75,6 +77,8 @@ export default function Style(props) {
         TABicnZ_Range,
         MOBicnZ_Range,
         accordionChildCount,
+        titlePrefixColor,
+        titleSuffixColor
     } = attributes;
 
     // styles related to generateTypographyStyles start ⬇
@@ -95,6 +99,24 @@ export default function Style(props) {
     } = generateTypographyStyles({
         attributes,
         prefixConstant: typoPrefix_content,
+        defaultFontSize: 14,
+    });
+    const {
+        typoStylesDesktop: titlePrefixTextTypoDesktop,
+        typoStylesTab: titlePrefixTextTypoTab,
+        typoStylesMobile: titlePrefixTextTypoMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: titlePrefixText,
+        defaultFontSize: 14,
+    });
+    const {
+        typoStylesDesktop: titleSuffixTextTypoDesktop,
+        typoStylesTab: titleSuffixTextTypoTab,
+        typoStylesMobile: titleSuffixTextTypoMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: titleSuffixText,
         defaultFontSize: 14,
     });
 
@@ -328,6 +350,98 @@ export default function Style(props) {
         property: "padding-top",
         attributes,
     });
+
+    const {
+        rangeStylesDesktop: titlePrefixIconWidthDesktop,
+        rangeStylesTab: titlePrefixIconWidthTab,
+        rangeStylesMobile: titlePrefixIconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titlePrefixIconSize,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titlePrefixIconHeightDesktop,
+        rangeStylesTab: titlePrefixIconHeightTab,
+        rangeStylesMobile: titlePrefixIconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titlePrefixIconSize,
+        customUnit: "px",
+        property: "height",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titlePrefixIconSizeDesktop,
+        rangeStylesTab: titlePrefixIconSizeTab,
+        rangeStylesMobile: titlePrefixIconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titlePrefixIconSize,
+        customUnit: "px",
+        property: "font-size",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titlePrefixImgWidthDesktop,
+        rangeStylesTab: titlePrefixImgWidthTab,
+        rangeStylesMobile: titlePrefixImgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titlePrefixImgWidth,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titlePrefixGapDesktop,
+        rangeStylesTab: titlePrefixGapTab,
+        rangeStylesMobile: titlePrefixGapMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titlePrefixGap,
+        customUnit: "px",
+        property: "gap",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: titleSuffixIconWidthDesktop,
+        rangeStylesTab: titleSuffixIconWidthTab,
+        rangeStylesMobile: titleSuffixIconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titleSuffixIconSize,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titleSuffixIconHeightDesktop,
+        rangeStylesTab: titleSuffixIconHeightTab,
+        rangeStylesMobile: titleSuffixIconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titleSuffixIconSize,
+        customUnit: "px",
+        property: "height",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titleSuffixIconSizeDesktop,
+        rangeStylesTab: titleSuffixIconSizeTab,
+        rangeStylesMobile: titleSuffixIconSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titleSuffixIconSize,
+        customUnit: "px",
+        property: "font-size",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: titleSuffixImgWidthDesktop,
+        rangeStylesTab: titleSuffixImgWidthTab,
+        rangeStylesMobile: titleSuffixImgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: titleSuffixImgWidth,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
     // styles related to generateResponsiveRangeStyles end
 
     const wrapperStylesDesktop = `
@@ -443,11 +557,40 @@ ${displayIcon
 	}
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-title{
+	.${blockId}.eb-accordion-container .eb-accordion-title-content-wrap{
 		text-align:${titleAlignment || "left"};
 		flex:1;
+        ${titlePrefixGapDesktop}
+	}
+	.${blockId}.eb-accordion-container .eb-accordion-title{
 		color:${titleColor};
 		${titleTypoStylesDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-text{
+		color:${titlePrefixColor};
+		${titlePrefixTextTypoDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-icon{
+		color:${titlePrefixColor};
+		${titlePrefixIconWidthDesktop}
+		${titlePrefixIconHeightDesktop}
+		${titlePrefixIconSizeDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-img{
+		${titlePrefixImgWidthDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-text{
+		color:${titleSuffixColor};
+		${titleSuffixTextTypoDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-icon{
+		color:${titleSuffixColor};
+		${titleSuffixIconWidthDesktop}
+		${titleSuffixIconHeightDesktop}
+		${titleSuffixIconSizeDesktop}
+	}
+    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-img{
+		${titleSuffixImgWidthDesktop}
 	}
 
 ${activeTitleColor

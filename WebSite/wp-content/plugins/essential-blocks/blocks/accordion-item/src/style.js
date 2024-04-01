@@ -16,6 +16,8 @@ export default function Style(props) {
         iconColor,
         accordionColor,
         parentBlockId,
+        titlePrefixColor,
+        titleSuffixIconColor,
     } = attributes;
 
     // CSS/styling Codes Starts from Here
@@ -41,6 +43,15 @@ export default function Style(props) {
 	}`
             : ""
         }
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-prefix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-prefix-icon {
+            color: ${titlePrefixColor};
+        }
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-suffix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-suffix-icon {
+            color: ${titleSuffixIconColor};
+        }
+
 	`);
 
     // all css styles for Tab in strings ⬇

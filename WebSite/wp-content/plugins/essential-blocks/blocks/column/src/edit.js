@@ -121,7 +121,7 @@ export default function Edit(props) {
 
     useEffect(() => {
         if (!parentBlockData || !parentBlockData.attributes) {
-            return false;
+            return () => { };
         }
         const {
             colOrder_Option,
