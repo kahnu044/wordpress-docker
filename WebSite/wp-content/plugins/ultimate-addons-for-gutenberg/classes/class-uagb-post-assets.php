@@ -637,7 +637,9 @@ class UAGB_Post_Assets {
 			$blocks = array();
 		if ( UAGB_Admin_Helper::is_block_theme() ) {
 			global $_wp_current_template_content;
-			$blocks = parse_blocks( $_wp_current_template_content );
+			if ( isset( $_wp_current_template_content ) ) {
+				$blocks = parse_blocks( $_wp_current_template_content );
+			}
 		}
 			// Global Required assets.
 			// If the current template has content and contains blocks, execute this code block.
@@ -846,13 +848,22 @@ class UAGB_Post_Assets {
 
 		$file_handler = $this->assets_file_handler;
 
+		/*
+		* Added filter to allows developers and users to adjust constant values for theme compatibility, easy updates, and compatibility with other plugins.
+		*/
+		$uagb_asset_ver = apply_filters( 'uagb_asset_version', UAGB_ASSET_VER );
+
+		if ( empty( $uagb_asset_ver ) || ! is_string( $uagb_asset_ver ) ) { 
+			$uagb_asset_ver = UAGB_ASSET_VER; 
+		}
+
 		if ( isset( $file_handler['css_url'] ) ) {
-			wp_enqueue_style( 'uag-style-' . $this->post_id, $file_handler['css_url'], array(), UAGB_ASSET_VER, 'all' );
+			wp_enqueue_style( 'uag-style-' . $this->post_id, $file_handler['css_url'], array(), $uagb_asset_ver, 'all' );
 		} else {
 			$this->fallback_css = true;
 		}
 		if ( isset( $file_handler['js_url'] ) ) {
-			wp_enqueue_script( 'uag-script-' . $this->post_id, $file_handler['js_url'], array(), UAGB_ASSET_VER, true );
+			wp_enqueue_script( 'uag-script-' . $this->post_id, $file_handler['js_url'], array(), $uagb_asset_ver, true );
 		} else {
 			$this->fallback_js = true;
 		}
