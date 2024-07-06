@@ -25,6 +25,11 @@
 		}
 	}
 
+	// For: Spectra One theme
+	.ebpg-entry-header.swt-transparent-header {
+		position: relative;
+	}
+
 	.ebpg-entry-thumbnail {
 		position: relative;
 		line-height: 0;
@@ -211,12 +216,12 @@
 				text-decoration: underline;
 			}
 
-			.ebpg-entry-wrapper > * {
+			.ebpg-entry-wrapper>* {
 				transform: translate(0px, 0px);
 				transition: ease-in 200ms;
 			}
 
-			&:hover .ebpg-entry-wrapper > * {
+			&:hover .ebpg-entry-wrapper>* {
 				transform: translate(0px, -10px);
 			}
 		}
@@ -285,10 +290,10 @@
 		.slick-slide {
 			height: auto !important;
 
-			> div {
+			>div {
 				height: 100%;
 
-				> article {
+				>article {
 					height: 100%;
 				}
 			}

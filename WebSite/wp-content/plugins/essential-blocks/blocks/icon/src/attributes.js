@@ -75,7 +75,7 @@ const attributes = {
         default: false,
     },
     iconPadding: {
-        type: "string",
+        type: "number",
     },
     iconColorType: {
         type: "string",

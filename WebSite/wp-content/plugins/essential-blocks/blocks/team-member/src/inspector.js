@@ -37,10 +37,10 @@ const {
     GradientColorControl,
     BorderShadowControl,
     BackgroundControl,
-    DealSocialProfiles,
-    faIcons: IconList,
     AdvancedControls,
     DynamicInputControl,
+    SortControl,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -172,6 +172,7 @@ function Inspector({ attributes, setAttributes }) {
 
         //
         imageUrl,
+        imageNewUrl,
 
         //
         imageId,
@@ -265,726 +266,726 @@ function Inspector({ attributes, setAttributes }) {
         objAttributes,
     };
 
-    const handlePresetChange = (preset) => {
-        applyFilters("eb_team_member_preset_change", preset, attributes, setAttributes, defaultPresetAttrsObj);
-
-        switch (preset) {
-            case "default":
-                const newsocialDetailsDefault = socialDetails.map(item => {
-                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
-                })
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    showDescs: true,
-                    showDesignation: true,
-                    showSSeparator: false,
-                    showSocialTitle: false,
-                    showCSeparator: false,
-                    isIconsDevider: false,
-                    imgBeforeEl: false,
-                    contentsAlign: 'center',
-                    iconsJustify: 'center',
-
-                    isConBgGradient: false,
-                    nameColor: '#4b4b4b',
-                    jobColor: '#4b4b4b',
-                    descsColor: '#9f9f9f',
-                    hvIcnColor: '#fff',
-                    hvIcnBgc: '#909AA9',
-
-                    name_FontSize: 20,
-                    name_SizeUnit: "px",
-                    job_FontSize: 16,
-                    job_FontWeight: 700,
-                    job_SizeUnit: "px",
-                    dscs_FontSize: 16,
-
-                    nameP_Bottom: "15",
-                    nameP_Top: "20",
-                    dscP_Top: "15",
-                    dscP_Bottom: "20",
-                    dscP_Left: "0",
-                    dscP_Right: "0",
-                    jobP_Left: "0",
-                    jobP_Right: "0",
-                    jobP_Top: "0",
-                    jobP_Bottom: "0",
-                    jobP_isLinked: true,
-
-                    icnZ_Range: 20,
-                    icnSp_Range: 20,
-                    icnPd_Range: 1,
-                    icnSepH: 38,
-                    icnWp_Bottom: "0",
-                    icnWp_Left: "0",
-                    icnWp_Right: "0",
-                    icnWp_Top: "10",
-                    icnWp_isLinked: false,
-                    socialDetails: newsocialDetailsDefault,
-
-                    imgBd_Bdr_Bottom: "0",
-                    imgBd_Bdr_Left: "0",
-                    imgBd_Bdr_Right: "0",
-                    imgBd_Bdr_Top: "0",
-                    imgBd_Rds_Bottom: "0",
-                    imgBd_Rds_Left: "0",
-                    imgBd_Rds_Right: "0",
-                    imgBd_Rds_Top: "0",
-                    imgBd_Rds_Unit: "%",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "none",
-
-                    sclBdSd_Rds_Bottom: "0",
-                    sclBdSd_Rds_Left: "0",
-                    sclBdSd_Rds_Right: "0",
-                    sclBdSd_Rds_Top: "0",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "solid",
-
-                    wrpBdSd_blur: 20,
-                    wrpBdSd_hOffset: 0,
-                    wrpBdSd_shadowColor: "rgba(0,0,0,0)",
-                    wrpBdSd_spread: 0,
-                    wrpBdSd_vOffset: 5,
-                    wrpMrg_isLinked: false,
-                    wrpPad_isLinked: false,
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-                });
-                break;
-
-            case "preset1":
-                const newsocialDetails1 = socialDetails.map(item => {
-                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
-                })
-
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    showDescs: true,
-                    showDesignation: true,
-                    showSSeparator: true,
-                    showSocialTitle: false,
-                    showCSeparator: true,
-                    isIconsDevider: true,
-                    imgBeforeEl: true,
-                    contentsAlign: 'center',
-                    iconsJustify: 'center',
-
-                    isConBgGradient: false,
-                    nameColor: '#4b4b4b',
-                    jobColor: '#4b4b4b',
-                    descsColor: '#9f9f9f',
-                    sSepColor: "#E1E7F1",
-                    hvIcnColor: '#fff',
-                    hvIcnBgc: '#909AA9',
-
-                    name_FontSize: 20,
-                    name_SizeUnit: "px",
-                    job_FontSize: 16,
-                    job_FontWeight: 700,
-                    job_SizeUnit: "px",
-                    dscs_FontSize: 16,
-
-                    nameP_Bottom: "15",
-                    nameP_Top: "20",
-                    dscP_Left: "20",
-                    dscP_Right: "20",
-                    dscP_Top: "15",
-                    dscP_Bottom: "20",
-                    jobP_Bottom: "15",
-                    jobP_isLinked: false,
-
-                    icnZ_Range: 20,
-                    icnSp_Range: 50,
-                    icnPd_Range: 1,
-                    icnSepH: 38,
-                    icnWp_Bottom: "20",
-                    icnWp_Left: "40",
-                    icnWp_Right: "40",
-                    icnWp_Top: "20",
-                    icnWp_isLinked: false,
-                    socialDetails: newsocialDetails1,
-
-                    imgBd_Bdr_Bottom: "5",
-                    imgBd_Bdr_Left: "5",
-                    imgBd_Bdr_Right: "5",
-                    imgBd_Bdr_Top: "5",
-                    imgBd_Rds_Bottom: "50",
-                    imgBd_Rds_Left: "50",
-                    imgBd_Rds_Right: "50",
-                    imgBd_Rds_Top: "50",
-                    imgBd_Rds_Unit: "%",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "solid",
-                    imgBgP_gradientColor:
-                        "linear-gradient(45deg, rgba(120,102,255,0.49) 0% , rgba(195,120,242,0.52) 100%)",
-                    imgMrg_Top: "-100",
-                    imgMrg_isLinked: false,
-
-                    WrpBg_backgroundColor: "rgba(255,255,255,1)",
-                    hov_imgBgP_gradientColor:
-                        "linear-gradient(45deg, rgba(0,0,0,0.8) 0% , rgba(0,0,0,0.4) 100%)",
-                    cSepColor: "#E1E7F1",
-
-                    sclBdSd_Rds_Bottom: "0",
-                    sclBdSd_Rds_Left: "0",
-                    sclBdSd_Rds_Right: "0",
-                    sclBdSd_Rds_Top: "0",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "solid",
-
-
-
-                    wrpBdSd_blur: 20,
-                    wrpBdSd_hOffset: 0,
-                    wrpBdSd_shadowColor: "rgba(0,0,0,0.3)",
-                    wrpBdSd_spread: 0,
-                    wrpBdSd_vOffset: 5,
-                    wrpMrg_isLinked: false,
-                    wrpPad_isLinked: false,
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-                });
-                break;
-
-            case "preset3":
-                const newsocialDetailspreset3 = socialDetails.map(item => {
-                    return { ...item, color: '#fff', bgColor: '#A0A8BD' }
-                })
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                    socialInImage: true,
-                    showDescs: true,
-                    showDesignation: true,
-                    showSSeparator: false,
-                    showSocialTitle: false,
-                    showCSeparator: false,
-                    isIconsDevider: false,
-                    imgBeforeEl: false,
-                    contentsAlign: 'center',
-                    iconsJustify: 'center',
-
-                    isConBgGradient: true,
-                    conBgGradient: "linear-gradient(211deg, #C8D2E3 0%, #DAE2F0 100%)",
-                    conBgColor: '#fff',
-                    nameColor: '#4b4b4b',
-                    jobColor: '#4b4b4b',
-                    descsColor: '#9f9f9f',
-                    hvIcnColor: '#fff',
-                    hvIcnBgc: '#909AA9',
-
-                    name_FontSize: 20,
-                    name_SizeUnit: "px",
-                    job_FontSize: 16,
-                    job_FontWeight: 700,
-                    job_SizeUnit: "px",
-                    dscs_FontSize: 16,
-                    name_SizeUnit: "px",
-
-                    nameP_Bottom: "15",
-                    nameP_Top: "20",
-                    dscP_Bottom: "20",
-                    dscP_Top: "15",
-                    dscP_Left: "0",
-                    dscP_Right: "0",
-                    dscP_isLinked: false,
-                    jobP_Bottom: "0",
-                    jobP_isLinked: true,
-
-                    icnZ_Range: 20,
-                    icnSp_Range: 20,
-                    icnPd_Range: 1,
-                    icnWp_Bottom: "0",
-                    icnWp_Left: "0",
-                    icnWp_Right: "0",
-                    icnWp_Top: "0",
-                    iconsVAlign: "flex-end",
-                    socialDetails: newsocialDetailspreset3,
-
-                    imgBd_Bdr_Bottom: "0",
-                    imgBd_Bdr_Left: "0",
-                    imgBd_Bdr_Right: "0",
-                    imgBd_Bdr_Top: "0",
-                    imgBd_Rds_Bottom: "0",
-                    imgBd_Rds_Left: "0",
-                    imgBd_Rds_Right: "0",
-                    imgBd_Rds_Top: "0",
-                    imgBd_Rds_Unit: "%",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "none",
-
-                    // hov_sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
-                    imgW_Unit: "%",
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-                    isImgHeightAuto: true,
-                    // sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
-
-                    cpd_Bottom: "50",
-                    cpd_Left: "50",
-                    cpd_Right: "50",
-                    cpd_Top: "50",
-                    cpd_Unit: "px",
-                    cpd_isLinked: true,
-
-                    cmrg_Bottom: "20",
-                    cmrg_Left: "20",
-                    cmrg_Right: "20",
-                    cmrg_Top: "20",
-                    cmrg_Unit: "px",
-                    cmrg_isLinked: true,
-
-
-
-                    sclBdSd_Bdr_Bottom: "1",
-                    sclBdSd_Bdr_Left: "1",
-                    sclBdSd_Bdr_Right: "1",
-                    sclBdSd_Bdr_Top: "1",
-                    sclBdSd_Bdr_Unit: "px",
-                    sclBdSd_Bdr_isLinked: true,
-                    sclBdSd_BorderType: "normal",
-
-                    sclBdSd_Rds_Bottom: "0",
-                    sclBdSd_Rds_Left: "0",
-                    sclBdSd_Rds_Right: "0",
-                    sclBdSd_Rds_Top: "0",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "solid",
-
-                    ovlBd_Rds_Bottom: "0",
-                    ovlBd_Rds_Left: "0",
-                    ovlBd_Rds_Right: "0",
-                    ovlBd_Rds_Top: "0",
-                    ovlBd_Rds_Unit: "px",
-
-
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-
-                });
-                break;
-
-            case "new-preset1":
-                const newsocialDetails = socialDetails.map(item => {
-                    return { ...item, color: '#A0A8BD', bgColor: '#fff' }
-                })
-
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    showDescs: true,
-                    showDesignation: true,
-                    showSSeparator: false,
-                    showSocialTitle: false,
-                    showCSeparator: false,
-                    isIconsDevider: false,
-                    imgBeforeEl: false,
-                    contentsAlign: 'left',
-                    iconsJustify: 'flex-start',
-
-                    isConBgGradient: false,
-                    conBgColor: '#fff',
-                    nameColor: '#1C1B1F',
-                    jobColor: '#CAD2DF',
-                    descsColor: '#768399',
-                    hvIcnColor: '#fff',
-                    hvIcnBgc: '#A0A8BD',
-
-                    name_FontSize: 24,
-                    name_SizeUnit: "px",
-                    job_FontSize: 32,
-                    job_SizeUnit: "px",
-                    job_FontWeight: 700,
-                    dscs_FontSize: 16,
-
-                    nameP_Bottom: "10",
-                    nameP_Top: "10",
-                    dscP_Bottom: "10",
-                    dscP_Top: "10",
-                    dscP_Left: "0",
-                    dscP_Right: "0",
-                    dscP_isLinked: false,
-                    jobP_Bottom: "0",
-                    jobP_isLinked: true,
-
-                    icnZ_Range: 17,
-                    icnSp_Range: 8,
-                    icnPd_Range: 1,
-                    icnWp_Bottom: "0",
-                    icnWp_Left: "0",
-                    icnWp_Right: "0",
-                    icnWp_Top: "0",
-                    socialDetails: newsocialDetails,
-
-                    imgW_Range: 424,
-                    imgW_Unit: "px",
-                    imgH_Range: 558,
-                    imgH_Unit: "px",
-                    wrpW_Range: 424,
-                    wrpW_Unit: "px",
-
-                    cpd_Bottom: "24",
-                    cpd_Left: "24",
-                    cpd_Right: "24",
-                    cpd_Top: "24",
-                    cpd_Unit: "px",
-                    cpd_isLinked: true,
-
-                    cmrg_Bottom: "20",
-                    cmrg_Left: "20",
-                    cmrg_Right: "20",
-                    cmrg_Top: "20",
-                    cmrg_Unit: "px",
-                    cmrg_isLinked: true,
-
-                    sclBdSd_Bdr_Bottom: "1",
-                    sclBdSd_Bdr_Left: "1",
-                    sclBdSd_Bdr_Right: "1",
-                    sclBdSd_Bdr_Top: "1",
-                    sclBdSd_Bdr_Unit: "px",
-                    sclBdSd_Bdr_isLinked: true,
-                    sclBdSd_BorderType: "normal",
-
-                    sclBdSd_Rds_Bottom: "50",
-                    sclBdSd_Rds_Left: "50",
-                    sclBdSd_Rds_Right: "50",
-                    sclBdSd_Rds_Top: "50",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "solid",
-
-                    ovlBd_Rds_Bottom: "5",
-                    ovlBd_Rds_Left: "5",
-                    ovlBd_Rds_Right: "5",
-                    ovlBd_Rds_Top: "5",
-                    ovlBd_Rds_Unit: "px",
-
-                    imgBd_Bdr_Bottom: "0",
-                    imgBd_Bdr_Left: "0",
-                    imgBd_Bdr_Right: "0",
-                    imgBd_Bdr_Top: "0",
-                    imgBd_Rds_Bottom: "5",
-                    imgBd_Rds_Left: "5",
-                    imgBd_Rds_Right: "5",
-                    imgBd_Rds_Top: "5",
-                    imgBd_Rds_Unit: "px",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "none",
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-                });
-                break;
-
-            case "new-preset2":
-                const newsocialDetails2 = socialDetails.map(item => {
-                    return { ...item, color: '#D5D5D5', bgColor: '#909AA9' }
-                })
-
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    showDescs: false,
-                    showDesignation: true,
-                    showSSeparator: false,
-                    showSocialTitle: false,
-                    showCSeparator: false,
-                    isIconsDevider: false,
-                    imgBeforeEl: false,
-                    contentsAlign: 'center',
-                    iconsJustify: 'center',
-
-                    isConBgGradient: true,
-                    conBgGradient: "linear-gradient(214deg, #949CAA -14.68% , #606977 103.07%)",
-                    conBgColor: '#949CAA',
-                    nameColor: '#fff',
-                    jobColor: '#D5D5D5',
-                    descsColor: '#fff',
-                    hvIcnColor: '#fff',
-                    hvIcnBgc: '#909AA9',
-
-                    name_FontSize: 24,
-                    name_SizeUnit: "px",
-                    job_FontSize: 16,
-                    job_FontWeight: 400,
-                    job_SizeUnit: "px",
-                    dscs_FontSize: 16,
-
-                    nameP_Bottom: "10",
-                    nameP_Top: "10",
-                    dscP_Bottom: "10",
-                    dscP_Top: "10",
-                    jobP_Bottom: "0",
-                    jobP_Top: "0",
-                    jobP_isLinked: true,
-
-                    icnZ_Range: 14,
-                    icnSp_Range: 8,
-                    icnPd_Range: 0.9,
-                    icnWp_Bottom: "0",
-                    icnWp_Left: "0",
-                    icnWp_Right: "0",
-                    icnWp_Top: "10",
-                    socialDetails: newsocialDetails2,
-
-                    imgBd_Rds_Bottom: "8",
-                    imgBd_Rds_Left: "8",
-                    imgBd_Rds_Right: "8",
-                    imgBd_Rds_Top: "8",
-                    imgBd_Rds_Unit: "px",
-                    imgBd_Bdr_Bottom: "0",
-                    imgBd_Bdr_Left: "0",
-                    imgBd_Bdr_Right: "0",
-                    imgBd_Bdr_Top: "0",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "none",
-
-                    imgW_Range: 424,
-                    imgW_Unit: "px",
-                    imgH_Range: 558,
-                    imgH_Unit: "px",
-                    wrpW_Range: 424,
-                    wrpW_Unit: "px",
-
-                    cpd_Bottom: "24",
-                    cpd_Left: "24",
-                    cpd_Right: "24",
-                    cpd_Top: "24",
-                    cpd_Unit: "px",
-                    cpd_isLinked: true,
-
-                    cmrg_Bottom: "24",
-                    cmrg_Left: "24",
-                    cmrg_Right: "24",
-                    cmrg_Top: "24",
-                    cmrg_Unit: "px",
-                    cmrg_isLinked: true,
-
-                    sclBdSd_Bdr_Bottom: "1",
-                    sclBdSd_Bdr_Left: "1",
-                    sclBdSd_Bdr_Right: "1",
-                    sclBdSd_Bdr_Top: "1",
-                    sclBdSd_Bdr_Unit: "px",
-                    sclBdSd_Bdr_isLinked: true,
-                    sclBdSd_BorderType: "normal",
-
-                    sclBdSd_Rds_Bottom: "50",
-                    sclBdSd_Rds_Left: "50",
-                    sclBdSd_Rds_Right: "50",
-                    sclBdSd_Rds_Top: "50",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "solid",
-
-                    ovlBd_Rds_Bottom: "8",
-                    ovlBd_Rds_Left: "8",
-                    ovlBd_Rds_Right: "8",
-                    ovlBd_Rds_Top: "8",
-                    ovlBd_Rds_Unit: "px",
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0.16)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-                });
-                break;
-
-            case "new-preset3":
-                const newsocialDetails3 = socialDetails.map(item => {
-                    return { ...item, color: '#645F7D', bgColor: 'rgba(0,0,0,0)' }
-                })
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    showDescs: true,
-                    showDesignation: true,
-                    showSSeparator: true,
-                    showSocialTitle: true,
-                    showCSeparator: false,
-                    isIconsDevider: false,
-                    imgBeforeEl: false,
-                    contentsAlign: 'left',
-                    iconsJustify: 'flex-start',
-
-                    isConBgGradient: false,
-                    conBgColor: '#EBF0F8',
-                    nameColor: '#342E4C',
-                    jobColor: '#736D8B',
-                    descsColor: '#342E4C',
-                    hvIcnColor: '#000',
-                    hvIcnBgc: 'rgba(0,0,0,0)',
-
-                    name_FontSize: 24,
-                    name_SizeUnit: "px",
-                    job_FontSize: 16,
-                    job_FontWeight: 400,
-                    job_SizeUnit: "px",
-                    dscs_FontSize: 16,
-
-                    nameP_Bottom: "10",
-                    nameP_Top: "10",
-                    dscP_Bottom: "50",
-                    dscP_Top: "10",
-                    jobP_Bottom: "",
-                    jobP_Top: "0",
-                    jobP_Left: "0",
-                    jobP_Right: "0",
-                    jobP_isLinked: false,
-
-                    icnZ_Range: 13,
-                    icnSp_Range: 8,
-                    icnPd_Range: 0,
-                    icnWp_Bottom: "0",
-                    icnWp_Left: "0",
-                    icnWp_Right: "0",
-                    icnWp_Top: "20",
-                    socialDetails: newsocialDetails3,
-
-                    imgBd_Rds_Bottom: "0",
-                    imgBd_Rds_Left: "0",
-                    imgBd_Rds_Right: "0",
-                    imgBd_Rds_Top: "0",
-                    imgBd_Rds_Unit: "px",
-                    imgBd_Bdr_Bottom: "0",
-                    imgBd_Bdr_Left: "0",
-                    imgBd_Bdr_Right: "0",
-                    imgBd_Bdr_Top: "0",
-                    imgBd_borderColor: "rgba(255,255,255,1)",
-                    imgBd_borderStyle: "none",
-
-                    imgW_Range: 400,
-                    imgW_Unit: "px",
-                    imgH_Range: 400,
-                    imgH_Unit: "px",
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-
-                    cpd_Bottom: "34",
-                    cpd_Left: "34",
-                    cpd_Right: "34",
-                    cpd_Top: "34",
-                    cpd_Unit: "px",
-                    cpd_isLinked: true,
-
-                    cmrg_Bottom: "0",
-                    cmrg_Left: "0",
-                    cmrg_Right: "0",
-                    cmrg_Top: "0",
-                    cmrg_Unit: "px",
-                    cmrg_isLinked: true,
-
-                    sclBdSd_Bdr_Bottom: "1",
-                    sclBdSd_Bdr_Left: "1",
-                    sclBdSd_Bdr_Right: "1",
-                    sclBdSd_Bdr_Top: "1",
-                    sclBdSd_Bdr_Unit: "px",
-                    sclBdSd_Bdr_isLinked: true,
-                    sclBdSd_BorderType: "normal",
-
-                    sclBdSd_Rds_Bottom: "0",
-                    sclBdSd_Rds_Left: "0",
-                    sclBdSd_Rds_Right: "0",
-                    sclBdSd_Rds_Top: "0",
-                    sclBdSd_Rds_Unit: "px",
-                    sclBdSd_Rds_isLinked: true,
-                    sclBdSd_borderColor: "#A0A8BD",
-                    sclBdSd_borderStyle: "none",
-                    sSepW_Range: 100,
-
-                    ovlBd_Rds_Bottom: "0",
-                    ovlBd_Rds_Left: "0",
-                    ovlBd_Rds_Right: "0",
-                    ovlBd_Rds_Top: "0",
-                    ovlBd_Rds_Unit: "px",
-
-                    ovlBd_shadowColor: "rgba(0,0,0,0)",
-                    ovlBd_vOffset: 5,
-                    ovlBd_hOffset: 2,
-                    ovlBd_blur: 17,
-                });
-                break;
-
-
-            case "preset2":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    icnWp_Bottom: "45",
-                    icnWp_isLinked: false,
-                    imgBd_Rds_Bottom: "50",
-                    imgBd_Rds_Left: "50",
-                    imgBd_Rds_Right: "50",
-                    imgBd_Rds_Top: "50",
-                    imgBd_Rds_Unit: "%",
-                    isImgHeightAuto: true,
-                    imgW_Range: 100,
-                    imgW_Unit: "%",
-                    jobP_Bottom: "15",
-                    jobP_isLinked: false,
-                    nameP_Bottom: "10",
-                    nameP_Top: "10",
-                    showDescs: false,
-                    wrpBdSd_Rds_Bottom: "50",
-                    wrpBdSd_Rds_Left: "50",
-                    wrpBdSd_Rds_Right: "50",
-                    wrpBdSd_Rds_Top: "50",
-                    wrpBdSd_Rds_Unit: "%",
-                    wrpMrg_Bottom: "80",
-                    wrpMrg_isLinked: false,
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-                });
-                break;
-
-            case "preset5":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                });
-                break;
-
-            case "preset6":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                });
-                break;
-
-            case "preset4":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-
-                    conBgGradient:
-                        "linear-gradient(45deg, #7967ff 0% , rgba(194,119,242,0.8) 100%)",
-                    imgW_Unit: "%",
-                    isImgHeightAuto: true,
-                    wrpW_Range: 400,
-                    wrpW_Unit: "px",
-                });
-                break;
-        }
-
-        setAttributes({ preset });
-    };
+    // const handlePresetChange = (preset) => {
+    //     applyFilters("eb_team_member_preset_change", preset, attributes, setAttributes, defaultPresetAttrsObj);
+
+    //     switch (preset) {
+    //         case "default":
+    //             const newsocialDetailsDefault = socialDetails.map(item => {
+    //                 return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+    //             })
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 showDescs: true,
+    //                 showDesignation: true,
+    //                 showSSeparator: false,
+    //                 showSocialTitle: false,
+    //                 showCSeparator: false,
+    //                 isIconsDevider: false,
+    //                 imgBeforeEl: false,
+    //                 contentsAlign: 'center',
+    //                 iconsJustify: 'center',
+
+    //                 isConBgGradient: false,
+    //                 nameColor: '#4b4b4b',
+    //                 jobColor: '#4b4b4b',
+    //                 descsColor: '#9f9f9f',
+    //                 hvIcnColor: '#fff',
+    //                 hvIcnBgc: '#909AA9',
+
+    //                 name_FontSize: 20,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 16,
+    //                 job_FontWeight: 700,
+    //                 job_SizeUnit: "px",
+    //                 dscs_FontSize: 16,
+
+    //                 nameP_Bottom: "15",
+    //                 nameP_Top: "20",
+    //                 dscP_Top: "15",
+    //                 dscP_Bottom: "20",
+    //                 dscP_Left: "0",
+    //                 dscP_Right: "0",
+    //                 jobP_Left: "0",
+    //                 jobP_Right: "0",
+    //                 jobP_Top: "0",
+    //                 jobP_Bottom: "0",
+    //                 jobP_isLinked: true,
+
+    //                 icnZ_Range: 20,
+    //                 icnSp_Range: 20,
+    //                 icnPd_Range: 1,
+    //                 icnSepH: 38,
+    //                 icnWp_Bottom: "0",
+    //                 icnWp_Left: "0",
+    //                 icnWp_Right: "0",
+    //                 icnWp_Top: "10",
+    //                 icnWp_isLinked: false,
+    //                 socialDetails: newsocialDetailsDefault,
+
+    //                 imgBd_Bdr_Bottom: "0",
+    //                 imgBd_Bdr_Left: "0",
+    //                 imgBd_Bdr_Right: "0",
+    //                 imgBd_Bdr_Top: "0",
+    //                 imgBd_Rds_Bottom: "0",
+    //                 imgBd_Rds_Left: "0",
+    //                 imgBd_Rds_Right: "0",
+    //                 imgBd_Rds_Top: "0",
+    //                 imgBd_Rds_Unit: "%",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "none",
+
+    //                 sclBdSd_Rds_Bottom: "0",
+    //                 sclBdSd_Rds_Left: "0",
+    //                 sclBdSd_Rds_Right: "0",
+    //                 sclBdSd_Rds_Top: "0",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "solid",
+
+    //                 wrpBdSd_blur: 20,
+    //                 wrpBdSd_hOffset: 0,
+    //                 wrpBdSd_shadowColor: "rgba(0,0,0,0)",
+    //                 wrpBdSd_spread: 0,
+    //                 wrpBdSd_vOffset: 5,
+    //                 wrpMrg_isLinked: false,
+    //                 wrpPad_isLinked: false,
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+    //             });
+    //             break;
+
+    //         case "preset1":
+    //             const newsocialDetails1 = socialDetails.map(item => {
+    //                 return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+    //             })
+
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 showDescs: true,
+    //                 showDesignation: true,
+    //                 showSSeparator: true,
+    //                 showSocialTitle: false,
+    //                 showCSeparator: true,
+    //                 isIconsDevider: true,
+    //                 imgBeforeEl: true,
+    //                 contentsAlign: 'center',
+    //                 iconsJustify: 'center',
+
+    //                 isConBgGradient: false,
+    //                 nameColor: '#4b4b4b',
+    //                 jobColor: '#4b4b4b',
+    //                 descsColor: '#9f9f9f',
+    //                 sSepColor: "#E1E7F1",
+    //                 hvIcnColor: '#fff',
+    //                 hvIcnBgc: '#909AA9',
+
+    //                 name_FontSize: 20,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 16,
+    //                 job_FontWeight: 700,
+    //                 job_SizeUnit: "px",
+    //                 dscs_FontSize: 16,
+
+    //                 nameP_Bottom: "15",
+    //                 nameP_Top: "20",
+    //                 dscP_Left: "20",
+    //                 dscP_Right: "20",
+    //                 dscP_Top: "15",
+    //                 dscP_Bottom: "20",
+    //                 jobP_Bottom: "15",
+    //                 jobP_isLinked: false,
+
+    //                 icnZ_Range: 20,
+    //                 icnSp_Range: 50,
+    //                 icnPd_Range: 1,
+    //                 icnSepH: 38,
+    //                 icnWp_Bottom: "20",
+    //                 icnWp_Left: "40",
+    //                 icnWp_Right: "40",
+    //                 icnWp_Top: "20",
+    //                 icnWp_isLinked: false,
+    //                 socialDetails: newsocialDetails1,
+
+    //                 imgBd_Bdr_Bottom: "5",
+    //                 imgBd_Bdr_Left: "5",
+    //                 imgBd_Bdr_Right: "5",
+    //                 imgBd_Bdr_Top: "5",
+    //                 imgBd_Rds_Bottom: "50",
+    //                 imgBd_Rds_Left: "50",
+    //                 imgBd_Rds_Right: "50",
+    //                 imgBd_Rds_Top: "50",
+    //                 imgBd_Rds_Unit: "%",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "solid",
+    //                 imgBgP_gradientColor:
+    //                     "linear-gradient(45deg, rgba(120,102,255,0.49) 0% , rgba(195,120,242,0.52) 100%)",
+    //                 imgMrg_Top: "-100",
+    //                 imgMrg_isLinked: false,
+
+    //                 WrpBg_backgroundColor: "rgba(255,255,255,1)",
+    //                 hov_imgBgP_gradientColor:
+    //                     "linear-gradient(45deg, rgba(0,0,0,0.8) 0% , rgba(0,0,0,0.4) 100%)",
+    //                 cSepColor: "#E1E7F1",
+
+    //                 sclBdSd_Rds_Bottom: "0",
+    //                 sclBdSd_Rds_Left: "0",
+    //                 sclBdSd_Rds_Right: "0",
+    //                 sclBdSd_Rds_Top: "0",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "solid",
+
+
+
+    //                 wrpBdSd_blur: 20,
+    //                 wrpBdSd_hOffset: 0,
+    //                 wrpBdSd_shadowColor: "rgba(0,0,0,0.3)",
+    //                 wrpBdSd_spread: 0,
+    //                 wrpBdSd_vOffset: 5,
+    //                 wrpMrg_isLinked: false,
+    //                 wrpPad_isLinked: false,
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+    //             });
+    //             break;
+
+    //         case "preset3":
+    //             const newsocialDetailspreset3 = socialDetails.map(item => {
+    //                 return { ...item, color: '#fff', bgColor: '#A0A8BD' }
+    //             })
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+    //                 socialInImage: true,
+    //                 showDescs: true,
+    //                 showDesignation: true,
+    //                 showSSeparator: false,
+    //                 showSocialTitle: false,
+    //                 showCSeparator: false,
+    //                 isIconsDevider: false,
+    //                 imgBeforeEl: false,
+    //                 contentsAlign: 'center',
+    //                 iconsJustify: 'center',
+
+    //                 isConBgGradient: true,
+    //                 conBgGradient: "linear-gradient(211deg, #C8D2E3 0%, #DAE2F0 100%)",
+    //                 conBgColor: '#fff',
+    //                 nameColor: '#4b4b4b',
+    //                 jobColor: '#4b4b4b',
+    //                 descsColor: '#9f9f9f',
+    //                 hvIcnColor: '#fff',
+    //                 hvIcnBgc: '#909AA9',
+
+    //                 name_FontSize: 20,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 16,
+    //                 job_FontWeight: 700,
+    //                 job_SizeUnit: "px",
+    //                 dscs_FontSize: 16,
+    //                 name_SizeUnit: "px",
+
+    //                 nameP_Bottom: "15",
+    //                 nameP_Top: "20",
+    //                 dscP_Bottom: "20",
+    //                 dscP_Top: "15",
+    //                 dscP_Left: "0",
+    //                 dscP_Right: "0",
+    //                 dscP_isLinked: false,
+    //                 jobP_Bottom: "0",
+    //                 jobP_isLinked: true,
+
+    //                 icnZ_Range: 20,
+    //                 icnSp_Range: 20,
+    //                 icnPd_Range: 1,
+    //                 icnWp_Bottom: "0",
+    //                 icnWp_Left: "0",
+    //                 icnWp_Right: "0",
+    //                 icnWp_Top: "0",
+    //                 iconsVAlign: "flex-end",
+    //                 socialDetails: newsocialDetailspreset3,
+
+    //                 imgBd_Bdr_Bottom: "0",
+    //                 imgBd_Bdr_Left: "0",
+    //                 imgBd_Bdr_Right: "0",
+    //                 imgBd_Bdr_Top: "0",
+    //                 imgBd_Rds_Bottom: "0",
+    //                 imgBd_Rds_Left: "0",
+    //                 imgBd_Rds_Right: "0",
+    //                 imgBd_Rds_Top: "0",
+    //                 imgBd_Rds_Unit: "%",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "none",
+
+    //                 // hov_sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
+    //                 imgW_Unit: "%",
+    //                 wrpW_Range: 400,
+    //                 wrpW_Unit: "px",
+    //                 isImgHeightAuto: true,
+    //                 // sclWBg_backgroundColor: "rgba(0,0,0,0.5)",
+
+    //                 cpd_Bottom: "50",
+    //                 cpd_Left: "50",
+    //                 cpd_Right: "50",
+    //                 cpd_Top: "50",
+    //                 cpd_Unit: "px",
+    //                 cpd_isLinked: true,
+
+    //                 cmrg_Bottom: "20",
+    //                 cmrg_Left: "20",
+    //                 cmrg_Right: "20",
+    //                 cmrg_Top: "20",
+    //                 cmrg_Unit: "px",
+    //                 cmrg_isLinked: true,
+
+
+
+    //                 sclBdSd_Bdr_Bottom: "1",
+    //                 sclBdSd_Bdr_Left: "1",
+    //                 sclBdSd_Bdr_Right: "1",
+    //                 sclBdSd_Bdr_Top: "1",
+    //                 sclBdSd_Bdr_Unit: "px",
+    //                 sclBdSd_Bdr_isLinked: true,
+    //                 sclBdSd_BorderType: "normal",
+
+    //                 sclBdSd_Rds_Bottom: "0",
+    //                 sclBdSd_Rds_Left: "0",
+    //                 sclBdSd_Rds_Right: "0",
+    //                 sclBdSd_Rds_Top: "0",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "solid",
+
+    //                 ovlBd_Rds_Bottom: "0",
+    //                 ovlBd_Rds_Left: "0",
+    //                 ovlBd_Rds_Right: "0",
+    //                 ovlBd_Rds_Top: "0",
+    //                 ovlBd_Rds_Unit: "px",
+
+
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+
+    //             });
+    //             break;
+
+    //         case "new-preset1":
+    //             const newsocialDetails = socialDetails.map(item => {
+    //                 return { ...item, color: '#A0A8BD', bgColor: '#fff' }
+    //             })
+
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 showDescs: true,
+    //                 showDesignation: true,
+    //                 showSSeparator: false,
+    //                 showSocialTitle: false,
+    //                 showCSeparator: false,
+    //                 isIconsDevider: false,
+    //                 imgBeforeEl: false,
+    //                 contentsAlign: 'left',
+    //                 iconsJustify: 'flex-start',
+
+    //                 isConBgGradient: false,
+    //                 conBgColor: '#fff',
+    //                 nameColor: '#1C1B1F',
+    //                 jobColor: '#CAD2DF',
+    //                 descsColor: '#768399',
+    //                 hvIcnColor: '#fff',
+    //                 hvIcnBgc: '#A0A8BD',
+
+    //                 name_FontSize: 24,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 32,
+    //                 job_SizeUnit: "px",
+    //                 job_FontWeight: 700,
+    //                 dscs_FontSize: 16,
+
+    //                 nameP_Bottom: "10",
+    //                 nameP_Top: "10",
+    //                 dscP_Bottom: "10",
+    //                 dscP_Top: "10",
+    //                 dscP_Left: "0",
+    //                 dscP_Right: "0",
+    //                 dscP_isLinked: false,
+    //                 jobP_Bottom: "0",
+    //                 jobP_isLinked: true,
+
+    //                 icnZ_Range: 17,
+    //                 icnSp_Range: 8,
+    //                 icnPd_Range: 1,
+    //                 icnWp_Bottom: "0",
+    //                 icnWp_Left: "0",
+    //                 icnWp_Right: "0",
+    //                 icnWp_Top: "0",
+    //                 socialDetails: newsocialDetails,
+
+    //                 imgW_Range: 424,
+    //                 imgW_Unit: "px",
+    //                 imgH_Range: 558,
+    //                 imgH_Unit: "px",
+    //                 wrpW_Range: 424,
+    //                 wrpW_Unit: "px",
+
+    //                 cpd_Bottom: "24",
+    //                 cpd_Left: "24",
+    //                 cpd_Right: "24",
+    //                 cpd_Top: "24",
+    //                 cpd_Unit: "px",
+    //                 cpd_isLinked: true,
+
+    //                 cmrg_Bottom: "20",
+    //                 cmrg_Left: "20",
+    //                 cmrg_Right: "20",
+    //                 cmrg_Top: "20",
+    //                 cmrg_Unit: "px",
+    //                 cmrg_isLinked: true,
+
+    //                 sclBdSd_Bdr_Bottom: "1",
+    //                 sclBdSd_Bdr_Left: "1",
+    //                 sclBdSd_Bdr_Right: "1",
+    //                 sclBdSd_Bdr_Top: "1",
+    //                 sclBdSd_Bdr_Unit: "px",
+    //                 sclBdSd_Bdr_isLinked: true,
+    //                 sclBdSd_BorderType: "normal",
+
+    //                 sclBdSd_Rds_Bottom: "50",
+    //                 sclBdSd_Rds_Left: "50",
+    //                 sclBdSd_Rds_Right: "50",
+    //                 sclBdSd_Rds_Top: "50",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "solid",
+
+    //                 ovlBd_Rds_Bottom: "5",
+    //                 ovlBd_Rds_Left: "5",
+    //                 ovlBd_Rds_Right: "5",
+    //                 ovlBd_Rds_Top: "5",
+    //                 ovlBd_Rds_Unit: "px",
+
+    //                 imgBd_Bdr_Bottom: "0",
+    //                 imgBd_Bdr_Left: "0",
+    //                 imgBd_Bdr_Right: "0",
+    //                 imgBd_Bdr_Top: "0",
+    //                 imgBd_Rds_Bottom: "5",
+    //                 imgBd_Rds_Left: "5",
+    //                 imgBd_Rds_Right: "5",
+    //                 imgBd_Rds_Top: "5",
+    //                 imgBd_Rds_Unit: "px",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "none",
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+    //             });
+    //             break;
+
+    //         case "new-preset2":
+    //             const newsocialDetails2 = socialDetails.map(item => {
+    //                 return { ...item, color: '#D5D5D5', bgColor: '#909AA9' }
+    //             })
+
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 showDescs: false,
+    //                 showDesignation: true,
+    //                 showSSeparator: false,
+    //                 showSocialTitle: false,
+    //                 showCSeparator: false,
+    //                 isIconsDevider: false,
+    //                 imgBeforeEl: false,
+    //                 contentsAlign: 'center',
+    //                 iconsJustify: 'center',
+
+    //                 isConBgGradient: true,
+    //                 conBgGradient: "linear-gradient(214deg, #949CAA -14.68% , #606977 103.07%)",
+    //                 conBgColor: '#949CAA',
+    //                 nameColor: '#fff',
+    //                 jobColor: '#D5D5D5',
+    //                 descsColor: '#fff',
+    //                 hvIcnColor: '#fff',
+    //                 hvIcnBgc: '#909AA9',
+
+    //                 name_FontSize: 24,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 16,
+    //                 job_FontWeight: 400,
+    //                 job_SizeUnit: "px",
+    //                 dscs_FontSize: 16,
+
+    //                 nameP_Bottom: "10",
+    //                 nameP_Top: "10",
+    //                 dscP_Bottom: "10",
+    //                 dscP_Top: "10",
+    //                 jobP_Bottom: "0",
+    //                 jobP_Top: "0",
+    //                 jobP_isLinked: true,
+
+    //                 icnZ_Range: 14,
+    //                 icnSp_Range: 8,
+    //                 icnPd_Range: 0.9,
+    //                 icnWp_Bottom: "0",
+    //                 icnWp_Left: "0",
+    //                 icnWp_Right: "0",
+    //                 icnWp_Top: "10",
+    //                 socialDetails: newsocialDetails2,
+
+    //                 imgBd_Rds_Bottom: "8",
+    //                 imgBd_Rds_Left: "8",
+    //                 imgBd_Rds_Right: "8",
+    //                 imgBd_Rds_Top: "8",
+    //                 imgBd_Rds_Unit: "px",
+    //                 imgBd_Bdr_Bottom: "0",
+    //                 imgBd_Bdr_Left: "0",
+    //                 imgBd_Bdr_Right: "0",
+    //                 imgBd_Bdr_Top: "0",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "none",
+
+    //                 imgW_Range: 424,
+    //                 imgW_Unit: "px",
+    //                 imgH_Range: 558,
+    //                 imgH_Unit: "px",
+    //                 wrpW_Range: 424,
+    //                 wrpW_Unit: "px",
+
+    //                 cpd_Bottom: "24",
+    //                 cpd_Left: "24",
+    //                 cpd_Right: "24",
+    //                 cpd_Top: "24",
+    //                 cpd_Unit: "px",
+    //                 cpd_isLinked: true,
+
+    //                 cmrg_Bottom: "24",
+    //                 cmrg_Left: "24",
+    //                 cmrg_Right: "24",
+    //                 cmrg_Top: "24",
+    //                 cmrg_Unit: "px",
+    //                 cmrg_isLinked: true,
+
+    //                 sclBdSd_Bdr_Bottom: "1",
+    //                 sclBdSd_Bdr_Left: "1",
+    //                 sclBdSd_Bdr_Right: "1",
+    //                 sclBdSd_Bdr_Top: "1",
+    //                 sclBdSd_Bdr_Unit: "px",
+    //                 sclBdSd_Bdr_isLinked: true,
+    //                 sclBdSd_BorderType: "normal",
+
+    //                 sclBdSd_Rds_Bottom: "50",
+    //                 sclBdSd_Rds_Left: "50",
+    //                 sclBdSd_Rds_Right: "50",
+    //                 sclBdSd_Rds_Top: "50",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "solid",
+
+    //                 ovlBd_Rds_Bottom: "8",
+    //                 ovlBd_Rds_Left: "8",
+    //                 ovlBd_Rds_Right: "8",
+    //                 ovlBd_Rds_Top: "8",
+    //                 ovlBd_Rds_Unit: "px",
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0.16)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+    //             });
+    //             break;
+
+    //         case "new-preset3":
+    //             const newsocialDetails3 = socialDetails.map(item => {
+    //                 return { ...item, color: '#645F7D', bgColor: 'rgba(0,0,0,0)' }
+    //             })
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 showDescs: true,
+    //                 showDesignation: true,
+    //                 showSSeparator: true,
+    //                 showSocialTitle: true,
+    //                 showCSeparator: false,
+    //                 isIconsDevider: false,
+    //                 imgBeforeEl: false,
+    //                 contentsAlign: 'left',
+    //                 iconsJustify: 'flex-start',
+
+    //                 isConBgGradient: false,
+    //                 conBgColor: '#EBF0F8',
+    //                 nameColor: '#342E4C',
+    //                 jobColor: '#736D8B',
+    //                 descsColor: '#342E4C',
+    //                 hvIcnColor: '#000',
+    //                 hvIcnBgc: 'rgba(0,0,0,0)',
+
+    //                 name_FontSize: 24,
+    //                 name_SizeUnit: "px",
+    //                 job_FontSize: 16,
+    //                 job_FontWeight: 400,
+    //                 job_SizeUnit: "px",
+    //                 dscs_FontSize: 16,
+
+    //                 nameP_Bottom: "10",
+    //                 nameP_Top: "10",
+    //                 dscP_Bottom: "50",
+    //                 dscP_Top: "10",
+    //                 jobP_Bottom: "",
+    //                 jobP_Top: "0",
+    //                 jobP_Left: "0",
+    //                 jobP_Right: "0",
+    //                 jobP_isLinked: false,
+
+    //                 icnZ_Range: 13,
+    //                 icnSp_Range: 8,
+    //                 icnPd_Range: 0,
+    //                 icnWp_Bottom: "0",
+    //                 icnWp_Left: "0",
+    //                 icnWp_Right: "0",
+    //                 icnWp_Top: "20",
+    //                 socialDetails: newsocialDetails3,
+
+    //                 imgBd_Rds_Bottom: "0",
+    //                 imgBd_Rds_Left: "0",
+    //                 imgBd_Rds_Right: "0",
+    //                 imgBd_Rds_Top: "0",
+    //                 imgBd_Rds_Unit: "px",
+    //                 imgBd_Bdr_Bottom: "0",
+    //                 imgBd_Bdr_Left: "0",
+    //                 imgBd_Bdr_Right: "0",
+    //                 imgBd_Bdr_Top: "0",
+    //                 imgBd_borderColor: "rgba(255,255,255,1)",
+    //                 imgBd_borderStyle: "none",
+
+    //                 imgW_Range: 400,
+    //                 imgW_Unit: "px",
+    //                 imgH_Range: 400,
+    //                 imgH_Unit: "px",
+    //                 wrpW_Range: 400,
+    //                 wrpW_Unit: "px",
+
+    //                 cpd_Bottom: "34",
+    //                 cpd_Left: "34",
+    //                 cpd_Right: "34",
+    //                 cpd_Top: "34",
+    //                 cpd_Unit: "px",
+    //                 cpd_isLinked: true,
+
+    //                 cmrg_Bottom: "0",
+    //                 cmrg_Left: "0",
+    //                 cmrg_Right: "0",
+    //                 cmrg_Top: "0",
+    //                 cmrg_Unit: "px",
+    //                 cmrg_isLinked: true,
+
+    //                 sclBdSd_Bdr_Bottom: "1",
+    //                 sclBdSd_Bdr_Left: "1",
+    //                 sclBdSd_Bdr_Right: "1",
+    //                 sclBdSd_Bdr_Top: "1",
+    //                 sclBdSd_Bdr_Unit: "px",
+    //                 sclBdSd_Bdr_isLinked: true,
+    //                 sclBdSd_BorderType: "normal",
+
+    //                 sclBdSd_Rds_Bottom: "0",
+    //                 sclBdSd_Rds_Left: "0",
+    //                 sclBdSd_Rds_Right: "0",
+    //                 sclBdSd_Rds_Top: "0",
+    //                 sclBdSd_Rds_Unit: "px",
+    //                 sclBdSd_Rds_isLinked: true,
+    //                 sclBdSd_borderColor: "#A0A8BD",
+    //                 sclBdSd_borderStyle: "none",
+    //                 sSepW_Range: 100,
+
+    //                 ovlBd_Rds_Bottom: "0",
+    //                 ovlBd_Rds_Left: "0",
+    //                 ovlBd_Rds_Right: "0",
+    //                 ovlBd_Rds_Top: "0",
+    //                 ovlBd_Rds_Unit: "px",
+
+    //                 ovlBd_shadowColor: "rgba(0,0,0,0)",
+    //                 ovlBd_vOffset: 5,
+    //                 ovlBd_hOffset: 2,
+    //                 ovlBd_blur: 17,
+    //             });
+    //             break;
+
+
+    //         case "preset2":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 icnWp_Bottom: "45",
+    //                 icnWp_isLinked: false,
+    //                 imgBd_Rds_Bottom: "50",
+    //                 imgBd_Rds_Left: "50",
+    //                 imgBd_Rds_Right: "50",
+    //                 imgBd_Rds_Top: "50",
+    //                 imgBd_Rds_Unit: "%",
+    //                 isImgHeightAuto: true,
+    //                 imgW_Range: 100,
+    //                 imgW_Unit: "%",
+    //                 jobP_Bottom: "15",
+    //                 jobP_isLinked: false,
+    //                 nameP_Bottom: "10",
+    //                 nameP_Top: "10",
+    //                 showDescs: false,
+    //                 wrpBdSd_Rds_Bottom: "50",
+    //                 wrpBdSd_Rds_Left: "50",
+    //                 wrpBdSd_Rds_Right: "50",
+    //                 wrpBdSd_Rds_Top: "50",
+    //                 wrpBdSd_Rds_Unit: "%",
+    //                 wrpMrg_Bottom: "80",
+    //                 wrpMrg_isLinked: false,
+    //                 wrpW_Range: 400,
+    //                 wrpW_Unit: "px",
+    //             });
+    //             break;
+
+    //         case "preset5":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+    //             });
+    //             break;
+
+    //         case "preset6":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+    //             });
+    //             break;
+
+    //         case "preset4":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+
+    //                 conBgGradient:
+    //                     "linear-gradient(45deg, #7967ff 0% , rgba(194,119,242,0.8) 100%)",
+    //                 imgW_Unit: "%",
+    //                 isImgHeightAuto: true,
+    //                 wrpW_Range: 400,
+    //                 wrpW_Unit: "px",
+    //             });
+    //             break;
+    //     }
+
+    //     setAttributes({ preset });
+    // };
 
     useEffect(() => {
         if (preset === 'preset3') {
@@ -1007,6 +1008,82 @@ function Inspector({ attributes, setAttributes }) {
         }
 
     }, [isContentOverlay, preset]);
+
+    const onSocialProfileAdd = () => {
+        const socialDetails = [
+            ...attributes.socialDetails,
+            {
+                title: "Facebook",
+                icon: "fab fa-facebook-f",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+        ];
+
+        setAttributes({ socialDetails });
+    };
+
+    const getSocialDetailsComponents = () => {
+        const onProfileChange = (key, value, position) => {
+            const newSocialDetail = { ...attributes.socialDetails[position] };
+            const newSocialDetails = [...attributes.socialDetails];
+            newSocialDetails[position] = newSocialDetail;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newSocialDetails[position][item] = value[index];
+                });
+            } else {
+                newSocialDetails[position][key] = value;
+            }
+
+            setAttributes({ socialDetails: newSocialDetails });
+        };
+
+        return attributes.socialDetails.map((each, i) => (
+            <div key={i}>
+                <EBIconPicker
+                    title={__("Social Media", "essential-blocks")}
+                    value={each.icon || null}
+                    onChange={(value) => onProfileChange('icon', value, i)}
+                />
+                <TextControl
+                    label={__("Title", "essential-blocks")}
+                    value={each.title}
+                    onChange={(value) => onProfileChange('title', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Color", "essential-blocks")}
+                    color={each.color}
+                    onChange={(value) => onProfileChange('color', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Background", "essential-blocks")}
+                    color={each.bgColor}
+                    onChange={(value) => onProfileChange('bgColor', value, i)}
+                />
+                <TextControl
+                    label={__("URL", "essential-blocks")}
+                    value={each.link}
+                    onChange={(value) => onProfileChange('link', value, i)}
+                    help={__(
+                        "Use https or http",
+                        "essential-blocks"
+                    )}
+                />
+                {showLinkNewTab && (
+                    <ToggleControl
+                        label={__("Open in New Tab", "essential-blocks")}
+                        checked={each.linkOpenNewTab}
+                        onChange={(value) => onProfileChange('linkOpenNewTab', value, i)}
+                    />
+                )}
+            </div>
+        ))
+    }
 
     return (
         <InspectorControls key="controls">
@@ -1041,7 +1118,7 @@ function Inspector({ attributes, setAttributes }) {
                                         title={__("Presets", "essential-blocks")}
                                     // initialOpen={false}
                                     >
-                                        <BaseControl label={__("Design Preset", "essential-blocks")}>
+                                        {/* <BaseControl label={__("Design Preset", "essential-blocks")}>
                                             <SelectControl
                                                 // label={__("Design Preset", "essential-blocks")}
                                                 value={preset}
@@ -1049,7 +1126,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 // onChange={(preset) => setAttributes({ preset })}
                                                 onChange={handlePresetChange}
                                             />
-                                        </BaseControl>
+                                        </BaseControl> */}
 
                                         {preset === "preset5" && (
                                             <>
@@ -1143,11 +1220,11 @@ function Inspector({ attributes, setAttributes }) {
                                         title={__("Content", "essential-blocks")}
                                         initialOpen={false}
                                     >
-                                        {!imageUrl && (
+                                        {!imageNewUrl && (
                                             <MediaUpload
                                                 onSelect={({ id, url, alt }) =>
                                                     setAttributes({
-                                                        imageUrl: url,
+                                                        imageNewUrl: url,
                                                         imageId: id,
                                                         imageAlt: alt,
                                                     })
@@ -1167,13 +1244,13 @@ function Inspector({ attributes, setAttributes }) {
                                             />
                                         )}
 
-                                        {imageUrl && (
+                                        {imageNewUrl && (
                                             <>
                                                 <ImageAvatar
-                                                    imageUrl={imageUrl}
+                                                    imageUrl={imageNewUrl}
                                                     onDeleteImage={() =>
                                                         setAttributes({
-                                                            imageUrl: null,
+                                                            imageNewUrl: null,
                                                         })
                                                     }
                                                 />
@@ -1274,18 +1351,26 @@ function Inspector({ attributes, setAttributes }) {
                                                         onChange={() =>
                                                             setAttributes({
                                                                 showLinkNewTab: !showLinkNewTab,
+                                                                socialDetails: [...socialDetails]
                                                             })
                                                         }
                                                     />
-                                                    <DealSocialProfiles
-                                                        profiles={socialDetails}
-                                                        onProfileAdd={(socialDetails) =>
-                                                            setAttributes({
-                                                                socialDetails,
-                                                            })
-                                                        }
-                                                        iconList={IconList}
-                                                        showLinkNewTab={showLinkNewTab}
+
+                                                    <SortControl
+                                                        items={attributes.socialDetails}
+                                                        labelKey={'title'}
+                                                        onSortEnd={socialDetails => setAttributes({ socialDetails })}
+                                                        onDeleteItem={index => {
+                                                            setAttributes({ socialDetails: attributes.socialDetails.filter((each, i) => i !== index) })
+                                                        }}
+                                                        hasSettings={true}
+                                                        settingsComponents={getSocialDetailsComponents()}
+                                                        hasAddButton={true}
+                                                        onAddItem={onSocialProfileAdd}
+                                                        addButtonText={__(
+                                                            "Add Social Profile",
+                                                            "essential-blocks"
+                                                        )}
                                                     />
                                                 </>
                                             )}
@@ -1819,11 +1904,11 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
                                     </PanelBody>
                                     <PanelBody title={__("Avatar", "essential-blocks")} initialOpen={false}>
-                                        {!imageUrl && (
+                                        {!imageNewUrl && (
                                             <MediaUpload
                                                 onSelect={({ id, url }) =>
                                                     setAttributes({
-                                                        imageUrl: url,
+                                                        imageNewUrl: url,
                                                         imageId: id,
                                                         imageAlt: alt,
                                                     })
@@ -1842,7 +1927,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 }}
                                             />
                                         )}
-                                        {imageUrl && (
+                                        {imageNewUrl && (
                                             <>
                                                 <ResponsiveRangeController
                                                     baseLabel={__("Image Width", "essential-blocks")}

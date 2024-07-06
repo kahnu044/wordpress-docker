@@ -32,6 +32,8 @@
 
 .eb-tabs-contents {
 	.eb-tab-wrapper {
+		box-sizing: border-box;
+
 		&.active {
 			opacity: 1;
 			height: auto;

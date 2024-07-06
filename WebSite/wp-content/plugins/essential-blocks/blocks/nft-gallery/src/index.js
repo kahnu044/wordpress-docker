@@ -13,6 +13,7 @@ import { NFTGalleryIcon } from "./icon";
 import "./style.scss";
 import metadata from "../block.json";
 import attributes from "./attributes";
+import deprecated from "./deprecated";
 const { ebConditionalRegisterBlockType } = EBControls;
 
 ebConditionalRegisterBlockType(metadata, {
@@ -25,6 +26,7 @@ ebConditionalRegisterBlockType(metadata, {
     ],
     edit: Edit,
     save: Save,
+    deprecated,
     example: {
         attributes: {
             cover: `${EssentialBlocksLocalize?.image_url}/block-preview/nft-gallery.jpeg`,

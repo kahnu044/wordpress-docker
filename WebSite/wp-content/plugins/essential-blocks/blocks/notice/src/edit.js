@@ -1,31 +1,22 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps, RichText } from "@wordpress/block-editor";
-import { useEffect } from "@wordpress/element";
-import { select } from "@wordpress/data";
-
+import { RichText } from "@wordpress/block-editor";
 /**
  * Internal depenencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
     const {
         attributes,
         setAttributes,
-        className,
-        clientId,
         isSelected,
-        name
     } = props;
     const {
         blockId,
@@ -36,30 +27,17 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        // const current_block_id = attributes.blockId;
-
-        const BLOCK_PREFIX = "eb-notice";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-notice',
+        style: <Style {...props} />
+    };
 
     return (
         <>
             {isSelected && <Inspector {...props} />}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -90,7 +68,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

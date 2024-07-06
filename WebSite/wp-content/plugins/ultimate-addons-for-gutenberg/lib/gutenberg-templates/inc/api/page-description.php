@@ -91,10 +91,10 @@ class PageDescription extends Api_Base {
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return new \WP_Error(
 				'gt_rest_cannot_access',
-				__( 'Sorry, you are not allowed to do that.', 'ast-block-templates' ),
+				__( 'Sorry, you are not allowed to do that.', 'ultimate-addons-for-gutenberg' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -114,14 +114,14 @@ class PageDescription extends Api_Base {
 		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
 			wp_send_json_error(
 				array(
-					'data' => __( 'Nonce verification failed.', 'ast-block-templates' ),
+					'data' => __( 'Nonce verification failed.', 'ultimate-addons-for-gutenberg' ),
 					'status'  => false,
 
 				)
 			);
 		}
 
-		$api_endpoint = AST_BLOCK_TEMPLATES_LIBRARY_URL . '/wp-json/ai/v1/page-description';
+		$api_endpoint = AST_BLOCK_TEMPLATES_LIBRARY_URL . 'wp-json/ai/v1/page-description';
 
 		$token = Importer_Helper::get_business_details( 'token' );
 
@@ -141,7 +141,7 @@ class PageDescription extends Api_Base {
 			),
 			'timeout' => 100,
 		);
-		$response = wp_remote_post( $api_endpoint, $request_args );
+		$response = wp_safe_remote_post( $api_endpoint, $request_args );
 
 
 

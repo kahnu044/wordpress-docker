@@ -9,10 +9,12 @@ import EBIcon from "./assets/icon"
 import "./store";
 
 
-registerPlugin(
-	'eb-global-controls',
-	{
-		icon: EBIcon,
-		render: EBGlobalControls,
-	}
-);
+if (eb_conditional_localize?.editor_type !== 'edit-site') {
+    registerPlugin(
+        'eb-global-controls',
+        {
+            icon: EBIcon,
+            render: EBGlobalControls,
+        }
+    );
+}

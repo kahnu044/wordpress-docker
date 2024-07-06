@@ -1,5 +1,6 @@
-import { RichText, useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+import { RichText } from "@wordpress/block-editor";
+const { EBDisplayIcon, sanitizeURL, BlockProps } = window.EBControls;
+
 const save = ({ attributes }) => {
     const {
         blockId,
@@ -20,7 +21,9 @@ const save = ({ attributes }) => {
         linkNewTab,
     } = attributes;
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div
                     className={`eb-cia-wrapper ${blockId}`}
@@ -69,7 +72,7 @@ const save = ({ attributes }) => {
                     {showButton && (
                         <div className="eb-cia-button-wrapper">
                             <a
-                                href={buttonURL}
+                                href={buttonURL == undefined ? '' : sanitizeURL(buttonURL)}
                                 target={linkNewTab ? "_blank" : "_self"}
                                 rel="noopener"
                             >
@@ -84,7 +87,7 @@ const save = ({ attributes }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

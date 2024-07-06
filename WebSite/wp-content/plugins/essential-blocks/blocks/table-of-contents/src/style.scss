@@ -7,6 +7,16 @@
 	width: 100%;
 	box-sizing: border-box;
 
+	.eb-toc-wrapper {
+		li {
+			svg {
+				path {
+					fill: transparent;
+				}
+			}
+		}
+	}
+
 	.eb-toc__list-wrap {
 		>.eb-toc__list {
 			li {

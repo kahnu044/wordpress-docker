@@ -12,7 +12,7 @@ const nonce = EssentialBlocksLocalize.admin_nonce;
  * @param {*} value
  * @returns {object}
  */
-export const updateGlobalStyle = (value, key = 'global_colors') => {
+export const updateGlobalStyle = (value, key = 'all') => {
     let data = new FormData();
     data.append("action", updateGlobalStyleAction);
     data.append("admin_nonce", nonce);

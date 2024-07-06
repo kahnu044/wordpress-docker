@@ -1,6 +1,7 @@
 <?php
 namespace EssentialBlocks\Core;
 
+use EssentialBlocks\Utils\Helper;
 use EssentialBlocks\Traits\HasSingletone;
 
 /**
@@ -147,37 +148,17 @@ class FontLoader
         if ( 'false' !== $googleFont ) {
             $fonts = self::$gfonts;
 
-            $default_fonts = [
-                "Default",
-                "Arial",
-                "Helvetica",
-                "Times New Roman",
-                "Georgia"
-             ];
+            // $default_fonts = [
+            //     "Default",
+            //     "Arial",
+            //     "Helvetica",
+            //     "Times New Roman",
+            //     "Georgia"
+            //  ];
 
-            $fonts = array_diff( $fonts, $default_fonts );
+            // $fonts = array_diff( $fonts, $default_fonts );
 
-            if ( ! empty( $fonts ) ) {
-                $gfonts      = '';
-                $gfonts_attr = ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic';
-                foreach ( $fonts as $font ) {
-                    $gfonts .= str_replace( ' ', '+', trim( $font ) ) . $gfonts_attr . '|';
-                }
-                if ( ! empty( $gfonts ) ) {
-                    $query_args = [
-                        'family' => $gfonts
-                     ];
-                    wp_register_style(
-                        $handle_name,
-                        add_query_arg( $query_args, '//fonts.googleapis.com/css' ),
-                        [  ],
-                        ESSENTIAL_BLOCKS_VERSION
-                    );
-                    wp_enqueue_style( $handle_name );
-                }
-                // Reset.
-                $gfonts = '';
-            }
+            Helper::load_google_font( $fonts, $handle_name );
         }
     }
 }

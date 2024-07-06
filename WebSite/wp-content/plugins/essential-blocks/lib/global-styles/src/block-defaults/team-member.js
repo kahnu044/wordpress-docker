@@ -28,13 +28,8 @@ const {
     ResponsiveRangeController,
     ImageAvatar,
     ColorControl,
-    // ResetControl,
-    GradientColorControl,
     BorderShadowControl,
     BackgroundControl,
-    DealSocialProfiles,
-    faIcons: IconList,
-    AdvancedControls,
 } = window.EBControls;
 
 import objAttributes from "../../../../blocks/team-member/src/attributes";
@@ -314,15 +309,6 @@ function TeamMember(props) {
                                     })
                                 }
                             />
-                            {showSocials && (
-                                <DealSocialProfiles
-                                    profiles={socialDetails}
-                                    onProfileAdd={(socialDetails) =>
-                                        handleBlockDefault({ socialDetails })
-                                    }
-                                    iconList={IconList}
-                                />
-                            )}
                         </>
                     </PanelBody>
                     <PanelBody
@@ -924,7 +910,7 @@ function TeamMember(props) {
                                     controlName={prefixSocialBdShadow}
                                     resRequiredProps={resRequiredProps}
                                     noShadow
-                                    // noBorder
+                                // noBorder
                                 />
                             </PanelBody>
                             <PanelBody

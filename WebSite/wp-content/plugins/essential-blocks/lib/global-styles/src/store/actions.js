@@ -1,3 +1,5 @@
+import { dispatch, useSelect, withSelect } from "@wordpress/data";
+
 /**
  * Import Constants
  */
@@ -6,6 +8,7 @@ import {
     customColorKey,
     gradientColorKey,
     customGradientColorKey,
+    globalTypoKey,
     DEFAULT_STATE,
     SET_GLOBAL_COLORS,
     SAVE_GLOBAL_COLORS,
@@ -22,9 +25,11 @@ import {
     SET_CUSTOM_GRADIENT_COLORS,
     SAVE_CUSTOM_GRADIENT_COLORS,
     FETCH_CUSTOM_GRADIENT_COLORS,
+    SET_GLOBAL_TYPOGRAPHY,
+    SAVE_GLOBAL_TYPOGRAPHY,
+    FETCH_GLOBAL_TYPOGRAPHY,
     SET_IS_SAVING,
     FETCH_IS_SAVING
-
 } from "./constant"
 
 /**
@@ -57,7 +62,7 @@ export function setGlobalColors(value) {
 export function saveGlobalColors(value) {
     return async ({ select, resolveSelect, dispatch }) => {
         if (Object.keys(value).length > 0) {
-            let response = await updateGlobalStyle(value);
+            let response = await updateGlobalStyle(value, globalColorKey);
         }
         dispatch({
             type: SAVE_GLOBAL_COLORS,
@@ -99,7 +104,7 @@ export function saveBlockDefault(value) {
         //     let response = await updateBlockDefaults(value);
         // }
         if (typeof value === 'object') {
-            let response = await updateBlockDefaults(value, globalColorKey);
+            let response = await updateBlockDefaults(value);
         }
         dispatch({
             type: SAVE_BLOCK_DEFAULTS,
@@ -238,6 +243,9 @@ export function fetchCustomGradientColor() {
  * @returns
  */
 export function setIsSaving(value) {
+    if (value) {
+        dispatch('core/editor').editPost({ meta: { _eb_meta_data: 1 } })
+    }
     return {
         type: SET_IS_SAVING,
         value
@@ -251,5 +259,47 @@ export function setIsSaving(value) {
 export function fetchIsSaving() {
     return {
         type: FETCH_IS_SAVING,
+    }
+}
+
+
+
+
+/**
+ * Action: Set Global Typography
+ * @param {*} value
+ * @returns
+ */
+export function setGlobalTypography(value) {
+    return {
+        type: SET_GLOBAL_TYPOGRAPHY,
+        value,
+    }
+}
+
+/**
+ * Action: Save Global Typography to Database
+ * @param {*} value
+ * @returns
+ */
+export function saveGlobalTypography(value) {
+    return async ({ select, resolveSelect, dispatch }) => {
+        if (Object.keys(value).length > 0) {
+            let response = await updateGlobalStyle(value, globalTypoKey);
+        }
+        dispatch({
+            type: SAVE_GLOBAL_TYPOGRAPHY,
+            value,
+        })
+    };
+}
+
+/**
+ * Action: Fetch Global Typography from Database
+ * @returns
+ */
+export function fetchGlobalTypography() {
+    return {
+        type: FETCH_GLOBAL_TYPOGRAPHY,
     }
 }

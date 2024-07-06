@@ -22,7 +22,8 @@ import {
 } from "./constants";
 const {
     duplicateBlockIdFix,
-    NoticeComponent
+    NoticeComponent,
+    BlockProps
 } = EBControls;
 
 const edit = (props) => {
@@ -44,28 +45,12 @@ const edit = (props) => {
     } = attributes;
 
     const is_fluent_form_active = EssentialBlocksLocalize?.get_plugins['fluentform/fluentform.php']?.active
-
-    useEffect(() => {
-        // this useEffect is for creating an unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-fluent-form";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        // // this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
-        // mimmikCssForPreviewBtnClick({
-        // 	domObj: document,
-        // 	select,
-        // });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-fluent-form',
+        style: <Style {...props} />
+    };
 
     // get template name for default form
     let template_name =
@@ -125,8 +110,7 @@ const edit = (props) => {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`${blockId} ${wrapperClasses.join(" ")}`}>
                         {!is_fluent_form_active && (
@@ -176,7 +160,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

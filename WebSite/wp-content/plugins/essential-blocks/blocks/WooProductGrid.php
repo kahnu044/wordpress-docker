@@ -81,7 +81,8 @@ class WooProductGrid extends Block {
             'variableCartText'      => 'Select Options',
             'groupedCartText'       => 'View Products',
             'externalCartText'      => 'Buy Now',
-            'defaultCartText'       => 'Read More'
+            'defaultCartText'       => 'Read More',
+            'showBlockContent'   => true
         ];
 
         foreach ( $_essential_attributes as $key => $value ) {
@@ -92,6 +93,10 @@ class WooProductGrid extends Block {
             } else {
                 $_essential_attributes[$key] = $value;
             }
+        }
+
+        if ( isset( $_essential_attributes[ 'showBlockContent' ] ) && $_essential_attributes[ 'showBlockContent' ] === false ) {
+            return;
         }
 
         $args = isset( $attributes['queryData'] ) ? $attributes['queryData'] : [];

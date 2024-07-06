@@ -8,6 +8,11 @@ export const LAYOUT_TYPES = [
     { label: __("Preset 4"), value: "preset4" },
 ];
 
+export const VERTICALTOHORIZONTAL = [
+    { label: __("Tab & Mobile"), value: "tab" },
+    { label: __("Mobile"), value: "mobile" },
+];
+
 export const MEDIA_TYPES = ["image", "icon", "number", "none"];
 
 export const CONTENTS_ALIGNMENTS = [

@@ -21,7 +21,6 @@ import {
  */
 
 import objAttributes from "./attributes";
-import SortableContents from "./sortable-contents";
 import {
     typoPrefix_title,
     typoPrefix_price,
@@ -73,7 +72,7 @@ const {
     WoocommerceQuery,
     MorePosts,
     AdvancedControls,
-    ucFirst,
+    SortControl
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
@@ -143,73 +142,73 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         }
     };
 
-    const changeGridPreset = (preset) => {
-        setAttributes({ gridPreset: preset });
-        switch (preset) {
-            case "grid-preset-1":
-                setAttributes({
-                    showRating: true,
-                    showPrice: true,
-                    showSaleBadge: true,
-                    autoHeight: false,
-                    contentAlignment: "center",
-                    titleColor: "#444444",
-                    priceColor: "#3f05e9",
-                    contentBackgroundColor: "",
-                    enableContents: ["rating", "title", "price"],
-                });
-                break;
-            case "grid-preset-2":
-                setAttributes({
-                    showRating: false,
-                    showPrice: true,
-                    autoHeight: false,
-                    contentAlignment: "left",
-                    titleColor: "#444444",
-                    priceColor: "#3f05e9",
-                    contentBackgroundColor: "#ffffff",
-                    enableContents: ["title", "price"],
-                });
-                break;
-            case "grid-preset-3":
-                setAttributes({
-                    showRating: false,
-                    autoHeight: false,
-                    contentAlignment: "center",
-                    titleColor: "#ffffff",
-                    priceColor: "#f1f1f1",
-                    contentBackgroundColor: "",
-                    enableContents: ["title", "price"],
-                });
-            default:
-                return false;
-        }
-    };
+    // const changeGridPreset = (preset) => {
+    //     setAttributes({ gridPreset: preset });
+    //     switch (preset) {
+    //         case "grid-preset-1":
+    //             setAttributes({
+    //                 showRating: true,
+    //                 showPrice: true,
+    //                 showSaleBadge: true,
+    //                 autoHeight: false,
+    //                 contentAlignment: "center",
+    //                 titleColor: "#444444",
+    //                 priceColor: "#3f05e9",
+    //                 contentBackgroundColor: "",
+    //                 enableContents: ["rating", "title", "price"],
+    //             });
+    //             break;
+    //         case "grid-preset-2":
+    //             setAttributes({
+    //                 showRating: false,
+    //                 showPrice: true,
+    //                 autoHeight: false,
+    //                 contentAlignment: "left",
+    //                 titleColor: "#444444",
+    //                 priceColor: "#3f05e9",
+    //                 contentBackgroundColor: "#ffffff",
+    //                 enableContents: ["title", "price"],
+    //             });
+    //             break;
+    //         case "grid-preset-3":
+    //             setAttributes({
+    //                 showRating: false,
+    //                 autoHeight: false,
+    //                 contentAlignment: "center",
+    //                 titleColor: "#ffffff",
+    //                 priceColor: "#f1f1f1",
+    //                 contentBackgroundColor: "",
+    //                 enableContents: ["title", "price"],
+    //             });
+    //         default:
+    //             return false;
+    //     }
+    // };
 
-    const changeListPreset = (preset) => {
-        setAttributes({ listPreset: preset });
-        switch (preset) {
-            case "list-preset-1":
-                setAttributes({
-                    showRating: true,
-                    autoHeight: true,
-                    contentAlignment: "left",
-                    titleColor: "#444444",
-                    priceColor: "#3f05e9",
-                    contentBackgroundColor: "#f3f3ff",
-                    enableContents: [
-                        "title",
-                        "price",
-                        "rating",
-                        "description",
-                        "button",
-                    ],
-                });
-                break;
-            default:
-                return false;
-        }
-    };
+    // const changeListPreset = (preset) => {
+    //     setAttributes({ listPreset: preset });
+    //     switch (preset) {
+    //         case "list-preset-1":
+    //             setAttributes({
+    //                 showRating: true,
+    //                 autoHeight: true,
+    //                 contentAlignment: "left",
+    //                 titleColor: "#444444",
+    //                 priceColor: "#3f05e9",
+    //                 contentBackgroundColor: "#f3f3ff",
+    //                 enableContents: [
+    //                     "title",
+    //                     "price",
+    //                     "rating",
+    //                     "description",
+    //                     "button",
+    //                 ],
+    //             });
+    //             break;
+    //         default:
+    //             return false;
+    //     }
+    // };
 
     const textToNumber = (value) => {
         if (value < 0) {
@@ -308,7 +307,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                             </BaseControl>
                                             {layout === "grid" && (
                                                 <>
-                                                    <SelectControl
+                                                    {/* <SelectControl
                                                         label={__("Grid Preset", "essential-blocks")}
                                                         value={gridPreset}
                                                         options={[
@@ -326,7 +325,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                                             },
                                                         ]}
                                                         onChange={(newGridPreset) => changeGridPreset(newGridPreset)}
-                                                    />
+                                                    /> */}
                                                     <ResponsiveRangeController
                                                         baseLabel={__("Columns", "essential-blocks")}
                                                         controlName={COLUMNS}
@@ -340,7 +339,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                             )}
                                             {layout === "list" && (
                                                 <>
-                                                    <SelectControl
+                                                    {/* <SelectControl
                                                         label={__("List Preset", "essential-blocks")}
                                                         value={listPreset}
                                                         options={[
@@ -352,7 +351,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                                         onChange={(newListPreset) =>
                                                             setAttributes(changeListPreset(newListPreset))
                                                         }
-                                                    />
+                                                    /> */}
                                                 </>
                                             )}
                                             <ToggleControl
@@ -533,11 +532,14 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                         )}
                                         initialOpen={false}
                                     >
-                                        <SortableContents
-                                            contentLists={enableContents}
-                                            setAttributes={setAttributes}
-                                            ucFirst={ucFirst}
-                                        />
+                                        <SortControl
+                                            items={enableContents}
+                                            labelKey=""
+                                            onSortEnd={enableContents => setAttributes({ enableContents })}
+                                            hasSettings={false}
+                                            hasAddButton={false}
+                                            hasDelete={false}
+                                        ></SortControl>
                                     </PanelBody>
                                     {applyFilters(
                                         "eb_woo_product_grid_general_tab",

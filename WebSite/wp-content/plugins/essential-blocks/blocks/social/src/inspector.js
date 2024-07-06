@@ -13,6 +13,7 @@ import {
     TabPanel,
     Button,
     ButtonGroup,
+    TextControl
 } from "@wordpress/components";
 import { select } from "@wordpress/data";
 
@@ -26,10 +27,10 @@ const {
     ColorControl,
     BorderShadowControl,
     BackgroundControl,
-    DealSocialProfiles,
-    faIcons: IconList,
+    SortControl,
     ResetControl,
     AdvancedControls,
+    EBIconPicker
 } = window.EBControls;
 
 import objAttributes from "./attributes";
@@ -145,6 +146,88 @@ function Inspector({ attributes, setAttributes }) {
         }
     };
 
+    const ucFirst = (string) =>
+        string
+            .split("_")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
+    const onSocialProfileAdd = () => {
+        const socialDetails = [
+            ...attributes.socialDetails,
+            {
+                title: "Behance",
+                icon: "fab fa-behance",
+                color: "",
+                bgColor: "",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+        ];
+
+        setAttributes({ socialDetails });
+    };
+
+    const getSocialDetailsComponents = () => {
+        const onProfileChange = (key, value, position) => {
+            const newSocialDetail = { ...attributes.socialDetails[position] };
+            const newSocialDetails = [...attributes.socialDetails];
+            newSocialDetails[position] = newSocialDetail;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newSocialDetails[position][item] = value[index];
+                });
+            } else {
+                newSocialDetails[position][key] = value;
+            }
+
+            setAttributes({ socialDetails: newSocialDetails });
+        };
+
+        return attributes.socialDetails.map((each, i) => (
+            <div key={i}>
+                <EBIconPicker
+                    title={__("Social Media", "essential-blocks")}
+                    value={each.icon || null}
+                    onChange={(value) => onProfileChange('icon', value, i)}
+                />
+                <TextControl
+                    label={__("Title", "essential-blocks")}
+                    value={each.title}
+                    onChange={(value) => onProfileChange('title', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Color", "essential-blocks")}
+                    color={each.color}
+                    onChange={(value) => onProfileChange('color', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Background", "essential-blocks")}
+                    color={each.bgColor}
+                    onChange={(value) => onProfileChange('bgColor', value, i)}
+                />
+                <TextControl
+                    label={__("URL", "essential-blocks")}
+                    value={each.link}
+                    onChange={(value) => onProfileChange('link', value, i)}
+                    help={__(
+                        "Use https or http",
+                        "essential-blocks"
+                    )}
+                />
+                {showLinkNewTab && (
+                    <ToggleControl
+                        label={__("Open in New Tab", "essential-blocks")}
+                        checked={each.linkOpenNewTab}
+                        onChange={(value) => onProfileChange('linkOpenNewTab', value, i)}
+                    />
+                )}
+            </div>
+        ))
+    }
+
     return (
         <InspectorControls key="controls">
             <div className="eb-panel-control">
@@ -185,16 +268,25 @@ function Inspector({ attributes, setAttributes }) {
                                                 onChange={() =>
                                                     setAttributes({
                                                         showLinkNewTab: !showLinkNewTab,
+                                                        socialDetails: [...socialDetails]
                                                     })
                                                 }
                                             />
-                                            <DealSocialProfiles
-                                                profiles={socialDetails}
-                                                onProfileAdd={(socialDetails) =>
-                                                    setAttributes({ socialDetails })
-                                                }
-                                                iconList={IconList}
-                                                showLinkNewTab={showLinkNewTab}
+                                            <SortControl
+                                                items={socialDetails.map((each, i) => ({ ...each, label: ucFirst((each.icon || " ").replace(/^fa[bsr] fa-|^dashicons-/i, "")) }))}
+                                                labelKey={'label'}
+                                                onSortEnd={socialDetails => setAttributes({ socialDetails })}
+                                                onDeleteItem={index => {
+                                                    setAttributes({ socialDetails: attributes.socialDetails.filter((each, i) => i !== index) })
+                                                }}
+                                                hasSettings={true}
+                                                settingsComponents={getSocialDetailsComponents()}
+                                                hasAddButton={true}
+                                                onAddItem={onSocialProfileAdd}
+                                                addButtonText={__(
+                                                    "Add Social Profile",
+                                                    "essential-blocks"
+                                                )}
                                             />
                                         </>
                                     </PanelBody>

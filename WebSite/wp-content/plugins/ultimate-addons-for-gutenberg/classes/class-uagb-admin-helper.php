@@ -58,7 +58,7 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 
 			$options = array(
 				'uagb_beta'                         => self::get_admin_settings_option( 'uagb_beta', 'no' ),
-				'uag_enable_legacy_blocks'          => self::get_admin_settings_option( 'uag_enable_legacy_blocks', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'yes' : 'no' ),
+				'uag_enable_legacy_blocks'          => self::get_admin_settings_option( 'uag_enable_legacy_blocks' ),
 				'_uagb_allow_file_generation'       => self::get_admin_settings_option( '_uagb_allow_file_generation', 'enabled' ),
 				'uag_enable_templates_button'       => self::get_admin_settings_option( 'uag_enable_templates_button', 'yes' ),
 				'uag_enable_on_page_css_button'     => self::get_admin_settings_option( 'uag_enable_on_page_css_button', 'yes' ),
@@ -66,6 +66,7 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 				'uag_enable_masonry_gallery'        => self::get_admin_settings_option( 'uag_enable_masonry_gallery', 'enabled' ),
 				'uag_enable_quick_action_sidebar'   => self::get_admin_settings_option( 'uag_enable_quick_action_sidebar', 'enabled' ),
 				'uag_enable_animations_extension'   => self::get_admin_settings_option( 'uag_enable_animations_extension', 'enabled' ),
+				'uag_enable_header_titlebar'        => self::get_admin_settings_option( 'uag_enable_header_titlebar', 'enabled' ),
 				'uag_enable_gbs_extension'          => self::get_admin_settings_option( 'uag_enable_gbs_extension', 'enabled' ),
 				'uag_enable_block_responsive'       => self::get_admin_settings_option( 'uag_enable_block_responsive', 'enabled' ),
 				'uag_select_font_globally'          => self::get_admin_settings_option( 'uag_select_font_globally', array() ),
@@ -79,8 +80,8 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 				'uag_container_global_elements_gap' => self::get_admin_settings_option( 'uag_container_global_elements_gap', 20 ),
 				'uag_btn_inherit_from_theme'        => self::get_admin_settings_option( 'uag_btn_inherit_from_theme', 'disabled' ),
 				'uag_blocks_editor_spacing'         => apply_filters( 'uagb_default_blocks_editor_spacing', self::get_admin_settings_option( 'uag_blocks_editor_spacing', 0 ) ),
-				'uag_load_font_awesome_5'           => self::get_admin_settings_option( 'uag_load_font_awesome_5', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'enabled' : 'disabled' ),
-				'uag_auto_block_recovery'           => self::get_admin_settings_option( 'uag_auto_block_recovery', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'enabled' : 'disabled' ),
+				'uag_load_font_awesome_5'           => self::get_admin_settings_option( 'uag_load_font_awesome_5' ),
+				'uag_auto_block_recovery'           => self::get_admin_settings_option( 'uag_auto_block_recovery' ),
 				'uag_content_width'                 => $content_width,
 				'spectra_core_blocks'               => apply_filters(
 					'spectra_core_blocks',
@@ -311,10 +312,6 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 			$wp_upload_dir = UAGB_Helper::get_uag_upload_dir_path();
 			$combined_path = $wp_upload_dir . 'custom-style-blocks.css';
 
-			if ( file_exists( $combined_path ) ) {
-				wp_delete_file( $combined_path );
-			}
-
 			$style = '';
 
 			$wp_filesystem = uagb_filesystem();
@@ -424,29 +421,31 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 		 * @access public
 		 */
 		public static function get_global_content_width() {
-
-			$content_width             = self::get_admin_settings_option( 'uag_content_width', '' );
-			$content_width_third_party = apply_filters( 'spectra_global_content_width', 'default' );
-			$astra_content_width       = false;
-			self::update_admin_settings_option( 'uag_content_width_set_by', __( 'Spectra', 'ultimate-addons-for-gutenberg' ) );
-			if ( function_exists( 'astra_get_option' ) ) {
-				$astra_content_width = astra_get_option( 'site-content-width' );
-			}
+			$content_width                = self::get_admin_settings_option( 'uag_content_width', '' );
+			$uag_content_width_set_by     = 'Spectra';
+			$get_uag_content_width_set_by = self::get_admin_settings_option( 'uag_content_width_set_by', '' );
 
 			if ( '' === $content_width ) {
-				if ( $astra_content_width ) {
-					$content_width = intval( $astra_content_width );
-					self::update_admin_settings_option( 'uag_content_width_set_by', __( 'Astra Theme', 'ultimate-addons-for-gutenberg' ) );
-				}
-				if ( 'default' !== $content_width_third_party ) {
-					$content_width = intval( $content_width_third_party );
-					self::update_admin_settings_option( 'uag_content_width_set_by', __( 'Filter added through any 3rd Party Theme/Plugin.', 'ultimate-addons-for-gutenberg' ) );
-				}
+				$content_width_third_party = apply_filters( 'spectra_global_content_width', 'default' );
+				$astra_content_width       = function_exists( 'astra_get_option' ) ? astra_get_option( 'site-content-width' ) : false;
+
 				if ( self::is_block_theme() ) {
-					$settings      = wp_get_global_settings();
-					$content_width = intval( $settings['layout']['wideSize'] );
-					self::update_admin_settings_option( 'uag_content_width_set_by', __( "Full Site Editor's Global Styles", 'ultimate-addons-for-gutenberg' ) );
+					$settings                 = wp_get_global_settings();
+					$content_width            = intval( $settings['layout']['wideSize'] );
+					$uag_content_width_set_by = __( "Full Site Editor's Global Styles", 'ultimate-addons-for-gutenberg' );
+				} elseif ( 'default' !== $content_width_third_party ) {
+					$content_width            = intval( $content_width_third_party );
+					$uag_content_width_set_by = __( 'Filter added through any 3rd Party Theme/Plugin.', 'ultimate-addons-for-gutenberg' );
+				} elseif ( $astra_content_width ) {
+					$content_width            = intval( $astra_content_width );
+					$ast_theme_name           = function_exists( 'astra_get_theme_name' ) ? astra_get_theme_name() : 'Astra';
+					$uag_content_width_set_by = $ast_theme_name . ' ' . __( 'Theme', 'ultimate-addons-for-gutenberg' );
 				}
+			}
+
+			// Update admin settings option uag_content_width_set_by if $get_uag_content_width_set_by and $uag_content_width_set_by are not same.
+			if ( $get_uag_content_width_set_by !== $uag_content_width_set_by ) {
+				self::update_admin_settings_option( 'uag_content_width_set_by', $uag_content_width_set_by );
 			}
 
 			return '' === $content_width ? 1140 : $content_width;

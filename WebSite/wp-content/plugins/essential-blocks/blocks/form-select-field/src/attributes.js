@@ -75,6 +75,21 @@ const attributes = {
             { name: "Option 3", value: "option_3" },
         ],
     },
+    fieldType: {
+        type: "string",
+        default: "select",
+    },
+    dynamicValue: {
+        type: "string",
+    },
+    dynamicOptionType: {
+        type: "string",
+        default: "normal"
+    },
+    dynamicValueLoader: {
+        type: 'boolean',
+        default: false,
+    },
     fieldName: {
         type: "string",
     },

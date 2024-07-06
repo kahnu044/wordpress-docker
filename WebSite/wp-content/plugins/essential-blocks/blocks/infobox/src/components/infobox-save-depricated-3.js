@@ -1,5 +1,5 @@
 import { RichText } from "@wordpress/block-editor";
-
+const { sanitizeURL } = window.EBControls;
 export default function InfoboxContainer3({ requiredProps }) {
     const {
         blockId,
@@ -86,7 +86,7 @@ export default function InfoboxContainer3({ requiredProps }) {
                         {enableButton && !isInfoClick ? (
                             <div className="eb-infobox-btn-wrapper">
                                 <a
-                                    href={infoboxLink}
+                                    href={sanitizeURL(infoboxLink)}
                                     target={linkNewTab ? "_blank" : "_self"}
                                     rel="noopener noreferrer"
                                     className={`infobox-btn  ${

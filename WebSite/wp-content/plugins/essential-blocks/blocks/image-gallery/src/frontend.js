@@ -23,6 +23,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         const loadMoreBtn = imageGallery.closest(".eb-parent-wrapper").querySelectorAll('.eb-img-gallery-loadmore')[0];
         const enableLoadmore = loadMoreBtn?.getAttribute("data-loadmore");;
+        const enableInfiniteScroll = loadMoreBtn?.getAttribute("data-infinite-scroll");
         const initShow = Number(loadMoreBtn?.getAttribute("data-images-per-page")); //number of images loaded on init & onclick load more button
         let counter = initShow;
 
@@ -67,7 +68,20 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 iso.arrange();
             }
 
-            if (enableLoadmore) loadMore(iso, initShow);
+            if (enableLoadmore === 'true' && enableInfiniteScroll === 'false') loadMore(iso, initShow);
+            if (enableLoadmore === 'true' && enableInfiniteScroll === 'true') {
+                // Enable infinite scroll
+                window.addEventListener('scroll', function (e) {
+                    if ((window.innerHeight + window.scrollY) >= imageGallery.offsetHeight) {
+                        loadMore(iso, counter);
+                        counter += initShow;
+                    }
+                });
+
+                // Trigger initial load
+                loadMore(iso, counter);
+                counter += initShow;
+            };
         });
 
         // bind filter button click
@@ -141,7 +155,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
 
         // Loadmore Btn
-        if (enableLoadmore) {
+        if (enableLoadmore === 'true' && enableInfiniteScroll === 'false') {
             const filtersWrapper = imageGallery.closest(".eb-parent-wrapper").querySelector('.eb-img-gallery-filter-wrapper');
 
             if (filtersWrapper) { filtersWrapper.dataset.clicked = 'true' };

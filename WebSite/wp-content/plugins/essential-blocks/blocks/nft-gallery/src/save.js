@@ -1,59 +1,58 @@
-import { RichText, useBlockProps } from "@wordpress/block-editor";
-
+const { BlockProps } = window.EBControls;
 const save = ({ attributes }) => {
-	const {
-		blockId,
-		settings,
-		source,
-		layout,
-		displayImage,
-		displayTitle,
-		displayCreator,
-		displayOwner,
-		displayPrice,
-		displayLastSale,
-		displayButton,
-		creatorLabel,
-		ownerLabel,
-		buttonText,
+    const {
+        blockId,
+        settings,
+        source,
+        layout,
+        displayImage,
+        displayTitle,
+        displayCreator,
+        displayOwner,
+        displayPrice,
+        displayLastSale,
+        displayButton,
+        creatorLabel,
+        ownerLabel,
+        buttonText,
         showOwnerText,
         showOwnerImage,
         gridPreset,
         listPreset,
-		classHook,
-	} = attributes;
+        classHook,
+    } = attributes;
 
-	const dataAttributes = {
-		settings,
-		layout,
-		displayImage,
-		displayTitle,
-		displayCreator,
-		displayOwner,
-		displayPrice,
-		displayLastSale,
-		displayButton,
-		creatorLabel,
-		ownerLabel,
-		buttonText,
+    const dataAttributes = {
+        settings,
+        layout,
+        displayImage,
+        displayTitle,
+        displayCreator,
+        displayOwner,
+        displayPrice,
+        displayLastSale,
+        displayButton,
+        creatorLabel,
+        ownerLabel,
+        buttonText,
         showOwnerText,
         showOwnerImage,
         gridPreset,
         listPreset,
-	};
+    };
 
-	return (
-		<div {...useBlockProps.save()}>
-			<div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-				<div
-					className={`eb-nft-gallery-wrapper ${blockId}`}
-					data-id={blockId}
-					data-source={source}
-					data-attributes={JSON.stringify(dataAttributes)}
-				></div>
-			</div>
-		</div>
-	);
+    return (
+        <BlockProps.Save attributes={attributes}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                <div
+                    className={`eb-nft-gallery-wrapper ${blockId}`}
+                    data-id={blockId}
+                    data-source={source}
+                    data-attributes={JSON.stringify(dataAttributes)}
+                ></div>
+            </div>
+        </BlockProps.Save>
+    );
 };
 
 export default save;

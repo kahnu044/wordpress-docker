@@ -7,7 +7,8 @@
   "apiVersion": 2,
   "textdomain": "essential-blocks",
   "supports": {
-    "align": ["full", "wide"]
+    "anchor": true,
+    "align": ["wide", "full"]
   },
   "editorScript": "essential-blocks-editor-script"
 }

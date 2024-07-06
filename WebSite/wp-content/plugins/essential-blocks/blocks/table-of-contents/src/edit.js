@@ -14,28 +14,23 @@ import { ToolbarButton, ToolbarGroup } from "@wordpress/components";
 import { select, withSelect } from "@wordpress/data";
 import { decodeEntities } from "@wordpress/html-entities";
 import {
-    safeHTML, removeInvalidHTML
+    safeHTML
 } from "@wordpress/dom";
-
-
 /*
  * External dependencies
  */
 import striptags from "striptags";
 
 const {
-    duplicateBlockIdFix,
     DynamicInputValueHandler,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 import { parseTocSlug } from "./helper";
 
-import classnames from "classnames";
 import Inspector from "./inspector";
-
 import List from "./list";
-
 import Style from "./style";
 
 function getHeadingsFromHeadingElements(headingElements) {
@@ -228,22 +223,12 @@ function Edit(props) {
         }
     }, [scrollToTop, scrollToTopIcon]);
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-toc";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-toc',
+        style: <Style {...props} />
+    };
 
     // CollapsedItem
     useEffect(() => {
@@ -269,7 +254,7 @@ function Edit(props) {
 
     return cover.length ? (
         <div>
-            <img src={cover} alt="table of content" style={{ maxWidth: "100%" }} />
+            <img src={cover} alt={__("table of content", "essential-blocks")} style={{ maxWidth: "100%" }} />
         </div>
     ) : (
         <>
@@ -311,9 +296,7 @@ function Edit(props) {
                 </ToolbarGroup>
             </BlockControls>
 
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -356,7 +339,7 @@ function Edit(props) {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

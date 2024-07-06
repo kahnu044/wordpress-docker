@@ -1,7 +1,7 @@
 import { useBlockProps } from "@wordpress/block-editor";
-
+const { sanitizeURL } = window.EBControls;
 import InfoboxContainer from "./components/infobox-save";
-
+const { BlockProps } = window.EBControls;
 export default function save({ attributes }) {
     const {
         blockId,
@@ -52,10 +52,10 @@ export default function save({ attributes }) {
     };
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             {isInfoClick ? (
                 <a
-                    href={infoboxLink}
+                    href={infoboxLink == undefined ? '' : sanitizeURL(infoboxLink)}
                     target={linkNewTab ? "_blank" : "_self"}
                     rel="noopener noreferrer"
                     className="info-click-link info-wrap-link"
@@ -65,6 +65,6 @@ export default function save({ attributes }) {
             ) : (
                 <InfoboxContainer requiredProps={requiredProps} />
             )}
-        </div>
+        </BlockProps.Save>
     );
 }

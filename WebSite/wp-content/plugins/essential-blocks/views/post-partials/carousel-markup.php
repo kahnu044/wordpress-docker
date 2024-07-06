@@ -57,7 +57,7 @@ foreach ( $posts as $result ) {
 	 */
 	$html             .= sprintf( '<article class="ebpg-carousel-post ebpg-post-carousel-column" data-id="%1$s">', $result->ID );
 	$html             .= '<div class="ebpg-carousel-post-holder">';
-	$wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper" href="%1$s"></a>', get_permalink( $result->ID ) );
+	$wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', get_permalink( $result->ID ), wp_kses( $result->post_title, 'post' ) );
 	if ( $preset === 'style-4' ) {
 		$html             .= $wrapper_link_html;
 		$wrapper_link_html = '';

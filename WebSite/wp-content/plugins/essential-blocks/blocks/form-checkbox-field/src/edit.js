@@ -2,9 +2,9 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
-import { useEffect, useState, useRef } from "@wordpress/element";
-import { select, dispatch, useSelect } from "@wordpress/data";
+import { useBlockProps } from "@wordpress/block-editor";
+import { useEffect } from "@wordpress/element";
+import { select } from "@wordpress/data";
 
 /**
  * Internal dependencies
@@ -14,12 +14,15 @@ const {
     duplicateBlockIdFix,
     filterBlocksByName,
     getBlockParentClientId,
+    DynamicInputValueHandler,
+    DynamicFormFieldValueHandler,
+    BlockProps
 } = EBControls;
 
 import classnames from "classnames";
-
 import Inspector from "./inspector";
 import Style from "./style";
+import { endsWith } from "lodash";
 
 export default function Edit(props) {
     const {
@@ -45,72 +48,18 @@ export default function Edit(props) {
         isRequired,
         validationRules,
         validationMessage,
+        dynamicValue,
+        dynamicOptionType,
+        dynamicValueLoader
     } = attributes;
 
-    useEffect(() => {
-        // this is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-checkbox-field";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        const parentClientId = getBlockParentClientId(
-            clientId,
-            "essential-blocks/form"
-        );
-
-        const getParentBlock = select("core/block-editor").getBlock(
-            parentClientId
-        );
-        const getParentBlockId = getParentBlock?.attributes?.blockId;
-        if (getParentBlockId)
-            setAttributes({ parentBlockId: getParentBlockId });
-
-        //Handle as per parent settings
-        const isBlockJustInserted = select(
-            "core/block-editor"
-        ).wasBlockJustInserted(clientId);
-        const getFormLabel = getParentBlock?.attributes?.showLabel;
-        const getFormIcon = getParentBlock?.attributes?.showInputIcon;
-        if (
-            isBlockJustInserted &&
-            typeof getFormLabel !== "undefined" &&
-            typeof getFormIcon !== "undefined"
-        ) {
-            setAttributes({
-                showLabel: getFormLabel,
-                isIcon: getFormIcon,
-            });
-        }
-
-        //Hanlde Field Name
-        if (!fieldName) {
-            if (parentClientId) {
-                const parentAllChildBlocks = select(
-                    "core/block-editor"
-                ).getBlocksByClientId(parentClientId);
-                const filteredBlocks = filterBlocksByName(
-                    parentAllChildBlocks,
-                    name
-                );
-                const currentBlockIndex = filteredBlocks.indexOf(clientId);
-                if (currentBlockIndex !== -1) {
-                    if (filteredBlocks.length === 1) {
-                        setAttributes({ fieldName: `checkbox-field` });
-                    } else {
-                        setAttributes({
-                            fieldName: `checkbox-field-${currentBlockIndex + 1
-                                }`,
-                        });
-                    }
-                }
-            }
-        }
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-checkbox-field',
+        rootClass: `eb-guten-block-main-parent-wrapper eb-form-field`,
+        style: <Style {...props} />
+    };
 
     //UseEffect for set Validation rules
     useEffect(() => {
@@ -141,9 +90,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -156,14 +103,21 @@ export default function Edit(props) {
                                     htmlFor={fieldName}
                                     className="eb-field-label"
                                 >
-                                    {labelText}{" "}
+                                    <DynamicInputValueHandler
+                                        value={labelText}
+                                        onChange={(labelText) =>
+                                            setAttributes({ labelText })
+                                        }
+                                        readOnly={true}
+                                    />
+                                    {" "}
                                     {isRequired && (
                                         <span className="eb-required">*</span>
                                     )}
                                 </label>
                             </>
                         )}
-                        {options.length > 0 &&
+                        {/* {options.length > 0 &&
                             options.map((option) => (
                                 <div className="eb-checkbox-inputarea">
                                     <label htmlFor={option.value}>
@@ -177,19 +131,35 @@ export default function Edit(props) {
                                         {option.name}
                                     </label>
                                 </div>
-                            ))}
+                            ))} */}
+                        <DynamicFormFieldValueHandler
+                            type="checkbox"
+                            fieldName={fieldName}
+                            defaultValue={defaultValue}
+                            options={options}
+                            dynamicValue={dynamicValue}
+                            dynamicOptionType={dynamicOptionType}
+                            dynamicValueLoader={dynamicValueLoader}
+                            setAttributes={setAttributes}
+                        />
                         {isRequired && (
                             <>
                                 <div
                                     className={`eb-form-validation eb-validate-${fieldName}`}
                                 >
-                                    {validationMessage}
+                                    <DynamicInputValueHandler
+                                        value={validationMessage}
+                                        onChange={(validationMessage) =>
+                                            setAttributes({ validationMessage })
+                                        }
+                                        readOnly={true}
+                                    />
                                 </div>
                             </>
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

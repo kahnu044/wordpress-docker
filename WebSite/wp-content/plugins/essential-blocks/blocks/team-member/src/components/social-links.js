@@ -1,4 +1,4 @@
-const { EBDisplayIcon } = window.EBControls;
+const { EBDisplayIcon, sanitizeURL } = window.EBControls;
 export default function SocialLinks({
     socialDetails = [],
     icnEffect,
@@ -11,7 +11,7 @@ export default function SocialLinks({
                 <li key={index}>
                     <a
                         className={icnEffect || " "}
-                        href={link ? link : "#"}
+                        href={link ? sanitizeURL(link) : ""}
                         {...(link && {
                             target: linkNewTab ? "_blank" : "_self",
                         })}

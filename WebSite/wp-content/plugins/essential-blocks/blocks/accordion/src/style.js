@@ -446,18 +446,18 @@ export default function Style(props) {
 
     const wrapperStylesDesktop = `
 
-	.eb-accordion-item.is-selected .eb-accordion-content-wrapper {
+	.eb-accordion-item.is-selected .eb-accordion-content-wrapper-${blockId} {
 		height:auto;
 		opacity: 0;
 		overflow: visible;
 	}
 
-	.eb-accordion-container.eb_accdn_loaded .eb-accordion-wrapper:not(.for_edit_page) .eb-accordion-content-wrapper{
+	.eb-accordion-container.eb_accdn_loaded .eb-accordion-wrapper:not(.for_edit_page) .eb-accordion-content-wrapper-${blockId}{
 		visibility:visible;
 		position:static;
 	}
 
-	.eb-accordion-container .eb-accordion-wrapper:not(.for_edit_page) .eb-accordion-content-wrapper{
+	.eb-accordion-container .eb-accordion-wrapper:not(.for_edit_page) .eb-accordion-content-wrapper-${blockId}{
 		visibility:hidden;
 		position:absolute;
 	}
@@ -509,7 +509,7 @@ export default function Style(props) {
 
 ${displayIcon
             ? `
-		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -521,12 +521,12 @@ ${displayIcon
 		}
 
 
-		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper:hover{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}:hover{
 			${iconHoverBackgroundStylesDesktop}
 			${iconBdShdStylesHoverDesktop}
 		}
 
-		.${blockId}.eb-accordion-container .eb-accordion-icon{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
 			text-align:center;
 			color: ${iconColor};
 			${iconSizeDesktop}
@@ -537,7 +537,7 @@ ${displayIcon
             : ""
         }
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper {
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId} {
 		cursor: pointer;
 		display: flex;
 		align-items: center;
@@ -550,46 +550,43 @@ ${displayIcon
 		transition:${tabBgTransitionStyle}, ${tabBdShdTransitionStyle};
 	}
 
-
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover{
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId}:hover{
 		${tabHoverBackgroundStylesDesktop}
 		${tabBdShdStylesHoverDesktop}
 	}
-
-
-	.${blockId}.eb-accordion-container .eb-accordion-title-content-wrap{
-		text-align:${titleAlignment || "left"};
+	.${blockId}.eb-accordion-container .title-content-${blockId}{
+		justify-content:${titleAlignment || "left"};
 		flex:1;
         ${titlePrefixGapDesktop}
 	}
-	.${blockId}.eb-accordion-container .eb-accordion-title{
-		color:${titleColor};
+	.${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title{
+        color:${titleColor};
 		${titleTypoStylesDesktop}
-	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-text{
+    }
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-text{
 		color:${titlePrefixColor};
 		${titlePrefixTextTypoDesktop}
 	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
 		color:${titlePrefixColor};
 		${titlePrefixIconWidthDesktop}
 		${titlePrefixIconHeightDesktop}
 		${titlePrefixIconSizeDesktop}
 	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-prefix-img{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-img{
 		${titlePrefixImgWidthDesktop}
 	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-text{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-text{
 		color:${titleSuffixColor};
 		${titleSuffixTextTypoDesktop}
 	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
 		color:${titleSuffixColor};
 		${titleSuffixIconWidthDesktop}
 		${titleSuffixIconHeightDesktop}
 		${titleSuffixIconSizeDesktop}
 	}
-    .${blockId}.eb-accordion-container .eb-accordion-title-suffix-img{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-img{
 		${titleSuffixImgWidthDesktop}
 	}
 
@@ -605,8 +602,8 @@ ${activeTitleColor
 
 ${activeBgColor
             ? `
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper,
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper.expanded_tab .eb-accordion-title-wrapper{
+	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper-${blockId},
+	.${blockId}.eb-accordion-container .eb-accordion-wrapper.expanded_tab .eb-accordion-title-wrapper-${blockId}{
 		${activeBgColor
                 ? `background-color: ${activeBgColor} !important; background-image: unset`
                 : ""
@@ -618,14 +615,14 @@ ${activeBgColor
 
 	${hoverTitleColor
             ? `
-			.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .eb-accordion-title{
+			.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title{
 				color:${hoverTitleColor};
 			}
 			`
             : ""
         }
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
 		color:${contentColor};
 		text-align:${contentAlign};
 		${conBackgroundStylesDesktop}
@@ -636,7 +633,7 @@ ${activeBgColor
 		transition:${conBdShdTransitionStyle}, ${conBgTransitionStyle};
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
 		${conHoverBackgroundStylesDesktop}
 		${conBdShdStylesHoverDesktop}
 	}
@@ -674,18 +671,18 @@ ${activeBgColor
 
 ${displayIcon
             ? `
-		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 			${iconMarginTab}
 			${iconPaddingTab}
 			${iconBdShdStyesTab}
 		}
 
 
-		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper:hover{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}:hover{
 			${iconBdShdStylesHoverTab}
 		}
 
-		.${blockId}.eb-accordion-container .eb-accordion-icon{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
 			${iconSizeTab}
 			${TABicnZ_Range ? `width:${TABicnZ_Range}px;` : ""}
 		}
@@ -696,31 +693,31 @@ ${displayIcon
 
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper {
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId} {
 		${tabMarginTab}
 		${tabPaddingTab}
 		${tabBdShdStyesTab}
 	}
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover{
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId}:hover{
 		${tabBdShdStylesHoverTab}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-title{
+	.${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title{
 		${titleTypoStylesTab}
 	}
 
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
 		${contentTypoStylesTab}
 		${conMarginTab}
 		${conPaddingTab}
 		${conBdShdStyesTab}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
 		${conBdShdStylesHoverTab}
 	}
 
@@ -758,17 +755,17 @@ ${displayIcon
 
 	${displayIcon
             ? `
-			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper{
+			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 				${iconMarginMobile}
 				${iconPaddingMobile}
 				${iconBdShdStyesMobile}
 			}
 
-			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper:hover{
+			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}:hover{
 				${iconBdShdStylesHoverMobile}
 			}
 
-			.${blockId}.eb-accordion-container .eb-accordion-icon{
+			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
 				${iconSizeMobile}
 				${MOBicnZ_Range ? `width:${MOBicnZ_Range}px;` : ""}
 			}
@@ -778,29 +775,29 @@ ${displayIcon
         }
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper {
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId} {
 		${tabMarginMobile}
 		${tabPaddingMobile}
 		${tabBdShdStyesMobile}
 	}
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover{
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId}:hover{
 		${tabBdShdStylesHoverMobile}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-title{
+	.${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title{
 		${titleTypoStylesMobile}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
 		${contentTypoStylesMobile}
 		${conMarginMobile}
 		${conPaddingMobile}
 		${conBdShdStyesMobile}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
 		${conBdShdStylesHoverMobile}
 	}
 	`;

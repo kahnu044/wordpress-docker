@@ -14,12 +14,13 @@ const {
     duplicateBlockIdFix,
     filterBlocksByName,
     getBlockParentClientId,
+    DynamicInputValueHandler,
+    DynamicFormFieldValueHandler,
+    BlockProps
 } = EBControls;
 
 import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 export default function Edit(props) {
@@ -45,71 +46,18 @@ export default function Edit(props) {
         isRequired,
         validationMessage,
         validationRules,
+        dynamicValue,
+        dynamicOptionType,
+        dynamicValueLoader
     } = attributes;
 
-    useEffect(() => {
-        // this is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-radio-field";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        const parentClientId = getBlockParentClientId(
-            clientId,
-            "essential-blocks/form"
-        );
-
-        const getParentBlock = select("core/block-editor").getBlock(
-            parentClientId
-        );
-        const getParentBlockId = getParentBlock?.attributes?.blockId;
-        if (getParentBlockId)
-            setAttributes({ parentBlockId: getParentBlockId });
-
-        //Handle as per parent settings
-        const isBlockJustInserted = select(
-            "core/block-editor"
-        ).wasBlockJustInserted(clientId);
-        const getFormLabel = getParentBlock?.attributes?.showLabel;
-        const getFormIcon = getParentBlock?.attributes?.showInputIcon;
-        if (
-            isBlockJustInserted &&
-            typeof getFormLabel !== "undefined" &&
-            typeof getFormIcon !== "undefined"
-        ) {
-            setAttributes({
-                showLabel: getFormLabel,
-                isIcon: getFormIcon,
-            });
-        }
-
-        //Hanlde Field Name
-        if (!fieldName) {
-            if (parentClientId) {
-                const parentAllChildBlocks = select(
-                    "core/block-editor"
-                ).getBlocksByClientId(parentClientId);
-                const filteredBlocks = filterBlocksByName(
-                    parentAllChildBlocks,
-                    name
-                );
-                const currentBlockIndex = filteredBlocks.indexOf(clientId);
-                if (currentBlockIndex !== -1) {
-                    if (filteredBlocks.length === 1) {
-                        setAttributes({ fieldName: `radio-field` });
-                    } else {
-                        setAttributes({
-                            fieldName: `radio-field-${currentBlockIndex + 1}`,
-                        });
-                    }
-                }
-            }
-        }
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-radio-field',
+        rootClass: `eb-guten-block-main-parent-wrapper eb-form-field`,
+        style: <Style {...props} />
+    };
 
     //UseEffect for set Validation rules
     useEffect(() => {
@@ -124,13 +72,6 @@ export default function Edit(props) {
         setAttributes({ validationRules: rules });
     }, [isRequired, fieldName, validationMessage]);
 
-    const blockProps = useBlockProps({
-        className: classnames(
-            className,
-            `eb-guten-block-main-parent-wrapper eb-form-field`
-        ),
-    });
-
     return (
         <>
             {isSelected && (
@@ -140,8 +81,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -151,14 +91,20 @@ export default function Edit(props) {
                         {showLabel && (
                             <>
                                 <label htmlFor={fieldName}>
-                                    {labelText}{" "}
+                                    <DynamicInputValueHandler
+                                        value={labelText}
+                                        onChange={(labelText) =>
+                                            setAttributes({ labelText })
+                                        }
+                                        readOnly={true}
+                                    />{" "}
                                     {isRequired && (
                                         <span className="eb-required">*</span>
                                     )}
                                 </label>
                             </>
                         )}
-                        {options.length > 0 &&
+                        {/* {options.length > 0 &&
                             options.map((option) => (
                                 <div className="eb-radio-inputarea">
                                     <label htmlFor={option.value}>
@@ -172,7 +118,18 @@ export default function Edit(props) {
                                         {option.name}
                                     </label>
                                 </div>
-                            ))}
+                            ))} */}
+
+                        <DynamicFormFieldValueHandler
+                            type="radio"
+                            fieldName={fieldName}
+                            defaultValue={defaultValue}
+                            options={options}
+                            dynamicValue={dynamicValue}
+                            dynamicOptionType={dynamicOptionType}
+                            dynamicValueLoader={dynamicValueLoader}
+                            setAttributes={setAttributes}
+                        />
                         {isRequired && (
                             <>
                                 <div
@@ -184,7 +141,7 @@ export default function Edit(props) {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

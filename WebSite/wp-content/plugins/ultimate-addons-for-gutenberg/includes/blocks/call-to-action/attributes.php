@@ -68,7 +68,7 @@ return array_merge(
 		'ctaIconSpaceMobile'              => '',
 		'ctaType'                         => 'button',
 		'ctaLink'                         => '#',
-		'ctaFontSize'                     => 14,
+		'ctaFontSize'                     => '',
 		'ctaFontSizeType'                 => 'px',
 		'ctaFontSizeTypeTablet'           => 'px',
 		'ctaFontSizeTypeMobile'           => 'px',
@@ -232,6 +232,7 @@ return array_merge(
 		// For Global Block Styles.
 		'globalBlockStyleName'            => '',
 		'globalBlockStyleId'              => '',
+		'enableMultilineParagraph'        => false,
 	),
 	$second_cta_border_attribute,
 	$cta_border_attribute

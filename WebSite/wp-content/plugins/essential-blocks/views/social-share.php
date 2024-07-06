@@ -1,6 +1,6 @@
 <?php global $post;?>
 	<div
-		<?php echo esc_attr( $wrapper_attributes ); ?>>
+		<?php echo wp_kses_post( $wrapper_attributes ); ?>>
         <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?><?php echo esc_attr( $classHook ); ?>">
             <div class="<?php echo esc_attr( $blockId ); ?> eb-social-share-wrapper<?php echo $isFloating ? esc_attr( ' eb-social-share-floating' ) : ''; ?><?php echo $isFloating && 'circular' == $iconShape ? esc_attr( ' eb-social-share-circular' ) : ''; ?>">
                 <ul class="eb-social-shares">

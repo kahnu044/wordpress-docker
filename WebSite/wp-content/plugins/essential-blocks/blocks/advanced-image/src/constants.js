@@ -82,3 +82,9 @@ export const FIT_STYLES = [
     { label: __("Contain", "essential-blocks"), value: "contain" },
     { label: __("Cover", "essential-blocks"), value: "cover" },
 ];
+
+export const SOURCE = [
+    { label: __("Site Logo", "essential-blocks"), value: "site-logo" },
+    { label: __("Featured Image", "essential-blocks"), value: "featured-img" },
+    { label: __("Custom", "essential-blocks"), value: "custom" },
+];

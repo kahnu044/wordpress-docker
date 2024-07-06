@@ -151,7 +151,6 @@ const attributes = {
     },
     titleTextHoverColor: {
         type: "string",
-        default: "var(--eb-global-link-color)",
     },
     descTextColor: {
         type: "string",

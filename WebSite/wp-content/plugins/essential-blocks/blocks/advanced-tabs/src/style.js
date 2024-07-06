@@ -68,9 +68,11 @@ export default function Style(props) {
         showCaret,
         caretColor,
         carZ_Range,
-        TABcarZ_Range,
-        MOBcarZ_Range,
+        TABcarZ_Range = carZ_Range,
+        MOBcarZ_Range = TABcarZ_Range || carZ_Range,
         isFillTitle,
+        enableResponsiveLayout,
+        verticalToHorizontal
     } = attributes;
 
     //
@@ -420,27 +422,6 @@ export default function Style(props) {
 		.${blockId}.eb-advanced-tabs-wrapper:hover:before{
 			${wrpHoverOverlayStylesDesktop}
 		}
-		.${blockId}.eb-advanced-tabs-wrapper{
-			flex-direction:${layout === "horizontal" ? "column" : "row"};
-			${wrpMarginDesktop}
-			${wrpPaddingDesktop}
-			${wrpBackgroundStylesDesktop}
-			${wrpBdShdStyesDesktop}
-		}
-
-		.${blockId}.eb-advanced-tabs-wrapper:hover{
-			${wrpHoverBackgroundStylesDesktop}
-			${wrpBdShdStylesHoverDesktop}
-		}
-
-		.${blockId}.eb-advanced-tabs-wrapper:before{
-			${wrpOverlayStylesDesktop}
-			transition: all .5s, ${wrpOvlTransitionStyle};
-		}
-
-		.${blockId}.eb-advanced-tabs-wrapper:hover:before{
-			${wrpHoverOverlayStylesDesktop}
-		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"]{
 			display: flex;
@@ -474,8 +455,7 @@ export default function Style(props) {
             ? mediaAlign === "left"
                 ? "flex-direction: row;"
                 : "flex-direction: row-reverse;"
-            : "flex-direction: column;"
-        }
+            : "flex-direction: column;"}
 			${titleMarginDesktop}
 			${titlePaddingDesktop}
 			${titleMinWidthDesktop}
@@ -546,18 +526,18 @@ export default function Style(props) {
 			${layout === "horizontal"
                 ? `
 					bottom: -${carZ_Range}px;
-					border-top-color: ${caretColor};
-					border-top-style: solid;
-					border-bottom: 0px;
+					border-top-color: ${caretColor} !important;
+					border-bottom: 0px !important;
 					left: 50%;
+					border-top-style: solid;
 					transform: translateX(-50%);
 				`
                 : `
 					right: -${carZ_Range}px;
-					border-left-color: ${caretColor};
-					border-left-style: solid;
-					border-right: 0px;
+					border-left-color: ${caretColor} !important;
+					border-right: 0px !important;
 					top: 50%;
+					border-left-style: solid;
 					transform: translateY(-50%);
 				`
             }
@@ -569,12 +549,14 @@ export default function Style(props) {
         }
 
 
-		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active span{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active span,
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active i {
 			${actIconColor ? `color:${actIconColor};` : ""}
 			${actColorTransition ? `transition:color ${actColorTransition}s;` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover span{
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover span,
+		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover i {
 			${actHvIconColor ? `color:${actHvIconColor};` : ""}
 		}
 
@@ -608,8 +590,9 @@ export default function Style(props) {
 	`);
 
     // all common (editor&frontEnd) css styles for Tab in strings ⬇
-    const tabAllStylesCommon = softMinifyCssStrings(`
+    const tabAllStylesCommon = (`
 		.${blockId}.eb-advanced-tabs-wrapper{
+            ${(layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'tab') && "flex-direction: column;"}
 			${wrpMarginTab}
 			${wrpPaddingTab}
 			${wrpBackgroundStylesTab}
@@ -630,6 +613,7 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"]{
+            ${(layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'tab') && "flex-direction: row;"}
 			${titleWrapMarginTab}
 			${titleWrapPaddingTab}
 			${titleWrapBdShdStyesTab}
@@ -666,17 +650,28 @@ export default function Style(props) {
 			${actTlHoverBackgroundStylesTab}
 		}
 
-		${showCaret && TABcarZ_Range
+		${showCaret
             ? `
-			.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
+			.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
 				border: ${TABcarZ_Range}px solid transparent;
 				${layout === "horizontal"
                 ? `
 						bottom: -${TABcarZ_Range}px;
 					`
-                : `
-						right: -${TABcarZ_Range}px;
-					`
+                : (layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'tab') ?
+                    `
+                        bottom: -${TABcarZ_Range}px;
+                        border-top-color: ${caretColor} !important;
+                        border-left-color: transparent !important;
+                        border-right: ${MOBcarZ_Range}px solid transparent !important;
+                        border-bottom: 0px !important;
+                        left: 50%;
+                        border-top-style: solid;
+                        transform: translateX(-50%);
+                        right: 0;
+                        top: auto;
+                    `
+                    : `right: -${TABcarZ_Range}px;`
             }
 
 			}
@@ -714,8 +709,9 @@ export default function Style(props) {
 	`);
 
     // all common (editor&frontEnd) css styles for Mobile in strings ⬇
-    const mobileAllStylesCommon = softMinifyCssStrings(`
+    const mobileAllStylesCommon = (`
 		.${blockId}.eb-advanced-tabs-wrapper{
+            ${(layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'mobile') && "flex-direction: column;"}
 			${wrpMarginMobile}
 			${wrpPaddingMobile}
 			${wrpBackgroundStylesMobile}
@@ -736,11 +732,11 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"]{
+            ${(layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'mobile') && "flex-direction: row;"}
 			${titleWrapMarginMobile}
 			${titleWrapPaddingMobile}
 			${titleWrapBdShdStyesMobile}
 			${titleWrapBackgroundStylesMobile}
-
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"]:hover{
@@ -774,15 +770,26 @@ export default function Style(props) {
 
 		${showCaret && MOBcarZ_Range
             ? `
-			.${blockId}.eb-advanced-tabs-wrapper ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
+			.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
 				border: ${MOBcarZ_Range}px solid transparent;
 				${layout === "horizontal"
                 ? `
 						bottom: -${MOBcarZ_Range}px;
 					`
-                : `
-						right: -${MOBcarZ_Range}px;
-					`
+                : (layout === "vertical" && enableResponsiveLayout && verticalToHorizontal === 'mobile') ?
+                    `
+                        bottom: -${MOBcarZ_Range}px;
+                        border-top-color: ${caretColor} !important;
+                        border-left-color: transparent !important;
+                        border-right: ${MOBcarZ_Range}px solid transparent !important;
+                        border-bottom: 0px !important;
+                        left: 50%;
+                        border-top-style: solid;
+                        transform: translateX(-50%);
+                        right: 0;
+                        top: auto;
+                    `
+                    : `right: -${TABcarZ_Range}px;`
             }
 
 			}

@@ -1,20 +1,27 @@
 import { PluginSidebar } from "@wordpress/edit-post";
 import { __ } from "@wordpress/i18n";
 import { applyFilters } from "@wordpress/hooks";
-import { useState, useEffect, useRef } from "@wordpress/element";
-import { PanelBody, Button, Popover, Dashicon, TabPanel, PanelRow } from "@wordpress/components";
-
+import { useState, useEffect } from "@wordpress/element";
+import { PanelBody, Button, Popover, Dashicon, TabPanel } from "@wordpress/components";
+import { store as editorStore } from '@wordpress/editor';
 import { dispatch, useSelect, withSelect } from "@wordpress/data";
 import {
-    __experimentalColorGradientControl as ColorGradientControl,
     BlockPreview,
     PanelColorSettings
 } from "@wordpress/block-editor";
-import { createBlock, store as blocksStore } from "@wordpress/blocks";
+import { createBlock } from "@wordpress/blocks";
 
 import EBIcon from "./assets/icon";
 import ColorPalletWrapper from "./components/colorPalletWrapper"
 import GradientColorPallet from "./components/GradientColorPallet"
+import TypographySettings from "./components/typography/TypographySettings"
+import {
+    getGlobalSettings,
+    generateTypographyCSS,
+    applyTypographyCSS,
+    loadGoogleFonts
+} from "./helpers/helpers"
+
 import "./style.scss";
 
 import Accordion from "./block-defaults/accordion";
@@ -71,6 +78,7 @@ function EBGlobalControls(props) {
         getCustomColors,
         getGradientColors,
         getCustomGradientColors,
+        getGlobalTypography,
         getBlockDefaults
     } = props;
 
@@ -354,6 +362,15 @@ function EBGlobalControls(props) {
     const [clickedBlock, setClickedBlock] = useState("");
     const [isVisible, setIsVisible] = useState(false);
 
+    //Create Element for write Global Typography
+    useEffect(() => {
+        if (Object.keys(getGlobalTypography).length > 0) {
+            const cssString = generateTypographyCSS(getGlobalTypography);
+            applyTypographyCSS(cssString);
+            loadGoogleFonts(getGlobalTypography)
+        }
+    }, [getGlobalTypography])
+
     //Initial UseEffect, Set Defualt color if Store is empty
     useEffect(() => {
         //Set Global Colors
@@ -458,11 +475,6 @@ function EBGlobalControls(props) {
         colors[index].color = color;
         setGlobalColors([...colors]);
     };
-    const setCustomColor = (index, color) => {
-        const colors = [...customColors];
-        colors[index].color = color;
-        setCustomColors([...colors]);
-    };
     const setGradientColor = (index, color) => {
         const colors = [...gradientColors];
         colors[index].color = color;
@@ -479,9 +491,11 @@ function EBGlobalControls(props) {
         setCustomGradientColors([...colors]);
     };
 
-    //Get Device type from "__experimentalGetPreviewDeviceType" Function
+    //Get Device type from "getDeviceType" Function
     const deviceType = useSelect((select) => {
-        return select("core/edit-post").__experimentalGetPreviewDeviceType();
+        const { getDeviceType } = select(editorStore)
+        const { __experimentalGetPreviewDeviceType } = select("core/edit-post")
+        return getDeviceType ? getDeviceType() : __experimentalGetPreviewDeviceType ? __experimentalGetPreviewDeviceType() : "Desktop";
     });
 
     /**
@@ -519,6 +533,31 @@ function EBGlobalControls(props) {
             dispatch("essential-blocks").setBlockDefault(blockDefaults);
             dispatch("essential-blocks").saveBlockDefault(blockDefaults);
         }
+    };
+
+    /**
+     * Handle Save & Insert Block
+     * @param {*} block
+     */
+    const handleSaveInsert = (clickedBlock) => {
+        setIsVisible((state) => !state);
+
+        //Save Block Default
+        if (Object.keys(blockDefaults).length > 0) {
+            dispatch("essential-blocks").setBlockDefault(blockDefaults);
+            dispatch("essential-blocks").saveBlockDefault(blockDefaults);
+        }
+
+        const insertedBlock = wp.blocks.createBlock(`essential-blocks/${registeredBlocks[clickedBlock]?.is_pro ? 'pro-' : ''}${clickedBlock.replace(
+            /_/g,
+            "-"
+        )}`,
+            {
+                ...previewData(
+                    clickedBlock
+                ),
+            });
+        wp.data.dispatch('core/block-editor').insertBlocks(insertedBlock);
     };
 
     /**
@@ -618,7 +657,7 @@ function EBGlobalControls(props) {
             >
                 <div className="eb-panel-control">
                     <PanelBody
-                        title={__("Color Settings", "essential-blocks")}
+                        title={__("Global Color", "essential-blocks")}
                         initialOpen={true}
                     >
                         <TabPanel
@@ -638,7 +677,7 @@ function EBGlobalControls(props) {
                             ]}
                         >
                             {(tab) => (
-                                <div className={"eb-tab-controls" + tab.name}>
+                                <div className={"eb-tab-control-item eb-tab-controls-" + tab.name}>
                                     {tab.name === "solid" && (
                                         <>
                                             <PanelColorSettings
@@ -655,15 +694,13 @@ function EBGlobalControls(props) {
 
                                             {customColors && customColors.length > 0 && (
                                                 <ColorPalletWrapper
-                                                    colorPanelArray={colorPanelArray}
                                                     customColors={customColors}
-                                                    setCustomColor={setCustomColor}
                                                     setCustomColors={setCustomColors}
                                                 />
                                             )}
-                                            <div className="add-custom-color">
+                                            <div className="eb-add-btn add-custom-color">
                                                 <Button
-                                                    className="add-custom-color-btn"
+                                                    className="eb-add-btn__button add-custom-color-btn"
                                                     onClick={() => setCustomColors([
                                                         ...customColors,
                                                         {
@@ -684,6 +721,7 @@ function EBGlobalControls(props) {
                                                 title={"Gradient Colors"}
                                                 colors={gradientColors}
                                                 setColor={setGradientColor}
+                                                setColors={setGradientColors}
                                                 wrapperClass={"eb-gradient-color-panel"}
                                                 resetAction={true}
                                             />
@@ -693,15 +731,17 @@ function EBGlobalControls(props) {
                                                 title={"Custom Gradient Colors"}
                                                 colors={customGradientColors}
                                                 setColor={setCustomGradientColor}
+                                                setColors={setCustomGradientColors}
                                                 wrapperClass={"eb-custom-gradient-color-panel"}
                                                 resetAction={true}
                                                 deleteAction={true}
+                                                enableEditName={true}
                                                 onDelete={deleteCustomGradientColor}
                                             />
 
-                                            <div className="add-custom-color">
+                                            <div className="eb-add-btn add-custom-color">
                                                 <Button
-                                                    className="add-custom-color-btn"
+                                                    className="eb-add-btn__button add-custom-color-btn"
                                                     onClick={() => setCustomGradientColors([
                                                         ...customGradientColors,
                                                         {
@@ -720,9 +760,17 @@ function EBGlobalControls(props) {
                         </TabPanel>
                     </PanelBody>
 
+
+                    <PanelBody
+                        title={__("Global Typography", "essential-blocks")}
+                        initialOpen={true}
+                    >
+                        <TypographySettings />
+                    </PanelBody>
+
                     <PanelBody
                         title={__("Block Defaults", "essential-blocks")}
-                        initialOpen={true}
+                        initialOpen={false}
                     >
                         <div className="eb-block-list-button">
                             {typeof registeredBlocks === "object" &&
@@ -822,7 +870,7 @@ function EBGlobalControls(props) {
 
                                 <div className="block-default-popup-footer">
                                     <Button
-                                        className="btn-block-default-reset"
+                                        className="btn-block-default-reset btn-block-default-link"
                                         onClick={() =>
                                             handleResetBlockDefault(
                                                 clickedBlock
@@ -833,7 +881,18 @@ function EBGlobalControls(props) {
                                     </Button>
 
                                     <Button
-                                        className=" btn-block-default-save"
+                                        className="btn-block-default-link"
+                                        onClick={() =>
+                                            handleSaveInsert(
+                                                clickedBlock
+                                            )
+                                        }
+                                    >
+                                        Save & Insert
+                                    </Button>
+
+                                    <Button
+                                        className="btn-block-default-save"
                                         onClick={() => handleSaveBlockDefault()}
                                     >
                                         Save
@@ -861,10 +920,7 @@ function EBGlobalControls(props) {
 
 export default withSelect((select) => {
     return {
-        getGlobalColors: select("essential-blocks").getGlobalColors(),
-        getCustomColors: select("essential-blocks").getCustomColors(),
-        getGradientColors: select("essential-blocks").getGradientColors(),
-        getCustomGradientColors: select("essential-blocks").getCustomGradientColors(),
-        getBlockDefaults: select("essential-blocks").getBlockDefaults(),
+        ...getGlobalSettings(select),
+        getBlockDefaults: select('essential-blocks').getBlockDefaults()
     };
 })(EBGlobalControls);

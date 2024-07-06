@@ -187,7 +187,7 @@ const attributes = {
     buttonIcon: {
         type: "attribute",
         selector: ".eb-pricing .eb-pricing-footer",
-        attribute: "data-icon",
+        attribute: "data-icon"
     },
     buttonIconPosition: {
         type: "string",
@@ -318,6 +318,10 @@ const attributes = {
         default: false,
     },
     showFeatureLine: {
+        type: "boolean",
+        default: true,
+    },
+    showFeatureIcon: {
         type: "boolean",
         default: true,
     },

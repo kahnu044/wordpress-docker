@@ -110,7 +110,7 @@ export const ApiInfo = (props) => {
 				type="mail"
 				name="mail-form"
 				id="mail-form"
-				class="openverse-input"
+				className="openverse-input"
 				placeholder={__("user@example.com", "essential-blocks")}
 				defaultValue={!apiInfo.email ? "" : apiInfo.email}
 				onChange={(e) => handleEmailChange(e)}

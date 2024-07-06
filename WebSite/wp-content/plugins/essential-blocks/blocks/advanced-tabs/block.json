@@ -7,7 +7,12 @@
   "category": "essential-blocks",
   "textdomain": "essential-blocks",
   "supports": {
-    "align": ["wide", "full"]
+    "anchor": true,
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
   },
   "editorScript": "essential-blocks-editor-script"
 }

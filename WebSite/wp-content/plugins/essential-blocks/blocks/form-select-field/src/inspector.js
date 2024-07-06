@@ -28,8 +28,10 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     AdvancedControls,
-    SortableControl,
-    EBIconPicker
+    EBIconPicker,
+    DynamicInputControl,
+    DynamicFormFieldControl,
+    SortControl,
 } = EBControls;
 
 import objAttributes from "./attributes";
@@ -61,6 +63,9 @@ function Inspector(props) {
         showLabel,
         labelText,
         options,
+        dynamicValue,
+        dynamicOptionType,
+        dynamicValueLoader,
         fieldName,
         defaultValue,
         placeholderText,
@@ -80,22 +85,54 @@ function Inspector(props) {
 
     const [optionType, setOptionType] = useState("normal");
 
-    const onOptionAdd = () => {
-        if (!options || typeof options !== "object") {
-            return;
-        }
+    // const onOptionAdd = () => {
+    //     if (!options || typeof options !== "object") {
+    //         return;
+    //     }
 
-        const count = options.length + 1;
-        const newOptions = [
-            ...options,
-            {
-                name: `Option ${count}`,
-                value: `option_${count}`,
-            },
-        ];
+    //     const count = options.length + 1;
+    //     const newOptions = [
+    //         ...options,
+    //         {
+    //             name: `Option ${count}`,
+    //             value: `option_${count}`,
+    //         },
+    //     ];
 
-        setAttributes({ options: newOptions });
-    };
+    //     setAttributes({ options: newOptions });
+    // };
+
+    const getOtionsComponents = () => {
+        const onValueChange = (key, value, position) => {
+            const options = [...attributes.options]
+            options[position] = { ...attributes.options[position], [key]: value }
+            setAttributes({ options });
+        };
+
+        return attributes.options.map((each, i) => (
+            <div key={i}>
+                {optionType !== 'normal' && (
+                    <>
+                        <TextControl
+                            label={__("Key", "essential-blocks")}
+                            value={each.value}
+                            onChange={(value) =>
+                                onValueChange('value', value, i)
+                            }
+                        />
+                    </>
+
+                )}
+                <TextControl
+                    label={__("Value", "essential-blocks")}
+                    value={each.name}
+                    onChange={(name) =>
+                        onValueChange('name', name, i)
+                    }
+                />
+            </div>
+        ))
+    }
 
     const resRequiredProps = {
         setAttributes,
@@ -153,12 +190,14 @@ function Inspector(props) {
                                         />
 
                                         {showLabel && (
-                                            <TextControl
+                                            <DynamicInputControl
                                                 label={__(
                                                     "Label Text",
                                                     "essential-blocks"
                                                 )}
-                                                value={labelText}
+                                                attrName="labelText"
+                                                inputValue={labelText}
+                                                setAttributes={setAttributes}
                                                 onChange={(text) =>
                                                     setAttributes({
                                                         labelText: text,
@@ -167,7 +206,7 @@ function Inspector(props) {
                                             />
                                         )}
                                         {/* <PanelRow>Manage Options</PanelRow> */}
-                                        <BaseControl
+                                        {/* <BaseControl
                                             label={__(
                                                 "Manage Options",
                                                 "essential-blocks"
@@ -188,11 +227,12 @@ function Inspector(props) {
                                                                 optionType !==
                                                                 item.value
                                                             }
-                                                            onClick={() =>
+                                                            onClick={() => {
                                                                 setOptionType(
                                                                     item.value
                                                                 )
-                                                            }
+                                                                setAttributes({ options: [...options] })
+                                                            }}
                                                         >
                                                             {item.label}
                                                         </Button>
@@ -201,19 +241,18 @@ function Inspector(props) {
                                             </ButtonGroup>
                                         </BaseControl>
 
-                                        <SortableControl
-                                            valueEditable={
-                                                optionType === "normal"
-                                                    ? false
-                                                    : true
-                                            }
-                                            options={options}
-                                            setAttributes={setAttributes}
-                                        />
-
-                                        <Button
-                                            className="eb-add-options-button"
-                                            label={__(
+                                        <SortControl
+                                            items={attributes.options}
+                                            labelKey={'name'}
+                                            onSortEnd={options => setAttributes({ options })}
+                                            onDeleteItem={index => {
+                                                setAttributes({ options: attributes.options.filter((each, i) => i !== index) })
+                                            }}
+                                            hasSettings={true}
+                                            settingsComponents={getOtionsComponents()}
+                                            hasAddButton={true}
+                                            onAddItem={onOptionAdd}
+                                            addButtonText={__(
                                                 "Add New Option",
                                                 "essential-blocks"
                                             )}
@@ -226,7 +265,16 @@ function Inspector(props) {
                                                     "essential-blocks"
                                                 )}
                                             </span>
-                                        </Button>
+                                        </Button> */}
+                                        {/* {Dynamic select option} */}
+                                        <DynamicFormFieldControl
+                                            type="select"
+                                            options={options}
+                                            dynamicValue={dynamicValue}
+                                            dynamicOptionType={dynamicOptionType}
+                                            dynamicValueLoader={dynamicValueLoader}
+                                            setAttributes={setAttributes}
+                                        />
 
                                         <ToggleControl
                                             label={__(

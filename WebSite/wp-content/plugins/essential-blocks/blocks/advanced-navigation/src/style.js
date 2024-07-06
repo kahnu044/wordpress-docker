@@ -586,8 +586,8 @@ export default function Style(props) {
             : ""
         }
 
-
-		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__responsive-container.is-menu-open {
+		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__responsive-container.is-menu-open,
+		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation:not(.has-background) .wp-block-navigation__responsive-container.is-menu-open {
 			background-color: ${navHamburgerBgColor};
 			${hamburgerPaddingDesktop}
 		}
@@ -693,7 +693,7 @@ export default function Style(props) {
 		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__submenu-container {
 			${navDropdownPaddingTab}
 			${navDropdownBdShdStyesTab}
-			min-width: ${TABdropdownW_Range}px !important;
+			min-width: ${TABdropdownW_Range ? TABdropdownW_Range : dropdownW_Range}px !important;
 		}
 		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
 			${navDropdownTypoStylesTab}
@@ -799,13 +799,12 @@ export default function Style(props) {
 	.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__submenu-container {
 		${navDropdownPaddingMobile}
 		${navDropdownBdShdStyesMobile}
-		min-width: ${MOBdropdownW_Range}px !important;
+		min-width: ${MOBdropdownW_Range ? MOBdropdownW_Range : 200}px !important;
 	}
 	.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
 		${navDropdownTypoStylesMobile}
 		${dropdownItemPaddingMobile}
 		${dropdownItemBdShdStyesMobile}
-
 	}
 
 	.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__responsive-container-open {

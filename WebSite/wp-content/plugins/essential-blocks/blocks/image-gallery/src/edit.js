@@ -15,8 +15,6 @@ import {
     Button,
 } from "@wordpress/components";
 import { Fragment, useEffect, useState, useRef } from "@wordpress/element";
-import { select } from "@wordpress/data";
-
 /**
  * Internal depencencies
  */
@@ -26,7 +24,7 @@ import Inspector from "./inspector";
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
@@ -34,9 +32,7 @@ export default function Edit(props) {
         attributes,
         setAttributes,
         className,
-        clientId,
         isSelected,
-        name
     } = props;
     const {
         resOption,
@@ -78,28 +74,24 @@ export default function Edit(props) {
         enableIsotope,
         loadmoreBtnText,
         enableLoadMore,
+        enableInfiniteScroll
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-image-gallery";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-image-gallery',
+        style: <Style {...props} />
+    };
 
     const blockProps = useBlockProps({
         className: classnames(className, `eb-guten-block-main-parent-wrapper`),
     });
 
+
     //Set Image Sources on Change Image/Size
     useEffect(() => {
         const currentSources = [];
-
         images.map((image) => {
             let item = {};
             if (image.sizes && imageSize && imageSize.length > 0) {
@@ -313,8 +305,7 @@ export default function Edit(props) {
                     />
                 )}
             </>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 {urls.length > 0 && (
                     <Fragment>
@@ -324,9 +315,17 @@ export default function Edit(props) {
                                     {() => (
                                         <MediaUpload
                                             value={images.map((img) => img.id)}
-                                            onSelect={(images) =>
-                                                setAttributes({ images })
-                                            }
+                                            onSelect={(...images) => {
+                                                const newImages = images[0]
+                                                const mergedArray = new Map(images.map(item => [item.id, item]));
+                                                newImages.forEach(item => {
+                                                    const correspondingItem = mergedArray.get(item.id);
+                                                    if (correspondingItem) {
+                                                        Object.assign(item, correspondingItem);
+                                                    }
+                                                });
+                                                setAttributes({ images: newImages })
+                                            }}
                                             allowedTypes={["image"]}
                                             multiple
                                             gallery
@@ -450,7 +449,14 @@ export default function Edit(props) {
                             </div>
 
                             {enableLoadMore && (
-                                <button className="eb-img-gallery-loadmore">{loadmoreBtnText}</button>
+                                <button
+                                    {...(enableInfiniteScroll ? { disabled: true } : {})}
+                                    className={`eb-img-gallery-loadmore ${enableInfiniteScroll ? 'loadmore-disable' : ''}`}>
+                                    {enableInfiniteScroll && (
+                                        <img src={`${EssentialBlocksLocalize.eb_plugins_url}/assets/images/loading.svg`} />
+                                    )}
+                                    {loadmoreBtnText}
+                                </button>
                             )}
 
                         </div>
@@ -506,7 +512,7 @@ export default function Edit(props) {
                         />
                     </Fragment>
                 )}
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

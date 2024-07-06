@@ -422,6 +422,12 @@ class Form extends ThirdPartyIntegration
                 }
             }
         }
+
+        if(isset($validation['data']) && count($validation['data']) > 0) {
+            foreach($validation['data'] as $key => $value) {
+                $validation['data'][$key] = apply_filters( 'eb_dynamic_tag_value', $value, $value, true );
+            }
+        }
         return $validation;
     }
 }

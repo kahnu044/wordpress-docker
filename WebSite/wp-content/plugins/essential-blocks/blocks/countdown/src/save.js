@@ -1,5 +1,4 @@
-import { useBlockProps } from "@wordpress/block-editor";
-
+const { BlockProps } = window.EBControls;
 export default function Save({ attributes }) {
     const {
         blockId,
@@ -20,10 +19,17 @@ export default function Save({ attributes }) {
         restartTime,
         recurringCountdownEnd,
         preset,
+        showBlockContent
     } = attributes;
 
+    if (!showBlockContent) {
+        return
+    }
+
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -39,9 +45,8 @@ export default function Save({ attributes }) {
                         }
                         data-evergreen-recurring={recurringCountdown || false}
                         data-evergreen-restart-time={restartTime || "0"}
-                        data-evergreen-deadline-time={`${
-                            recurringCountdownEnd || 0
-                        }`}
+                        data-evergreen-deadline-time={`${recurringCountdownEnd || 0
+                            }`}
                     >
                         {showDays ? (
                             <div className="box cd-box-day">
@@ -89,6 +94,6 @@ export default function Save({ attributes }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 }

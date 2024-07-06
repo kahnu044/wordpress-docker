@@ -214,185 +214,185 @@ function Inspector({ attributes, setAttributes }) {
         setAttributes({ recurringCountdownEnd });
     };
 
-    const handlePresetChange = (preset) => {
-        applyFilters("eb_countdown_preset_change", preset, attributes, setAttributes);
-        switch (preset) {
-            case "default":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                });
-                break;
+    // const handlePresetChange = (preset) => {
+    //     applyFilters("eb_countdown_preset_change", preset, attributes, setAttributes);
+    //     switch (preset) {
+    //         case "default":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+    //             });
+    //             break;
 
-            case "preset1":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset1":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    boxsBds_Rds_Bottom: "50",
-                    boxsBds_Rds_Left: "50",
-                    boxsBds_Rds_Right: "50",
-                    boxsBds_Rds_Top: "50",
-                    boxsBds_Rds_Unit: "%",
-                    boxsBg_backgroundColor: "rgba(255,255,255,0.5)",
-                    boxsBg_backgroundType: "classic",
-                    dg_FontSize: 60,
-                    dg_LineHeight: 1,
-                    digitsColor: "rgba(16,253,244,1)",
-                    labelsColor: "rgba(0,0,0,0.5)",
-                });
-                break;
+    //                 boxsBds_Rds_Bottom: "50",
+    //                 boxsBds_Rds_Left: "50",
+    //                 boxsBds_Rds_Right: "50",
+    //                 boxsBds_Rds_Top: "50",
+    //                 boxsBds_Rds_Unit: "%",
+    //                 boxsBg_backgroundColor: "rgba(255,255,255,0.5)",
+    //                 boxsBg_backgroundType: "classic",
+    //                 dg_FontSize: 60,
+    //                 dg_LineHeight: 1,
+    //                 digitsColor: "rgba(16,253,244,1)",
+    //                 labelsColor: "rgba(0,0,0,0.5)",
+    //             });
+    //             break;
 
-            case "preset2":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset2":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    boxsBds_Bdr_Bottom: "2",
-                    boxsBds_Bdr_Left: "2",
-                    boxsBds_Bdr_Right: "2",
-                    boxsBds_Bdr_Top: "2",
-                    boxsBds_borderStyle: "solid",
-                    boxsBg_backgroundColor: "rgba(255,255,255,1)",
-                    boxsBg_backgroundType: "classic",
-                    boxsP_Bottom: "12",
-                    boxsP_Top: "12",
-                    dayBdrColor: "rgba(0,194,232,1)",
-                    dg_FontSize: 64,
-                    dg_LineHeight: 1.1,
-                    digitsColor: "rgba(75,75,75,1)",
-                    hourBdrColor: "rgba(255,107,211,1)",
-                    labelsColor: "rgba(75,75,75,1)",
-                    lb_FontSize: 21,
-                    lb_TextTransform: "uppercase",
-                    minuteBdrColor: "rgba(153,102,13,1)",
-                    sepRight_Range: 20,
-                    secondBdrColor: "rgba(0,91,255,1)",
-                });
-                break;
+    //                 boxsBds_Bdr_Bottom: "2",
+    //                 boxsBds_Bdr_Left: "2",
+    //                 boxsBds_Bdr_Right: "2",
+    //                 boxsBds_Bdr_Top: "2",
+    //                 boxsBds_borderStyle: "solid",
+    //                 boxsBg_backgroundColor: "rgba(255,255,255,1)",
+    //                 boxsBg_backgroundType: "classic",
+    //                 boxsP_Bottom: "12",
+    //                 boxsP_Top: "12",
+    //                 dayBdrColor: "rgba(0,194,232,1)",
+    //                 dg_FontSize: 64,
+    //                 dg_LineHeight: 1.1,
+    //                 digitsColor: "rgba(75,75,75,1)",
+    //                 hourBdrColor: "rgba(255,107,211,1)",
+    //                 labelsColor: "rgba(75,75,75,1)",
+    //                 lb_FontSize: 21,
+    //                 lb_TextTransform: "uppercase",
+    //                 minuteBdrColor: "rgba(153,102,13,1)",
+    //                 sepRight_Range: 20,
+    //                 secondBdrColor: "rgba(0,91,255,1)",
+    //             });
+    //             break;
 
-            case "preset3":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
-                    WrpBg_backgroundColor: "rgba(255,255,255,1)",
-                    boxsBg_backgroundType: "classic",
-                    dayDgColor: "rgba(52,219,213,1)",
-                    dg_FontSize: 62,
-                    dg_LineHeight: 1.1,
-                    hourDgColor: "rgba(138,65,255,1)",
-                    labelsColor: "rgba(77,77,77,1)",
-                    lb_FontSize: 16,
-                    lb_FontWeight: "500",
-                    lb_TextTransform: "uppercase",
-                    minuteDgColor: "rgba(1,206,135,1)",
-                    secondDgColor: "rgba(252,105,125,1)",
-                    separatorColor: "rgba(91,91,91,1)",
-                    showSeparator: true,
-                    wrpBdSd_Rds_Bottom: "10",
-                    wrpBdSd_Rds_Left: "10",
-                    wrpBdSd_Rds_Right: "10",
-                    wrpBdSd_Rds_Top: "10",
-                    wrpBdSd_blur: 20,
-                    wrpBdSd_hOffset: 11,
-                    wrpBdSd_shadowColor: "rgba(155,155,155,1)",
-                    wrpBdSd_vOffset: 12,
-                });
-                break;
+    //         case "preset3":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
+    //                 WrpBg_backgroundColor: "rgba(255,255,255,1)",
+    //                 boxsBg_backgroundType: "classic",
+    //                 dayDgColor: "rgba(52,219,213,1)",
+    //                 dg_FontSize: 62,
+    //                 dg_LineHeight: 1.1,
+    //                 hourDgColor: "rgba(138,65,255,1)",
+    //                 labelsColor: "rgba(77,77,77,1)",
+    //                 lb_FontSize: 16,
+    //                 lb_FontWeight: "500",
+    //                 lb_TextTransform: "uppercase",
+    //                 minuteDgColor: "rgba(1,206,135,1)",
+    //                 secondDgColor: "rgba(252,105,125,1)",
+    //                 separatorColor: "rgba(91,91,91,1)",
+    //                 showSeparator: true,
+    //                 wrpBdSd_Rds_Bottom: "10",
+    //                 wrpBdSd_Rds_Left: "10",
+    //                 wrpBdSd_Rds_Right: "10",
+    //                 wrpBdSd_Rds_Top: "10",
+    //                 wrpBdSd_blur: 20,
+    //                 wrpBdSd_hOffset: 11,
+    //                 wrpBdSd_shadowColor: "rgba(155,155,155,1)",
+    //                 wrpBdSd_vOffset: 12,
+    //             });
+    //             break;
 
-            case "preset4":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset4":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    boxsBg_backgroundType: "classic",
-                    boxsP_Bottom: "27",
-                    contentsDirection: "row",
-                    dayBg_backgroundColor: "rgba(253,121,139,1)",
-                    dg_FontSize: 64,
-                    dg_LineHeight: 1,
-                    hourBg_backgroundColor: "rgba(23,229,157,1)",
-                    flexDirection: "column",
-                    labelsColor: "rgba(238,238,238,1)",
-                    lb_FontSize: 20,
-                    lb_FontWeight: "500",
-                    lb_LineHeight: 0,
-                    lb_TextTransform: "uppercase",
-                    lblPad_Left: "10",
-                    lblPad_Top: "35",
-                    lblPad_isLinked: false,
-                    minuteBg_backgroundColor: "rgba(124,117,255,1)",
-                    secondBg_backgroundColor: "rgba(75,230,224,1)",
-                });
-                break;
+    //                 boxsBg_backgroundType: "classic",
+    //                 boxsP_Bottom: "27",
+    //                 contentsDirection: "row",
+    //                 dayBg_backgroundColor: "rgba(253,121,139,1)",
+    //                 dg_FontSize: 64,
+    //                 dg_LineHeight: 1,
+    //                 hourBg_backgroundColor: "rgba(23,229,157,1)",
+    //                 flexDirection: "column",
+    //                 labelsColor: "rgba(238,238,238,1)",
+    //                 lb_FontSize: 20,
+    //                 lb_FontWeight: "500",
+    //                 lb_LineHeight: 0,
+    //                 lb_TextTransform: "uppercase",
+    //                 lblPad_Left: "10",
+    //                 lblPad_Top: "35",
+    //                 lblPad_isLinked: false,
+    //                 minuteBg_backgroundColor: "rgba(124,117,255,1)",
+    //                 secondBg_backgroundColor: "rgba(75,230,224,1)",
+    //             });
+    //             break;
 
-            case "preset5":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset5":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    WrpBg_backgroundColor: "rgba(40,70,175,1)",
-                    boxsBg_backgroundType: "classic",
-                    boxsBg_backgroundColor: "",
-                    dg_FontSize: 70,
-                    dg_LineHeight: 1,
-                    digitsColor: "rgba(255,255,255,0.8)",
-                    lb_FontSize: 19,
-                    lb_FontWeight: "100",
-                    lb_TextTransform: "uppercase",
-                    lblPad_Top: "5",
-                    lblPad_isLinked: false,
-                    separatorColor: "rgba(255,255,255,0.71)",
-                    separatorType: "|",
-                    showSeparator: true,
-                    sp_FontSize: 90,
-                    sp_FontWeight: "100",
-                });
-                break;
+    //                 WrpBg_backgroundColor: "rgba(40,70,175,1)",
+    //                 boxsBg_backgroundType: "classic",
+    //                 boxsBg_backgroundColor: "",
+    //                 dg_FontSize: 70,
+    //                 dg_LineHeight: 1,
+    //                 digitsColor: "rgba(255,255,255,0.8)",
+    //                 lb_FontSize: 19,
+    //                 lb_FontWeight: "100",
+    //                 lb_TextTransform: "uppercase",
+    //                 lblPad_Top: "5",
+    //                 lblPad_isLinked: false,
+    //                 separatorColor: "rgba(255,255,255,0.71)",
+    //                 separatorType: "|",
+    //                 showSeparator: true,
+    //                 sp_FontSize: 90,
+    //                 sp_FontWeight: "100",
+    //             });
+    //             break;
 
-            case "preset6":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset6":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    boxsBg_backgroundColor: "rgba(107,99,255,1)",
-                    boxsBg_backgroundType: "classic",
-                    boxsP_Bottom: "10",
-                    boxsP_Top: "10",
-                    contentsAlign: "flex-end",
-                    contentsDirection: "row",
-                    dg_FontSize: 37,
-                    lb_FontSize: 12,
-                    lb_LineHeight: 1,
-                    lb_TextTransform: "uppercase",
-                    lblPad_Bottom: "20",
-                    lblPad_Left: "5",
-                    lblPad_isLinked: false,
-                });
-                break;
+    //                 boxsBg_backgroundColor: "rgba(107,99,255,1)",
+    //                 boxsBg_backgroundType: "classic",
+    //                 boxsP_Bottom: "10",
+    //                 boxsP_Top: "10",
+    //                 contentsAlign: "flex-end",
+    //                 contentsDirection: "row",
+    //                 dg_FontSize: 37,
+    //                 lb_FontSize: 12,
+    //                 lb_LineHeight: 1,
+    //                 lb_TextTransform: "uppercase",
+    //                 lblPad_Bottom: "20",
+    //                 lblPad_Left: "5",
+    //                 lblPad_isLinked: false,
+    //             });
+    //             break;
 
-            case "preset7":
-                setAttributes({
-                    ...defaultPresetAttrsObj,
+    //         case "preset7":
+    //             setAttributes({
+    //                 ...defaultPresetAttrsObj,
 
-                    boxsBds_Bdr_Bottom: "10",
-                    boxsBds_Bdr_Left: "10",
-                    boxsBds_Bdr_Right: "10",
-                    boxsBds_Bdr_Top: "10",
-                    boxsBds_Rds_Bottom: "50",
-                    boxsBds_Rds_Left: "50",
-                    boxsBds_Rds_Right: "50",
-                    boxsBds_Rds_Top: "50",
-                    boxsBds_Rds_Unit: "%",
-                    boxsBds_borderStyle: "solid",
-                    boxsBg_backgroundType: "classic",
-                    boxsP_Bottom: "16",
-                    boxsP_Top: "16",
-                    dg_FontSize: 46,
-                    dg_LineHeight: 1,
-                    digitsColor: "rgba(0,0,0,0.5)",
-                    labelsColor: "rgba(0,0,0,0.5)",
-                    lb_FontWeight: "600",
-                    sepRight_Range: 29,
-                });
-                break;
-        }
+    //                 boxsBds_Bdr_Bottom: "10",
+    //                 boxsBds_Bdr_Left: "10",
+    //                 boxsBds_Bdr_Right: "10",
+    //                 boxsBds_Bdr_Top: "10",
+    //                 boxsBds_Rds_Bottom: "50",
+    //                 boxsBds_Rds_Left: "50",
+    //                 boxsBds_Rds_Right: "50",
+    //                 boxsBds_Rds_Top: "50",
+    //                 boxsBds_Rds_Unit: "%",
+    //                 boxsBds_borderStyle: "solid",
+    //                 boxsBg_backgroundType: "classic",
+    //                 boxsP_Bottom: "16",
+    //                 boxsP_Top: "16",
+    //                 dg_FontSize: 46,
+    //                 dg_LineHeight: 1,
+    //                 digitsColor: "rgba(0,0,0,0.5)",
+    //                 labelsColor: "rgba(0,0,0,0.5)",
+    //                 lb_FontWeight: "600",
+    //                 sepRight_Range: 29,
+    //             });
+    //             break;
+    //     }
 
-        setAttributes({ preset });
-    };
+    //     setAttributes({ preset });
+    // };
 
     return (
         <InspectorControls key="controls">
@@ -425,9 +425,9 @@ function Inspector({ attributes, setAttributes }) {
                                 <>
                                     <PanelBody
                                         title={__("Countdown Settings", "essential-blocks")}
-                                        // initialOpen={false}
+                                    // initialOpen={false}
                                     >
-                                        <BaseControl label={__("Design Preset", "essential-blocks")}>
+                                        {/* <BaseControl label={__("Design Preset", "essential-blocks")}>
                                             <ProSelectControl
                                                 // label={__("Design Preset", "essential-blocks")}
                                                 value={preset}
@@ -435,7 +435,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 // onChange={(preset) => setAttributes({ preset })}
                                                 onChange={handlePresetChange}
                                             />
-                                        </BaseControl>
+                                        </BaseControl> */}
                                         <ToggleControl
                                             label={__("Evergreen Timer?", "essential-blocks")}
                                             checked={isEvergreenTimer}
@@ -765,7 +765,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 resRequiredProps={resRequiredProps}
                                                 noOverlay
                                                 noMainBgi
-                                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                                             />
                                         </PanelBody>
 
@@ -780,8 +780,8 @@ function Inspector({ attributes, setAttributes }) {
                                             <BorderShadowControl
                                                 controlName={cdBoxsBdShadowConst}
                                                 resRequiredProps={resRequiredProps}
-                                                // noShadow
-                                                // noBorder
+                                            // noShadow
+                                            // noBorder
                                             />
                                         </PanelBody>
                                     </PanelBody>
@@ -946,7 +946,7 @@ function Inspector({ attributes, setAttributes }) {
                                 <>
                                     <PanelBody
                                         title={__("Margin & Padding")}
-                                        // initialOpen={true}
+                                    // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
@@ -971,8 +971,8 @@ function Inspector({ attributes, setAttributes }) {
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

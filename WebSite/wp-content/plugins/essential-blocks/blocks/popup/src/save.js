@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+const { EBDisplayIcon, BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -34,7 +34,7 @@ const Save = ({ attributes }) => {
                 ? " alignment-right"
                 : " alignment-center";
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div className="eb-parent-wrapper">
                 <div
                     id={blockId}
@@ -59,7 +59,7 @@ const Save = ({ attributes }) => {
                         {"btn_click" === trigger && (
                             <>
                                 <div className={`eb-popup-button${alignmentClass}`}>
-                                    <a className="eb-popup-button-anchor">
+                                    <a className="eb-popup-button-anchor" role="button">
                                         {"button" === btnType && (
                                             <>
                                                 {btnIcon && "left" === iconPosition && (
@@ -112,7 +112,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

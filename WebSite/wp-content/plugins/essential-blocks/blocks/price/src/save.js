@@ -1,5 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
-
+const { BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -21,7 +21,7 @@ const Save = ({ attributes }) => {
             : "eb-price-view-stacked";
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -57,9 +57,8 @@ const Save = ({ attributes }) => {
                             </>
                         )}
                         <h3
-                            className={`eb-original-price-wrapper${
-                                showOnSale === true ? " eb-line-through" : ""
-                            }`}
+                            className={`eb-original-price-wrapper${showOnSale === true ? " eb-line-through" : ""
+                                }`}
                         >
                             <span className="eb-original-price">
                                 {currencyPlacement === "left" && (
@@ -82,7 +81,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

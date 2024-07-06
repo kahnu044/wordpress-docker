@@ -19,3 +19,76 @@ span.mfcf7-notice-image a img {
   border: 1px solid #bebebe;
   padding: 3px;
 }
+/* For deactivation popup */
+.admin-popup-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.admin-popup-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.admin-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+/*01-03-2024*/
+.mfcf7-modal-header {
+  border-bottom: #eee solid 1px;
+  background: #ffffff;
+  position: relative;
+  margin-bottom: -12px;
+}
+.mfcf7-modal-footer {
+  background: #ffffff;
+  border: 0;
+  padding: 8px;
+  text-align: right;
+  border-top: #eee 1px solid;
+}
+a#cancel-btn {
+  padding: 4px 24px;
+}
+label textarea[name="other_reason"] {
+  margin-top: 10px; /* Adjust the value as needed */
+}
+#loader {
+  display: none;
+  position: fixed;
+  bottom: 5%;
+  left: 38%;
+  transform: translate(-5%, -40%);
+}
+.loader-circle {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@media screen and (max-width: 480px) {
+  .admin-popup-content {
+    width: 70%;
+  }
+  .zl_mfcf_btn {
+    width: 100%;
+  }
+}

@@ -100,6 +100,7 @@ class Common_Settings extends Ajax_Base {
 			'btn_inherit_from_theme',
 			'zip_ai_module_status',
 			'zip_ai_verify_authenticity',
+			'enable_header_titlebar',
 		);
 
 		$this->init_ajax_events( $ajax_events );
@@ -114,6 +115,10 @@ class Common_Settings extends Ajax_Base {
 	public function btn_inherit_from_theme() {
 
 		$this->check_permission_nonce( 'uag_btn_inherit_from_theme' );
+		if ( false !== get_option( 'uag_btn_inherit_from_theme_fallback' ) ) {
+			\UAGB_Admin_Helper::delete_admin_settings_option( 'uag_btn_inherit_from_theme_fallback' );
+		};
+		
 		$value = $this->check_post_value();
 		$this->delete_all_assets(); // We need to regenerate assets when user changes this setting to regenerate the dynamic CSS according to it.
 		$this->save_admin_settings( 'uag_btn_inherit_from_theme', sanitize_text_field( $value ) );
@@ -707,8 +712,10 @@ class Common_Settings extends Ajax_Base {
 	 */
 	public function regenerate_assets() {
 		$this->check_permission_nonce( 'uag_regenerate_assets' );
-
-		$this->delete_all_assets();
+		
+		/* Update the asset version */
+		\UAGB_Admin_Helper::create_specific_stylesheet();
+		\UAGB_Admin_Helper::update_admin_settings_option( '__uagb_asset_version', time() );
 
 		$response_data = array(
 			'messsage' => __( 'Successfully saved data!', 'ultimate-addons-for-gutenberg' ),
@@ -1022,5 +1029,18 @@ class Common_Settings extends Ajax_Base {
 		} else {
 			wp_send_json_error( array( 'messsage' => __( 'Unable to verify authenticity.', 'ultimate-addons-for-gutenberg' ) ) );
 		}
+	}
+
+	/**
+	 * Save setting - Enables the header titlebar.
+	 *
+	 * @since 2.13.1
+	 * @return void
+	 */
+	public function enable_header_titlebar() {
+		$this->check_permission_nonce( 'uag_enable_header_titlebar' );
+		$value = $this->check_post_value();
+		$value = 'enabled' === $value ? 'enabled' : 'disabled';
+		$this->save_admin_settings( 'uag_enable_header_titlebar', sanitize_text_field( $value ) );
 	}
 }

@@ -58,6 +58,8 @@ if ( ! class_exists( 'EbStyleHandlerParseCss' ) ) {
                 foreach ( $block as $item ) {
                     $attributes = $item[ 'attrs' ];
 
+                    $isCustomCssError = isset($attributes['isCustomCssError']) ? $attributes['isCustomCssError'] : false;
+
                     $blockId = "";
                     if ( isset( $attributes[ 'blockId' ] ) && ! empty( $attributes[ 'blockId' ] ) ) {
                         $blockId = $attributes[ 'blockId' ];
@@ -71,8 +73,9 @@ if ( ! class_exists( 'EbStyleHandlerParseCss' ) ) {
                         $commonStyles = $attributes[ 'commonStyles' ];
                     }
                     $customCss = "";
-                    if ( isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
-                        $customCss = $attributes[ 'customCss' ];
+                    if ( !$isCustomCssError && isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
+                        // $customCss = $attributes[ 'customCss' ];
+                        $customCss = str_replace('eb_selector', "." . $blockId, $attributes['customCss']);
                     }
 
                     if ( isset( $attributes[ 'ref' ] ) && ! empty( $attributes[ 'ref' ] ) && $item[ "blockName" ] === "core/block" ) {

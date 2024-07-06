@@ -51,7 +51,7 @@ class SocialShare extends Block {
 					'showTitle'          => true,
 					'isFloating'         => false,
 					'iconShape'          => '',
-					'wrapper_attributes' => get_block_wrapper_attributes(),
+					'wrapper_attributes' => get_block_wrapper_attributes(['class' => 'root-' . $attributes['blockId']]),
 					'block_object'       => $this,
 				)
 			)

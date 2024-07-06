@@ -122,6 +122,30 @@ const attributes = {
         type: "string",
         default: "fas fa-arrow-circle-down"
     },
+    source: {
+        type: "string",
+        default: "custom"
+    },
+    enableLink: {
+        type: "boolean",
+        default: false,
+    },
+    titleLink: {
+        type: "string",
+        default: "",
+    },
+    openInNewTab: {
+        type: "boolean",
+        default: false,
+    },
+
+    currentPostId: {
+        type: "number",
+        default: 0
+    },
+    currentPostType: {
+        type: "string",
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(typographyObjs)),

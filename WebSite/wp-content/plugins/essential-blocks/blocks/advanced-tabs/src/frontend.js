@@ -38,8 +38,9 @@ window.addEventListener("DOMContentLoaded", () => {
         let verticalTab = titleListsWrap.closest(
             ".eb-advanced-tabs-wrapper.vertical"
         );
+        const isMinHeight = verticalTab?.getAttribute("data-min-height");
 
-        if (verticalTab) {
+        if (verticalTab && isMinHeight === 'true') {
             const navHeight = titleListsWrap.offsetHeight;
 
             verticalTab.querySelector(
@@ -119,7 +120,7 @@ window.addEventListener("DOMContentLoaded", () => {
                         // add min height for vertical
                         const navHeight = titleLiTag.closest(".tabTitles")
                             .offsetHeight;
-                        if (verticalTab) {
+                        if (verticalTab && isMinHeight === 'true') {
                             verticalTab.querySelector(
                                 ".eb-tabs-contents .eb-tab-wrapper.active"
                             ).style.minHeight = navHeight + "px";

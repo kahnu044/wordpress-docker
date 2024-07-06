@@ -137,9 +137,6 @@ export default function Style(props) {
 
     const contentHeightDesktop = `
         .eb-parent-${blockId} {
-            overflow-y: auto;
-        }
-        .eb-parent-${blockId} {
             ${wrapperHeightDesktop}
         }
         .eb-wrapper-outer.${blockId} {

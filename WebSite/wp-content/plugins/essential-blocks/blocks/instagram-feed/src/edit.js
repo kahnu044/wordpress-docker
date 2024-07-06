@@ -11,7 +11,6 @@ import {
     ToolbarButton,
     ExternalLink,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
 /**
  * Internal Import
  */
@@ -20,7 +19,7 @@ import Style from "./style";
 import Inspector from "./inspector";
 
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 const edit = (props) => {
@@ -28,9 +27,7 @@ const edit = (props) => {
         attributes,
         setAttributes,
         className,
-        clientId,
         isSelected,
-        name
     } = props;
     const {
         blockId,
@@ -61,28 +58,12 @@ const edit = (props) => {
     const [responseCode, setResponseCode] = useState(undefined);
     const [errorMessage, setErrorMessage] = useState("");
 
-    useEffect(() => {
-        // this useEffect is for creating an unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-instagram-feed";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        // get default profileImg
-        if (!profileImg) {
-            setAttributes({
-                profileImg: `${EssentialBlocksLocalize.eb_plugins_url}assets/images/user.png`,
-            });
-        }
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-instagram-feed',
+        style: <Style {...props} />
+    };
 
     if (preview) {
         return (
@@ -431,8 +412,7 @@ const edit = (props) => {
                     </>
                 </BlockControls>
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
@@ -456,7 +436,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

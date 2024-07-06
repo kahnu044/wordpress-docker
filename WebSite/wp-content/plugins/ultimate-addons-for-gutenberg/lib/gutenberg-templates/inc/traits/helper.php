@@ -23,11 +23,14 @@ class Helper {
 	 * @param string $message   Log message.
 	 */
 	public function ast_block_templates_log( $message = '' ) {
+		
 		if ( self::$instance->ast_block_templates_doing_wp_cli() ) {
 			\WP_CLI::line( $message );
 		} else {
-			error_log( $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG && function_exists( 'error_log' ) && apply_filters( 'ast_block_templates_debug_logs', false ) ) {
+				error_log( $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+		}   
 	}
 
 	/**
@@ -216,7 +219,7 @@ class Helper {
 		// If the endpoint is not a string, then abandon ship.
 		if ( ! is_string( $endpoint ) ) {
 			return array(
-				'error' => __( 'The Zip AI Endpoint was not declared', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Endpoint was not declared', 'ultimate-addons-for-gutenberg' ),
 			);
 		}
 
@@ -226,7 +229,7 @@ class Helper {
 		// If the Zip Auth Token is not set, then abandon ship.
 		if ( empty( $auth_token ) || ! is_string( $auth_token ) ) {
 			return array(
-				'error' => __( 'The Zip AI Auth Token is not set.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Auth Token is not set.', 'ultimate-addons-for-gutenberg' ),
 			);
 		}
 
@@ -235,7 +238,7 @@ class Helper {
 		$api_url = $server_url . $endpoint;
 
 		// Get the response from the endpoint.
-		$response = wp_remote_post(
+		$response = wp_safe_remote_post(
 			$api_url,
 			array(
 				'headers' => array(
@@ -248,7 +251,7 @@ class Helper {
 		// If the response was an error, or not a 200 status code, then abandon ship.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return array(
-				'error' => __( 'The Zip AI Middleware is not responding.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Middleware is not responding.', 'ultimate-addons-for-gutenberg' ),
 			);
 		}
 
@@ -258,7 +261,7 @@ class Helper {
 		// If the response body is not a JSON, then abandon ship.
 		if ( empty( $response_body ) || ! json_decode( $response_body ) ) {
 			return array(
-				'error' => __( 'The Zip AI Middleware encountered an error.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Middleware encountered an error.', 'ultimate-addons-for-gutenberg' ),
 			);
 		}
 
@@ -313,6 +316,157 @@ class Helper {
 	 */
 	public function is_debug_mode() {
 		return defined( 'GT_DEBUG' ) && GT_DEBUG;
+	}
+
+	/**
+	 * Create files/directories.
+	 * 
+	 * @param array<int, array<string, string>> $files The files array.
+	 * 
+	 * @return void
+	 */
+	public function create_files( $files = array() ) {
+		// Install files and folders for uploading files and prevent hotlinking.
+		foreach ( $files as $file ) {
+			$this->create_single_file( $file );
+		}
+	}
+
+	/**
+	 * Create file/directories.
+	 * 
+	 * @param array<string, string> $file The file array.
+	 * 
+	 * @return void
+	 */
+	public function create_single_file( $file ) {
+		if ( wp_mkdir_p( $file['file_base'] ) && ! file_exists( trailingslashit( $file['file_base'] ) . $file['file_name'] ) ) {
+			$file_handle = @fopen( trailingslashit( $file['file_base'] ) . $file['file_name'], 'w' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_read_fopen
+			if ( $file_handle ) {
+				fwrite( $file_handle, $file['file_content'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite, WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite
+				fclose( $file_handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+				self::ast_block_templates_log( 'File: ' . $file['file_name'] . ' Created Successfully!' );
+			}
+		}
+	}
+
+	/**
+	 * Update files/directories.
+	 * 
+	 * @param string     $file_name The file path.
+	 * @param string|int $file_content The file content.
+	 * 
+	 * @return void
+	 */
+	public function update_json_file( $file_name, $file_content ) {
+
+		$file_name = $file_name . '.json';
+
+		if ( ! file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) ) {
+			$file_data = array(
+				'file_name' => $file_name,
+				'file_content' => '',
+				'file_base' => AST_BLOCK_TEMPLATES_JSON_DIR,
+			);
+
+			$this->create_single_file( $file_data );
+		}
+
+		if ( file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) && file_put_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name, wp_json_encode( $file_content ) ) !== false ) { //phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+			self::ast_block_templates_log( 'File: ' . $file_name . ' Updated Successfully!' );
+		} else {
+			self::ast_block_templates_log( 'File: ' . $file_name . ' Not Updated!' );
+		}
+		
+	}
+
+	/**
+	 * Get files/directories.
+	 * 
+	 * @param string $file_name The file name.
+	 * @param bool   $get_array Is The file content array.
+	 * 
+	 * @return mixed
+	 */
+	public function get_json_file_content( $file_name, $get_array = true ) {
+
+		if ( file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) ) {
+			// Ignoring the rule as it is not a remote file.
+			$file_content = file_get_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ); //phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+			
+			if ( $get_array ) {
+				return json_decode( (string) $file_content, true );
+			} else {
+				return $file_content;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Get block categories.
+	 * 
+	 * @return array<int, array<string, string>>
+	 */
+	public function get_block_template_category() {
+		return self::get_json_file_content( 'ast-block-templates-categories.json', true );
+	}
+
+	/**
+	 * Get customiser CSS.
+	 * 
+	 * @return string
+	 */
+	public function get_block_template_customiser_css() {
+		return trim( self::get_json_file_content( 'ast-block-templates-customizer-css.json', false ), '"' );
+	}   
+
+	/**
+	 * Get last exported checksum.
+	 * 
+	 * @return string
+	 */
+	public function get_last_exported_checksum() {
+		return trim( self::get_json_file_content( 'ast-block-templates-last-export-checksums.json', false ), '"' );
+	}
+
+	/**
+	 * Get site request count.
+	 * 
+	 * @return int
+	 */
+	public function get_site_request() {
+		return self::get_json_file_content( 'ast-block-templates-site-requests.json', false );
+	}
+
+	/**
+	 * Get block request count.
+	 * 
+	 * @return int
+	 */
+	public function get_block_templates_requests() {
+		return self::get_json_file_content( 'ast-block-templates-block-requests.json', false );
+	}
+
+	/**
+	 * Get blocks page wise.
+	 * 
+	 * @param int $page The page number.
+	 * @return  array<int, mixed>
+	 */
+	public function get_blocks_templates( $page = 0 ) {
+		return self::get_json_file_content( 'ast-block-templates-blocks-' . $page . '.json', true );
+	}
+
+	/**
+	 * Get sites page wise.
+	 * 
+	 * @param int $page The page number.
+	 * @return array<int, mixed>
+	 */
+	public function get_sites_templates( $page = 0 ) {
+		return self::get_json_file_content( 'ast-block-templates-sites-' . $page . '.json', true );
 	}
 }
 

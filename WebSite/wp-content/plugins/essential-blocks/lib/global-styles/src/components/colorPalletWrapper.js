@@ -1,12 +1,17 @@
 
 import { __ } from "@wordpress/i18n";
-import { useState, useEffect, useRef } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 import {
-    PanelColorSettings
-} from "@wordpress/block-editor";
+    Dashicon,
+    ColorIndicator,
+    TextControl,
+    PanelRow,
+    Dropdown,
+    ColorPicker
+} from "@wordpress/components";
 
 const ColorPalletWrapper = (props) => {
-    const { colorPanelArray, customColors, setCustomColor, setCustomColors } = props
+    const { colorPanelArray, customColors, setCustomColors } = props
 
     const deleteItem = (index) => {
         const colors = [...customColors]
@@ -14,16 +19,34 @@ const ColorPalletWrapper = (props) => {
         setCustomColors([...colors])
     }
 
+    const editColorName = (index, value) => {
+        let colors = [...customColors]
+        colors[index] = {
+            ...colors[index],
+            name: value
+        }
+        setCustomColors([...colors])
+    }
+
+    const changeColor = (index, value) => {
+        let colors = [...customColors]
+        colors[index] = {
+            ...colors[index],
+            color: value
+        }
+        setCustomColors([...colors])
+    }
+
     useEffect(() => {
         if (customColors.length > 0) {
-            //Add delete button and delete action for custom colors
-            const colorPanel = document.querySelector('.eb-custom-color-panel');
+            // deleteOptionHandler('.eb-custom-color-panel', '.components-tools-panel-item', deleteItem)
+            const panel = document.querySelector('.eb-custom-color-panel');
             setTimeout(() => {
-                const items = colorPanel && colorPanel.querySelectorAll('.components-tools-panel-item');
+                const items = panel && panel.querySelectorAll('.components-tools-panel-item');
                 if (items) {
                     items.forEach((item, index) => {
                         const newButton = document.createElement('button');
-                        newButton.className = 'eb-delete-custom-color';
+                        newButton.className = 'eb-delete-item';
                         const deleteIcon = document.createElement('span');
                         deleteIcon.className = 'dashicons dashicons-trash';
                         newButton.appendChild(deleteIcon);
@@ -42,16 +65,37 @@ const ColorPalletWrapper = (props) => {
 
     return (
         <>
-            <PanelColorSettings
-                title={__(
-                    "Custom Colors",
-                    "essential-blocks"
-                )}
-                className={"eb-color-panel eb-custom-color-panel"}
-                initialOpen={true}
-                disableAlpha={true}
-                colorSettings={colorPanelArray(customColors, setCustomColor)}
-            />
+            <PanelRow className="eb-gradient-color-label">Custom Colors</PanelRow>
+            <div className="eb-custom-panel eb-custom-color-panel">
+                {customColors.length > 0 && customColors.map((color, index) => (
+                    <div key={index} className="eb-custom-element eb-global--color-item">
+                        <Dropdown
+                            className="color-indicator"
+                            contentClassName="my-dropdown-content-classname"
+                            popoverProps={{ placement: 'bottom-start' }}
+                            renderToggle={({ isOpen, onToggle }) => (
+                                <ColorIndicator
+                                    onClick={onToggle}
+                                    aria-expanded={isOpen}
+                                    colorValue={color?.color} />
+                            )}
+                            renderContent={() => <ColorPicker onChange={(color) => changeColor(index, color)} />}
+                        />
+
+                        <TextControl
+                            className={'eb-custom-element__edit-input'}
+                            value={color.name || ''}
+                            onChange={(text) => editColorName(index, text)}
+                        />
+                        <button
+                            className={'eb-delete-item'}
+                            onClick={() => deleteItem(index)}
+                        >
+                            <Dashicon icon="trash" />
+                        </button>
+                    </div>
+                ))}
+            </div>
         </>
     )
 }

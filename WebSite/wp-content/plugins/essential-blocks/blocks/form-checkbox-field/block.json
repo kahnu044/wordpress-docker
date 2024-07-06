@@ -7,10 +7,8 @@
   "category": "essential-blocks",
   "textdomain": "essential-blocks",
   "ancestor": [ "essential-blocks/form" ],
-  "supports": {
-    "align": [
-      "full"
-    ]
+"supports": {
+    "anchor": true
   },
   "editorScript": "essential-blocks-editor-script"
 }

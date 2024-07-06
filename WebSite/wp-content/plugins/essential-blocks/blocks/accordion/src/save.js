@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
-
+import { InnerBlocks } from "@wordpress/block-editor";
+const { BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -15,7 +15,9 @@ const Save = ({ attributes }) => {
     } = attributes;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div
                     className={`eb-accordion-container ${blockId}`}
@@ -29,7 +31,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

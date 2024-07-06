@@ -9,7 +9,7 @@ import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
  *
  */
 import { SHAPE_DIVIDER_TOP, SHAPE_DIVIDER_BOTTOM } from "./constants";
-const { ShapeDividerContent } = window.EBControls;
+const { ShapeDividerContent, BlockProps } = window.EBControls;
 
 const save = ({ attributes }) => {
     const {
@@ -25,18 +25,17 @@ const save = ({ attributes }) => {
         wrapperAlign === "center"
             ? "eb-wrapper-align-center"
             : wrapperAlign === "right"
-            ? "eb-wrapper-align-right"
-            : "";
+                ? "eb-wrapper-align-right"
+                : "";
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
                 <div
-                    className={`eb-wrapper-outer ${blockId}${
-                        isWrapperWidth ? ` ${alignmentClass}` : ""
-                    }`}
+                    className={`eb-wrapper-outer ${blockId}${isWrapperWidth ? ` ${alignmentClass}` : ""
+                        }`}
                 >
                     {attributes[`${SHAPE_DIVIDER_TOP}Type`] != "" && (
                         <ShapeDividerContent
@@ -54,16 +53,15 @@ const save = ({ attributes }) => {
                     )}
                     <div className="eb-wrapper-inner">
                         <div
-                            className={`eb-wrapper-inner-blocks${
-                                !isWrapperWidth ? ` ${alignmentClass}` : ""
-                            }`}
+                            className={`eb-wrapper-inner-blocks${!isWrapperWidth ? ` ${alignmentClass}` : ""
+                                }`}
                         >
                             <InnerBlocks.Content />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import { useState } from "@wordpress/element";
 import {
     PanelBody,
@@ -13,13 +13,14 @@ import {
     BaseControl,
     ButtonGroup,
     TabPanel,
+    TextControl,
+    PanelRow
 } from "@wordpress/components";
 
 /**
  * Internal dependencies
  */
-import SortableTabs from "./components/sortable-lists";
-
+import { addTab } from "./helpers";
 const {
     BackgroundControl,
     BorderShadowControl,
@@ -28,6 +29,9 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     AdvancedControls,
+    SortControl,
+    ImageAvatar,
+    EBIconPicker
 } = EBControls;
 
 import {
@@ -71,7 +75,7 @@ import {
     typoPrefixTabTitle,
 } from "./constants/typographyPrefixConstants";
 
-import { HEADING } from "./constants";
+import { HEADING, VERTICALTOHORIZONTAL } from "./constants";
 
 function Inspector(props) {
     const { attributes, setAttributes, clientId, handleTabTitleClick } = props;
@@ -98,6 +102,9 @@ function Inspector(props) {
         showCaret,
         caretColor,
         isFillTitle,
+        isMinHeightAsTitle,
+        enableResponsiveLayout,
+        verticalToHorizontal,
         tagName,
         closeAllTabs
     } = attributes;
@@ -116,6 +123,162 @@ function Inspector(props) {
     const handleLayoutChange = (layout) => {
         setAttributes({ layout });
     };
+
+    const addNewTab = () => {
+        addTab({
+            setAttributes,
+            tabChildCount,
+            clientId,
+            tabTitles,
+            blockId,
+            handleTabTitleClick,
+        });
+    };
+
+    const getTabsComponents = () => {
+        const onTabChange = (key, value, position) => {
+            const newFeature = { ...attributes.tabTitles[position] };
+            const newFeatureList = [...attributes.tabTitles];
+            newFeatureList[position] = newFeature;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newFeatureList[position][item] = value[index];
+                });
+            } else {
+                newFeatureList[position][key] = value;
+            }
+
+            setAttributes({ tabTitles: newFeatureList });
+        };
+
+        const handleDefaultActive = (id) => {
+            const newTabTitles = tabTitles.map((item) => {
+                if (item.id === id) {
+                    item.isDefault = !item.isDefault;
+                } else {
+                    item.isDefault = false;
+                }
+                return item;
+            });
+
+            setAttributes({ tabTitles: newTabTitles });
+        };
+
+        return attributes.tabTitles.map((each, i) => (
+            <div key={i}>
+                <ToggleControl
+                    label={__("Active Initially", "essential-blocks")}
+                    checked={each.isDefault || false}
+                    onChange={() => {
+                        handleDefaultActive(each.id);
+                    }}
+                />
+
+                <ButtonGroup>
+                    {[
+                        {
+                            label: __("None", "essential-blocks"),
+                            value: "none",
+                        },
+                        {
+                            label: __("Icon", "essential-blocks"),
+                            value: "icon",
+                        },
+                        {
+                            label: __("Image", "essential-blocks"),
+                            value: "image",
+                        },
+                    ].map((item, index) => (
+                        <Button
+                            key={index}
+                            isSecondary={each.media !== item.value}
+                            isPrimary={each.media === item.value}
+                            onClick={() => {
+                                onTabChange(
+                                    "media",
+                                    item.value,
+                                    i
+                                )
+                            }}
+                        >
+                            {item.label}
+                        </Button>
+                    ))}
+                </ButtonGroup>
+
+                {each.media === "icon" && (
+                    <div>
+                        <label>Icon</label>
+                        <EBIconPicker
+                            value={each.icon}
+                            onChange={(value) => onTabChange("icon", value, i)}
+                            title={""}
+                        />
+                    </div>
+                )}
+
+                {each.media === "image" && (
+                    <>
+                        {!each.imgUrl && (
+                            <MediaUpload
+                                onSelect={({ id, url }) => {
+                                    onTabChange(
+                                        [
+                                            "imgId",
+                                            "imgUrl",
+                                        ],
+                                        [id, url],
+                                        i
+                                    );
+                                }}
+                                type="image"
+                                value={each.imgId}
+                                render={({ open }) => {
+                                    return (
+                                        <Button
+                                            className="eb-background-control-inspector-panel-img-btn components-button"
+                                            label={__(
+                                                "Upload Image",
+                                                "essential-blocks"
+                                            )}
+                                            icon="format-image"
+                                            onClick={open}
+                                        />
+                                    );
+                                }}
+                            />
+                        )}
+
+                        {each.imgUrl && (
+                            <ImageAvatar
+                                imageUrl={each.imgUrl}
+                                onDeleteImage={() => {
+                                    onTabChange(
+                                        [
+                                            "imgId",
+                                            "imgUrl",
+                                        ],
+                                        [null, null],
+                                        i
+                                    );
+                                }}
+                            />
+                        )}
+                    </>
+                )}
+                <TextControl
+                    label={__("Custom ID", "essential-blocks")}
+                    value={each.customId}
+                    onChange={(value) => onTabChange("customId", value, i)}
+                    help={__(
+                        "Custom ID will be added as an anchor tag. For example, if you add ‘test’ as your custom ID, the link will become like the following: https://www.example.com/#test and it will open the respective tab directly.",
+                        "essential-blocks"
+                    )}
+                />
+            </div>
+        ))
+    }
 
     return (
         <InspectorControls key="controls">
@@ -151,7 +314,7 @@ function Inspector(props) {
                                             "essential-blocks"
                                         )}
                                     >
-                                        <SortableTabs
+                                        {/* <SortableTabs
                                             setAttributes={setAttributes}
                                             tabTitles={tabTitles}
                                             clientId={clientId}
@@ -160,7 +323,24 @@ function Inspector(props) {
                                             handleTabTitleClick={
                                                 handleTabTitleClick
                                             }
-                                        />
+                                        /> */}
+
+                                        <SortControl
+                                            items={attributes.tabTitles}
+                                            labelKey={'text'}
+                                            onSortEnd={tabTitles => setAttributes({ tabTitles })}
+                                            onDeleteItem={index => {
+                                                setAttributes({ tabTitles: attributes.tabTitles.filter((each, i) => i !== index) })
+                                            }}
+                                            hasSettings={true}
+                                            settingsComponents={getTabsComponents()}
+                                            hasAddButton={true}
+                                            onAddItem={addNewTab}
+                                            addButtonText={__(
+                                                "Add Tab",
+                                                "essential-blocks"
+                                            )}
+                                        ></SortControl>
                                     </PanelBody>
 
                                     <PanelBody
@@ -242,6 +422,70 @@ function Inspector(props) {
                                                         })
                                                     }
                                                 />
+                                            </>
+                                        )}
+
+                                        {layout === "vertical" && (
+                                            <>
+                                                <ToggleControl
+                                                    label={__(
+                                                        "Enable Responsive Layout",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={enableResponsiveLayout}
+                                                    onChange={() =>
+                                                        setAttributes({
+                                                            enableResponsiveLayout: !enableResponsiveLayout,
+                                                        })
+                                                    }
+                                                />
+                                                <PanelRow className="eb-instruction"><strong>Note:</strong> Enable this option to switch the layout from vertical to horizontal on responsive devices.</PanelRow>
+                                                {enableResponsiveLayout && (
+                                                    <BaseControl
+                                                        label={__(
+                                                            "Select Devices for Horizontal Layout",
+                                                            "essential-blocks"
+                                                        )}
+                                                        id="eb-advance-heading-alignment"
+                                                    >
+                                                        <ButtonGroup className="eb-advance-heading-alignment eb-verticaltohorizontal-buttongroup">
+                                                            {VERTICALTOHORIZONTAL.map((item, key) => (
+                                                                <Button
+                                                                    key={key}
+                                                                    isPrimary={
+                                                                        verticalToHorizontal ===
+                                                                        item.value
+                                                                    }
+                                                                    isSecondary={
+                                                                        verticalToHorizontal !==
+                                                                        item.value
+                                                                    }
+                                                                    onClick={() =>
+                                                                        setAttributes({
+                                                                            verticalToHorizontal:
+                                                                                item.value,
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    {item.label}
+                                                                </Button>
+                                                            ))}
+                                                        </ButtonGroup>
+                                                    </BaseControl>
+                                                )}
+                                                <ToggleControl
+                                                    label={__(
+                                                        "Minimum Height Based on Tabs Heading Panel",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={isMinHeightAsTitle}
+                                                    onChange={() =>
+                                                        setAttributes({
+                                                            isMinHeightAsTitle: !isMinHeightAsTitle,
+                                                        })
+                                                    }
+                                                />
+                                                <PanelRow className="eb-instruction"><strong>Note:</strong> When enabled, the tab content will have a minimum height equal to the height of the heading panel.</PanelRow>
                                             </>
                                         )}
 

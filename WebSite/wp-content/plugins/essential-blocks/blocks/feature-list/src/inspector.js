@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
     ToggleControl,
@@ -11,6 +11,8 @@ import {
     ButtonGroup,
     BaseControl,
     TabPanel,
+    TextControl,
+    TextareaControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
@@ -42,6 +44,7 @@ import {
     boxBorder,
     wrapperBackgroundType,
     wrapperBorder,
+    MEDIA_TYPES
 } from "./constants";
 
 import {
@@ -50,7 +53,6 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 import objAttributes from "./attributes";
-import SortableFeatures from "./sortable-features";
 
 const {
     ColorControl,
@@ -60,6 +62,9 @@ const {
     BackgroundControl,
     BorderShadowControl,
     AdvancedControls,
+    SortControl,
+    ImageAvatar,
+    EBIconPicker,
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -112,6 +117,189 @@ const Inspector = ({ attributes, setAttributes }) => {
         setAttributes({ features });
     };
 
+    const getFeaturesComponents = () => {
+        const onFeatureChange = (key, value, position) => {
+            const newFeature = { ...attributes.features[position] };
+            const newFeatureList = [...attributes.features];
+            newFeatureList[position] = newFeature;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newFeatureList[position][item] = value[index];
+                });
+            } else {
+                newFeatureList[position][key] = value;
+            }
+
+            setAttributes({ features: newFeatureList });
+        };
+
+        return attributes.features.map((each, i) => (
+            <div key={i}>
+                <TextControl
+                    onChange={(value) => onFeatureChange("title", value, i)}
+                    label={__(
+                        "Text",
+                        "essential-blocks"
+                    )}
+                    value={each.title}
+                />
+
+                {!useInlineDesign && (
+                    <TextareaControl
+                        label={__("Content", "essential-blocks")}
+                        value={each.content}
+                        onChange={(value) =>
+                            onFeatureChange("content", value, i)
+                        }
+                    />
+                )}
+                <BaseControl
+                    label={__("Icon Type", "essential-blocks")}
+                >
+                    <ButtonGroup className="eb-featurelist-icon-type">
+                        {MEDIA_TYPES.map((item, index) => (
+                            <Button
+                                key={index}
+                                isPrimary={
+                                    each.iconType === item.value
+                                }
+                                isSecondary={
+                                    each.iconType !== item.value
+                                }
+                                onClick={() =>
+                                    onFeatureChange(
+                                        "iconType",
+                                        item.value,
+                                        i
+                                    )
+                                }
+                            >
+                                {item.label}
+                            </Button>
+                        ))}
+                    </ButtonGroup>
+                </BaseControl>
+                {each.iconType !== "none" && (
+                    <>
+                        {each.iconType === "icon" && (
+                            <EBIconPicker
+                                value={each.icon}
+                                onChange={(value) => onFeatureChange("icon", value, i)}
+                            />
+                        )}
+                        {each.iconType === "image" &&
+                            !each.featureImage && (
+                                <MediaUpload
+                                    onSelect={({
+                                        id,
+                                        url,
+                                        alt,
+                                        title,
+                                    }) => {
+                                        onFeatureChange(
+                                            [
+                                                "featureImageId",
+                                                "featureImage",
+                                                "featureImageAlt",
+                                                "featureImageTitle",
+                                            ],
+                                            [id, url, alt, title],
+                                            i
+                                        );
+                                    }}
+                                    type="image"
+                                    value={each.featureImageId}
+                                    render={({ open }) => {
+                                        return (
+                                            <Button
+                                                className="eb-background-control-inspector-panel-img-btn components-button"
+                                                label={__(
+                                                    "Upload Image",
+                                                    "essential-blocks"
+                                                )}
+                                                icon="format-image"
+                                                onClick={open}
+                                            />
+                                        );
+                                    }}
+                                />
+                            )}
+                        {each.iconType === "image" &&
+                            each.featureImage && (
+                                <ImageAvatar
+                                    imageUrl={each.featureImage}
+                                    onDeleteImage={() => {
+                                        onFeatureChange(
+                                            [
+                                                "featureImageId",
+                                                "featureImage",
+                                                "featureImageAlt",
+                                                "featureImageTitle",
+                                            ],
+                                            [null, null, null, null],
+                                            i
+                                        );
+                                    }}
+                                />
+                            )}
+                        {each.iconType === "icon" &&
+                            each.icon && (
+                                <ColorControl
+                                    label={__(
+                                        "Icon Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={each.iconColor}
+                                    onChange={(value) =>
+                                        onFeatureChange(
+                                            "iconColor",
+                                            value,
+                                            i
+                                        )
+                                    }
+                                />
+                            )}
+                        <ColorControl
+                            label={__(
+                                "Background Color",
+                                "essential-blocks"
+                            )}
+                            color={each.iconBackgroundColor}
+                            onChange={(value) =>
+                                onFeatureChange(
+                                    "iconBackgroundColor",
+                                    value,
+                                    i
+                                )
+                            }
+                        />
+                    </>
+                )}
+                <TextControl
+                    label={__("Link", "essential-blocks")}
+                    value={each.link}
+                    onChange={(value) =>
+                        onFeatureChange("link", value, i)
+                    }
+                />
+                <ToggleControl
+                    label={__("Open in New Tab", "essential-blocks")}
+                    checked={
+                        each.linkOpenNewTab == "false" ? false : true
+                    }
+                    onChange={(value) =>
+                        onFeatureChange(
+                            "linkOpenNewTab",
+                            value.toString(),
+                            i
+                        )
+                    }
+                />
+            </div>
+        ))
+    }
+
     return (
         <InspectorControls key="controls">
             <div className="eb-panel-control">
@@ -147,27 +335,22 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         )}
                                         initialOpen={true}
                                     >
-                                        <SortableFeatures
-                                            inlineDesign={useInlineDesign}
-                                            features={attributes.features}
-                                            setAttributes={setAttributes}
-                                        />
-                                        <Button
-                                            className="eb-pricebox-feature-button"
-                                            label={__(
-                                                "Add feature",
+                                        <SortControl
+                                            items={attributes.features}
+                                            labelKey={'title'}
+                                            onSortEnd={features => setAttributes({ features })}
+                                            onDeleteItem={index => {
+                                                setAttributes({ features: attributes.features.filter((each, i) => i !== index) })
+                                            }}
+                                            hasSettings={true}
+                                            settingsComponents={getFeaturesComponents()}
+                                            hasAddButton={true}
+                                            onAddItem={onFeatureAdd}
+                                            addButtonText={__(
+                                                "Add Feature",
                                                 "essential-blocks"
                                             )}
-                                            icon="plus-alt"
-                                            onClick={onFeatureAdd}
-                                        >
-                                            <span className="eb-pricebox-add-button-label">
-                                                {__(
-                                                    "Add Feature",
-                                                    "essential-blocks"
-                                                )}
-                                            </span>
-                                        </Button>
+                                        ></SortControl>
                                         <Divider />
                                         <SelectControl
                                             label={__(

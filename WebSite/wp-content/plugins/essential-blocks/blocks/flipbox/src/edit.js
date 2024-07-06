@@ -2,30 +2,25 @@
  * WordPress dependencits
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import {
     BlockControls,
-    AlignmentToolbar,
-    useBlockProps,
-    RichText,
+    AlignmentToolbar
 } from "@wordpress/block-editor";
 import { ToolbarGroup, ToolbarButton } from "@wordpress/components";
-import { select } from "@wordpress/data";
 
 /*
  * Internal dependencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
 
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
     isValidHtml,
     DynamicInputValueHandler,
-    EBDisplayIcon
+    EBDisplayIcon,
+    sanitizeURL,
+    BlockProps
 } = window.EBControls;
 
 function Edit(props) {
@@ -33,9 +28,7 @@ function Edit(props) {
         isSelected,
         attributes,
         setAttributes,
-        className,
-        clientId,
-        name
+        className
     } = props;
     const {
         blockId,
@@ -67,29 +60,15 @@ function Edit(props) {
         buttonClasses,
         align,
         contentPosition,
-        flipMode,
-        isMouseLeaveOn,
         classHook,
     } = attributes;
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-flipbox";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        if (!flipMode) {
-            setAttributes({ flipMode: "hover" });
-        }
-        if (!isMouseLeaveOn) {
-            setAttributes({ isMouseLeaveOn: true });
-        }
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-flipbox',
+        style: <Style {...props} />
+    };
 
     const alignmentClass =
         contentPosition === "center"
@@ -98,9 +77,7 @@ function Edit(props) {
                 ? " eb-flipbox-align-right"
                 : "";
 
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    const sanitizeLink = sanitizeURL(link)
 
     return (
         <>
@@ -131,8 +108,7 @@ function Edit(props) {
                 />
             </BlockControls>
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -176,7 +152,7 @@ function Edit(props) {
                                         <div className="eb-flipbox-front-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? link : "#"}
+                                                    href={link ? sanitizeLink : "#"}
                                                     className="title-link"
                                                 >
                                                     <DynamicInputValueHandler
@@ -293,7 +269,7 @@ function Edit(props) {
                                         <div className="eb-flipbox-back-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? link : "#"}
+                                                    href={link ? sanitizeLink : "#"}
                                                     className="title-link"
                                                 >
                                                     {/* <RichText
@@ -408,7 +384,7 @@ function Edit(props) {
                                         <div className="eb-flipbox-button-container">
                                             <a
                                                 className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                href={link ? link : "#"}
+                                                href={link ? sanitizeLink : "#"}
                                             >
                                                 <div className="eb-flipbox-button-content">
                                                     <span>{buttonText}</span>
@@ -424,7 +400,7 @@ function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

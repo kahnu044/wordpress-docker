@@ -365,7 +365,7 @@ class CustomCSSandJS_Admin {
 				$h_time    = $t_time;
 				$time_diff = 0;
 			} else {
-				$time      = ( 'published' === $column ) ? get_post_time( 'U', false, $post ) : get_post_modified_time( 'U', false, $post );
+				$time      = ( 'published' === $column ) ? get_post_time( 'U', true, $post ) : get_post_modified_time( 'U', true, $post );
 				$time_diff = time() - $time;
 
 				if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {

@@ -2,33 +2,38 @@
 
 namespace EssentialBlocks\Core;
 
+use EssentialBlocks\Utils\Settings;
 use EssentialBlocks\Traits\HasSingletone;
 
-class Blocks {
+class Blocks
+{
     use HasSingletone;
 
-    private $enabled_blocks = [];
+    private $enabled_blocks = [  ];
     private $settings       = null;
     private $dir            = '';
 
-    public function __construct( $settings ) {
+    public function __construct( $settings )
+    {
         $this->settings       = $settings;
         $this->enabled_blocks = $this->enabled();
 
         $this->dir = ESSENTIAL_BLOCKS_BLOCK_DIR;
     }
 
-    public function is_enabled( $key = null ) {
+    public function is_enabled( $key = null )
+    {
         if ( empty( $key ) ) {
             return true;
         }
 
-        return isset( $this->enabled_blocks[$key] );
+        return isset( $this->enabled_blocks[ $key ] );
     }
 
-    public function all() {
-        $all_blocks = $this->settings->get( 'essential_all_blocks', [] );
-        $_defaults  = $this->defaults();
+    public static function all()
+    {
+        $all_blocks = Settings::get( 'essential_all_blocks', [  ] );
+        $_defaults  = self::defaults();
 
         if ( empty( $all_blocks ) ) {
             return $_defaults;
@@ -41,31 +46,33 @@ class Blocks {
         return $all_blocks;
     }
 
-    public function enabled() {
+    public function enabled()
+    {
         $blocks         = $this->all();
         $enabled_blocks = array_filter(
             $blocks,
             function ( $a ) {
-                return isset( $a['visibility'] ) && $a['visibility'] === 'true' ? $a : false;
+                return isset( $a[ 'visibility' ] ) && $a[ 'visibility' ] === 'true' ? $a : false;
             }
         );
         return $enabled_blocks;
     }
 
-    public static function defaults( $no_object = true, $no_static_data = true ) {
+    public static function defaults( $no_object = true, $no_static_data = true )
+    {
         $_blocks = require ESSENTIAL_BLOCKS_DIR_PATH . 'includes/blocks.php';
         $_blocks = apply_filters( 'essential_blocks_block_lists', $_blocks );
 
         $_blocks = array_map(
             function ( $block ) use ( $no_object, $no_static_data ) {
                 if ( $no_object ) {
-                    unset( $block['object'] );
+                    unset( $block[ 'object' ] );
                 }
                 if ( $no_static_data ) {
-                    unset( $block['demo'] );
-                    unset( $block['doc'] );
-                    unset( $block['icon'] );
-                    unset( $block['status'] );
+                    unset( $block[ 'demo' ] );
+                    unset( $block[ 'doc' ] );
+                    unset( $block[ 'icon' ] );
+                    unset( $block[ 'status' ] );
                 }
 
                 return $block;
@@ -76,7 +83,8 @@ class Blocks {
         return $_blocks;
     }
 
-    public function register_blocks( $assets_manager ) {
+    public function register_blocks( $assets_manager )
+    {
         $blocks = $this->enabled();
 
         if ( empty( $blocks ) ) {
@@ -86,8 +94,8 @@ class Blocks {
         $_defaults = $this->defaults( false );
 
         foreach ( $blocks as $block_name => $block ) {
-            if ( isset( $_defaults[$block_name]['object'] ) ) {
-                $block_object = $_defaults[$block_name]['object'];
+            if ( isset( $_defaults[ $block_name ][ 'object' ] ) ) {
+                $block_object = $_defaults[ $block_name ][ 'object' ];
 
                 if ( ! $block_object->can_enable() ) {
                     continue;

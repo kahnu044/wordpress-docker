@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
 	PanelBody,
@@ -13,7 +12,7 @@ import {
 	TextControl,
 	TabPanel,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
+
 /**
  * Internal dependencies
  */

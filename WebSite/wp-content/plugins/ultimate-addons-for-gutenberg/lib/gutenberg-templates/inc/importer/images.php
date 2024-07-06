@@ -9,6 +9,7 @@
 namespace Gutenberg_Templates\Inc\Importer;
 
 use Gutenberg_Templates\Inc\Traits\Instance;
+use Gutenberg_Templates\Inc\Traits\Helper;
 use Gutenberg_Templates\Inc\Importer\Importer_Helper;
 
 /**
@@ -36,13 +37,9 @@ class Images {
 	 * Image index
 	 *
 	 * @since {{since}}
-	 * @var (array) image_index
+	 * @var (int) image_index
 	 */
-	public static $image_index = array(
-		'landscape' => 0,
-		'portrait'  => 0,
-		'square'    => 0,
-	);
+	public static $image_index = 0;
 
 	/**
 	 * Get Images
@@ -51,21 +48,21 @@ class Images {
 	 * @since {{since}}
 	 */
 	public function get_images() {
+
 		return Importer_Helper::get_business_details( 'images' );
 	}
 
 	/**
 	 * Get Image for the specified index and orientation
 	 *
-	 * @param string $orientation Orientation of the image.
-	 * @param int    $index Index of the image.
+	 * @param int $index Index of the image.
 	 * @return array|boolean Array of images or false.
 	 * @since {{since}}
 	 */
-	public function get_image( $orientation = 'landscape', $index = 0 ) {
+	public function get_image( $index = 0 ) {
 		$images = $this->get_images();
-		error_log( 'Fetching ' . $orientation . ' image with index ' . $index );
-		return ( isset( $images[ $orientation ][ $index ] ) ) ? $images[ $orientation ][ $index ] : false;
+		Helper::instance()->ast_block_templates_log( 'Fetching image with index ' . $index );
+		return ( isset( $images[ $index ] ) ) ? $images[ $index ] : false;
 	}
 
 	/**
@@ -85,15 +82,15 @@ class Images {
 			return $downloaded_ids[ $id ];
 		}
 		/* This is a Pixabay code $name = $image['tags']; Pixabay. */
-		$name = sanitize_title( $id ); // Unsplash.
+		$name = 'zipwp-image-' . sanitize_title( $id );
 		/* This is a Pixabay code $url  = $image['largeImageURL']; Pixabay. */
 		$url = $image['url']; // Unsplash.
 
 		$description = isset( $image['description'] ) ? $image['description'] : '';
 
-		$name = preg_replace( '/\.[^.]+$/', '', $name ) . '-' . $id . '.jpg';
+		$name = preg_replace( '/\.[^.]+$/', '', $name ) . '.jpg';
 
-		error_log( 'Downloading Image as "' . $name . '" : ' . $url );
+		Helper::instance()->ast_block_templates_log( 'Downloading Image as "' . $name . '" : ' . $url );
 
 		$wp_id = $this->create_image_from_url( $url, $name, $id, $description );
 		$downloaded_ids[ $id ] = $wp_id;

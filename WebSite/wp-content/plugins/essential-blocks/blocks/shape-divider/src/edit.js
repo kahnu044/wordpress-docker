@@ -10,14 +10,13 @@ import { select } from "@wordpress/data";
  * Internal depencencies
  */
 import classnames from "classnames";
-
 import Inspector from "./inspector";
 import Style from "./style";
 
 const {
     duplicateBlockIdFix,
     ShapeDividerContent,
-    generateShapeDividerStyles,
+    BlockProps,
 } = window.EBControls;
 
 import { SHAPE_DIVIDER } from "./constants";
@@ -42,21 +41,12 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-shape-divider";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-shape-divider',
+        style: <Style {...props} />
+    };
 
     useEffect(() => {
         setAttributes({ shapeDividerInvert: false });
@@ -66,8 +56,7 @@ export default function Edit(props) {
         <>
             {isSelected && <Inspector {...props} />}
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
@@ -87,7 +76,7 @@ export default function Edit(props) {
                         />
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

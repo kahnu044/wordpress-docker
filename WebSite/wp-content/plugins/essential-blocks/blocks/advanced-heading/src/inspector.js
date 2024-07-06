@@ -36,6 +36,7 @@ import {
     HEADING,
     SEPERATOR_STYLES,
     SEPARATOR_TYPE,
+    SOURCE
 } from "./constants/constants";
 import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
 const {
@@ -76,6 +77,10 @@ function Inspector(props) {
         seperatorType,
         seperatorStyle,
         separatorIcon,
+        source,
+        enableLink,
+        titleLink,
+        openInNewTab
     } = attributes;
 
     const resRequiredProps = {
@@ -170,6 +175,25 @@ function Inspector(props) {
                 return false;
         }
     };
+    const changeSource = (selected) => {
+        switch (selected) {
+            case "custom":
+                setAttributes({
+                    source: selected,
+                    displaySubtitle: false,
+
+                });
+                break;
+            case "dynamic-title":
+                setAttributes({
+                    source: selected,
+                    displaySubtitle: false,
+                });
+                break;
+            default:
+                return false;
+        }
+    };
 
     return (
         <InspectorControls key="controls">
@@ -201,6 +225,12 @@ function Inspector(props) {
                             {tab.name === "general" && (
                                 <>
                                     <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
+                                        <SelectControl
+                                            label={__("Source", "essential-blocks")}
+                                            value={source}
+                                            options={SOURCE}
+                                            onChange={(selected) => changeSource(selected)}
+                                        />
                                         <SelectControl
                                             label={__("Preset Designs", "essential-blocks")}
                                             value={preset}
@@ -249,19 +279,25 @@ function Inspector(props) {
                                             </ButtonGroup>
                                         </BaseControl>
 
-                                        <DynamicInputControl
-                                            label="Title Text"
-                                            attrName="titleText"
-                                            inputValue={titleText}
-                                            setAttributes={setAttributes}
-                                            onChange={(text) => setAttributes({ titleText: text })}
-                                        />
-                                        <ToggleControl
-                                            label={__("Display Subtilte", "essential-blocks")}
-                                            checked={displaySubtitle}
-                                            onChange={() => setAttributes({ displaySubtitle: !displaySubtitle })}
-                                        />
-                                        {displaySubtitle && (
+                                        {source == 'custom' && (
+                                            <>
+                                                <DynamicInputControl
+                                                    label="Title Text"
+                                                    attrName="titleText"
+                                                    inputValue={titleText}
+                                                    setAttributes={setAttributes}
+                                                    onChange={(text) => setAttributes({ titleText: text })}
+                                                />
+
+                                                <ToggleControl
+                                                    label={__("Display Subtilte", "essential-blocks")}
+                                                    checked={displaySubtitle}
+                                                    onChange={() => setAttributes({ displaySubtitle: !displaySubtitle })}
+                                                />
+                                            </>
+                                        )}
+
+                                        {source == 'custom' && displaySubtitle && (
                                             <>
                                                 <BaseControl
                                                     label={__("Subtitle Level", "essential-blocks")}
@@ -297,6 +333,44 @@ function Inspector(props) {
                                             checked={displaySeperator}
                                             onChange={() => setAttributes({ displaySeperator: !displaySeperator })}
                                         />
+
+                                        <ToggleControl
+                                            label={__("Enable Link?", "essential-blocks")}
+                                            checked={enableLink}
+                                            onChange={(enableLink) => setAttributes({ enableLink })}
+                                        />
+
+                                        {source === 'custom' && enableLink && (
+                                            <>
+                                                <DynamicInputControl
+                                                    label={__(
+                                                        "Link",
+                                                        "essential-blocks"
+                                                    )}
+                                                    attrName="titleLink"
+                                                    inputValue={titleLink}
+                                                    setAttributes={
+                                                        setAttributes
+                                                    }
+                                                    onChange={(link) =>
+                                                        setAttributes({
+                                                            titleLink: link,
+                                                        })
+                                                    }
+                                                />
+                                            </>
+                                        )}
+                                        {enableLink && (
+                                            <ToggleControl
+                                                label={__("Open in New Tab", "essential-blocks")}
+                                                checked={openInNewTab}
+                                                onChange={(openInNewTab) =>
+                                                    setAttributes({
+                                                        openInNewTab,
+                                                    })
+                                                }
+                                            />
+                                        )}
                                     </PanelBody>
                                 </>
                             )}
@@ -327,30 +401,34 @@ function Inspector(props) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody title={__("Subtitle", "essential-blocks")} initialOpen={false}>
-                                        <TypographyDropdown
-                                            baseLabel={__("Typography", "essential-blocks")}
-                                            typographyPrefixConstant={SUBTITLE_TYPOGRAPHY}
-                                            resRequiredProps={resRequiredProps}
-                                        />
+                                    {source == 'custom' && displaySubtitle && (
+                                        <PanelBody title={__("Subtitle", "essential-blocks")} initialOpen={false}>
+                                            <TypographyDropdown
+                                                baseLabel={__("Typography", "essential-blocks")}
+                                                typographyPrefixConstant={SUBTITLE_TYPOGRAPHY}
+                                                resRequiredProps={resRequiredProps}
+                                            />
 
-                                        <ColorControl
-                                            label={__("Subtitle Color", "essential-blocks")}
-                                            color={subtitleColor}
-                                            onChange={(color) => setAttributes({ subtitleColor: color })}
-                                        />
-                                        <ColorControl
-                                            label={__("Subtitle Hover Color", "essential-blocks")}
-                                            color={subtitleHoverColor}
-                                            onChange={(color) => setAttributes({ subtitleHoverColor: color })}
-                                        />
+                                            <ColorControl
+                                                label={__("Subtitle Color", "essential-blocks")}
+                                                color={subtitleColor}
+                                                onChange={(color) => setAttributes({ subtitleColor: color })}
+                                            />
+                                            <ColorControl
+                                                label={__("Subtitle Hover Color", "essential-blocks")}
+                                                color={subtitleHoverColor}
+                                                onChange={(color) => setAttributes({ subtitleHoverColor: color })}
+                                            />
 
-                                        <ResponsiveDimensionsControl
-                                            resRequiredProps={resRequiredProps}
-                                            controlName={SUBTITLE_MARGIN}
-                                            baseLabel="Margin"
-                                        />
-                                    </PanelBody>
+                                            <ResponsiveDimensionsControl
+                                                resRequiredProps={resRequiredProps}
+                                                controlName={SUBTITLE_MARGIN}
+                                                baseLabel="Margin"
+                                            />
+                                        </PanelBody>
+                                    )}
+
+
 
                                     {displaySeperator && (
                                         <PanelBody title={__("Separator", "essential-blocks")} initialOpen={false}>

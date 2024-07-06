@@ -1,8 +1,6 @@
-/**
- * WordPress dependencies
- */
-import { useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+
+const { EBDisplayIcon, sanitizeURL, BlockProps } = window.EBControls;
+
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -30,7 +28,7 @@ const Save = ({ attributes }) => {
     let iconStyle = {};
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div
                     className={`${blockId} eb-feature-list-wrapper -icon-position-${iconPosition} -tablet-icon-position-${iconPosition} -mobile-icon-position-${iconPosition}${featureListAlignClass}${showConnector ? " connector-" + connectorStyle : ""
@@ -107,7 +105,7 @@ const Save = ({ attributes }) => {
                                             {link ? (
                                                 <attributes.titleTag className="eb-feature-list-title">
                                                     <a
-                                                        href={link}
+                                                        href={sanitizeURL(link)}
                                                         target={
                                                             linkOpenNewTab == "true" ? "_blank" : "_self"
                                                         }
@@ -132,7 +130,7 @@ const Save = ({ attributes }) => {
                     </ul>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
         // edit view end
     );
 };

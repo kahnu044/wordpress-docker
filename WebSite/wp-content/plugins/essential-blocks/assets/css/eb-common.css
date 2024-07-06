@@ -3,6 +3,7 @@
 .eb-dot-style-modern-3 .slick-dots li {
 	transition: all 0.2ms ease;
 }
+
 .eb-dot-style-modern-1 .slick-dots li,
 .eb-dot-style-modern-1 .slick-dots li button,
 .eb-dot-style-modern-1 .slick-dots li button::before {
@@ -38,13 +39,16 @@
 .eb-dot-style-modern-3 .slick-dots li {
 	margin: 0 5px !important;
 }
+
 .eb-dot-style-modern-3 .slick-dots li.slick-active {
 	margin-right: 20px !important;
 }
+
 .eb-dot-style-modern-3 .slick-dots li button::before {
 	margin: 0;
 	padding: 0;
 }
+
 .eb-dot-style-modern-3 .slick-dots li.slick-active button::before {
 	width: 25px;
 }
@@ -54,4 +58,20 @@
 .eb-dot-style-modern-3 .slick-dots li button::before {
 	font-size: 0 !important;
 	background: black;
+}
+
+/* for post grid, carousel */
+.eb-sr-only {
+	border: 0 !important;
+	text-indent: -9999px;
+	/* clip: rect(1px, 1px, 1px, 1px) !important;
+	-webkit-clip-path: inset(50%) !important;
+	clip-path: inset(50%) !important; */
+	/* height: 1px !important; */
+	margin: -1px !important;
+	overflow: hidden !important;
+	padding: 0 !important;
+	position: absolute !important;
+	/* width: 1px !important; */
+	white-space: nowrap !important;
 }

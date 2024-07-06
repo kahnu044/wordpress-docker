@@ -1,5 +1,6 @@
 import { useEffect } from '@wordpress/element';
 import { select } from '@wordpress/data';
+
 const getUniqId = ( blocks ) => blocks
 	.reduce( ( result, block ) => {
 		if ( block?.attributes?.block_id && block.name.includes( 'uagb' ) ) {
@@ -113,7 +114,6 @@ const addInitialAttr = ( ChildComponent ) => {
 			if ( listOfClassMigrate.includes( name ) ) {
 				attributeObject.classMigrate = true;
 			}
-
 
 			/**
 			 * Resolve issue of reusable block.

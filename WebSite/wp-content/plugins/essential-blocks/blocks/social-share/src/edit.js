@@ -3,20 +3,14 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect } from "@wordpress/element";
-import { useBlockProps } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
-
 /**
  * Internal dependencies
  */
-
 import SocialLinks from "./components/social-links";
 
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
-
-import classnames from "classnames";
 import Inspector from "./inspector";
 import Style from "./style";
 
@@ -24,10 +18,7 @@ export default function Edit(props) {
     const {
         attributes,
         setAttributes,
-        className,
-        clientId,
         isSelected,
-        name
     } = props;
     const {
         resOption,
@@ -91,25 +82,16 @@ export default function Edit(props) {
         setAttributes({ profilesOnly });
     }, [socialDetails]);
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-social-share";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-social-share',
+        style: <Style {...props} />
+    };
 
     return cover.length ? (
         <div>
-            <img src={cover} alt="table of content" style={{ maxWidth: "100%" }} />
+            <img src={cover} alt={__("Social Share", "essential-blocks")} style={{ maxWidth: "100%" }} />
         </div>
     ) : (
         <>
@@ -119,9 +101,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -139,7 +119,7 @@ export default function Edit(props) {
                         />
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

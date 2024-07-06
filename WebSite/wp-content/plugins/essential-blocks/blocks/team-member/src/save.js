@@ -1,5 +1,6 @@
-import { useBlockProps, RichText } from "@wordpress/block-editor";
+import { RichText } from "@wordpress/block-editor";
 import SocialLinks from "./components/social-links";
+const { BlockProps, ImgPlaceholder, sanitizeURL } = window.EBControls;
 
 export default function Save({ attributes }) {
     const {
@@ -11,7 +12,9 @@ export default function Save({ attributes }) {
         showSocials,
         showCSeparator,
         showSSeparator,
+        imageNewUrl,
         imageUrl,
+        imageNewClassUrl,
         profilesOnly,
         socialInImage,
         icnEffect,
@@ -24,10 +27,18 @@ export default function Save({ attributes }) {
         showDesignation,
         hoverPreset,
         isContentOverlay,
+        showBlockContent
     } = attributes;
 
+    if (!showBlockContent) {
+        return
+    }
+
+    const imageUrlFromSource = imageUrl || imageNewClassUrl || ImgPlaceholder
+    const image = imageNewUrl ? imageNewUrl : imageUrlFromSource
+
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -37,13 +48,13 @@ export default function Save({ attributes }) {
                             {avatarURL && (
                                 <a
                                     // className={`eb-button-anchor`}
-                                    href={avatarURL ? avatarURL : ""}
+                                    href={avatarURL ? sanitizeURL(avatarURL) : ""}
                                     {...(newWindow && { target: "_blank" })}
                                     rel="noopener"
                                 >
                                     <img
                                         className="eb-team-member-avatar"
-                                        src={imageUrl}
+                                        src={image}
                                         alt={imageAlt ? imageAlt : name}
                                     />
                                 </a>
@@ -52,7 +63,7 @@ export default function Save({ attributes }) {
                             {!avatarURL && (
                                 <img
                                     className="eb-team-member-avatar"
-                                    src={imageUrl}
+                                    src={image}
                                     alt={imageAlt ? imageAlt : name}
                                 />
                             )}
@@ -171,6 +182,6 @@ export default function Save({ attributes }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 }

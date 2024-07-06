@@ -23,7 +23,6 @@ import { doAction, applyFilters } from "@wordpress/hooks";
  * External Dependencies
  */
 import Select2 from "react-select";
-import SortableContents from "./sortable-content";
 
 /**
  * Internal depencencies
@@ -101,7 +100,8 @@ const {
     ProSelectControl,
     faIcons,
     DynamicInputControl,
-    EBIconPicker
+    EBIconPicker,
+    SortControl
 } = window.EBControls;
 
 function Inspector(props) {
@@ -1083,12 +1083,14 @@ function Inspector(props) {
                                                     }}
                                                 />
                                             )}
-
-                                        <SortableContents
-                                            contentLists={enableContents}
-                                            setAttributes={setAttributes}
-                                            ucFirst={ucFirst}
-                                        />
+                                        <SortControl
+                                            items={enableContents}
+                                            labelKey=""
+                                            onSortEnd={enableContents => setAttributes({ enableContents })}
+                                            hasSettings={false}
+                                            hasAddButton={false}
+                                            hasDelete={false}
+                                        ></SortControl>
                                     </PanelBody>
 
                                     <MorePosts

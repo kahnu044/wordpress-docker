@@ -24,10 +24,7 @@ const {
     ColorControl,
     BorderShadowControl,
     BackgroundControl,
-    DealSocialProfiles,
-    faIcons: IconList,
     ResetControl,
-    AdvancedControls,
 } = window.EBControls;
 
 import objAttributes from "../../../../blocks/social/src/attributes";
@@ -226,20 +223,6 @@ function Social(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     <PanelBody
-                        title={__("Social Profiles", "essential-blocks")}
-                        // initialOpen={false}
-                    >
-                        <>
-                            <DealSocialProfiles
-                                profiles={socialDetails}
-                                onProfileAdd={(socialDetails) =>
-                                    handleBlockDefault({ socialDetails })
-                                }
-                                iconList={IconList}
-                            />
-                        </>
-                    </PanelBody>
-                    <PanelBody
                         title={__("Icons Styles", "essential-blocks")}
                         initialOpen={false}
                     >
@@ -422,8 +405,8 @@ function Social(props) {
                         <BorderShadowControl
                             controlName={prefixSocialBdShadow}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                     <PanelBody
@@ -529,8 +512,8 @@ function Social(props) {
                         <BorderShadowControl
                             controlName={WrpBdShadowConst}
                             resRequiredProps={resRequiredProps}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
                 </div>

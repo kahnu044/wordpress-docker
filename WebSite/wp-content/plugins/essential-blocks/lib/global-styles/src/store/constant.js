@@ -3,7 +3,7 @@ export const DEFAULT_STATE = {
     customColors: [],
     gradientColors: [],
     customGradientColors: [],
-    globalTypography: [],
+    globalTypography: {},
     blockDefaults: {},
     isSaving: false
 };
@@ -36,3 +36,7 @@ export const FETCH_CUSTOM_GRADIENT_COLORS = 'FETCH_CUSTOM_GRADIENT_COLORS';
 
 export const SET_IS_SAVING = 'SET_IS_SAVING';
 export const FETCH_IS_SAVING = 'FETCH_IS_SAVING';
+
+export const SET_GLOBAL_TYPOGRAPHY = 'SET_GLOBAL_TYPOGRAPHY';
+export const SAVE_GLOBAL_TYPOGRAPHY = 'SAVE_GLOBAL_TYPOGRAPHY';
+export const FETCH_GLOBAL_TYPOGRAPHY = 'FETCH_GLOBAL_TYPOGRAPHY';

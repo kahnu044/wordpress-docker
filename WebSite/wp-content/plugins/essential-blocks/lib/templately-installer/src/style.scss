@@ -1,6 +1,7 @@
 .eb-pattern-library-button-wrapper {
 	min-width: 140px;
 }
+
 .eb-pattern-library-button {
 	background-color: #ebe4ff;
 	color: #6c3bff;
@@ -59,6 +60,7 @@
 		background: transparent;
 	}
 }
+
 .is-sidebar-opened .eb-pattern-library-popover {
 	width: calc(100% - 280px) !important;
 }
@@ -115,6 +117,17 @@
 		img {
 			height: 24px;
 		}
+	}
+
+	.eb-hide-button {
+		margin-top: 15px;
+		padding: 0;
+		height: auto;
+		font-size: 13px;
+		text-decoration: underline;
+		text-transform: capitalize;
+		font-style: italic;
+		color: #475467;
 	}
 
 	.pattern-content {

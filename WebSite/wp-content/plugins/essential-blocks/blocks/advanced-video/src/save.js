@@ -1,5 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
-
+const { BlockProps } = window.EBControls;
 const save = ({ attributes }) => {
     // const { blockId, showAfterDismiss, title, text } = attributes;
 
@@ -31,7 +31,7 @@ const save = ({ attributes }) => {
     } = attributes;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`} data-id={blockId}>
                     {videoOptions != "lightbox" && (
@@ -103,7 +103,7 @@ const save = ({ attributes }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

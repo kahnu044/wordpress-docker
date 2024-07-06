@@ -79,7 +79,8 @@ const {
     ColorControl,
     AdvancedControls,
     EbImageSizeSelector,
-    DynamicInputControl
+    DynamicInputControl,
+    SortControl
 } = window.EBControls;
 
 function Inspector(props) {
@@ -123,7 +124,8 @@ function Inspector(props) {
         loadmoreHvColor,
         loadmoreBGColor,
         loadmoreHvBGColor,
-        imagesPerPage,
+        enableInfiniteScroll,
+        imagesPerPageCount
     } = attributes;
 
     const [defaultFilterOptions, setDefaultFilterOptions] = useState("");
@@ -224,19 +226,6 @@ function Inspector(props) {
         setAttributes({ filterItems: filterItems });
     };
 
-    const handleFilter = (text, id) => {
-        let updatedSources = sources.map((item, index) => {
-            if (id === index) {
-                const newTime = { ...item };
-                newTime.filter = text;
-                return newTime;
-            }
-            return item;
-        });
-
-        setAttributes({ sources: updatedSources });
-    };
-
     const handleSelect2Filter = (options, id) => {
         let newOptions = JSON.stringify(options);
 
@@ -251,6 +240,77 @@ function Inspector(props) {
 
         setAttributes({ sources: updatedSources });
     };
+
+    const handleLoadMore = (enableLoadMore) => {
+        let attr = {
+            enableLoadMore: enableLoadMore,
+        }
+        if (!enableFilter && !enableIsotope) {
+            attr = { ...attr, enableIsotope: true }
+        }
+        setAttributes(attr);
+    };
+
+    useEffect(() => {
+        enableInfiniteScroll ? setAttributes({ loadmoreBtnText: 'Loading ...', }) : setAttributes({ loadmoreBtnText: 'Load More', });
+    }, [enableInfiniteScroll])
+
+    const getFilterItemsComponents = () => {
+        const onFeatureChange = (key, value, position) => {
+            let filterItems = [...attributes.filterItems];
+
+            filterItems[position][key] = value;
+
+            //sort
+            let newValue = value.toLowerCase();
+            newValue = newValue.replaceAll(" ", "-");
+            newValue = newValue.replaceAll(",-", " eb-filter-img-");
+            newValue = newValue.replaceAll(",", "comma");
+            newValue = newValue.replaceAll("&", "and");
+            newValue = newValue.replaceAll("+", "plus");
+            newValue = newValue.replaceAll("amp;", "");
+            newValue = newValue.replaceAll("/", "slash");
+            newValue = newValue.replaceAll("'", "apostrophe");
+            newValue = newValue.replaceAll('"', "apostrophe");
+            newValue = newValue.replaceAll(".", "-");
+            newValue = newValue.replaceAll("~", "tilde");
+            newValue = newValue.replaceAll("!", "exclamation");
+            newValue = newValue.replaceAll("@", "at");
+            newValue = newValue.replaceAll("#", "hash");
+            newValue = newValue.replaceAll("(", "parenthesis");
+            newValue = newValue.replaceAll(")", "parenthesis");
+            newValue = newValue.replaceAll("=", "equal");
+            newValue = newValue.replaceAll(";", "semicolon");
+            newValue = newValue.replaceAll(":", "colon");
+            newValue = newValue.replaceAll("<", "lessthan");
+            newValue = newValue.replaceAll(">", "greaterthan");
+            newValue = newValue.replaceAll("|", "pipe");
+            newValue = newValue.replaceAll("\\", "backslash");
+            newValue = newValue.replaceAll("^", "caret");
+            newValue = newValue.replaceAll("*", "asterisk");
+            newValue = newValue.replaceAll("$", "dollar");
+            newValue = newValue.replaceAll("`", "backtick");
+            newValue = newValue.replaceAll("[", "bracket");
+            newValue = newValue.replaceAll("]", "bracket");
+            newValue = newValue.replaceAll("{", "curlybracket");
+            newValue = newValue.replaceAll("}", "curlybracket");
+            newValue = newValue.replaceAll("?", "questionmark");
+
+            filterItems[position]["value"] = newValue;
+
+            setAttributes({ filterItems });
+        };
+
+        return attributes.filterItems.map((each, i) => (
+            <div key={i}>
+                <TextControl
+                    label={__("Text", "essential-blocks")}
+                    value={each.label}
+                    onChange={(value) => onFeatureChange("label", value, i)}
+                />
+            </div>
+        ))
+    }
 
     return (
         <InspectorControls key="controls">
@@ -501,7 +561,7 @@ function Inspector(props) {
                                                         "essential-blocks"
                                                     )}
                                                 </PanelRow>
-                                                <SortableFilterItems
+                                                {/* <SortableFilterItems
                                                     filterItems={
                                                         attributes.filterItems
                                                     }
@@ -524,7 +584,20 @@ function Inspector(props) {
                                                             "essential-blocks"
                                                         )}
                                                     </span>
-                                                </Button>
+                                                </Button> */}
+                                                <SortControl
+                                                    items={attributes.filterItems}
+                                                    labelKey={'label'}
+                                                    onSortEnd={filterItems => setAttributes({ filterItems })}
+                                                    onDeleteItem={index => {
+                                                        setAttributes({ filterItems: attributes.filterItems.filter((each, i) => i !== index) })
+                                                    }}
+                                                    hasSettings={true}
+                                                    settingsComponents={getFilterItemsComponents()}
+                                                    hasAddButton={true}
+                                                    onAddItem={onFilterAdd}
+                                                    addButtonText={__("Add Filter", "essential-blocks")}
+                                                ></SortControl>
                                             </>
                                         )}
                                     </PanelBody>
@@ -647,55 +720,63 @@ function Inspector(props) {
                                         })}
                                     </PanelBody>
 
-                                    {(enableFilter || enableIsotope) && (
-                                        <PanelBody
-                                            title={__(
-                                                "Load More Button",
+                                    <PanelBody
+                                        title={__(
+                                            "Load More Button",
+                                            "essential-blocks"
+                                        )}
+                                        initialOpen={false}
+                                    >
+                                        <ToggleControl
+                                            label={__(
+                                                "Enable Loadmore",
                                                 "essential-blocks"
                                             )}
-                                            initialOpen={false}
-                                        >
-                                            <ToggleControl
-                                                label={__(
-                                                    "Enable Loadmore",
-                                                    "essential-blocks"
-                                                )}
-                                                checked={enableLoadMore}
-                                                onChange={() =>
-                                                    setAttributes({
-                                                        enableLoadMore: !enableLoadMore,
-                                                    })
-                                                }
-                                            />
+                                            checked={enableLoadMore}
+                                            onChange={(enableLoadMore) =>
+                                                handleLoadMore(enableLoadMore)
+                                            }
+                                        />
 
-                                            {enableLoadMore && (
-                                                <>
-                                                    <DynamicInputControl
-                                                        label="Button Text"
-                                                        attrName="loadmoreBtnText"
-                                                        inputValue={loadmoreBtnText}
-                                                        setAttributes={setAttributes}
-                                                        onChange={(text) => setAttributes({ loadmoreBtnText: text })}
-                                                    />
-                                                    <RangeControl
-                                                        label={__(
-                                                            "Images Per Page",
-                                                            "essential-blocks"
-                                                        )}
-                                                        value={imagesPerPage}
-                                                        onChange={(imagesPerPage) =>
-                                                            setAttributes({
-                                                                imagesPerPage,
-                                                            })
-                                                        }
-                                                        min={1}
-                                                        max={sources?.length - 1}
-                                                        allowReset={true}
-                                                    />
-                                                </>
-                                            )}
-                                        </PanelBody>
-                                    )}
+                                        {enableLoadMore && (
+                                            <>
+                                                {/* <ToggleControl
+                                                    label={__(
+                                                        "Infinite Scroll",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={enableInfiniteScroll}
+                                                    onChange={() =>
+                                                        setAttributes({
+                                                            enableInfiniteScroll: !enableInfiniteScroll,
+                                                        })
+                                                    }
+                                                /> */}
+                                                <DynamicInputControl
+                                                    label="Button Text"
+                                                    attrName="loadmoreBtnText"
+                                                    inputValue={loadmoreBtnText}
+                                                    setAttributes={setAttributes}
+                                                    onChange={(text) => setAttributes({ loadmoreBtnText: text })}
+                                                />
+                                                <RangeControl
+                                                    label={__(
+                                                        "Images Per Page",
+                                                        "essential-blocks"
+                                                    )}
+                                                    value={imagesPerPageCount}
+                                                    onChange={(imagesPerPageCount) =>
+                                                        setAttributes({
+                                                            imagesPerPageCount,
+                                                        })
+                                                    }
+                                                    min={1}
+                                                    max={sources?.length - 1}
+                                                    allowReset={true}
+                                                />
+                                            </>
+                                        )}
+                                    </PanelBody>
                                 </>
                             )}
 
@@ -1323,7 +1404,7 @@ function Inspector(props) {
 
                                     {(enableFilter || enableIsotope) && enableLoadMore && (
                                         <PanelBody
-                                            title={__("Loadmore Button", "essential-blocks")}
+                                            title={__("Load More Button", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <>

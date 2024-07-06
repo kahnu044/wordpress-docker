@@ -19,7 +19,8 @@ import Style from "./style";
 const {
     textInsideForEdit,
     duplicateBlockIdFix,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 const Edit = (props) => {
@@ -113,21 +114,12 @@ const Edit = (props) => {
         counterTitleLevel,
     ]);
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-counter";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-counter',
+        style: <Style {...props} />
+    }
 
     return (
         <>
@@ -138,8 +130,7 @@ const Edit = (props) => {
                 />
             )}
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -225,7 +216,7 @@ const Edit = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

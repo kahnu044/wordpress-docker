@@ -14,9 +14,7 @@ import { select } from "@wordpress/data";
  * Internal depenencies
  */
 import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 import {
@@ -28,6 +26,7 @@ import {
 const {
     duplicateBlockIdFix,
     DynamicInputValueHandler,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
@@ -138,21 +137,12 @@ export default function Edit(props) {
         };
     }, [layout, progress, animationDuration]);
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-progressbar";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-progressbar',
+        style: <Style {...props} />
+    };
 
     const stripeClass = showStripe ? " " + STRIPE_CLASS[stripeAnimation] : "";
 
@@ -165,8 +155,7 @@ export default function Edit(props) {
                     onChange={(wrapperAlign) => setAttributes({ wrapperAlign })}
                 />
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -355,7 +344,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

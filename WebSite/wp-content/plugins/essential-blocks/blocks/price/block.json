@@ -8,7 +8,8 @@
   "textdomain": "essential-blocks",
   "parent": ["essential-blocks/pro-pricing-cell"],
   "supports": {
-    "anchor": true
+    "anchor": true,
+    "align": ["wide", "full"]
   },
   "editorScript": "essential-blocks-editor-script"
 }

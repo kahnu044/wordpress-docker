@@ -2,44 +2,26 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
-import {
-    BlockControls,
-    AlignmentToolbar,
-    RichText,
-    useBlockProps,
-} from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
 
 /**
  * Internal depencencies
  */
-import classnames from "classnames";
 import Style from "./style";
 import Inspector from "./inspector";
-import {
-    WRAPPER_BG,
-    WRAPPER_MARGIN,
-    WRAPPER_PADDING,
-    WRAPPER_BORDER_SHADOW,
-} from "./constants";
 
 /**
  * External depencencies
  */
 const {
-    duplicateBlockIdFix,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
     const {
         attributes,
         setAttributes,
-        className,
-        clientId,
         isSelected,
-        name
     } = props;
     const {
         resOption,
@@ -50,21 +32,12 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-icon";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-icon',
+        style: <Style {...props} />
+    };
 
     const viewClass = iconView !== "default" ? " eb-icon-view-" + iconView : "";
     const shapeClass =
@@ -81,8 +54,7 @@ export default function Edit(props) {
                 </>
             )}
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -95,7 +67,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

@@ -2,8 +2,7 @@
  * WordPress Dependencies
  *
  */
-import { useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+const { EBDisplayIcon, BlockProps } = window.EBControls;
 const save = ({ attributes }) => {
     const {
         resOption,
@@ -22,12 +21,8 @@ const save = ({ attributes }) => {
         formStyle,
     } = attributes;
 
-    const blockProps = useBlockProps.save({
-        className: "eb-form-field",
-    });
-
     return (
-        <div {...blockProps}>
+        <BlockProps.Save attributes={attributes} rootClass={"eb-form-field"}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -87,7 +82,7 @@ const save = ({ attributes }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

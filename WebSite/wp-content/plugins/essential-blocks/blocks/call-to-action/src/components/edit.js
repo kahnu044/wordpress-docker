@@ -9,22 +9,19 @@ import {
     RichText,
     useBlockProps,
 } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
 
 /**
  * Internal dependencies
  */
-
-import classnames from "classnames";
 
 import Inspector from "./inspector";
 
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
     EBDisplayIcon,
-    DynamicInputValueHandler
+    DynamicInputValueHandler,
+    BlockProps
 } = window.EBControls;
 
 const edit = (props) => {
@@ -50,21 +47,11 @@ const edit = (props) => {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-call-to-action";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-button',
+        style: <Style {...props} />
+    };
 
     return (
         <>
@@ -75,7 +62,7 @@ const edit = (props) => {
                     onChange={(contentAlign) => setAttributes({ contentAlign })}
                 />
             </BlockControls>
-            <div {...blockProps}>
+            <BlockProps.Edit {...enhancedProps}>
                 <Style {...props} />
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-cia-wrapper ${blockId}`}>
@@ -143,7 +130,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

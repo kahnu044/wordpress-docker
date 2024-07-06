@@ -7,8 +7,28 @@ import {
     select,
     subscribe,
     dispatch,
-    combineReducers
+    useSelect
 } from '@wordpress/data';
+
+/**
+ * Import Constants
+ */
+import {
+    globalColorKey,
+    customColorKey,
+    gradientColorKey,
+    customGradientColorKey,
+    globalTypoKey
+} from "./constant"
+
+import { getGlobalSettings } from "../helpers/helpers"
+
+/**
+ * Import Fetch Functions
+ */
+import {
+    updateGlobalStyle
+} from '../fetch';
 
 import * as actions from "./actions"
 import * as selectors from "./selectors"
@@ -32,6 +52,7 @@ const store = createReduxStore(
 
 register(store);
 
+
 /**
  * Save Global Values on Save Page/Post
  */
@@ -46,24 +67,17 @@ subscribe(() => {
         return;
     }
 
-    /**
-     * Action
-     */
-    //Global Colors
-    const globalColors = select('essential-blocks').getGlobalColors()
-    dispatch('essential-blocks').saveGlobalColors(globalColors)
+    const globals = getGlobalSettings()
+    const allData = {
+        [globalColorKey]: globals?.getGlobalColors,
+        [customColorKey]: globals?.getCustomColors,
+        [gradientColorKey]: globals?.getGradientColors,
+        [customGradientColorKey]: globals?.getCustomGradientColors,
+        [globalTypoKey]: globals?.getGlobalTypography
+    }
 
-    //Custom Colors
-    const customColors = select('essential-blocks').getCustomColors()
-    dispatch('essential-blocks').saveCustomColors(customColors)
+    let response = updateGlobalStyle(allData);
 
-    //Gradient Colors
-    const gradientColors = select('essential-blocks').getGradientColors()
-    dispatch('essential-blocks').saveGradientColors(gradientColors)
-
-    //Custom Gradient Colors
-    const gradientCustomColors = select('essential-blocks').getCustomGradientColors()
-    dispatch('essential-blocks').saveCustomGradientColors(gradientCustomColors)
-
+    //setIsSaving to 'false' so that 'updateGlobalStyle' won't run multiple times
     dispatch('essential-blocks').setIsSaving(false)
 });

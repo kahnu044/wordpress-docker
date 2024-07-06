@@ -127,11 +127,11 @@ const attributes = {
     },
     saleTextColor: {
         type: "string",
-        default: "var(--eb-global-secondary-color)",
+        default: "var(--eb-global-button-text-color)",
     },
     saleTextBackgroundColor: {
         type: "string",
-        default: "var(--eb-global-primary-color)",
+        default: "var(--eb-global-button-background-color)",
     },
     contentAlignment: {
         type: "string",

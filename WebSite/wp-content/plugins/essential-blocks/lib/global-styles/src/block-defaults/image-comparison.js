@@ -146,6 +146,14 @@ function ImageComparison(props) {
         objAttributes,
     };
 
+    const onImageSwap = () => {
+        let { leftImageURL, rightImageURL, swap } = defaultValues;
+        swap = !swap;
+        [leftImageURL, rightImageURL] = [rightImageURL, leftImageURL];
+
+        setDefaultValues({ swap, leftImageURL, rightImageURL });
+    };
+
     return (
         <>
             {isDefaultSet && (

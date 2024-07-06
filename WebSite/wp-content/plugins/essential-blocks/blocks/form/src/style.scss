@@ -459,6 +459,9 @@
 			transition: ease-in-out 0.3s;
 			cursor: pointer;
 
+			// for Shapely theme
+			line-height: normal;
+
 			.eb-form-submit-loader {
 				display: none;
 				height: 1.4em;
@@ -486,6 +489,24 @@
 
 	.block-editor-default-block-appender .block-editor-inserter {
 		top: calc(100% + 10px);
+	}
+
+	.block-list-appender {
+		width: 100%;
+
+		button {
+			box-shadow: none;
+			border: 1px solid rgb(195 195 195);
+			background: #cccccc47;
+			border-radius: 5px;
+			/* color: white; */
+
+			&:hover {
+				border-color: #000;
+				color: #000;
+			}
+
+		}
 	}
 }
 

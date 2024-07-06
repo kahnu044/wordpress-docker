@@ -71,12 +71,25 @@ class GlobalStyles extends ThirdPartyIntegration
 
         if ( isset( $_POST[ 'eb_global_style_key' ] ) && isset( $_POST[ 'eb_global_style_value' ] ) ) {
             $style = sanitize_text_field( $_POST[ 'eb_global_style_value' ] );
+            $key   = sanitize_text_field( $_POST[ 'eb_global_style_key' ] );
 
             $settings = is_array( get_option( self::$global_style_options_key ) ) ? get_option( self::$global_style_options_key ) : [  ];
-            if ( strlen( $style ) === 0 ) {
-                unset( $settings[ $_POST[ 'eb_global_style_key' ] ] );
+
+            if ( $key === 'all' ) {
+                $style = json_decode( wp_unslash( $style ), true );
+
+                // Convert each top-level array back to a JSON string and store it under the same key
+                foreach ( $style as $key => $value ) {
+                    if ( count( $value ) > 0 ) {
+                        $settings[ $key ] = json_encode( $value );
+                    }
+                }
             } else {
-                $settings[ $_POST[ 'eb_global_style_key' ] ] = $style;
+                if ( strlen( $style ) === 0 ) {
+                    unset( $settings[ $key ] );
+                } else {
+                    $settings[ $key ] = $style;
+                }
             }
 
             if ( is_array( $settings ) > 0 ) {

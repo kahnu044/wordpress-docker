@@ -1,30 +1,36 @@
 .eb-advance-heading-wrapper {
-	h1.eb-ah-title {
+	h1 {
 		font-size: 36px;
 	}
 
-	h2.eb-ah-title {
+	h2 {
 		font-size: 30px;
 	}
 
-	h3.eb-ah-title {
+	h3 {
 		font-size: 24px;
 	}
 
-	h4.eb-ah-title {
+	h4 {
 		font-size: 20px;
 	}
 
-	h5.eb-ah-title {
+	h5 {
 		font-size: 18px;
 	}
 
-	h6.eb-ah-title {
+	h6 {
 		font-size: 14px;
 	}
 
-	p.eb-ah-title {
+	p {
 		font-size: 13px;
+	}
+
+	a {
+		color: inherit;
+
+		// &:hover
 	}
 
 	&>* {

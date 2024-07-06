@@ -7,6 +7,34 @@ function mfcf7_enqueue_plugin_style() {
 }
 add_action( 'admin_enqueue_scripts', 'mfcf7_enqueue_plugin_style' );
 
+//this code is used to add "zl-multine-admin-files.js" file in script and localise ajax
+
+add_action('admin_enqueue_scripts', 'mfcf7_zl_multiline_admin_files_enqueue_script');
+
+function mfcf7_zl_multiline_admin_files_enqueue_script(){
+
+    // Enqueue jQuery
+
+    wp_enqueue_script('jquery');
+
+    // Get the current time as version
+
+    $version = time();
+
+    // Enqueue your custom JavaScript file with dynamic version
+
+    wp_enqueue_script('mfcf7_zl_multiline_files_script', plugin_dir_url(__FILE__) . 'js/zl-multine-admin-files.js', array('jquery'), $version, true);
+
+    $ajax_url = admin_url('admin-ajax.php');
+
+    wp_localize_script('mfcf7_zl_multiline_files_script', 'custom_plugin_ajax_object', array(
+
+        'ajax_url' => $ajax_url,
+
+    ));
+
+}
+
 /* Tag generator */
 add_action( 'wpcf7_admin_init', 'mfcf7_zl_add_tag_for_multilinefile', 50 );
 function mfcf7_zl_add_tag_for_multilinefile() {
@@ -214,3 +242,243 @@ if( !class_exists('ZipArchive') ) {
 
  }
 }
+
+// The HTML for the feedback popup is stored in the footer.
+
+function mfcf7_zl_deactivation_popup(){
+
+	echo get_option('mfcf7_zl_plugin_deactivate_request');
+
+	?>
+
+	<div class="admin_click">click here</div>
+
+    <!-- Popup HTML Structure -->
+
+    <div class="admin-popup-container" style="display:none;">
+
+        <div class="admin-popup-content">
+
+            <span class="admin-popup-close button-close"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15"><path fill="currentColor" d="M3.64 2.27L7.5 6.13l3.84-3.84A.92.92 0 0 1 12 2a1 1 0 0 1 1 1a.9.9 0 0 1-.27.66L8.84 7.5l3.89 3.89A.9.9 0 0 1 13 12a1 1 0 0 1-1 1a.92.92 0 0 1-.69-.27L7.5 8.87l-3.85 3.85A.92.92 0 0 1 3 13a1 1 0 0 1-1-1a.9.9 0 0 1 .27-.66L6.16 7.5L2.27 3.61A.9.9 0 0 1 2 3a1 1 0 0 1 1-1c.24.003.47.1.64.27"/></svg></span>
+
+			<div id="custom-plugin-modal-overlay"></div>
+
+				<div id="custom-plugin-modal">
+
+					<div id="custom-plugin-modal-content">
+
+						<div class="mfcf7-modal-header">
+
+							<h2>MFCF7 Feedback</h2>
+
+						</div>
+
+						<form id="custom-plugin-deactivate-form">
+
+							<div class="mfcf7-modal-body">
+
+								<h3><strong>If you have a moment, please let us know why you are deactivating:</strong></h3>
+
+								<ul id="cf7-any-api-list">
+
+								<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="I found a better plugin.">
+
+										<span for="rad">I found a better plugin</span>
+
+									</label>
+
+									</li>
+
+								<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="This plugin does not work on my site">
+
+										<span for="rad">This plugin does not work on my site</span>
+
+									</label>
+
+									</li>
+
+								<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="Design is outdated, difficult to navigate">
+
+										<span for="rad">Design is outdated, difficult to navigate</span>
+
+									</label>
+
+									</li>
+
+									<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="It's just temporary. I will be back soon.">
+
+										<span for="rad">It's just temporary. I will be back soon</span>
+
+									</label>
+
+									</li>
+
+									<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="It is not what I am looking for.">
+
+										<span for="rad">It is not what I am looking for</span>
+
+									</label>
+
+									</li>
+
+									<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value=" I am finding it difficult to configure it as per my needs">
+
+										<span for="rad"> I am finding it difficult to configure it as per my needs</span>
+
+									</label>
+
+									</li>
+
+									<li class="reason">
+
+									<label>
+
+										<input type="radio" name="selected-reason" value="Other">
+
+										<span for="rad">Other</span>
+
+										<textarea name="other_reason" placeholder="Enter your reason(please specify)"></textarea>
+
+									</label>
+
+									</li>
+
+								</ul>
+
+							</div>
+
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('custom_plugin_deactivate_nonce')); ?>">
+
+						<div class="mfcf7-modal-footer">
+
+							<div id="loader" style="display:none;">
+
+								<div class="loader-circle"></div>
+
+							</div>
+
+							<input type="submit" class="button button-secondary zl_mfcf_btn " id="deactivate-custom-post-type-filter" value="Submit &amp; Deactivate">
+
+							<input type="button" class="button button-secondary zl_mfcf_btn cancel-deactivate-button" value="Cancel &amp; Deactivate">
+
+						</div>
+
+					</form>
+
+				</div>
+
+			</div>
+
+        </div>
+
+    </div>
+
+	<?php
+
+}
+
+add_action( 'admin_footer', 'mfcf7_zl_deactivation_popup' );
+
+// Created a callback function for the ‘on submit’ feedback popup to send details to a Google Form.
+
+// function is used when user select reason
+
+function mfcf7_zl_custom_handle_deactivation_plugin_form_submission(){
+
+    // Log the start of the function
+
+
+
+    if (isset($_POST['reason'])) {
+
+        // Get the selected reason
+
+        $reason = sanitize_text_field($_POST['reason']);
+
+        $otherReason = isset($_POST['other_reason']) ? sanitize_text_field($_POST['other_reason']) : '';
+
+        // Log the form data
+
+        update_option('mfcf7_zl_plugin_deactivate_request', true);
+
+
+
+        // Get current site URL
+
+        $site_url = get_site_url();
+
+        // Get current user's email
+
+        $current_user = wp_get_current_user();
+
+        $user_email = $current_user->user_email;
+
+         // Prepare data to send to Google Form
+
+        $form_data = array(
+
+            'entry.1315009358' => $site_url,
+
+            'entry.144564863' => $user_email,
+
+            'entry.1682553995' => $reason === 'Other' ? $otherReason : $reason
+
+        );
+
+        // Send data to Google Form endpoint via AJAX
+
+        $response = wp_remote_post('https://docs.google.com/forms/u/0/d/e/1FAIpQLSeKd-6b__62G4gZ1UNkY90q4Ws0SbSUiDVuRSPkLNaIYK43nQ/formResponse', array(
+
+            'body' => $form_data
+
+        ));
+
+        // Attempt to deactivate the plugin
+
+        wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
+
+    }
+
+
+
+}
+
+add_action('wp_ajax_custom_plugin_deactivate', 'mfcf7_zl_custom_handle_deactivation_plugin_form_submission');
+
+
+
+// callback function when user select deactived without reason
+
+function mfcf7_zl_handle_deactivation_plugin_without_feedback(){
+
+	update_option('mfcf7_zl_plugin_deactivate_request', true);
+
+	wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
+
+}
+
+add_action('wp_ajax_deactive_plugin_without_feedback', 'mfcf7_zl_handle_deactivation_plugin_without_feedback');

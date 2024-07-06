@@ -1,5 +1,4 @@
-import { useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+const { EBDisplayIcon, BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const { blockId, icon, iconView, iconShape, classHook } = attributes;
     const viewClass = iconView !== "default" ? " eb-icon-view-" + iconView : "";
@@ -7,7 +6,7 @@ const Save = ({ attributes }) => {
         iconView !== "default" ? " eb-icon-shape-" + iconShape : "";
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -20,7 +19,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

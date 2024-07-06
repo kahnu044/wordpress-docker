@@ -91,6 +91,7 @@ const TrashIcon = ({ position, onDeleteFeature }) => (
 
 const SortableItem = SortableElement(
     ({
+        featureIcon,
         feature,
         position,
         onFeatureClick,
@@ -134,17 +135,21 @@ const SortableItem = SortableElement(
                             />
                         )}
 
-                        <EBIconPicker
-                            value={feature.icon}
-                            onChange={(value) => onFeatureChange("icon", value, position)}
-                        />
+                        {featureIcon && (
+                            <>
+                                <EBIconPicker
+                                    value={feature.icon}
+                                    onChange={(value) => onFeatureChange("icon", value, position)}
+                                />
 
-                        {feature.icon && (
-                            <ColorControl
-                                label={__("Icon Color", "essential-blocks")}
-                                color={feature.color}
-                                onChange={(value) => onFeatureChange("color", value, position)}
-                            />
+                                {feature.icon && (
+                                    <ColorControl
+                                        label={__("Icon Color", "essential-blocks")}
+                                        color={feature.color}
+                                        onChange={(value) => onFeatureChange("color", value, position)}
+                                    />
+                                )}
+                            </>
                         )}
                     </Fragment>
                 )}
@@ -155,6 +160,7 @@ const SortableItem = SortableElement(
 
 const SortableList = SortableContainer(
     ({
+        featureIcon,
         features,
         onFeatureClick,
         onFeatureChange,
@@ -169,6 +175,7 @@ const SortableList = SortableContainer(
                         index={index}
                         position={index}
                         feature={item}
+                        featureIcon={featureIcon}
                         clickedItem={clickedItem}
                         onFeatureClick={onFeatureClick}
                         onFeatureChange={onFeatureChange}
@@ -213,6 +220,7 @@ class SortableFeatures extends Component {
     render = () => {
         return (
             <SortableList
+                featureIcon={this.props.featureIcon}
                 features={this.props.features}
                 onFeatureClick={this.onFeatureClick}
                 onFeatureChange={this.onFeatureChange}

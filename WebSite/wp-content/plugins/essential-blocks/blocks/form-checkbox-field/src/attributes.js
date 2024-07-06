@@ -50,6 +50,17 @@ const attributes = {
         type: "string",
         default: "Field Title",
     },
+    dynamicValue: {
+        type: "string",
+    },
+    dynamicOptionType: {
+        type: "string",
+        default: "normal"
+    },
+    dynamicValueLoader: {
+        type: 'boolean',
+        default: false,
+    },
     options: {
         type: "array",
         default: [

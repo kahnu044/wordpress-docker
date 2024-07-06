@@ -389,7 +389,7 @@ function Inspector(props) {
                                         )}
                                         initialOpen={true}
                                     >
-                                        <TextControl
+                                        {/* <TextControl
                                             label={__(
                                                 "Form Title",
                                                 "essential-blocks"
@@ -400,6 +400,24 @@ function Inspector(props) {
                                                 "Use Title to recognize in Form Response",
                                                 "essential-blocks"
                                             )}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    formTitle: value,
+                                                })
+                                            }
+                                        /> */}
+                                        <DynamicInputControl
+                                            label={__(
+                                                "Form Title",
+                                                "essential-blocks"
+                                            )}
+                                            help={__(
+                                                "Use Title to recognize in Form Response",
+                                                "essential-blocks"
+                                            )}
+                                            attrName="formTitle"
+                                            inputValue={formTitle}
+                                            setAttributes={setAttributes}
                                             onChange={(value) =>
                                                 setAttributes({
                                                     formTitle: value,
@@ -578,11 +596,12 @@ function Inspector(props) {
                                                     "essential-blocks"
                                                 )
                                             }
-                                            onChange={(text) =>
+                                            onChange={(text) => {
                                                 setFormSettings({
                                                     ...formSettings,
                                                     mailTo: text,
                                                 })
+                                            }
                                             }
                                             help={__(
                                                 "Use commas to separate emails",
@@ -692,18 +711,31 @@ function Inspector(props) {
 
                                         {confirmationType === "message" && (
                                             <>
-                                                <TextareaControl
-                                                    label="Success Message"
-                                                    // help="Write your email body here"
-                                                    value={successMessage}
-                                                    rows={3}
+                                                <DynamicInputControl
+                                                    label={__("Success Message", "essential-blocks")}
+                                                    attrName="successMessage"
+                                                    inputValue={successMessage}
+                                                    setAttributes={setAttributes}
                                                     onChange={(text) =>
                                                         setAttributes({
                                                             successMessage: text,
                                                         })
                                                     }
+                                                    isTextarea={true}
                                                 />
-                                                <TextareaControl
+                                                <DynamicInputControl
+                                                    label={__("Default Error Message", "essential-blocks")}
+                                                    attrName="errorMessage"
+                                                    inputValue={errorMessage}
+                                                    setAttributes={setAttributes}
+                                                    onChange={(text) =>
+                                                        setAttributes({
+                                                            errorMessage: text,
+                                                        })
+                                                    }
+                                                    isTextarea={true}
+                                                />
+                                                {/* <TextareaControl
                                                     label="Default Error Message"
                                                     // help="Write your email body here"
                                                     value={errorMessage}
@@ -713,10 +745,22 @@ function Inspector(props) {
                                                             errorMessage: text,
                                                         })
                                                     }
-                                                />
+                                                /> */}
                                             </>
                                         )}
-                                        <TextareaControl
+                                        <DynamicInputControl
+                                            label={__("Validation Error Message", "essential-blocks")}
+                                            attrName="validationErrorMessage"
+                                            inputValue={validationErrorMessage}
+                                            setAttributes={setAttributes}
+                                            onChange={(text) =>
+                                                setAttributes({
+                                                    validationErrorMessage: text,
+                                                })
+                                            }
+                                            isTextarea={true}
+                                        />
+                                        {/* <TextareaControl
                                             label="Validation Error Message"
                                             // help="Write your email body here"
                                             value={validationErrorMessage}
@@ -726,7 +770,7 @@ function Inspector(props) {
                                                     validationErrorMessage: text,
                                                 })
                                             }
-                                        />
+                                        /> */}
                                     </PanelBody>
 
                                     <PanelBody
@@ -767,12 +811,26 @@ function Inspector(props) {
                                                 </>
                                             )}
 
-                                            <TextControl
+                                            {/* <TextControl
                                                 label={__(
                                                     "Text",
                                                     "essential-blocks"
                                                 )}
                                                 value={buttonText}
+                                                onChange={(buttonText) =>
+                                                    setAttributes({
+                                                        buttonText,
+                                                    })
+                                                }
+                                            /> */}
+                                            <DynamicInputControl
+                                                label={__(
+                                                    "Text",
+                                                    "essential-blocks"
+                                                )}
+                                                attrName="buttonText"
+                                                inputValue={buttonText}
+                                                setAttributes={setAttributes}
                                                 onChange={(buttonText) =>
                                                     setAttributes({
                                                         buttonText,

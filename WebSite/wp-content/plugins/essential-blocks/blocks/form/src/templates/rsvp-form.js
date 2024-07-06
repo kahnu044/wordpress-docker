@@ -40,6 +40,8 @@ export const RSVP_FORM_TEMPLATE = [
             labelText: "Full Name",
             fieldName: "full-name",
             placeholderText: "Full Name",
+            showLabel: false,
+            isIcon: false,
         },
     ],
     [

@@ -168,7 +168,7 @@ const attributes = {
     },
     filterBGColor: {
         type: "string",
-        default: "var(--eb-global-background-color)",
+        default: "var(--eb-global-tertiary-color)",
     },
     filterActBGColor: {
         type: "string",
@@ -195,9 +195,14 @@ const attributes = {
         type: "string",
         default: "Load More",
     },
+    // cant delete it as we migrate it to imagesPerPage attribute
     imagesPerPage: {
         type: "number",
         default: 1,
+    },
+    imagesPerPageCount: {
+        type: "number",
+        default: 3,
     },
     loadmoreColor: {
         type: "string",
@@ -210,6 +215,10 @@ const attributes = {
     loadmoreBGColor: {
         type: "string",
         default: "var(--eb-global-button-background-color)",
+    },
+    enableInfiniteScroll: {
+        type: "boolean",
+        default: false,
     },
 
     // typography attributes ⬇

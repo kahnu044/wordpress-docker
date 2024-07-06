@@ -97,7 +97,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		 * @return array
 		 */
 		public static function get_frontend_css( $slug, $attr, $id, $is_gbs = false ) {
-			return self::get_frontend_assets( $slug, $attr, $id, 'css', $is_gbs );
+			return self::get_frontend_assets( $slug, $attr, esc_attr( $id ), 'css', $is_gbs );
 		}
 
 		/**
@@ -111,7 +111,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 		 * @return array
 		 */
 		public static function get_frontend_js( $slug, $attr, $id ) {
-			return self::get_frontend_assets( $slug, $attr, $id, 'js' );
+			return self::get_frontend_assets( $slug, $attr, esc_attr( $id ), 'js' );
 		}
 
 		/**
@@ -176,15 +176,15 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 				$block_dir = $main_dir . 'includes/blocks/' . $blocks[ $slug ]['dir'];
 
-				$assets_file = $block_dir . '/frontend.' . $type . '.php';
+				$assets_file = realpath( $block_dir . '/frontend.' . $type . '.php' );
 
-				if ( file_exists( $assets_file ) ) {
+				if ( is_string( $assets_file ) && file_exists( $assets_file ) ) {
 
 					
 					// Set default attributes.
-					$attr_file = $block_dir . '/attributes.php';
+					$attr_file = realpath( $block_dir . '/attributes.php' );
 					
-					if ( file_exists( $attr_file ) ) {
+					if ( is_string( $attr_file ) && file_exists( $attr_file ) ) {
 						
 						$default_attr = include $attr_file;
 						

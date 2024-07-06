@@ -5,16 +5,19 @@ namespace EssentialBlocks\Core;
 use EssentialBlocks\Core\BlocksPatterns;
 use EssentialBlocks\Traits\HasSingletone;
 
-class Maintenance {
+class Maintenance
+{
     use HasSingletone;
 
-    public function __construct() {
-        add_action( 'admin_init', [$this, 'update_actions'], 5 );
+    public function __construct()
+    {
+        add_action( 'admin_init', [ $this, 'update_actions' ], 5 );
 
         $this->init( ESSENTIAL_BLOCKS_PLUGIN_BASENAME );
     }
 
-    public function update_actions() {
+    public function update_actions()
+    {
         $_version        = get_option( 'essential_blocks_version' );
         $_code_version   = ESSENTIAL_BLOCKS_VERSION;
         $requires_update = version_compare( $_version, $_code_version, '<' );
@@ -33,14 +36,15 @@ class Maintenance {
             self::db_create_tables();
 
             //update all blocks in db
-            update_option( 'essential_all_blocks', Blocks::defaults() );
+            update_option( 'essential_all_blocks', Blocks::all() );
         }
     }
 
     /**
      * Update WC version to current.
      */
-    private function update_version() {
+    private function update_version()
+    {
         update_option( 'essential_blocks_version', ESSENTIAL_BLOCKS_VERSION );
     }
 
@@ -50,9 +54,10 @@ class Maintenance {
      * @since 2.0.1
      * @return void
      */
-    public function init( $plguin_basename ) {
-        register_activation_hook( $plguin_basename, [__CLASS__, 'activation'] );
-        register_uninstall_hook( $plguin_basename, [__CLASS__, 'uninstall'] );
+    public function init( $plguin_basename )
+    {
+        register_activation_hook( $plguin_basename, [ __CLASS__, 'activation' ] );
+        register_uninstall_hook( $plguin_basename, [ __CLASS__, 'uninstall' ] );
     }
 
     /**
@@ -61,8 +66,9 @@ class Maintenance {
      * @since 2.0.1
      * @return void
      */
-    public static function activation() {
-        update_option( 'essential_all_blocks', Blocks::defaults() );
+    public static function activation()
+    {
+        update_option( 'essential_all_blocks', Blocks::all() );
         self::db_create_tables();
     }
 
@@ -72,10 +78,12 @@ class Maintenance {
      * @since 2.0.1
      * @return void
      */
-    public static function uninstall() {
+    public static function uninstall()
+    {
     }
 
-    private static function db_create_tables() {
+    private static function db_create_tables()
+    {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();

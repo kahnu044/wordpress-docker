@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", (event) => {
     var keySelector = ".eb___animated";
-    waitForElement(keySelector).then((elm) => {
+    ebAnimationwaitForElement(keySelector).then((elm) => {
         var findAnimationClass = document.querySelectorAll(keySelector);
         replaceAnimationClasses(findAnimationClass);
 
@@ -42,10 +42,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
 var isInViewport = function (elem) {
     var distance = elem.getBoundingClientRect();
     return (
-        distance.bottom > 0 &&
-        distance.top < (window.innerHeight || document.documentElement.clientHeight) &&
-        distance.right > 0 &&
-        distance.left < (window.innerWidth || document.documentElement.clientWidth)
+        distance.top >= 0 &&
+        distance.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        distance.left >= 0 &&
+        // distance.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        distance.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
 };
 
@@ -67,7 +68,7 @@ var replaceAnimationClasses = function (selector) {
 };
 
 //
-var waitForElement = function (selector) {
+var ebAnimationwaitForElement = function (selector) {
     return new Promise((resolve) => {
         if (document.querySelector(selector)) {
             return resolve(document.querySelector(selector));

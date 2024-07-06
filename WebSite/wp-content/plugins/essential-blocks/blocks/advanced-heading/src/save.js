@@ -1,11 +1,11 @@
-import { RichText, useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+import { RichText } from "@wordpress/block-editor";
+const { EBDisplayIcon, BlockProps } = window.EBControls;
 
 const Save = ({ attributes }) => {
     const {
         blockId,
         preset,
-        tagName,
+        tagName: TagName,
         titleText,
         subtitleTagName,
         displaySubtitle,
@@ -15,11 +15,19 @@ const Save = ({ attributes }) => {
         seperatorPosition,
         separatorIcon,
         classHook,
+        source,
+        enableLink,
+        titleLink,
+        openInNewTab
     } = attributes;
 
+    if (source == 'dynamic-title') return null;
+    const linkTarget = openInNewTab ? "_blank" : undefined;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -40,11 +48,26 @@ const Save = ({ attributes }) => {
                             )}
                         </div>
                     )}
-                    <RichText.Content
-                        tagName={tagName}
-                        className="eb-ah-title"
-                        value={titleText}
-                    />
+                    {enableLink && titleLink.length > 0 && (
+                        <TagName className="eb-ah-title">
+                            <a
+                                href={titleLink}
+                                target={linkTarget}
+                                rel={linkTarget === "_blank" ? "noopener" : undefined}
+                            >
+                                {titleText}
+                            </a>
+                        </TagName>
+                    )}
+
+                    {(!enableLink || (enableLink && titleLink.length == 0)) && (
+                        <RichText.Content
+                            tagName={TagName}
+                            className="eb-ah-title"
+                            value={titleText}
+                        />
+                    )}
+
                     {displaySubtitle && (
                         <RichText.Content
                             tagName={subtitleTagName}
@@ -67,7 +90,7 @@ const Save = ({ attributes }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

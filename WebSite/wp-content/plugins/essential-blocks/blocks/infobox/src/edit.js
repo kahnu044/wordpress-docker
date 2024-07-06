@@ -2,22 +2,14 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
-import { useBlockProps } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
-
 /**
  * Internal dependencies
  */
-
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 import InfoboxContainer from "./components/infobox-edit";
-
-import classnames from "classnames";
-
 import Inspector from "./inspector";
 import Style from "./style";
 
@@ -25,49 +17,15 @@ const Edit = (props) => {
     const {
         attributes,
         setAttributes,
-        className,
         isSelected,
-        clientId,
-        name
     } = props;
-    const {
-        // responsive control attributes ⬇
-        resOption,
-        // blockMeta is for keeping all the styles
-        blockMeta,
-        // blockId attribute for making unique className and other uniqueness
-        blockId,
-        number,
-        enableButton,
-        isInfoClick,
-        btnEffect
-    } = attributes;
 
-    useEffect(() => {
-        // this codes is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-infobox";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        //
-        if (number === undefined) {
-            setAttributes({ number: "01" });
-        }
-        //set "btnEffect" to "hvr-fade" if not selected
-        if (btnEffect === undefined) {
-            setAttributes({ btnEffect: "hvr-fade" });
-        }
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-infobox',
+        style: <Style {...props} />
+    };
 
     return (
         <>
@@ -77,14 +35,13 @@ const Edit = (props) => {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <InfoboxContainer
                     setAttributes={setAttributes}
                     attributes={attributes}
                 />
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

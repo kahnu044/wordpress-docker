@@ -188,6 +188,82 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 								'type'    => 'string',
 								'default' => 'ajax',
 							),
+							'isLeftToRightLayout'         => array(
+								'type'    => 'boolean',
+								'default' => false,
+							),
+							'wrapperTopPadding'           => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperRightPadding'         => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperLeftPadding'          => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperBottomPadding'        => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperTopPaddingTablet'     => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperRightPaddingTablet'   => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperLeftPaddingTablet'    => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperBottomPaddingTablet'  => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperTopPaddingMobile'     => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperRightPaddingMobile'   => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperLeftPaddingMobile'    => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperBottomPaddingMobile'  => array(
+								'type'    => 'number',
+								'default' => '',
+							),
+							'wrapperPaddingUnit'          => array(
+								'type'    => 'string',
+								'default' => 'px',
+							),
+							'wrapperPaddingUnitTablet'    => array(
+								'type'    => 'string',
+								'default' => 'px',
+							),
+							'wrapperPaddingUnitMobile'    => array(
+								'type'    => 'string',
+								'default' => 'px',
+							),
+							'wrapperPaddingLink'          => array(
+								'type'    => 'boolean',
+								'default' => false,
+							),
+							'wrapperAlign'                => array(
+								'type'    => 'string',
+								'default' => 'row',
+							),
+							'wrapperAlignPosition'        => array(
+								'type'    => 'string',
+								'default' => 'center',
+							),
 						)
 					),
 					'render_callback' => array( $this, 'post_grid_callback' ),
@@ -294,9 +370,9 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 				)
 			);
 
-			$enable_legacy_blocks = UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_legacy_blocks', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'yes' : 'no' );
+			$enable_legacy_blocks = UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_legacy_blocks' );
 
-			if ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) || 'yes' === $enable_legacy_blocks ) {
+			if ( 'yes' === $enable_legacy_blocks ) {
 				register_block_type(
 					'uagb/post-masonry',
 					array(
@@ -431,6 +507,8 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 
 			}
 
+			$inherit_from_theme = 'enabled' === ( 'deleted' !== UAGB_Admin_Helper::get_admin_settings_option( 'uag_btn_inherit_from_theme_fallback', 'deleted' ) ? 'disabled' : UAGB_Admin_Helper::get_admin_settings_option( 'uag_btn_inherit_from_theme', 'disabled' ) );
+
 			return array_merge(
 				$btn_border_attribute,
 				$overall_border_attribute,
@@ -544,6 +622,14 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 					'ctaText'                       => array(
 						'type'    => 'string',
 						'default' => __( 'Read More', 'ultimate-addons-for-gutenberg' ),
+					),
+					'inheritFromThemeBtn'           => array(
+						'type'    => 'boolean',
+						'default' => $inherit_from_theme,
+					),
+					'buttonType'                    => array(
+						'type'    => 'string',
+						'default' => 'primary',
 					),
 					'btnHPadding'                   => array(
 						'type'    => 'number',
@@ -1619,6 +1705,7 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 
 				do_action( "uagb_post_before_article_{$attributes['post_type']}", get_the_ID(), $attributes );
 				$post_classes = ( $post_class_enabled ) ? implode( ' ', get_post_class( 'uagb-post__inner-wrap' ) ) : 'uagb-post__inner-wrap';
+				$isLeftRight  = ( is_array( $attributes ) && isset( $attributes['isLeftToRightLayout'] ) ) ? $attributes['isLeftToRightLayout'] : false;
 				?>
 				<?php do_action( "uagb_post_before_inner_wrap_{$attributes['post_type']}", get_the_ID(), $attributes ); ?>
 				<?php
@@ -1627,7 +1714,14 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 					esc_attr( $post_classes )
 				);
 				?>
-					<?php $this->render_innerblocks( $attributes ); ?>
+					<?php
+					if ( $isLeftRight ) {
+						$this->render_innerblocks_with_wrapper( $attributes );
+					} else {
+						$this->render_innerblocks( $attributes );
+					}
+					?>
+
 					<?php $this->render_complete_box_link( $attributes ); ?>
 				</article>
 				<?php do_action( "uagb_post_after_inner_wrap_{$attributes['post_type']}", get_the_ID(), $attributes ); ?>
@@ -1665,12 +1759,51 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 					return '';
 			}
 		}
+
+		/**
+		 * Render Inner blocks with a wrapper.
+		 *
+		 * @param array $attributes Array of block attributes.
+		 *
+		 * @since 2.13.3
+		 * @return void
+		 */
+		public function render_innerblocks_with_wrapper( $attributes ) {
+			$length   = count( $attributes['layoutConfig'] );
+			$img_atts = array();
+		
+			// Iterate through the blocks and find the uagb/post-image block.
+			for ( $i = 0; $i < $length; $i++ ) {
+				if ( 'uagb/post-image' === $attributes['layoutConfig'][ $i ][0] ) {
+					// Store the image attributes for later rendering.
+					$img_atts[] = $attributes['layoutConfig'][ $i ];
+					// Remove the uagb/post-image block from the layoutConfig array.
+					array_splice( $attributes['layoutConfig'], $i, 1 );
+					$i--;
+					$length--;
+				}
+			}
+		
+			// Render the uagb/post-image block(s) outside the wrapper, if it exists.
+			foreach ( $img_atts as $img_att ) {
+				echo esc_html( $this->render_layout( $img_att[0], $attributes ) );
+			}
+		
+			// Render all blocks except for the uagb/post-image block inside the wrapper.
+			echo '<div class="uag-post-grid-wrapper">';
+			for ( $i = 0; $i < $length; $i++ ) {
+				echo esc_html( $this->render_layout( $attributes['layoutConfig'][ $i ][0], $attributes ) );
+			}
+			echo '</div>';
+		}
+
 		/**
 		 * Render Inner blocks.
 		 *
 		 * @param array $attributes Array of block attributes.
 		 *
 		 * @since 1.20.0
+		 * @return void
 		 */
 		public function render_innerblocks( $attributes ) {
 			$length   = count( $attributes['layoutConfig'] );
@@ -1707,7 +1840,6 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 										} );
 									imagesLoaded( scope, function() { isotope	});
 									window.addEventListener( 'resize', function() {	isotope	});
-									UAGBImageGalleryMasonry.initByOffset( scope, isotope );
 								}, 500 );
 							}
 							// This CSS is for Post BG Image Spacing
@@ -2136,6 +2268,12 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 		 * @since 0.0.1
 		 */
 		public function render_button( $attributes ) {
+			$inherit_astra_secondary = $attributes['inheritFromThemeBtn'] && 'secondary' === $attributes['buttonType'];
+			$button_type_class       = $inherit_astra_secondary ? 'ast-outline-button' : 'wp-block-button__link';
+
+			// Initialize an empty string for border style.
+			$border_style = $inherit_astra_secondary ? 'border-width: revert-layer;' : '';
+
 			if ( ! $attributes['displayPostLink'] ) {
 				return;
 			}
@@ -2143,10 +2281,10 @@ if ( ! class_exists( 'UAGB_Post' ) ) {
 			$cta_text = ( $attributes['ctaText'] ) ? $attributes['ctaText'] : __( 'Read More', 'ultimate-addons-for-gutenberg' );
 			do_action( "uagb_single_post_before_cta_{$attributes['post_type']}", get_the_ID(), $attributes );
 			$wrap_classes = 'uagb-post__text uagb-post__cta wp-block-button';
-			$link_classes = 'wp-block-button__link uagb-text-link';
+			$link_classes = $button_type_class . ' uagb-text-link';
 			?>
 			<div class="<?php echo esc_attr( $wrap_classes ); ?>">
-				<a class="<?php echo esc_attr( $link_classes ); ?>" href="<?php echo esc_url( apply_filters( "uagb_single_post_link_{$attributes['post_type']}", get_the_permalink(), get_the_ID(), $attributes ) ); ?>" target="<?php echo esc_attr( $target ); ?>" rel="bookmark noopener noreferrer"><?php echo wp_kses_post( $cta_text ); ?></a>
+				<a class="<?php echo esc_attr( $link_classes ); ?>" style="<?php echo esc_attr( $border_style ); ?>" href="<?php echo esc_url( apply_filters( "uagb_single_post_link_{$attributes['post_type']}", get_the_permalink(), get_the_ID(), $attributes ) ); ?>" target="<?php echo esc_attr( $target ); ?>" rel="bookmark noopener noreferrer"><?php echo wp_kses_post( $cta_text ); ?></a>
 			</div>
 			<?php
 			do_action( "uagb_single_post_after_cta_{$attributes['post_type']}", get_the_ID(), $attributes );

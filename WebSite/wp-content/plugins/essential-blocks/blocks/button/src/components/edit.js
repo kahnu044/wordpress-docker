@@ -24,7 +24,8 @@ import Inspector from "./inspector";
 const {
     duplicateBlockIdFix,
     DynamicInputValueHandler,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 import Style from "./style";
 
@@ -45,21 +46,12 @@ const edit = (props) => {
         type,
     } = attributes;
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-button";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-button',
+        style: <Style {...props} />
+    };
 
     const setButtonAlign = (newAlign) => {
         switch (newAlign) {
@@ -87,8 +79,7 @@ const edit = (props) => {
                     controls={["left", "center", "right"]}
                 />
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
 
                     <div className={`eb-button-wrapper eb-button-alignment ${blockId}`}>
@@ -137,7 +128,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

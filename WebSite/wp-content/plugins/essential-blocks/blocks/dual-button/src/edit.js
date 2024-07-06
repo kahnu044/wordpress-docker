@@ -2,27 +2,21 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useBlockProps } from "@wordpress/block-editor";
-import { useEffect } from "@wordpress/element";
-import { select } from "@wordpress/data";
 
 /**
  * Internal depencencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
     DynamicInputValueHandler,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
-    const { attributes, setAttributes, className, clientId, isSelected, name } = props;
+    const { attributes, setAttributes, isSelected } = props;
     const {
         blockId,
         preset,
@@ -35,27 +29,17 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-button-group";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-button-group',
+        style: <Style {...props} />
+    };
 
     return (
         <>
             {isSelected && <Inspector {...props} />}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div
@@ -131,7 +115,7 @@ export default function Edit(props) {
                         </a>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

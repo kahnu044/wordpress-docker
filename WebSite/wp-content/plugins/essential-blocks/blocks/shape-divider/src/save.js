@@ -1,9 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps } from "@wordpress/block-editor";
 import { SHAPE_DIVIDER } from "./constants";
-const { ShapeDividerContent } = window.EBControls;
+const { ShapeDividerContent, BlockProps } = window.EBControls;
 
 const save = ({ attributes }) => {
     const {
@@ -14,7 +13,7 @@ const save = ({ attributes }) => {
     } = attributes;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -26,7 +25,7 @@ const save = ({ attributes }) => {
                     />
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

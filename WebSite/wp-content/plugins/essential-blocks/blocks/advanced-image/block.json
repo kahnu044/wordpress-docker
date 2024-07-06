@@ -7,6 +7,7 @@
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,
+    "align": ["wide", "full"],
     "color": {
       "__experimentalDuotone": "img",
       "text": false,

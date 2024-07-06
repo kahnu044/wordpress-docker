@@ -16,7 +16,7 @@ import Inspector from "./inspector";
 /**
  * External depencencies
  */
-const { duplicateBlockIdFix } = window.EBControls;
+const { duplicateBlockIdFix, BlockProps } = window.EBControls;
 
 export default function Edit(props) {
     const {
@@ -42,21 +42,12 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-price";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-price',
+        style: <Style {...props} />
+    };
 
     const wrapperClasses =
         priceView === "inline"
@@ -74,8 +65,7 @@ export default function Edit(props) {
                 </>
             )}
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -112,8 +102,8 @@ export default function Edit(props) {
                             )}
                             <h3
                                 className={`eb-original-price-wrapper${showOnSale === true
-                                        ? " eb-line-through"
-                                        : ""
+                                    ? " eb-line-through"
+                                    : ""
                                     }`}
                             >
                                 <span className="eb-original-price">
@@ -137,7 +127,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

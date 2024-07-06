@@ -14,12 +14,7 @@ import Inspector from "./inspector";
 import { WPFormsIcon } from "./icon";
 
 const {
-    softMinifyCssStrings,
-    duplicateBlockIdFix,
-    generateDimensionsControlStyles,
-    generateBorderShadowStyles,
-    generateTypographyStyles,
-    generateResponsiveRangeStyles,
+    BlockProps,
     NoticeComponent
 } = EBControls;
 
@@ -66,21 +61,12 @@ const edit = (props) => {
         cover
     } = attributes;
 
-    useEffect(() => {
-        // this useEffect is for creating an unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-wpforms";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-wpforms',
+        style: <Style {...props} />
+    };
 
     const is_wpforms_active =
         EssentialBlocksLocalize?.get_plugins["wpforms-lite/wpforms.php"]?.active ||
@@ -127,8 +113,7 @@ const edit = (props) => {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`${blockId} ${wrapperClasses.join(" ")}`}>
                         {!is_wpforms_active && (
@@ -174,7 +159,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

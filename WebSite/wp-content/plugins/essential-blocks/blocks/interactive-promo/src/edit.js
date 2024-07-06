@@ -2,9 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import {
-    useBlockProps,
     BlockControls,
     MediaPlaceholder,
     MediaUpload,
@@ -15,18 +13,16 @@ import { select } from "@wordpress/data";
 /**
  * Internal dependencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
+    sanitizeURL,
+    BlockProps
 } = window.EBControls;
 
 const Edit = (props) => {
-    const { isSelected, attributes, setAttributes, className, clientId, name } = props;
+    const { isSelected, attributes, setAttributes } = props;
     const {
         blockMeta,
         blockId,
@@ -61,21 +57,12 @@ const Edit = (props) => {
         );
     }
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-interactive-promo";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-interactive-promo',
+        style: <Style {...props} />
+    };
 
     return (
         <>
@@ -108,8 +95,7 @@ const Edit = (props) => {
                     </ToolbarItem>
                 </ToolbarGroup>
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-interactive-promo-wrapper ${blockId}`}>
                         <div
@@ -124,7 +110,7 @@ const Edit = (props) => {
                                         <p className="eb-interactive-promo-content">{content}</p>
                                         {link && (
                                             <a
-                                                href={link}
+                                                href={sanitizeURL(link)}
                                                 target={newWindow ? "_blank" : "_self"}
                                                 rel="noopener noreferrer"
                                             />
@@ -135,7 +121,7 @@ const Edit = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

@@ -2,28 +2,21 @@
  * WordPress Dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useRef } from "@wordpress/element";
+import { useRef } from "@wordpress/element";
 import { useBlockProps, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { select, dispatch } from "@wordpress/data";
+import { dispatch } from "@wordpress/data";
 
 /**
  * Internal Import
  */
 import ReactCompareImage from "react-compare-image";
 import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
-    softMinifyCssStrings,
-    // mimmikCssForPreviewBtnClick,
-    duplicateBlockIdFix,
-    generateDimensionsControlStyles,
-    generateTypographyStyles,
-    generateResponsiveRangeStyles,
+    BlockProps
 } = window.EBControls;
 
 const edit = (props) => {
@@ -55,29 +48,12 @@ const edit = (props) => {
 
     const hiddenImg = useRef(null);
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-image-comparison";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    // // this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
-    // useEffect(() => {
-    // 	mimmikCssForPreviewBtnClick({
-    // 		domObj: document,
-    // 		select,
-    // 	});
-    // }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-image-comparison',
+        style: <Style {...props} />
+    };
 
     let labelPostionClass = verticalMode
         ? ` eb-label-vertical-${verticalLabelPosition}`
@@ -115,8 +91,7 @@ const edit = (props) => {
                     onImageSwap={onImageSwap}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div
                         className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
@@ -186,7 +161,7 @@ const edit = (props) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

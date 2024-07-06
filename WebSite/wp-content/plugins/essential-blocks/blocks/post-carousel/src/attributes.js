@@ -30,6 +30,7 @@ import {
     DOTS_SIZE,
     SLIDES_GAP,
     DOT_PRESETS,
+    READMORE_BORDER_SHADOW
 } from "./constants/constants";
 
 // import {
@@ -238,23 +239,23 @@ const attributes = {
     },
     categoryMetaColor: {
         type: "string",
-        default: "var(--eb-global-button-text-color)",
+        default: "var(--eb-global-tertiary-color)",
     },
     categoryMetaHoverColor: {
         type: "string",
-        default: "var(--eb-global-button-text-color)",
+        default: "var(--eb-global-secondary-text-color)",
     },
     categoryMetaDividerColor: {
         type: "string",
-        default: "var(--eb-global-secondary-text-color)",
+        default: "var(--eb-global-tertiary-color)",
     },
     tagMetaColor: {
         type: "string",
-        default: "var(--eb-global-button-text-color)",
+        default: "var(--eb-global-tertiary-color)",
     },
     tagMetaHoverColor: {
         type: "string",
-        default: "var(--eb-global-button-text-color)",
+        default: "var(--eb-global-secondary-text-color)",
     },
     tagMetaBgColor: {
         type: "string",
@@ -513,6 +514,24 @@ const attributes = {
         type: "string",
         default: "",
     },
+    ...generateBorderShadowAttributes(READMORE_BORDER_SHADOW, {
+        noShadow: true,
+        defaultBdrColor: "#F445FF",
+        defaultBdrStyle: "none",
+        bdrDefaults: {
+            top: 1,
+            right: 1,
+            bottom: 1,
+            left: 1,
+        },
+        rdsDefaults: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+        },
+        // noBorder: true,
+    }),
 };
 
 export default attributes;

@@ -7,8 +7,33 @@ import attributes from "./attributes";
 import SocialLinks from "./components/social-links";
 import SocialLinksDeprecated1 from "./components/depricated-social-links-1";
 import SocialLinksDeprecated2 from "./components/depricated-social-links-2";
+import SocialLinksDeprecated3 from "./components/depricated-social-links-3";
 
 const deprecated = [
+    {
+        attributes: { ...attributes },
+        supports: {
+            align: ["wide", "full"],
+        },
+        save: ({ attributes }) => {
+            const {
+                blockId,
+                profilesOnly = [],
+                icnEffect,
+                classHook,
+            } = attributes;
+
+            return (
+                <div {...useBlockProps.save()}>
+                    <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                        <div className={`${blockId} eb-social-links-wrapper`}>
+                            <SocialLinks profilesOnly={profilesOnly} icnEffect={icnEffect} />
+                        </div>
+                    </div>
+                </div>
+            );
+        },
+    },
     {
         attributes: { ...attributes },
         supports: {

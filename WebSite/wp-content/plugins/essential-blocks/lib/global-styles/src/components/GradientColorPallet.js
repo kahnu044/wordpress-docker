@@ -8,7 +8,8 @@ import {
     Dashicon,
     GradientPicker,
     ColorIndicator,
-    PanelRow
+    PanelRow,
+    TextControl
 } from "@wordpress/components";
 
 const GradientColorPallet = (props) => {
@@ -16,50 +17,75 @@ const GradientColorPallet = (props) => {
         title = "",
         colors,
         setColor,
+        setColors,
         wrapperClass,
         resetAction,
         deleteAction,
+        enableEditName = false,
         onDelete
     } = props
 
     const [clickedGradient, setClickedGradient] = useState('');
     const [gradientPopoverAnchor, setGradientPopoverAnchor] = useState();
 
+    const editColorName = (index, value) => {
+        let cloneColors = [...colors]
+        cloneColors[index] = {
+            ...cloneColors[index],
+            name: value
+        }
+        setColors([...cloneColors])
+    }
+
     return (
         <>
             {colors && colors.length > 0 && (
                 <div className={`eb-color-panel ${wrapperClass}`}>
                     <PanelRow className="eb-gradient-color-label">{title}</PanelRow>
-                    <div className="eb-gradient-color-list">
+                    <div className="eb-custom-panel eb-gradient-color-list">
                         {colors.map((color, index) => (
-                            <>
+                            <div
+                                key={index}
+                                ref={setGradientPopoverAnchor}
+                                id={`eb-gradient-color-${index}`}
+                                className="eb-custom-element eb-custom-color-item"
+                            >
                                 <div
-                                    ref={setGradientPopoverAnchor}
-                                    id={`eb-gradient-color-${index}`}
-                                    className="eb-custom-color-item"
+                                    className="item-content"
+                                    onClick={() => !enableEditName && setClickedGradient(clickedGradient === color.slug ? '' : color.slug)}
                                 >
-                                    <div
-                                        className="item-content"
+                                    <ColorIndicator
                                         onClick={() => setClickedGradient(clickedGradient === color.slug ? '' : color.slug)}
-                                    >
-                                        <ColorIndicator colorValue={color?.color} />
-                                        {color?.name}
-                                    </div>
-                                    <div className="actions">
-                                        {resetAction && (
-                                            <span
-                                                title="Reset"
-                                                onClick={() => setColor(index, 'linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%)')}
-                                            ><Dashicon icon={'image-rotate'} /></span>
-                                        )}
-                                        {deleteAction && (
-                                            <span
-                                                title="Delete"
-                                                onClick={() => onDelete(index)}
-                                            ><Dashicon icon={'trash'} /></span>
-                                        )}
-                                    </div>
+                                        colorValue={color?.color}
+                                    />
+                                    {enableEditName && (
+                                        <TextControl
+                                            className={'eb-custom-element__edit-input'}
+                                            value={color.name || ''}
+                                            onChange={(text) => editColorName(index, text)}
+                                        />
+                                    )}
+                                    {!enableEditName && (
+                                        color?.name
+                                    )}
                                 </div>
+                                <div className="actions">
+                                    {resetAction && (
+                                        <span
+                                            className={'eb-reset'}
+                                            title="Reset"
+                                            onClick={() => setColor(index, 'linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%)')}
+                                        ><Dashicon icon={'image-rotate'} /></span>
+                                    )}
+                                    {deleteAction && (
+                                        <span
+                                            className={'eb-delete'}
+                                            title="Delete"
+                                            onClick={() => onDelete(index)}
+                                        ><Dashicon icon={'trash'} /></span>
+                                    )}
+                                </div>
+
                                 {clickedGradient === color?.slug && (
                                     <Popover
                                         anchor={gradientPopoverAnchor}
@@ -85,8 +111,7 @@ const GradientColorPallet = (props) => {
                                         </div>
                                     </Popover>
                                 )}
-
-                            </>
+                            </div>
                         ))}
                     </div>
                 </div>

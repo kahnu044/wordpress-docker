@@ -11,7 +11,7 @@ class OpenVerse extends ThirdPartyIntegration {
      *
      * @var string
      */
-    const URL = 'https://api.openverse.engineering/';
+    const URL = 'https://api.openverse.org/';
 
     public function __construct() {
         $this->add_ajax(

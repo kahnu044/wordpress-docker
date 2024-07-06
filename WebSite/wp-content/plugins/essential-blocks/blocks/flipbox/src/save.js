@@ -1,8 +1,8 @@
 /**
  * Internal dependencies
  */
-import { useBlockProps, RichText } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+import { RichText } from "@wordpress/block-editor";
+const { EBDisplayIcon, sanitizeURL, BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -35,6 +35,8 @@ const Save = ({ attributes }) => {
         classHook,
     } = attributes;
 
+    const sanitizeLink = sanitizeURL(link)
+
     const alignmentClass =
         contentPosition === "center"
             ? " eb-flipbox-align-center"
@@ -45,7 +47,7 @@ const Save = ({ attributes }) => {
         flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -90,7 +92,7 @@ const Save = ({ attributes }) => {
                                     <div className="eb-flipbox-front-title-wrapper">
                                         {linkType === "title" && link ? (
                                             <a
-                                                href={link ? link : "#"}
+                                                href={link ? sanitizeLink : "#"}
                                                 className="title-link"
                                             >
                                                 <RichText.Content
@@ -124,9 +126,9 @@ const Save = ({ attributes }) => {
                             className="eb-flipbox-back"
                             onClick={
                                 linkType === "box" && link && linkOpenNewTab
-                                    ? `window.open('${link}', '_blank');`
+                                    ? `window.open('${sanitizeLink}', '_blank');`
                                     : linkType === "box" && link
-                                        ? `window.location='${link}'`
+                                        ? `window.location='${sanitizeLink}'`
                                         : undefined
                             }
                         >
@@ -157,7 +159,7 @@ const Save = ({ attributes }) => {
                                     <div className="eb-flipbox-back-title-wrapper">
                                         {linkType === "title" && link ? (
                                             <a
-                                                href={link ? link : "#"}
+                                                href={link ? sanitizeLink : "#"}
                                                 className="title-link"
                                                 target={
                                                     linkOpenNewTab
@@ -194,7 +196,7 @@ const Save = ({ attributes }) => {
                                     <div className="eb-flipbox-button-container">
                                         <a
                                             className={`eb-flipbox-button-link ${buttonClasses}`}
-                                            href={link ? link : "#"}
+                                            href={link ? sanitizeLink : "#"}
                                             target={
                                                 linkOpenNewTab
                                                     ? `_blank`
@@ -216,7 +218,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

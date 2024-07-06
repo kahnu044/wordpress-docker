@@ -6,5 +6,9 @@
   "category": "essential-blocks",
   "description": "Create two buttons to be stacked together",
   "textdomain": "essential-blocks",
-  "editorScript": "essential-blocks-editor-script"
+  "editorScript": "essential-blocks-editor-script",
+  "supports": {
+    "anchor": true,
+    "align": ["wide", "full"]
+  }
 }

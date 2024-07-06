@@ -9,6 +9,7 @@ import { __ } from "@wordpress/i18n";
 import Icon from "./icon";
 import Edit from "./edit";
 import Save from "./save";
+import deprecated from "./deprecated";
 import attributes from "./attributes";
 import metadata from "../block.json";
 import "./style.scss";
@@ -26,5 +27,6 @@ ebConditionalRegisterBlockType(metadata, {
     attributes,
     edit: Edit,
     save: Save,
+    deprecated,
     example: {},
 });

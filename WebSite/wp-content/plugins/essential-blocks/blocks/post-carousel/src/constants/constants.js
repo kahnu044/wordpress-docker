@@ -36,6 +36,8 @@ export const ARROW_SIZE = "arrowSize";
 export const DOTS_SIZE = "dotsSize";
 export const SLIDES_GAP = "slidesGap";
 
+export const READMORE_BORDER_SHADOW = "readmoreBorder";
+
 export const UNIT_TYPES = [
     { label: "px", value: "px" },
     { label: "em", value: "em" },

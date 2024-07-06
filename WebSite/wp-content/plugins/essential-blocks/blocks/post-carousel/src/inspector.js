@@ -70,6 +70,7 @@ import {
     FONT_UNIT_TYPES,
     COLORS,
     DOT_PRESETS,
+    READMORE_BORDER_SHADOW
 } from "./constants/constants";
 import {
     EBPG_TITLE_TYPOGRAPHY,
@@ -1107,22 +1108,88 @@ function Inspector(props) {
                                         </PanelBody>
                                     )}
 
-                                    {preset != "style-4" ||
-                                        (preset != "pro-style-5" && showReadMore && (
-                                            <PanelBody
-                                                title={__("Read More Button", "essential-blocks")}
-                                                initialOpen={false}
+                                    {(preset != "style-4" || preset != "pro-style-5") && showReadMore && (
+                                        <PanelBody
+                                            title={__("Read More Button", "essential-blocks")}
+                                            initialOpen={false}
+                                        >
+                                            <ButtonGroup className="eb-inspector-btn-group">
+                                                {NORMAL_HOVER.map((item, index) => (
+                                                    <Button
+                                                        key={index}
+                                                        // isLarge
+                                                        isPrimary={readmoreColorType === item.value}
+                                                        isSecondary={readmoreColorType !== item.value}
+                                                        onClick={() =>
+                                                            setAttributes({
+                                                                readmoreColorType: item.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {item.label}
+                                                    </Button>
+                                                ))}
+                                            </ButtonGroup>
+
+                                            {readmoreColorType === "normal" && (
+                                                <>
+                                                    <ColorControl
+                                                        label={__("Color", "essential-blocks")}
+                                                        color={readmoreColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                readmoreColor: newColor,
+                                                            })
+                                                        }
+                                                    />
+                                                    <ColorControl
+                                                        label={__("Background Color", "essential-blocks")}
+                                                        color={readmoreBGColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                readmoreBGColor: newColor,
+                                                            })
+                                                        }
+                                                    />
+                                                </>
+                                            )}
+
+                                            {readmoreColorType === "hover" && (
+                                                <>
+                                                    <ColorControl
+                                                        label={__("Hover Color", "essential-blocks")}
+                                                        color={readmoreHoverColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                readmoreHoverColor: newColor,
+                                                            })
+                                                        }
+                                                    />
+                                                    <ColorControl
+                                                        label={__("Hover Background Color", "essential-blocks")}
+                                                        color={readmoreBGHoverColor}
+                                                        onChange={(newColor) =>
+                                                            setAttributes({
+                                                                readmoreBGHoverColor: newColor,
+                                                            })
+                                                        }
+                                                    />
+                                                </>
+                                            )}
+                                            <BaseControl
+                                                label={__("Alignment", "essential-blocks")}
+                                                id="essential-blocks"
                                             >
-                                                <ButtonGroup className="eb-inspector-btn-group">
-                                                    {NORMAL_HOVER.map((item, index) => (
+                                                <ButtonGroup id="essential-blocks">
+                                                    {TEXT_ALIGN.map((item, index) => (
                                                         <Button
                                                             key={index}
                                                             // isLarge
-                                                            isPrimary={readmoreColorType === item.value}
-                                                            isSecondary={readmoreColorType !== item.value}
+                                                            isPrimary={readmoreTextAlign === item.value}
+                                                            isSecondary={readmoreTextAlign !== item.value}
                                                             onClick={() =>
                                                                 setAttributes({
-                                                                    readmoreColorType: item.value,
+                                                                    readmoreTextAlign: item.value,
                                                                 })
                                                             }
                                                         >
@@ -1130,91 +1197,33 @@ function Inspector(props) {
                                                         </Button>
                                                     ))}
                                                 </ButtonGroup>
+                                            </BaseControl>
+                                            <TypographyDropdown
+                                                baseLabel={__("Typography", "essential-blocks")}
+                                                typographyPrefixConstant={EBPG_READMORE_TYPOGRAPHY}
+                                                resRequiredProps={resRequiredProps}
+                                            />
+                                            <ResponsiveDimensionsControl
+                                                resRequiredProps={resRequiredProps}
+                                                controlName={READMORE_MARGIN}
+                                                baseLabel="Margin"
+                                            />
+                                            <ResponsiveDimensionsControl
+                                                resRequiredProps={resRequiredProps}
+                                                controlName={READMORE_PADDING}
+                                                baseLabel="Padding"
+                                            />
 
-                                                {readmoreColorType === "normal" && (
-                                                    <>
-                                                        <ColorControl
-                                                            label={__("Color", "essential-blocks")}
-                                                            color={readmoreColor}
-                                                            onChange={(newColor) =>
-                                                                setAttributes({
-                                                                    readmoreColor: newColor,
-                                                                })
-                                                            }
-                                                        />
-                                                        <ColorControl
-                                                            label={__("Background Color", "essential-blocks")}
-                                                            color={readmoreBGColor}
-                                                            onChange={(newColor) =>
-                                                                setAttributes({
-                                                                    readmoreBGColor: newColor,
-                                                                })
-                                                            }
-                                                        />
-                                                    </>
-                                                )}
-
-                                                {readmoreColorType === "hover" && (
-                                                    <>
-                                                        <ColorControl
-                                                            label={__("Hover Color", "essential-blocks")}
-                                                            color={readmoreHoverColor}
-                                                            onChange={(newColor) =>
-                                                                setAttributes({
-                                                                    readmoreHoverColor: newColor,
-                                                                })
-                                                            }
-                                                        />
-                                                        <ColorControl
-                                                            label={__("Hover Background Color", "essential-blocks")}
-                                                            color={readmoreBGHoverColor}
-                                                            onChange={(newColor) =>
-                                                                setAttributes({
-                                                                    readmoreBGHoverColor: newColor,
-                                                                })
-                                                            }
-                                                        />
-                                                    </>
-                                                )}
-                                                <BaseControl
-                                                    label={__("Alignment", "essential-blocks")}
-                                                    id="essential-blocks"
-                                                >
-                                                    <ButtonGroup id="essential-blocks">
-                                                        {TEXT_ALIGN.map((item, index) => (
-                                                            <Button
-                                                                key={index}
-                                                                // isLarge
-                                                                isPrimary={readmoreTextAlign === item.value}
-                                                                isSecondary={readmoreTextAlign !== item.value}
-                                                                onClick={() =>
-                                                                    setAttributes({
-                                                                        readmoreTextAlign: item.value,
-                                                                    })
-                                                                }
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        ))}
-                                                    </ButtonGroup>
-                                                </BaseControl>
-                                                <TypographyDropdown
-                                                    baseLabel={__("Typography", "essential-blocks")}
-                                                    typographyPrefixConstant={EBPG_READMORE_TYPOGRAPHY}
+                                            <PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                                                <BorderShadowControl
+                                                    controlName={READMORE_BORDER_SHADOW}
                                                     resRequiredProps={resRequiredProps}
-                                                />
-                                                <ResponsiveDimensionsControl
-                                                    resRequiredProps={resRequiredProps}
-                                                    controlName={READMORE_MARGIN}
-                                                    baseLabel="Margin"
-                                                />
-                                                <ResponsiveDimensionsControl
-                                                    resRequiredProps={resRequiredProps}
-                                                    controlName={READMORE_PADDING}
-                                                    baseLabel="Padding"
+                                                    noShadow
+                                                // noBorder
                                                 />
                                             </PanelBody>
-                                        ))}
+                                        </PanelBody>
+                                    )}
 
                                     {showMeta && (
                                         <PanelBody title={__("Meta", "essential-blocks")} initialOpen={false}>

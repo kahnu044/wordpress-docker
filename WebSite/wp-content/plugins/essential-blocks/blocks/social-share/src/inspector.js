@@ -12,6 +12,7 @@ import {
     TabPanel,
     Button,
     ButtonGroup,
+    TextControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
@@ -29,9 +30,9 @@ const {
     BackgroundControl,
     AdvancedControls,
     TypographyDropdown,
+    SortControl,
+    EBIconPicker
 } = window.EBControls;
-
-import ShareButtons from "./shareButtons";
 
 import objAttributes from "./attributes";
 
@@ -79,6 +80,7 @@ function Inspector({ attributes, setAttributes }) {
         showTitle,
         isFloating,
     } = attributes;
+
     //
     useEffect(() => {
         const newSclDtails = socialDetails.map((item) => ({
@@ -142,6 +144,55 @@ function Inspector({ attributes, setAttributes }) {
         }
     };
 
+    const getSocialDetailsComponents = () => {
+        const onProfileChange = (key, value, position) => {
+            const newSocialDetail = { ...attributes.socialDetails[position] };
+            const newSocialDetails = [...attributes.socialDetails];
+            newSocialDetails[position] = newSocialDetail;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newSocialDetails[position][item] = value[index];
+                });
+            } else {
+                newSocialDetails[position][key] = value;
+            }
+
+            setAttributes({ socialDetails: newSocialDetails });
+        };
+
+        return attributes.socialDetails.map((each, i) => (
+            <div key={i}>
+                <EBIconPicker
+                    title={__("Social Media", "essential-blocks")}
+                    value={each.icon || null}
+                    onChange={(value) => onProfileChange('icon', value, i)}
+                />
+                <TextControl
+                    label={__("Text", "essential-blocks")}
+                    className="social-share-name-input"
+                    value={each.iconText || ""}
+                    onChange={(value) => onProfileChange('iconText', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Color", "essential-blocks")}
+                    color={each.color || ""}
+                    onChange={(value) => onProfileChange('color', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Background Color", "essential-blocks")}
+                    color={each.backgroundColor}
+                    onChange={(value) => onProfileChange('backgroundColor', value, i)}
+                />
+                <ColorControl
+                    label={__("Separator Color", "essential-blocks")}
+                    color={each.separatorColor}
+                    onChange={(value) => onProfileChange('separatorColor', value, i)}
+                />
+            </div>
+        ))
+    }
+
     return (
         <InspectorControls key="controls">
             <div className="eb-panel-control">
@@ -204,13 +255,16 @@ function Inspector({ attributes, setAttributes }) {
                                                 }
                                             />
                                             <Divider />
-                                            <ShareButtons
-                                                profiles={socialDetails}
-                                                onProfileAdd={(socialDetails) =>
-                                                    setAttributes({
-                                                        socialDetails,
-                                                    })
-                                                }
+                                            <SortControl
+                                                items={attributes.socialDetails}
+                                                labelKey={'iconText'}
+                                                onSortEnd={socialDetails => setAttributes({ socialDetails })}
+                                                onDeleteItem={index => {
+                                                    setAttributes({ socialDetails: attributes.socialDetails.filter((each, i) => i !== index) })
+                                                }}
+                                                hasSettings={true}
+                                                settingsComponents={getSocialDetailsComponents()}
+                                                hasAddButton={false}
                                             />
                                         </>
                                     </PanelBody>

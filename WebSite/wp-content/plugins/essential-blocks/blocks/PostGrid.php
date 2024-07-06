@@ -7,7 +7,11 @@ class PostGrid extends PostBlock
 {
     protected $frontend_scripts = [ 'essential-blocks-post-grid-frontend' ];
 
-    protected $frontend_styles = [ 'essential-blocks-frontend-style', 'essential-blocks-fontawesome' ];
+    protected $frontend_styles = [
+        'essential-blocks-frontend-style',
+        'essential-blocks-fontawesome',
+        'essential-blocks-common-style'
+     ];
 
     protected static $default_attributes = [
         'thumbnailSize'       => '',

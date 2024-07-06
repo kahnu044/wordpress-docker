@@ -14,12 +14,11 @@ import SocialLinks from "./components/social-links";
 
 const {
     duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 export default function Edit(props) {
@@ -101,21 +100,12 @@ export default function Edit(props) {
         setAttributes({ profilesOnly });
     }, [socialDetails]);
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-social-links";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-social-links',
+        style: <Style {...props} />
+    };
 
     return (
         <>
@@ -125,9 +115,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -138,7 +126,7 @@ export default function Edit(props) {
                         />
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

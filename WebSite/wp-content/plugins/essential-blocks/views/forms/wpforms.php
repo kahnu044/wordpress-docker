@@ -36,7 +36,7 @@
 	?>
 
 <div
-	<?php echo esc_attr( $wrapper_attributes ); ?>>
+	<?php echo wp_kses_data($wrapper_attributes); ?>>
 	<div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-parent-wrapper">
 		<div class="<?php echo esc_attr( implode( ' ', $_form_wrapper_classes ) ); ?>">
 			<?php wpforms_display( $formId ); ?>

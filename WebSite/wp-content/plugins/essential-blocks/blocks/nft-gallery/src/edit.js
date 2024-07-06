@@ -2,18 +2,14 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useBlockProps } from "@wordpress/block-editor";
 import { useEffect, useState } from "@wordpress/element";
-import { select } from "@wordpress/data";
 /**
  * Internal depenencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
 import Style from "./style";
 
-const { duplicateBlockIdFix, NoticeComponent } = window.EBControls;
+const { NoticeComponent, BlockProps } = window.EBControls;
 
 import Items from "./template-components/items";
 import Collections from "./template-components/collections";
@@ -22,7 +18,7 @@ import { NFTGalleryIcon } from "./icon";
 import { Dashicon } from "@wordpress/components";
 
 export default function Edit(props) {
-    const { attributes, setAttributes, className, clientId, isSelected, name } = props;
+    const { attributes, isSelected } = props;
     const {
         blockId,
         blockMeta,
@@ -39,23 +35,12 @@ export default function Edit(props) {
     const [nftErrorType, setNftErrorType] = useState('');
     const [loading, setLoading] = useState(true);
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        // const current_block_id = attributes.blockId;
-
-        const BLOCK_PREFIX = "eb-nft-gallery";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-nft-gallery',
+        style: <Style {...props} />
+    };
 
     //Is JSON test
     const isJsonStr = (str) => {
@@ -163,9 +148,7 @@ export default function Edit(props) {
     ) : (
         <>
             {isSelected && <Inspector {...props} setLoading={setLoading} />}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-nft-gallery-wrapper ${blockId}`} data-id={blockId}>
                         {loading && <Loading attributes={attributes} />}
@@ -217,7 +200,7 @@ export default function Edit(props) {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit >
         </>
     );
 }

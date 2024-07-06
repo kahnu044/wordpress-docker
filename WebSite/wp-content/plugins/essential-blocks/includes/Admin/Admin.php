@@ -55,6 +55,7 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
 
             add_action( 'wp_ajax_save_eb_admin_options', [ $this, 'save' ] );
             add_action( 'wp_ajax_get_eb_admin_options', [ $this, 'get' ] );
+            add_action( 'wp_ajax_hide_pattern_library', [ $this, 'hide_pattern_library' ] );
             add_action( 'wp_ajax_reset_eb_admin_options', [ $this, 'reset' ] );
             add_action( 'wp_ajax_get_eb_admin_templates', [ $this, 'templates' ] );
             add_action( 'wp_ajax_get_eb_admin_template_count', [ $this, 'template_count' ] );
@@ -275,10 +276,9 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
             /**
              * Early bird specials
              */
-            $b_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">Early bird specials: Grab <strong>LIFETIME</strong> access to premium Gutenberg Blocks</p>
-        <a class="button button-primary" href="https://essential-blocks.com/" target="_blank">Upgrade to PRO Now</a>
-        <a class="button button-secondary" href="https://essential-blocks.com/#pricing" target="_blank">Give Me LIFETIME Access</a>
-        <button data-dismiss="true" class="dismiss-btn button button-link">I Don\'t Want To Save Money</button>';
+            $b_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🔥 Essential Blocks PRO: Get access to premium Gutenberg blocks, features & website templates</p>
+        <a class="button button-primary" href="https://essential-blocks.com/eb-pro-upgrade" target="_blank">Upgrade to PRO Now</a>
+        <button data-dismiss="true" class="dismiss-btn button button-secondary">I Don\'t Want To Save Money</button>';
             $_black_friday_notice = [
                 'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
                 'html'      => $b_message
@@ -355,7 +355,7 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
             }
 
             wpdev_essential_blocks()->assets->enqueue( 'admin', 'css/admin.css' );
-            wpdev_essential_blocks()->assets->enqueue( 'admin-custom', ESSENTIAL_BLOCKS_URL . 'admin/style.css' );
+            wpdev_essential_blocks()->assets->enqueue( 'admin-custom', '../admin/style.css' );
         }
 
         public function enqueue_scripts( $hook )
@@ -501,6 +501,26 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
                 }
             } else {
                 wp_send_json_error( __( 'Something went wrong regarding getting options data.', 'essential-blocks' ) );
+            }
+        }
+
+        /**
+         * AJAX Get function for set hide pattern library in editor
+         */
+        public function hide_pattern_library()
+        {
+            if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+                wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
+            }
+            if ( ! current_user_can( 'edit_posts' ) ) {
+                wp_send_json_error( __( 'You are not authorized to save this!', 'essential-blocks' ) );
+            }
+
+            $save = update_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY, true );
+            if ( $save ) {
+                wp_send_json_success( __( 'Settings Updated Successfully', 'essential-blocks' ) );
+            } else {
+                wp_send_json_error( __( 'Couldn\'t Save Settings Data', 'essential-blocks' ) );
             }
         }
 
@@ -655,6 +675,7 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
          */
         public function eb_show_admin_menu_notice()
         {
+            $get_option = get_option( 'eb_admin_menu_notice' );
             if ( get_option( 'eb_admin_menu_notice' ) < EB_ADMIN_MENU_FLAG ) {
                 update_option( 'eb_admin_menu_notice', EB_ADMIN_MENU_FLAG, 'no' );
             }
@@ -682,8 +703,9 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
     <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
         <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
         <?php printf(
-                        __( "<p> <i>📣</i> NEW: Essential Blocks 4.5.0 is here, with new '<a target='_blank' href='%s'>Responsive Breakpoints </a>' settings & more! Check out the <a target='_blank' href='%s'>Changelog</a> for more details 🎉</p>", "essential-blocks" ),
-                        esc_url( 'https://essential-blocks.com/docs/customize-website-responsive-breakpoints/' ),
+                        __( "<p> <i>📣</i> NEW: Essential Blocks 4.7.0 is here, with new '<a target='_blank' href='%s'>Global Typography</a>', new options in '<a target='_blank' href='%s'>Dynamic Tags</a>' & more! Check out the <a target='_blank' href='%s'>Changelog</a> for more details 🎉</p>", "essential-blocks" ),
+                        esc_url( 'https://essential-blocks.com/docs/configure-global-typography/' ),
+                        esc_url( 'https://essential-blocks.com/docs/dynamic-tags-support/' ),
                         esc_url( 'https://essential-blocks.com/changelog' )
                 );?>
     </div>

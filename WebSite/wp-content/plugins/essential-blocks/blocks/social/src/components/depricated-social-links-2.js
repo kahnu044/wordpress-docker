@@ -1,16 +1,16 @@
+const { sanitizeURL } = window.EBControls;
 export default function SocialLinksDeprecated2({ profilesOnly, icnEffect }) {
     return (
         <ul className="socials">
             {profilesOnly.map(({ link, icon, linkOpenNewTab }, index) => (
                 <li key={index}>
                     <a
-                        className={`${
-                            ((icon || " ").match(/fa-([\w\-]+)/i) || [
-                                " ",
-                                " ",
-                            ])[1]
-                        }-original ${icnEffect || " "}`}
-                        href={link}
+                        className={`${((icon || " ").match(/fa-([\w\-]+)/i) || [
+                            " ",
+                            " ",
+                        ])[1]
+                            }-original ${icnEffect || " "}`}
+                        href={sanitizeURL(link)}
                         target={linkOpenNewTab ? "_blank" : "_self"}
                         rel="noopener"
                     >

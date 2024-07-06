@@ -50,6 +50,16 @@ export function getCustomGradientColors(state) {
 }
 
 /**
+ * Selector: Get Global Typography
+ * @param {*} state
+ * @returns
+ */
+export function getGlobalTypography(state) {
+    const { globalTypography } = state
+    return globalTypography;
+}
+
+/**
  * Selector: Get Block Defaults
  * @param {*} state
  * @returns

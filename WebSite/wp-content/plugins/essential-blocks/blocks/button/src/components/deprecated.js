@@ -4,6 +4,7 @@
 import { useBlockProps, RichText } from "@wordpress/block-editor";
 const { omit } = lodash;
 
+const { sanitizeURL, EBDisplayIcon } = window.EBControls;
 import attributes from "./attributes";
 
 const deprecated = [
@@ -36,6 +37,57 @@ const deprecated = [
                                     className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
                                         }`}
                                     href={buttonURL ? buttonURL : ""}
+                                    {...(newWindow && { target: "_blank" })}
+                                    rel={addNofollow ? "nofollow noopener" : "noopener"}
+                                >
+                                    {addIcon && iconPosition === "left" ? (
+                                        <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-left hvr-icon"} />
+                                    ) : (
+                                        ""
+                                    )}
+                                    <RichText.Content value={buttonText} />
+                                    {addIcon && iconPosition === "right" ? (
+                                        <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-right hvr-icon"} />
+                                    ) : (
+                                        ""
+                                    )}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        },
+    },
+    {
+        attributes: { ...attributes },
+        save: ({ attributes }) => {
+            const {
+                blockId,
+                buttonText,
+                iconPosition,
+                addIcon,
+                icon,
+                buttonURL,
+                newWindow,
+                addNofollow,
+                hoverEffect,
+                classHook,
+            } = attributes;
+
+            return (
+                <div {...useBlockProps.save()}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
+                        <div
+                            className={`eb-button-wrapper eb-button-alignment ${blockId}`}
+                        >
+                            <div className="eb-button">
+                                <a
+                                    className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
+                                        }`}
+                                    href={buttonURL ? sanitizeURL(buttonURL) : ""}
                                     {...(newWindow && { target: "_blank" })}
                                     rel={addNofollow ? "nofollow noopener" : "noopener"}
                                 >
@@ -84,7 +136,7 @@ const deprecated = [
                             <a
                                 className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
                                     }`}
-                                href={buttonURL ? buttonURL : ""}
+                                href={buttonURL ? sanitizeURL(buttonURL) : ""}
                                 {...(newWindow && { target: "_blank" })}
                                 rel="noopener"
                             >
@@ -140,7 +192,7 @@ const deprecated = [
                             <a
                                 className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
                                     }`}
-                                href={buttonURL ? buttonURL : ""}
+                                href={buttonURL ? sanitizeURL(buttonURL) : ""}
                                 {...(newWindow && { target: "_blank" })}
                                 rel="noopener"
                             >
@@ -197,7 +249,7 @@ const deprecated = [
                             <a
                                 className={`eb-button-anchor is-${buttonSize}${hoverEffect ? ` ${hoverEffect}` : ""
                                     }`}
-                                href={buttonURL ? buttonURL : ""}
+                                href={buttonURL ? sanitizeURL(buttonURL) : ""}
                                 {...(newWindow && { target: "_blank" })}
                                 rel="noopener"
                             >

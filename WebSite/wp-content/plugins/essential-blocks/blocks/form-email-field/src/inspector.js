@@ -28,8 +28,8 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     AdvancedControls,
-    faIcons,
-    EBIconPicker
+    EBIconPicker,
+    DynamicInputControl
 } = EBControls;
 
 import objAttributes from "./attributes";
@@ -133,12 +133,26 @@ function Inspector(props) {
                                         />
 
                                         {showLabel && (
-                                            <TextControl
+                                            // <TextControl
+                                            //     label={__(
+                                            //         "Label Text",
+                                            //         "essential-blocks"
+                                            //     )}
+                                            //     value={labelText}
+                                            //     onChange={(text) =>
+                                            //         setAttributes({
+                                            //             labelText: text,
+                                            //         })
+                                            //     }
+                                            // />
+                                            <DynamicInputControl
                                                 label={__(
                                                     "Label Text",
                                                     "essential-blocks"
                                                 )}
-                                                value={labelText}
+                                                attrName="labelText"
+                                                inputValue={labelText}
+                                                setAttributes={setAttributes}
                                                 onChange={(text) =>
                                                     setAttributes({
                                                         labelText: text,
@@ -147,7 +161,22 @@ function Inspector(props) {
                                             />
                                         )}
 
-                                        <TextControl
+                                        <DynamicInputControl
+                                            label={__(
+                                                "Placeholder Text",
+                                                "essential-blocks"
+                                            )}
+                                            attrName="placeholderText"
+                                            inputValue={placeholderText}
+                                            setAttributes={setAttributes}
+                                            onChange={(text) =>
+                                                setAttributes({
+                                                    placeholderText: text,
+                                                })
+                                            }
+                                        />
+
+                                        {/* <TextControl
                                             label={__(
                                                 "Placeholder Text",
                                                 "essential-blocks"
@@ -158,7 +187,7 @@ function Inspector(props) {
                                                     placeholderText: text,
                                                 })
                                             }
-                                        />
+                                        /> */}
 
                                         <ToggleControl
                                             label={__(

@@ -16,6 +16,7 @@ import Inspector from "./inspector";
 const {
     duplicateBlockIdFix,
     NoticeComponent,
+    BlockProps
 } = EBControls;
 
 import {
@@ -53,21 +54,12 @@ const edit = (props) => {
 
     const [isMapInit, setIsMapInit] = useState(true);
 
-    useEffect(() => {
-        // this useEffect is for creating an unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-google-map";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-google-map',
+        style: <Style {...props} />
+    };
 
     // References
     const mapRef = useRef(null);
@@ -147,7 +139,7 @@ const edit = (props) => {
             var imageSizeNew = imageSize ? imageSize : 32;
             var marker, i;
             var bounds = new google.maps.LatLngBounds();
-            for (i = 0; i < locations.length; i++) {
+            for (i = 0;i < locations.length;i++) {
                 let iconUrl = "true" == locations[i].showCustomIcon ? locations[i].imageUrl : locations[i].icon;
                 let icon = {
                     url: iconUrl || "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
@@ -198,8 +190,7 @@ const edit = (props) => {
             {isSelected && (
                 <Inspector key="inspector" attributes={attributes} setAttributes={setAttributes} map={mapRef.current} />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     {!isMapInit && (
                         <NoticeComponent
@@ -233,7 +224,7 @@ const edit = (props) => {
                         ></div>
                     )}
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

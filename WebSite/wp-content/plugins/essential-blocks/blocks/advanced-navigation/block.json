@@ -5,7 +5,8 @@
   "description": "Display pages & posts with easy navigation in your website with stunning & organised appearance.",
   "category": "essential-blocks",
   "textdomain": "essential-blocks",
-  "supports": {
+"supports": {
+    "anchor": true,
     "align": ["wide", "full"]
   },
   "editorScript": "essential-blocks-editor-script"

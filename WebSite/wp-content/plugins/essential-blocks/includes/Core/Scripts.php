@@ -84,14 +84,17 @@ class Scripts
             'essential-blocks-editor-breakpoint'
          ];
 
-        if ( $pagenow !== 'widgets.php' ) {
+        if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' || $pagenow === 'site-editor.php' ) {
             //global-styles
             wpdev_essential_blocks()->assets->register( 'global-styles', '../lib/global-styles/dist/index.js' );
             $editor_scripts_deps[  ] = 'essential-blocks-global-styles';
 
             //templately-installer
-            wpdev_essential_blocks()->assets->register( 'templately-installer', '../lib/templately-installer/dist/index.js' );
-            $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
+            $show_pattern_library = get_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY );
+            if ( ! $show_pattern_library ) {
+                wpdev_essential_blocks()->assets->register( 'templately-installer', '../lib/templately-installer/dist/index.js' );
+                $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
+            }
         }
 
         wpdev_essential_blocks()->assets->register( 'editor-script', '../dist/index.js', $editor_scripts_deps );
@@ -178,66 +181,115 @@ class Scripts
         wp_enqueue_style( 'dashicons' );
         wpdev_essential_blocks()->assets->register( 'controls-frontend', '../dist/frontend.js' );
 
-        //CSS Var for Global Colors
-        $global_color_settings = wp_unslash( get_option( 'eb_global_styles' ) );
+        //Run Global frontend styles
+        self::global_frontend_styles();
+    }
+
+    private function global_frontend_styles()
+    {
+        //Get global values from wp_option
+        $global_settings = wp_unslash( get_option( 'eb_global_styles' ) );
 
         //global solid colors
         $global_colors = [  ];
-        if ( isset( $global_color_settings[ 'global_colors' ] ) && Helper::isJson( $global_color_settings[ 'global_colors' ] ) ) {
-            $global_colors = json_decode( $global_color_settings[ 'global_colors' ] );
+        if ( isset( $global_settings[ 'global_colors' ] ) && Helper::isJson( $global_settings[ 'global_colors' ] ) ) {
+            $global_colors = json_decode( $global_settings[ 'global_colors' ] );
         } else {
             $global_colors = Helper::global_colors();
         }
 
         //custom solid colors
         $custom_colors = [  ];
-        if ( isset( $global_color_settings[ 'custom_colors' ] ) && Helper::isJson( $global_color_settings[ 'custom_colors' ] ) ) {
-            $custom_colors = json_decode( $global_color_settings[ 'custom_colors' ] );
+        if ( isset( $global_settings[ 'custom_colors' ] ) && Helper::isJson( $global_settings[ 'custom_colors' ] ) ) {
+            $custom_colors = json_decode( $global_settings[ 'custom_colors' ] );
         }
 
         //global gradient colors
         $gradient_colors = [  ];
-        if ( isset( $global_color_settings[ 'gradient_colors' ] ) && Helper::isJson( $global_color_settings[ 'gradient_colors' ] ) ) {
-            $gradient_colors = json_decode( $global_color_settings[ 'gradient_colors' ] );
+        if ( isset( $global_settings[ 'gradient_colors' ] ) && Helper::isJson( $global_settings[ 'gradient_colors' ] ) ) {
+            $gradient_colors = json_decode( $global_settings[ 'gradient_colors' ] );
         } else {
             $gradient_colors = Helper::gradient_colors();
         }
 
         //custom gradient colors
         $custom_gradient_colors = [  ];
-        if ( isset( $global_color_settings[ 'custom_gradient_colors' ] ) && Helper::isJson( $global_color_settings[ 'custom_gradient_colors' ] ) ) {
-            $custom_gradient_colors = json_decode( $global_color_settings[ 'custom_gradient_colors' ] );
+        if ( isset( $global_settings[ 'custom_gradient_colors' ] ) && Helper::isJson( $global_settings[ 'custom_gradient_colors' ] ) ) {
+            $custom_gradient_colors = json_decode( $global_settings[ 'custom_gradient_colors' ] );
+        }
+
+        //Global Typography
+        $global_typography = [  ];
+        $custom_typography = [  ];
+        $google_fonts      = [  ];
+        if ( isset( $global_settings[ 'global_typography' ] ) && Helper::isJson( $global_settings[ 'global_typography' ] ) ) {
+            $global_typography = (array) json_decode( $global_settings[ 'global_typography' ] );
+            $google_fonts      = array_unique( $this->get_google_fonts( $global_typography ) );
+            if ( is_array( $global_typography ) && isset( $global_typography[ 'custom' ] ) ) {
+                $custom_typography = (array) $global_typography[ 'custom' ];
+                unset( $global_typography[ 'custom' ] );
+            }
         }
 
         $colors_css = "";
 
         //Global Colors to CSS String
-        $colors_css .= $this->array_to_css( $global_colors );
+        $colors_css .= $this->color_array_to_css( $global_colors );
 
         //Custom Colors to CSS String
-        $colors_css .= $this->array_to_css( $custom_colors );
+        $colors_css .= $this->color_array_to_css( $custom_colors );
 
         //Gradient Colors to CSS String
-        $colors_css .= $this->array_to_css( $gradient_colors );
+        $colors_css .= $this->color_array_to_css( $gradient_colors );
 
         //Custom Gradient Colors to CSS String
-        $colors_css .= $this->array_to_css( $custom_gradient_colors );
+        $colors_css .= $this->color_array_to_css( $custom_gradient_colors );
 
         //Responsive Breakpoints CSS
         $responsive_breakpoints = Helper::get_responsive_breakpoints();
         $responsive_css         = '';
         $responsive_css .= $this->array_responsive_css( $responsive_breakpoints );
 
+        if ( isset( $global_typography[ 'allHeadings' ] ) ) {
+            $global_typography = array_merge( [ 'allHeadings' => $global_typography[ 'allHeadings' ] ], $global_typography );
+        }
+        $global_typography_css      = $this->generateTypographyCSS( $global_typography );
+        $custom_typography_css__var = $this->generateCustomTypographyCSS( $custom_typography );
+
         $custom_css = "
             :root {
                 {$colors_css}
                 {$responsive_css}
+                {$custom_typography_css__var}
             }
+            {$global_typography_css}
         ";
         wp_add_inline_style( 'essential-blocks-frontend-style', $custom_css );
+
+        if ( is_array( $google_fonts ) && ! empty( $google_fonts ) ) {
+            Helper::load_google_font( $google_fonts, 'eb-global-fonts' );
+        }
     }
 
-    private function array_to_css( $css_array )
+    private function get_google_fonts( $fontArr )
+    {
+        $g_fonts = [  ];
+        if ( is_array( $fontArr ) && count( $fontArr ) > 0 ) {
+            foreach ( $fontArr as $index => $font ) {
+                if ( is_object( $font ) || is_array( $font ) ) {
+                    $font = (array) $font;
+                    if ( isset( $font[ 'fontFamily' ] ) ) {
+                        $g_fonts[  ] = $font[ 'fontFamily' ];
+                    } else {
+                        $g_fonts = array_merge( $g_fonts, self::get_google_fonts( $font ) );
+                    }
+                }
+            }
+        }
+        return $g_fonts;
+    }
+
+    private function color_array_to_css( $css_array )
     {
         $css = '';
         if ( is_array( $css_array ) && count( $css_array ) > 0 ) {
@@ -264,6 +316,88 @@ class Scripts
         return $css;
     }
 
+    private function generateTypographyCSS( $styles )
+    {
+        $cssString = '';
+
+        foreach ( $styles as $element => $style ) {
+            $selector = $element;
+
+            if ( $element === 'body' ) {
+                $selector = 'p';
+            } elseif ( $element === 'link' ) {
+                $selector = 'a';
+            } elseif ( $element === 'allHeadings' ) {
+                $selector = ':is(h1, h2, h3, h4, h5, h6)';
+            }
+
+            $cssString .= ".eb-parent-wrapper $selector { ";
+            $cssString .= self::generateCssStyles( $style );
+            $cssString .= "}\n"; // Close the style block
+        }
+
+        return $cssString;
+    }
+
+    private function generateCustomTypographyCSS( $styles )
+    {
+        if ( is_array( $styles ) && count( $styles ) === 0 ) {
+            return '';
+        }
+        $css = '';
+        foreach ( $styles as $element => $style ) {
+            $css .= self::generateCssStyles( $style, $element );
+        }
+        return $css;
+    }
+
+    private function generateCssStyles( $styles, $varPrefix = '' )
+    {
+        if ( is_array( $styles ) && count( $styles ) === 0 ) {
+            return '';
+        }
+        if ( ! empty( $varPrefix ) ) {
+            $varPrefix = "--$varPrefix-";
+        }
+        $css    = '';
+        $styles = (array) $styles;
+        foreach ( $styles as $styleKey => $value ) {
+            // Convert camelCase to kebab-case for CSS properties
+            $cssProperty = strtolower( preg_replace( '/([a-zA-Z])(?=[A-Z])/', '$1-', $styleKey ) );
+            $cssValue    = $value;
+            switch ( $styleKey ) {
+                case 'fontFamily':
+                    $css .= "$varPrefix" . "font-family: $cssValue;\n";
+                    break;
+                case 'fontSize':
+                    $unit = isset( $styles[ 'fontSizeUnit' ] ) ? $styles[ 'fontSizeUnit' ] : 'px';
+                    $css .= "$varPrefix" . "font-size: $cssValue$unit;\n";
+                    break;
+                case 'fontWeight':
+                    $css .= "$varPrefix" . "font-weight: $cssValue;\n";
+                    break;
+                case 'letterSpacing':
+                    $unit = isset( $styles[ 'letterSpacingUnit' ] ) ? $styles[ 'letterSpacingUnit' ] : 'px';
+                    $css .= "$varPrefix" . "letter-spacing: $cssValue$unit;\n";
+                    break;
+                case 'lineHeight':
+                    $unit = isset( $styles[ 'lineHeightUnit' ] ) ? $styles[ 'lineHeightUnit' ] : 'px';
+                    $css .= "$varPrefix" . "line-height: $cssValue$unit;\n";
+                    break;
+                case 'fontStyle':
+                    $css .= "$varPrefix" . "font-style: $cssValue;\n";
+                    break;
+                case 'textDecoration':
+                    $css .= "$varPrefix" . "text-decoration: $cssValue;\n";
+                    break;
+                case 'textTransform':
+                    $css .= "$varPrefix" . "text-transform: $cssValue;\n";
+                    break;
+            }
+        }
+        return $css;
+    }
+
     /**
      * enqueue localize scripts
      *
@@ -274,7 +408,7 @@ class Scripts
         wpdev_essential_blocks()->assets->enqueue( 'blocks-localize', 'js/eb-blocks-localize.js' );
 
         global $pagenow;
-        $editor_type = '';
+        $editor_type = false;
         if ( $pagenow == 'post-new.php' || $pagenow == 'post.php' ) {
             $editor_type = 'edit-post';
         } elseif ( $pagenow == 'site-editor.php' || ( $pagenow == 'themes.php' && isset( $_GET[ 'page' ] ) && $_GET[ 'page' ] == 'gutenberg-edit-site' ) ) {
@@ -282,12 +416,13 @@ class Scripts
         } elseif ( $pagenow == 'widgets.php' ) {
             $editor_type = 'edit-widgets';
         }
+
         wpdev_essential_blocks()->assets->localize(
             'blocks-localize',
             'eb_conditional_localize',
-            [
+            $editor_type !== false ? [
                 'editor_type' => $editor_type
-             ]
+             ] : [  ]
         );
 
         $eb_settings = get_option( 'eb_settings', [  ] );

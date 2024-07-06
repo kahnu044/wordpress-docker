@@ -46,6 +46,7 @@ import {
     TEXT_ALIGNMENT,
     IMAGE_ALIGN,
     IMAGE_ALIGNMENT,
+    SOURCE
 } from "./constants";
 
 const {
@@ -83,7 +84,58 @@ function Inspector(props) {
         imageSize,
         fitStyles,
         autoHeight,
+        imgSource
     } = attributes;
+
+    const changImgSource = (selected) => {
+        switch (selected) {
+            case "site-logo":
+                setAttributes({
+                    imgSource: selected,
+                    displayCaption: false,
+                    enableLink: true,
+                    widthRange: 120,
+                    widthUnit: "px",
+                    imgBorderShadowborderStyle: "none",
+                    imgBorderShadowRds_Bottom: "0",
+                    imgBorderShadowRds_Left: "0",
+                    imgBorderShadowRds_Right: "0",
+                    imgBorderShadowRds_Top: "0",
+                    hoverEffect: 'no-effect',
+                });
+                break;
+            case "featured-img":
+                setAttributes({
+                    imgSource: selected,
+                    displayCaption: false,
+                    enableLink: true,
+                    widthRange: '',
+                    imgBorderShadowborderStyle: "solid",
+                    imgBorderShadowRds_Bottom: "15",
+                    imgBorderShadowRds_Left: "15",
+                    imgBorderShadowRds_Right: "15",
+                    imgBorderShadowRds_Top: "15",
+                    hoverEffect: 'no-effect',
+                });
+                break;
+            case "custom":
+                setAttributes({
+                    imgSource: selected,
+                    displayCaption: true,
+                    enableLink: false,
+                    widthRange: '',
+                    imgBorderShadowborderStyle: "solid",
+                    imgBorderShadowRds_Bottom: "15",
+                    imgBorderShadowRds_Left: "15",
+                    imgBorderShadowRds_Right: "15",
+                    imgBorderShadowRds_Top: "15",
+                    hoverEffect: 'zoom-in',
+                });
+                break;
+            default:
+                return false;
+        }
+    };
 
     const changeStyle = (selected) => {
         setAttributes({ stylePreset: selected });
@@ -191,12 +243,21 @@ function Inspector(props) {
                                 <>
                                     <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                                         <SelectControl
-                                            label={__("Styles", "essential-blocks")}
-                                            description={__("Border won't work", "essential-blocks")}
-                                            value={stylePreset}
-                                            options={STYLES}
-                                            onChange={(stylePreset) => changeStyle(stylePreset)}
+                                            label={__("Source", "essential-blocks")}
+                                            value={imgSource}
+                                            options={SOURCE}
+                                            onChange={(imgSource) => changImgSource(imgSource)}
                                         />
+                                        {imgSource !== 'site-logo' && (
+                                            <SelectControl
+                                                label={__("Styles", "essential-blocks")}
+                                                description={__("Border won't work", "essential-blocks")}
+                                                value={stylePreset}
+                                                options={STYLES}
+                                                onChange={(stylePreset) => changeStyle(stylePreset)}
+                                            />
+                                        )}
+
                                         {stylePreset === "circle" && (
                                             <PanelRow>
                                                 <em>
@@ -205,15 +266,17 @@ function Inspector(props) {
                                             </PanelRow>
                                         )}
 
-                                        <ToggleControl
-                                            label={__("Display Caption", "essential-blocks")}
-                                            checked={displayCaption}
-                                            onChange={() =>
-                                                setAttributes({
-                                                    displayCaption: !displayCaption,
-                                                })
-                                            }
-                                        />
+                                        {imgSource === 'custom' && (
+                                            <ToggleControl
+                                                label={__("Display Caption", "essential-blocks")}
+                                                checked={displayCaption}
+                                                onChange={() =>
+                                                    setAttributes({
+                                                        displayCaption: !displayCaption,
+                                                    })
+                                                }
+                                            />
+                                        )}
 
                                         {displayCaption && (
                                             <SelectControl
@@ -224,11 +287,13 @@ function Inspector(props) {
                                             />
                                         )}
 
-                                        <EbImageSizeSelector
-                                            attrName={"imageSize"}
-                                            resRequiredProps={resRequiredProps}
-                                            label={"Image Size"} //Optional
-                                        />
+                                        {imgSource !== 'site-logo' && (
+                                            <EbImageSizeSelector
+                                                attrName={"imageSize"}
+                                                resRequiredProps={resRequiredProps}
+                                                label={"Image Size"} //Optional
+                                            />
+                                        )}
 
                                         <ResponsiveRangeController
                                             baseLabel={__("Width", "essential-blocks")}
@@ -273,7 +338,7 @@ function Inspector(props) {
                                             onChange={(autoFit) => setAttributes({ autoFit })}
                                         />
 
-                                        {autoFit && (
+                                        {imgSource !== 'site-logo' && autoFit && (
                                             <SelectControl
                                                 label={__("Image Fit Options", "essential-blocks")}
                                                 value={fitStyles}
@@ -288,20 +353,8 @@ function Inspector(props) {
                                             onChange={(enableLink) => setAttributes({ enableLink })}
                                         />
 
-                                        {enableLink && (
+                                        {imgSource === 'custom' && enableLink && (
                                             <>
-                                                {/* <TextControl
-                                                    label={__(
-                                                        "Link",
-                                                        "essential-blocks"
-                                                    )}
-                                                    value={imageLink}
-                                                    onChange={(link) =>
-                                                        setAttributes({
-                                                            imageLink: link,
-                                                        })
-                                                    }
-                                                /> */}
                                                 <DynamicInputControl
                                                     label={__(
                                                         "Link",
@@ -363,8 +416,8 @@ function Inspector(props) {
                                                 <BorderShadowControl
                                                     controlName={IMAGE_BORDER_SHADOW}
                                                     resRequiredProps={resRequiredProps}
-                                                    // noShadow
-                                                    // noBorder
+                                                // noShadow
+                                                // noBorder
                                                 />
                                             </>
                                         )}
@@ -536,8 +589,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

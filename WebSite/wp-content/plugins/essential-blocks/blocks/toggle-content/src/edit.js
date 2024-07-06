@@ -11,30 +11,23 @@ import {
     RichText,
 } from "@wordpress/block-editor";
 import { createBlock } from "@wordpress/blocks";
-import { select, subscribe, dispatch, useSelect } from "@wordpress/data";
-
-const { times } = lodash;
-
+import { select, dispatch, useSelect } from "@wordpress/data";
 /**
  * Internal dependencies
  */
-
 import Style from "./style";
-
 import {
     DEFAULT_TEMPLATE,
 } from "./constants";
-
 import {
     typoPrefix_tgl,
 } from "./constants/typographyPrefixConstants";
 
 const {
     duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
-
 import classnames from "classnames";
-
 import Inspector from "./inspector";
 
 export default function Edit(props) {
@@ -75,21 +68,12 @@ export default function Edit(props) {
     const primaryRef = useRef(null);
     const secondaryRef = useRef(null);
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-toggle";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-toggle',
+        style: <Style {...props} />
+    };
 
     useEffect(() => {
         if (contentRef.current) {
@@ -100,7 +84,7 @@ export default function Edit(props) {
             let childElemenets = [];
             const child = container.children;
 
-            for (let i = 0; i < child.length; i++) {
+            for (let i = 0;i < child.length;i++) {
                 if (child[i].classList.contains("block-editor-block-list__block")) {
                     childElemenets.push(child[i]);
                 }
@@ -184,16 +168,10 @@ export default function Edit(props) {
     };
 
     const hideBlock = (node) => (node.style.display = "none");
-
     const showBlock = (node) => (node.style.display = "block");
-
     const onSwitchClick = (e) => {
         setPrimary(e.target.checked);
     };
-
-
-
-
     const getMargin = () => {
         switch (alignment) {
             case "center":
@@ -233,8 +211,7 @@ export default function Edit(props) {
                     onChange={(alignment) => setAttributes({ alignment })}
                 />
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`${blockId} eb-toggle-wrapper`}>
                         <div
@@ -352,7 +329,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

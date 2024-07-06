@@ -4,7 +4,7 @@
  * Plugin Name: MultiLine files for Contact Form 7
  * Description: Upload unlimited files one by one to contact form 7
  * Plugin URI: https://wordpress.org/plugins/multiline-files-for-contact-form-7/
- * Version: 2.7
+ * Version: 2.8.1
  * Author: Zluck Solutions
  * Author URI: https://profiles.wordpress.org/zluck
  * Text Domain: zl-mfcf7
@@ -13,21 +13,32 @@
 /**
  ** base class for [multilinefile] and [multilinefile*]
  **/
+
+// Prevent direct access to the file
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Include the deactivation handler
+require_once plugin_dir_path(__FILE__) . 'multiline-admin.php';
+
 if (!function_exists('is_plugin_active')) {
 	include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 }
+
+//check contact form installation 
 if (is_plugin_active('contact-form-7/wp-contact-form-7.php')) {
 	$latest_contact_form_7new = false;
 	if ((float)WPCF7_VERSION >= 5.6) {
 		$latest_contact_form_7new  = true;
 	}
 } else {
-	add_action('admin_notices', 'zl_warning_if_cf7_deactivated');
+	add_action('admin_notices', 'mfcf7_zl_warning_if_cf7_deactivated');
 	$latest_contact_form_7new = true;
 }
-//add_action( 'admin_notices', 'wpb_admin_notice' );
-function zl_warning_if_cf7_deactivated()
-{
+
+// This code display warning when user active plugin without contact form 7
+function mfcf7_zl_warning_if_cf7_deactivated(){
 	echo '<div class="notice notice-error">
 		  		<p>Important: Mfcf7 plugin only compatible with contact form 7. Please install or activate contact form 7 plugin first. </p>
 		  </div>';
@@ -37,10 +48,7 @@ function zl_warning_if_cf7_deactivated()
 		unset($_GET['activate']);
 	}
 }
-// $latest_contact_form_7new = false;
-// if ((float)WPCF7_VERSION >= 5.6){
-// 	$latest_contact_form_7new  = true;
-// }
+
 $latest_contact_form_7 = false;
 if (function_exists('wpcf7_add_form_tag')) {
 	$latest_contact_form_7 = true;
@@ -48,6 +56,37 @@ if (function_exists('wpcf7_add_form_tag')) {
 $mfcf7_btn_tag_name = 'zl-mfcf7-upld-btn';
 /* Register activation hook. */
 register_activation_hook(__FILE__, 'mfcf7_zl_admin_notice_activation_hook');
+
+
+//function responsible for deactive plugin 
+// Check for the deactivation request on the next page load
+add_action('admin_init', 'mfcf7_zl_plugin_check_deactivation_request');
+function mfcf7_zl_plugin_check_deactivation_request() {
+
+    if (get_option('mfcf7_zl_plugin_deactivate_request', false)) {
+
+        // Perform the actual deactivation
+
+        deactivate_plugins(plugin_basename(__FILE__));
+
+        // Display the admin notice
+
+        add_action('admin_notices', 'mfcf7_zl_plugin_deactivation_notice');
+
+        update_option('mfcf7_zl_plugin_deactivate_request', false);
+    }
+}
+
+// Display notice after deavtivate
+function mfcf7_zl_plugin_deactivation_notice() {
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><?php echo esc_html__('Plugin deactivated successfully.', 'zl-mfcf7'); ?></p>
+    </div>
+    <?php
+}
+
+// display notices after 1,3,5 days
 function mfcf7_zl_admin_notice_activation_hook()
 {
 	if (get_transient('mfcf7-zl-admin-do-not-show-pro-tip')) {
@@ -183,9 +222,9 @@ function mfcf7_zl_multilinefile_form_enctype_filter($enctype)
 
 global $latest_contact_form_7new;
 if ($latest_contact_form_7new) {
-	add_action('wpcf7_before_send_mail', 'zlchange_attachments', 10, 3);
+	add_action('wpcf7_before_send_mail', 'mfcf7_zlchange_attachments', 10, 3);
 }
-function zlchange_attachments($cf7, &$abort, $object)
+function mfcf7_zlchange_attachments($cf7, &$abort, $object)
 {
 
 	$properties = $cf7->get_properties();
@@ -668,7 +707,7 @@ function mfcf7_zl_multilinefile_messages($messages)
 		)
 	));
 }
-require_once plugin_dir_path(__FILE__) . 'multiline-admin.php';
+
 /* creates a compressed zip file */
 function mfcf7_zl_multilinefile_create_zip($files = array(), $destination = '', $overwrite = false)
 {

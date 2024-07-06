@@ -9,7 +9,8 @@ import { select } from "@wordpress/data";
 const {
     duplicateBlockIdFix,
     DynamicInputValueHandler,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 import Style from "./style";
@@ -48,21 +49,12 @@ const Edit = (props) => {
         closeBtnText,
     } = attributes;
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-popup";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-popup',
+        style: <Style {...props} />
+    };
 
     const alignmentClass =
         "left" === btnAlignment
@@ -74,9 +66,7 @@ const Edit = (props) => {
     return (
         <>
             {isSelected && <Inspector {...props} />}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div className="eb-parent-wrapper">
                     <div
                         className={`${blockId} eb-popup-container`}
@@ -174,7 +164,7 @@ const Edit = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

@@ -14,6 +14,9 @@ import {
     SET_CUSTOM_GRADIENT_COLORS,
     SAVE_CUSTOM_GRADIENT_COLORS,
     FETCH_CUSTOM_GRADIENT_COLORS,
+    SET_GLOBAL_TYPOGRAPHY,
+    SAVE_GLOBAL_TYPOGRAPHY,
+    FETCH_GLOBAL_TYPOGRAPHY,
     SET_IS_SAVING,
     FETCH_IS_SAVING
 } from "./constant"
@@ -65,11 +68,20 @@ export default function reducer(state = DEFAULT_STATE, action) {
         case SAVE_CUSTOM_COLORS:
         case SAVE_GRADIENT_COLORS:
         case SAVE_CUSTOM_GRADIENT_COLORS:
-            return {
-                ...state
-            }
+        case SAVE_GLOBAL_TYPOGRAPHY:
+            return state
         case FETCH_CUSTOM_GRADIENT_COLORS:
             return state
+        case SET_GLOBAL_TYPOGRAPHY:
+            return {
+                ...state,
+                globalTypography: {
+                    ...action.value,
+                },
+            };
+        case FETCH_GLOBAL_TYPOGRAPHY:
+            return state
+
         case SET_IS_SAVING:
             return {
                 ...state,

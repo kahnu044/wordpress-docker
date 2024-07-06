@@ -7,7 +7,8 @@
   "description": "Put spotlight in important data using Counter block for Gutenberg. Customize the designs by adding proper Animation effects with flexibility and many more!",
   "textdomain": "essential-blocks",
   "supports": {
-    "align": [ "wide", "full" ]
+    "anchor": true,
+    "align": ["wide", "full"]
   },
   "editorScript": "essential-blocks-editor-script"
 }

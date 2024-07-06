@@ -5,6 +5,7 @@ import Edit from "./edit";
 import save from "./save";
 import { OpenverseIcon } from "./icon";
 import attributes from "./attributes";
+import deprecated from "./deprecated";
 import Example from "./example";
 import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBControls;
@@ -24,6 +25,7 @@ ebConditionalRegisterBlockType(metadata, {
     attributes,
     edit: Edit,
     save,
+    deprecated,
     example: {
         attributes: {
             cover: `${EssentialBlocksLocalize?.image_url}/block-preview/openverse.jpeg`,

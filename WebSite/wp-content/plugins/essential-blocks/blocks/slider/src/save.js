@@ -1,5 +1,5 @@
-import { RichText, useBlockProps } from "@wordpress/block-editor";
-
+import { RichText } from "@wordpress/block-editor";
+const { sanitizeURL, BlockProps } = window.EBControls;
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -65,7 +65,7 @@ const Save = ({ attributes }) => {
     const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save attributes={attributes}>
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -120,8 +120,8 @@ const Save = ({ attributes }) => {
                                                         href={
                                                             image.buttonUrl &&
                                                                 image.isValidUrl
-                                                                ? image.buttonUrl
-                                                                : "#"
+                                                                ? sanitizeURL(image.buttonUrl)
+                                                                : ""
                                                         }
                                                         className="eb-slider-button"
                                                         target={
@@ -147,8 +147,8 @@ const Save = ({ attributes }) => {
                                                         href={
                                                             image.secondButtonUrl &&
                                                                 image.isValidUrl
-                                                                ? image.secondButtonUrl
-                                                                : "#"
+                                                                ? sanitizeURL(image.secondButtonUrl)
+                                                                : ""
                                                         }
                                                         className="eb-slider-button"
                                                         target={
@@ -173,7 +173,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

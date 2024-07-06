@@ -1,8 +1,9 @@
 /**
  * Internal dependencies
  */
-import { useBlockProps, RichText } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+import { RichText } from "@wordpress/block-editor";
+const { EBDisplayIcon, sanitizeURL, BlockProps } = window.EBControls;
+
 const save = ({ attributes }) => {
     const {
         blockId,
@@ -18,7 +19,9 @@ const save = ({ attributes }) => {
     } = attributes;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -29,7 +32,7 @@ const save = ({ attributes }) => {
                         <a
                             className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
                                 }`}
-                            href={buttonURL ? buttonURL : ""}
+                            href={buttonURL ? sanitizeURL(buttonURL) : ""}
                             {...(newWindow && { target: "_blank" })}
                             rel={addNofollow ? "nofollow noopener" : "noopener"}
                         >
@@ -48,7 +51,7 @@ const save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

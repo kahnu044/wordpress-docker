@@ -12,6 +12,7 @@ const { installPlugin } = window.EBControls;
 const plugin_file = "templately/templately.php";
 
 const PatternLibraryButton = () => {
+    const [showPatternButton, setShowPatternButton] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -54,7 +55,27 @@ const PatternLibraryButton = () => {
         });
     }
 
-    return (
+    const neverShowPatternButton = () => {
+        let data = new FormData();
+        data.append("action", "hide_pattern_library");
+        data.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
+
+        return fetch(EssentialBlocksLocalize.ajax_url, {
+            method: "POST",
+            body: data,
+        })
+            .then((res) => res.text())
+            .then((data) => {
+                const res = JSON.parse(data);
+                if (res.success) {
+                    setIsVisible(false)
+                    setShowPatternButton(false)
+                }
+            })
+            .catch((err) => console.log(err));
+    }
+
+    return (!showPatternButton ? '' :
         <>
             <Button
                 onClick={() => handleClick()}
@@ -99,6 +120,10 @@ const PatternLibraryButton = () => {
                                 )}
 
                             </Button>
+                            <Button
+                                className="eb-hide-button"
+                                onClick={() => neverShowPatternButton()}
+                            >Never show again</Button>
                         </div>
                         <div className="pattern-img">
                             <img src={`${EssentialBlocksLocalize.image_url}//patternLibrary.jpg`} alt="Pattern Library" />

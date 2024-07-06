@@ -31,6 +31,7 @@ import { rMinHConst, rMaxWConst, rColsNumber } from "./constants/rangeNames";
 
 const {
     duplicateBlockIdFix,
+    BlockProps,
     Icon01z1x100,
     Icon02z2x50,
     Icon03z3x33_33,
@@ -286,42 +287,12 @@ export default function Edit(props) {
     //
     const rowWrap = useRef(null);
 
-    /**
-     * Create Unique ID for each row
-     */
-    useEffect(() => {
-        // this codes is for creating a unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-row";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-
-        //
-        if (clGp_Range === undefined) {
-            setAttributes({
-                clGp_Range: 20,
-            });
-        }
-
-        if (
-            (mobileColNumber === undefined || mobileColNumber === 1) &&
-            MOBclGp_Range === undefined
-        ) {
-            setAttributes({
-                MOBclGp_Range: 0,
-            });
-        }
-
-        if (desktopColOrder === undefined) {
-            setAttributes({
-                [`${columnsOrderPrefix}Option`]: "default",
-            });
-        }
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-row',
+        style: <Style {...props} />
+    };
 
     //
     useEffect(() => {
@@ -439,8 +410,7 @@ export default function Edit(props) {
         <>
             {isSelected && <Inspector {...props} />}
 
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
@@ -676,7 +646,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

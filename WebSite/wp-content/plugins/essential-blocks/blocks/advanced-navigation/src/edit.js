@@ -20,11 +20,8 @@ import { createHigherOrderComponent } from "@wordpress/compose";
  */
 
 const {
-    duplicateBlockIdFix,
+    BlockProps
 } = EBControls;
-
-import classnames from "classnames";
-
 import Inspector from "./inspector";
 
 const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
@@ -87,7 +84,7 @@ const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
                         element.style.display = "none";
                     });
 
-                    for (let i = 0; i <= nodes.length - 1; i++) {
+                    for (let i = 0;i <= nodes.length - 1;i++) {
                         let card = nodes[i].classList.contains(
                             "block-editor-block-card"
                         );
@@ -98,7 +95,7 @@ const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
                         let childen = nodes[i].children;
 
                         if (!card && !tab) {
-                            for (let x = 0; x <= childen.length - 1; x++) {
+                            for (let x = 0;x <= childen.length - 1;x++) {
                                 const hasNavigation = childen[x].querySelector(
                                     ".wp-block-navigation__navigation-selector"
                                 );
@@ -129,10 +126,10 @@ const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
                     ).style.display = "block";
 
                     let nodes = inspector.children;
-                    for (let i = 0; i <= nodes.length - 1; i++) {
+                    for (let i = 0;i <= nodes.length - 1;i++) {
                         let childen = nodes[i].children;
 
-                        for (let x = 0; x <= childen.length - 1; x++) {
+                        for (let x = 0;x <= childen.length - 1;x++) {
                             childen[x].style.display = "block";
                         }
                     }
@@ -185,17 +182,11 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    useEffect(() => {
-        // this is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-advanced-navigation";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-advanced-navigation',
+        style: <Style {...props} />
+    };
 
     //
     useEffect(() => {
@@ -300,10 +291,6 @@ export default function Edit(props) {
         }
     }, [hamburgerMenu]);
 
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
     if (layout == "is-horizontal") {
         var layoutPreset = preset;
     } else {
@@ -319,9 +306,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -355,7 +340,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

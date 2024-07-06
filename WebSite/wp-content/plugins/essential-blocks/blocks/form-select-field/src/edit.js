@@ -2,25 +2,23 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
-import { useEffect, useState, useRef } from "@wordpress/element";
-import { select, dispatch, useSelect } from "@wordpress/data";
+import { useEffect } from "@wordpress/element";
+import { select } from "@wordpress/data"
 
 /**
  * Internal dependencies
  */
-
 const {
     duplicateBlockIdFix,
     filterBlocksByName,
     getBlockParentClientId,
-    EBDisplayIcon
+    EBDisplayIcon,
+    DynamicInputValueHandler,
+    DynamicFormFieldValueHandler,
+    BlockProps
 } = EBControls;
 
-import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 export default function Edit(props) {
@@ -29,13 +27,8 @@ export default function Edit(props) {
         setAttributes,
         isSelected,
         clientId,
-        className,
-        name,
     } = props;
     const {
-        resOption,
-        blockMeta,
-        parentBlockId,
         blockId,
         classHook,
         showLabel,
@@ -45,7 +38,6 @@ export default function Edit(props) {
         defaultValue,
         isRequired,
         validationMessage,
-        validationRules,
         isIcon,
         icon,
         formStyle,
@@ -53,18 +45,13 @@ export default function Edit(props) {
         parentBlockPaddingUnit,
         parentBlockIconSize,
         parentIconColor,
+        dynamicValue,
+        dynamicOptionType,
+        dynamicValueLoader
     } = attributes;
 
+
     useEffect(() => {
-        // this is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-select-field";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
 
         const parentClientId = getBlockParentClientId(
             clientId,
@@ -135,6 +122,15 @@ export default function Edit(props) {
         }
     }, []);
 
+
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-select-field',
+        rootClass: `eb-guten-block-main-parent-wrapper eb-form-field`,
+        style: <Style {...props} />
+    };
+
     //UseEffect for set Validation rules
     useEffect(() => {
         const rules = {
@@ -148,13 +144,6 @@ export default function Edit(props) {
         setAttributes({ validationRules: rules });
     }, [isRequired, fieldName, validationMessage]);
 
-    const blockProps = useBlockProps({
-        className: classnames(
-            className,
-            `eb-guten-block-main-parent-wrapper eb-form-field`
-        ),
-    });
-
     return (
         <>
             {isSelected && (
@@ -164,9 +153,7 @@ export default function Edit(props) {
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -176,7 +163,13 @@ export default function Edit(props) {
                         {showLabel && formStyle != "form-style-modern" && (
                             <>
                                 <label htmlFor={fieldName}>
-                                    {labelText}{" "}
+                                    <DynamicInputValueHandler
+                                        value={labelText}
+                                        onChange={(labelText) =>
+                                            setAttributes({ labelText })
+                                        }
+                                        readOnly={true}
+                                    />{" "}
                                     {isRequired && (
                                         <span className="eb-required">*</span>
                                     )}
@@ -186,7 +179,7 @@ export default function Edit(props) {
 
                         <div className="eb-field-input-wrap">
                             {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
-                            <select
+                            {/* <select
                                 id={fieldName}
                                 name={fieldName}
                                 className={"eb-field-input"}
@@ -203,7 +196,17 @@ export default function Edit(props) {
                                             </option>
                                         </>
                                     ))}
-                            </select>
+                            </select> */}
+                            <DynamicFormFieldValueHandler
+                                type="select"
+                                fieldName={fieldName}
+                                defaultValue={defaultValue}
+                                options={options}
+                                dynamicValue={dynamicValue}
+                                dynamicOptionType={dynamicOptionType}
+                                dynamicValueLoader={dynamicValueLoader}
+                                setAttributes={setAttributes}
+                            />
                             {formStyle == "form-style-modern" && (
                                 <>
                                     <label htmlFor={fieldName}>
@@ -228,7 +231,7 @@ export default function Edit(props) {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

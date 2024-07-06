@@ -239,7 +239,7 @@ class TableOfContents extends Block
                 "level"   => $level,
                 "content" => $value,
                 "text"    => $value,
-                "link"    => preg_match( '/^[A-Za-z0-9\-]+$/', $heading_string ) === 1 ? $heading_string : "eb-table-content-$index"
+                "link"    => preg_match( '/^[A-Za-z0-9\-\_]+$/', $heading_string ) === 1 ? $heading_string : "eb-table-content-$index"
              ];
         }
 
@@ -268,6 +268,32 @@ class TableOfContents extends Block
 
         return urldecode( rawurlencode( $parsedSlug ) );
     }
+    /**
+     * Callback function for wp_kses_allowed_html
+     *
+     * @param array $tags
+     *
+     * @return array
+     */
+    public function allowed_html( $tags ){
+            return array_merge($tags, [
+                'svg' => array(
+                    'xmlns' => true,
+                    'version' => true,
+                    'width' => true,
+                    'height' => true,
+                    'viewBox' => true,
+                    'fill' => true,
+                    'stroke' => true,
+                    'stroke-width' => true,
+                    'xmlns:xlink' => true,
+                ),
+                'g' => array(),
+                'path' => array(
+                    'd' => true,
+                ),
+            ]);
+        }
 
     /**
      * Render Table of Contents Block
@@ -393,6 +419,10 @@ class TableOfContents extends Block
         $output .= '</div>'; // parent wrapper
         $output .= "</div>"; // block
 
-        return wp_kses_post( $output );
+        add_filter( 'wp_kses_allowed_html', [$this, 'allowed_html'] );
+        $content = wp_kses_post($output);
+        remove_filter( 'wp_kses_allowed_html', [$this, 'allowed_html'] );
+
+        return $content;
     }
 }

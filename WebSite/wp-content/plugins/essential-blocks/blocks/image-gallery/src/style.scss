@@ -14,6 +14,19 @@
 		transition: box-shadow 0.1s linear;
 		border: 0;
 		border-radius: 0;
+
+		&.loadmore-disable {
+			cursor: none;
+
+			img {
+				width: 16px;
+				margin-right: 5px;
+				display: inline-block;
+				position: relative;
+				top: 2px;
+			}
+
+		}
 	}
 
 	.eb-gallery-link-wrapper {

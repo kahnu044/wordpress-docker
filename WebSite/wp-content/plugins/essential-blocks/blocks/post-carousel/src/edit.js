@@ -3,8 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState, createRef } from "@wordpress/element";
-import { useBlockProps } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
+import { safeHTML } from "@wordpress/dom";
 import { doAction, applyFilters } from "@wordpress/hooks";
 import { dateI18n, format, getSettings } from "@wordpress/date";
 
@@ -30,6 +29,7 @@ const {
     CustomQuery,
     DynamicInputValueHandler,
     BrowseTemplate,
+    BlockProps
 } = window.EBControls;
 
 const SlickArrow = (props) => {
@@ -89,26 +89,19 @@ export default function Edit(props) {
 
     const dateFormat = getSettings().formats.date;
 
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-post-carousel',
+        style: <Style {...props} />
+    };
+
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
         setTimeout(() => {
             setDidMount(true)
         }, 1500)
-
-        //Set Unique Id
-        const BLOCK_PREFIX = "eb-post-carousel";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
     }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className),
-    });
 
     const TABslideToShowRanges = TABslideToShowRange ? TABslideToShowRange : 2;
     const MOBslideToShowRanges = MOBslideToShowRange ? MOBslideToShowRange : 1;
@@ -178,8 +171,7 @@ export default function Edit(props) {
                     />
                 </>
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <BrowseTemplate
                     {...props}
@@ -214,13 +206,13 @@ export default function Edit(props) {
                                                 const title = post?.title?.rendered;
                                                 const titleWithLimitWords =
                                                     titleLength >= 0 ? title.trim().split(" ", titleLength).join(" ") : title;
-                                                const titleHTML = `
+                                                const titleHTML = safeHTML(`
 						<${titleTag} class="ebpg-entry-title">
 							<a class="ebpg-carousel-post-link" href="#" title="${titleWithLimitWords}">
 								${titleWithLimitWords}
 							</a>
 						</${titleTag}>
-					`;
+					`);
 
                                                 //Generate Excerpt & Read More
                                                 let excerpt = post?.excerpt ? post?.excerpt?.rendered : post?.content?.rendered;
@@ -536,7 +528,7 @@ export default function Edit(props) {
                         )}
                     </>
                 )}
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

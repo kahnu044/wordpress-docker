@@ -108,6 +108,26 @@ export function FETCH_CUSTOM_GRADIENT_COLORS() {
 }
 
 /**
+ * Fetch Global Typography from Database using AJAX
+ * @returns {Object || false}
+ */
+export function FETCH_GLOBAL_TYPOGRAPHY() {
+    return getGlobalSettings().then(response => {
+        if (response && typeof response === 'object') {
+            if (response[globalTypoKey] && ebJsonStringCheck(response[globalTypoKey]) && typeof JSON.parse(response[globalTypoKey]) === 'object') {
+                return JSON.parse(response[globalTypoKey])
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
+        }
+    });
+}
+
+/**
  * Fetch Block Defaults from Database using AJAX
  * @returns {Object || false}
  */

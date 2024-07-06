@@ -14,13 +14,10 @@ import { select } from "@wordpress/data";
 /*
  * Internal  Dependencies
  */
-import classnames from "classnames";
 import Style from "./style";
-
 import Inspector from "./inspector";
 import { SHAPE_DIVIDER_TOP, SHAPE_DIVIDER_BOTTOM } from "./constants";
-
-const { duplicateBlockIdFix, ShapeDividerContent } = window.EBControls;
+const { BlockProps, ShapeDividerContent } = window.EBControls;
 
 const Edit = (props) => {
     const {
@@ -39,17 +36,12 @@ const Edit = (props) => {
         wrpShapeBottomInvert,
     } = attributes;
 
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-wrapper";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-wrapper',
+        style: <Style {...props} />
+    };
 
     const isMount = useRef(null);
     useEffect(() => {
@@ -71,10 +63,6 @@ const Edit = (props) => {
         attributes[`${SHAPE_DIVIDER_BOTTOM}Type`],
     ]);
 
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
     const alignmentClass =
         wrapperAlign === "center"
             ? "eb-wrapper-align-center"
@@ -91,8 +79,7 @@ const Edit = (props) => {
                     onChange={(wrapperAlign) => setAttributes({ wrapperAlign })}
                 />
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -134,7 +121,7 @@ const Edit = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

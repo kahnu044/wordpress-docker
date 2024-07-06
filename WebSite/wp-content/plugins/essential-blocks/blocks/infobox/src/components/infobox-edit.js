@@ -6,7 +6,6 @@ import { Button } from "@wordpress/components";
  * Internal dependencies
  */
 const { DynamicInputValueHandler, EBDisplayIcon } = window.EBControls;
-
 export default function InfoboxContainer({ attributes, setAttributes }) {
     const {
         blockId,

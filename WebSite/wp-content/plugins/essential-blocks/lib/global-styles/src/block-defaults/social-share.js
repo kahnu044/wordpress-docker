@@ -27,7 +27,7 @@ const {
     TypographyDropdown,
 } = window.EBControls;
 import { TITLE_TYPOGRAPHY } from "../../../../blocks/social-share/src/constants/typographyPrefixConstants";
-import ShareButtons from "../../../../blocks/social-share/src/shareButtons";
+// import ShareButtons from "../../../../blocks/social-share/src/shareButtons";
 import objAttributes from "../../../../blocks/social-share/src/attributes";
 import {
     rangeIconSize,
@@ -239,12 +239,12 @@ function SocialShare(props) {
                                 }
                             />
                             <Divider />
-                            <ShareButtons
+                            {/* <ShareButtons
                                 profiles={socialDetails}
                                 onProfileAdd={(socialDetails) =>
                                     handleBlockDefault({ socialDetails })
                                 }
-                            />
+                            /> */}
                         </>
                     </PanelBody>
                     <PanelBody

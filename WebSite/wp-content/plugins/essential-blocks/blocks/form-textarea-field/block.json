@@ -8,9 +8,7 @@
   "textdomain": "essential-blocks",
   "ancestor": [ "essential-blocks/form" ],
   "supports": {
-    "align": [
-      "full"
-    ]
+    "anchor": true
   },
   "editorScript": "essential-blocks-editor-script"
 }

@@ -1,9 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { RichText, useBlockProps } from "@wordpress/block-editor";
-
+import { RichText } from "@wordpress/block-editor";
 import QuoteSVG from "./quoteIconSVG";
+const { BlockProps } = window.EBControls;
 
 const Save = ({ attributes }) => {
     const {
@@ -32,17 +32,10 @@ const Save = ({ attributes }) => {
         }
         return str.replace(new RegExp(find, "g"), replace);
     };
-
-    const blockProps = { ...useBlockProps.save() };
-
-    const { className } = blockProps;
-
-    const updatedClassName = replaceString(className, "eb-testimonial-wrapper " + blockId, "").trim();
-
-    const finalProps = { ...useBlockProps.save(), className: updatedClassName };
+    attributes.className = replaceString(attributes.className, "eb-testimonial-wrapper " + blockId, "").trim();
 
     return (
-        <div {...finalProps}>
+        <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div className={`eb-testimonial-wrapper ${blockId} ${layoutPreset}`} data-id={blockId}>
                     <div className="eb-testimonial-container">
@@ -118,7 +111,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

@@ -11,8 +11,7 @@ import { createBlock } from "@wordpress/blocks";
 const ALLOWED_BLOCKS = ["essential-blocks/accordion-item"];
 
 const {
-    duplicateBlockIdFix,
-    EBDisplayIcon
+    BlockProps
 } = window.EBControls;
 
 /**
@@ -27,7 +26,6 @@ const Edit = (props) => {
     const {
         attributes,
         setAttributes,
-        className,
         isSelected,
         clientId
     } = props;
@@ -43,21 +41,11 @@ const Edit = (props) => {
         accordionChildCount,
     } = attributes;
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-accordion";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-accordion',
+        style: <Style {...props} />
+    };
 
     const addAccordion = () => {
         const innerBlocks = [
@@ -134,9 +122,7 @@ const Edit = (props) => {
     return (
         <>
             {isSelected && <Inspector {...props} addAccordion={addAccordion} />}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -164,7 +150,7 @@ const Edit = (props) => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

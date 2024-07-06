@@ -34,7 +34,7 @@ const {
     generateTypographyAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
-    generateResponsiveRangeAttributes,
+    generateResponsiveRangeAttributes
 } = EBControls;
 
 const attributes = {
@@ -103,6 +103,18 @@ const attributes = {
     isFillTitle: {
         type: "boolean",
         default: true,
+    },
+    isMinHeightAsTitle: {
+        type: "boolean",
+        default: true,
+    },
+    enableResponsiveLayout: {
+        type: "boolean",
+        default: false,
+    },
+    verticalToHorizontal: {
+        type: "string",
+        default: 'mobile',
     },
 
     //
@@ -258,7 +270,7 @@ const attributes = {
         isLinked: false,
     }),
     ...generateDimensionsAttributes(prefixTtlWrpMargin),
-    ...generateDimensionsAttributes(prefixTtlWrpPadding),
+    ...generateDimensionsAttributes(prefixTtlWrpPadding)
 };
 
 export default attributes;

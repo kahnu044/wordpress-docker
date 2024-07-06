@@ -3,13 +3,13 @@ import { __ } from "@wordpress/i18n";
 import "./style.scss";
 
 import Edit from "./edit";
-import icon from "./icon";
+import WooProductGridIcon from "./icon";
 import attributes from "./attributes";
 import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBControls;
 
 ebConditionalRegisterBlockType(metadata, {
-    icon,
+    icon: WooProductGridIcon,
     attributes,
     keywords: [
         __("WooCommerce Product", "essential-blocks"),

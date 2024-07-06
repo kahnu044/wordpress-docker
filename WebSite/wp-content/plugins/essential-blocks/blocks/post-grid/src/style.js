@@ -782,7 +782,7 @@ export default function Style(props) {
         ${preset === "style-1" || preset === "style-2" || preset === "style-3"
             ? `
             .eb-post-grid-wrapper.${blockId} .ebpg-entry-media {
-                ${isContentEnabled("thumbnail") && `order: ${enableContents.indexOf("thumbnail") + 1}`}
+                ${isContentEnabled("thumbnail") && `order: ${enableContents.indexOf("thumbnail") + 1} !important`}
             }
             `
             : ""
@@ -835,7 +835,7 @@ export default function Style(props) {
 
     const titleStyleDesktop = `
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-header {
-            ${isContentEnabled("title") && `order: ${enableContents.indexOf("title") + 1}`}
+            ${isContentEnabled("title") && `order: ${enableContents.indexOf("title") + 1} !important`}
         }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title {
 			text-align: ${titleTextAlign};
@@ -873,7 +873,7 @@ export default function Style(props) {
 
     const contentStyleDesktop = `
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-content, .eb-post-grid-wrapper.${blockId} .ebpg-grid-post-excerpt {
-            ${isContentEnabled("excerpt") && `order: ${enableContents.indexOf("excerpt") + 1}`}
+            ${isContentEnabled("excerpt") && `order: ${enableContents.indexOf("excerpt") + 1} !important`}
         }
 		.eb-post-grid-wrapper.${blockId} .ebpg-grid-post-excerpt p {
 			color: ${contentColor};
@@ -1142,7 +1142,7 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-header-meta {
 			justify-content: ${headerMetaTextAlign};
 			${headerMetaMarginStylesDesktop}
-            ${isContentEnabled("headerMeta") && `order: ${enableContents.indexOf("headerMeta") + 1}`}
+            ${isContentEnabled("headerMeta") && `order: ${enableContents.indexOf("headerMeta") + 1} !important`}
 		}
 		.eb-post-grid-wrapper.${blockId} .ebpg-header-meta .ebpg-entry-meta-items {
 			justify-content: ${headerMetaTextAlign};
@@ -1177,7 +1177,7 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-footer-meta {
 			justify-content: ${footerMetaTextAlign};
 			${footerMetaMarginStylesDesktop}
-            ${isContentEnabled("footerMeta") && `order: ${enableContents.indexOf("footerMeta") + 1}`}
+            ${isContentEnabled("footerMeta") && `order: ${enableContents.indexOf("footerMeta") + 1} !important`}
 		}
 		.eb-post-grid-wrapper.${blockId} .ebpg-footer-meta .ebpg-entry-meta-items {
 			justify-content: ${footerMetaTextAlign};

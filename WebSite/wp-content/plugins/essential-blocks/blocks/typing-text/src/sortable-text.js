@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { Component } from "@wordpress/element";
-
+import { safeHTML } from "@wordpress/dom";
 /**
  * External dependencies
  */
@@ -89,12 +89,13 @@ const SortableItem = SortableElement(
 					<DragHandle />
 					<TrashIcon position={position} onDeleteItem={onDeleteItem} />
 				</span>
+				
 				{clickedIndex === position && (
 					<div className="eb-typed-input-wrapper">
 						<input
 							type="text"
 							value={text}
-							onChange={() => onTextChange(event, position)}
+							onChange={(event) => onTextChange(event, position)}
 							placeholder="Add text"
 						/>
 					</div>

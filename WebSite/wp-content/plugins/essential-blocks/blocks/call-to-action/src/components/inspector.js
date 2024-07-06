@@ -43,7 +43,6 @@ import {
 } from "./typographyPrefixConstants";
 
 import objAttributes from "./attributes";
-import SortableLists from "./sortable-lists";
 
 const {
     ColorControl,
@@ -54,7 +53,8 @@ const {
     ResponsiveRangeController,
     AdvancedControls,
     EBIconPicker,
-    DynamicInputControl
+    DynamicInputControl,
+    SortControl
 } = window.EBControls;
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -210,10 +210,16 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 )}
                                             </h3>
                                         </BaseControl>
-                                        <SortableLists
-                                            features={sortableLists}
-                                            setAttributes={setAttributes}
-                                        />
+
+                                        <SortControl
+                                            items={sortableLists}
+                                            labelKey={'label'}
+                                            onSortEnd={sortableLists => setAttributes({ sortableLists })}
+                                            hasSettings={false}
+                                            hasAddButton={false}
+                                            hasDelete={false}
+                                        ></SortControl>
+
                                     </PanelBody>
                                     {showIcon && (
                                         <PanelBody

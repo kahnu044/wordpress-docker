@@ -44,8 +44,8 @@ class Form extends Block {
         'buttonText'   => 'Submit',
         'icon'         => 'fas fa-chevron-right',
         'formLayout'   => 'block',
-        'formStyle'    => 'form-style-classic'
-
+        'formStyle'    => 'form-style-classic',
+        'formType'    => ''
     ];
 
     /**
@@ -79,6 +79,12 @@ class Form extends Block {
 
         $attributes = wp_parse_args( $attributes, self::$default_attributes );
 
+        if ( empty( $attributes['formType'] ) ) {
+            return '';
+        }
+        if ( empty( $content ) ) {
+            return '';
+        }
         $classHook = isset( $attributes['classHook'] ) ? $attributes['classHook'] : '';
 
         $submit_btn_attr = apply_filters( 'eb_form_submit_btn_attr', [
@@ -112,10 +118,20 @@ class Form extends Block {
             'data-error'             => esc_html( $_essential_attributes['errorMessage'] )
         ], $attributes );
 
+        $attributes_html = '';
+        foreach ($confirmation_div_attr as $key => $value) {
+            $attributes_html .= sprintf('%s="%s" ', esc_attr($key), esc_attr($value));
+        }
+
         $confirmation_div_html = sprintf(
             '<div class="eb_form_submit_response" %1$s></div>',
-            http_build_query( $confirmation_div_attr, '', ' ' )
+            trim($attributes_html)
         );
+
+        // $confirmation_div_html = sprintf(
+        //     '<div class="eb_form_submit_response" %1$s></div>',
+        //     http_build_query( $confirmation_div_attr, '', ' ' )
+        // );
 
         ob_start();
         Helper::views( 'form-block', array_merge( $attributes, [

@@ -21,13 +21,12 @@ import { select } from "@wordpress/data";
  */
 import Slider from "./slider";
 import classnames from "classnames";
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
     duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 function getPreviousImgData(previousData, image) {
@@ -54,17 +53,12 @@ export default function Edit(props) {
         classHook,
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-slider";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-slider',
+        style: <Style {...props} />
+    };
 
     const blockProps = useBlockProps({
         className: classnames(className, `eb-guten-block-main-parent-wrapper`),
@@ -154,8 +148,7 @@ export default function Edit(props) {
                     </ToolbarItem>
                 </ToolbarGroup>
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-parallax-slider-wrapper ${blockId}`}>
                         <Slider
@@ -165,7 +158,7 @@ export default function Edit(props) {
                         />
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

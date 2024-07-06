@@ -274,7 +274,11 @@ export default function Style(props) {
 			${titleTypographyDesktop}
 			${titleMarginDesktop}
 		}
-		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title {
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title a{
+            color: ${titleColor};
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title,
+        .eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title a {
 			color: ${titleHoverColor};
 		}
 	`;

@@ -590,7 +590,7 @@ export default function Style(props) {
 			background: ${imageOverlayColor}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image img {
 			${imageWidthDesktop}
 			${autoHeight ? `height: auto;` : imageHeightDesktop}
 		}
@@ -718,7 +718,7 @@ export default function Style(props) {
 			${titleMarginTab}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-price {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-price {
 			${priceTypoStylesTab}
 			${priceMarginTab}
 		}
@@ -727,7 +727,7 @@ export default function Style(props) {
 			${ratingMarginTab}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-rating-wrapper .eb-woo-product-rating {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-rating-wrapper .eb-woo-product-rating {
 			${ratingIconSizeTab}
 		}
 
@@ -735,13 +735,13 @@ export default function Style(props) {
 			${contentPaddingTab}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-overlay .eb-woo-product-button-list a.button, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-button-list a.button {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.added_to_cart {
 			${btnShadowStyesTab}
 			${buttonMarginTab}
 			${btnTypoStylesTab}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery  .eb-woo-product-button-list a.button:hover {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
 			${btnShadowStylesHoverTab}
 		}
 
@@ -777,7 +777,8 @@ export default function Style(props) {
 		}`
         }
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image img {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
+        {
 			${imageWidthTab}
 			${imageHeightTab}
 		}
@@ -859,7 +860,7 @@ export default function Style(props) {
 			${titleMarginMobile}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-price {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-price {
 			${priceTypoStylesMobile}
 			${priceMarginMobile}
 		}
@@ -868,7 +869,7 @@ export default function Style(props) {
 			${ratingMarginMobile}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-rating-wrapper .eb-woo-product-rating {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-rating-wrapper .eb-woo-product-rating {
 			${ratingIconSizeMobile}
 		}
 
@@ -876,13 +877,13 @@ export default function Style(props) {
 			${contentPaddingMobile}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-overlay .eb-woo-product-button-list a.button, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-button-list a.button {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.added_to_cart {
 			${btnShadowStyesMobile}
 			${buttonMarginMobile}
 			${btnTypoStylesMobile}
 		}
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery  .eb-woo-product-button-list a.button:hover {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
 			${btnShadowStylesHoverMobile}
 		}
 
@@ -918,7 +919,7 @@ export default function Style(props) {
 		}`
         }
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image img {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
 			${imageWidthMobile}
 			${imageHeightMobile}
 		}

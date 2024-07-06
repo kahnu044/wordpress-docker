@@ -28,8 +28,8 @@ const {
     ResponsiveDimensionsControl,
     TypographyDropdown,
     AdvancedControls,
-    faIcons,
-    EBIconPicker
+    EBIconPicker,
+    DynamicInputControl
 } = EBControls;
 
 import objAttributes from "./attributes";
@@ -148,12 +148,14 @@ function Inspector(props) {
                                         />
 
                                         {showLabel && (
-                                            <TextControl
+                                            <DynamicInputControl
                                                 label={__(
                                                     "Label Text",
                                                     "essential-blocks"
                                                 )}
-                                                value={labelText}
+                                                attrName="labelText"
+                                                inputValue={labelText}
+                                                setAttributes={setAttributes}
                                                 onChange={(text) =>
                                                     setAttributes({
                                                         labelText: text,

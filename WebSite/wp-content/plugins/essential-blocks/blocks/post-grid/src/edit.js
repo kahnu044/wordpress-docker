@@ -3,11 +3,10 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from "@wordpress/element";
-import { useBlockProps } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { dateI18n, format, getSettings } from "@wordpress/date";
 import { isEmpty } from "lodash";
+import { safeHTML } from "@wordpress/dom";
 
 /**
  * Externnal depencencies
@@ -17,20 +16,18 @@ import parse from "html-react-parser";
 /**
  * Internal depencencies
  */
-import classnames from "classnames";
-
 import Inspector from "./inspector";
 import Style from "./style";
 import PostGridIcon from "./icon";
 import { Templates } from './templates/templates'
 
 const {
-    duplicateBlockIdFix,
     ebJsonStringCheck,
     CustomQuery,
     DynamicInputValueHandler,
     EBDisplayIcon,
-    BrowseTemplate
+    BrowseTemplate,
+    BlockProps
 } = window.EBControls;
 
 export default function Edit(props) {
@@ -79,30 +76,25 @@ export default function Edit(props) {
     const [searchError, setSearchError] = useState(false);
     const [queryResults, setQueryResults] = useState(false);
     const [didMount, setDidMount] = useState(false);
+    const isContentEnabled = (contentName) => enableContents.includes(contentName);
+
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-post-grid',
+        style: <Style {...props} isContentEnabled={isContentEnabled} />
+    };
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
         setTimeout(() => {
             setDidMount(true)
         }, 1500)
-        //Unique Id
-        const BLOCK_PREFIX = "eb-post-grid";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
 
         if (!version) {
             setAttributes({ version: 'v2' });
         }
     }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className),
-    });
 
     useEffect(() => {
         //If Preset is 4/5, make enableThumbnailSort to false
@@ -214,8 +206,6 @@ export default function Edit(props) {
     //     }
     // }, [queryResults]);
 
-    const isContentEnabled = (contentName) => enableContents.includes(contentName);
-
     return cover.length ? (
         <div>
             <img src={cover} alt="post grid" style={{ maxWidth: "100%" }} />
@@ -244,8 +234,7 @@ export default function Edit(props) {
                 </>
             )}
 
-            <div {...blockProps}>
-                <Style {...props} isContentEnabled={isContentEnabled} />
+            <BlockProps.Edit {...enhancedProps}>
 
                 <BrowseTemplate
                     {...props}
@@ -288,6 +277,7 @@ export default function Edit(props) {
                                                     {JSON.parse(selectedTaxonomyItems).length > 0 &&
                                                         JSON.parse(selectedTaxonomyItems).map((catItem, catIndex) => (
                                                             <li
+                                                                key={catIndex}
                                                                 className={`ebpg-category-filter-list-item ${catItem.value === "all" ? "active" : ""
                                                                     }`}
                                                             >
@@ -330,13 +320,13 @@ export default function Edit(props) {
                                                 const title = post?.title?.rendered;
                                                 const titleWithLimitWords =
                                                     titleLength >= 0 ? title.trim().split(" ", titleLength).join(" ") : title;
-                                                const titleHTML = `
+                                                const titleHTML = safeHTML(`
 								<${titleTag} class="ebpg-entry-title">
 									<a class="ebpg-grid-post-link" href="#" title="">
 										${titleWithLimitWords}
 									</a>
 								</${titleTag}>
-							`;
+							`);
 
                                                 //Generate Excerpt & Read More
                                                 let excerpt = post?.excerpt?.rendered;
@@ -485,8 +475,8 @@ export default function Edit(props) {
 
                                                 const tags = postTermsVal.post_tag ? (
                                                     <div className="ebpg-meta ebpg-tags-meta">
-                                                        {Object.keys(postTermsVal.post_tag).map((item) => (
-                                                            <a href={"#"} title={postTermsVal.post_tag[item].name}>
+                                                        {Object.keys(postTermsVal.post_tag).map((item, index) => (
+                                                            <a key={index} href={"#"} title={postTermsVal.post_tag[item].name}>
                                                                 {postTermsVal.post_tag[item].name}
                                                             </a>
                                                         ))}
@@ -879,8 +869,8 @@ export default function Edit(props) {
 
                                         const tags = postTermsVal.post_tag ? (
                                             <div className="ebpg-meta ebpg-tags-meta">
-                                                {Object.keys(postTermsVal.post_tag).map((item) => (
-                                                    <a href={"#"} title={postTermsVal.post_tag[item].name}>
+                                                {Object.keys(postTermsVal.post_tag).map((item, index) => (
+                                                    <a key={index} href={"#"} title={postTermsVal.post_tag[item].name}>
                                                         {postTermsVal.post_tag[item].name}
                                                     </a>
                                                 ))}
@@ -1136,7 +1126,7 @@ export default function Edit(props) {
                         </div>
                     </>
                 )}
-            </div >
+            </BlockProps.Edit>
         </>
     );
 }

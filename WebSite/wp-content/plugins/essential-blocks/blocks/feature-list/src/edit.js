@@ -2,34 +2,21 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import {
-    useBlockProps,
-    BlockControls,
-    AlignmentToolbar,
-} from "@wordpress/block-editor";
 import { useEffect } from "@wordpress/element";
-import { select } from "@wordpress/data";
-
-/**
- * External depencencies
- */
-import classnames from "classnames";
-
 /**
  * Internal dependencies
  */
-
 import Inspector from "./inspector";
-
 import Style from "./style";
 
 const {
-    duplicateBlockIdFix,
-    EBDisplayIcon
+    EBDisplayIcon,
+    sanitizeURL,
+    BlockProps
 } = window.EBControls;
 
 const edit = (props) => {
-    const { attributes, isSelected, className, setAttributes, clientId, name } = props;
+    const { attributes, isSelected, setAttributes } = props;
     const {
         blockId,
         blockMeta,
@@ -53,21 +40,12 @@ const edit = (props) => {
                 ? " eb-feature-list-right"
                 : " eb-feature-list-left";
 
-    useEffect(() => {
-        // this useEffect is for creating an unique id for each block's unique className by a random unique number
-        const BLOCK_PREFIX = "eb-feature-list";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-feature-list',
+        style: <Style {...props} />
+    };
 
     const featureListWrapperClass =
         iconShape !== "none" ? ` ${iconShape} ${shapeView}` : " none";
@@ -122,8 +100,7 @@ const edit = (props) => {
             {isSelected && (
                 <Inspector attributes={attributes} setAttributes={setAttributes} />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
+            <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div
                         className={`${blockId} eb-feature-list-wrapper -icon-position-${iconPosition} -tablet-icon-position-${iconPosition} -mobile-icon-position-${iconPosition}${featureListAlignClass} ${!useInlineDesign && showConnector
@@ -202,7 +179,7 @@ const edit = (props) => {
                                             <div className="eb-feature-list-content-box">
                                                 {link ? (
                                                     <attributes.titleTag className="eb-feature-list-title">
-                                                        <a href={link}>{title}</a>
+                                                        <a href={sanitizeURL(link)}>{title}</a>
                                                     </attributes.titleTag>
                                                 ) : (
                                                     <attributes.titleTag className="eb-feature-list-title">
@@ -220,7 +197,7 @@ const edit = (props) => {
                         </ul>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

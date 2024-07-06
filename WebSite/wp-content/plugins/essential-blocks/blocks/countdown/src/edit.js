@@ -2,30 +2,24 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useBlockProps } from "@wordpress/block-editor";
 import { useEffect, useRef } from "@wordpress/element";
-import { select } from "@wordpress/data";
+import { applyFilters } from "@wordpress/hooks";
 
 /**
  * Internal dependencies
  */
-
-const { duplicateBlockIdFix } = window.EBControls;
-
-import classnames from "classnames";
-
+const { BlockProps, BrowseTemplate } = window.EBControls;
 import Inspector from "./inspector";
-
 import Style from "./style";
+
+import { CountdownIcon } from "./icon";
+import { Templates } from './templates/templates'
 
 export default function Edit(props) {
     const {
         attributes,
         setAttributes,
-        className,
-        clientId,
         isSelected,
-        name
     } = props;
 
     const daysRef = useRef(null);
@@ -62,19 +56,15 @@ export default function Edit(props) {
         recurringCountdown,
         restartTime,
         recurringCountdownEnd,
+        showBlockContent
     } = attributes;
 
-    // this useEffect is for creating a unique blockId for each block's unique className
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-countdown";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-countdown',
+        style: <Style {...props} />
+    };
 
     // this useEffect is for the countdown animation effect
     useEffect(() => {
@@ -188,90 +178,99 @@ export default function Edit(props) {
         recurringCountdownEnd,
     ]);
 
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
     return (
         <>
-            {isSelected && (
+            {isSelected && showBlockContent && (
                 <Inspector
                     attributes={attributes}
                     setAttributes={setAttributes}
                 />
             )}
-            <div {...blockProps}>
-                <Style {...props} />
 
-                <div
-                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                >
-                    <div className={`${blockId} eb-cd-wrapper ${preset}`}>
-                        <div className="eb-cd-inner">
-                            {showDays ? (
-                                <div className="box cd-box-day">
-                                    <span ref={daysRef} className="eb-cd-digit">
-                                        00
-                                    </span>
-                                    {daysLabel ? (
-                                        <span className="eb-cd-label">
-                                            {daysLabel}
-                                        </span>
+
+            <BlockProps.Edit {...enhancedProps}>
+
+                <BrowseTemplate
+                    {...props}
+                    Icon={CountdownIcon}
+                    title={"Countdown"}
+                    description={"Choose a template for the Countdown or start blank."}
+                    patterns={applyFilters('eb_pro_templates_countdown', Templates)}
+                />
+
+                {showBlockContent && (
+                    <>
+                        <div
+                            className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                        >
+                            <div className={`${blockId} eb-cd-wrapper ${preset}`}>
+                                <div className="eb-cd-inner">
+                                    {showDays ? (
+                                        <div className="box cd-box-day">
+                                            <span ref={daysRef} className="eb-cd-digit">
+                                                00
+                                            </span>
+                                            {daysLabel ? (
+                                                <span className="eb-cd-label">
+                                                    {daysLabel}
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                    ) : null}
+
+                                    {showHours ? (
+                                        <div className="box cd-box-hour">
+                                            <span
+                                                ref={hoursRef}
+                                                className="eb-cd-digit"
+                                            >
+                                                00
+                                            </span>
+                                            {hoursLabel ? (
+                                                <span className="eb-cd-label">
+                                                    {hoursLabel}
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                    ) : null}
+
+                                    {showMinutes ? (
+                                        <div className="box cd-box-minute">
+                                            <span
+                                                ref={minutesRef}
+                                                className="eb-cd-digit"
+                                            >
+                                                00
+                                            </span>
+                                            {minutesLabel ? (
+                                                <span className="eb-cd-label">
+                                                    {minutesLabel}
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                    ) : null}
+
+                                    {showSeconds ? (
+                                        <div className="box cd-box-second">
+                                            <span
+                                                ref={secondsRef}
+                                                className="eb-cd-digit"
+                                            >
+                                                00
+                                            </span>
+                                            {secondsLabel ? (
+                                                <span className="eb-cd-label">
+                                                    {secondsLabel}
+                                                </span>
+                                            ) : null}
+                                        </div>
                                     ) : null}
                                 </div>
-                            ) : null}
-
-                            {showHours ? (
-                                <div className="box cd-box-hour">
-                                    <span
-                                        ref={hoursRef}
-                                        className="eb-cd-digit"
-                                    >
-                                        00
-                                    </span>
-                                    {hoursLabel ? (
-                                        <span className="eb-cd-label">
-                                            {hoursLabel}
-                                        </span>
-                                    ) : null}
-                                </div>
-                            ) : null}
-
-                            {showMinutes ? (
-                                <div className="box cd-box-minute">
-                                    <span
-                                        ref={minutesRef}
-                                        className="eb-cd-digit"
-                                    >
-                                        00
-                                    </span>
-                                    {minutesLabel ? (
-                                        <span className="eb-cd-label">
-                                            {minutesLabel}
-                                        </span>
-                                    ) : null}
-                                </div>
-                            ) : null}
-
-                            {showSeconds ? (
-                                <div className="box cd-box-second">
-                                    <span
-                                        ref={secondsRef}
-                                        className="eb-cd-digit"
-                                    >
-                                        00
-                                    </span>
-                                    {secondsLabel ? (
-                                        <span className="eb-cd-label">
-                                            {secondsLabel}
-                                        </span>
-                                    ) : null}
-                                </div>
-                            ) : null}
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </>
+                )}
+            </BlockProps.Edit>
         </>
     );
 }

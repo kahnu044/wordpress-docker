@@ -21,7 +21,6 @@ use WPGraphQL\Utils\Preview;
  */
 final class WPGraphQL {
 
-
 	/**
 	 * Stores the instance of the WPGraphQL class
 	 *
@@ -335,6 +334,24 @@ final class WPGraphQL {
 			},
 			10,
 			3
+		);
+
+		/**
+		 * Prevent WPML from redirecting within WPGraphQL requests
+		 *
+		 * @see https://github.com/wp-graphql/wp-graphql/issues/1626#issue-769089073
+		 * @since @todo
+		 */
+		add_filter(
+			'wpml_is_redirected',
+			static function ( bool $is_redirect ) {
+				if ( is_graphql_request() ) {
+					return false;
+				}
+				return $is_redirect;
+			},
+			10,
+			1
 		);
 	}
 
@@ -782,15 +799,18 @@ final class WPGraphQL {
 	/**
 	 * Return the static schema if there is one
 	 *
-	 * @return string|null
+	 * @return ?string
 	 */
 	public static function get_static_schema() {
-		$schema = null;
-		if ( file_exists( WPGRAPHQL_PLUGIN_DIR . 'schema.graphql' ) && ! empty( file_get_contents( WPGRAPHQL_PLUGIN_DIR . 'schema.graphql' ) ) ) {
-			$schema = file_get_contents( WPGRAPHQL_PLUGIN_DIR . 'schema.graphql' );
+		$schema_file = WPGRAPHQL_PLUGIN_DIR . 'schema.graphql';
+
+		if ( ! file_exists( $schema_file ) ) {
+			return null;
 		}
 
-		return $schema;
+		$schema = file_get_contents( WPGRAPHQL_PLUGIN_DIR . 'schema.graphql' );
+
+		return ! empty( $schema ) ? $schema : null;
 	}
 
 	/**

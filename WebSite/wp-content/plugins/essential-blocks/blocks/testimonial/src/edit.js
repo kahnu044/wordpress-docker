@@ -11,18 +11,16 @@ import { select } from "@wordpress/data";
  * Internal dependencies
  */
 import classnames from "classnames";
-
 import Inspector from "./inspector";
 import TestimonialIcon from "./icon";
 import { Templates } from './templates/templates'
 
 const {
-    duplicateBlockIdFix,
+    BlockProps,
     BrowseTemplate
 } = window.EBControls;
 
 import Style from "./style";
-
 import QuoteSVG from "./quoteIconSVG";
 
 const Edit = (props) => {
@@ -45,35 +43,26 @@ const Edit = (props) => {
         showBlockContent
     } = attributes;
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-testimonial";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
-
     const replaceString = (str, find, replace) => {
+        if (str === undefined) {
+            return "";
+        }
         return str.replace(new RegExp(find, "g"), replace);
     };
+    attributes.className = replaceString(attributes.className, "eb-testimonial-wrapper", "");
+    attributes.className = replaceString(attributes.className, blockId, "");
 
-    blockProps.className = replaceString(blockProps.className, "eb-testimonial-wrapper", "");
-    blockProps.className = replaceString(blockProps.className, blockId, "");
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-testimonial',
+        style: <Style {...props} />
+    };
 
     return (
         <>
             {isSelected && showBlockContent && <Inspector attributes={attributes} setAttributes={setAttributes} />}
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <BrowseTemplate
                     {...props}
                     Icon={TestimonialIcon}
@@ -81,7 +70,6 @@ const Edit = (props) => {
                     description={"Choose a template for the Testimonial or start blank."}
                     patterns={Templates}
                 />
-
                 {showBlockContent && (
                     <>
                         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
@@ -209,8 +197,7 @@ const Edit = (props) => {
                         </div>
                     </>
                 )}
-
-            </div>
+            </BlockProps.Edit>
         </>
     );
 };

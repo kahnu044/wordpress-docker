@@ -13,8 +13,8 @@ const { times } = lodash;
  */
 
 const {
-    duplicateBlockIdFix,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = EBControls;
 
 import classnames from "classnames";
@@ -41,12 +41,15 @@ export default function Edit(props) {
         layout,
         classHook,
         tagName,
+        isMinHeightAsTitle,
     } = attributes;
 
     const tabWrapRef = useRef(null);
+    const tabHeaderWrapRef = useRef(null);
 
     const [activeTabId, setActiveTabId] = useState(false);
     const [isClickTab, setIsClickTab] = useState(false);
+    const [contentMinHeight, setContentMinHeight] = useState("auto");
 
     const activeDefaultTabId = (
         tabTitles.find((item) => item.isDefault) || { id: "1" }
@@ -92,15 +95,6 @@ export default function Edit(props) {
     };
 
     useEffect(() => {
-        // this is for creating a unique blockId for each block's unique className
-        const BLOCK_PREFIX = "eb-advanced-tabs";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
 
         if (tabTitles.length === 0) {
             setAttributes({
@@ -140,6 +134,16 @@ export default function Edit(props) {
         }
     }, []);
 
+    //Inline Min Height
+    useEffect(() => {
+        if (layout === 'vertical' && isMinHeightAsTitle && tabHeaderWrapRef.current) {
+            setContentMinHeight(tabHeaderWrapRef.current.offsetHeight + 'px');
+        }
+        else {
+            setContentMinHeight('auto')
+        }
+    }, [attributes])
+
     const { innerBlocks } = useSelect(
         (select) => select("core/block-editor").getBlocksByClientId(clientId)[0]
     );
@@ -154,9 +158,11 @@ export default function Edit(props) {
         });
     }, [blockId, innerBlocks]);
 
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-advanced-tabs',
+        style: <Style {...props} isClickTab={isClickTab} />
+    };
 
     return (
         <>
@@ -168,12 +174,7 @@ export default function Edit(props) {
                     handleTabTitleClick={handleTabTitleClick}
                 />
             )}
-            <div {...blockProps}>
-                <Style
-                    {...props}
-                    isClickTab={isClickTab}
-                />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -183,12 +184,11 @@ export default function Edit(props) {
                     >
                         <div className="eb-tabs-nav">
                             <ul
+                                ref={tabHeaderWrapRef}
                                 className="tabTitles"
                                 data-tabs-ul-id={`${blockId}`}
                             >
                                 {tabTitles.map((item, index) => {
-                                    const itemId = item.id;
-
                                     return (
                                         <li
                                             key={index}
@@ -237,7 +237,15 @@ export default function Edit(props) {
                                 })}
                             </ul>
                         </div>
-                        <div className={`eb-tabs-contents`}>
+                        <div className={`eb-tabs-contents`} >
+                            {/* Min Height Style if content min height equals to Heading */}
+                            <style>
+                                {`
+                                    .eb-tabs-contents .eb-tab-wrapper {
+                                        min-height: ${contentMinHeight};
+                                    }
+                                `}
+                            </style>
                             <InnerBlocks
                                 templateLock="all"
                                 template={times(tabChildCount, (n) => [
@@ -252,7 +260,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

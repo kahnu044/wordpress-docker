@@ -3,69 +3,58 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-	// InspectorControls,
-	// MediaUpload,
-	useBlockProps,
-	// RichText,
-	InnerBlocks,
+    // InspectorControls,
+    // MediaUpload,
+    useBlockProps,
+    // RichText,
+    InnerBlocks,
 } from "@wordpress/block-editor";
-
 import classnames from "classnames";
-
-import { useEffect, useState, useRef } from "@wordpress/element";
-import { select, dispatch } from "@wordpress/data";
-import {
-	PanelBody,
-	SelectControl,
-	ToggleControl,
-	// TextControl,
-	Button,
-	RangeControl,
-	BaseControl,
-	ButtonGroup,
-	TabPanel,
-} from "@wordpress/components";
-
+import { select, useSelect } from "@wordpress/data";
+const { BlockProps } = window.EBControls;
 export default function Edit(props) {
-	const { attributes, setAttributes, className, clientId, isSelected } = props;
-	const {
-		//
-		tabId,
+    const { attributes, className, clientId } = props;
+    const {
+        //
+        tabId,
 
-		//
-		tabParentId,
-	} = attributes;
+        //
+        tabParentId,
+    } = attributes;
 
-	const blockProps = useBlockProps({
-		className: classnames(
-			className,
-			`eb-guten-block-main-parent-wrapper eb-tab-editor-wrap`
-		),
-	});
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        rootClass: `eb-guten-block-main-parent-wrapper eb-tab-editor-wrap`,
+    };
 
-	return (
-		<div {...blockProps}>
-			<div
-				className={`eb-tab-wrapper`}
-				data-tab-id={tabId}
-				data-tab-parent-id={tabParentId}
-			>
-				<div className="eb-tab-inner">
-					{/* <h5>tabId: {tabId}</h5> */}
-					<InnerBlocks
-						orientation={"vertical"}
-						templateLock={
-							// templateLock ? templateLock :
-							false
-						}
-						renderAppender={
-							select("core/block-editor").getBlockOrder(clientId).length > 0
-								? undefined
-								: InnerBlocks.ButtonBlockAppender
-						}
-					/>
-				</div>
-			</div>
-		</div>
-	);
+    const { blocks } = useSelect((select) => ({
+        blocks: select("core/block-editor").getBlockOrder(clientId)
+    }), []);
+
+    return (
+        <BlockProps.Edit {...enhancedProps}>
+            <div
+                className={`eb-tab-wrapper`}
+                data-tab-id={tabId}
+                data-tab-parent-id={tabParentId}
+            >
+                <div className="eb-tab-inner">
+                    {/* <h5>tabId: {tabId}</h5> */}
+                    <InnerBlocks
+                        orientation={"vertical"}
+                        templateLock={
+                            // templateLock ? templateLock :
+                            false
+                        }
+                        renderAppender={
+                            blocks.length > 0
+                                ? undefined
+                                : InnerBlocks.ButtonBlockAppender
+                        }
+                    />
+                </div>
+            </div>
+        </BlockProps.Edit>
+    );
 }

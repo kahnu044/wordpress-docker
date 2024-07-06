@@ -15,14 +15,13 @@ import {
     ToolbarItem,
     ToolbarButton,
 } from "@wordpress/components";
-import { select } from "@wordpress/data";
 
 /**
  * Internal dependencies
  */
 import Inspector from "./inspector";
-
 import Style from "./style";
+
 
 import {
     SLIDE_TO_SHOW,
@@ -31,20 +30,17 @@ import {
 import {
     handleTitle,
     handleSubtitle,
-    handleShowButton,
     handleButtonText,
-    handleSecondButtonText,
-    handleButtonURL,
-    handleOpenNewTab,
+    handleSecondButtonText
 } from "./helpers";
 
 const {
     generateResponsiveRangeStyles,
-    duplicateBlockIdFix,
     isValidHtml,
-    EBDisplayIcon
+    EBDisplayIcon,
+    sanitizeURL,
+    BlockProps
 } = window.EBControls;
-
 /**
  * External dependencies
  */
@@ -86,33 +82,12 @@ export default function Edit(props) {
         titleTag,
         contentTag
     } = attributes;
-
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-slider";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-        if (eb_conditional_localize && eb_conditional_localize.editor_type == 'edit-site') {
-            const { isRTL } = wp.data.select('core/edit-site').getSettings();
-            setAttributes({ isRTLEnable: isRTL });
-        } else {
-            const { isRTL } = select("core/editor").getEditorSettings();
-            setAttributes({ isRTLEnable: isRTL });
-        }
-
-        // Default value for old version
-        if (titleTag == undefined) { setAttributes({ titleTag: 'h2' }) }
-        if (contentTag == undefined) { setAttributes({ contentTag: 'p' }) }
-    }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-slider',
+        style: <Style {...props} />
+    };
 
     // range controller Slides to Show
     const {
@@ -359,9 +334,7 @@ export default function Edit(props) {
                     </ToolbarItem>
                 </ToolbarGroup>
             </BlockControls>
-            <div {...blockProps}>
-                <Style {...props} />
-
+            <BlockProps.Edit {...enhancedProps}>
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -458,7 +431,7 @@ export default function Edit(props) {
                                                                 href={
                                                                     image.buttonUrl &&
                                                                         image.isValidUrl
-                                                                        ? image.buttonUrl
+                                                                        ? sanitizeURL(image.buttonUrl)
                                                                         : "#"
                                                                 }
                                                                 className="eb-slider-button"
@@ -506,7 +479,7 @@ export default function Edit(props) {
                                                                 href={
                                                                     image.secondButtonUrl &&
                                                                         image.isValidUrl
-                                                                        ? image.secondButtonUrl
+                                                                        ? sanitizeURL(image.secondButtonUrl)
                                                                         : "#"
                                                                 }
                                                                 className="eb-slider-second-button"
@@ -553,7 +526,7 @@ export default function Edit(props) {
                         </Slider>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

@@ -45,6 +45,8 @@ if ( ! class_exists( 'UAGB_Rest_API' ) ) {
 
 			// We have added this action here to support both the ways of post updations, Rest API & Normal.
 			add_action( 'save_post', array( 'UAGB_Helper', 'delete_page_assets' ), 10, 1 );
+			// Adding this action to delete post assets if the post is moved to trash.
+			add_action( 'wp_trash_post', array( $this, 'delete_page_assets_on_trash' ) );
 			global $wp_customize;
 			if ( $wp_customize ) { // Check whether the $wp_customize is set.
 				add_filter( 'render_block_data', array( $this, 'content_pre_render' ) ); // Add a inline style for block when it rendered in customizer.
@@ -53,6 +55,29 @@ if ( ! class_exists( 'UAGB_Rest_API' ) ) {
 				add_action( 'rest_after_save_widget', array( $this, 'after_widget_save_action' ) ); // Update the assets on widget save.
 			}
 
+		}
+
+		/**
+		 * Function to delete post assets.
+		 *
+		 * @param int $post_id post_id of deleted post.
+		 * @since 2.13.1
+		 * @return void 
+		 */
+		public function delete_page_assets_on_trash( $post_id ) {
+			
+				$css_asset_info = UAGB_Scripts_Utils::get_asset_info( 'css', $post_id );
+				$js_asset_info  = UAGB_Scripts_Utils::get_asset_info( 'js', $post_id );
+
+				$css_file_path = $css_asset_info['css'];
+				$js_file_path  = $js_asset_info['js'];
+
+			if ( file_exists( $css_file_path ) ) {
+				wp_delete_file( $css_file_path );
+			}
+			if ( file_exists( $js_file_path ) ) {
+				wp_delete_file( $js_file_path );
+			}
 		}
 
 		/**
@@ -204,7 +229,18 @@ if ( ! class_exists( 'UAGB_Rest_API' ) ) {
 					),
 				)
 			);
-			
+
+			register_rest_route(
+				'spectra/v1',
+				'check-custom-fields-support',
+				array(
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( $this, 'check_custom_fields_support' ),
+						'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					),
+				)
+			);
 		}
 
 		/**
@@ -524,6 +560,60 @@ if ( ! class_exists( 'UAGB_Rest_API' ) ) {
 			}
 
 			return $args;
+		}
+
+		/**
+		 * Supported arguments to check if the given post type supports custom fields.
+		 *
+		 * @since 2.13.1
+		 * @return array The array of supported arguments.
+		 */
+		public function check_custom_fields_support_args() {
+			$args = array();
+
+			$args['post_type'] = array(
+				'type'     => 'string',
+				'required' => false,
+			);
+
+			return $args;
+		}
+
+		/**
+		 * Checks if the given post type supports custom fields.
+		 *
+		 * @param WP_REST_Request $request All the details about the request.
+		 * @since 2.13.1
+		 * @return WP_REST_Response The response.
+		 */
+		public function check_custom_fields_support( $request ) {
+			$post_type = $request->get_param( 'post_type' );
+
+			// If the post type was not passed, abandon ship.
+			if ( empty( $post_type ) || ! is_string( $post_type ) ) {
+				$response = new \WP_REST_Response(
+					array(
+						'success' => false,
+					)
+				);
+				$response->set_status( 400 );
+				return $response;
+			}
+
+			// Sanitize the post type, and check if the post type supports custom fields.
+			$post_type              = sanitize_text_field( $post_type );
+			$supports_custom_fields = post_type_supports( $post_type, 'custom-fields' );
+
+			// Return the successful response, with whether or not custom fields is supported.
+			$response = new \WP_REST_Response(
+				array(
+					'success'                => true,
+					'supports_custom_fields' => $supports_custom_fields,
+				)
+			);
+			$response->set_status( 200 );
+
+			return $response;
 		}
 	}
 

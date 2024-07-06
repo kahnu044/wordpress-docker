@@ -121,6 +121,27 @@ const attributes = {
         type: "boolean",
         default: true,
     },
+    imgSource: {
+        type: "string",
+        // default: "custom",
+    },
+    logoUrl: {
+        type: "string",
+        default: "",
+    },
+    shouldSyncIcon: {
+        type: "boolean",
+        default: false,
+    },
+    rel: {
+        type: "string",
+        attribute: "rel",
+        default: ""
+    },
+    imagePostId: {
+        type: "number",
+        default: 0
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(CAPTION_TYPOGRAPHY)),

@@ -53,7 +53,7 @@ export default function Style(props) {
     } = attributes;
 
     //Calculate Gap for Responsiveness
-    const calculateGap = (gap = columnGap.desktop, columnNumber) => {
+    const calculateGap = (gap = columnGap.desktop || 0, columnNumber) => {
 
         let columnGap = columnNumber;
         if (columnGap > 1) {
@@ -207,14 +207,18 @@ export default function Style(props) {
 			${wrapWidthDesktop}
 			${!isColumnOrder_Custom_Desktop || columnOrderDesktop === undefined ? "order: unset;" : `order: ${columnOrderDesktop};`}
 			${rOverflowStylesDesktop}
+		}
 
-			${wrpMarginDesktop}
+        .eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId} {
+            ${wrpMarginDesktop}
 			${wrpPaddingDesktop}
 			${wrpBackgroundStylesDesktop}
 			${wrpBdShdStyesDesktop}
 			transition: all .5s, ${wrpBgTransitionStyle}, ${wrpBdShdTransitionStyle};
-		}
-		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap.eb-column-editor-wrap-${blockId}:hover{
+        }
+
+
+		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId}:hover{
 			${wrpHoverBackgroundStylesDesktop}
 			${wrpBdShdStylesHoverDesktop}
 		}
@@ -227,13 +231,15 @@ export default function Style(props) {
 
 			${!isColumnOrder_Custom_Tab || columnOrderTab === undefined ? "order: unset;" : `order: ${columnOrderTab};`}
 			${rOverflowStylesTab}
+		}
 
-			${wrpMarginTab}
+        .eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId} {
+            ${wrpMarginTab}
 			${wrpPaddingTab}
 			${wrpBackgroundStylesTab}
 			${wrpBdShdStyesTab}
-		}
-		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap.eb-column-editor-wrap-${blockId}:hover{
+        }
+		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId}:hover{
 			${wrpHoverBackgroundStylesTab}
 			${wrpBdShdStylesHoverTab}
 		}
@@ -246,13 +252,14 @@ export default function Style(props) {
 
 			${!isColumnOrder_Custom_Mobile || columnOrderMobile === undefined ? "order: unset;" : `order: ${columnOrderMobile};`}
 			${rOverflowStylesMobile}
-
-			${wrpMarginMobile}
+		}
+        .eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId} {
+            ${wrpMarginMobile}
 			${wrpPaddingMobile}
 			${wrpBackgroundStylesMobile}
 			${wrpBdShdStyesMobile}
-		}
-		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap.eb-column-editor-wrap-${blockId}:hover{
+        }
+		.eb-row-wrapper .eb-guten-block-main-parent-wrapper.eb-column-editor-wrap .eb-parent-${blockId}:hover{
 			${wrpHoverBackgroundStylesMobile}
 			${wrpBdShdStylesHoverMobile}
 		}
@@ -262,13 +269,14 @@ export default function Style(props) {
     const desktopAllStylesFrontEnd = softMinifyCssStrings(`
 		${desktopAllStylesCommon}
 
-		.eb-parent-${blockId}{
-			${colAli ? `align-self:${colAli} !important;` : ""}
-			${wrapWidthDesktop}
-
-			${!isColumnOrder_Custom_Desktop || columnOrderDesktop === undefined ? "order: unset;" : `order: ${columnOrderDesktop};`}
+        .root-${blockId} {
+            ${colAli ? `align-self:${colAli} !important;` : ""}
+            ${wrapWidthDesktop}
+            ${!isColumnOrder_Custom_Desktop || columnOrderDesktop === undefined ? "order: unset;" : `order: ${columnOrderDesktop};`}
 			${rOverflowStylesDesktop}
+        }
 
+		.eb-parent-${blockId}{
 			${wrpMarginDesktop}
 			${wrpPaddingDesktop}
 			${wrpBackgroundStylesDesktop}
@@ -285,12 +293,14 @@ export default function Style(props) {
     const tabAllStylesFrontEnd = softMinifyCssStrings(`
 		${tabAllStylesCommon}
 
-		.eb-parent-${blockId}{
-			width: calc(${tabWidthRange ? tabWidthRange : (desktopRange !== 100 ? 50 : 100)}% - ${calculateGap(columnGap.tab, columnNumber.tab)}px);
+        .root-${blockId} {
+            width: calc(${tabWidthRange ? tabWidthRange : (desktopRange !== 100 ? 50 : 100)}% - ${calculateGap(columnGap.tab, columnNumber.tab)}px);
 
 			${!isColumnOrder_Custom_Tab || columnOrderTab === undefined ? "order: unset;" : `order: ${columnOrderTab};`}
 			${rOverflowStylesTab}
+        }
 
+		.eb-parent-${blockId}{
 			${wrpMarginTab}
 			${wrpPaddingTab}
 			${wrpBackgroundStylesTab}
@@ -306,12 +316,14 @@ export default function Style(props) {
     const mobileAllStylesFrontEnd = softMinifyCssStrings(`
 		${mobileAllStylesCommon}
 
-		.eb-parent-${blockId}{
-			width: calc(${mobileWidthRange ? mobileWidthRange : 100}% - ${calculateGap(columnGap.mobile, columnNumber.mobile)}px);
+        .root-${blockId} {
+            width: calc(${mobileWidthRange ? mobileWidthRange : 100}% - ${calculateGap(columnGap.mobile, columnNumber.mobile)}px);
 
 			${!isColumnOrder_Custom_Mobile || columnOrderMobile === undefined ? "order: unset;" : `order: ${columnOrderMobile};`}
 			${rOverflowStylesMobile}
+        }
 
+		.eb-parent-${blockId}{
 			${wrpMarginMobile}
 			${wrpPaddingMobile}
 			${wrpBackgroundStylesMobile}

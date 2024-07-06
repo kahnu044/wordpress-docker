@@ -273,149 +273,6 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                             {tab.name === "styles" && (
                                 <>
                                     <PanelBody
-                                        title={__("Title", "essential-blocks")}
-                                    >
-                                        <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Prefix Suffix Spacing", "essential-blocks"
-                                            )}
-                                            controlName={
-                                                titlePrefixGap
-                                            }
-                                            resRequiredProps={
-                                                resRequiredProps
-                                            }
-                                            min={0}
-                                            max={500}
-                                            step={1}
-                                            noUnits
-                                        />
-                                        <PanelBody
-                                            title={__("Title Prefix", "essential-blocks")}
-                                        >
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Icon Size",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    titlePrefixIconSize
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                                min={8}
-                                                max={200}
-                                                step={1}
-                                            />
-
-                                            <TypographyDropdown
-                                                baseLabel="Text Typography"
-                                                typographyPrefixConstant={
-                                                    titlePrefixText
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                            />
-
-                                            <ColorControl
-                                                label={__(
-                                                    "Text / Icon Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={titlePrefixColor}
-                                                onChange={(
-                                                    titlePrefixColor
-                                                ) =>
-                                                    setAttributes({
-                                                        titlePrefixColor,
-                                                    })
-                                                }
-                                            />
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Width",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    titlePrefixImgWidth
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                                units={
-                                                    sizeUnitTypes
-                                                }
-                                                min={0}
-                                                max={500}
-                                                step={1}
-                                            />
-                                        </PanelBody>
-                                        <PanelBody
-                                            title={__("Title Suffix", "essential-blocks")}
-                                        >
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Icon Size",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    titleSuffixIconSize
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                                min={8}
-                                                max={200}
-                                                step={1}
-                                            />
-
-                                            <TypographyDropdown
-                                                baseLabel="Text Typography"
-                                                typographyPrefixConstant={
-                                                    titleSuffixText
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                            />
-                                            <ColorControl
-                                                label={__(
-                                                    "Text / Icon Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={titleSuffixColor}
-                                                onChange={(
-                                                    titleSuffixColor
-                                                ) =>
-                                                    setAttributes({
-                                                        titleSuffixColor,
-                                                    })
-                                                }
-                                            />
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Width",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    titleSuffixImgWidth
-                                                }
-                                                resRequiredProps={
-                                                    resRequiredProps
-                                                }
-                                                units={
-                                                    sizeUnitTypes
-                                                }
-                                                min={0}
-                                                max={500}
-                                                step={1}
-                                            />
-                                        </PanelBody>
-                                    </PanelBody>
-
-                                    <PanelBody
                                         title={__("Icon", "essential-blocks")}
                                         initialOpen={false}
                                     >
@@ -662,10 +519,150 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                 })
                                             }
                                         />
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Prefix Suffix Spacing", "essential-blocks"
+                                            )}
+                                            controlName={
+                                                titlePrefixGap
+                                            }
+                                            resRequiredProps={
+                                                resRequiredProps
+                                            }
+                                            min={0}
+                                            max={500}
+                                            step={1}
+                                            noUnits
+                                        />
+                                        <PanelBody
+                                            title={__("Title Prefix", "essential-blocks")}
+                                            initialOpen={false}
+                                        >
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Icon Size",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titlePrefixIconSize
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                min={8}
+                                                max={200}
+                                                step={1}
+                                            />
+
+                                            <TypographyDropdown
+                                                baseLabel="Text Typography"
+                                                typographyPrefixConstant={
+                                                    titlePrefixText
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                            />
+
+                                            <ColorControl
+                                                label={__(
+                                                    "Text / Icon Color",
+                                                    "essential-blocks"
+                                                )}
+                                                color={titlePrefixColor}
+                                                onChange={(
+                                                    titlePrefixColor
+                                                ) =>
+                                                    setAttributes({
+                                                        titlePrefixColor,
+                                                    })
+                                                }
+                                            />
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Image Width",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titlePrefixImgWidth
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                units={
+                                                    sizeUnitTypes
+                                                }
+                                                min={0}
+                                                max={500}
+                                                step={1}
+                                            />
+                                        </PanelBody>
+                                        <PanelBody
+                                            title={__("Title Suffix", "essential-blocks")}
+                                            initialOpen={false}
+                                        >
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Icon Size",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titleSuffixIconSize
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                min={8}
+                                                max={200}
+                                                step={1}
+                                            />
+
+                                            <TypographyDropdown
+                                                baseLabel="Text Typography"
+                                                typographyPrefixConstant={
+                                                    titleSuffixText
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                            />
+                                            <ColorControl
+                                                label={__(
+                                                    "Text / Icon Color",
+                                                    "essential-blocks"
+                                                )}
+                                                color={titleSuffixColor}
+                                                onChange={(
+                                                    titleSuffixColor
+                                                ) =>
+                                                    setAttributes({
+                                                        titleSuffixColor,
+                                                    })
+                                                }
+                                            />
+                                            <ResponsiveRangeController
+                                                baseLabel={__(
+                                                    "Image Width",
+                                                    "essential-blocks"
+                                                )}
+                                                controlName={
+                                                    titleSuffixImgWidth
+                                                }
+                                                resRequiredProps={
+                                                    resRequiredProps
+                                                }
+                                                units={
+                                                    sizeUnitTypes
+                                                }
+                                                min={0}
+                                                max={500}
+                                                step={1}
+                                            />
+                                        </PanelBody>
 
                                         <PanelBody
                                             title={__("Margin & Padding")}
-                                        // initialOpen={true}
+                                            initialOpen={false}
                                         >
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={

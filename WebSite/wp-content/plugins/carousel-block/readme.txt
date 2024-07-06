@@ -1,17 +1,18 @@
 === Carousel Slider Block for Gutenberg ===
 Contributors: virgildia
 Donate link: http://virgiliudiaconu.com/
-Tags: gutenberg, carousel, slide, slideshow, slider, block
-Requires at least: 5.8
-Tested up to: 6.4
-Requires PHP: 5.6+
+Tags: carousel, slide, gutenberg, slideshow, block
+Requires at least: 6.1
+Tested up to: 6.5.2
+Requires PHP: 7.0
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Description ==
 
-A responsive carousel slider for the Gutenberg editor. 
+A responsive carousel slider for the Gutenberg editor that supports adding any blocks to slides.
 
 = Features =
 
@@ -114,4 +115,17 @@ Small CSS improvements in the editor. Updated slick CSS stylesheet handle. Teste
 Fixed error message on Widget Editor screen. Tested on WordPress 6.3.1.
 
 = 1.0.10 =
-Fixed lodash error with latest WordPress 6.4 update
+Fixed lodash error with latest WordPress 6.4 update.
+
+= 1.0.11 =
+Fixed layout issue in rows.
+Code refactoring.
+
+= 1.0.12 =
+Added tag dependency.
+
+= 1.0.13 = 
+Reverted Slick init to working solution - outside the WP block build process.
+
+= 1.0.14 = 
+Update CSS for image block centering. 

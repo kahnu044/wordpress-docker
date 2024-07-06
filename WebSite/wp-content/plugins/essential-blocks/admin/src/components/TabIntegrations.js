@@ -6,11 +6,11 @@ import betterlinks from "../icons/intregrations/btl.svg";
 import easyjobs from "../icons/intregrations/ej.svg";
 import embedpress from "../icons/intregrations/ep.svg";
 import notificationx from "../icons/intregrations/nx.svg";
-import reviewx from "../icons/intregrations/rx.svg";
+import betterPayment from "../icons/intregrations/bp.svg";
 import scheduledPress from "../icons/intregrations/wscp.svg";
 import essentialAddons from "../icons/intregrations/ea.svg";
 
-const {installPlugin} = window.EBControls;
+const { installPlugin } = window.EBControls;
 
 const integrations = [
     {
@@ -34,12 +34,12 @@ const integrations = [
         ),
     },
     {
-        slug: "reviewx",
-        basename: "reviewx/reviewx.php",
-        logo: reviewx,
-        title: "ReviewX",
+        slug: "betterlinks",
+        basename: "betterlinks/betterlinks.php",
+        logo: betterlinks,
+        title: "BetterLinks",
         desc: __(
-            "ReviewX lets you get instant customer ratings and multi criteria reviews to add credibility to your WooCommerce Store and increase conversion rates.",
+            "Best Link Shortening tool to create, shorten and manage any URL to help you cross-promote your brands & products. Gather analytics reports, run successfully marketing campaigns easily & many more.",
             "essential-blocks"
         ),
     },
@@ -74,16 +74,6 @@ const integrations = [
         ),
     },
     {
-        slug: "betterlinks",
-        basename: "betterlinks/betterlinks.php",
-        logo: betterlinks,
-        title: "BetterLinks",
-        desc: __(
-            "Best Link Shortening tool to create, shorten and manage any URL to help you cross-promote your brands & products. Gather analytics reports, run successfully marketing campaigns easily & many more.",
-            "essential-blocks"
-        ),
-    },
-    {
         slug: "essential-addons-for-elementor-lite",
         basename:
             "essential-addons-for-elementor-lite/essential_adons_elementor.php",
@@ -91,6 +81,16 @@ const integrations = [
         title: "Essential Addons for Elementor",
         desc: __(
             "Powerful Elementor widgets library with 90+ advanced, fully customizable elements & extensions to enhance your website designing experience.",
+            "essential-blocks"
+        ),
+    },
+    {
+        slug: "better-payment",
+        basename: "better-payment/better-payment.php",
+        logo: betterPayment,
+        title: "Better Payment",
+        desc: __(
+            "Better Payment streamlines transactions in Elementor, integrating PayPal, Stripe, advanced analytics, validation, and Elementor forms for the most secure & efficient payments.",
             "essential-blocks"
         ),
     },
@@ -190,11 +190,10 @@ export default function TabIntegrations() {
                         </p>
 
                         <button
-                            className={`eb-integration-block__link eb-btn eb-btn-md ${
-                                status[item.basename]?.btnText == "Activated"
-                                    ? "eb-btn-border"
-                                    : "eb-btn-primary"
-                            }`}
+                            className={`eb-integration-block__link eb-btn eb-btn-md ${status[item.basename]?.btnText == "Activated"
+                                ? "eb-btn-border"
+                                : "eb-btn-primary"
+                                }`}
                             onClick={() =>
                                 installIntegration(
                                     index,

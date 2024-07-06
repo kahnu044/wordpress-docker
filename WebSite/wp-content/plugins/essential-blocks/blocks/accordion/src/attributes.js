@@ -101,7 +101,6 @@ const attributes = {
 
     hoverTitleColor: {
         type: "string",
-        default: "var(--eb-global-link-color)",
     },
     activeBgColor: {
         type: "string",
@@ -133,7 +132,7 @@ const attributes = {
         type: "string",
         default: "#000",
     },
-    
+
 
     ...generateResponsiveRangeAttributes(titlePrefixIconSize, {
         defaultRange: 20,

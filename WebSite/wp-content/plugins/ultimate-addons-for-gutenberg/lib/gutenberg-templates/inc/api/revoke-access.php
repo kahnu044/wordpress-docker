@@ -68,10 +68,10 @@ class RevokeAccess extends Api_Base {
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return new WP_Error(
 				'gt_rest_cannot_access',
-				__( 'Sorry, you are not allowed to do that.', 'ast-block-templates' ),
+				__( 'Sorry, you are not allowed to do that.', 'ultimate-addons-for-gutenberg' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -92,25 +92,19 @@ class RevokeAccess extends Api_Base {
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			wp_send_json_error(
 				array(
-					'data' => __( 'Nonce verification failed.', 'ast-block-templates' ),
+					'data' => __( 'Nonce verification failed.', 'ultimate-addons-for-gutenberg' ),
 					'status'  => false,
 
 				)
 			);
 		}
 		
-		$business_details = get_option( 'ast-templates-business-details', false );
 		delete_option( 'ast-block-templates-show-onboarding' );
-		if ( ! $business_details ) {
-			$business_details = array();
-		}
-
-		$business_details['token'] = '';
-		$updated = update_option( 'ast-templates-business-details', $business_details );
+		
 		Helper::delete_admin_settings_option( 'zip_ai_settings' );
 		$response = new WP_REST_Response(
 			array(
-				'success' => $updated,
+				'success' => true,
 			)
 		);
 		$response->set_status( 200 );

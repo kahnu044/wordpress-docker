@@ -15,6 +15,7 @@ import Style from "./style";
 //
 const {
     duplicateBlockIdFix,
+    BlockProps
 } = window.EBControls;
 
 import {
@@ -154,17 +155,19 @@ export default function Edit(props) {
         });
     }, [parentBlockData]);
 
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        const BLOCK_PREFIX = "eb-column";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
-    }, []);
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-column',
+        rootClass: `eb-guten-block-main-parent-wrapper eb-column-editor-wrap eb-column-editor-wrap-${blockId}`,
+        style: <Style
+            {...props}
+            isColumnOrder_Custom_Desktop={isColumnOrder_Custom_Desktop}
+            isColumnOrder_Custom_Tab={isColumnOrder_Custom_Tab}
+            isColumnOrder_Custom_Mobile={isColumnOrder_Custom_Mobile}
+            columnGap={columnGap}
+            columnNumber={columnNumber} />
+    };
 
     const blockProps = useBlockProps({
         className: classnames(
@@ -372,16 +375,7 @@ export default function Edit(props) {
                 />
             )}
 
-            <div {...blockProps}>
-                <Style
-                    {...props}
-                    isColumnOrder_Custom_Desktop={isColumnOrder_Custom_Desktop}
-                    isColumnOrder_Custom_Tab={isColumnOrder_Custom_Tab}
-                    isColumnOrder_Custom_Mobile={isColumnOrder_Custom_Mobile}
-                    columnGap={columnGap}
-                    columnNumber={columnNumber}
-                />
-
+            <BlockProps.Edit {...enhancedProps}>
                 {nextBlockClientId && (
                     <div className="width-dragger-change" ref={draggerRef}>
                         <div className="dragger-inner">
@@ -426,7 +420,7 @@ export default function Edit(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit>
         </>
     );
 }

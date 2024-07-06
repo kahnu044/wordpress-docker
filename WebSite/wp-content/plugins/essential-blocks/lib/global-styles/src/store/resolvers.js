@@ -37,6 +37,15 @@ export function* getCustomGradientColors() {
 }
 
 /**
+ * getGlobalTypography resolver
+ * @returns
+ */
+export function* getGlobalTypography() {
+    let globalTypography = yield actions.fetchGlobalTypography();
+    return actions.setGlobalTypography(globalTypography)
+}
+
+/**
  * getBlockDefaults resolver
  * @returns
  */

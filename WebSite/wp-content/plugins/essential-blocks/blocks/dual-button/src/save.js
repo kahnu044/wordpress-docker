@@ -1,5 +1,6 @@
-import { useBlockProps } from "@wordpress/block-editor";
-const { EBDisplayIcon } = window.EBControls;
+const { EBDisplayIcon, sanitizeURL, BlockProps } = window.EBControls;
+
+import { RichText } from "@wordpress/block-editor";
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -18,7 +19,9 @@ const Save = ({ attributes }) => {
     } = attributes;
 
     return (
-        <div {...useBlockProps.save()}>
+        <BlockProps.Save
+            attributes={attributes}
+        >
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
@@ -28,13 +31,15 @@ const Save = ({ attributes }) => {
                 >
                     <a
                         className={"eb-button-parent eb-button-one"}
-                        href={buttonURLOne}
+                        href={buttonURLOne === '#' ? '' : sanitizeURL(buttonURLOne)}
                         {...(buttonOneNewWindow && { target: "_blank" })}
                         rel="noopener"
                     >
-                        <div className="eb-button-text eb-button-one-text">
-                            {buttonTextOne}
-                        </div>
+                        <RichText.Content
+                            tagName="div"
+                            className="eb-button-text eb-button-one-text"
+                            value={buttonTextOne}
+                        />
                     </a>
 
                     {showConnector && (
@@ -53,17 +58,19 @@ const Save = ({ attributes }) => {
 
                     <a
                         className={"eb-button-parent eb-button-two"}
-                        href={buttonURLTwo}
+                        href={buttonURLTwo === '#' ? '' : sanitizeURL(buttonURLTwo)}
                         {...(buttonTwoNewWindow && { target: "_blank" })}
                         rel="noopener"
                     >
-                        <div className="eb-button-text eb-button-two-text">
-                            {buttonTextTwo}
-                        </div>
+                        <RichText.Content
+                            tagName="div"
+                            className="eb-button-text eb-button-two-text"
+                            value={buttonTextTwo}
+                        />
                     </a>
                 </div>
             </div>
-        </div>
+        </BlockProps.Save>
     );
 };
 

@@ -2,31 +2,18 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import {
-    MediaUpload,
-    MediaPlaceholder,
-    RichText,
-    BlockControls,
-    useBlockProps,
-    BlockAlignmentToolbar,
-} from "@wordpress/block-editor";
-import { ToolbarGroup, ToolbarItem, ToolbarButton, Button } from "@wordpress/components";
 import { Fragment, useEffect, useState, useRef, createRef } from "@wordpress/element";
-import { select } from "@wordpress/data";
 import ReactPlayer from "react-player";
 
 /**
  * Internal depencencies
  */
-import classnames from "classnames";
 
 import Inspector from "./inspector";
 
-import { isEmpty } from "lodash";
-
 const {
-    duplicateBlockIdFix,
-    EBDisplayIcon
+    EBDisplayIcon,
+    BlockProps
 } = window.EBControls;
 
 import Style from "./style";
@@ -56,35 +43,34 @@ export default function Edit(props) {
         lightboxPlayIconlib,
     } = attributes;
 
+    const [didMount, setDidMount] = useState(false)
+
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-advanced-video',
+        style: <Style {...props} />
+    };
+
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
-        const BLOCK_PREFIX = "eb-advanced-video";
-        duplicateBlockIdFix({
-            BLOCK_PREFIX,
-            blockId,
-            setAttributes,
-            select,
-            clientId,
-        });
+        setDidMount(true)
     }, []);
-
-    const blockProps = useBlockProps({
-        className: classnames(className, `eb-guten-block-main-parent-wrapper`),
-    });
 
     // show controls
     useEffect(() => {
-        const url = videoURL;
-        setAttributes({
-            videoURL: "",
-            showBar: showBar,
-        });
-        setTimeout(() => {
+        if (didMount) {
+            const url = videoURL;
             setAttributes({
-                videoURL: url,
-                // showBar: showBar,
+                videoURL: "",
+                showBar: showBar,
             });
-        }, 10);
+            setTimeout(() => {
+                setAttributes({
+                    videoURL: url,
+                    // showBar: showBar,
+                });
+            }, 100);
+        }
     }, [showBar]);
 
     const [preview, setPreview] = useState(false);
@@ -134,9 +120,8 @@ export default function Edit(props) {
     return (
         <>
             {isSelected && <Inspector attributes={attributes} setAttributes={setAttributes} />}
-            <div {...blockProps}>
+            <BlockProps.Edit {...enhancedProps}>
                 <div className="eb-selector-overlay"></div> {/* Only for Editor */}
-                <Style {...props} />
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`} data-id={blockId}>
                         {videoOptions != "lightbox" && (
@@ -206,7 +191,7 @@ export default function Edit(props) {
                         )}
                     </div>
                 </div>
-            </div>
+            </BlockProps.Edit >
         </>
     );
 }

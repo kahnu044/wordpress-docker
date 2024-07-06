@@ -291,7 +291,7 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 			}
 
 			$icons_chunks = apply_filters( 'uagb_icons_chunks', $icons_chunks );
-			
+
 			if ( ! is_array( $icons_chunks ) || empty( $icons_chunks ) ) {
 				$icons_chunks = array();
 			}
@@ -304,14 +304,9 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 		 * Generate SVG.
 		 *
 		 * @since 1.8.1
-		 * @param  array $icon Decoded fontawesome json file data.
+		 * @param  string $icon Decoded fontawesome json file data.
 		 */
 		public static function render_svg_html( $icon ) {
-			$icon = str_replace( 'far', '', $icon );
-			$icon = str_replace( 'fas', '', $icon );
-			$icon = str_replace( 'fab', '', $icon );
-			$icon = str_replace( 'fa-', '', $icon );
-			$icon = str_replace( 'fa', '', $icon );
 			$icon = sanitize_text_field( esc_attr( $icon ) );
 
 			$json = self::backend_load_font_awesome_icons();
@@ -326,7 +321,7 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 			}
 
 			// Load Polyfiller Array if needed.
-			$load_font_awesome_5 = UAGB_Admin_Helper::get_admin_settings_option( 'uag_load_font_awesome_5', ( 'yes' === get_option( 'uagb-old-user-less-than-2' ) ) ? 'enabled' : 'disabled' );
+			$load_font_awesome_5 = UAGB_Admin_Helper::get_admin_settings_option( 'uag_load_font_awesome_5' );
 
 			if ( 'disabled' !== $load_font_awesome_5 ) {
 				// If Icon doesn't need Polyfilling, use the Original.
@@ -1437,39 +1432,11 @@ if ( ! class_exists( 'UAGB_Helper' ) ) {
 				// Delete all the TOC Post Meta on update of the template.
 				delete_post_meta_by_key( '_uagb_toc_options' );
 
-				$wp_upload_dir = self::get_uag_upload_dir_path();
-
-				if ( file_exists( $wp_upload_dir . 'custom-style-blocks.css' ) ) {
-					wp_delete_file( $wp_upload_dir . 'custom-style-blocks.css' );
-				}
-
-
-				if ( 'enabled' === self::$file_generation ) {
-
-					self::delete_uag_asset_dir();
-				}
-
 				UAGB_Admin_Helper::create_specific_stylesheet();
 
 				/* Update the asset version */
 				UAGB_Admin_Helper::update_admin_settings_option( '__uagb_asset_version', time() );
 				return;
-			}
-
-			if ( 'enabled' === self::$file_generation ) {
-
-				$css_asset_info = UAGB_Scripts_Utils::get_asset_info( 'css', $post_id );
-				$js_asset_info  = UAGB_Scripts_Utils::get_asset_info( 'js', $post_id );
-
-				$css_file_path = $css_asset_info['css'];
-				$js_file_path  = $js_asset_info['js'];
-
-				if ( file_exists( $css_file_path ) ) {
-					wp_delete_file( $css_file_path );
-				}
-				if ( file_exists( $js_file_path ) ) {
-					wp_delete_file( $js_file_path );
-				}
 			}
 
 			$unique_ids = get_option( '_uagb_fse_uniqids' );

@@ -18,7 +18,7 @@ $footerMeta = array_map(
 );
 
 $thumbnail_inside_content_wpr = false;
-if ( $enableThumbnailSort && in_array( $preset, ['style-1', 'style-2', 'style-3'] ) ) {
+if ( $enableThumbnailSort && in_array( $preset, [ 'style-1', 'style-2', 'style-3' ] ) ) {
     $thumbnail_inside_content_wpr = true;
 }
 
@@ -51,7 +51,7 @@ foreach ( $posts as $result ) {
                 'categories' => $categories,
                 'tags'       => $tags,
                 'readtime'   => $readtime
-            ]
+             ]
         ),
         $result->ID,
         $allMeta
@@ -62,7 +62,7 @@ foreach ( $posts as $result ) {
      */
     $html .= sprintf( '<article class="ebpg-grid-post ebpg-post-grid-column" data-id="%1$s">', $result->ID );
     $html .= '<div class="ebpg-grid-post-holder">';
-    $wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper" href="%1$s"></a>', get_permalink( $result->ID ) );
+    $wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', get_permalink( $result->ID ), wp_kses( $result->post_title, 'post' ) );
     if ( $preset === 'style-5' || $preset === 'style-6' ) {
         $html .= $wrapper_link_html;
         $wrapper_link_html = '';
