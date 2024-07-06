@@ -48,9 +48,9 @@ LocalGoogle WordPress WebSite.
      ```
 6. Update local hostfile to serve `wp.localgoogle.com`:
    ```bash
-   echo "0.0.0.0   wp.localgoogle.com"  | sudo tee -a /etc/hosts
+   echo "0.0.0.0  wp.localgoogle.com"  | sudo tee -a /etc/hosts
    ```
-7. Open http://wp.localgoogle.com:8012 and complete setup using information as per `.env` file
+7. Open http://wp.localgoogle.com:8015 and complete setup using information as per `.env` file
     ```bash
     Database Name : local_google_db
     Username : local_google_db_usr
@@ -71,11 +71,13 @@ LocalGoogle WordPress WebSite.
    apprun 'wp db export localgoogle.sql; mv WebSite/localgoogle.sql dump/localgoogle.sql'
    ```
 9. All `docker-compose` commands must be run from within `wordpress-docker` directory.
-10. SMTP Settings at `/wp-admin/options-general.php?page=swpsmtp_settings#smtp`:
-    1. SMTP Host: `mailhog`
-    2. Type of Encryption: `None`
-    3. SMTP Port: `1025`
-    4. No Username/Password Auth required
+10. SMTP Settings at `/wp-admin/admin.php?page=wp-mail-smtp` (Google SMTP):
+    1. SMTP Host: `smtp.gmail.com`
+    2. Type of Encryption: `TLS`
+    3. SMTP Port: `587`
+    4. Authentication: On
+    5. Username: youremail@gmail.com
+    6. Password: generatedAppPassword
 
 ### Using Docker Compose Environment
 
@@ -88,7 +90,7 @@ LocalGoogle WordPress WebSite.
 
 1. Default MySQL root Username and Password is `root`.
 2. Single quotes `'` don't work in docker-compose commands in Windows.
-3. If you are upgrading from `MySQL 5.7` to `MariaDB 10.5` on your container please run the following command:
-   ```bash
-   docker-compose exec db /bin/bash -c "mariadb-upgrade -uroot -proot"
-   ```
+
+## Author
+
+[Kahnu Charan Swain](https://github.com/kahnu044)
