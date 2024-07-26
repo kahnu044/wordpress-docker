@@ -7,7 +7,6 @@ import {
     MediaUpload,
     MediaPlaceholder,
     BlockControls,
-    useBlockProps,
     RichText,
 } from "@wordpress/block-editor";
 import {
@@ -15,6 +14,7 @@ import {
     ToolbarItem,
     ToolbarButton,
 } from "@wordpress/components";
+import { select } from "@wordpress/data";
 
 /**
  * Internal dependencies
@@ -80,8 +80,29 @@ export default function Edit(props) {
         arrowPrevIcon,
         isRTLEnable,
         titleTag,
-        contentTag
+        contentTag,
+        version
     } = attributes;
+
+    // this useEffect is for creating a unique id for each block's unique className by a random unique number
+    useEffect(() => {
+        if (eb_conditional_localize && eb_conditional_localize.editor_type == 'edit-site') {
+            const { isRTL } = select('core/edit-site').getSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        } else {
+            const { isRTL } = select("core/editor").getEditorSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        }
+
+        // Default value for old version
+        if (titleTag == undefined) { setAttributes({ titleTag: 'h2' }) }
+        if (contentTag == undefined) { setAttributes({ contentTag: 'p' }) }
+
+        if (!version) {
+            setAttributes({ version: 'v2' });
+        }
+    }, []);
+
     // you must declare this variable
     const enhancedProps = {
         ...props,

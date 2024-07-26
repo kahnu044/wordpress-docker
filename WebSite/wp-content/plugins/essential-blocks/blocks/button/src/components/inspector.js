@@ -196,14 +196,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         /> */}
 
                                         <DynamicInputControl
-                                            label="Button Text"
+                                            label={__("Button Text", "essential-blocks")}
                                             attrName="buttonText"
                                             inputValue={buttonText}
                                             setAttributes={setAttributes}
                                             onChange={(text) => setAttributes({ buttonText: text })}
                                         />
                                         <DynamicInputControl
-                                            label="URL"
+                                            label={__("URL", "essential-blocks")}
                                             attrName="buttonURL"
                                             inputValue={buttonURL}
                                             setAttributes={setAttributes}

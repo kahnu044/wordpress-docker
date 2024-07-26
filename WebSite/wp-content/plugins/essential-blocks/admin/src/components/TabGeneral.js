@@ -277,45 +277,21 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 4.7.4", "essential-blocks")}
+                                    {__("Version: 4.8.2", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("02/07/2024", "essential-blocks")}
+                                        {__("16/07/2024", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Improved: Advanced Tab | Added option to disable min height for vertical layout",
+                                            "Fixed: Resolved an error in the editor for WordPress 6.6",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Improved: Advanced Tab | Added option for responsive layout switch on vertical layout",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Advanced Tabs | Active tab icon color not working",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Team Member | Images removed on attempt recovery issue",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Removed Edit HTML option for Advanced Tabs and Accordion Block to prevent attempt recovery",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: EB Dashboard | Blocks enable/disable reset on plugin update",
+                                            "Minor bug fixes & improvements",
                                             "essential-blocks"
                                         )}
                                     </li>

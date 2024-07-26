@@ -297,6 +297,57 @@ const Inspector = ({ attributes, setAttributes, deleteHeaders }) => {
 										`}
                                     </style>
                                     <PanelBody
+                                        title={__("Title", "essential-blocks")}
+                                    >
+                                        <>
+                                            {!isSticky && (
+                                                <ToggleControl
+                                                    label={__(
+                                                        "Display Title",
+                                                        "essential-blocks"
+                                                    )}
+                                                    checked={displayTitle}
+                                                    onChange={() =>
+                                                        setAttributes({
+                                                            displayTitle: !displayTitle,
+                                                        })
+                                                    }
+                                                />
+                                            )}
+                                            <DynamicInputControl
+                                                label={__(
+                                                    "Title Text",
+                                                    "essential-blocks"
+                                                )}
+                                                attrName="title"
+                                                inputValue={title}
+                                                setAttributes={setAttributes}
+                                                onChange={(text) =>
+                                                    setAttributes({
+                                                        title: text,
+                                                    })
+                                                }
+                                            />
+                                        </>
+                                    </PanelBody>
+                                    <PanelBody
+                                        title={__(
+                                            "Supported Heading Tags",
+                                            "essential-blocks"
+                                        )}
+                                    >
+                                        <div className="fix-select-over-lapping">
+                                            <Select2
+                                                options={options}
+                                                value={defaultOptions}
+                                                defaultValue={defaultOptions}
+                                                isMulti
+                                                onChange={onHeaderChange}
+                                            />
+                                        </div>
+                                    </PanelBody>
+
+                                    <PanelBody
                                         title={__(
                                             "Content Settings",
                                             "essential-blocks"

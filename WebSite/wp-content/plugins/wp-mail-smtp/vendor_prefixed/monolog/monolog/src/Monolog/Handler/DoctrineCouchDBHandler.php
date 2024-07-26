@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -12,6 +13,7 @@ namespace WPMailSMTP\Vendor\Monolog\Handler;
 
 use WPMailSMTP\Vendor\Monolog\Logger;
 use WPMailSMTP\Vendor\Monolog\Formatter\NormalizerFormatter;
+use WPMailSMTP\Vendor\Monolog\Formatter\FormatterInterface;
 use WPMailSMTP\Vendor\Doctrine\CouchDB\CouchDBClient;
 /**
  * CouchDB handler for Doctrine CouchDB ODM
@@ -20,8 +22,9 @@ use WPMailSMTP\Vendor\Doctrine\CouchDB\CouchDBClient;
  */
 class DoctrineCouchDBHandler extends \WPMailSMTP\Vendor\Monolog\Handler\AbstractProcessingHandler
 {
+    /** @var CouchDBClient */
     private $client;
-    public function __construct(\WPMailSMTP\Vendor\Doctrine\CouchDB\CouchDBClient $client, $level = \WPMailSMTP\Vendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(\WPMailSMTP\Vendor\Doctrine\CouchDB\CouchDBClient $client, $level = \WPMailSMTP\Vendor\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
@@ -29,11 +32,11 @@ class DoctrineCouchDBHandler extends \WPMailSMTP\Vendor\Monolog\Handler\Abstract
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         $this->client->postDocument($record['formatted']);
     }
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \WPMailSMTP\Vendor\Monolog\Formatter\FormatterInterface
     {
         return new \WPMailSMTP\Vendor\Monolog\Formatter\NormalizerFormatter();
     }

@@ -319,7 +319,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         },
                         {
                             name: "advance",
-                            title: "Advanced",
+                            title: __("Advanced", "essential-blocks"),
                             className: "eb-tab advance",
                         },
                     ]}
@@ -750,7 +750,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         "essential-blocks"
                                                     )}
                                                 />
-                                                <PanelBody title="Background">
+                                                <PanelBody title={__("Background", "essential-blocks")}>
                                                     <BackgroundControl
                                                         controlName={
                                                             boxBackgroundType
@@ -762,7 +762,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         noMainBgi={true}
                                                     />
                                                 </PanelBody>
-                                                <PanelBody title="Border">
+                                                <PanelBody title={__("Border", "essential-blocks")}>
                                                     <BorderShadowControl
                                                         controlName={boxBorder}
                                                         resRequiredProps={

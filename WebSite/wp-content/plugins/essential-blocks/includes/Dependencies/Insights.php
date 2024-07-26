@@ -682,9 +682,9 @@
          */
         public function set_notice_options( $options = [] ) {
             $default_options = [
-                'consent_button_text' => __( 'What we collect', 'wpinsight' ),
-                'yes'                 => __( 'Sure, I\'d like to help', 'wpinsight' ),
-                'no'                  => __( 'No Thanks.', 'wpinsight' )
+                'consent_button_text' => __( 'What we collect', 'essential-blocks' ),
+                'yes'                 => __( 'Sure, I\'d like to help', 'essential-blocks' ),
+                'no'                  => __( 'No Thanks.', 'essential-blocks' )
             ];
             $options              = wp_parse_args( $options, $default_options );
             $this->notice_options = $options;
@@ -795,20 +795,20 @@
          */
         public function deactivation_reasons() {
             $form            = [];
-            $form['heading'] = __( 'Sorry to see you go &#128542;', 'wpinsight' );
-            $form['body']    = __( 'If you have a moment, please share why you are deactivating this plugin. All submissions are anonymous and we only use this feedback to improve Essential Blocks for Gutenberg.', 'wpinsight' );
+            $form['heading'] = __( 'Sorry to see you go &#128542;', 'essential-blocks' );
+            $form['body']    = __( 'If you have a moment, please share why you are deactivating this plugin. All submissions are anonymous and we only use this feedback to improve Essential Blocks for Gutenberg.', 'essential-blocks' );
 
             $form['options'] = [
-                __( 'I no longer need the plugin', 'wpinsight' ),
+                __( 'I no longer need the plugin', 'essential-blocks' ),
                 [
-                    'label'       => __( 'I found a better plugin', 'wpinsight' ),
-                    'extra_field' => __( 'Please share which plugin', 'wpinsight' )
+                    'label'       => __( 'I found a better plugin', 'essential-blocks' ),
+                    'extra_field' => __( 'Please share which plugin', 'essential-blocks' )
                 ],
-                __( "I couldn't get the plugin to work", 'wpinsight' ),
-                __( 'It\'s a temporary deactivation', 'wpinsight' ),
+                __( "I couldn't get the plugin to work", 'essential-blocks' ),
+                __( 'It\'s a temporary deactivation', 'essential-blocks' ),
                 [
-                    'label'       => __( 'Other', 'wpinsight' ),
-                    'extra_field' => __( 'Please share the reason', 'wpinsight' ),
+                    'label'       => __( 'Other', 'essential-blocks' ),
+                    'extra_field' => __( 'Please share the reason', 'essential-blocks' ),
                     'type'        => 'textarea'
                 ]
             ];
@@ -1016,7 +1016,7 @@
                 $html .= '</ul></div><!-- .wpinsights-' . esc_attr( $this->plugin_name ) . '-goodbye-options -->';
             }
             $html .= '</div><!-- .wpinsights-goodbye-form-body -->';
-            $html .= '<p class="deactivating-spinner"><span class="spinner"></span> ' . __( 'Submitting form', 'wpinsight' ) . '</p>';
+            $html .= '<p class="deactivating-spinner"><span class="spinner"></span> ' . __( 'Submitting form', 'essential-blocks' ) . '</p>';
             $allowed_html = array_merge( [
                 'input'    => [
                     'type'        => [],
@@ -1072,8 +1072,8 @@ jQuery(document).ready(function($) {
             .fadeIn();
         $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form")
             .html('<?php echo wp_kses( $html, $allowed_html ); ?>' +
-                '<div class="wpinsights-goodbye-form-footer"><div class="wpinsights-goodbye-form-buttons"><a id="wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>" class="wpinsights-submit-btn" href="#"><?php esc_html_e( 'Submit and Deactivate', 'wpinsight' );?></a>&nbsp;<a class="wpsp-put-deactivate-btn" href="' +
-                url + '"><?php esc_html_e( 'Skip & Deactivate', 'wpinsight' );?></a></div></div>');
+                '<div class="wpinsights-goodbye-form-footer"><div class="wpinsights-goodbye-form-buttons"><a id="wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>" class="wpinsights-submit-btn" href="#"><?php esc_html_e( 'Submit and Deactivate', 'essential-blocks' );?></a>&nbsp;<a class="wpsp-put-deactivate-btn" href="' +
+                url + '"><?php esc_html_e( 'Skip & Deactivate', 'essential-blocks' );?></a></div></div>');
         $('#wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>').on('click', function(
             e) {
             // As soon as we click, the body of the form should disappear

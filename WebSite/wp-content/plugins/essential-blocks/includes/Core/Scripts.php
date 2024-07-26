@@ -70,6 +70,7 @@ class Scripts
         );
 
         $editor_scripts_deps = [
+            'regenerator-runtime',
             'essential-blocks-vendor-bundle',
             'essential-blocks-controls-util',
             'essential-blocks-twenty-move',

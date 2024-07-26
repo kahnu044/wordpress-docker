@@ -380,7 +380,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                                 <PanelBody
                                                     title={__(
-                                                        "Margin & Padding"
+                                                        "Margin & Padding",
+                                                        "essential-blocks"
                                                     )}
                                                 // initialOpen={true}
                                                 >
@@ -391,7 +392,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                         controlName={
                                                             iconMarginConst
                                                         }
-                                                        baseLabel="Margin"
+                                                        baseLabel={__("Margin", "essential-blocks")}
                                                     />
                                                     <ResponsiveDimensionsControl
                                                         resRequiredProps={
@@ -400,7 +401,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                         controlName={
                                                             iconPaddingConst
                                                         }
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                 </PanelBody>
 
@@ -425,7 +426,8 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
 
                                                 <PanelBody
                                                     title={__(
-                                                        "Border & Shadow"
+                                                        "Border & Shadow",
+                                                        "essential-blocks"
                                                     )}
                                                 // initialOpen={false}
                                                 >
@@ -489,7 +491,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         </BaseControl>
 
                                         <TypographyDropdown
-                                            baseLabel="Title Typography"
+                                            baseLabel={__("Title Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefix_title
                                             }
@@ -661,22 +663,22 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Margin & Padding")}
-                                            initialOpen={false}
+                                            title={__("Margin & Padding", "essential-blocks")}
+                                        // initialOpen={true}
                                         >
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
                                                 controlName={tabMarginConst}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
                                                 controlName={tabPaddingConst}
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                         </PanelBody>
 
@@ -740,7 +742,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Border & Shadow")}
+                                            title={__("Border & Shadow", "essential-blocks")}
                                         // initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -796,7 +798,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         </BaseControl>
 
                                         <TypographyDropdown
-                                            baseLabel="Content Typography"
+                                            baseLabel={__("Content Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefix_content
                                             }
@@ -815,7 +817,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         />
 
                                         <PanelBody
-                                            title={__("Margin & Padding")}
+                                            title={__("Margin & Padding", "essential-blocks")}
                                         // initialOpen={true}
                                         >
                                             <ResponsiveDimensionsControl
@@ -823,14 +825,14 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                                     resRequiredProps
                                                 }
                                                 controlName={conMarginConst}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
                                                 controlName={conPaddingConst}
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                         </PanelBody>
 
@@ -852,7 +854,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Border & Shadow")}
+                                            title={__("Border & Shadow", "essential-blocks")}
                                         // initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -879,12 +881,12 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapMarginConst}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapPaddingConst}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -902,7 +904,7 @@ const Inspector = ({ attributes, setAttributes, clientId }) => {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

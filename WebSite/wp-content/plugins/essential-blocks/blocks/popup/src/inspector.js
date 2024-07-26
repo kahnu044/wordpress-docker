@@ -38,6 +38,7 @@ import {
     CONTAINER_PADDING,
     wrapMarginConst,
     wrapPaddingConst,
+    HEIGHT_UNITS
 } from "./constants";
 
 const {
@@ -606,6 +607,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     min={0}
                                                     max={1000}
                                                     step={1}
+                                                    units={HEIGHT_UNITS}
                                                 />
                                             </>
                                         )}

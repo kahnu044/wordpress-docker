@@ -702,12 +702,12 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
         ?>
     <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
         <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
-        <?php printf(
-                        __( "<p> <i>📣</i> NEW: Essential Blocks 4.7.0 is here, with new '<a target='_blank' href='%s'>Global Typography</a>', new options in '<a target='_blank' href='%s'>Dynamic Tags</a>' & more! Check out the <a target='_blank' href='%s'>Changelog</a> for more details 🎉</p>", "essential-blocks" ),
-                        esc_url( 'https://essential-blocks.com/docs/configure-global-typography/' ),
-                        esc_url( 'https://essential-blocks.com/docs/dynamic-tags-support/' ),
-                        esc_url( 'https://essential-blocks.com/changelog' )
-                );?>
+        <?php
+            printf(
+                        __( "<p> <i>📣</i> Essential Blocks <strong>v4.8</strong> is now Compatible with WPML. Check out <strong><a target='_blank' href='%s'>this doc</a></strong> for more info.</p>", "essential-blocks" ),
+                        esc_url( 'https://essential-blocks.com/docs/translate-essential-blocks-with-wpml/' )
+                    );
+                ?>
     </div>
     <?php
         }

@@ -77,12 +77,11 @@ class WooProductGrid extends Block {
             'showSaleBadge'         => true,
             'productDescLength'     => 5,
             'isCustomCartBtn'       => false,
-            'simpleCartText'        => 'Buy Now',
-            'variableCartText'      => 'Select Options',
-            'groupedCartText'       => 'View Products',
-            'externalCartText'      => 'Buy Now',
-            'defaultCartText'       => 'Read More',
-            'showBlockContent'   => true
+            'simpleCartText'        => __("Buy Now","essential-blocks"),
+            'variableCartText'      => __("Select Options","essential-blocks"),
+            'groupedCartText'       => __("View Products","essential-blocks"),
+            'externalCartText'      => __("Buy Now","essential-blocks"),
+            'defaultCartText'       => __("Read More","essential-blocks")
         ];
 
         foreach ( $_essential_attributes as $key => $value ) {

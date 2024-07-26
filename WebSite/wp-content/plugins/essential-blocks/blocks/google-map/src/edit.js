@@ -100,7 +100,7 @@ const edit = (props) => {
 
         let defaultMarker = [
             {
-                title: searchAddress ? searchAddress : __("Marker 1", "essential-block"),
+                title: searchAddress ? searchAddress : __("Marker 1", "essential-blocks"),
                 latitude: latitude,
                 longitude: longitude,
                 location: searchAddress,

@@ -4,10 +4,14 @@ import { render, createRef } from "@wordpress/element";
  */
 import Slider from "react-slick";
 
+
 window.addEventListener("DOMContentLoaded", (event) => {
     const wrappers = document.getElementsByClassName(`eb-slider-wrapper`);
 
     for (let wrapper of wrappers) {
+        let version = wrapper.getAttribute("data-version");
+
+        if(version == null || version == 'v1') {
         let settings = JSON.parse(wrapper.getAttribute("data-settings"));
         let images = JSON.parse(wrapper.getAttribute("data-images"));
         let sliderContentType = wrapper.getAttribute("data-sliderContentType");
@@ -186,5 +190,23 @@ window.addEventListener("DOMContentLoaded", (event) => {
             </Slider>,
             wrapper
         );
+        }
+        
+        
+
+        if(version ===  'v2') {
+            let blockId = wrapper.getAttribute("data-blockid").replaceAll("-", "_");
+            let settings = window[`${blockId}`];
+            let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
+            let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
+            settings.prevArrow = `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`;
+            settings.nextArrow = `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`;
+
+            let slickType = wrapper.querySelector('.eb-slider-init');
+
+            (function ($) {
+                $(slickType).slick(settings);
+            })(jQuery);
+        }
     }
 });

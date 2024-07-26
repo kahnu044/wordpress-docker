@@ -261,7 +261,7 @@ function Inspector(props) {
                                         {stylePreset === "circle" && (
                                             <PanelRow>
                                                 <em>
-                                                    Please use equal "Height" &#38; "Width" for perfect Circle shape.
+                                                    {__("Please use equal 'Height' &#38; 'Width' for perfect Circle shape.", "essential-blocks")}
                                                 </em>
                                             </PanelRow>
                                         )}
@@ -291,7 +291,7 @@ function Inspector(props) {
                                             <EbImageSizeSelector
                                                 attrName={"imageSize"}
                                                 resRequiredProps={resRequiredProps}
-                                                label={"Image Size"} //Optional
+                                                label={__("Image Size", "essential-blocks")}
                                             />
                                         )}
 
@@ -423,7 +423,7 @@ function Inspector(props) {
                                         )}
                                         {complexStyle && (
                                             <PanelRow>
-                                                <em>Border Style doesn't support for "{stylePreset} style".</em>
+                                                <em>{__("Border Style doesn't support for '{stylePreset} style'.", "essential-blocks")}</em>
                                             </PanelRow>
                                         )}
                                     </PanelBody>
@@ -549,13 +549,13 @@ function Inspector(props) {
                                                     <ResponsiveDimensionsControl
                                                         resRequiredProps={resRequiredProps}
                                                         controlName={CAPTION_MARGIN}
-                                                        baseLabel="Margin"
+                                                        baseLabel={__("Margin", "essential-blocks")}
                                                     />
 
                                                     <ResponsiveDimensionsControl
                                                         resRequiredProps={resRequiredProps}
                                                         controlName={CAPTION_PADDING}
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                 </>
                                             )}
@@ -570,12 +570,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
                                     <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
@@ -585,7 +585,7 @@ function Inspector(props) {
                                             noOverlay
                                         />
                                     </PanelBody>
-                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                                    <PanelBody title={__("Border & Shadow", "essential-blocks")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}

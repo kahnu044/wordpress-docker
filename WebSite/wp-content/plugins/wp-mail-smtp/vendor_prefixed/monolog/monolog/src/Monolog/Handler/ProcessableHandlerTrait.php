@@ -12,30 +12,31 @@ declare (strict_types=1);
 namespace WPMailSMTP\Vendor\Monolog\Handler;
 
 use WPMailSMTP\Vendor\Monolog\ResettableInterface;
+use WPMailSMTP\Vendor\Monolog\Processor\ProcessorInterface;
 /**
  * Helper trait for implementing ProcessableInterface
  *
- * This trait is present in monolog 1.x to ease forward compatibility.
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 trait ProcessableHandlerTrait
 {
     /**
      * @var callable[]
+     * @phpstan-var array<ProcessorInterface|callable(Record): Record>
      */
     protected $processors = [];
     /**
-     * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
+     * {@inheritDoc}
      */
-    public function pushProcessor($callback) : \WPMailSMTP\Vendor\Monolog\Handler\HandlerInterface
+    public function pushProcessor(callable $callback) : \WPMailSMTP\Vendor\Monolog\Handler\HandlerInterface
     {
         \array_unshift($this->processors, $callback);
         return $this;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function popProcessor() : callable
     {
@@ -46,6 +47,9 @@ trait ProcessableHandlerTrait
     }
     /**
      * Processes a record.
+     *
+     * @phpstan-param  Record $record
+     * @phpstan-return Record
      */
     protected function processRecord(array $record) : array
     {

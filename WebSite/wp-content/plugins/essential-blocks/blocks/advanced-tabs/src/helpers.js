@@ -2,19 +2,9 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import {
-    InspectorControls,
-    MediaUpload,
-    useBlockProps,
-    RichText,
-    InnerBlocks,
-} from "@wordpress/block-editor";
-import { useEffect, useState, useRef } from "@wordpress/element";
-import { select, dispatch } from "@wordpress/data";
-import { IconButton } from "@wordpress/components";
+import { select, dispatch, useDispatch } from "@wordpress/data";
 import { createBlock } from "@wordpress/blocks";
-
-const { times } = lodash;
+const { times, omit } = lodash;
 
 //
 export const getBlocksMethods = () => {
@@ -37,25 +27,45 @@ export const getBlocksMethods = () => {
 };
 
 //
-export const resetTabsOrder = ({ clientId, setAttributes, tabTitles }) => {
+export const resetTabsOrder = (clientId, setAttributes, tabTitles) => {
     const {
-        //
         updateBlockAttributes,
+        replaceInnerBlocks,
+        selectBlock,
+        replaceBlock
     } = dispatch("core/block-editor");
 
     const innerBlocks = select("core/block-editor").getBlocks(clientId);
+    const titleOrder = []
 
-    const newTabTitles = tabTitles.map((item, index) => ({
-        ...item,
-        id: `${index + 1}`,
-    }));
+    const newTabTitles = tabTitles.map((item, index) => {
+        titleOrder[index] = item.id
+        return ({
+            ...item,
+            id: `${index + 1}`,
+        })
+    });
 
-    //
+    innerBlocks.sort((a, b) => {
+        const a_tabId = a?.attributes?.tabId
+        const b_tabId = b?.attributes?.tabId
+        if (a_tabId && b_tabId) {
+            return titleOrder.indexOf(a_tabId) - titleOrder.indexOf(b_tabId)
+        }
+    });
+    innerBlocks.map((item, index) => {
+        item.key = index + 10
+    })
+
+    //setAttributes updated tabTitles after id change
     setAttributes({
         tabTitles: newTabTitles,
     });
 
-    //
+    //replace innerBlocks with sorted innerBlocks
+    replaceInnerBlocks(clientId, innerBlocks)
+
+    //update innerBlocks attribute 'tabId' after replace innerBlocks
     times(innerBlocks.length, (n) => {
         updateBlockAttributes(innerBlocks[n].clientId, {
             tabId: `${n + 1}`,
@@ -72,6 +82,10 @@ export const addTab = ({
     blockId,
     handleTabTitleClick,
 }) => {
+    const {
+        replaceInnerBlocks,
+        selectBlock
+    } = dispatch("core/block-editor");
     // const thisBlock = getBlock(clientId);
     const innerBlocks = [...select("core/block-editor").getBlocks(clientId)];
     const maxId = tabTitles.reduce(
@@ -86,10 +100,8 @@ export const addTab = ({
     });
 
     innerBlocks.splice(innerBlocks.length, 0, newBlock);
-    dispatch("core/block-editor")
-        .replaceInnerBlocks(clientId, innerBlocks)
+    replaceInnerBlocks(clientId, innerBlocks)
         .then(() => {
-            //
             setAttributes({
                 tabTitles: [
                     ...tabTitles,
@@ -104,6 +116,36 @@ export const addTab = ({
             });
             handleTabTitleClick(tabId);
         });
+};
 
-    //
+export const deleteTab = (clientId, setAttributes, tabTitles, index) => {
+    const {
+        removeBlock,
+        updateBlockAttributes,
+        selectBlock
+    } = dispatch("core/block-editor");
+
+    const innerBlocks = select("core/block-editor").getBlocks(clientId);
+    const deleteItemClientId = innerBlocks[index]?.clientId || false;
+
+    const updatedInnerBlocks = innerBlocks.filter((each, i) => i !== index)
+    times(updatedInnerBlocks.length, (n) => {
+        updateBlockAttributes(updatedInnerBlocks[n].clientId);
+    });
+
+    //Update Innerblock Attribute for unlocak and then remove
+    if (deleteItemClientId) {
+        updateBlockAttributes(deleteItemClientId, {
+            lock: { move: false, remove: false }
+        });
+        removeBlock(deleteItemClientId)
+        selectBlock(clientId)
+    }
+
+    const titles = tabTitles.filter((each, i) => i !== index);
+
+    setAttributes({
+        tabTitles: titles,
+        tabChildCount: titles ? titles.length : 0
+    });
 };

@@ -1030,7 +1030,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         frontTitlePadding
                                                     }
-                                                    baseLabel="Front Title Padding"
+                                                    baseLabel={__("Front Title Padding", "essential-blocks")}
                                                 />
                                                 <ColorControl
                                                     label={__(
@@ -1053,7 +1053,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         frontContentPadding
                                                     }
-                                                    baseLabel="Padding"
+                                                    baseLabel={__("Padding", "essential-blocks")}
                                                 />
                                                 <BaseControl>
                                                     <h3 className="eb-control-title">
@@ -1078,7 +1078,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         frontItemPadding
                                                     }
-                                                    baseLabel="Items Padding"
+                                                    baseLabel={__("Items Padding", "essential-blocks")}
                                                 />
                                             </>
                                         )}
@@ -1106,7 +1106,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         backTitlePadding
                                                     }
-                                                    baseLabel="Back Title Padding"
+                                                    baseLabel={__("Back Title Padding", "essential-blocks")}
                                                 />
                                                 <ColorControl
                                                     label={__(
@@ -1129,7 +1129,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         backContentPadding
                                                     }
-                                                    baseLabel="Padding"
+                                                    baseLabel={__("Padding", "essential-blocks")}
                                                 />
                                                 <BaseControl>
                                                     <h3 className="eb-control-title">
@@ -1154,7 +1154,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     controlName={
                                                         backItemPadding
                                                     }
-                                                    baseLabel="Items Padding"
+                                                    baseLabel={__("Items Padding", "essential-blocks")}
                                                 />
                                             </>
                                         )}
@@ -1225,7 +1225,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 controlName={
                                                                     frontIconMargin
                                                                 }
-                                                                baseLabel="Margin"
+                                                                baseLabel={__("Margin", "essential-blocks")}
                                                             />
                                                             <ResponsiveDimensionsControl
                                                                 resRequiredProps={
@@ -1235,7 +1235,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 controlName={
                                                                     frontIconPadding
                                                                 }
-                                                                baseLabel="Padding"
+                                                                baseLabel={__("Padding", "essential-blocks")}
                                                             />
                                                             <BaseControl>
                                                                 <h3 className="eb-control-title">
@@ -1276,7 +1276,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         controlName={
                                                             frontImgPadding
                                                         }
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                 </>
                                             </PanelBody>
@@ -1347,7 +1347,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 controlName={
                                                                     backIconMargin
                                                                 }
-                                                                baseLabel="Margin"
+                                                                baseLabel={__("Margin", "essential-blocks")}
                                                             />
                                                             <ResponsiveDimensionsControl
                                                                 resRequiredProps={
@@ -1357,7 +1357,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 controlName={
                                                                     backIconPadding
                                                                 }
-                                                                baseLabel="Padding"
+                                                                baseLabel={__("Padding", "essential-blocks")}
                                                             />
                                                             <BaseControl>
                                                                 <h3 className="eb-control-title">
@@ -1398,7 +1398,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         controlName={
                                                             backImgPadding
                                                         }
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                 </>
                                             </PanelBody>
@@ -1499,7 +1499,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         controlName={
                                                             buttonPadding
                                                         }
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                     <BaseControl>
                                                         <h3 className="eb-control-title">
@@ -1621,14 +1621,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             resRequiredProps={resRequiredProps}
                                             className="forWrapperMargin"
                                             controlName={dimensionsMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                             disableLeftRight={true}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             className="forWrapperPadding"
                                             controlName={dimensionsPadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                         <BaseControl>
                                             <h3 className="eb-control-title">

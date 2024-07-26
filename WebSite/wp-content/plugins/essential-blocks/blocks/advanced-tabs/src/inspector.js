@@ -20,7 +20,7 @@ import {
 /**
  * Internal dependencies
  */
-import { addTab } from "./helpers";
+import { addTab, resetTabsOrder, deleteTab } from "./helpers";
 const {
     BackgroundControl,
     BorderShadowControl,
@@ -134,6 +134,14 @@ function Inspector(props) {
             handleTabTitleClick,
         });
     };
+
+    const onDeleteTab = (index) => {
+        deleteTab(clientId, setAttributes, tabTitles, index)
+    }
+
+    const onSortEnd = (tabTitles) => {
+        resetTabsOrder(clientId, setAttributes, tabTitles)
+    }
 
     const getTabsComponents = () => {
         const onTabChange = (key, value, position) => {
@@ -314,24 +322,12 @@ function Inspector(props) {
                                             "essential-blocks"
                                         )}
                                     >
-                                        {/* <SortableTabs
-                                            setAttributes={setAttributes}
-                                            tabTitles={tabTitles}
-                                            clientId={clientId}
-                                            tabChildCount={tabChildCount}
-                                            blockId={blockId}
-                                            handleTabTitleClick={
-                                                handleTabTitleClick
-                                            }
-                                        /> */}
 
                                         <SortControl
                                             items={attributes.tabTitles}
                                             labelKey={'text'}
-                                            onSortEnd={tabTitles => setAttributes({ tabTitles })}
-                                            onDeleteItem={index => {
-                                                setAttributes({ tabTitles: attributes.tabTitles.filter((each, i) => i !== index) })
-                                            }}
+                                            onSortEnd={tabTitles => onSortEnd(tabTitles)}
+                                            onDeleteItem={index => onDeleteTab(index)}
                                             hasSettings={true}
                                             settingsComponents={getTabsComponents()}
                                             hasAddButton={true}
@@ -605,10 +601,7 @@ function Inspector(props) {
                                                             }}
                                                         >
                                                             <i>
-                                                                Set icon
-                                                                position
-                                                                before/after the
-                                                                tab title.
+                                                                {__("Set icon position before / after the tab title.", "essentail-blocks")}
                                                             </i>
                                                         </label>
                                                     </>
@@ -628,7 +621,7 @@ function Inspector(props) {
                                     // initialOpen={false}
                                     >
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefixTabTitle
                                             }
@@ -681,13 +674,13 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixTitlePadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
 
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixTitleMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
 
                                         <PanelBody
@@ -1061,7 +1054,7 @@ function Inspector(props) {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Active Border & Shadow")}
+                                            title={__("Active Border & Shadow", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -1095,7 +1088,7 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 controlName={prefixTtlWrpMargin}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
@@ -1104,7 +1097,7 @@ function Inspector(props) {
                                                 controlName={
                                                     prefixTtlWrpPadding
                                                 }
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                         </PanelBody>
 
@@ -1125,7 +1118,7 @@ function Inspector(props) {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Border & Shadow")}
+                                            title={__("Border & Shadow", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -1140,7 +1133,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Content")}
+                                        title={__("Content", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <PanelBody
@@ -1156,7 +1149,7 @@ function Inspector(props) {
                                                 controlName={
                                                     prefixContentMargin
                                                 }
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
@@ -1165,7 +1158,7 @@ function Inspector(props) {
                                                 controlName={
                                                     prefixContentPadding
                                                 }
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                         </PanelBody>
 
@@ -1186,7 +1179,7 @@ function Inspector(props) {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Border & Shadow")}
+                                            title={__("Border & Shadow", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -1268,12 +1261,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixWrapperMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixWrapperPadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -1291,7 +1284,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

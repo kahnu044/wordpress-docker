@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
-import { useEffect, useState, useRef } from "@wordpress/element";
+import { useEffect, useState, useRef, useId } from "@wordpress/element";
 import { select, dispatch, useSelect } from "@wordpress/data";
 
 const { times } = lodash;
@@ -50,6 +50,13 @@ export default function Edit(props) {
     const [activeTabId, setActiveTabId] = useState(false);
     const [isClickTab, setIsClickTab] = useState(false);
     const [contentMinHeight, setContentMinHeight] = useState("auto");
+    const renderId = useId()
+
+    //Change Dom refKey on tab sorting
+    //This is for force render on title Array change
+    // useEffect(() => {
+    //     setRenderKey(renderId);
+    // }, [tabChildCount])
 
     const activeDefaultTabId = (
         tabTitles.find((item) => item.isDefault) || { id: "1" }
@@ -95,7 +102,6 @@ export default function Edit(props) {
     };
 
     useEffect(() => {
-
         if (tabTitles.length === 0) {
             setAttributes({
                 tabTitles: [
@@ -147,6 +153,7 @@ export default function Edit(props) {
     const { innerBlocks } = useSelect(
         (select) => select("core/block-editor").getBlocksByClientId(clientId)[0]
     );
+    const innerBlocksRef = useRef(innerBlocks)
     //
     useEffect(() => {
         const { updateBlockAttributes } = dispatch("core/block-editor");
@@ -156,6 +163,24 @@ export default function Edit(props) {
                 tabParentId: `${blockId}`,
             });
         });
+
+        if (innerBlocks.length > innerBlocksRef.current.length) {
+            innerBlocksRef.current = innerBlocks
+        }
+        if (innerBlocks.length < innerBlocksRef.current.length) {
+            const difference = innerBlocksRef.current.filter(item1 =>
+                !innerBlocks.some(item2 => item2.clientId === item1.clientId)
+            );
+            if (difference.length === 1) {
+                const removedTabId = difference[0]?.attributes?.tabId
+                const updatedTitles = tabTitles.filter((item) => item.id !== removedTabId)
+                setAttributes({
+                    tabTitles: updatedTitles,
+                    tabChildCount: updatedTitles.length
+                })
+            }
+            innerBlocksRef.current = innerBlocks
+        }
     }, [blockId, innerBlocks]);
 
     const enhancedProps = {
@@ -237,7 +262,10 @@ export default function Edit(props) {
                                 })}
                             </ul>
                         </div>
-                        <div className={`eb-tabs-contents`} >
+                        <div
+                            key={renderId}
+                            className={`eb-tabs-contents`}
+                        >
                             {/* Min Height Style if content min height equals to Heading */}
                             <style>
                                 {`

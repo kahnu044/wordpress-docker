@@ -2249,12 +2249,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -2272,7 +2272,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

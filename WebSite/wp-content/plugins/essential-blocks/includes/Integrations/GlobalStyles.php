@@ -82,6 +82,8 @@ class GlobalStyles extends ThirdPartyIntegration
                 foreach ( $style as $key => $value ) {
                     if ( count( $value ) > 0 ) {
                         $settings[ $key ] = json_encode( $value );
+                    } else {
+                        unset( $settings[ $key ] );
                     }
                 }
             } else {

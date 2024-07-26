@@ -221,6 +221,9 @@ const attributes = {
         type: "string",
         default: "p",
     },
+    version: {
+        type: "string",
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(TYPOGRAPHY)),

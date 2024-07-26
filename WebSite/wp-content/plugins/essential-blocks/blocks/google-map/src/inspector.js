@@ -227,9 +227,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                                 let updatedMarker = [
                                                     ...marker,
                                                     {
-                                                        title: `Address ${
-                                                            marker.length + 1
-                                                        }`,
+                                                        title: `Address ${marker.length + 1
+                                                            }`,
                                                     },
                                                 ];
 
@@ -238,9 +237,7 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                                 });
                                             }}
                                         >
-                                            <span className="eb-google-map-marker-button">
-                                                Add Address
-                                            </span>
+                                            <span className="eb-google-map-marker-button">{__("Add Adress", "essential-blocks")}</span>
                                         </Button>
                                     </PanelBody>
                                     <PanelBody
@@ -496,12 +493,12 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapMarginConst}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapPaddingConst}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -519,7 +516,7 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

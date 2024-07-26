@@ -356,7 +356,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             <ToggleControl
                                                 label={__(
                                                     "Show Meta?",
-                                                    "instagram-block"
+                                                    "essential-blocks"
                                                 )}
                                                 checked={showMeta}
                                                 onChange={(showMeta) =>

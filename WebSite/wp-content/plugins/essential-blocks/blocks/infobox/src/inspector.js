@@ -281,7 +281,7 @@ function Inspector(props) {
                                                 <TextControl
                                                     // id={`info-link-input-${blockId}`}
                                                     label={__(
-                                                        "URL (use https:// at the beginning)"
+                                                        "URL (use https:// at the beginning)", "essential-blocks"
                                                     )}
                                                     placeholder="https://your-link.com"
                                                     value={infoboxLink}
@@ -335,7 +335,7 @@ function Inspector(props) {
                                                     "row-reverse") && (
                                                         <BaseControl
                                                             id="eb-infobox-alignments"
-                                                            label="Media alignments"
+                                                            label={__("Media alignments", "essential-blocks")}
                                                         >
                                                             <ButtonGroup id="eb-infobox-alignments">
                                                                 {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
@@ -379,7 +379,7 @@ function Inspector(props) {
                                                     "column-reverse") && (
                                                         <BaseControl
                                                             id="eb-infobox-alignments"
-                                                            label="Media alignments"
+                                                            label={__("Media alignments", "essential-blocks")}
                                                         >
                                                             <ButtonGroup id="eb-infobox-alignments">
                                                                 {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
@@ -422,7 +422,7 @@ function Inspector(props) {
 
                                         <BaseControl
                                             id="eb-infobox-alignments"
-                                            label="Contents alignments"
+                                            label={__("Contents alignments", "essential-blocks")}
                                         >
                                             <ButtonGroup id="eb-infobox-alignments">
                                                 {CONTENTS_ALIGNMENTS.map(
@@ -456,7 +456,7 @@ function Inspector(props) {
                                         {enableButton && !isInfoClick && (
                                             <BaseControl
                                                 id="eb-infobox-alignments"
-                                                label="Button alignments"
+                                                label={__("Button alignments", "essential-blocks")}
                                             >
                                                 <ButtonGroup id="eb-infobox-alignments">
                                                     {CONTENTS_ALIGNMENTS.map(
@@ -500,7 +500,7 @@ function Inspector(props) {
                                             initialOpen={false}
                                         >
                                             <DynamicInputControl
-                                                label="Button Text"
+                                                label={__("Button Text", "essential-blocks")}
                                                 attrName="buttonText"
                                                 inputValue={buttonText}
                                                 setAttributes={setAttributes}
@@ -630,7 +630,7 @@ function Inspector(props) {
                                                         </BaseControl>
 
                                                         <TypographyDropdown
-                                                            baseLabel="Text Typography"
+                                                            baseLabel={__("Text Typography", "essential-blocks")}
                                                             typographyPrefixConstant={
                                                                 typoPrefix_number
                                                             }
@@ -666,7 +666,7 @@ function Inspector(props) {
                                                                 controlName={
                                                                     mediaBackground
                                                                 }
-                                                                baseLabel="Padding"
+                                                                baseLabel={__("Padding", "essential-blocks")}
                                                             />
 
                                                             <ToggleControl
@@ -915,7 +915,7 @@ function Inspector(props) {
                                                         resRequiredProps
                                                     }
                                                     controlName={mediaBgRadius}
-                                                    baseLabel="Border Radius"
+                                                    baseLabel={__("Border Radius", "essential-blocks")}
                                                 />
 
                                                 <ResponsiveDimensionsControl
@@ -923,7 +923,7 @@ function Inspector(props) {
                                                         resRequiredProps
                                                     }
                                                     controlName={mediaBgMargin}
-                                                    baseLabel="Margin"
+                                                    baseLabel={__("Margin", "essential-blocks")}
                                                 />
                                             </>
                                         )}
@@ -966,7 +966,7 @@ function Inspector(props) {
                                         </BaseControl>
 
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefix_title
                                             }
@@ -976,7 +976,7 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={titlePadding}
-                                            baseLabel="Title Padding"
+                                            baseLabel={__("Title Padding", "essential-blocks")}
                                         />
 
                                         <ColorControl
@@ -1048,7 +1048,7 @@ function Inspector(props) {
                                                 </BaseControl>
 
                                                 <TypographyDropdown
-                                                    baseLabel="Typography"
+                                                    baseLabel={__("Typography", "essential-blocks")}
                                                     typographyPrefixConstant={
                                                         typoPrefix_subTitle
                                                     }
@@ -1064,7 +1064,7 @@ function Inspector(props) {
                                                     controlName={
                                                         subTitlePadding
                                                     }
-                                                    baseLabel="Subtitle Padding"
+                                                    baseLabel={__("Subtitle Padding", "essential-blocks")}
                                                 />
 
                                                 <ColorControl
@@ -1106,7 +1106,7 @@ function Inspector(props) {
                                         {enableDescription && (
                                             <>
                                                 <TypographyDropdown
-                                                    baseLabel="Typography"
+                                                    baseLabel={__("Typography", "essential-blocks")}
                                                     typographyPrefixConstant={
                                                         typoPrefix_content
                                                     }
@@ -1120,7 +1120,7 @@ function Inspector(props) {
                                                         resRequiredProps
                                                     }
                                                     controlName={contentPadding}
-                                                    baseLabel="Content Padding"
+                                                    baseLabel={__("Content Padding", "essential-blocks")}
                                                 />
 
                                                 <ColorControl
@@ -1176,7 +1176,7 @@ function Inspector(props) {
                                             /> */}
 
                                             <TypographyDropdown
-                                                baseLabel="Typography"
+                                                baseLabel={__("Typography", "essential-blocks")}
                                                 typographyPrefixConstant={
                                                     typoPrefix_buttonText
                                                 }
@@ -1190,7 +1190,7 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 controlName={buttonPadding}
-                                                baseLabel="Button Padding"
+                                                baseLabel={__("Button Padding", "essential-blocks")}
                                             />
 
                                             <ColorControl
@@ -1241,7 +1241,7 @@ function Inspector(props) {
                                             </PanelBody>
 
                                             <PanelBody
-                                                title={__("Border & Shadow")}
+                                                title={__("Border & Shadow", "essential-blocks")}
                                                 initialOpen={false}
                                             >
                                                 <BorderShadowControl
@@ -1305,12 +1305,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapperMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={wrapperPadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -1331,7 +1331,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

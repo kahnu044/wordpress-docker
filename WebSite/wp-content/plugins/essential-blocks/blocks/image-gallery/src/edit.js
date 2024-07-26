@@ -142,7 +142,7 @@ export default function Edit(props) {
             setAttributes({ enableFilterAll: true });
         }
         if (filterAllTitle == null) {
-            setAttributes({ filterAllTitle: "All" });
+            setAttributes({ filterAllTitle: __("All", "essential-blocks") });
         }
     }, []);
 
@@ -365,7 +365,7 @@ export default function Edit(props) {
                                         >
                                             {filterAllTitle !== ""
                                                 ? filterAllTitle
-                                                : "All"}
+                                                : __("All", "essential-blocks")}
                                         </li>
                                     )}
                                     {filterItems.map(

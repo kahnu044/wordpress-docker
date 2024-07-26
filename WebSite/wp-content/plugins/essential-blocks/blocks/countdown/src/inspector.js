@@ -562,7 +562,7 @@ function Inspector({ attributes, setAttributes }) {
                                                         marginTop: "-5px",
                                                     }}
                                                 >
-                                                    <i>Leave blank to hide</i>
+                                                    <i>{__("Leave blank to hide", "essential-blocks")}</i>
                                                 </p>
                                             </>
                                         )}
@@ -595,7 +595,7 @@ function Inspector({ attributes, setAttributes }) {
                                                         marginTop: "-5px",
                                                     }}
                                                 >
-                                                    <i>Leave blank to hide</i>
+                                                    <i>{__("Leave blank to hide", "essential-blocks")}</i>
                                                 </p>
                                             </>
                                         )}
@@ -628,7 +628,7 @@ function Inspector({ attributes, setAttributes }) {
                                                         marginTop: "-5px",
                                                     }}
                                                 >
-                                                    <i>Leave blank to hide</i>
+                                                    <i>{__("Leave blank to hide", "essential-blocks")}</i>
                                                 </p>
                                             </>
                                         )}
@@ -661,7 +661,7 @@ function Inspector({ attributes, setAttributes }) {
                                                         marginTop: "-5px",
                                                     }}
                                                 >
-                                                    <i>Leave blank to hide</i>
+                                                    <i>{__("Leave blank to hide", "essential-blocks")}</i>
                                                 </p>
                                             </>
                                         )}
@@ -773,7 +773,7 @@ function Inspector({ attributes, setAttributes }) {
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={resRequiredProps}
                                                 controlName={cdBoxsPaddingConst}
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                         </PanelBody>
                                         <PanelBody title={__("Border & Shadow")} initialOpen={false}>
@@ -794,7 +794,7 @@ function Inspector({ attributes, setAttributes }) {
                                         />
 
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={typoPrefix_digits}
                                             resRequiredProps={resRequiredProps}
                                         />
@@ -802,7 +802,7 @@ function Inspector({ attributes, setAttributes }) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={cdDigitsPaddingConst}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -821,14 +821,14 @@ function Inspector({ attributes, setAttributes }) {
                                         )}
 
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={typoPrefix_labels}
                                             resRequiredProps={resRequiredProps}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={cdLabelsPaddingConst}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -886,7 +886,7 @@ function Inspector({ attributes, setAttributes }) {
                                                     />
 
                                                     <TypographyDropdown
-                                                        baseLabel="Typography"
+                                                        baseLabel={__("Typography", "essential-blocks")}
                                                         typographyPrefixConstant={typoPrefix_separator}
                                                         resRequiredProps={resRequiredProps}
                                                     />
@@ -902,7 +902,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showDays && (
                                             <SingleBoxControl
                                                 resRequiredProps={resRequiredProps}
-                                                heading="Days"
+                                                heading={__("Days", "essential-blocks")}
                                                 bgControlName={cdDayBoxBgConst}
                                                 dgColorAttrString="dayDgColor"
                                                 lbColorAttrString="dayLbColor"
@@ -912,7 +912,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showHours && (
                                             <SingleBoxControl
                                                 resRequiredProps={resRequiredProps}
-                                                heading="Hours"
+                                                heading={__("Hours", "essential-blocks")}
                                                 bgControlName={cdHourBoxBgConst}
                                                 dgColorAttrString="hourDgColor"
                                                 lbColorAttrString="hourLbColor"
@@ -922,7 +922,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showMinutes && (
                                             <SingleBoxControl
                                                 resRequiredProps={resRequiredProps}
-                                                heading="Minutes"
+                                                heading={__("Minutes", "essential-blocks")}
                                                 bgControlName={cdMinuteBoxBgConst}
                                                 dgColorAttrString="minuteDgColor"
                                                 lbColorAttrString="minuteLbColor"
@@ -932,7 +932,7 @@ function Inspector({ attributes, setAttributes }) {
                                         {showSeconds && (
                                             <SingleBoxControl
                                                 resRequiredProps={resRequiredProps}
-                                                heading="Seconds"
+                                                heading={__("Seconds", "essential-blocks")}
                                                 bgControlName={cdSecondBoxBgConst}
                                                 dgColorAttrString="secondDgColor"
                                                 lbColorAttrString="secondLbColor"
@@ -945,18 +945,18 @@ function Inspector({ attributes, setAttributes }) {
                             {tab.name === "advance" && (
                                 <>
                                     <PanelBody
-                                        title={__("Margin & Padding")}
+                                        title={__("Margin & Padding", "essential-blocks")}
                                     // initialOpen={true}
                                     >
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={cdWrapMarginConst}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={cdWrapPaddingConst}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -967,7 +967,7 @@ function Inspector({ attributes, setAttributes }) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                                    <PanelBody title={__("Border & Shadow", "essential-blocks")} initialOpen={false}>
                                         <BorderShadowControl
                                             controlName={WrpBdShadowConst}
                                             resRequiredProps={resRequiredProps}

@@ -333,9 +333,7 @@ function Inspector(props) {
                                                     defaultValue: text,
                                                 })
                                             }
-                                            help={
-                                                "Leave empty if no default value."
-                                            }
+                                            help={__("Leave empty if no default value.", "essential-blocks")}
                                         />
                                         <TextControl
                                             label={__(
@@ -348,9 +346,7 @@ function Inspector(props) {
                                                     fieldName: text,
                                                 })
                                             }
-                                            help={
-                                                "This is for the name attributes which is used to submit form data, Name must be unique."
-                                            }
+                                            help={__("This is for the name attributes which is used to submit form data, Name must be unique.", "essential-blocks")}
                                         />
 
                                         {isRequired && (
@@ -605,12 +601,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -628,7 +624,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

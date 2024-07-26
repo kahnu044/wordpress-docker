@@ -865,7 +865,7 @@ function Inspector(props) {
                                     // initialOpen={false}
                                     >
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefixNav
                                             }
@@ -875,13 +875,13 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixNavPadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
 
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixNavMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
 
                                         {layout == "is-horizontal" &&
@@ -1416,11 +1416,11 @@ function Inspector(props) {
                                             controlName={
                                                 prefixNavDropdownPadding
                                             }
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
 
                                         <PanelBody
-                                            title={__("Border & Shadow")}
+                                            title={__("Border & Shadow", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -1442,7 +1442,7 @@ function Inspector(props) {
                                             {__("Items", "essential-blocks")}
                                         </PanelRow>
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefixNavDropdown
                                             }
@@ -1453,7 +1453,8 @@ function Inspector(props) {
                                             controlName={
                                                 prefixDropdownItemPadding
                                             }
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
+
                                         />
                                         {preset == "preset-4" && (
                                             <ColorControl
@@ -1877,7 +1878,7 @@ function Inspector(props) {
 
                                         {preset == "preset-3" && (
                                             <PanelBody
-                                                title={__("Border & Shadow")}
+                                                title={__("Border & Shadow", "essential-blocks")}
                                                 initialOpen={false}
                                             >
                                                 <BorderShadowControl
@@ -1984,7 +1985,7 @@ function Inspector(props) {
 
                                         {!navBtnType && (
                                             <TypographyDropdown
-                                                baseLabel="Typography"
+                                                baseLabel={__("Typography", "essentail-blocks")}
                                                 typographyPrefixConstant={
                                                     typoPrefixHamburgerBtn
                                                 }
@@ -2016,7 +2017,7 @@ function Inspector(props) {
                                             controlName={
                                                 prefixHamburgerBtnPadding
                                             }
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
 
                                         <PanelRow>
@@ -2047,7 +2048,7 @@ function Inspector(props) {
                                             controlName={
                                                 prefixNavHamburgerPadding
                                             }
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
 
                                         <Divider />
@@ -2056,7 +2057,7 @@ function Inspector(props) {
                                             {__("Items", "essential-blocks")}
                                         </PanelRow>
                                         <TypographyDropdown
-                                            baseLabel="Typography"
+                                            baseLabel={__("Typography", "essential-blocks")}
                                             typographyPrefixConstant={
                                                 typoPrefixNavHamburger
                                             }
@@ -2067,7 +2068,7 @@ function Inspector(props) {
                                             controlName={
                                                 prefixHamburgerItemPadding
                                             }
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                         <PanelBody
                                             title={__(
@@ -2232,7 +2233,7 @@ function Inspector(props) {
                                         </PanelBody>
 
                                         <PanelBody
-                                            title={__("Border")}
+                                            title={__("Border", "essential-blocks")}
                                             initialOpen={false}
                                         >
                                             <BorderShadowControl
@@ -2321,12 +2322,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixWrapperMargin}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={prefixWrapperPadding}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -2347,7 +2348,7 @@ function Inspector(props) {
                                     </PanelBody>
 
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

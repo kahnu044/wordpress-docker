@@ -1,3 +1,4 @@
+import { __ } from "@wordpress/i18n";
 const { sanitizeURL, BlockProps } = window.EBControls;
 
 const Save = ({ attributes }) => {
@@ -55,7 +56,7 @@ const Save = ({ attributes }) => {
                                 data-filter={"*"}
                                 data-id={blockId}
                             >
-                                {filterAllTitle !== "" ? filterAllTitle : "All"}
+                                {filterAllTitle !== "" ? filterAllTitle : __("All", "essential-blocks")}
                             </li>
                         )}
                         {filterItems.map(({ value, label }, index) => {

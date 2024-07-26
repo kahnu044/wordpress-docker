@@ -31,8 +31,8 @@ class PageTemplates
 
         // Add your templates to this array.
         $this->templates = [
-            'essential-blocks-fullwidth-template.php' => __( 'Essential Blocks Fullwidth Template', 'essential_blocks' ),
-            'essential-blocks-blank-template.php'     => __( 'Essential Blocks Blank Template', 'essential_blocks' )
+            'essential-blocks-fullwidth-template.php' => __( 'Essential Blocks Fullwidth Template', 'essential-blocks' ),
+            'essential-blocks-blank-template.php'     => __( 'Essential Blocks Blank Template', 'essential-blocks' )
          ];
     }
 

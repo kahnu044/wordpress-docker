@@ -33,7 +33,7 @@ class Slider extends Block
         $this->assets_manager->register(
             'slider-frontend',
             $this->path() . '/frontend/index.js',
-            [ 'jquery' ]
+            [ 'jquery','essential-blocks-controls-frontend' ]
         );
     }
 }

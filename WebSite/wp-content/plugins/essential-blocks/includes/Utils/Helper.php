@@ -651,7 +651,7 @@ hr.eb-update-warning__separator {
             <?php echo esc_html__( 'Heads up!', 'essential-blocks' ); ?>
         </div>
         <div class="eb-update-warning__message">
-            <?php echo esc_html( $notice ); ?>
+            <?php echo wp_kses_post( $notice ); ?>
         </div>
 
         <?php
@@ -664,7 +664,7 @@ hr.eb-update-warning__separator {
                 <?php echo esc_html__( 'What\'s new?', 'essential-blocks' ); ?>
             </div>
             <div class="eb-update-warning__message">
-                <?php echo esc_html( $upgrade_notice ); ?>
+                <?php echo wp_kses_post( $upgrade_notice ); ?>
             </div>
         </div>
         <?php

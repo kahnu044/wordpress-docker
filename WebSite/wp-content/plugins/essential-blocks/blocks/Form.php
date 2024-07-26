@@ -10,6 +10,24 @@ class Form extends Block {
     protected $frontend_styles  = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome'];
 
     /**
+     * Default attributes
+     *
+     * @var array
+     */
+    protected $default_attributes;
+
+    public function __construct(){
+        $this->default_attributes = [
+            'btnAddIcon'   => false,
+            'iconPosition' => 'right',
+            'buttonText'   => __('Submit','essential-blocks'),
+            'icon'         => 'fas fa-chevron-right',
+            'formLayout'   => 'block',
+            'formStyle'    => 'form-style-classic'
+        ];
+    }
+
+    /**
      * Unique name of the block.
      * @return string
      */
@@ -38,16 +56,6 @@ class Form extends Block {
         );
     }
 
-    protected static $default_attributes = [
-        'btnAddIcon'   => false,
-        'iconPosition' => 'right',
-        'buttonText'   => 'Submit',
-        'icon'         => 'fas fa-chevron-right',
-        'formLayout'   => 'block',
-        'formStyle'    => 'form-style-classic',
-        'formType'    => ''
-    ];
-
     /**
      * Render callback
      */
@@ -63,8 +71,8 @@ class Form extends Block {
             'formType'         => 'contact_form',
             'preset'           => 'contact_form_1',
             'confirmationType' => 'message',
-            'successMessage'   => 'Your form has been submitted Successfully!',
-            'errorMessage'     => 'Your form couldn\'t been submitted! Please try again'
+            'successMessage'   => __('Your form has been submitted Successfully!','essential-blocks'),
+            'errorMessage'     => __('Your form couldn\'t been submitted! Please try again','essential-blocks')
         ];
 
         foreach ( $_essential_attributes as $key => $value ) {
@@ -77,7 +85,7 @@ class Form extends Block {
             }
         }
 
-        $attributes = wp_parse_args( $attributes, self::$default_attributes );
+        $attributes = wp_parse_args( $attributes, $this->default_attributes );
 
         if ( empty( $attributes['formType'] ) ) {
             return '';

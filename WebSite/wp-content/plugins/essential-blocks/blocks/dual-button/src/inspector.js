@@ -223,14 +223,14 @@ function Inspector(props) {
 											onChange={(link) => setAttributes({ buttonURLOne: link })}
 										/> */}
                                         <DynamicInputControl
-                                            label="Button One Text"
+                                            label={__("Button One Text", "essential-blocks")}
                                             attrName="buttonTextOne"
                                             inputValue={buttonTextOne}
                                             setAttributes={setAttributes}
                                             onChange={(text) => setAttributes({ buttonTextOne: text })}
                                         />
                                         <DynamicInputControl
-                                            label="Button One Link"
+                                            label={__("Button One Link", "essential-blocks")}
                                             attrName="buttonURLOne"
                                             inputValue={buttonURLOne}
                                             setAttributes={setAttributes}
@@ -262,14 +262,14 @@ function Inspector(props) {
 											onChange={(link) => setAttributes({ buttonURLTwo: link })}
 										/> */}
                                         <DynamicInputControl
-                                            label="Button Two Text"
+                                            label={__("Button Two Text", "essential-blocks")}
                                             attrName="buttonTextTwo"
                                             inputValue={buttonTextTwo}
                                             setAttributes={setAttributes}
                                             onChange={(text) => setAttributes({ buttonTextTwo: text })}
                                         />
                                         <DynamicInputControl
-                                            label="Button Two Link"
+                                            label={__("Button Two Link", "essential-blocks")}
                                             attrName="buttonURLTwo"
                                             inputValue={buttonURLTwo}
                                             setAttributes={setAttributes}
@@ -343,7 +343,7 @@ function Inspector(props) {
                                     </PanelBody>
                                     <PanelBody title={__("Connector", "essential-blocks")} initialOpen={true}>
                                         <ToggleControl
-                                            label={__("Show Connector?")}
+                                            label={__("Show Connector?", "essential-blocks")}
                                             checked={showConnector}
                                             onChange={() => {
                                                 setAttributes({ showConnector: !showConnector });
@@ -530,7 +530,7 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={BUTTONS_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -548,7 +548,7 @@ function Inspector(props) {
                                         />
 
                                         <ColorControl
-                                            label={__("Text/ Icon Color")}
+                                            label={__("Text/ Icon Color", "essential-blocks")}
                                             color={innerButtonTextColor}
                                             onChange={(innerButtonTextColor) => setAttributes({ innerButtonTextColor })}
                                         />
@@ -562,7 +562,7 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                     </PanelBody>
 

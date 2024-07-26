@@ -2,9 +2,9 @@
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: WordPress Block Editor, Gutenberg Blocks Plugin, WooCommerce, Gutenberg Templates, Page Builder
 Requires at least: 5.8
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 4.7.4
+Stable tag: 4.8.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -226,6 +226,20 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
+= 4.8.2 - 11/07/2024 =
+- Fixed: Resolved an error in the editor for WordPress 6.6
+- Minor bug fixes & improvements
+
+= 4.8.1 - 11/07/2024 =
+- Fixed: Slider || URL not working
+- Fixed: Popup || Add 'VH' unit in height control
+- Fixed: Custom CSS editor not working in RTL
+
+= 4.8.0 - 11/07/2024 =
+- Added: Translation compatibility with WPML
+- Fixed: Advanced Tabs | Tab Sorting and Deletion not working properly
+- Minor bug fixes & improvements
+
 = 4.7.4 - 02/07/2024 =
 - Improved: Advanced Tab | Added option to disable min height for vertical layout
 - Improved: Advanced Tab | Added option for responsive layout switch on vertical layout
@@ -251,5 +265,5 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Upgrade Notice ==
 
-= 4.0.0 =
-- Essential Blocks 4.0 comes with a new Block "Google Maps". "Global Block Controls" feature is added to set Block Defaults. A new Dashboard page is designed with all settings in one place. Optimization options, Asset generation and lot more features has been added.
+= 4.8.0 =
+- Essential Blocks is now Compatible with WPML.

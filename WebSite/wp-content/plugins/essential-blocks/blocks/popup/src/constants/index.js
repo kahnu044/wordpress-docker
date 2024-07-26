@@ -11,6 +11,13 @@ export const BUTTON_ALIGNMENT = [
 	{ label: __("Right", "essential-blocks"), value: "right" },
 ];
 
+export const HEIGHT_UNITS = [
+	{ label: "px", value: "px" },
+	{ label: "%", value: "%" },
+	{ label: "em", value: "em" },
+	{ label: "vh", value: "vh" },
+];
+
 export const POPUP_WIDTH = "popupWidth";
 export const POPUP_HEIGHT = "popupHeight";
 export const POPUP_MARGIN = "popupMargin";

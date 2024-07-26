@@ -57,18 +57,17 @@ class BlocksPatterns
         }
     }
 
-    /**
-     * Register category
-     *
-     * @return void
-     */
-    public function register_category()
-    {
-        register_block_pattern_category(
-            $this->category,
-            [ 'label' => __( 'Essential blocks', 'essential-block' ) ]
-        );
-    }
+	/**
+	 * Register category
+	 *
+	 * @return void
+	 */
+	public function register_category() {
+		register_block_pattern_category(
+			$this->category,
+			array( 'label' => __( 'Essential blocks', 'essential-blocks' ) )
+		);
+	}
 
     /**
      * Register category

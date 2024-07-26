@@ -22,9 +22,7 @@ import { select } from "@wordpress/data";
 /**
  * Internal depencencies
  */
-
 import objAttributes from "./attributes";
-
 import SortableFilterItems from "./sortable-filteritems";
 
 /**
@@ -404,7 +402,7 @@ function Inspector(props) {
                                         <EbImageSizeSelector
                                             attrname={"imageSize"}
                                             resRequiredProps={resRequiredProps}
-                                            label={"Image Size"} //Optional
+                                            label={__("Image Size", "essential-blocks")} //Optional
                                         />
 
                                         {displayCaption && styleNumber === "0" && (
@@ -650,7 +648,7 @@ function Inspector(props) {
                                                                 filterItems
                                                             }
                                                             isMulti="true"
-                                                            Placeholder="Select Filter"
+                                                            Placeholder={__("Select Filter", "essential-blocks")}
                                                         />
                                                     )}
                                                     {disableLightBox &&
@@ -1191,7 +1189,7 @@ function Inspector(props) {
                                                         controlName={
                                                             CAPTION_MARGIN
                                                         }
-                                                        baseLabel="Margin"
+                                                        baseLabel={__("Margin", "essential-blocks")}
                                                     />
 
                                                     <ResponsiveDimensionsControl
@@ -1201,7 +1199,7 @@ function Inspector(props) {
                                                         controlName={
                                                             CAPTION_PADDING
                                                         }
-                                                        baseLabel="Padding"
+                                                        baseLabel={__("Padding", "essential-blocks")}
                                                     />
                                                 </>
                                             )}
@@ -1221,14 +1219,14 @@ function Inspector(props) {
                                                     resRequiredProps
                                                 }
                                                 controlName={FILTER_MARGIN}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={
                                                     resRequiredProps
                                                 }
                                                 controlName={FILTER_PADDING}
-                                                baseLabel="Padding"
+                                                baseLabel={__("Padding", "essential-blocks")}
                                             />
                                             <TypographyDropdown
                                                 baseLabel={__(
@@ -1386,9 +1384,7 @@ function Inspector(props) {
                                                     )}
                                             </BaseControl>
 
-                                            <PanelRow>
-                                                Button Border & Shadow
-                                            </PanelRow>
+                                            <PanelRow>{__("Button Border & Shadow", "essential-blocks")}</PanelRow>
                                             <BorderShadowControl
                                                 controlName={
                                                     FILTER_BORDER_SHADOW
@@ -1501,12 +1497,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
                                     <PanelBody
@@ -1523,7 +1519,7 @@ function Inspector(props) {
                                         />
                                     </PanelBody>
                                     <PanelBody
-                                        title={__("Border & Shadow")}
+                                        title={__("Border & Shadow", "essential-blocks")}
                                         initialOpen={false}
                                     >
                                         <BorderShadowControl

@@ -25,37 +25,40 @@ class TableOfContents extends Block
      * @var string
      */
     public static $output_content = '';
-/**
- * Default attributes
- *
- * @var array
- */
-    protected $default_attributes = [
-        'title'              => "Table of Contents",
-        "collapsible"        => false,
-        "initialCollapse"    => false,
-        "displayTitle"       => true,
-        "isSmooth"           => true,
-        "seperator"          => false,
-        "isSticky"           => false,
-        "contentAlign"       => 'left',
-        "scrollTarget"       => "scroll_to_toc",
-        "stickyPosition"     => 'left',
-        "enableCopyLink"     => false,
-        "showListSeparator"  => false,
-        "scrollToTop"        => false,
-        "scrollToTopIcon"    => "fas fa-angle-up",
-        "stickyHideOnMobile" => false,
-        "hideOnDesktop"      => false,
-        "hideOnTab"          => false,
-        "hideOnMobile"       => false,
-        "topOffset"          => '',
-        "listStyle"          => "ul",
-        "enableListStyle"    => false,
-        "itemCollapsed"      => false,
-        "preset"             => "style-1"
+    /**
+     * Default attributes
+     *
+     * @var array
+     */
+    protected $default_attributes;
 
-     ];
+     public function __construct(){
+        $this->default_attributes = [
+            'title'              => esc_html__("Table of Contents","essential-blocks"),
+            "collapsible"        => false,
+            "initialCollapse"    => false,
+            "displayTitle"       => true,
+            "isSmooth"           => true,
+            "seperator"          => false,
+            "isSticky"           => false,
+            "contentAlign"       => 'left',
+            "scrollTarget"       => "scroll_to_toc",
+            "stickyPosition"     => 'left',
+            "enableCopyLink"     => false,
+            "showListSeparator"  => false,
+            "scrollToTop"        => false,
+            "scrollToTopIcon"    => "fas fa-angle-up",
+            "stickyHideOnMobile" => false,
+            "hideOnDesktop"      => false,
+            "hideOnTab"          => false,
+            "hideOnMobile"       => false,
+            "topOffset"          => '',
+            "listStyle"          => "ul",
+            "itemCollapsed"      => false,
+            "preset"             => "style-1",
+            "enableListStyle"    => false
+        ];
+     }
 
     /**
      * Unique name of the block.

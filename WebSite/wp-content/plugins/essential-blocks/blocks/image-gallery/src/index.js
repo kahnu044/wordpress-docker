@@ -18,15 +18,15 @@ import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBControls;
 
 ebConditionalRegisterBlockType(metadata, {
-	icon: ImageGalleryIcon,
-	attributes: Attributes,
-	keywords: [
-		__("images", "essential-blocks"),
-		__("photos", "essential-blocks"),
-		__("eb image gallery", "essential-blocks"),
-	],
-	edit: Edit,
-	save: Save,
-	example,
-	deprecated,
+    icon: ImageGalleryIcon,
+    attributes: Attributes,
+    keywords: [
+        __("images", "essential-blocks"),
+        __("photos", "essential-blocks"),
+        __("eb image gallery", "essential-blocks"),
+    ],
+    edit: Edit,
+    save: Save,
+    example,
+    deprecated,
 });

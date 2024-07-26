@@ -180,7 +180,7 @@ function Inspector(props) {
                                                 />
                                                 {videoConfig.autoplay && (
                                                     <PanelRow>
-                                                        <em>Audio will be muted by default if autoplay is enabled.</em>
+                                                        <em>{__("Audio will be muted by default if autoplay is enabled.", "essential-blocks")}</em>
                                                     </PanelRow>
                                                 )}
 
@@ -406,7 +406,7 @@ function Inspector(props) {
                                                     </ButtonGroup>
                                                 </BaseControl>
                                                 <ResponsiveSelectController
-                                                    baseLabel={"Visibility"}
+                                                    baseLabel={__("Visibility", "essential-blocks")}
                                                     controlName={stickyVisibility}
                                                     resRequiredProps={resRequiredProps}
                                                     options={STICKY_VISIBILITY}
@@ -417,7 +417,7 @@ function Inspector(props) {
 
                                         {videoOptions == "lightbox" && (
                                             <>
-                                                <PanelRow>Placeholder Image</PanelRow>
+                                                <PanelRow>{__("Placeholder Image", "essential-blocks")}</PanelRow>
                                                 {!placeholderImage && (
                                                     <MediaUpload
                                                         onSelect={({ id, url }) =>
@@ -452,7 +452,7 @@ function Inspector(props) {
                                                     />
                                                 )}
 
-                                                <PanelRow>Play Icon</PanelRow>
+                                                <PanelRow>{__("Play Icon", "essential-blocks")}</PanelRow>
                                                 <ToggleControl
                                                     label={__("Show Play Icon", "essential-blocks")}
                                                     checked={lightboxPlayIcon}
@@ -586,7 +586,7 @@ function Inspector(props) {
                                             <>
                                                 {lightboxPlayIcon && (
                                                     <>
-                                                        <PanelRow>Play Icon</PanelRow>
+                                                        <PanelRow>{__("Play Icon", "essential-blocks")}</PanelRow>
                                                         {lightboxPlayIconType == "icon" && (
                                                             <>
                                                                 <ColorControl
@@ -713,7 +713,7 @@ function Inspector(props) {
                                             // noBorder
                                             />
 
-                                            <PanelRow>Close Icon</PanelRow>
+                                            <PanelRow>{__("Close Icon", "essential-blocks")}</PanelRow>
                                             <ColorControl
                                                 label={__("Background Color", "essential-blocks")}
                                                 color={closeIconBgColor}
@@ -765,7 +765,7 @@ function Inspector(props) {
                                                 units={SIZE_UNIT_TYPES}
                                             />
 
-                                            <PanelRow>Close Icon</PanelRow>
+                                            <PanelRow>{__("Close Icon", "essential-blocks")}</PanelRow>
                                             <ColorControl
                                                 label={__("Color", "essential-blocks")}
                                                 color={closeIconColor}
@@ -795,12 +795,12 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
+                                            baseLabel={__("Padding", "essential-blocks")}
                                         />
                                     </PanelBody>
                                     <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>

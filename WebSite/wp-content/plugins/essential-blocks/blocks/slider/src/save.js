@@ -24,7 +24,8 @@ const Save = ({ attributes }) => {
         dotPreset,
         isRTLEnable,
         titleTag,
-        contentTag
+        contentTag,
+        version
     } = attributes;
 
     //Slider Settings
@@ -69,28 +70,46 @@ const Save = ({ attributes }) => {
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
+                {
+                    blockId && (
+                        <script dangerouslySetInnerHTML={{
+                            __html:
+                                `var ${blockId.replaceAll('-', '_')} = ${JSON.stringify(settings)};`
+                        }}></script>
+                    )
+                }
                 <div
                     className={`eb-slider-wrapper ${blockId}`}
-                    data-settings={JSON.stringify(settings)}
-                    data-images={JSON.stringify(images)}
-                    data-sliderContentType={sliderContentType}
-                    data-sliderType={sliderType}
-                    data-textAlign={textAlign}
+                    data-blockid={blockId}
+                    data-version={version}
                     data-arrowNextIcon={arrowNextIcon}
                     data-arrowPrevIcon={arrowPrevIcon}
-                    data-titleTag={titleTag}
-                    data-contentTag={contentTag}
                 >
-                    <div className={sliderTypeClass}>
+                    <div className={`eb-slider-init ${sliderTypeClass}`}>
                         {images.map((image, index) => (
                             <div
                                 className={`eb-slider-item ${sliderContentType}`}
                                 key={index}
                             >
-                                <img
-                                    className="eb-slider-image"
-                                    src={image.url}
-                                />
+                                {image.buttonUrl && image.isValidUrl ? 
+                                    <div><a 
+                                        href={sanitizeURL(image.buttonUrl)}
+                                        target={
+                                            image.openNewTab
+                                                ? "_blank"
+                                                : "_self"
+                                        }
+                                        rel="noopener">
+                                        <img
+                                            className="eb-slider-image"
+                                            src={image.url}
+                                        />
+                                    </a></div>
+                                 : <div><img
+                                        className="eb-slider-image"
+                                        src={image.url}
+                                    /></div>
+                                }
                                 {sliderType === "content" && (
                                     <div
                                         className={`eb-slider-content align-${textAlign}`}
@@ -98,7 +117,7 @@ const Save = ({ attributes }) => {
                                         {image.title &&
                                             image.title.length > 0 && (
                                                 <RichText.Content
-                                                    tagName={"h2"}
+                                                    tagName={titleTag}
                                                     className="eb-slider-title"
                                                     value={image.title}
                                                 />
@@ -106,7 +125,7 @@ const Save = ({ attributes }) => {
                                         {image.subtitle &&
                                             image.subtitle.length > 0 && (
                                                 <RichText.Content
-                                                    tagName={"p"}
+                                                    tagName={contentTag}
                                                     className="eb-slider-subtitle"
                                                     value={image.subtitle}
                                                 />

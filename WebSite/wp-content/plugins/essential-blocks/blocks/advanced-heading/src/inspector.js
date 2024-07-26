@@ -282,7 +282,7 @@ function Inspector(props) {
                                         {source == 'custom' && (
                                             <>
                                                 <DynamicInputControl
-                                                    label="Title Text"
+                                                    label={__("Title Text", "essential-blocks")}
                                                     attrName="titleText"
                                                     inputValue={titleText}
                                                     setAttributes={setAttributes}
@@ -320,7 +320,7 @@ function Inspector(props) {
                                                     </ButtonGroup>
                                                 </BaseControl>
                                                 <DynamicInputControl
-                                                    label="Subtitle Text"
+                                                    label={__("Subtitle Text", "essential-blocks")}
                                                     attrName="subtitleText"
                                                     inputValue={subtitleText}
                                                     setAttributes={setAttributes}
@@ -397,7 +397,7 @@ function Inspector(props) {
                                         <ResponsiveDimensionsControl
                                             resRequiredProps={resRequiredProps}
                                             controlName={TITLE_MARGIN}
-                                            baseLabel="Margin"
+                                            baseLabel={__("Margin", "essential-blocks")}
                                         />
                                     </PanelBody>
 
@@ -423,13 +423,10 @@ function Inspector(props) {
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={resRequiredProps}
                                                 controlName={SUBTITLE_MARGIN}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                         </PanelBody>
                                     )}
-
-
-
                                     {displaySeperator && (
                                         <PanelBody title={__("Separator", "essential-blocks")} initialOpen={false}>
                                             <SelectControl
@@ -526,50 +523,53 @@ function Inspector(props) {
                                             <ResponsiveDimensionsControl
                                                 resRequiredProps={resRequiredProps}
                                                 controlName={SEPARATOR_MARGIN}
-                                                baseLabel="Margin"
+                                                baseLabel={__("Margin", "essential-blocks")}
                                             />
                                         </PanelBody>
-                                    )}
+                                    )
+                                    }
                                 </>
                             )}
 
-                            {tab.name === "advance" && (
-                                <>
-                                    <PanelBody>
-                                        <ResponsiveDimensionsControl
-                                            resRequiredProps={resRequiredProps}
-                                            controlName={WRAPPER_MARGIN}
-                                            baseLabel="Margin"
-                                        />
-                                        <ResponsiveDimensionsControl
-                                            resRequiredProps={resRequiredProps}
-                                            controlName={WRAPPER_PADDING}
-                                            baseLabel="Padding"
-                                        />
-                                    </PanelBody>
-                                    <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
-                                        <BackgroundControl
-                                            controlName={WRAPPER_BG}
-                                            resRequiredProps={resRequiredProps}
-                                        />
-                                    </PanelBody>
-                                    <PanelBody title={__("Border & Shadow")} initialOpen={false}>
-                                        <BorderShadowControl
-                                            controlName={WRAPPER_BORDER_SHADOW}
-                                            resRequiredProps={resRequiredProps}
-                                        // noShadow
-                                        // noBorder
-                                        />
-                                    </PanelBody>
+                            {
+                                tab.name === "advance" && (
+                                    <>
+                                        <PanelBody>
+                                            <ResponsiveDimensionsControl
+                                                resRequiredProps={resRequiredProps}
+                                                controlName={WRAPPER_MARGIN}
+                                                baseLabel={__("Margin", "essential-blocks")}
+                                            />
+                                            <ResponsiveDimensionsControl
+                                                resRequiredProps={resRequiredProps}
+                                                controlName={WRAPPER_PADDING}
+                                                baseLabel={__("Padding", "essential-blocks")}
+                                            />
+                                        </PanelBody>
+                                        <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
+                                            <BackgroundControl
+                                                controlName={WRAPPER_BG}
+                                                resRequiredProps={resRequiredProps}
+                                            />
+                                        </PanelBody>
+                                        <PanelBody title={__("Border & Shadow", "essential-blocks")} initialOpen={false}>
+                                            <BorderShadowControl
+                                                controlName={WRAPPER_BORDER_SHADOW}
+                                                resRequiredProps={resRequiredProps}
+                                            // noShadow
+                                            // noBorder
+                                            />
+                                        </PanelBody>
 
-                                    <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
-                                </>
-                            )}
-                        </div>
+                                        <AdvancedControls attributes={attributes} setAttributes={setAttributes} />
+                                    </>
+                                )
+                            }
+                        </div >
                     )}
-                </TabPanel>
-            </div>
-        </InspectorControls>
+                </TabPanel >
+            </div >
+        </InspectorControls >
     );
 }
 
