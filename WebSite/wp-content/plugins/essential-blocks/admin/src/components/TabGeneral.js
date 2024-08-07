@@ -277,21 +277,27 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 4.8.2", "essential-blocks")}
+                                    {__("Version: 4.8.3", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("16/07/2024", "essential-blocks")}
+                                        {__("27/07/2024", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Fixed: Resolved an error in the editor for WordPress 6.6",
+                                            "Google Map || Incorrect map Pointer placement",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Minor bug fixes & improvements",
+                                            "Color Picker not working in Firefox and Safari",
+                                            "essential-blocks"
+                                        )}
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved: Security enhancement",
                                             "essential-blocks"
                                         )}
                                     </li>

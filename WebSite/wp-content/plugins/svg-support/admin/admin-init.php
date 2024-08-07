@@ -49,36 +49,32 @@ function bodhi_svg_support_settings_page() {
 /**
  * Sanitize class before saving
  */
-
 function bodhi_sanitize_fields( $value ) {
-    
+
 	global $bodhi_svgs_options;
-    $bodhi_plugin_version_stored = get_option( 'bodhi_svgs_plugin_version' );
+	$bodhi_plugin_version_stored = get_option( 'bodhi_svgs_plugin_version' );
 
-    if( !isset($value['sanitize_svg']) ) {
-        $value['sanitize_svg'] = "none";
-    }
+	if( !isset($value['sanitize_svg']) ) {
+		$value['sanitize_svg'] = "none";
+	}
 
-    if( !isset($value['sanitize_on_upload_roles']) ) {
-        $value['sanitize_on_upload_roles'] = array("none");
-    }
+	if( !isset($value['sanitize_on_upload_roles']) ) {
+		$value['sanitize_on_upload_roles'] = array("none");
+	}
 
-    if( !isset($value['restrict']) ) {
-        $value['restrict'] = array("none");
-    }
+	if( !isset($value['restrict']) ) {
+		$value['restrict'] = array("none");
+	}
 
 	$value['css_target'] = esc_attr( sanitize_text_field( $value['css_target'] ) );
 
-	if( $value['sanitize_svg_front_end'] !== 'on' ) {
-	    
-	    $value['sanitize_svg_front_end'] = false;
-    
+	if( !isset($value['sanitize_svg_front_end']) || $value['sanitize_svg_front_end'] !== 'on' ) {
+		$value['sanitize_svg_front_end'] = false;
 	}
-    
+
 	return $value;
 
 }
-
 
 /**
  * Register settings in the database
@@ -96,7 +92,6 @@ add_action( 'admin_init', 'bodhi_svgs_register_settings' );
 
 /**
  * Advanced Mode Check
- *
  * Creates a usable function for conditionals around the plugin
  */
 function bodhi_svgs_advanced_mode() {
@@ -165,23 +160,23 @@ function bodhi_svgs_specific_pages_media_library() {
  */
 function bodhi_svgs_is_edit_page( $new_edit = null ) {
 
-    global $pagenow;
+	global $pagenow;
 
-    if ( ! is_admin() ) return false;
+	if ( ! is_admin() ) return false;
 
-    if ( $new_edit == 'edit' ) {
+	if ( $new_edit == 'edit' ) {
 
-        return in_array( $pagenow, array( 'post.php',  ) );
+		return in_array( $pagenow, array( 'post.php',  ) );
 
-    } elseif ( $new_edit == "new" ) { //check for new post page
+	} elseif ( $new_edit == "new" ) { //check for new post page
 
-        return in_array( $pagenow, array( 'post-new.php' ) );
+		return in_array( $pagenow, array( 'post-new.php' ) );
 
-    } else { //check for either new or edit
+	} else { //check for either new or edit
 
-        return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
+		return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 
-    }
+	}
 
 }
 

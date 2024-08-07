@@ -4,7 +4,7 @@ Tags: WordPress Block Editor, Gutenberg Blocks Plugin, WooCommerce, Gutenberg Te
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 4.8.2
+Stable tag: 4.8.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -226,7 +226,12 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
-= 4.8.2 - 11/07/2024 =
+= 4.8.3 - 27/07/2024 =
+- Fixed: Google Map || Incorrect map Pointer placement
+- Fixed: Color Picker not working in Firefox and Safari
+- Improved: Security enhancement
+
+= 4.8.2 - 16/07/2024 =
 - Fixed: Resolved an error in the editor for WordPress 6.6
 - Minor bug fixes & improvements
 

@@ -220,44 +220,48 @@ function bodhi_svgs_is_gzipped( $contents ) {
 
 }
 
-function bodhi_svgs_sanitize_svg( $file ) {
+function bodhi_svgs_sanitize_svg($file) {
+    global $bodhi_svgs_options;
 
-	global $bodhi_svgs_options;
+    // Check if the sanitization option is enabled and if the file is an SVG
+    if (!empty($bodhi_svgs_options['sanitize_svg']) && $bodhi_svgs_options['sanitize_svg'] === 'on' && $file['type'] === 'image/svg+xml') {
 
-	if ( !empty($bodhi_svgs_options['sanitize_svg']) && $bodhi_svgs_options['sanitize_svg'] === 'on' && $bodhi_svgs_options['sanitize_on_upload_roles'][0] != "none" ) {
+        // Get the roles that do not require SVG sanitization
+        $sanitize_on_upload_roles_array = (array) $bodhi_svgs_options['sanitize_on_upload_roles'];
+        $user = wp_get_current_user();
+        $current_user_roles = (array) $user->roles;
 
-		if ( $file['type'] === 'image/svg+xml' ) {
+        // Check if the current user's roles intersect with the roles that do not need sanitization
+        $no_sanitize_needed = array_intersect($sanitize_on_upload_roles_array, $current_user_roles);
 
-			$sanitize_on_upload_roles_array = array();
+        // Check if the user has the capability to upload SVGs
+        $can_upload_files = current_user_can('upload_files');
 
-			$should_sanitize_svg = array();
+        // If the user is in the roles that do not require sanitization and has the capability, just upload without sanitization
+        if ($can_upload_files && !empty($no_sanitize_needed)) {
+            return $file;
+        }
+        
+        // If the user has the capability to upload SVGs but is not in the no-sanitize roles, sanitize the SVG
+        if ($can_upload_files) {
+            if (!bodhi_svgs_sanitize($file['tmp_name'])) {
+                $file['error'] = __("Sorry, this file couldn't be sanitized for security reasons and wasn't uploaded.", 'safe-svg');
+            }
+            return $file;
+        }
 
-			$sanitize_on_upload_roles_array = (array) $bodhi_svgs_options['sanitize_on_upload_roles'];
+        // If the user doesn't have the capability and is not in the no-sanitize roles, return an error
+        if (!$can_upload_files) {
+            $file['error'] = __("Sorry, you are not allowed to upload SVG files.", 'safe-svg');
+            return $file;
+        }
+    }
 
-			$user = wp_get_current_user();
-
-			$current_user_roles = ( array ) $user->roles;
-
-			$should_sanitize_svg = array_intersect($sanitize_on_upload_roles_array, $current_user_roles);
-
-			if( empty($should_sanitize_svg) ) {
-				// Do nothing Here
-			}
-			elseif ( ! bodhi_svgs_sanitize( $file['tmp_name'] ) ) {
-				$file['error'] = __( "Sorry, this file couldn't be sanitized for security reasons and wasn't uploaded",
-					'safe-svg' );
-			}
-
-		}
-
-	}
-
-	return $file;
-
+    return $file;
 }
 
-// Sanitize svg if user has enabled option
-add_filter( 'wp_handle_upload_prefilter', 'bodhi_svgs_sanitize_svg' );
+// Add filter to handle upload pre-filtering for sanitization
+add_filter('wp_handle_upload_prefilter', 'bodhi_svgs_sanitize_svg');
 
 // Fix image widget PHP warnings
 function bodhi_svgs_get_attachment_metadata( $data ) {

@@ -48,7 +48,7 @@ const TrashIcon = ({ position, onDeleteItem }) => (
     </span>
 );
 
-const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDeleteItem, onMarkerChange }) => {
+const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDeleteItem, onMarkerChange, onMarkerSetUpdate }) => {
     const searchRef = useRef(null);
 
     const initSearch = () => {
@@ -59,32 +59,57 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
 
+            // This is the new Approach by Jamil
+            // Only first Place has been set thought multiple place can be provided by Google
             if (places && 0 < places.length) {
-                places.forEach((place) => {
-                    const latitude = place.geometry.location.lat();
-                    const longitude = place.geometry.location.lng();
-                    const latLng = new window.google.maps.LatLng(
-                        latitude,
-                        longitude
-                    );
-                    map.setCenter(latLng);
-                    onMarkerChange(
-                        "location",
-                        place.formatted_address || place.name,
-                        position
-                    );
-                    onMarkerChange(
-                        "latitude",
-                        latitude.toString(),
-                        position
-                    );
-                    onMarkerChange(
-                        "longitude",
-                        longitude.toString(),
-                        position
-                    );
-                });
+                const place = places[0]
+                const latitude = place.geometry.location.lat();
+                const longitude = place.geometry.location.lng();
+                const latLng = new window.google.maps.LatLng(
+                    latitude,
+                    longitude
+                );
+
+                map.setCenter(latLng);
+
+                onMarkerSetUpdate({
+                    ...marker,
+                    location: place.formatted_address || place.name,
+                    latitude: latitude.toString(),
+                    longitude: longitude.toString()
+                }, position)
             }
+
+            // **We need to find a way to show all places provided by Google
+            // ***
+            // if (places && 0 < places.length) {
+            //     places.forEach((place) => {
+            //         const latitude = place.geometry.location.lat();
+            //         const longitude = place.geometry.location.lng();
+            //         const latLng = new window.google.maps.LatLng(
+            //             latitude,
+            //             longitude
+            //         );
+
+            //         map.setCenter(latLng);
+
+            //         onMarkerChange(
+            //             "location",
+            //             place.formatted_address || place.name,
+            //             position
+            //         );
+            //         onMarkerChange(
+            //             "latitude",
+            //             latitude.toString(),
+            //             position
+            //         );
+            //         onMarkerChange(
+            //             "longitude",
+            //             longitude.toString(),
+            //             position
+            //         );
+            //     });
+            // }
         });
     };
 
@@ -262,8 +287,14 @@ const SortableMarker = ({ marker, map, setAttributes }) => {
         const newMarkerList = [...marker];
         newMarkerList[position] = newMarker;
         newMarkerList[position][key] = value;
-        setAttributes({ marker: newMarkerList });
+        setAttributes({ marker: [...newMarkerList] });
     };
+
+    const onMarkerSetUpdate = (value, position) => {
+        const newMarkerList = [...marker];
+        newMarkerList[position] = value;
+        setAttributes({ marker: [...newMarkerList] });
+    }
 
     // Expand title when clicked
     const onTitleClick = (position) => {
@@ -281,6 +312,7 @@ const SortableMarker = ({ marker, map, setAttributes }) => {
                     position={index}
                     onTitleClick={onTitleClick}
                     onMarkerChange={onMarkerChange}
+                    onMarkerSetUpdate={onMarkerSetUpdate}
                     marker={item}
                     clickedIndex={clickedIndex}
                     onDeleteItem={onDeleteItem}

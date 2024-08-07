@@ -13,34 +13,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add Mime Types
  */
 function bodhi_svgs_upload_mimes( $mimes = array() ) {
+    global $bodhi_svgs_options;
 
-	global $bodhi_svgs_options;
-	
-	$allowed_roles_array = array();
-	$is_role_allowed = array();
-	
-	if( !isset($bodhi_svgs_options['restrict']) ) {
-	    return $mimes;
-	}
-	
-	$allowed_roles_array = (array) $bodhi_svgs_options['restrict'];
-	
-	$user = wp_get_current_user();
- 
-    $current_user_roles = ( array ) $user->roles;
+    // Ensure the option is set
+    if ( !isset($bodhi_svgs_options['restrict']) ) {
+        return $mimes;
+    }
+
+    // Get the allowed roles from settings
+    $allowed_roles_array = (array) $bodhi_svgs_options['restrict'];
     
-    $is_role_allowed = array_intersect($allowed_roles_array, $current_user_roles);
-	
-	if( empty($is_role_allowed) ) {
-	    return $mimes;
-	}
-	else {
-		// allow SVG file upload
-		$mimes['svg'] = 'image/svg+xml';
-		$mimes['svgz'] = 'image/svg+xml';
-		return $mimes;
-	}
+    // Get the current user and their roles
+    $user = wp_get_current_user();
+    $current_user_roles = ( array ) $user->roles;
 
+    // Check if the user has the capability or the role
+    $is_role_allowed = array_intersect($allowed_roles_array, $current_user_roles);
+    if ( empty($is_role_allowed) || !current_user_can('upload_files') ) {
+        return $mimes;
+    }
+
+    // Allow SVG file upload
+    $mimes['svg'] = 'image/svg+xml';
+    $mimes['svgz'] = 'image/svg+xml';
+
+    return $mimes;
 }
 add_filter( 'upload_mimes', 'bodhi_svgs_upload_mimes', 99 );
 

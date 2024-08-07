@@ -24,7 +24,7 @@ import classnames from "classnames";
 import Inspector from "./inspector";
 import Style from "./style";
 
-const { duplicateBlockIdFix, BlockProps } = window.EBControls;
+const { BlockProps } = window.EBControls;
 
 import SeachModal from "./template-components/searchModal";
 import DisplayImage from "./template-components/displayImage";
@@ -69,6 +69,10 @@ export default function Edit(props) {
 
     const [pagination, setPagination] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [isError, setError] = useState({
+        error: false,
+        message: ''
+    });
 
     // search
     // const [q, setQ] = useState("");
@@ -131,6 +135,13 @@ export default function Edit(props) {
                     });
                     setLoadingApi(false);
                 }
+                else {
+                    setLoadingApi(false);
+                    setError({
+                        error: true,
+                        message: response?.data && typeof response.data === 'string' ? response.data : 'Something went wrong!'
+                    })
+                }
             })
             .catch((err) => console.log(err));
     }, []);
@@ -181,7 +192,6 @@ export default function Edit(props) {
                     } else {
                         const error = response.data || 'Invalid Data'
 
-                        console.log(error);
                         setOpenverseError({
                             status: true,
                             message:
@@ -333,7 +343,11 @@ export default function Edit(props) {
                                             </>
                                         )}
 
-                                        {!showForm && !loadingApi && (
+                                        {isError?.error && (
+                                            <div className="eb-alert eb-alert-error">{isError.message}</div>
+                                        )}
+
+                                        {!isError?.error && !showForm && !loadingApi && (
                                             <>
                                                 {openverseRegError.status &&
                                                     openverseRegError.type == "Success" && (

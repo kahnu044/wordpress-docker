@@ -65,12 +65,12 @@ class Scripts
             'controls-util',
             '../dist/modules.js',
             [
+                'regenerator-runtime',
                 'essential-blocks-blocks-localize'
              ]
         );
 
         $editor_scripts_deps = [
-            'regenerator-runtime',
             'essential-blocks-vendor-bundle',
             'essential-blocks-controls-util',
             'essential-blocks-twenty-move',

@@ -3,7 +3,7 @@
 Plugin Name: 	SVG Support
 Plugin URI:		http://wordpress.org/plugins/svg-support/
 Description: 	Upload SVG files to the Media Library and render SVG files inline for direct styling/animation of an SVG's internal elements using CSS/JS.
-Version: 		2.5.5
+Version: 		2.5.7
 Author: 		Benbodhi
 Author URI: 	https://benbodhi.com
 Text Domain: 	svg-support
@@ -24,13 +24,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 global $bodhi_svgs_options;
 $bodhi_svgs_options = array();										// Defining global array
-$svgs_plugin_version = '2.5.5';										// for use on admin pages
+$svgs_plugin_version = '2.5.7';										// for use on admin pages
 $plugin_file = plugin_basename(__FILE__);							// plugin file for reference
 define( 'BODHI_SVGS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );	// define the absolute plugin path for includes
 define( 'BODHI_SVGS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );		// define the plugin url for use in enqueue
-$bodhi_svgs_options = get_option('bodhi_svgs_settings');			// retrieve our plugin settings from the options table
+$bodhi_svgs_options = get_option('bodhi_svgs_settings', array());	// Retrieve our plugin settings from the options table, ensure it's an array
 
-/*
+// ensure $bodhi_svgs_options is always an array
+if ( $bodhi_svgs_options === false ) {
+	$bodhi_svgs_options = array();
+	update_option('bodhi_svgs_settings', $bodhi_svgs_options);
+}
+
+/**
  * SVG Sanitizer class
  */
 use enshrined\svgSanitize\Sanitizer;								// init svg sanitizer for usage

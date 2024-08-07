@@ -3,7 +3,8 @@ namespace EssentialBlocks\Utils;
 
 use EssentialBlocks\Traits\HasSingletone;
 
-class Enqueue {
+class Enqueue
+{
     use HasSingletone;
 
     private $plugin_url;
@@ -13,18 +14,21 @@ class Enqueue {
 
     private $assets_dir = 'assets/';
 
-    public function __construct( $plugin_url, $plugin_path, $version ) {
+    public function __construct( $plugin_url, $plugin_path, $version )
+    {
         $this->plugin_url      = $plugin_url;
         $this->plugin_path     = $plugin_path;
         $this->version         = $version;
         $this->plugin_basename = basename( $this->plugin_path );
     }
 
-    public function handle( $handle ) {
+    public function handle( $handle )
+    {
         return $this->plugin_basename . "-$handle";
     }
 
-    public function enqueue( $handle, $filename, $dependencies = [], $args = null ) {
+    public function enqueue( $handle, $filename, $dependencies = [  ], $args = null )
+    {
         $handle = $this->handle( $handle );
         $config = $this->asset_config( $filename, $dependencies, $args );
 
@@ -41,29 +45,33 @@ class Enqueue {
      *
      * @return void
      */
-    public function register( $handle, $filename, $dependencies = [], $args = null ) {
+    public function register( $handle, $filename, $dependencies = [  ], $args = null )
+    {
         $handle = $this->handle( $handle );
         $config = $this->asset_config( $filename, $dependencies, $args );
 
         $this->call_wp_func( 'wp_register', $handle, $config );
     }
 
-    public function localize( $handle, $name, $args ) {
+    public function localize( $handle, $name, $args )
+    {
         $handle = $this->handle( $handle );
         wp_localize_script( $handle, $name, $args );
     }
 
-    private function call_wp_func( $action, $handle, $config ) {
-        call_user_func( $action . '_' . $config['type'], $handle, $config['url'], $config['dependencies'], $config['version'], $config['args'] );
+    private function call_wp_func( $action, $handle, $config )
+    {
+        call_user_func( $action . '_' . $config[ 'type' ], $handle, $config[ 'url' ], $config[ 'dependencies' ], $config[ 'version' ], $config[ 'args' ] );
 
         $this->assets_dir = 'assets/';
 
-        if ( 'script' === $config['type'] && in_array( 'wp-i18n', $config['dependencies'], true ) ) {
+        if ( 'script' === $config[ 'type' ] && in_array( 'wp-i18n', $config[ 'dependencies' ], true ) ) {
             wp_set_script_translations( $handle, 'essential-blocks' );
         }
     }
 
-    public function asset_config( $filename, $dependencies = [], $args = null ) {
+    public function asset_config( $filename, $dependencies = [  ], $args = null )
+    {
         $is_js             = preg_match( '/\.js$/', $filename );
         $basename          = preg_replace( '/\.\w+$/', '', $filename );
         $file_basename     = basename( $filename );
@@ -71,8 +79,8 @@ class Enqueue {
         $version           = $this->version;
         $asset_config_path = $this->dist_path( $basename . '.asset.php' );
 
-        if ( ! empty( $args['is_js'] ) ) {
-            $is_js = (bool) $args['is_js'];
+        if ( ! empty( $args[ 'is_js' ] ) ) {
+            $is_js = (bool) $args[ 'is_js' ];
             $args  = null;
         }
 
@@ -80,9 +88,9 @@ class Enqueue {
             $asset_config = require $asset_config_path;
 
             if ( $is_js ) {
-                $dependencies = array_unique( array_merge( $asset_config['dependencies'], $dependencies ) );
+                $dependencies = array_unique( array_merge( $asset_config[ 'dependencies' ], $dependencies ) );
             }
-            $version = $asset_config['version'];
+            $version = $asset_config[ 'version' ];
         }
 
         return [
@@ -91,10 +99,11 @@ class Enqueue {
             'version'      => $version,
             'type'         => $is_js ? 'script' : 'style',
             'args'         => null !== $args ? $args : ( $is_js ? true : 'all' )
-        ];
+         ];
     }
 
-    private function filename( $name ) {
+    private function filename( $name )
+    {
         if ( strpos( $name, '..' ) === 0 ) {
             $name             = str_replace( '../', '', $name );
             $this->assets_dir = '';
@@ -103,7 +112,8 @@ class Enqueue {
         return $name;
     }
 
-    private function get_dir( $name ) {
+    private function get_dir( $name )
+    {
         $name = $this->filename( $name );
         if ( strpos( $name, $this->plugin_path ) === 0 ) {
             return $name;
@@ -112,7 +122,8 @@ class Enqueue {
         return $this->plugin_path . $this->assets_dir . $name;
     }
 
-    public function asset_url( $filename, $file_basename ) {
+    public function asset_url( $filename, $file_basename )
+    {
         if ( filter_var( $filename, FILTER_VALIDATE_URL ) ) {
             return $filename;
         }
@@ -120,11 +131,13 @@ class Enqueue {
         return plugin_dir_url( $this->get_dir( $filename ) ) . $file_basename;
     }
 
-    public function dist_path( $file ) {
+    public function dist_path( $file )
+    {
         return $this->get_dir( $file );
     }
 
-    public function icon( $name ) {
+    public function icon( $name )
+    {
         return $this->plugin_url . $this->assets_dir . 'images/' . $name . '?v=' . $this->version;
     }
 }

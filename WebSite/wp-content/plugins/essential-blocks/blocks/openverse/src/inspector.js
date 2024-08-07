@@ -349,8 +349,8 @@ function Inspector(props) {
                                                 <BorderShadowControl
                                                     controlName={IMAGE_BORDER_SHADOW}
                                                     resRequiredProps={resRequiredProps}
-                                                    // noShadow
-                                                    // noBorder
+                                                // noShadow
+                                                // noBorder
                                                 />
                                             </>
                                         )}
@@ -389,8 +389,9 @@ function Inspector(props) {
                                                 <>
                                                     <BaseControl label={__("Text Align", "essential-blocks")}>
                                                         <ButtonGroup>
-                                                            {TEXT_ALIGN.map((item) => (
+                                                            {TEXT_ALIGN.map((item, index) => (
                                                                 <Button
+                                                                    key={index}
                                                                     // isLarge
                                                                     isPrimary={textAlign === item.value}
                                                                     isSecondary={textAlign !== item.value}
@@ -447,8 +448,8 @@ function Inspector(props) {
                                         <BorderShadowControl
                                             controlName={WRAPPER_BORDER_SHADOW}
                                             resRequiredProps={resRequiredProps}
-                                            // noShadow
-                                            // noBorder
+                                        // noShadow
+                                        // noBorder
                                         />
                                     </PanelBody>
 

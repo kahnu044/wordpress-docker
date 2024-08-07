@@ -268,7 +268,7 @@ class Form extends ThirdPartyIntegration
                 wp_send_json_error( 'You don\'t have permission to update form settings' );
             }
         } else if ( $existing_row ) {
-            if (  ( current_user_can( 'manage_options' ) ) || $user_id === $existing_creator ) {
+            if ( ( current_user_can( 'manage_options' ) ) || $user_id === $existing_creator ) {
                 // Update the existing row
                 $insert = $wpdb->update( $table_name, $data, $where );
             } else {
@@ -423,9 +423,9 @@ class Form extends ThirdPartyIntegration
             }
         }
 
-        if(isset($validation['data']) && count($validation['data']) > 0) {
-            foreach($validation['data'] as $key => $value) {
-                $validation['data'][$key] = apply_filters( 'eb_dynamic_tag_value', $value, $value, true );
+        if ( isset( $validation[ 'data' ] ) && count( $validation[ 'data' ] ) > 0 ) {
+            foreach ( $validation[ 'data' ] as $key => $value ) {
+                $validation[ 'data' ][ $key ] = apply_filters( 'eb_dynamic_tag_value', $value, $value, true );
             }
         }
         return $validation;

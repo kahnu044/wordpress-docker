@@ -6,7 +6,7 @@
  * Description: The ultimate blocks library for Gutenberg editor. Packed with 40+ powerful free blocks, it is an essential and feature-rich plugin to create websites with ease.
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
- * Version: 4.8.2
+ * Version: 4.8.3
  * License: GPL3+
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: essential-blocks
