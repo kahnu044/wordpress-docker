@@ -34,7 +34,7 @@ function bodhi_svg_support_settings_page() {
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 
-		wp_die( __('You can\'t play with this.', 'svg-support') );
+		wp_die( esc_html__('You can\'t play with this.', 'svg-support') );
 
 	}
 
@@ -51,11 +51,10 @@ function bodhi_svg_support_settings_page() {
  */
 function bodhi_sanitize_fields( $value ) {
 
-	global $bodhi_svgs_options;
-	$bodhi_plugin_version_stored = get_option( 'bodhi_svgs_plugin_version' );
+	$value['css_target'] = esc_attr( sanitize_text_field( $value['css_target'] ) );
 
-	if( !isset($value['sanitize_svg']) ) {
-		$value['sanitize_svg'] = "none";
+	if( !isset($value['sanitize_svg_front_end']) || $value['sanitize_svg_front_end'] !== 'on' ) {
+		$value['sanitize_svg_front_end'] = false;
 	}
 
 	if( !isset($value['sanitize_on_upload_roles']) ) {
@@ -66,14 +65,7 @@ function bodhi_sanitize_fields( $value ) {
 		$value['restrict'] = array("none");
 	}
 
-	$value['css_target'] = esc_attr( sanitize_text_field( $value['css_target'] ) );
-
-	if( !isset($value['sanitize_svg_front_end']) || $value['sanitize_svg_front_end'] !== 'on' ) {
-		$value['sanitize_svg_front_end'] = false;
-	}
-
 	return $value;
-
 }
 
 /**
@@ -89,6 +81,21 @@ function bodhi_svgs_register_settings() {
 
 }
 add_action( 'admin_init', 'bodhi_svgs_register_settings' );
+
+/**
+ * Remove old sanitize setting
+ */
+function bodhi_svgs_remove_old_sanitize_setting() {
+	// Fetch current settings
+	$bodhi_svgs_options = get_option('bodhi_svgs_settings');
+
+	// Remove the old 'sanitize_svg' setting if it exists
+	if (isset($bodhi_svgs_options['sanitize_svg'])) {
+		unset($bodhi_svgs_options['sanitize_svg']);
+		update_option('bodhi_svgs_settings', $bodhi_svgs_options);
+	}
+}
+add_action('admin_init', 'bodhi_svgs_remove_old_sanitize_setting');
 
 /**
  * Advanced Mode Check
@@ -187,7 +194,11 @@ function bodhi_svgs_admin_footer_text( $default ) {
 
 	if ( bodhi_svgs_specific_pages_settings() || bodhi_svgs_specific_pages_media_library() ) {
 
-		printf( __( 'If you like <strong>SVG Support</strong> please leave a %s&#9733;&#9733;&#9733;&#9733;&#9733;%s rating. A huge thanks in advance!', 'svg-support' ), '<a href="https://wordpress.org/support/view/plugin-reviews/svg-support?filter=5#postform" target="_blank" class="svgs-rating-link">', '</a>' );
+		/* translators: 1: Opening anchor tag, 2: Closing anchor tag */
+		printf( esc_html__( 'If you like <strong>SVG Support</strong> please leave a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. A huge thanks in advance!', 'svg-support' ),
+			'<a href="https://wordpress.org/support/view/plugin-reviews/svg-support?filter=5#postform" target="_blank" class="svgs-rating-link">',
+			'</a>'
+		);
 
 	} else {
 
