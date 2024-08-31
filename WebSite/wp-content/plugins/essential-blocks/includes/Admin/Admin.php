@@ -147,7 +147,8 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
         {
             array_unshift( $categories, [
                 'slug'  => 'essential-blocks',
-                'title' => __( 'Essential Blocks', 'essential-blocks' )
+                'title' => __( 'Essential Blocks', 'essential-blocks' ),
+                'icon'  => ESSENTIAL_BLOCKS_ICON
              ] );
 
             return $categories;
@@ -203,6 +204,10 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
          */
         public function notices()
         {
+            global $pagenow;
+            if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' || $pagenow === 'site-editor.php' ) {
+                return;
+            }
             $notices = new Notices(
                 [
                     'id'             => 'essential_blocks',
@@ -355,7 +360,7 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
             }
 
             wpdev_essential_blocks()->assets->enqueue( 'admin', 'css/admin.css' );
-            wpdev_essential_blocks()->assets->enqueue( 'admin-custom', '../admin/style.css' );
+            wpdev_essential_blocks()->assets->enqueue( 'admin-custom', 'admin/dashboard/admin.css' );
         }
 
         public function enqueue_scripts( $hook )
@@ -364,27 +369,29 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
                 return;
             }
 
-            wpdev_essential_blocks()->assets->register( 'admin-controls-util', '../dist/modules.js', [
+            wpdev_essential_blocks()->assets->register( 'admin-controls-util', 'admin/controls/controls.js', [
                 'essential-blocks-blocks-localize'
              ] );
-            wpdev_essential_blocks()->assets->register( 'vendor-bundle', '../../vendor-bundle/index.js' );
+
+            wpdev_essential_blocks()->assets->register( 'babel-bundle', 'vendors/js/bundle.babel.js' );
+            wpdev_essential_blocks()->assets->register( 'vendor-bundle', 'vendors/js/bundles.js', [ 'essential-blocks-babel-bundle' ] );
             wpdev_essential_blocks()->assets->register( 'flv', 'js/react-player/flv.min.js' );
             wpdev_essential_blocks()->assets->register( 'dash', 'js/react-player/dash.all.min.js' );
             wpdev_essential_blocks()->assets->register( 'hls', 'js/react-player/hls.min.js' );
             wpdev_essential_blocks()->assets->enqueue(
                 'admin',
-                '../admin/index.js',
+                'admin/dashboard/admin.js',
                 [
                     'lodash',
                     'essential-blocks-vendor-bundle',
                     'essential-blocks-admin-controls-util',
                     'essential-blocks-hls',
                     'essential-blocks-flv',
-                    'essential-blocks-dash'
+                    'essential-blocks-dash',
+                    'regenerator-runtime'
                  ]
             );
 
-            wpdev_essential_blocks()->assets->enqueue( 'category-icon', '../lib/update-category-icon/index.js' );
             wpdev_essential_blocks()->assets->enqueue( 'eb-admin', 'js/admin.js' );
         }
 

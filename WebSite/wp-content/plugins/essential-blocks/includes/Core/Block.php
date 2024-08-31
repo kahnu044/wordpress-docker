@@ -58,7 +58,7 @@ abstract class Block
 
     public function get_block_path( $name, $wp_version_check = false )
     {
-        $path = ESSENTIAL_BLOCKS_DIR_PATH . 'blocks/' . $name;
+        $path = ESSENTIAL_BLOCKS_BLOCK_DIR . $name;
 
         if ( $wp_version_check && ESSENTIAL_BLOCKS_WP_VERSION < 5.8 ) {
             $path = 'essential-blocks/' . $name;
@@ -66,6 +66,7 @@ abstract class Block
 
         return apply_filters( 'essential_blocks_block_path', $path, $this->is_pro, $name, $wp_version_check );
     }
+
 
     public function path( $name = '' )
     {

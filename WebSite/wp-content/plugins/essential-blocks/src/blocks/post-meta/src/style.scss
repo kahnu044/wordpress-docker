@@ -1,0 +1,32 @@
+.eb-post-meta-wrapper {
+	box-sizing: border-box;
+	.eb-post-metadata {
+		display: flex;
+		align-items: center;
+		&.eb-post-meta-stacked {
+			flex-direction: column;
+		}
+		&.eb-post-meta-inline {
+			flex-direction: row;
+		}
+	}
+	
+	.eb-post-metadata-label {
+		font-weight: bold;
+		color: #000000;
+	}
+	
+	.eb-post-metadata-value {
+		color: #000000;
+	}
+	
+	.eb-post-meta-stacked .eb-post-metadata-item {
+		display: block;
+	}
+	
+	.eb-post-meta-inline .eb-post-metadata-item {
+		display: inline-block;
+	}
+	  
+
+}

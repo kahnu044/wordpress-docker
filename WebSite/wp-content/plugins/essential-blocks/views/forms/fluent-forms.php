@@ -37,6 +37,12 @@
         $_form_wrapper_classes[] = 'eb-fluentform-alignment-' . $formAlignment;
     }
 
+    $wrapper_attributes = get_block_wrapper_attributes(
+        [
+            'class' => 'root-' . $blockId
+        ]
+    );
+
 ?>
 
 <div

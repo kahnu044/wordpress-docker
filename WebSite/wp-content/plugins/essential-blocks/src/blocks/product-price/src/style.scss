@@ -1,0 +1,30 @@
+.eb-product-price-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	&.right .eb-woo-product-price {
+		flex-direction: row-reverse;
+	}
+
+	.eb-woo-product-price {
+		display: flex;
+		flex-direction: row;
+		gap: 5px;
+		align-items: center;
+
+		.eb-product-price-regular {
+			text-decoration: line-through;
+		}
+	}
+
+	.eb-sale-price-wrapper {
+		margin: 0;
+	}
+
+	del .woocommerce-Price-currencySymbol,
+	.eb-woo-product-price .eb-product-price-currency {
+		display: inline-block;
+		text-decoration: none;
+	}
+}

@@ -17,10 +17,10 @@ spl_autoload_register(function ($class) {
     /**
      * This is for blocks autoloading.
      */
-    $class_array = explode('\\', $class);
-    if( ! empty( $class_array[1] ) && $class_array[1] === 'blocks' ) {
-        $base_dir = __DIR__ . '/';
-    }
+    // $class_array = explode('\\', $class);
+    // if( ! empty( $class_array[1] ) && $class_array[1] === 'blocks' ) {
+    //     $base_dir = __DIR__ . '/';
+    // }
 
     // get the relative class name
     $relative_class = substr($class, $len);

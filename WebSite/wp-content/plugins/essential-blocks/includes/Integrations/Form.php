@@ -275,10 +275,14 @@ class Form extends ThirdPartyIntegration
                 wp_send_json_error( 'You don\'t have permission to update form settings' );
             }
         } else {
-            // Insert a new row
-            $data[ 'block_id' ]   = $form_id;
-            $data[ 'created_by' ] = $user_id;
-            $insert               = $wpdb->insert( $table_name, $data );
+            if (current_user_can( 'unfiltered_html' )) {
+                // Insert a new row
+                $data[ 'block_id' ]   = $form_id;
+                $data[ 'created_by' ] = $user_id;
+                $insert               = $wpdb->insert( $table_name, $data );
+            } else {
+                wp_send_json_error( __('You do not have permission to create form','essential-blocks') );
+            }
         }
 
         if ( $insert ) {

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Accordion",
+  "apiVersion": 2,
+  "name": "essential-blocks/accordion",
+  "category": "essential-blocks",
+  "description": "Display your FAQs & improve user experience with Accordion/Toggle block",
+  "textdomain": "essential-blocks",
+  "supports": {
+    "anchor": true,
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

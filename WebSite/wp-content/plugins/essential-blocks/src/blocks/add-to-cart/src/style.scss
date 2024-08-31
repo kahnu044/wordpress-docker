@@ -1,0 +1,31 @@
+.eb-add-to-cart-wrapper {
+	.cart.variations_form table.variations {
+
+		th.label,
+		td.value {
+			display: block;
+			text-align: left;
+			padding-left: 0;
+		}
+
+	}
+
+	.eb-cart-form table {
+		margin-bottom: 1em;
+		border: 0;
+
+		del {
+			margin-right: 5px;
+		}
+	}
+
+	.eb-quantity {
+		display: inline-block;
+		margin-right: 15px;
+
+		input {
+			width: 60px;
+			text-align: center;
+		}
+	}
+}

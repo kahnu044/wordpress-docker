@@ -73,7 +73,6 @@ class PostBlock extends Base
         $posts  = [  ];
         if ( isset( $result->posts ) && is_array( $result->posts ) && count( $result->posts ) > 0 ) {
             $posts = $result->posts;
-            error_log( print_r( $result->posts, 1 ) );
         }
         $posts_count = 0;
         if ( isset( $result->found_posts ) ) {

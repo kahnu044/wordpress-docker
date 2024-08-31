@@ -3,8 +3,8 @@ Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07
 Tags: WordPress Block Editor, Gutenberg Blocks Plugin, WooCommerce, Gutenberg Templates, Page Builder
 Requires at least: 5.8
 Tested up to: 6.6
-Requires PHP: 7.0
-Stable tag: 4.8.3
+Requires PHP: 7.4
+Stable tag: 4.9.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -31,6 +31,10 @@ Now, any block can be saved with customized styling. You can also personalize th
 ###⚡ LIGHT WEIGHT & INSTANT LOADING
 
 No extra resources or messy codes to slow down your website. Optimized for super fast loading and instant live editing.
+
+###🈸 WPML CERTIFIED PlUGIN
+
+Translate Gutenberg blocks with WPML in your chosen language & offer a multilingual experience to your visitors.
 
 ###⚙️ BLOCKS MODULAR CONTROL
 Enable and disable individual blocks to make your page load faster and smoother. You can deactivate unnecessary blocks to keep the site lightweight.
@@ -226,49 +230,23 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
-= 4.8.3 - 27/07/2024 =
-- Fixed: Google Map || Incorrect map Pointer placement
-- Fixed: Color Picker not working in Firefox and Safari
+= 4.9.0 - 27/08/2024 =
+- Improved: Optimized codebase for better performance and efficiency
+- Fixed: Synced Pattern re-render issue in some blocks
+- Fixed: EB Post Carousel | Throwing PHP warning
+- Few minor bug fixes & improvements
+
+= 4.8.4 - 13/08/2024 =
+- Fixed: Style generation conflict with Generatepres
+- Fixed: Image Gallery | URL removed when new image add
+- Fixed: Slider | Images appeared broken at first glance
 - Improved: Security enhancement
-
-= 4.8.2 - 16/07/2024 =
-- Fixed: Resolved an error in the editor for WordPress 6.6
-- Minor bug fixes & improvements
-
-= 4.8.1 - 11/07/2024 =
-- Fixed: Slider || URL not working
-- Fixed: Popup || Add 'VH' unit in height control
-- Fixed: Custom CSS editor not working in RTL
-
-= 4.8.0 - 11/07/2024 =
-- Added: Translation compatibility with WPML
-- Fixed: Advanced Tabs | Tab Sorting and Deletion not working properly
-- Minor bug fixes & improvements
-
-= 4.7.4 - 02/07/2024 =
-- Improved: Advanced Tab | Added option to disable min height for vertical layout
-- Improved: Advanced Tab | Added option for responsive layout switch on vertical layout
-- Fixed: Advanced Tabs | Active tab icon color not working
-- Fixed: Team Member | Images removed on attempt recovery issue
-- Fixed: Removed Edit HTML option for Advanced Tabs and Accordion Block to prevent attempt recovery
-- Fixed: EB Dashboard | Blocks enable/disable reset on plugin update
-
-= 4.7.3 - 24/06/2024 =
-- Improved: Custom CSS Editor better performance
-- Fixed: Dual Button | HTML Tag not working properly
-- Minor bug fixes & improvements
-
-= 4.7.2 - 12/06/2024 =
-- Fixed: Animation Delay Option not working for blocks
-- Fixed: Column Block | responsive not working properly
-- Fixed: Column Block | animation not working properly
-- Fixed: Responsive control not working properly for all blocks
-- Minor bug fixes & improvements
 
 [See changelog for all versions](https://essential-blocks.com/changelog).
 
 
 == Upgrade Notice ==
 
-= 4.8.0 =
-- Essential Blocks is now Compatible with WPML.
+= 4.9.0 =
+- Optimized the codebase for better performance and efficiency
+- Fixed Synced Pattern rerender issue

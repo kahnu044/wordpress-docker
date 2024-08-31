@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Popup",
+  "apiVersion": 2,
+  "name": "essential-blocks/popup",
+  "category": "essential-blocks",
+  "description": "Showcase your videos, images or other content with popup & trigger actions.",
+  "textdomain": "essential-blocks",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

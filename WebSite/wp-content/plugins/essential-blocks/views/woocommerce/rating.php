@@ -1,6 +1,6 @@
 <div class="eb-woo-product-rating-wrapper">
 
-	<?php
+    <?php
         if ( ! isset( $ratingStyle ) ) {
             $ratingStyle = 'star';
         }

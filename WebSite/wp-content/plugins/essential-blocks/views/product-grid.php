@@ -13,7 +13,7 @@
 
 ?>
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
-    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?><?php echo esc_attr( $classHook ); ?>">
+    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?> <?php echo esc_attr( $classHook ); ?>">
         <div
             class="<?php echo esc_attr( $blockId ); ?> eb-woo-products-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"

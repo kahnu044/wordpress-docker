@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Product Images",
+  "name": "essential-blocks/product-images",
+  "description": "Showcase eye-catching WooCommerce product images that draw in customers and are easy to customize.",
+  "category": "essential-blocks",
+  "apiVersion": 2,
+  "textdomain": "essential-blocks",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

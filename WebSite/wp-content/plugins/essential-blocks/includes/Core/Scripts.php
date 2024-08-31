@@ -63,12 +63,13 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'editor-breakpoint', 'js/eb-editor-breakpoint.js' );
         wpdev_essential_blocks()->assets->register(
             'controls-util',
-            '../dist/modules.js',
+            'admin/controls/controls.js',
             [
                 'regenerator-runtime',
                 'essential-blocks-blocks-localize'
              ]
         );
+        wpdev_essential_blocks()->assets->register( 'store', 'admin/store/store.js', [ 'regenerator-runtime' ] ); //EB Store
 
         $editor_scripts_deps = [
             'essential-blocks-vendor-bundle',
@@ -82,27 +83,29 @@ class Scripts
             'essential-blocks-typedjs',
             'essential-blocks-slickjs',
             'essential-blocks-patterns',
+            'essential-blocks-store',
             'essential-blocks-editor-breakpoint'
          ];
 
-        if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' || $pagenow === 'site-editor.php' ) {
+        if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) {
             //global-styles
-            wpdev_essential_blocks()->assets->register( 'global-styles', '../lib/global-styles/dist/index.js' );
+            wpdev_essential_blocks()->assets->register( 'global-styles', 'admin/global-styles/global-styles.js' );
             $editor_scripts_deps[  ] = 'essential-blocks-global-styles';
 
             //templately-installer
+
             $show_pattern_library = get_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY );
             if ( ! $show_pattern_library ) {
-                wpdev_essential_blocks()->assets->register( 'templately-installer', '../lib/templately-installer/dist/index.js' );
+                wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.js' );
                 $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
             }
         }
 
-        wpdev_essential_blocks()->assets->register( 'editor-script', '../dist/index.js', $editor_scripts_deps );
+        wpdev_essential_blocks()->assets->register( 'editor-script', 'admin/editor/editor.js', $editor_scripts_deps ); //Main Editor Script
 
         // If vendor files has css and extists
-        if ( file_exists( ESSENTIAL_BLOCKS_DIR_PATH . 'vendor-bundle/style.css' ) ) {
-            wpdev_essential_blocks()->assets->register( 'admin-vendor-style', '../vendor-bundle/style.css' );
+        if ( file_exists( ESSENTIAL_BLOCKS_DIR_PATH . 'assets/vendors/css/bundles.css' ) ) {
+            wpdev_essential_blocks()->assets->register( 'admin-vendor-style', 'vendors/css/bundles.css' );
         }
 
         $editor_styles_deps = [
@@ -124,20 +127,16 @@ class Scripts
 
         if ( $pagenow !== 'widgets.php' ) {
             //Global Styles
-            wpdev_essential_blocks()->assets->register( 'global-styles', '../lib/global-styles/dist/style.css', [ 'dashicons' ] );
+            wpdev_essential_blocks()->assets->register( 'global-styles', 'admin/global-styles/global-styles.css', [ 'dashicons' ] );
             $editor_styles_deps[  ] = 'essential-blocks-global-styles';
 
             //templately-installer
-            wpdev_essential_blocks()->assets->register( 'templately-installer', '../lib/templately-installer/dist/style.css' );
+            wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.css' );
             $editor_styles_deps[  ] = 'essential-blocks-templately-installer';
         }
 
-        //Iconpicker css
-        wpdev_essential_blocks()->assets->register( 'iconpicker-css', '../dist/style-modules.css' );
-        $editor_styles_deps[  ] = 'essential-blocks-iconpicker-css';
-
         // register styles
-        wpdev_essential_blocks()->assets->register( 'editor-css', '../dist/modules.css', $editor_styles_deps );
+        wpdev_essential_blocks()->assets->register( 'editor-css', 'admin/controls/controls.css', $editor_styles_deps );
     }
 
     /**
@@ -150,12 +149,13 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'eb-animation', 'js/eb-animation-load.js' );
         wpdev_essential_blocks()->assets->register( 'animation', 'css/animate.min.css' );
 
-        wpdev_essential_blocks()->assets->register( 'vendor-bundle', '../vendor-bundle/index.js' );
+        wpdev_essential_blocks()->assets->register( 'babel-bundle', 'vendors/js/bundle.babel.js' );
+        wpdev_essential_blocks()->assets->register( 'vendor-bundle', 'vendors/js/bundles.js', [ 'essential-blocks-babel-bundle' ] );
 
         //Register block combined styles
         $css_file                        = 'eb-style' . DIRECTORY_SEPARATOR . 'frontend' . DIRECTORY_SEPARATOR . 'style.css';
         $css_with_custom_breakpoint_path = wp_upload_dir()[ 'basedir' ] . DIRECTORY_SEPARATOR . $css_file;
-        $frontend_css_file               = '../dist/style.css';
+        $frontend_css_file               = 'admin/editor/editor.css';
         if ( file_exists( $css_with_custom_breakpoint_path ) ) {
             $frontend_css_file = wp_upload_dir()[ 'baseurl' ] . '/eb-style/frontend/style.css';
         }
@@ -180,7 +180,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'hls', 'js/react-player/hls.min.js' );
         // dashicon
         wp_enqueue_style( 'dashicons' );
-        wpdev_essential_blocks()->assets->register( 'controls-frontend', '../dist/frontend.js' );
+        wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js' );
 
         //Run Global frontend styles
         self::global_frontend_styles();
@@ -364,8 +364,7 @@ class Scripts
         $styles = (array) $styles;
         foreach ( $styles as $styleKey => $value ) {
             // Convert camelCase to kebab-case for CSS properties
-            $cssProperty = strtolower( preg_replace( '/([a-zA-Z])(?=[A-Z])/', '$1-', $styleKey ) );
-            $cssValue    = $value;
+            $cssValue = $value;
             switch ( $styleKey ) {
                 case 'fontFamily':
                     $css .= "$varPrefix" . "font-family: $cssValue;\n";
@@ -426,10 +425,6 @@ class Scripts
              ] : [  ]
         );
 
-        $eb_settings = get_option( 'eb_settings', [  ] );
-        $googleFont  = ! empty( $eb_settings[ 'googleFont' ] ) ? $eb_settings[ 'googleFont' ] : 'true';
-        $fontAwesome = ! empty( $eb_settings[ 'fontAwesome' ] ) ? $eb_settings[ 'fontAwesome' ] : 'true';
-
         $plugin = $this->plugin;
 
         $localize_array = [
@@ -463,6 +458,10 @@ class Scripts
              ];
 
             $localize_array = array_merge( $localize_array, $admin_localize_array );
+        }
+
+        if ( class_exists( 'WooCommerce' ) ) {
+            $localize_array[ "wc_currency_symbol" ] = get_woocommerce_currency_symbol();
         }
 
         wpdev_essential_blocks()->assets->localize( 'blocks-localize', 'EssentialBlocksLocalize', $localize_array );

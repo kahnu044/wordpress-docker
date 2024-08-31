@@ -9,6 +9,7 @@ use EssentialBlocks\Utils\Helper;
 class Product extends Base
 {
     private $sampleData = [  ];
+
     /**
      * Register REST Routes
      *
@@ -50,6 +51,9 @@ class Product extends Base
      */
     public function get_products( $request, $local = false )
     {
+        if ( ! function_exists( '\WC' ) ) {
+            return false;
+        }
         $data       = [  ];
         $query_data = ! empty( $request->get_param( 'query_data' ) ) ? json_decode( $request->get_param( 'query_data' ) ) : [  ];
         $query_data = ( is_object( $query_data ) || is_array( $query_data ) ) ? (array) $query_data : [  ];
@@ -137,7 +141,7 @@ class Product extends Base
                 $products[ 'price' ]            = $product->get_price();
                 $products[ 'price_sale' ]       = $product->get_sale_price();
                 $products[ 'price_regular' ]    = $product->get_regular_price();
-                $products[ 'discount' ]         = ( $products[ 'price_sale' ] && $products[ 'price_regular' ] ) ? round(  ( $products[ 'price_regular' ] - $products[ 'price_sale' ] ) / $products[ 'price_regular' ] * 100 ) . '%' : '';
+                $products[ 'discount' ]         = ( $products[ 'price_sale' ] && $products[ 'price_regular' ] ) ? round( ( $products[ 'price_regular' ] - $products[ 'price_sale' ] ) / $products[ 'price_regular' ] * 100 ) . '%' : '';
                 $products[ 'sale' ]             = $product->is_on_sale();
                 $products[ 'price_html' ]       = $product->get_price_html();
                 $products[ 'stock' ]            = $product->get_stock_status();

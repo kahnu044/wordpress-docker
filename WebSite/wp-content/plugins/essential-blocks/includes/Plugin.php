@@ -17,6 +17,7 @@ use EssentialBlocks\Integrations\Data;
 use EssentialBlocks\Integrations\Form;
 use EssentialBlocks\Core\PageTemplates;
 use EssentialBlocks\Core\BlocksPatterns;
+use EssentialBlocks\Modules\StyleHandler;
 use EssentialBlocks\Traits\HasSingletone;
 use EssentialBlocks\Integrations\GoogleMap;
 use EssentialBlocks\Integrations\Instagram;
@@ -29,7 +30,7 @@ use EssentialBlocks\Integrations\PluginInstaller;
 final class Plugin
 {
     use HasSingletone;
-    public $version = '4.8.3';
+    public $version = '4.9.0';
 
     public $admin;
     /**
@@ -64,11 +65,14 @@ final class Plugin
 
         Maintenance::get_instance();
 
-        $this->assets = Enqueue::get_instance( ESSENTIAL_BLOCKS_URL, ESSENTIAL_BLOCKS_DIR_PATH, $this->version );
-
+        $this->assets   = Enqueue::get_instance( ESSENTIAL_BLOCKS_URL, ESSENTIAL_BLOCKS_DIR_PATH, $this->version );
         self::$settings = Settings::get_instance();
+        $this->admin    = Admin::get_instance();
 
-        $this->admin = Admin::get_instance();
+        /**
+         * Style Handler For Parsing and Saving Styles as file.
+         */
+        StyleHandler::init();
 
         Scripts::get_instance();
 
@@ -191,7 +195,7 @@ final class Plugin
         $this->define( 'ESSENTIAL_BLOCKS_WHATSNEW_REDIRECT', 'none' );
         $this->define( 'ESSENTIAL_BLOCKS_NAME', 'essential-blocks' );
         $this->define( 'ESSENTIAL_BLOCKS_DIR_PATH', plugin_dir_path( ESSENTIAL_BLOCKS_FILE ) );
-        $this->define( 'ESSENTIAL_BLOCKS_BLOCK_DIR', ESSENTIAL_BLOCKS_DIR_PATH . '/blocks/' );
+        $this->define( 'ESSENTIAL_BLOCKS_BLOCK_DIR', ESSENTIAL_BLOCKS_DIR_PATH . '/assets/blocks/' );
         $this->define( 'ESSENTIAL_BLOCKS_URL', plugin_dir_url( ESSENTIAL_BLOCKS_FILE ) );
         $this->define( 'ESSENTIAL_BLOCKS_ADMIN_URL', plugin_dir_url( ESSENTIAL_BLOCKS_FILE ) );
         $this->define( 'ESSENTIAL_BLOCKS_PLUGIN_BASENAME', plugin_basename( ESSENTIAL_BLOCKS_FILE ) );
@@ -200,6 +204,7 @@ final class Plugin
         $this->define( 'ESSENTIAL_BLOCKS_SITE_URL', 'https://essential-blocks.com/' );
         $this->define( 'ESSENTIAL_BLOCKS_UPGRADE_PRO_URL', 'https://essential-blocks.com/upgrade' );
         $this->define( 'ESSENTIAL_BLOCKS_PLACEHOLDER_IMAGE', ESSENTIAL_BLOCKS_URL . 'assets/images/placeholder.png' );
+        $this->define( 'ESSENTIAL_BLOCKS_ICON', ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo.svg' );
         $this->define( 'EB_PATTERN', true );
 
         //Those flags needs to update if notice

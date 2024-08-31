@@ -33,6 +33,11 @@
 		$_form_wrapper_classes[] = 'eb-wpforms-hide-errormessage';
 	}
 
+	$wrapper_attributes = get_block_wrapper_attributes(
+        [
+            'class' => 'root-' . $blockId
+        ]
+    );
 	?>
 
 <div

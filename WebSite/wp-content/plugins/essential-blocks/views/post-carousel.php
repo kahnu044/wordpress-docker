@@ -2,7 +2,6 @@
     $_wrapper_classes = [
         $blockId,
         $preset,
-        $className,
         $arrows == 1 ? 'slick-arrows' : 'arrow-none',
         $adaptiveHeight == 1 ? 'equal-height' : 'arrow-none',
         $dotPreset
@@ -20,15 +19,15 @@
 	);
 ?>
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
-    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?><?php echo esc_attr( $classHook ); ?>">
-        <div
-            class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-carousel-wrapper"
+    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?> <?php echo esc_attr( $classHook ); ?>">
+        <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-carousel-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
             data-querydata="<?php echo esc_attr( serialize( $queryData ) ); ?>"
             data-slidersettings="<?php echo esc_attr( json_encode( $sliderSettings ) ); ?>"
             data-attributes="<?php echo esc_attr( json_encode( $essentialAttr ) ); ?>">
 
-            <div class="<?php echo esc_attr( implode( ' ', $_eb_classes ) ); ?>" data-id="<?php echo esc_attr( $blockId ); ?>">
+            <div class="<?php echo esc_attr( implode( ' ', $_eb_classes ) ); ?>"
+                data-id="<?php echo esc_attr( $blockId ); ?>">
                 <?php
                     /**
                      * Post Grid Markup

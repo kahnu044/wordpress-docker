@@ -6,8 +6,7 @@
      ];
     $_wrapper_classes = [
         $blockId,
-        $preset,
-        $className
+        $preset
      ];
 
     $wrapper_attributes = get_block_wrapper_attributes(
