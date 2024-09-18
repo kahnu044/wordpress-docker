@@ -103,7 +103,8 @@ class WooProductGrid extends Block
             return;
         }
 
-        $args = isset( $attributes[ 'queryData' ] ) ? $attributes[ 'queryData' ] : [  ];
+        $args = isset( $attributes['queryData'] ) ? $attributes['queryData'] : [];
+        $query_type = isset($args['query_type']) ? $args['query_type'] : 'custom_query';
 
         $_normalize = [
             'orderby'  => 'date',
@@ -121,13 +122,30 @@ class WooProductGrid extends Block
         if ( isset( $args[ 'orderby' ] ) && ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE && in_array( $args[ 'orderby' ], $proOrderby ) ) {
             $args[ 'orderby' ] = 'date';
         }
+        
+        $args = wp_parse_args( $args, [
+            'per_page' => 10,
+            'offset'   => 0
+        ] );
 
-        $isCustomCartBtn  = $_essential_attributes[ 'isCustomCartBtn' ];
-        $simpleCartText   = $_essential_attributes[ 'simpleCartText' ];
-        $variableCartText = $_essential_attributes[ 'variableCartText' ];
-        $groupedCartText  = $_essential_attributes[ 'groupedCartText' ];
-        $externalCartText = $_essential_attributes[ 'externalCartText' ];
-        $defaultCartText  = $_essential_attributes[ 'defaultCartText' ];
+
+        if("related_products" === $query_type) {
+            $product = json_decode($args["product"], true);
+            $product_id = isset($product["value"]) && "current" !== $product["value"] ? $product["value"] : get_the_ID();
+            $per_page = $args['per_page'];
+            $exclude_products = isset($args['exclude_products']) ? Helper::get_value_from_json_array(json_decode($args['exclude_products'],true)) : [];
+            $related_products = wc_get_related_products($product_id,$args['per_page'],$exclude_products);
+            unset($args);
+            $args['post__in'] = is_array($related_products) && count($related_products) > 0 ? $related_products : [];
+            $args['per_page'] = $per_page;
+        }
+
+        $isCustomCartBtn  = $_essential_attributes['isCustomCartBtn'];
+        $simpleCartText   = $_essential_attributes['simpleCartText'];
+        $variableCartText = $_essential_attributes['variableCartText'];
+        $groupedCartText  = $_essential_attributes['groupedCartText'];
+        $externalCartText = $_essential_attributes['externalCartText'];
+        $defaultCartText  = $_essential_attributes['defaultCartText'];
 
         $this->sampleData = [
             $simpleCartText,
@@ -140,11 +158,6 @@ class WooProductGrid extends Block
             // change the cart button text according to editor change
             add_filter( 'woocommerce_product_add_to_cart_text', [ $this, 'eb_change_cart_button_text' ], 10, 1 );
         }
-
-        $args = wp_parse_args( $args, [
-            'per_page' => 10,
-            'offset'   => 0
-         ] );
 
         $query = new WP_Query( Product::query_builder( $args ) );
 
@@ -167,13 +180,13 @@ class WooProductGrid extends Block
             array_merge(
                 $_essential_attributes,
                 [
-                    'blockId'         => $blockId,
-                    'classHook'       => $classHook,
-                    'query'           => $query,
-                    'essentialAttr'   => $_essential_attributes,
-                    'loadMoreOptions' => $loadMoreOptions,
-                    'queryData'       => $args
-                 ]
+                    'blockId'           => $blockId,
+                    'classHook'         => $classHook,
+                    'query'             => isset($query)? $query : '',
+                    'essentialAttr'     => $_essential_attributes,
+                    'loadMoreOptions'   => $loadMoreOptions,
+                    'queryData'         => $args,
+                ]
             )
         );
 

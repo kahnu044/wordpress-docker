@@ -80,6 +80,9 @@
 		<?php endif;?>
 
 		<div class="eb-woo-product-image-wrapper">
+        <?php if ( 'grid' === $layout && 'grid-preset-3' !== $gridPreset ): ?>
+			<a class="grid-preset-anchor" href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>"></a>
+		<?php endif;?>
 			<div class="eb-woo-product-image">
 				<?php if ( 'list' === $layout ): ?>
 					<a href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>">

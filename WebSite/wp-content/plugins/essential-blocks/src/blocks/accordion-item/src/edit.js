@@ -4,7 +4,7 @@
 import { __ } from "@wordpress/i18n";
 import { InnerBlocks, MediaUpload, } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { useRef, memo } from "@wordpress/element";
+import { useRef, memo , useEffect} from "@wordpress/element";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes';
@@ -17,7 +17,7 @@ import {
 } from "@essential-blocks/controls";
 
 const Edit = (props) => {
-    const { attributes, setAttributes, isSelected, clientId } = props;
+    const { attributes, setAttributes, isSelected, clientId, context } = props;
     const {
         blockId,
         title,
@@ -76,10 +76,28 @@ const Edit = (props) => {
                 }
                 iconWrapper.classList.add("eb-accordion-icon");
             }
-
         }
-
     };
+
+    useEffect(() => {
+        setAttributes({
+            parentBlockId:  context["eb/accordionParentBlockId"],
+            inheritedAccordionType:  context["eb/accordionInheritedAccordionType"],
+            inheritedDisplayIcon: context["eb/accordionInheritedDisplayIcon"],
+            inheritedTabIcon: context["eb/accordionInheritedTabIcon"],
+            inheritedExpandedIcon: context["eb/accordionInheritedExpandedIcon"],
+            inheritedTagName: context["eb/accordionInheritedTagName"],
+            faqSchema: context["eb/accordionFaqSchema"],
+        })
+    }, [
+        context["eb/accordionParentBlockId"],
+        context["eb/accordionInheritedAccordionType"],
+        context["eb/accordionInheritedDisplayIcon"],
+        context["eb/accordionInheritedTabIcon"],
+        context["eb/accordionInheritedExpandedIcon"],
+        context["eb/accordionInheritedTagName"],
+        context["eb/accordionFaqSchema"]
+    ])
 
     return (
         <>

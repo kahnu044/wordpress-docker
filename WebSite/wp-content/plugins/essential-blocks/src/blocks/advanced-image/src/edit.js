@@ -51,6 +51,7 @@ const Edit = (props) => {
         attributes,
         setAttributes,
         isSelected,
+        context
     } = props;
     const {
         resOption,
@@ -241,13 +242,8 @@ const Edit = (props) => {
         );
     }
 
-    // featured image
-    const postId = select("core/editor").getCurrentPostId();
-    const postTypeSlug = select("core/editor").getCurrentPostType();
-
-    useEffect(() => {
-        setAttributes({ imagePostId: postId });
-    }, [postId]);
+    const postId = context['postID'],
+        postTypeSlug = context['postType']
 
     const [storedFeaturedImage, setFeaturedImage] = useEntityProp(
         'postType',
@@ -333,144 +329,22 @@ const Edit = (props) => {
         );
     }
 
-    // image size change
-    useEffect(() => {
-        // custom
-        if (imgSource === 'custom') {
-            if (image.sizes && imageSize && imageSize.length > 0) {
-                let newWidth;
-                let newHeight;
-                if (image.sizes[imageSize]) {
-                    image.url = image.sizes[imageSize]
-                        ? image.sizes[imageSize].url
-                        : image.url;
-
-                    newWidth = image.sizes[imageSize].width
-                        ? image.sizes[imageSize].width
-                        : image.width;
-                    newHeight = image.sizes[imageSize].height
-                        ? image.sizes[imageSize].height
-                        : image.height;
-                } else {
-                    image.url = image.sizes.full.url;
-                    newWidth = image.width;
-                    newHeight = image.height;
-                }
-
-                image["url"] = image.url;
-
-                setAttributes({
-                    image,
-                    widthRange:
-                        prevImageSize.current === imageSize && widthRange
-                            ? widthRange
-                            : newWidth
-                                ? newWidth
-                                : "",
-                    widthUnit:
-                        prevImageSize.current === imageSize &&
-                            attributes["widthUnit"]
-                            ? attributes["widthUnit"]
-                            : "px",
-                    heightRange:
-                        prevImageSize.current === imageSize && heightRange
-                            ? heightRange
-                            : newHeight
-                                ? newHeight
-                                : "",
-                    heightUnit:
-                        prevImageSize.current === imageSize &&
-                            attributes["heightUnit"]
-                            ? attributes["heightUnit"]
-                            : "px",
-                });
-            } else {
-                let newWidth = "";
-                let newHeight = "";
-                if (image && !imageSize) {
-                    newWidth = widthRange
-                        ? widthRange
-                        : image?.width
-                            ? image.width
-                            : "";
-                    newHeight = !autoHeight && image?.height ? image.height : "";
-                } else if (oldImageData?.media_details?.sizes) {
-                    if (oldImageData.media_details.sizes?.[imageSize]) {
-                        image.url = oldImageData.media_details.sizes?.[imageSize]
-                            ?.source_url
-                            ? oldImageData.media_details.sizes?.[imageSize]
-                                ?.source_url
-                            : oldImageData.source_url;
-                    } else {
-                        image.url = oldImageData.source_url;
-                    }
-                    image["url"] = image.url;
-
-                    newWidth = oldImageData.media_details.sizes?.[imageSize]?.width
-                        ? oldImageData.media_details.sizes?.[imageSize]?.width
-                        : oldImageData.width;
-                    newHeight = oldImageData.media_details.sizes?.[imageSize]
-                        ?.height
-                        ? oldImageData.media_details.sizes?.[imageSize]?.height
-                        : oldImageData.height;
-                }
-                setAttributes({
-                    image,
-                    widthRange: newWidth ? newWidth : "",
-                    // widthUnit: "px",
-                    widthUnit: attributes["widthUnit"]
-                        ? attributes["widthUnit"]
-                        : "px",
-                    heightRange: newHeight ? newHeight : "",
-                    // heightUnit: "px",
-                    heightUnit: attributes["heightUnit"]
-                        ? attributes["heightUnit"]
-                        : "px",
-                });
-            }
-        }
-
-        if (imgSource === 'featured-img' && media?.media_details?.sizes) {
-            let featuredImgWidth = media.media_details.sizes?.[imageSize]?.width
-                ? media.media_details.sizes?.[imageSize]?.width
-                : media.width;
-            let featuredImgHeight = media.media_details.sizes?.[imageSize]
-                ?.height
-                ? media.media_details.sizes?.[imageSize]?.height
-                : media.height;
-
-            setAttributes({
-                widthRange: featuredImgWidth ? featuredImgWidth : "",
-                // widthUnit: "px",
-                widthUnit: attributes["widthUnit"]
-                    ? attributes["widthUnit"]
-                    : "px",
-                heightRange: featuredImgHeight ? featuredImgHeight : "",
-                // heightUnit: "px",
-                heightUnit: attributes["heightUnit"]
-                    ? attributes["heightUnit"]
-                    : "px",
-            });
-
-        }
-
-        prevImageSize.current = imageSize;
-    }, [imageSize]);
-
     if (imgSource === 'featured-img' && !media && postFeaturedImage.length == 0) {
         return (
             <div className="eb-loading">
                 <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
             </div>
         )
-    };
-
+    }
     return (
         <>
             {isSelected && imgSource && (
                 <Inspector
                     attributes={attributes}
                     setAttributes={setAttributes}
+                    media={media}
+                    prevImageSize={prevImageSize}
+                    oldImageData={oldImageData}
                 />
             )}
 
@@ -623,7 +497,7 @@ const Edit = (props) => {
                             )}
                         </>
 
-                        {((imgSource === 'custom' && urls.length > 0) || (imgSource === 'featured-img' && typeof imagePostId == 'number' && featuredImage != 0)) && (
+                        {((imgSource === 'custom' && urls.length > 0) || (imgSource === 'featured-img' && featuredImage != 0)) && (
                             <>
                                 <BlockControls>
                                     <ToolbarGroup>
@@ -755,14 +629,14 @@ const Edit = (props) => {
                             </>
                         )}
 
-                        {imgSource === 'featured-img' && typeof imagePostId == 'number' && !featuredImage && (
+                        {imgSource === 'featured-img' && eb_conditional_localize.editor_type === 'edit-post' && !featuredImage && (
                             <NoticeComponent
                                 Icon={AdvancedImageIcon}
                                 title={"Advanced Image"}
                                 description={postFeaturedImage}
                             />
                         )}
-                        {imgSource === 'featured-img' && typeof imagePostId == 'string' && (
+                        {imgSource === 'featured-img' && eb_conditional_localize.editor_type === 'edit-site' && (
                             <div className="feature-image-placeholder">
                                 <img src={EssentialBlocksLocalize?.eb_plugins_url + "assets/images/user.jpg"} alt='featured image' />
                             </div>

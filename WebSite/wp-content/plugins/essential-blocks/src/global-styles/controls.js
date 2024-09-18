@@ -366,14 +366,17 @@ function EBGlobalControls(props) {
     const [clickedBlock, setClickedBlock] = useState("");
     const [isVisible, setIsVisible] = useState(false);
 
+    //Get Device type from context
+    const deviceType = useDeviceType()
+
     //Create Element for write Global Typography
     useEffect(() => {
         if (Object.keys(getGlobalTypography).length > 0) {
-            const cssString = generateTypographyCSS(getGlobalTypography);
+            const cssString = generateTypographyCSS(getGlobalTypography, deviceType);
             applyTypographyCSS(cssString);
             loadGoogleFonts(getGlobalTypography)
         }
-    }, [getGlobalTypography])
+    }, [getGlobalTypography, deviceType])
 
     //Initial UseEffect, Set Defualt color if Store is empty
     useEffect(() => {
@@ -494,9 +497,6 @@ function EBGlobalControls(props) {
         colors.splice(index, 1)
         setCustomGradientColors([...colors]);
     };
-
-    //Get Device type from context
-    const deviceType = useDeviceType()
 
     /**
      * Handle Popup Visibility

@@ -9,36 +9,24 @@ const save = ({ attributes }) => {
         layout,
         displayImage,
         displayTitle,
-        displayCreator,
-        displayOwner,
-        displayPrice,
-        displayLastSale,
         displayButton,
-        creatorLabel,
-        ownerLabel,
         buttonText,
-        showOwnerText,
-        showOwnerImage,
         gridPreset,
         listPreset,
         classHook,
     } = attributes;
+
+    if (settings?.opensea?.apiKey.length == 0) {
+        return
+    }
 
     const dataAttributes = {
         settings,
         layout,
         displayImage,
         displayTitle,
-        displayCreator,
-        displayOwner,
-        displayPrice,
-        displayLastSale,
         displayButton,
-        creatorLabel,
-        ownerLabel,
         buttonText,
-        showOwnerText,
-        showOwnerImage,
         gridPreset,
         listPreset,
     };

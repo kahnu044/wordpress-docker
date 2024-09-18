@@ -3,12 +3,12 @@
     namespace EssentialBlocks\Admin;
 
     use PriyoMukul\WPNotice\Notices;
-use EssentialBlocks\Utils\Helper;
-use EssentialBlocks\Utils\Settings;
-use PriyoMukul\WPNotice\Utils\CacheBank;
-use EssentialBlocks\Traits\HasSingletone;
-use EssentialBlocks\Dependencies\Insights;
-use PriyoMukul\WPNotice\Utils\NoticeRemover;
+    use EssentialBlocks\Utils\Helper;
+    use EssentialBlocks\Utils\Settings;
+    use PriyoMukul\WPNotice\Utils\CacheBank;
+    use EssentialBlocks\Traits\HasSingletone;
+    use EssentialBlocks\Dependencies\Insights;
+    use PriyoMukul\WPNotice\Utils\NoticeRemover;
 
     // use EssentialBlocks\Dependencies\WPNotice\Notices;
 
@@ -711,8 +711,8 @@ use PriyoMukul\WPNotice\Utils\NoticeRemover;
         <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
         <?php
             printf(
-                        __( "<p> <i>📣</i> Essential Blocks <strong>v4.8</strong> is now Compatible with WPML. Check out <strong><a target='_blank' href='%s'>this doc</a></strong> for more info.</p>", "essential-blocks" ),
-                        esc_url( 'https://essential-blocks.com/docs/translate-essential-blocks-with-wpml/' )
+                        __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.0</strong> with 5 New WooCommerce Blocks, Taxonomy, Text, Post Meta, Breadcrumbs. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
+                        esc_url( 'https://essential-blocks.com/changelog/' )
                     );
                 ?>
     </div>

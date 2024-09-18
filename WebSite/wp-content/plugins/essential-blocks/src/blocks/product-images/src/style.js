@@ -3,22 +3,19 @@ import {
     WRAPPER_PADDING,
     WRAPPER_BORDER_SHADOW,
     WRAPPER_BG,
-    META_ALIGNMENT,
-    // 
     LARGE_IMAGE_HEIGHT,
     LARGE_IMAGE_BORDER,
     GALLERY_ICON_SIZE,
     GALLERY_COLUMN_SPACE,
-    GALLERY_COLUMN_GAP
+    GALLERY_COLUMN_GAP,
+    LARGE_IMAGE_WIDTH,
+    FEATURE_IMG_MARGIN,
+    THUMBNAILS_IMAGE_BORDER,
+    ACTIVE_THUMBNAILS_IMAGE_BORDER
 } from "./constants/constants";
-import {
-    META_LABEL,
-    META_VALUE
-} from "./constants/typographyPrefixConstants";
 
 import {
     softMinifyCssStrings,
-    generateTypographyStyles,
     generateDimensionsControlStyles,
     generateBorderShadowStyles,
     generateResponsiveAlignStyles,
@@ -38,6 +35,7 @@ export default function Style(props) {
         galleryArrowHoverColor,
         galleryArrowBackgroundColor,
         galleryArrowBackgroundHoverColor,
+        featureImgAlignment
     } = attributes;
 
     // CSS/styling Codes Starts from Here
@@ -89,53 +87,6 @@ export default function Style(props) {
         controlName: WRAPPER_BG,
         noOverlay: true,
     });
-
-    const {
-        typoStylesDesktop: labelTypoStylesDesktop,
-        typoStylesTab: labelTypoStylesTab,
-        typoStylesMobile: labelTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: META_LABEL,
-        defaultFontSize: 18,
-    });
-
-    const {
-        typoStylesDesktop: valueTypoStylesDesktop,
-        typoStylesTab: valueTypoStylesTab,
-        typoStylesMobile: valueTypoStylesMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: META_VALUE,
-        defaultFontSize: 18,
-    });
-
-    const {
-        alignStylesDesktop: postMetaInlineAlignDesktop,
-        alignStylesTab: postMetaInlineAlignTab,
-        alignStylesMobile: postMetaInlineAlignMobile,
-    } = generateResponsiveAlignStyles({
-        controlName: META_ALIGNMENT,
-        property: "justify-content",
-        attributes,
-    });
-
-    const {
-        alignStylesDesktop: postMetaStackedAlignDesktop,
-        alignStylesTab: postMetaStackedAlignTab,
-        alignStylesMobile: postMetaStackedAlignMobile,
-    } = generateResponsiveAlignStyles({
-        controlName: META_ALIGNMENT,
-        property: "align-items",
-        attributes,
-    });
-
-    
-
-    
-
-    ///
-
     const {
         rangeStylesDesktop: largeImgHeightDesktop,
         rangeStylesTab: largeImgHeightTab,
@@ -189,6 +140,54 @@ export default function Style(props) {
         attributes,
     });
 
+    const {
+        rangeStylesDesktop: featureImageWidthDesktop,
+        rangeStylesTab: featureImageWidthTab,
+        rangeStylesMobile: featureImageWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: LARGE_IMAGE_WIDTH,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: featureImgMarginStylesDesktop,
+        dimensionStylesTab: featureImgMarginStylesTab,
+        dimensionStylesMobile: featureImgMarginStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURE_IMG_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+
+    const {
+        styesDesktop: thumbnailBDShadowDesktop,
+        styesTab: thumbnailBDShadowTab,
+        styesMobile: thumbnailBDShadowMobile,
+        stylesHoverDesktop: thumbnailBDShadowHoverDesktop,
+        stylesHoverTab: thumbnailBDShadowHoverTab,
+        stylesHoverMobile: thumbnailBDShadowHoverMobile,
+        transitionStyle: thumbnailBDShadowTransition,
+    } = generateBorderShadowStyles({
+        controlName: THUMBNAILS_IMAGE_BORDER,
+        attributes,
+        // noShadow: true,
+    });
+
+    const {
+        styesDesktop: thumbnailActiveBDShadowDesktop,
+        styesTab: thumbnailActiveBDShadowTab,
+        styesMobile: thumbnailActiveBDShadowMobile,
+        stylesHoverDesktop: thumbnailActiveBDShadowHoverDesktop,
+        stylesHoverTab: thumbnailActiveBDShadowHoverTab,
+        stylesHoverMobile: thumbnailActiveBDShadowHoverMobile,
+        transitionStyle: thumbnailActiveBDShadowTransition,
+    } = generateBorderShadowStyles({
+        controlName: ACTIVE_THUMBNAILS_IMAGE_BORDER,
+        attributes,
+        // noShadow: true,
+    });
+
 
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
@@ -229,12 +228,20 @@ export default function Style(props) {
 		}
 	`;
    const largeImageDesktop = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider .slick-list {
+            ${featureImgMarginStylesDesktop}
+        }
+   
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item {
+            justify-content: ${featureImgAlignment};
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image {
             ${! useAdaptiveHeight ? `
                 ${largeImgHeightDesktop}
                 object-fit: ${largeImgScale};
             ` : ''}
             ${largeImageBDShadowDesktop}
+            ${featureImageWidthDesktop}
         }
 
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image:hover {
@@ -243,11 +250,15 @@ export default function Style(props) {
    `;
 
    const largeImageTab = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider .slick-list {
+            ${featureImgMarginStylesTab}
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image {
             ${! useAdaptiveHeight ? `
                 ${largeImgHeightTab}
             ` : ''}
             ${largeImageBDShadowTab}
+            ${featureImageWidthTab}
         }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image:hover {
             ${largeImageBDShadowHoverTab}
@@ -255,11 +266,15 @@ export default function Style(props) {
    `;
 
    const largeImageMobile = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider .slick-list {
+            ${featureImgMarginStylesMobile}
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image {
             ${! useAdaptiveHeight ? `
                 ${largeImgHeightMobile}
             ` : ''}
             ${largeImageBDShadowMobile}
+            ${featureImageWidthMobile}
         }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider-body-item .eb-product-gallery-image:hover {
             ${largeImageBDShadowHoverMobile}
@@ -267,6 +282,21 @@ export default function Style(props) {
    `;
 
    const galleryIconDesktop = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item img {
+            ${thumbnailBDShadowDesktop}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item:hover img {
+            ${thumbnailBDShadowHoverDesktop}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current img {
+            ${thumbnailActiveBDShadowDesktop}
+            transition: ${thumbnailActiveBDShadowTransition};
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center:hover img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current:hover img  {
+            ${thumbnailActiveBDShadowHoverDesktop}
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-prev:before,
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-next:before {
             ${galleryIconSizeDesktop}
@@ -275,7 +305,7 @@ export default function Style(props) {
         }
         
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button:hover:before {
-                color: ${galleryArrowHoverColor};
+            color: ${galleryArrowHoverColor};
         }
 
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button {
@@ -294,6 +324,21 @@ export default function Style(props) {
    `;
 
    const galleryIconTab = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item img {
+            ${thumbnailBDShadowTab}
+            transition: ${thumbnailBDShadowTransition};
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item:hover img {
+            ${thumbnailBDShadowHoverTab}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current img  {
+            ${thumbnailActiveBDShadowTab}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center:hover img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current:hover img {
+            ${thumbnailActiveBDShadowHoverTab}
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-prev:before,
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-next:before {
             ${galleryIconSizeTab}
@@ -306,6 +351,20 @@ export default function Style(props) {
    `;
 
    const galleryIconMobile = `
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item img {
+            ${thumbnailBDShadowMobile}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item:hover img {
+            ${thumbnailBDShadowHoverMobile}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current img {
+            ${thumbnailActiveBDShadowMobile}
+        }
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-center:hover img,
+        .eb-product-images-wrapper.${blockId} .eb-product-image_slider-footer .eb-product-image_slider-footer-item.slick-current:hover img {
+            ${thumbnailActiveBDShadowHoverMobile}
+        }
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-prev:before,
         .eb-product-images-wrapper.${blockId} .eb-product-image_slider .eb-product-image_slider-footer button.slick-next:before {
             ${galleryIconSizeMobile}

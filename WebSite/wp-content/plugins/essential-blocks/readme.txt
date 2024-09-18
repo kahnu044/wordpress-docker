@@ -1,30 +1,30 @@
 === Essential Blocks – Page Builder Gutenberg Blocks, Patterns & Templates ===
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
-Tags: WordPress Block Editor, Gutenberg Blocks Plugin, WooCommerce, Gutenberg Templates, Page Builder
+Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gutenberg Plugin
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 4.9.0
+Stable tag: 5.0.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-The Essential Blocks Library for WordPress Gutenberg Editor.
+Gutenberg blocks library to create WordPress sites in the Gutenberg Block Editor with 60+ essential blocks, patterns, templates for WooCommerce & more
 
 == Description ==
-Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate blocks library for WordPress!
-Enhance your Gutenberg experience with 50+ unique blocks (more coming soon). Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before.
+Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate Gutenberg blocks library for WordPress default editor!
+Enhance your Gutenberg experience with 60+ unique blocks (more coming soon). Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before.
 
 https://youtu.be/PnZx4ZOMyzI
 
-##DESIGN OUTSTANDING WEB PAGES WITH ADVANCED GUTENBERG BLOCKS LIBRARY!
+##DESIGN OUTSTANDING WEB PAGES WITH ADVANCED & ESSENTIAL GUTENBERG BLOCKS LIBRARY!
 
 [See It In Action: Check out all the interactive block demos in one place.](https://essential-blocks.com/demo/)
 
-###✨ COMPLETELY CUSTOMIZABLE
+###✨ BLOCK PLUGIN WITH FULL CUSTOMIZATION
 
-Each block comes with a bunch of options to control every possible aspect of your website design. You can design your page with endless customization options using this amazing Gutenberg blocks plugin.
+Each Gutenberg block comes with a bunch of options to control every possible aspect of your website design on the block editor. You can design your page with endless customization options using this amazing Gutenberg blocks plugin.
 
-###🌐 BLOCKS GLOBAL CONTROL, COLORS & TYPOGRAPHY
+###🌐 GUTENBERG BLOCKS GLOBAL CONTROL, COLORS & TYPOGRAPHY
 
 Now, any block can be saved with customized styling. You can also personalize the colors and typography throughout your entire website. This boosts efficiency, so you do not have to recreate the same styling repeatedly on all pages or posts.
 
@@ -32,14 +32,14 @@ Now, any block can be saved with customized styling. You can also personalize th
 
 No extra resources or messy codes to slow down your website. Optimized for super fast loading and instant live editing.
 
-###🈸 WPML CERTIFIED PlUGIN
+###🈸 WPML CERTIFIED GUTENBERG PLUGIN
 
 Translate Gutenberg blocks with WPML in your chosen language & offer a multilingual experience to your visitors.
 
-###⚙️ BLOCKS MODULAR CONTROL
+###⚙️ GUTENBERG BLOCKS MODULAR CONTROL
 Enable and disable individual blocks to make your page load faster and smoother. You can deactivate unnecessary blocks to keep the site lightweight.
 
-###🚀 ASSET REGENERATION
+###🚀 ASSET REGENERATION FOR FASTER GUTENBERG PAGES
 Keep your website's loading speed fast and secure against heavy scripts and CSS files with the Asset Regeneration feature.
 
 ###🖊️ COMPATIBILITY WITH GOOGLE FONTS
@@ -48,16 +48,16 @@ Choose any Google Font you prefer from a collection of 1,000+ font families avai
 ###💻 RESPONSIVE ON ALL DEVICES
 Directly from your Gutenberg block editor, you can control each block’s responsiveness individually. With flexible, responsive customization options, make your website user-friendly for all devices.
 
-###💫 ADVANCED ANIMATION FEATURE
+###💫 ADVANCED ANIMATION FOR PAGE BUILDER
 With our latest exclusive feature, animation, you can design every block with a stunning animated appearance. Grab users’ attention instantly with eye-catching animations, transitions, and many more.
 
 ##⚡ DYNAMIC TAGS & ACF SUPPORT (PRO)
 Enhance the flexibility and customization options of your Gutenberg-built website and easily add custom fields to posts, pages, or custom post types with dynamic placeholders or variables generated from various parameters or data sources.
 
-##🖼️ READY GUTENBERG BLOCK PATTERNS
-Get stunningly designed, ready-to-use block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
+##🖼️ READY GUTENBERG PATTERNS BUILT WITH BLOCKS
+Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
 
-###🎯 STUNNING GUTENBERG TEMPLATES
+###🎯 STUNNING GUTENBERG TEMPLATES FOR WORDPRESS
 Explore and get access to 2,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
 
 You will find a wide variety of stunning Gutenberg website or web page templates in any niche:
@@ -71,7 +71,7 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 - Food & Restaurant
 - Health & Medical
 - Multipurpose
-- NFT & CryptoCurrency
+- NFT & Crypto Currency
 - Non-profit
 - Portfolio & Consultancy
 - Technology
@@ -80,8 +80,8 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 ###👨‍💻 EXPERT SUPPORT
 We have a very friendly support team ready to help you out. Ask your questions in the support forum, we will get back to you immediately.
 
-## 50+ FREE & ADVANCED BLOCKS AND COUNTING
-Design without limits in WordPress block editor, using 50+ of the most useful Essential Blocks for Gutenberg.
+## 60+ FREE & ADVANCED BLOCKS AND COUNTING
+Design without limits in WordPress block editor, using 60+ of the most useful Essential Blocks for Gutenberg.
 
 - **[Accordion](https://essential-blocks.com/demo/accordion/)** - Add beautiful accordions in your pages, posts, anywhere & reduce scrolling
 - **[Button](https://essential-blocks.com/demo/button/)** - Quickly add modern buttons with hover effect in your post or page
@@ -115,7 +115,7 @@ Design without limits in WordPress block editor, using 50+ of the most useful Es
 - **[Fluent Forms](https://essential-blocks.com/demo/fluent-form/)** - Design your Forms container and fields and choose your preferred form layout to style Fluent Forms
 - **[Advanced Image](https://essential-blocks.com/demo/advanced-image/)** - Customize images in Gutenberg to fit your exact needs
 - **[WPForms](https://essential-blocks.com/demo/wpform/)** - Design stunning WPForms in minutes with plenty of controls & styling options
-- **[Woo Product Grid](https://essential-blocks.com/demo/woo-product-grid)** - Display WooCommerce products with stunning layouts, buttons, tags, ratings, and more
+- **[Woo Product Grid](https://essential-blocks.com/demo/woo-product-grid)** - Display WooCommerce products with stunning layouts, buttons, x, ratings, and more
 - **[Post Carousel](https://essential-blocks.com/demo/post-carousel)** - Showcase your posts creatively with an animated, dynamic carousel
 - **[Advanced Video](https://essential-blocks.com/demo/advanced-video)** -  Add extra styling and unique customization to your videos and amaze site visitors
 - **[Advanced Navigation](https://essential-blocks.com/demo/advanced-navigation)** -  Display pages & posts with easy navigation on your website with a stunning & organized appearance
@@ -136,15 +136,24 @@ Design without limits in WordPress block editor, using 50+ of the most useful Es
 - **[Stacked Cards (PRO)](https://essential-blocks.com/demo/stacked-cards)** - Display your content in a unique style with the EB Stacked Cards block. With this block, you can easily make your stacked cards sticky in place and provide users an interactive experience when they scroll through your website
 - **[Testimonial Slider (PRO)](https://essential-blocks.com/demo/testimonial-slider)** - Display engaging and credible customer testimonials, reviews and ratings in a sleek slider format to build trust and encourage conversions
 - **[Offcanvas (PRO)](https://essential-blocks.com/demo/offcanvas/)** - Showcase a sidebar menu on your Gutenberg site using the Offcanvas block and grab visitors’ attention with various stunning transitions & effects
+- **[Breadcrumbs](https://essential-blocks.com/demo/breadcrumbs/)** - Make smooth navigation for your posts or pages by adding a Breadcrumbs block.
+- **[Taxonomy](https://essential-blocks.com/demo/taxonomy/)** - Display and organize content by categories, tags, product SKUs, etc. to make it easy for users to navigate.
+- **[Woo Product Details](https://essential-blocks.com/demo/woo-product-details/)** - Display WooCommerce product details with an organized layout that helps grab customers' attention.
+- **[Woo Product Price](https://essential-blocks.com/demo/woo-product-price/)** - Display the price of the WooCommerce product and style it using custom colors and typography.
+- **[Woo Product Rating](https://essential-blocks.com/demo/woo-product-rating/)** - Display WooCommerce product ratings to build credibility among visitors and customers.
+- **[Woo Product Images](https://essential-blocks.com/demo/woo-product-image/)** - Showcase eye-catching WooCommerce product images that draw in customers and are easy to customize.
+- **[Woo Add to Cart](https://essential-blocks.com/demo/woo-add-to-cart/)** - Display the 'add to cart' option for all your WooCommerce products to ensure easy navigation for customers.
+- **[Post Meta](https://essential-blocks.com/demo/post-meta/)** - Attractively showcase your current post metadata like author, date, excerpt & more.
+- **[Text](https://essential-blocks.com/demo/text-block/)** - Add and customize text content on your website that catches the attention of the visitors.
 
-More blocks and demos coming soon (weekly update)
+More Gutenberg blocks and demos coming soon for the block visual editor (weekly update)
 
 ## 📄 SUPPORT & DOCUMENTATION
 - If you have any more questions, visit our support on the **[Plugin’s Forum](https://wordpress.org/support/plugin/essential-blocks/)**.
 - Find out how to use each Gutenberg block with our **[detailed documentation](https://essential-blocks.com/docs/)**.
 - For information about our features, FAQs and more, check out our website at **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**.
 
-##🏆 GET ACCESS TO QUICK & EASY TUTORIALS
+##🏆 GET ACCESS TO EASY & ESSENTIAL GUTENBERG TUTORIALS
 Learn from our video tutorials available on our **[Youtube Channel](https://www.youtube.com/c/WPDeveloperNet)**.
 
 ##LIKED ESSENTIAL BLOCKS?
@@ -228,7 +237,35 @@ Yes, you can effortlessly display your WooCommerce products on your store websit
 = What should I do to use an earlier version of Essential Blocks? =
 If you found the recent version of Essential Blocks isn’t working or conflicting with other plugins, then you can use earlier versions of the plugin.
 
+
 == Changelog ==
+
+= 5.0.0 - 12/09/2024 =
+- Added: New Block | Text
+- Added: New Block | Taxonomy
+- Added: New Block | Post Meta
+- Added: New Block | Breadcrumbs
+- Added: New Block | Woo Add to Cart
+- Added: New Block | Woo Product Price
+- Added: New Block | Woo Product Images
+- Added: New Block | Woo Product Rating
+- Added: New Block | Woo Product Details
+- Added: Product Grid | Related product query option
+- Fixed: Advanced Heading | Dynamic Title loading issue in FSE
+- Fixed: Row Block | Columns equal height not working in frontend
+- Fixed: Slider Block| Loading animation always showing
+- Fixed: Synced Pattern issue fix
+- Few minor bug fixes & improvements
+
+= 4.9.1 - 03/09/2024 =
+- Added: Responsive typography support
+- Added: Product Grid | Product image clicable option
+- Fixed: Post Carousel | Posts not showing for default query
+- Fixed: NFT Gallery | API updated to v2.0
+- Fixed: Slider | Loading icon showing all time if image is transparent
+- Fixed: Image Gallery | Image size settings reverted to default
+- Fixed: Toggle Content | z-index conflict with Astra theme
+- Few minor bug fixes & improvements
 
 = 4.9.0 - 27/08/2024 =
 - Improved: Optimized codebase for better performance and efficiency
@@ -236,17 +273,9 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 - Fixed: EB Post Carousel | Throwing PHP warning
 - Few minor bug fixes & improvements
 
-= 4.8.4 - 13/08/2024 =
-- Fixed: Style generation conflict with Generatepres
-- Fixed: Image Gallery | URL removed when new image add
-- Fixed: Slider | Images appeared broken at first glance
-- Improved: Security enhancement
-
 [See changelog for all versions](https://essential-blocks.com/changelog).
-
 
 == Upgrade Notice ==
 
-= 4.9.0 =
-- Optimized the codebase for better performance and efficiency
-- Fixed Synced Pattern rerender issue
+= 5.0.0 =
+- Introducing 5 New WooCommerce Blocks along with Taxonomy, Text, Post Meta, Breadcrumbs to enhance your Full Site Editing Experience

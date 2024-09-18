@@ -25,7 +25,12 @@ import {
     GALLERY_POSITON,
     GALLERY_ICON_SIZE,
     LARGE_IMAGE_HEIGHT,
-    LARGE_IMAGE_BORDER
+    LARGE_IMAGE_WIDTH,
+    LARGE_IMAGE_BORDER,
+    FEATURE_ALIGNMENT,
+    FEATURE_IMG_MARGIN,
+    THUMBNAILS_IMAGE_BORDER,
+    ACTIVE_THUMBNAILS_IMAGE_BORDER
 } from "./constants/constants";
 import {
     ColorControl,
@@ -34,6 +39,7 @@ import {
     SortControl,
     InspectorPanel,
     ResponsiveRangeController,
+    ResponsiveDimensionsControl,
     ButtonGroupControl,
     BorderShadowControl
 }  from "@essential-blocks/controls";
@@ -49,6 +55,8 @@ export default function Inspector(props) {
         galleryArrowHoverColor,
         galleryArrowBackgroundColor,
         galleryArrowBackgroundHoverColor,
+        featureImgAlignment,
+        disableNavArrow
     } = attributes;
 
     return (
@@ -60,7 +68,7 @@ export default function Inspector(props) {
         }}>
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody
-                    title={__("Gallery", "essential-blocks")}
+                    title={__("Settings", "essential-blocks")}
                     initialOpen={true}
                 >
                     <ButtonGroupControl
@@ -85,19 +93,31 @@ export default function Inspector(props) {
                         step={1}
                     />
                     <ResponsiveRangeController
-                        baseLabel={__("Space Between", "essential-blocks")}
+                        baseLabel={__("Thumbnails Space", "essential-blocks")}
                         controlName={GALLERY_COLUMN_SPACE}
                         min={1}
                         max={200}
                         step={1}
                     />
+                    <ToggleControl
+                        label={__(
+                            "Disable Thumbnail Navigation Icon",
+                            "essential-blocks"
+                        )}
+                        checked={disableNavArrow}
+                        onChange={() =>
+                            setAttributes({
+                                disableNavArrow: !disableNavArrow,
+                            })
+                        }
+                    />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
-                <InspectorPanel.PanelBody title={__("Large Image","essential-blocks")} initialOpen={true}>
+                <InspectorPanel.PanelBody title={__("Featured Image","essential-blocks")} initialOpen={true}>
                     <ToggleControl
                         label={__(
-                            "Use Adaptive Height?",
+                            "Enable Adaptive Height",
                             "essential-blocks"
                         )}
                         checked={useAdaptiveHeight}
@@ -120,7 +140,7 @@ export default function Inspector(props) {
                                 step={1}
                             />
                             <SelectControl
-                                label={ __( 'Image Scale','essential-blocks' ) }
+                                label={ __( 'Display Size','essential-blocks' ) }
                                 value={ largeImgScale }
                                 onChange={ (value) => {
                                     setAttributes({largeImgScale: value})
@@ -136,6 +156,26 @@ export default function Inspector(props) {
                             />
                         </>
                     )}
+                    <ResponsiveRangeController
+                        baseLabel={__(
+                            "Width",
+                            "essential-blocks"
+                        )}
+                        controlName={LARGE_IMAGE_WIDTH}
+                        min={100}
+                        max={2000}
+                        step={1}
+                    />
+                    <ButtonGroupControl
+                        label={__("Alignment", "essential-blocks")}
+                        attrName="featureImgAlignment"
+                        options={FEATURE_ALIGNMENT}
+                        currentValue={featureImgAlignment}
+                    />
+                    <ResponsiveDimensionsControl
+                        controlName={FEATURE_IMG_MARGIN}
+                        baseLabel="Margin"
+                    />
                     <BaseControl>
                         <h3 className="eb-control-title">
                             {__("Border", "essential-blocks")}
@@ -148,7 +188,31 @@ export default function Inspector(props) {
                         }
                     />
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Gallery Arrow","essential-blocks")}>
+                <InspectorPanel.PanelBody title={__("Thumbnails","essential-blocks")}>
+                    <BaseControl>
+                        <h3 className="eb-control-title">
+                            {__("Thumbnails Border", "essential-blocks")}
+                        </h3>
+                    </BaseControl>
+                    <BorderShadowControl
+                        label={__("Thumbnails Border","essential-blocks")}
+                        controlName={
+                            THUMBNAILS_IMAGE_BORDER
+                        }
+                    />
+                    <BaseControl>
+                        <h3 className="eb-control-title">
+                            {__("Active Thumbnails Border", "essential-blocks")}
+                        </h3>
+                    </BaseControl>
+                    <BorderShadowControl
+                        label={__("Active Thumbnails Border","essential-blocks")}
+                        controlName={
+                            ACTIVE_THUMBNAILS_IMAGE_BORDER
+                        }
+                    />
+                </InspectorPanel.PanelBody>
+                <InspectorPanel.PanelBody title={__("Navigations","essential-blocks")}>
                     <ResponsiveRangeController
                         baseLabel={__("Icon Size", "essential-blocks")}
                         controlName={GALLERY_ICON_SIZE}

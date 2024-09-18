@@ -68,7 +68,7 @@ function Edit(props) {
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-text',
+        blockPrefix: 'eb-taxonomy',
         style: <Style {...props} />
     };
 
@@ -239,66 +239,63 @@ function Edit(props) {
 
                     {hasResolved && taxonomies && (
                         <>
-                            {Array.isArray(categories) && categories.length == 0 && (
+                            {Array.isArray(categories) && categories.length == 0 && eb_conditional_localize?.editor_type !== 'edit-site' && (
                                 <NoticeComponent
                                     Icon={TaxonomyIcon}
                                     title={__("Taxonomy", "essential-blocks")}
                                     description={`Not found any data.`}
                                 />
                             )}
+                            <div
+                                className={`eb-taxonomies-wrapper ${blockId} ${displayStyle}`}
+                                data-id={blockId}
+                            >
+                                {prefixType !== 'none' && (
+                                    <div className="prefix-wrap">
+                                        {prefixType === 'text' && prefixText && (
+                                            <DynamicInputValueHandler
+                                                value={prefixText}
+                                                tagName='span'
+                                                className="eb-taxonomy-prefix-text"
+                                                onChange={(prefixText) =>
+                                                    setAttributes({ prefixText })
+                                                }
+                                                readOnly={true}
+                                            />
+                                        )}
 
-                            {Array.isArray(categories) && categories.length > 0 && (
-                                <div
-                                    className={`eb-taxonomies-wrapper ${blockId} ${displayStyle}`}
-                                    data-id={blockId}
-                                >
-                                    {prefixType !== 'none' && (
-                                        <div className="prefix-wrap">
-                                            {prefixType === 'text' && prefixText && (
-                                                <DynamicInputValueHandler
-                                                    value={prefixText}
-                                                    tagName='span'
-                                                    className="eb-taxonomy-prefix-text"
-                                                    onChange={(prefixText) =>
-                                                        setAttributes({ prefixText })
-                                                    }
-                                                    readOnly={true}
-                                                />
-                                            )}
-
-                                            {prefixType === 'icon' && prefixIcon && (
-                                                <EBDisplayIcon icon={prefixIcon} className={`eb-taxonomy-prefix-icon`} />
-                                            )}
-                                        </div>
-                                    )}
-
-
-                                    <div className="eb-tax-wrap">
-                                        {renderCategoryList()}
+                                        {prefixType === 'icon' && prefixIcon && (
+                                            <EBDisplayIcon icon={prefixIcon} className={`eb-taxonomy-prefix-icon`} />
+                                        )}
                                     </div>
+                                )}
 
-                                    {suffixType !== 'none' && (
-                                        <div className="suffix-wrap">
-                                            {suffixType === 'text' && suffixText && (
-                                                <DynamicInputValueHandler
-                                                    value={suffixText}
-                                                    placeholder='placeholder text'
-                                                    tagName='span'
-                                                    className="eb-taxonomy-suffix-text"
-                                                    onChange={(suffixText) =>
-                                                        setAttributes({ suffixText })
-                                                    }
-                                                    readOnly={true}
-                                                />
-                                            )}
 
-                                            {suffixType === 'icon' && suffixIcon && (
-                                                <EBDisplayIcon icon={suffixIcon} className={`eb-taxonomy-suffix-icon`} />
-                                            )}
-                                        </div>
-                                    )}
+                                <div className="eb-tax-wrap">
+                                    {renderCategoryList()}
                                 </div>
-                            )}
+
+                                {suffixType !== 'none' && (
+                                    <div className="suffix-wrap">
+                                        {suffixType === 'text' && suffixText && (
+                                            <DynamicInputValueHandler
+                                                value={suffixText}
+                                                placeholder='placeholder text'
+                                                tagName='span'
+                                                className="eb-taxonomy-suffix-text"
+                                                onChange={(suffixText) =>
+                                                    setAttributes({ suffixText })
+                                                }
+                                                readOnly={true}
+                                            />
+                                        )}
+
+                                        {suffixType === 'icon' && suffixIcon && (
+                                            <EBDisplayIcon icon={suffixIcon} className={`eb-taxonomy-suffix-icon`} />
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>

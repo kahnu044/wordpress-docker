@@ -184,7 +184,7 @@ const attributes = {
     }),
     //Image Max Height
     ...generateResponsiveRangeAttributes(imageHeight, {
-        defaultRange: 300,
+        defaultRange: 150,
     }),
     //Image Max Width
     ...generateResponsiveRangeAttributes(imageWidth, {

@@ -49,6 +49,30 @@ const Edit = (props) => {
         tabTitles.find((item) => item.isDefault) || { id: "1" }
     ).id;
 
+    const TEMPLATE = [
+        [
+            "essential-blocks/tab",
+            {
+                tabId: '1',
+                tabParentId: blockId
+            },
+        ],
+        [
+            "essential-blocks/tab",
+            {
+                tabId: '2',
+                tabParentId: blockId
+            },
+        ],
+        [
+            "essential-blocks/tab",
+            {
+                tabId: '3',
+                tabParentId: blockId
+            },
+        ]
+    ]
+
     const handleTabTitleClick = (id) => {
         setIsClickTab(true);
 
@@ -104,13 +128,6 @@ const Edit = (props) => {
     const innerBlocksRef = useRef(innerBlocks)
     //
     useEffect(() => {
-        const { updateBlockAttributes } = dispatch("core/block-editor");
-
-        times(innerBlocks.length, (n) => {
-            updateBlockAttributes(innerBlocks[n].clientId, {
-                tabParentId: `${blockId}`,
-            });
-        });
 
         if (innerBlocks.length > innerBlocksRef.current.length) {
             innerBlocksRef.current = innerBlocks
@@ -129,7 +146,7 @@ const Edit = (props) => {
             }
             innerBlocksRef.current = innerBlocks
         }
-    }, [blockId, innerBlocks]);
+    }, [innerBlocks]);
 
     const enhancedProps = {
         ...props,
@@ -223,14 +240,8 @@ const Edit = (props) => {
                                 `}
                             </style>
                             <InnerBlocks
-                                templateLock="all"
-                                template={times(tabChildCount, (n) => [
-                                    "essential-blocks/tab",
-                                    {
-                                        tabId: `${n + 1}`,
-                                        tabParentId: blockId,
-                                    },
-                                ])}
+                                templateLock="insert"
+                                template={TEMPLATE}
                                 allowedBlocks={["essential-blocks/tab"]}
                             />
                         </div>

@@ -1,7 +1,8 @@
 <?php
 use EssentialBlocks\Blocks\Row;
-use EssentialBlocks\Blocks\Form;
 use EssentialBlocks\Blocks\Icon;
+use EssentialBlocks\Blocks\Form;
+use EssentialBlocks\Blocks\Text;
 use EssentialBlocks\Blocks\PopUp;
 use EssentialBlocks\Blocks\Button;
 use EssentialBlocks\Blocks\Notice;
@@ -10,12 +11,16 @@ use EssentialBlocks\Blocks\Social;
 use EssentialBlocks\Blocks\FlipBox;
 use EssentialBlocks\Blocks\InfoBox;
 use EssentialBlocks\Blocks\WPForms;
-use EssentialBlocks\Blocks\Wrapper;
 use EssentialBlocks\Blocks\PostGrid;
+use EssentialBlocks\Blocks\Wrapper;
+use EssentialBlocks\Blocks\PostMeta;
+use EssentialBlocks\Blocks\Taxonomy;
 use EssentialBlocks\Blocks\Accordion;
+use EssentialBlocks\Blocks\AddToCart;
 use EssentialBlocks\Blocks\CountDown;
 use EssentialBlocks\Blocks\GoogleMap;
 use EssentialBlocks\Blocks\Openverse;
+use EssentialBlocks\Blocks\Breadcrumbs;
 use EssentialBlocks\Blocks\DualButton;
 use EssentialBlocks\Blocks\NftGallery;
 use EssentialBlocks\Blocks\TeamMember;
@@ -30,19 +35,25 @@ use EssentialBlocks\Blocks\CallToAction;
 use EssentialBlocks\Blocks\ImageGallery;
 use EssentialBlocks\Blocks\PostCarousel;
 use EssentialBlocks\Blocks\PricingTable;
+use EssentialBlocks\Blocks\ProductPrice;
 use EssentialBlocks\Blocks\ShapeDivider;
 use EssentialBlocks\Blocks\AdvancedImage;
 use EssentialBlocks\Blocks\AdvancedVideo;
 use EssentialBlocks\Blocks\InstagramFeed;
 use EssentialBlocks\Blocks\NumberCounter;
+use EssentialBlocks\Blocks\ProductImages;
+use EssentialBlocks\Blocks\ProductRating;
 use EssentialBlocks\Blocks\ToggleContent;
 use EssentialBlocks\Blocks\ParallaxSlider;
+use EssentialBlocks\Blocks\ProductDetails;
 use EssentialBlocks\Blocks\WooProductGrid;
 use EssentialBlocks\Blocks\AdvancedHeading;
 use EssentialBlocks\Blocks\ImageComparison;
 use EssentialBlocks\Blocks\TableOfContents;
 use EssentialBlocks\Blocks\InteractivePromo;
 use EssentialBlocks\Blocks\AdvancedNavigation;
+
+$testArr = [  ];
 
 $free_blocks = [
     'accordion'           => [
@@ -204,7 +215,6 @@ $free_blocks = [
         'label'      => __( 'Progress Bar', 'essential-blocks' ),
         'value'      => 'progress_bar',
         'visibility' => 'true',
-        'status'     => 'popular',
         'category'   => 'creative',
         'object'     => ProgressBar::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/progress-bar/',
@@ -277,7 +287,6 @@ $free_blocks = [
         'label'      => __( 'Typing Text', 'essential-blocks' ),
         'value'      => 'typing_text',
         'visibility' => 'true',
-        'status'     => 'popular',
         'category'   => 'creative',
         'object'     => TypingText::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/typing-text/',
@@ -340,7 +349,7 @@ $free_blocks = [
         'label'      => __( 'Table Of Contents', 'essential-blocks' ),
         'value'      => 'table_of_contents',
         'visibility' => 'true',
-        'status'     => 'updated',
+        'status'     => 'popular',
         'category'   => 'content',
         'object'     => TableOfContents::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/table-of-contents/',
@@ -454,6 +463,7 @@ $free_blocks = [
         'value'      => 'nft_gallery',
         'visibility' => 'true',
         'category'   => 'dynamic',
+        'status'     => 'updated',
         'object'     => NftGallery::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/nft-gallery/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-nft-gallery/',
@@ -463,7 +473,6 @@ $free_blocks = [
         'label'      => __( 'Google Maps', 'essential-blocks' ),
         'value'      => 'google_map',
         'visibility' => 'true',
-        'status'     => 'updated',
         'category'   => 'dynamic',
         'object'     => GoogleMap::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/google-maps/',
@@ -484,7 +493,7 @@ $free_blocks = [
         'label'      => __( 'Form', 'essential-blocks' ),
         'value'      => 'form',
         'visibility' => 'true',
-        'status'     => 'new',
+        'status'     => 'popular',
         'category'   => 'form',
         'object'     => Form::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/form-block/',
@@ -495,109 +504,121 @@ $free_blocks = [
         'label'      => __( 'Icon Picker', 'essential-blocks' ),
         'value'      => 'icon',
         'visibility' => 'true',
-        'status'     => 'new',
         'category'   => 'creative',
         'object'     => Icon::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/icon-picker/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-icon-picker',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/icon/icon.svg'
      ]
-    // 'text'                => [
-    //     'label'      => __( 'Text', 'essential-blocks' ),
-    //     'value'      => 'text',
-    //     'visibility' => 'true',
-    //     'category'   => 'content',
-    //     'status'     => 'new',
-    //     'object'     => Text::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/text/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/text/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/advanced-heading/icon.svg'
-    //  ],
-    // 'taxonomy'            => [
-    //     'label'      => __( 'Taxonomy', 'essential-blocks' ),
-    //     'value'      => 'taxonomy',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'dynamic',
-    //     'object'     => Taxonomy::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/taxonomy/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/taxonomy/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/taxonomy/icon.svg'
-    //  ],
-    // 'product_price'       => [
-    //     'label'      => __( 'Product Price', 'essential-blocks' ),
-    //     'value'      => 'product_price',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'woocommerce',
-    //     'object'     => ProductPrice::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/product-price/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-product-price/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-price/icon.svg'
-    //  ],
-    // 'post_meta'           => [
-    //     'label'      => __( 'Post Meta', 'essential-blocks' ),
-    //     'value'      => 'post_meta',
-    //     'visibility' => 'true',
-    //     'category'   => 'creative',
-    //     'object'     => PostMeta::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-navigation/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-advanced-navigation/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/advanced-navigation/icon.svg'
-    //  ],
-    // 'product_rating'      => [
-    //     'label'      => __( 'Product Rating', 'essential-blocks' ),
-    //     'value'      => 'product_rating',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'woocommerce',
-    //     'object'     => ProductRating::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/product-rating/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-product-rating/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-rating/icon.svg'
-    //  ],
-    // 'product_details'     => [
-    //     'label'      => __( 'Product Details', 'essential-blocks' ),
-    //     'value'      => 'product_details',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'woocommerce',
-    //     'object'     => ProductDetails::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/product-details/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-product-details/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-details/icon.svg'
-    //  ],
-    // 'add_to_cart'         => [
-    //     'label'      => __( 'Add To Cart', 'essential-blocks' ),
-    //     'value'      => 'add_to_cart',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'woocommerce',
-    //     'object'     => AddToCart::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/add-to-cart/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-add-to-cart/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/add-to-cart/icon.svg'
-    //  ],
-    // 'product_images'      => [
-    //     'label'      => __( 'Product Images', 'essential-blocks' ),
-    //     'value'      => 'product_images',
-    //     'visibility' => 'true',
-    //     'status'     => 'new',
-    //     'category'   => 'woocommerce',
-    //     'object'     => ProductImages::get_instance(),
-    //     'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/product-image-gallery/',
-    //     'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-product-image-gallery/',
-    //     'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-images/icon.svg'
-    //  ]
+ ];
+
+$new_blocks = [
+    'text'            => [
+        'label'      => __( 'Text', 'essential-blocks' ),
+        'value'      => 'text',
+        'visibility' => 'true',
+        'category'   => 'content',
+        'status'     => 'new',
+        'object'     => Text::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/text-block/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-text/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/text/icon.svg'
+     ],
+    'taxonomy'        => [
+        'label'      => __( 'Taxonomy', 'essential-blocks' ),
+        'value'      => 'taxonomy',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'dynamic',
+        'object'     => Taxonomy::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/taxonomy/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-taxonomy/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/taxonomy/icon.svg'
+     ],
+    'product_price'   => [
+        'label'      => __( 'Product Price', 'essential-blocks' ),
+        'value'      => 'product_price',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'woocommerce',
+        'object'     => ProductPrice::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-product-price/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-woo-product-price/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-price/icon.svg'
+     ],
+    'post_meta'       => [
+        'label'      => __( 'Post Meta', 'essential-blocks' ),
+        'value'      => 'post_meta',
+        'visibility' => 'true',
+        'category'   => 'creative',
+        'object'     => PostMeta::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/post-meta/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-post-meta/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/post-meta/icon.svg'
+     ],
+    'product_rating'  => [
+        'label'      => __( 'Product Rating', 'essential-blocks' ),
+        'value'      => 'product_rating',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'woocommerce',
+        'object'     => ProductRating::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-product-rating/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-product-rating/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-rating/icon.svg'
+     ],
+    'product_details' => [
+        'label'      => __( 'Product Details', 'essential-blocks' ),
+        'value'      => 'product_details',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'woocommerce',
+        'object'     => ProductDetails::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-product-details/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-woo-product-details/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-details/icon.svg'
+     ],
+    'add_to_cart'     => [
+        'label'      => __( 'Add To Cart', 'essential-blocks' ),
+        'value'      => 'add_to_cart',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'woocommerce',
+        'object'     => AddToCart::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-add-to-cart/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/woo-add-to-cart/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/add-to-cart/icon.svg'
+     ],
+    'product_images'  => [
+        'label'      => __( 'Product Images', 'essential-blocks' ),
+        'value'      => 'product_images',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'woocommerce',
+        'object'     => ProductImages::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-product-image/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-woo-product-image/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/product-images/icon.svg'
+     ],
+    'breadcrumbs'     => [
+        'label'      => __( 'Breadcrumbs', 'essential-blocks' ),
+        'value'      => 'breadcrumbs',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'dynamic',
+        'object'     => Breadcrumbs::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/breadcrumbs/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-breadcrumbs/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/breadcrumb/icon.svg'
+     ]
  ];
 
 $pro_blocks = [
-
     'advanced_search'           => [
         'label'      => __( 'Advanced Search', 'essential-blocks' ),
         'value'      => 'advanced_search',
         'visibility' => 'true',
-        'status'     => 'new',
+        'status'     => 'updated',
         'is_pro'     => true,
         'category'   => 'content',
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/advanced-search',
@@ -639,7 +660,6 @@ $pro_blocks = [
         'label'      => __( 'Woo Product Carousel', 'essential-blocks' ),
         'value'      => 'woo_product_carousel',
         'visibility' => 'true',
-        'status'     => 'new',
         'category'   => 'woocommerce',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/woo-product-carousel/',
@@ -650,7 +670,7 @@ $pro_blocks = [
         'label'      => __( 'Multicolumn Pricing Table', 'essential-blocks' ),
         'value'      => 'multicolumn_pricing_table',
         'visibility' => 'true',
-        'status'     => 'new',
+        'status'     => 'updated',
         'category'   => 'marketing',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/multicolumn-pricing-table',
@@ -661,7 +681,7 @@ $pro_blocks = [
         'label'      => __( 'Fancy Chart', 'essential-blocks' ),
         'value'      => 'fancy_chart',
         'visibility' => 'true',
-        'status'     => 'new',
+        'status'     => 'updated',
         'category'   => 'dynamic',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/fancy-chart',
@@ -672,7 +692,6 @@ $pro_blocks = [
         'label'      => __( 'Stacked Cards', 'essential-blocks' ),
         'value'      => 'stacked_cards',
         'visibility' => 'true',
-        'status'     => 'new',
         'category'   => 'creative',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/stacked-cards',
@@ -683,7 +702,6 @@ $pro_blocks = [
         'label'      => __( 'Testimonial Slider', 'essential-blocks' ),
         'value'      => 'testimonial_slider',
         'visibility' => 'true',
-        'status'     => 'new',
         'category'   => 'content',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/testimonial-slider/',
@@ -694,7 +712,6 @@ $pro_blocks = [
         'label'      => __( 'Offcanvas', 'essential-blocks' ),
         'value'      => 'off_canvas',
         'visibility' => 'true',
-        'status'     => 'new',
         'category'   => 'content',
         'is_pro'     => true,
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/offcanvas/',
@@ -703,4 +720,4 @@ $pro_blocks = [
      ]
  ];
 
-return array_merge( $free_blocks, $pro_blocks );
+return array_merge( $free_blocks, $new_blocks, $pro_blocks );

@@ -11,5 +11,6 @@
     "html": false,
     "align": ["full"]
   },
-  "parent": ["essential-blocks/advanced-tabs"]
+  "parent": ["essential-blocks/advanced-tabs"],
+  "usesContext": ["eb/tabParentId"]
 }

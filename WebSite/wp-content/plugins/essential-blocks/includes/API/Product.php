@@ -8,8 +8,7 @@ use EssentialBlocks\Utils\Helper;
 
 class Product extends Base
 {
-    private $sampleData = [  ];
-
+    private $sampleData = [];
     /**
      * Register REST Routes
      *
@@ -21,19 +20,19 @@ class Product extends Base
             'products',
             [
                 'args'     => [
-                    'order_by'   => [  ],
-                    'order'      => [  ],
-                    'per_page'   => [  ],
-                    'offset'     => [  ],
-                    'categories' => [  ],
-                    'tags'       => [  ]
+                    'order_by'   => [],
+                    'order'      => [],
+                    'per_page'   => [],
+                    'offset'     => [],
+                    'categories' => [],
+                    'tags'       => []
                  ],
                 'callback' => [ $this, 'get_products' ]
              ]
         );
     }
 
-    public static function __callStatic( $name, $arguments = [  ] )
+    public static function __callStatic( $name, $arguments = [] )
     {
         if ( method_exists( __CLASS__, $name ) ) {
             return static::get_instance()->$name( $arguments );
@@ -92,10 +91,23 @@ class Product extends Base
             $query_data[ "taxonomies" ] = $filterQuery;
         }
 
+        $query_type = isset($query_data['query_type']) ? $query_data['query_type'] : 'custom_query';
+
+        if('related_products' === $query_type) {
+            $product_id = isset($query_data["product"]) ? sanitize_text_field($query_data["product"]) : '';
+            $product_id = 'current' !== $product_id ? $product_id : get_the_ID();
+            $per_page = sanitize_text_field($query_data['per_page']);
+            $exclude_products = isset($query_data["exclude_products"]) ? explode(",", sanitize_text_field($query_data["exclude_products"])) : [];
+            $related_products = wc_get_related_products($product_id,$per_page,$exclude_products);
+            unset($query_data);
+            $query_data['post__in'] = is_array($related_products) && count($related_products) > 0 ? $related_products : [];
+            $query_data['per_page'] = $per_page;
+        }
+
         $loop = new WP_Query( $this->query_builder( $query_data ) );
 
-        $attributes = $_is_frontend ? json_decode( $request->get_param( 'attributes' ) ) : [  ];
-        $attributes = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [  ];
+        $attributes = $_is_frontend ? json_decode( $request->get_param( 'attributes' ) ) : [];
+        $attributes = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [];
 
         $isCustomCartBtn  = isset( $attributes[ 'isCustomCartBtn' ] ) ? $attributes[ 'isCustomCartBtn' ] : false;
         $simpleCartText   = isset( $attributes[ 'simpleCartText' ] ) ? $attributes[ 'simpleCartText' ] : 'Buy Now';
@@ -110,7 +122,7 @@ class Product extends Base
             $groupedCartText,
             $externalCartText,
             $defaultCartText
-         ];
+        ];
         if ( $_is_frontend && $isCustomCartBtn ) {
             // change the cart button text according to editor change
             add_filter( 'woocommerce_product_add_to_cart_text', [ $this, 'eb_change_cart_button_text' ], 10, 1 );
@@ -128,7 +140,7 @@ class Product extends Base
             while ( $loop->have_posts() ) {
                 $loop->the_post();
 
-                $products = [  ];
+                $products = [];
                 $post_id  = get_the_ID();
                 $product  = wc_get_product( $post_id );
 
@@ -158,7 +170,7 @@ class Product extends Base
                 if ( has_post_thumbnail() ) {
                     $thumb_id    = get_post_thumbnail_id( $post_id );
                     $image_sizes = get_intermediate_image_sizes();
-                    $image_src   = [  ];
+                    $image_src   = [];
                     foreach ( $image_sizes as $key => $value ) {
                         $image_src[ $value ] = wp_get_attachment_image_src( $thumb_id, $value, false )[ 0 ];
                     }
@@ -168,9 +180,9 @@ class Product extends Base
                 // tag
                 $tag = get_the_terms( $post_id, ( isset( $request[ 'tag' ] ) ? esc_attr( $request[ 'tag' ] ) : 'product_tag' ) );
                 if ( ! empty( $tag ) ) {
-                    $all_tag = [  ];
+                    $all_tag = [];
                     foreach ( $tag as $val ) {
-                        $all_tag[  ] = [
+                        $all_tag[] = [
                             'term_id' => $val->term_id,
                             'slug'    => $val->slug,
                             'name'    => $val->name,
@@ -183,9 +195,9 @@ class Product extends Base
                 // cat
                 $cat = get_the_terms( $post_id, ( isset( $request[ 'cat' ] ) ? esc_attr( $request[ 'cat' ] ) : 'product_cat' ) );
                 if ( ! empty( $cat ) ) {
-                    $all_cats = [  ];
+                    $all_cats = [];
                     foreach ( $cat as $val ) {
-                        $all_cats[  ] = [
+                        $all_cats[] = [
                             'term_id' => $val->term_id,
                             'slug'    => $val->slug,
                             'name'    => $val->name,
@@ -194,7 +206,7 @@ class Product extends Base
                     }
                     $products[ 'category' ] = $all_cats;
                 }
-                $data[  ] = $products;
+                $data[] = $products;
 
                 if ( $_is_frontend ) {
                     $_params = array_merge(
@@ -261,12 +273,12 @@ class Product extends Base
         }
 
         if ( isset( $attr[ 'taxonomies' ] ) && is_array( $attr[ 'taxonomies' ] ) && count( $attr[ 'taxonomies' ] ) > 0 ) {
-            $tax_query = [  ];
+            $tax_query = [];
             foreach ( $attr[ 'taxonomies' ] as $taxonomy_key => $taxonomy ) {
                 // If Taxonomoy is array and has value
                 if ( is_array( $taxonomy ) && count( $taxonomy ) > 0 && isset( $taxonomy[ 'value' ] ) ) {
                     $tax_value_obj = json_decode( $taxonomy[ 'value' ] ); // decode value from json strong to array
-                    $tax_values    = [  ];
+                    $tax_values    = [];
                     // If value is Array and has value, push the value to $tax_values array
                     if ( is_array( $tax_value_obj ) && count( $tax_value_obj ) > 0 ) {
                         foreach ( $tax_value_obj as $tax_item ) {
@@ -293,7 +305,7 @@ class Product extends Base
         // For Old Query Data [Beofre 4.3.2]
         else {
             if ( ! empty( $attr[ 'category' ] ) ) {
-                $query_args[ 'tax_query' ][  ] = [
+                $query_args[ 'tax_query' ][] = [
                     [
                         'taxonomy' => 'product_cat',
                         'field'    => 'term_id',
@@ -304,7 +316,7 @@ class Product extends Base
 
             if ( ! empty( $attr[ 'tag' ] ) ) {
                 $query_args[ 'tax_query' ]     = [ 'relation' => 'OR' ];
-                $query_args[ 'tax_query' ][  ] = [
+                $query_args[ 'tax_query' ][] = [
                     [
                         'taxonomy' => 'product_tag',
                         'field'    => 'term_id',
@@ -316,13 +328,17 @@ class Product extends Base
 
         $hide_outofstock_products = get_option( 'woocommerce_hide_out_of_stock_items' );
         if ( "yes" === $hide_outofstock_products ) {
-            $meta_query[  ] = [
+            $meta_query[] = [
                 'key'     => '_stock_status',
                 'value'   => 'outofstock',
                 'compare' => 'NOT IN'
              ];
 
             $query_args[ 'meta_query' ] = $meta_query;
+        }
+
+        if(isset($attr['post__in']) && is_array($attr['post__in']) && count($attr['post__in'])>0) {
+            $query_args[ 'post__in' ] = $attr['post__in'];
         }
 
         return $query_args;

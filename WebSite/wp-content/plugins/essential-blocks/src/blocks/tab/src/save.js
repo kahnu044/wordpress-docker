@@ -5,7 +5,6 @@ import {
 } from "@wordpress/block-editor";
 const save = ({ attributes }) => {
     const { tabId, tabParentId } = attributes;
-
     return (
         <>
             <div

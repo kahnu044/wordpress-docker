@@ -78,28 +78,6 @@ const Edit = (props) => {
         if (!expandedIcon) {
             setAttributes({ expandedIcon: "fas fa-angle-down" });
         }
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
-
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { updateBlockAttributes } = dispatch("core/block-editor");
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    itemId: n + 1,
-                    inheritedAccordionType: accordionType,
-                    inheritedDisplayIcon: displayIcon,
-                    inheritedTabIcon: tabIcon,
-                    inheritedExpandedIcon: expandedIcon,
-                    inheritedTagName: tagName,
-                    faqSchema: faqSchema,
-                    parentBlockId: parentBlocks.attributes.blockId,
-                });
-            });
-        }
     }, []);
 
     const insertAccodionItem = (accordionChildCount) => {

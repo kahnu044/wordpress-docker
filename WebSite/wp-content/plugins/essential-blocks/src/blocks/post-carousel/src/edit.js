@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useState, createRef, memo } from "@wordpress/element";
+import { useEffect, useState, createRef, useRef, memo } from "@wordpress/element";
 import { safeHTML } from "@wordpress/dom";
 import { applyFilters } from "@wordpress/hooks";
 import { dateI18n, format, getSettings } from "@wordpress/date";
@@ -77,9 +77,9 @@ const Edit = (props) => {
         showBlockContent
     } = attributes;
 
-
     const [queryResults, setQueryResults] = useState(false);
-    const [didMount, setDidMount] = useState(false);
+    // const [didMount, setDidMount] = useState(false);
+    const didMount = useRef(false)
 
     const dateFormat = getSettings().formats.date;
 
@@ -92,11 +92,11 @@ const Edit = (props) => {
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
-        if (showBlockContent) {
-            setDidMount(true)
+        if (showBlockContent && typeof queryResults === 'object') {
+            didMount.current = true
         }
         else {
-            setDidMount(false)
+            didMount.current = false
         }
     }, [showBlockContent]);
 
@@ -153,7 +153,7 @@ const Edit = (props) => {
         <>
             {isSelected && showBlockContent && <Inspector {...props} slider={slider} setQueryResults={setQueryResults} />}
 
-            {showBlockContent && didMount === false && (
+            {showBlockContent && didMount.current === false && (
                 <>
                     {queryResults === false && (
                         <div className="eb-loading">
@@ -184,7 +184,7 @@ const Edit = (props) => {
                             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                                 <div
                                     className={`eb-post-carousel-wrapper ${blockId} ${dotPreset} ${preset} ${dots ? "eb-slider-dots" : ""
-                                        } ${adaptiveHeight ? "equal-height" : ""}`}
+                                    } ${adaptiveHeight ? "equal-height" : ""}`}
                                     data-id={blockId}
                                 >
                                     <Slider {...settings} ref={slider}>
@@ -306,23 +306,23 @@ const Edit = (props) => {
 
                                                 const postTermsVal = {};
                                                 post._embedded &&
-                                                    post._embedded["wp:term"] &&
-                                                    post._embedded["wp:term"].length > 0 &&
-                                                    post._embedded["wp:term"].map((item) => {
-                                                        let termObj = {};
-                                                        let termName = "";
-                                                        item.length > 0 &&
-                                                            item.map((term) => {
-                                                                termName = term.taxonomy;
-                                                                termObj[term.slug] = {
-                                                                    name: term.name,
-                                                                    id: term.id,
-                                                                    link: term.link,
-                                                                    slug: term.slug,
-                                                                };
-                                                            });
-                                                        postTermsVal[termName] = termObj;
+                                                post._embedded["wp:term"] &&
+                                                post._embedded["wp:term"].length > 0 &&
+                                                post._embedded["wp:term"].map((item) => {
+                                                    let termObj = {};
+                                                    let termName = "";
+                                                    item.length > 0 &&
+                                                    item.map((term) => {
+                                                        termName = term.taxonomy;
+                                                        termObj[term.slug] = {
+                                                            name: term.name,
+                                                            id: term.id,
+                                                            link: term.link,
+                                                            slug: term.slug,
+                                                        };
                                                     });
+                                                    postTermsVal[termName] = termObj;
+                                                });
 
                                                 const postTermsHtml = {};
                                                 if (Object.keys(postTermsVal).length > 0) {
@@ -335,8 +335,8 @@ const Edit = (props) => {
                                                         }
                                                         let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
                                                         Object.keys(postTermsVal[term]).length > 0 &&
-                                                            Object.keys(postTermsVal[term]).map((item, index) => {
-                                                                markup += `
+                                                        Object.keys(postTermsVal[term]).map((item, index) => {
+                                                            markup += `
 													<a
 														key=${index}
 														href=${postTermsVal[term][item].link}
@@ -345,7 +345,7 @@ const Edit = (props) => {
 														${postTermsVal[term][item].name}
 													</a>
 												`;
-                                                            });
+                                                        });
                                                         markup += `</div>`;
                                                         postTermsHtml[term] = markup;
                                                     });
@@ -406,8 +406,7 @@ const Edit = (props) => {
                                                                     if (item === "avatar") {
                                                                         return;
                                                                     }
-                                                                    return applyFilters(
-                                                                        "essential_blocks_post_carousel_dynamic_fields_markup",
+                                                                    return applyFilters("essential_blocks_post_carousel_dynamic_fields_markup",
                                                                         "",
                                                                         item
                                                                     );
@@ -435,8 +434,7 @@ const Edit = (props) => {
                                                                     if (item === "avatar") {
                                                                         return;
                                                                     }
-                                                                    return applyFilters(
-                                                                        "essential_blocks_post_carousel_dynamic_fields_markup",
+                                                                    return applyFilters("essential_blocks_post_carousel_dynamic_fields_markup",
                                                                         "",
                                                                         item
                                                                     );

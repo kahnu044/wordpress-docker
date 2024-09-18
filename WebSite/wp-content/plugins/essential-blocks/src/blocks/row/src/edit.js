@@ -318,12 +318,12 @@ function Edit(props) {
         }
     }, [resOption]);
 
-    const blockProps = useBlockProps({
+    /*const blockProps = useBlockProps({
         className: classnames(
             className,
             `eb-guten-block-main-parent-wrapper eb-row-editor-wrap eb-row-editor-wrap-${blockId}`
         ),
-    });
+    });*/
 
     //
     const handleLayoutClick = (id) => {

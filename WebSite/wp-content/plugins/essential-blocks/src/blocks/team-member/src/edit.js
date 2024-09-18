@@ -43,7 +43,6 @@ function Edit(props) {
         imageId,
         showSocials,
         socialDetails,
-        profilesOnly,
         socialInImage,
         showCSeparator,
         showSSeparator,
@@ -57,77 +56,63 @@ function Edit(props) {
     } = attributes;
 
     //
-    useEffect(() => {
-        if (socialDetails.length === 0) {
-            const newSclDtails = [
-                {
-                    title: "Facebook",
-                    icon: "fab fa-facebook-f",
-                    color: "#fff",
-                    bgColor: "#A0A8BD",
-                    link: "",
-                    linkOpenNewTab: false,
-                    isExpanded: false,
-                },
-                {
-                    title: "Twitter",
-                    icon: "fab fa-x-twitter",
-                    color: "#fff",
-                    bgColor: "#A0A8BD",
-                    link: "",
-                    linkOpenNewTab: false,
-                    isExpanded: false,
-                },
-                {
-                    title: "LinkedIn",
-                    icon: "fab fa-linkedin-in",
-                    color: "#fff",
-                    bgColor: "#A0A8BD",
-                    link: "",
-                    linkOpenNewTab: false,
-                    isExpanded: false,
-                },
-                {
-                    title: "YouTube",
-                    icon: "fab fa-youtube",
-                    color: "#fff",
-                    bgColor: "#A0A8BD",
-                    link: "",
-                    linkOpenNewTab: false,
-                    isExpanded: false,
-                },
-            ];
+    // useEffect(() => {
+    //     if (socialDetails.length === 0) {
+    //         const newSclDtails = [
+    //             {
+    //                 title: "Facebook",
+    //                 icon: "fab fa-facebook-f",
+    //                 color: "#fff",
+    //                 bgColor: "#A0A8BD",
+    //                 link: "",
+    //                 linkOpenNewTab: false,
+    //                 isExpanded: false,
+    //             },
+    //             {
+    //                 title: "Twitter",
+    //                 icon: "fab fa-x-twitter",
+    //                 color: "#fff",
+    //                 bgColor: "#A0A8BD",
+    //                 link: "",
+    //                 linkOpenNewTab: false,
+    //                 isExpanded: false,
+    //             },
+    //             {
+    //                 title: "LinkedIn",
+    //                 icon: "fab fa-linkedin-in",
+    //                 color: "#fff",
+    //                 bgColor: "#A0A8BD",
+    //                 link: "",
+    //                 linkOpenNewTab: false,
+    //                 isExpanded: false,
+    //             },
+    //             {
+    //                 title: "YouTube",
+    //                 icon: "fab fa-youtube",
+    //                 color: "#fff",
+    //                 bgColor: "#A0A8BD",
+    //                 link: "",
+    //                 linkOpenNewTab: false,
+    //                 isExpanded: false,
+    //             },
+    //         ];
 
-            setAttributes({ socialDetails: newSclDtails });
-        }
-        else {
-            const newProfiles = socialDetails.map((profile) => ({
-                ...profile,
-                isExpanded: false,
-            }));
-            setAttributes({ socialDetails: newProfiles });
-        }
+    //         setAttributes({ socialDetails: newSclDtails });
+    //     }
+    //     else {
+    //         const newProfiles = socialDetails.map((profile) => ({
+    //             ...profile,
+    //             isExpanded: false,
+    //         }));
+    //         setAttributes({ socialDetails: newProfiles });
+    //     }
 
-        //Hanlde Deprecation for ImageURL
-        const imageUrlFromSource = imageUrl || imageNewClassUrl || ImgPlaceholder
-        if (!imageNewUrl) {
-            setAttributes({ imageNewUrl: imageUrlFromSource })
-        }
-    }, []);
-
-    //
-    useEffect(() => {
-        const profilesOnly = socialDetails.map(
-            ({ title, icon, link, linkOpenNewTab }) => ({
-                title,
-                icon,
-                link,
-                linkOpenNewTab,
-            })
-        );
-
-        setAttributes({ profilesOnly });
-    }, [socialDetails]);
+    //     //Hanlde Deprecation for ImageURL
+    //     const imageUrlFromSource = imageUrl || imageNewClassUrl || ImgPlaceholder
+    //     if (!imageNewUrl) {
+    //         setAttributes({ imageNewUrl: imageUrlFromSource })
+    //     }
+    // }, []);
 
     // you must declare this variable
     const enhancedProps = {
@@ -170,7 +155,7 @@ function Edit(props) {
 
                                         {socialInImage && showSocials && (
                                             <SocialLinks
-                                                socialDetails={profilesOnly}
+                                                socialDetails={socialDetails}
                                                 icnEffect={icnEffect}
                                                 preset={preset}
                                             />
@@ -241,7 +226,7 @@ function Edit(props) {
                                                             <hr className="eb-team-member-social-separator" />
                                                         )}
                                                         <SocialLinks
-                                                            socialDetails={profilesOnly}
+                                                            socialDetails={socialDetails}
                                                             icnEffect={icnEffect}
                                                             preset={preset}
                                                         />
@@ -302,7 +287,7 @@ function Edit(props) {
                                                             <hr className="eb-team-member-social-separator" />
                                                         )}
                                                         <SocialLinks
-                                                            socialDetails={profilesOnly}
+                                                            socialDetails={socialDetails}
                                                             icnEffect={icnEffect}
                                                             preset={preset}
                                                         />

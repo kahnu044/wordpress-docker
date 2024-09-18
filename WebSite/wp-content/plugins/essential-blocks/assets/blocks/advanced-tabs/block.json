@@ -14,5 +14,8 @@
       "full"
     ]
   },
-  "editorScript": "essential-blocks-editor-script"
+  "editorScript": "essential-blocks-editor-script",
+  "providesContext": {
+    "eb/tabParentId": "blockId"
+  }
 }

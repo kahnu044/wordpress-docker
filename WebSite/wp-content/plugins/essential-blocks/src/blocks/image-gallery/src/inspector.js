@@ -72,7 +72,7 @@ import {
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, onImageChange } = props;
     const {
         layouts,
         displayCaption,
@@ -235,6 +235,10 @@ function Inspector(props) {
         enableInfiniteScroll ? setAttributes({ loadmoreBtnText: 'Loading ...', }) : setAttributes({ loadmoreBtnText: 'Load More', });
     }, [enableInfiniteScroll])
 
+    useEffect(() => {
+        images && typeof imageSize !== 'undefined' && onImageChange(images);
+    }, [imageSize]);
+
     const getFilterItemsComponents = () => {
         const onFeatureChange = (key, value, position) => {
             let filterItems = [...attributes.filterItems];
@@ -291,7 +295,6 @@ function Inspector(props) {
             </div>
         ))
     }
-
     return (
         <InspectorPanel advancedControlProps={{
             marginPrefix: WRAPPER_MARGIN,
@@ -363,7 +366,7 @@ function Inspector(props) {
                         />
 
                         <EbImageSizeSelector
-                            attrname={"imageSize"}
+                            attrName={"imageSize"}
                             label={__("Image Size", "essential-blocks")} //Optional
                         />
 
@@ -561,7 +564,7 @@ function Inspector(props) {
                                     {enableFilter && (
                                         <Select2
                                             name="select-gallery-item"
-                                            value={item.hasOwnProperty("filter") && item?.filter.length > 0
+                                            value={item.filter
                                                 ? JSON.parse(item.filter) : ""
                                             }
                                             onChange={(selected) =>
@@ -594,7 +597,7 @@ function Inspector(props) {
                                                         handleCustomURL(
                                                             text,
                                                             item.id,
-                                                            images,
+                                                            sources,
                                                             setAttributes
                                                         )
                                                     }
@@ -623,7 +626,7 @@ function Inspector(props) {
                                                         handleOpenNewTab(
                                                             !item.openNewTab,
                                                             item.id,
-                                                            images,
+                                                            sources,
                                                             setAttributes
                                                         )
                                                     }

@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect } from "@wordpress/element";
 import {
     ToggleControl,
     SelectControl,
@@ -11,9 +10,6 @@ import {
     BaseControl,
     ButtonGroup,
     Button,
-    Card,
-    CardBody,
-    ExternalLink,
 } from "@wordpress/components";
 
 /**
@@ -32,11 +28,6 @@ import {
     imageHeight,
     imageWidth,
     titleMargin,
-    creatorMargin,
-    creatorImageHeight,
-    creatorImageWidth,
-    creatorImageBorder,
-    priceMargin,
     buttonMargin,
     buttonPadding,
     buttonBdrSdw,
@@ -53,11 +44,8 @@ import {
 
 import {
     typoPrefix_title,
-    typoPrefix_owner,
-    typoPrefix_price,
     typoPrefix_button,
 } from "./constants/typographyPrefixConstants";
-import { useState } from "react";
 
 import {
     ResponsiveDimensionsControl,
@@ -79,19 +67,8 @@ function Inspector(props) {
         layout,
         displayImage,
         displayTitle,
-        displayCreator,
-        displayOwner,
-        displayPrice,
-        displayLastSale,
         displayButton,
         titleColor,
-        ownerTextColor,
-        ownerLinkColor,
-        showOwnerImage,
-        showOwnerText,
-        creatorLabel,
-        ownerLabel,
-        priceColor,
         buttonTextColor,
         buttonBgColor,
         buttonHoverTextColor,
@@ -102,44 +79,6 @@ function Inspector(props) {
         gridOverlayBg,
         listVerticalAlignment,
     } = attributes;
-
-    const [openseaApi, setOpenseaApi] = useState("");
-
-    //Initial UseEffect
-    useEffect(() => {
-        if (!settings) {
-            setAttributes({
-                settings: {
-                    opensea: {
-                        apiKey: "",
-                        type: "items",
-                        filterBy: "",
-                        itemLimit: 6,
-                        collectionLimit: 6,
-                        orderBy: "desc",
-                    },
-                },
-            });
-        }
-
-        //Get Opensea API
-        let data = new FormData();
-        data.append("action", "opensea_api_key");
-        data.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
-        fetch(EssentialBlocksLocalize.ajax_url, {
-            method: "POST",
-            body: data,
-        }) // wrapped
-            .then((res) => res.text())
-            .then((data) => {
-                const response = JSON.parse(data);
-                if (response.success && response.data) {
-                    setOpenseaApi(response.data);
-                    // setOpenseaDbApi(response.data);
-                }
-            })
-            .catch((err) => console.log(err));
-    }, []);
 
     //Change Type
     const updateSettings = (source, field, value) => {
@@ -194,23 +133,6 @@ function Inspector(props) {
                     >
                         {source === "opensea" && (
                             <>
-                                {!openseaApi && (
-                                    <Card>
-                                        <CardBody>
-                                            <p>
-                                                {__(
-                                                    "Please add your own Opensea API ",
-                                                    "essential-blocks"
-                                                )}{" "}
-                                                <ExternalLink
-                                                    href={`${EssentialBlocksLocalize.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
-                                                >
-                                                    {__("here.")}
-                                                </ExternalLink>
-                                            </p>
-                                        </CardBody>
-                                    </Card>
-                                )}
                                 <SelectControl
                                     label={__("Type", "essential-blocks")}
                                     value={settings?.opensea?.type}
@@ -230,70 +152,25 @@ function Inspector(props) {
                                 />
                                 {settings?.opensea?.type === "items" && (
                                     <>
-                                        <SelectControl
-                                            label={__("Filter By", "essential-blocks")}
-                                            value={settings?.opensea?.filterBy}
-                                            options={[
-                                                {
-                                                    label: __("None", "essential-blocks"),
-                                                    value: "",
-                                                },
-                                                {
-                                                    label: __(
-                                                        "Collection Slug",
-                                                        "essential-blocks"
-                                                    ),
-                                                    value: "slug",
-                                                },
-                                                {
-                                                    label: __(
-                                                        "Wallet Address",
-                                                        "essential-blocks"
-                                                    ),
-                                                    value: "wallet",
-                                                },
-                                            ]}
+                                        <TextControl
+                                            label={__(
+                                                "Collection Slug",
+                                                "essential-blocks"
+                                            )}
+                                            placeholder={__(
+                                                "cryptopunks",
+                                                "essential-blocks"
+                                            )}
+                                            value={settings?.opensea?.collectionSlug}
                                             onChange={(value) =>
-                                                updateSettings("opensea", "filterBy", value)
+                                                updateSettings(
+                                                    "opensea",
+                                                    "collectionSlug",
+                                                    value
+                                                )
                                             }
                                         />
-                                        {settings?.opensea?.filterBy === "slug" && (
-                                            <TextControl
-                                                label={__(
-                                                    "Collection Slug",
-                                                    "essential-blocks"
-                                                )}
-                                                placeholder={__(
-                                                    "cryptopunks",
-                                                    "essential-blocks"
-                                                )}
-                                                value={settings?.opensea?.collectionSlug}
-                                                onChange={(value) =>
-                                                    updateSettings(
-                                                        "opensea",
-                                                        "collectionSlug",
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        )}
-                                        {settings?.opensea?.filterBy === "wallet" && (
-                                            <TextControl
-                                                label={__("Wallet Address", "essential-blocks")}
-                                                placeholder={__(
-                                                    "0x1......",
-                                                    "essential-blocks"
-                                                )}
-                                                value={settings?.opensea?.itemWalletId}
-                                                onChange={(value) =>
-                                                    updateSettings(
-                                                        "opensea",
-                                                        "itemWalletId",
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        )}
+
                                         <RangeControl
                                             label="Limit"
                                             value={settings?.opensea?.itemLimit}
@@ -305,29 +182,12 @@ function Inspector(props) {
                                             step={1}
                                             allowReset={true}
                                         />
-                                        <SelectControl
-                                            label={__("Order By", "essential-blocks")}
-                                            value={settings?.opensea?.orderBy}
-                                            options={[
-                                                {
-                                                    label: __("DESC", "essential-blocks"),
-                                                    value: "desc",
-                                                },
-                                                {
-                                                    label: __("ASC", "essential-blocks"),
-                                                    value: "asc",
-                                                },
-                                            ]}
-                                            onChange={(value) =>
-                                                updateSettings("opensea", "orderBy", value)
-                                            }
-                                        />
                                     </>
                                 )}
                                 {settings?.opensea?.type === "collections" && (
                                     <>
                                         <TextControl
-                                            label={__("Wallet Address", "essential-blocks")}
+                                            label={__("Creator Username", "essential-blocks")}
                                             value={settings?.opensea?.collectionWalletId}
                                             onChange={(value) =>
                                                 updateSettings(
@@ -414,34 +274,6 @@ function Inspector(props) {
 
                         {settings?.opensea?.type === "items" && (
                             <>
-                                <ToggleControl
-                                    label={__("Show Current Owner?", "essential-blocks")}
-                                    checked={displayOwner}
-                                    onChange={() =>
-                                        setAttributes({ displayOwner: !displayOwner })
-                                    }
-                                />
-                                <ToggleControl
-                                    label={__("Show Creator?", "essential-blocks")}
-                                    checked={displayCreator}
-                                    onChange={() =>
-                                        setAttributes({ displayCreator: !displayCreator })
-                                    }
-                                />
-                                <ToggleControl
-                                    label={__("Show Price?", "essential-blocks")}
-                                    checked={displayPrice}
-                                    onChange={() =>
-                                        setAttributes({ displayPrice: !displayPrice })
-                                    }
-                                />
-                                <ToggleControl
-                                    label={__("Show Last Sale?", "essential-blocks")}
-                                    checked={displayLastSale}
-                                    onChange={() =>
-                                        setAttributes({ displayLastSale: !displayLastSale })
-                                    }
-                                />
                                 <ToggleControl
                                     label={__("Show Button?", "essential-blocks")}
                                     checked={displayButton}
@@ -583,99 +415,6 @@ function Inspector(props) {
                         />
                         <ResponsiveDimensionsControl
                             controlName={titleMargin}
-                            baseLabel={__("Margin", "essential-blocks")}
-                        />
-                    </InspectorPanel.PanelBody>
-
-                    <InspectorPanel.PanelBody
-                        title={__("Creator/Owner", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <ToggleControl
-                            label={__("Show Name?", "essential-blocks")}
-                            checked={showOwnerText}
-                            onChange={() =>
-                                setAttributes({ showOwnerText: !showOwnerText })
-                            }
-                        />
-                        <ToggleControl
-                            label={__("Show Image?", "essential-blocks")}
-                            checked={showOwnerImage}
-                            onChange={() =>
-                                setAttributes({ showOwnerImage: !showOwnerImage })
-                            }
-                        />
-                        <TypographyDropdown
-                            baseLabel={__("Typography", "essential-blocks")}
-                            typographyPrefixConstant={typoPrefix_owner}
-                        />
-                        {displayCreator && (
-                            <TextControl
-                                label={__("Creator Label", "essential-blocks")}
-                                value={creatorLabel}
-                                onChange={(text) =>
-                                    setAttributes({ creatorLabel: text })
-                                }
-                            />
-                        )}
-                        {displayOwner && (
-                            <TextControl
-                                label={__("Owner Label", "essential-blocks")}
-                                value={ownerLabel}
-                                onChange={(text) => setAttributes({ ownerLabel: text })}
-                            />
-                        )}
-                        <ColorControl
-                            label={__("Label Color", "essential-blocks")}
-                            color={ownerTextColor}
-                            attributeName={'ownerTextColor'}
-                        />
-                        <ColorControl
-                            label={__("Link Color", "essential-blocks")}
-                            color={ownerLinkColor}
-                            attributeName={'ownerLinkColor'}
-                        />
-                        <ResponsiveRangeController
-                            baseLabel={__("Image Height", "essential-blocks")}
-                            controlName={creatorImageHeight}
-                            min={0}
-                            max={500}
-                            step={1}
-                            units={GAP_UNIT}
-                        />
-                        <ResponsiveRangeController
-                            baseLabel={__("Image Width", "essential-blocks")}
-                            controlName={creatorImageWidth}
-                            min={0}
-                            max={500}
-                            step={1}
-                            units={GAP_UNIT}
-                        />
-                        <ResponsiveDimensionsControl
-                            controlName={creatorImageBorder}
-                            baseLabel={__("Image Border Radius", "essential-blocks")}
-                        />
-                        <ResponsiveDimensionsControl
-                            controlName={creatorMargin}
-                            baseLabel={__("Margin", "essential-blocks")}
-                        />
-                    </InspectorPanel.PanelBody>
-
-                    <InspectorPanel.PanelBody
-                        title={__("Price", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <TypographyDropdown
-                            baseLabel={__("Typography", "essential-blocks")}
-                            typographyPrefixConstant={typoPrefix_price}
-                        />
-                        <ColorControl
-                            label={__("Color", "essential-blocks")}
-                            color={priceColor}
-                            attributeName={'priceColor'}
-                        />
-                        <ResponsiveDimensionsControl
-                            controlName={priceMargin}
                             baseLabel={__("Margin", "essential-blocks")}
                         />
                     </InspectorPanel.PanelBody>

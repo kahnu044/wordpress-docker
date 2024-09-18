@@ -27,7 +27,8 @@ function Edit(props) {
         enableContents,
         classHook,
         galleryPosition,
-        type
+        type,
+        disableNavArrow
     } = attributes;
 
     const postType = select("core/editor").getCurrentPostType();
@@ -90,11 +91,11 @@ function Edit(props) {
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
             <div className={`eb-product-images-wrapper ${blockId}`} data-id={blockId}>
                 <div class={`eb-product-images`}>
-                    <div class={`eb-product-image_slider eb-product-gallery-${galleryPosition}`}>
+                    <div class={`eb-product-image_slider eb-product-gallery-${galleryPosition} eb-product-image-editor`}>
                         <div class="eb-product-image_slider-body">
                             <Slider 
                                 asNavFor={nav2} 
-                                ref={slider => (sliderRef1 = slider)}
+                                ref={slider => setNav1(slider)}
                                 arrows={false}
                             >
                                 <div className="eb-product-image_slider-body-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} className="eb-product-gallery-image" /></div>
@@ -106,11 +107,12 @@ function Edit(props) {
                         </div>
                             <Slider
                                 asNavFor={nav1}
-                                ref={slider => (sliderRef2 = slider)}
+                                ref={slider => setNav2(slider)}
                                 slidesToShow={3}
                                 swipeToSlide={true}
                                 focusOnSelect={true}
                                 vertical={(galleryPosition == 'left' || galleryPosition == 'right') ? true : false}
+                                arrows={disableNavArrow ? false : true}
                                 className="eb-product-image_slider-footer"
                             >
                                 <div class="eb-product-image_slider-footer-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} /></div>
@@ -124,10 +126,6 @@ function Edit(props) {
                                 </div>
                                 <div class="eb-product-image_slider-footer-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} />
                                 </div>
-                                <div class="eb-product-image_slider-footer-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} />
-                                </div>
-                                <div class="eb-product-image_slider-footer-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} /></div>
-                                <div class="eb-product-image_slider-footer-item"><img src={`${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`} /></div>
                             </Slider>
                     </div>
                 </div>

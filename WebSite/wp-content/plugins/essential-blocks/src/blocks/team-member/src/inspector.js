@@ -146,15 +146,6 @@ function Inspector({ attributes, setAttributes }) {
         socialInImage
     } = attributes;
 
-    //
-    useEffect(() => {
-        const newSclDtails = socialDetails.map((item) => ({
-            ...item,
-            isExpanded: false,
-        }));
-        setAttributes({ socialDetails: newSclDtails });
-    }, []);
-
     const resRequiredProps = {
         setAttributes,
         resOption,

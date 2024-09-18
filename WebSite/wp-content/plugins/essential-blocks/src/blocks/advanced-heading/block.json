@@ -9,5 +9,6 @@
   "supports": {
     "anchor": true
   },
+  "usesContext": ["postId", "postType"],
   "editorScript": "essential-blocks-editor-script"
 }

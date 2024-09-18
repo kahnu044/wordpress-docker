@@ -147,7 +147,7 @@ function Inspector(props) {
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody
                     title={__("Additional", "essential-blocks")}
-
+                    initialOpen={false}
                 >
                     <BaseControl label={__("Prefix", "essential-blocks")}>
                         <ButtonGroup id="eb-accordion-image-icon">
@@ -430,7 +430,7 @@ function Inspector(props) {
                         controlName={TAXONOMIES_MARGIN}
                         baseLabel="Margin"
                     />
-                    <InspectorPanel.PanelBody title={__("Border")} >
+                    <InspectorPanel.PanelBody title={__("Border")} initialOpen={false}>
                         <BorderShadowControl
                             controlName={TAXONOMIES_BORDER_SHADOW}
                         // noShadow
@@ -440,7 +440,7 @@ function Inspector(props) {
 
 
                     {prefixType !== "none" && (
-                        <InspectorPanel.PanelBody title={__("Prefix")}>
+                        <InspectorPanel.PanelBody title={__("Prefix")} initialOpen={false}>
                             <ColorControl
                                 label={__(
                                     "Color",
@@ -478,7 +478,7 @@ function Inspector(props) {
                     )}
 
                     {suffixType !== "none" && (
-                        <InspectorPanel.PanelBody title={__("Suffix")}>
+                        <InspectorPanel.PanelBody title={__("Suffix")} initialOpen={false}>
                             <ColorControl
                                 label={__(
                                     "Color",

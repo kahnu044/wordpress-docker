@@ -45,7 +45,7 @@ const attributes = {
     },
     prefixIcon: {
         type: "string",
-        default: 'far fa-check-circle'
+        default: 'fas fa-list'
     },
     prefixText: {
         type: "string",
@@ -53,7 +53,7 @@ const attributes = {
     },
     prefixColor: {
         type: "string",
-        default: "var(--eb-global-text-color)",
+        default: '',
     },
     suffixType: {
         type: "string",
@@ -61,7 +61,7 @@ const attributes = {
     },
     suffixIcon: {
         type: "string",
-        default: 'far fa-check-circle'
+        default: 'fas fa-list'
     },
     suffixText: {
         type: "string",
@@ -69,7 +69,7 @@ const attributes = {
     },
     suffixColor: {
         type: "string",
-        default: "var(--eb-global-text-color)",
+        default: '',
     },
     currentPostType: {
         type: "string",
@@ -193,10 +193,10 @@ const attributes = {
         defaultRange: 5,
     }),
     ...generateResponsiveRangeAttributes(PREFIX_ICON_SIZE, {
-        defaultRange: 20,
+        defaultRange: 30,
     }),
     ...generateResponsiveRangeAttributes(SUFFIX_ICON_SIZE, {
-        defaultRange: 20,
+        defaultRange: 30,
     }),
 };
 

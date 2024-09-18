@@ -4,6 +4,7 @@ import Loading from "./template-components/loading";
 import Items from "./template-components/items";
 import Collections from "./template-components/collections";
 
+
 const Content = (props) => {
     const {
         blockId,
@@ -25,12 +26,9 @@ const Content = (props) => {
         data.append("nft_source", source);
         if (source === "opensea" && settings) {
             data.append("openseaType", settings.opensea.type);
-            data.append("openseaItemFilterBy", settings.opensea.filterBy);
             data.append("openseaCollectionSlug", settings.opensea.collectionSlug);
-            data.append("openseaItemWalletId", settings.opensea.itemWalletId);
             data.append("openseaCollectionmWalletId", settings.opensea.collectionWalletId);
             data.append("openseaItemLimit", settings.opensea.itemLimit);
-            data.append("openseaItemOrderBy", settings.opensea.orderBy);
             data.append("openseaCollectionLimit", settings.opensea.collectionLimit);
 
             fetch(EssentialBlocksLocalize.ajax_url, {
@@ -74,14 +72,14 @@ const Content = (props) => {
                         <>
                             {settings.opensea.type === "items" && (
                                 <Items
-                                    data={nftData.assets}
+                                    data={nftData?.nfts}
                                     attributes={attributes}
                                 />
                             )}
 
                             {settings.opensea.type === "collections" && (
                                 <Collections
-                                    data={settings.opensea.collectionWalletId ? nftData : nftData?.collections}
+                                    data={nftData?.collections}
                                     attributes={attributes}
                                 />
                             )}
@@ -96,7 +94,7 @@ const Content = (props) => {
 document.addEventListener("DOMContentLoaded", function (event) {
     let nftGallery = document.querySelectorAll(".eb-nft-gallery-wrapper");
 
-    for (let i = 0;i < nftGallery.length;i++) {
+    for (let i = 0; i < nftGallery.length; i++) {
 
         //Retrieve Data
         let blockId = nftGallery[i].getAttribute("data-id");

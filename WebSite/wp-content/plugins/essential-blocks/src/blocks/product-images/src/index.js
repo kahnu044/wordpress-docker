@@ -9,9 +9,10 @@ import { ReactComponent as Icon } from "./icon.svg";
 
 ebConditionalRegisterBlockType(metadata, {
     keywords: [
-        __("image", "essential-blocks"),
-        __("gallery", "essential-blocks"),
         __("product image gallery", "essential-blocks"),
+        __("product image", "essential-blocks"),
+        __("product image slider", "essential-blocks"),
+        __("product variation image", "essential-blocks"),
     ],
     icon: Icon,
     attributes,

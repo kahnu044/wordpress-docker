@@ -7,7 +7,7 @@ import {
     BlockControls,
     AlignmentToolbar
 } from "@wordpress/block-editor";
-import { select } from "@wordpress/data";
+import { useSelect } from '@wordpress/data'
 import { useEntityProp } from '@wordpress/core-data';
 
 /**
@@ -33,6 +33,7 @@ function Edit(props) {
         attributes,
         setAttributes,
         isSelected,
+        context
     } = props;
     const {
         blockId,
@@ -53,7 +54,6 @@ function Edit(props) {
         currentPostType
     } = attributes;
 
-
     // you must declare this variable
     const enhancedProps = {
         ...props,
@@ -68,24 +68,17 @@ function Edit(props) {
     }, [])
 
     useEffect(() => {
-        const postId = select("core/editor")?.getCurrentPostId();
-        const postType = select("core/editor")?.getCurrentPostType();
-
-        if (postId) {
+        if (context.postId && !currentPostId && !currentPostType) {
             setAttributes({
-                currentPostId: postId,
-                currentPostType: postType,
+                currentPostId: context.postId,
+                currentPostType: context.postType,
             });
         }
-    }, [source])
+    }, [source]);
 
-    const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
-        'postType',
-        currentPostType,
-        'title',
-        currentPostId
-    );
+    const [rawTitle = '', setTitle, fullTitle] = useEntityProp('postType', currentPostType, 'title', currentPostId);
 
+    const editorType = eb_conditional_localize?.editor_type || false
     let TagName = tagName;
 
     return (
@@ -109,9 +102,16 @@ function Edit(props) {
             <BlockProps.Edit {...enhancedProps}>
 
                 {source == 'dynamic-title' && currentPostId == 0 && (
-                    <div className="eb-loading" >
-                        <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
-                    </div >
+                    <>
+                        {editorType === 'edit-site' && (
+                            <TagName className="eb-ah-title">Dynamic Title</TagName>
+                        )}
+                        {editorType !== 'edit-site' && (
+                            <div className="eb-loading" >
+                                <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
+                            </div >
+                        )}
+                    </>
                 )}
 
                 {((source == 'dynamic-title' && currentPostId != 0) || source == 'custom') && (
@@ -126,12 +126,6 @@ function Edit(props) {
                                 {displaySeperator && seperatorPosition === "top" && (
                                     <div className={"eb-ah-separator " + seperatorType}>
                                         {seperatorType === "icon" && (
-                                            // <i
-                                            //     className={`${separatorIcon
-                                            //         ? separatorIcon
-                                            //         : "fas fa-arrow-circle-down"
-                                            //         }`}
-                                            // ></i>
                                             <EBDisplayIcon icon={separatorIcon} />
                                         )}
                                     </div>

@@ -5,7 +5,6 @@ import { __ } from "@wordpress/i18n";
 import { memo } from "@wordpress/element";
 import { RichText, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-
 /**
  * Internal dependencies
  */
@@ -59,7 +58,7 @@ const Edit = (props) => {
         style: <Style {...props} />
     };
 
-    return (
+    return(
         <>
             {isSelected && showBlockContent && <Inspector attributes={attributes} setAttributes={setAttributes} />}
             <BlockProps.Edit {...enhancedProps}>

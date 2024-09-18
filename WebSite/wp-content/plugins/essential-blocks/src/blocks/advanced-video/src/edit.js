@@ -14,7 +14,8 @@ import Inspector from "./inspector";
 import {
     EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    getEditorRoot
 } from "@essential-blocks/controls";
 
 import Style from "./style";
@@ -23,13 +24,10 @@ import defaultAttributes from './attributes';
 const Edit = (props) => {
     const { attributes, setAttributes, className, clientId, isSelected, name } = props;
     const {
-        resOption,
         blockId,
-        blockMeta,
         videoConfig,
         showBar,
         videoURL,
-        previewImage,
         imageOverlay,
         customPlayIcon,
         customPlayIconURL,
@@ -39,66 +37,21 @@ const Edit = (props) => {
         stickyPosition,
         classHook,
         lightboxPlayIcon,
-        placeholderCustomPlayIconType,
-        customPlayIconlib,
         lightboxPlayIconType,
         lightboxPlayIconlib,
     } = attributes;
 
-    const [didMount, setDidMount] = useState(false)
+    const [preview, setPreview] = useState(false);
+    const [videoPlayIcon, setVideoPlayIcon] = useState(null);
 
     const enhancedProps = {
         ...props,
         blockPrefix: 'eb-advanced-video',
         style: <Style {...props} />
     };
-
-    // this useEffect is for creating a unique id for each block's unique className by a random unique number
+    // todo
     useEffect(() => {
-        setDidMount(true)
-    }, []);
-
-    // show controls
-    useEffect(() => {
-        if (didMount) {
-            const url = videoURL;
-            setAttributes({
-                videoURL: "",
-                showBar: showBar,
-            });
-            setTimeout(() => {
-                setAttributes({
-                    videoURL: url,
-                    // showBar: showBar,
-                });
-            }, 100);
-        }
-    }, [showBar]);
-
-    const [preview, setPreview] = useState(false);
-    useEffect(() => {
-        if (imageOverlay && previewImage) {
-            setPreview(previewImage);
-        } else {
-            setPreview(false);
-        }
-    }, [imageOverlay, previewImage]);
-
-    const [videoPlayIcon, setVideoPlayIcon] = useState(null);
-    useEffect(() => {
-        if (customPlayIcon) {
-            if (placeholderCustomPlayIconType == "image") {
-                setVideoPlayIcon(<img src={customPlayIconURL} />);
-            } else {
-                setVideoPlayIcon(<EBDisplayIcon icon={customPlayIconlib} />);
-            }
-        } else {
-            setVideoPlayIcon(null);
-        }
-    }, [customPlayIcon, customPlayIconURL, placeholderCustomPlayIconType, customPlayIconlib]);
-
-    useEffect(() => {
-        var element = document.querySelector(`#block-${clientId} .eb-selector-overlay`);
+        const element = getEditorRoot().querySelector(`#block-${clientId} .eb-selector-overlay`);
         if (element) {
             if (isSelected) {
                 element.classList.add("selected");
@@ -108,25 +61,22 @@ const Edit = (props) => {
         }
     }, [isSelected]);
 
-    useEffect(() => {
-        if (videoConfig.autoplay && preview === false) {
-            setAttributes({
-                videoConfig: {
-                    ...videoConfig,
-                    muted: videoConfig.autoplay,
-                },
-            });
-        }
-    }, [videoConfig.autoplay]);
-
     return (
         <>
-            {isSelected && <Inspector attributes={attributes} setAttributes={setAttributes} />}
+            {isSelected &&
+                <Inspector
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                    preview={preview}
+                    setPreview={setPreview}
+                    setVideoPlayIcon={setVideoPlayIcon}
+                />
+            }
             <BlockProps.Edit {...enhancedProps}>
                 <div className="eb-selector-overlay"></div> {/* Only for Editor */}
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-advanced-video-wrapper ${blockId} ${videoOptions}`} data-id={blockId}>
-                        {videoOptions != "lightbox" && (
+                        {videoOptions !== "lightbox" && (
                             <div className="eb-player-wrapper">
                                 <div className={`eb-player-option ${videoOptions} ${stickyPosition}`}>
                                     <ReactPlayer
@@ -164,8 +114,8 @@ const Edit = (props) => {
                                 >
                                     {lightboxPlayIcon && (
                                         <>
-                                            {lightboxPlayIconType == "icon" && <EBDisplayIcon icon={lightboxPlayIconlib} />}
-                                            {lightboxPlayIconType == "image" && placeholderPlayIconURL && (
+                                            {lightboxPlayIconType === "icon" && <EBDisplayIcon icon={lightboxPlayIconlib} />}
+                                            {lightboxPlayIconType === "image" && placeholderPlayIconURL && (
                                                 <img src={placeholderPlayIconURL} alt="" />
                                             )}
                                         </>

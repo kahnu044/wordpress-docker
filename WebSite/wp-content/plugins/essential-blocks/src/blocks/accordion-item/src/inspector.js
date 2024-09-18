@@ -46,7 +46,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         <InspectorPanel>
             <InspectorPanel.General>
                 <>
-                    <InspectorPanel.PanelBody initialOpen={true}>
+                    <InspectorPanel.PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
                             label={__("Default Open?", "essential-blocks")}
                             checked={clickable}
@@ -61,7 +61,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                     </InspectorPanel.PanelBody>
 
-                    <InspectorPanel.PanelBody title={__("Title", "essential-blocks")} initialOpen={true}>
+                    <InspectorPanel.PanelBody title={__("Title", "essential-blocks")} initialOpen={false}>
                         <InspectorPanel.PanelBody title={__("Title Prefix", "essential-blocks")}>
                             <BaseControl id="eb-accordion-image-icon">
                                 <ButtonGroup id="eb-accordion-image-icon">

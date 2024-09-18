@@ -26,7 +26,9 @@ import { dispatch, useSelect, withSelect } from "@wordpress/data";
 import {
     FontFamilyPicker,
     UnitControl,
-    ResetControl
+    ResetControl,
+    WithResButtons,
+    useDeviceType
 } from "@essential-blocks/controls";
 
 import {
@@ -41,19 +43,37 @@ import {
 } from './constants'
 
 
-const UnitRangeControl = ({ label, unit, unitTypes, itemKey, unitKey, rangeValue, step, setTypo, setSizeUnit }) => {
+const UnitRangeControl = ({ label, unitTypes, itemKey, data, step, setTypo, deviceType }) => {
+    let rangeKey = itemKey
+    let unitKey = `${itemKey}Unit`;
+    let unit = data?.[unitKey] || 'px';
+    let rangeValue = data?.[rangeKey];
+    const unitKeyDesktop = unitKey
+
+    if (deviceType === 'Tablet') {
+        rangeKey = `TAB${itemKey}`
+        unitKey = `TAB${itemKey}Unit`;
+        unit = data?.[unitKey] || data?.[unitKeyDesktop] || 'px';
+        rangeValue = data?.[rangeKey];
+    }
+    else if (deviceType === 'Mobile') {
+        rangeKey = `MOB${itemKey}`
+        unitKey = `MOB${itemKey}Unit`;
+        unit = data?.[unitKey] || data?.[unitKeyDesktop] || 'px';
+        rangeValue = data?.[rangeKey];
+    }
+
     return (
         <>
             <UnitControl
                 selectedUnit={unit}
                 unitTypes={unitTypes}
-                onClick={(unit) => {
-                    setTypo(unitKey, unit)
-                    setSizeUnit(unit)
+                onClick={(value) => {
+                    setTypo(unitKey, value)
                 }}
             />
             <ResetControl
-                onReset={() => setTypo(itemKey)}
+                onReset={() => setTypo(rangeKey)}
             >
                 <RangeControl
                     label={__(
@@ -61,7 +81,7 @@ const UnitRangeControl = ({ label, unit, unitTypes, itemKey, unitKey, rangeValue
                         "essential-blocks"
                     )}
                     value={rangeValue}
-                    onChange={(value) => setTypo(itemKey, value)}
+                    onChange={(value) => setTypo(rangeKey, value)}
                     step={step ? step : unit === "em" ? 0.1 : 1}
                     min={0}
                     max={unit === "em" ? 10 : 300}
@@ -71,12 +91,8 @@ const UnitRangeControl = ({ label, unit, unitTypes, itemKey, unitKey, rangeValue
     )
 }
 
-const TypographyOptions = ({
-    element,
-    typography,
-    setTypography,
-    hideFontFamily = false
-}) => {
+const TypographyOptions = ({ element, typography, setTypography, hideFontFamily = false }) => {
+    const deviceType = useDeviceType()
 
     //Function to seet Typography by key
     const setTypo = (key, value = false) => {
@@ -90,9 +106,6 @@ const TypographyOptions = ({
         }
         setTypography({ ...typo })
     }
-    const [sizeUnit, setSizeUnit] = useState(typography[element]?.fontSizeUnit || 'px')
-    const [spacingUnit, setSpacingUnit] = useState(typography[element]?.letterSpacingUnit || 'px')
-    const [heightUnit, setHeightUnit] = useState(typography[element]?.lineHeightUnit || 'px')
 
     return (
         <div className="eb-typography-control-wrapper">
@@ -103,18 +116,19 @@ const TypographyOptions = ({
                 onChange={(fontFamily) => setTypo('fontFamily', fontFamily)}
             />
             {!hideFontFamily && (
-                <UnitRangeControl
-                    label={"Font Size"}
-                    unit={sizeUnit}
-                    unitTypes={sizeUnitTypes}
-                    itemKey={'fontSize'}
-                    unitKey={'fontSizeUnit'}
-                    rangeValue={typography[element]?.fontSize}
-                    setTypo={setTypo}
-                    setSizeUnit={setSizeUnit}
-                />
+                <WithResButtons
+                    className="global-font-size"
+                >
+                    <UnitRangeControl
+                        label={"Font Size"}
+                        unitTypes={sizeUnitTypes}
+                        itemKey={'fontSize'}
+                        data={typography[element]}
+                        setTypo={setTypo}
+                        deviceType={deviceType}
+                    />
+                </WithResButtons>
             )}
-
 
             <SelectControl
                 label={__("Font Weight", "essential-blocks")}
@@ -144,28 +158,33 @@ const TypographyOptions = ({
                 onChange={(textDecoration) => setTypo('textDecoration', textDecoration)}
             />
 
-            <UnitRangeControl
-                label={"Letter Spacing"}
-                unit={spacingUnit}
-                unitTypes={sizeUnitTypes2}
-                itemKey={'letterSpacing'}
-                unitKey={'letterSpacingUnit'}
-                rangeValue={typography[element]?.letterSpacing}
-                step='0.1'
-                setTypo={setTypo}
-                setSizeUnit={setSpacingUnit}
-            />
+            <WithResButtons
+                className="global-letter-spacing"
+            >
+                <UnitRangeControl
+                    label={"Letter Spacing"}
+                    unitTypes={sizeUnitTypes2}
+                    itemKey={'letterSpacing'}
+                    data={typography[element]}
+                    setTypo={setTypo}
+                    step='0.1'
+                    deviceType={deviceType}
+                />
+            </WithResButtons>
 
-            <UnitRangeControl
-                label={"Line Height"}
-                unit={heightUnit}
-                unitTypes={sizeUnitTypes2}
-                itemKey={'lineHeight'}
-                unitKey={'lineHeightUnit'}
-                rangeValue={typography[element]?.lineHeight}
-                setTypo={setTypo}
-                setSizeUnit={setHeightUnit}
-            />
+            <WithResButtons
+                className="global-line-height"
+            >
+                <UnitRangeControl
+                    label={"Line Height"}
+                    unitTypes={sizeUnitTypes2}
+                    itemKey={'lineHeight'}
+                    data={typography[element]}
+                    setTypo={setTypo}
+                    step='0.1'
+                    deviceType={deviceType}
+                />
+            </WithResButtons>
         </div>
     )
 }
@@ -230,7 +249,7 @@ const TypographySettings = (props) => {
                 ...(font.fontStyle && { fontStyle: font.fontStyle }),
                 ...(font.textDecoration && { textDecoration: font.textDecoration }),
                 ...(font.letterSpacing && { letterSpacing: `${font.letterSpacing}${font.letterSpacingUnit || 'px'}` }),
-                ...((size && font.fontSize) && { fontSize: `${font.fontSize}${font.fontSizeUnit || 'px'}` }),
+                ...((size && font.fontSize) && { fontSize: `${font.fontSize}${font.fontSizeUnit || 'px'}` })
             }
         }
         return result
@@ -443,7 +462,6 @@ const TypographySettings = (props) => {
         </div >
     )
 }
-
 
 export default withSelect((select) => {
     return {

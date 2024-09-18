@@ -1330,6 +1330,18 @@ export default function Style(props) {
 		.eb-post-carousel-wrapper.${blockId}.dot-style-4 .slick-dots li.slick-active {
 			width: calc(${dotsSizeRange}${dotsSizeUnit});
 		}
+
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li button:before {
+			background-color: ${dotsColor} !important;
+			font-size: 0;
+		}
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li.slick-active button:before,
+		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li.slick-active button:before,
+        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li.slick-active button:before {
+			background-color: ${dotsActiveColor} !important;
+		}
 	`;
     const sliderControlsStylesTab = `
 		.eb-post-carousel-wrapper.${blockId} .slick-prev {
@@ -1411,18 +1423,6 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active {
 			width: calc(${MOBdotsSizeRange}${MOBdotsSizeUnit}* 2);
-		}
-
-		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li button:before,
-        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li button:before,
-        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li button:before {
-			background-color: ${dotsColor} !important;
-			font-size: 0;
-		}
-		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li.slick-active button:before,
-		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-2 .slick-dots li.slick-active button:before,
-        .eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-3 .slick-dots li.slick-active button:before {
-			background-color: ${dotsActiveColor} !important;
 		}
 	`;
 

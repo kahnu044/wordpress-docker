@@ -10,13 +10,7 @@ export default function Collections(props) {
         layout,
         displayImage,
         displayTitle,
-        displayCreator,
-        displayOwner,
-        displayPrice,
-        displayLastSale,
         displayButton,
-        creatorLabel,
-        ownerLabel,
         buttonText,
         gridPreset,
         listPreset,
@@ -38,7 +32,7 @@ export default function Collections(props) {
                         )}
 
                         {displayButton && (
-                            <div className="eb_nft_button"><button><a target="_blank" href={`https://opensea.io/collection/${item.slug}`}>{buttonText}</a></button></div>
+                            <div className="eb_nft_button"><button><a target="_blank" href={`https://opensea.io/collection/${item.collection}`}>{buttonText}</a></button></div>
                         )}
                     </div>
                 </div>

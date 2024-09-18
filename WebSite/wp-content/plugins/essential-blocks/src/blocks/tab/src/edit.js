@@ -6,7 +6,7 @@ import {
     InnerBlocks
 } from "@wordpress/block-editor";
 import { useSelect } from "@wordpress/data";
-import { memo } from "@wordpress/element";
+import { memo, useEffect } from '@wordpress/element'
 import {
     BlockProps,
     withBlockContext
@@ -14,10 +14,10 @@ import {
 import defaultAttributes from "./attributes";
 
 const Edit = (props) => {
-    const { attributes, clientId } = props;
+    const { attributes, setAttributes, clientId, context } = props;
     const {
         tabId,
-        tabParentId,
+        tabParentId
     } = attributes;
 
     // you must declare this variable
@@ -30,6 +30,12 @@ const Edit = (props) => {
     const { blocks } = useSelect((select) => ({
         blocks: select("core/block-editor").getBlockOrder(clientId)
     }), []);
+
+    useEffect(() => {
+        setAttributes({
+            tabParentId : context['eb/tabParentId'],
+        })
+    }, [context['eb/tabParentId']])
 
     return (
         <BlockProps.Edit {...enhancedProps}>

@@ -1,4 +1,7 @@
-import { loadGoogleFontEditor } from "@essential-blocks/controls";
+import {
+    loadGoogleFontEditor,
+    softMinifyCssStrings
+} from "@essential-blocks/controls";
 
 export const getGlobalSettings = (select) => {
     return {
@@ -10,7 +13,7 @@ export const getGlobalSettings = (select) => {
     }
 }
 
-export const generateTypographyCSS = (styles) => {
+export const generateTypographyCSS = (styles, deviceType) => {
     let cssString = '';
     let customCssString = '';
 
@@ -29,18 +32,15 @@ export const generateTypographyCSS = (styles) => {
 
         //
         if (element === 'custom') {
-            cssString += generateCustomTypographyCSS(styles[element])
+            cssString += generateCustomTypographyCSS(styles[element], deviceType)
         }
         else {
+            const selectorParam = `.editor-styles-wrapper .eb-parent-wrapper ${selector} { `;
             if (element === 'allHeadings') {
-                customCssString += `.editor-styles-wrapper .eb-parent-wrapper ${selector} { `;
-                customCssString += generateCSSStyles(styles[element])
-                customCssString += `}\n`; // Close the style block
+                customCssString += generateCSSStyles(selectorParam, styles[element], deviceType)
             }
             else {
-                cssString += `.editor-styles-wrapper .eb-parent-wrapper ${selector} { `;
-                cssString += generateCSSStyles(styles[element])
-                cssString += `}\n`; // Close the style block
+                cssString += generateCSSStyles(selectorParam, styles[element], deviceType)
             }
         }
     }
@@ -48,36 +48,44 @@ export const generateTypographyCSS = (styles) => {
     return customCssString + cssString;
 }
 
-const generateCustomTypographyCSS = (styles) => {
+const generateCustomTypographyCSS = (styles, deviceType) => {
 
     if (typeof styles === 'object' && Object.keys(styles).length === 0) {
         return ''
     }
-    let css = 'body {' // Start body tag for css var
+    let css = ''
+    const selector = 'body {'
     for (const element in styles) {
-        css += generateCSSStyles(styles[element], element)
+        css += generateCSSStyles(selector, styles[element], deviceType, element)
     }
-    css += `}\n`; // Close the style block
     return css;
 }
 
-const generateCSSStyles = (styles, varPrefix = '') => {
+const generateCSSStyles = (selector, styles, deviceType = 'Desktop', varPrefix = '') => {
     if (typeof styles === 'object' && Object.keys(styles).length === 0) {
         return ''
     }
     if (varPrefix.length > 0) {
         varPrefix = `--${varPrefix}-`
     }
-    let css = ''
+    let css = selector
+    let tablet_css = selector
+    let mobile_css = selector
     for (const style in styles) {
-        // Convert camelCase to kebab-case for CSS properties
-        const cssProperty = style.replace(/([A-Z])/g, "-$1").toLowerCase();
         const cssValue = styles[style];
+
+        //Generate CSS for each Property
         if (style === 'fontFamily') {
             css += `${varPrefix}font-family: ${cssValue}; `;
         }
         else if (style === 'fontSize') {
             css += `${varPrefix}font-size: ${cssValue}${styles?.fontSizeUnit || 'px'}; `;
+        }
+        else if (style === 'TABfontSize') {
+            tablet_css += `${varPrefix}font-size: ${cssValue}${styles?.TABfontSizeUnit || styles?.fontSizeUnit || 'px'}; `;
+        }
+        else if (style === 'MOBfontSize') {
+            mobile_css += `${varPrefix}font-size: ${cssValue}${styles?.MOBfontSizeUnit || styles?.fontSizeUnit || 'px'}; `;
         }
         else if (style === 'fontWeight') {
             css += `${varPrefix}font-weight: ${cssValue}; `;
@@ -85,8 +93,20 @@ const generateCSSStyles = (styles, varPrefix = '') => {
         else if (style === 'letterSpacing') {
             css += `${varPrefix}letter-spacing: ${cssValue}${styles?.letterSpacingUnit || 'px'}; `;
         }
+        else if (style === 'TABletterSpacing') {
+            tablet_css += `${varPrefix}letter-spacing: ${cssValue}${styles?.TABletterSpacingUnit || styles?.letterSpacingUnit || 'px'}; `;
+        }
+        else if (style === 'MOBletterSpacing') {
+            mobile_css += `${varPrefix}letter-spacing: ${cssValue}${styles?.MOBletterSpacingUnit || styles?.letterSpacingUnit || 'px'}; `;
+        }
         else if (style === 'lineHeight') {
             css += `${varPrefix}line-height: ${cssValue}${styles?.lineHeightUnit || 'px'}; `;
+        }
+        else if (style === 'TABlineHeight') {
+            tablet_css += `${varPrefix}line-height: ${cssValue}${styles?.TABlineHeightUnit || styles?.lineHeightUnit || 'px'}; `;
+        }
+        else if (style === 'MOBlineHeight') {
+            mobile_css += `${varPrefix}line-height: ${cssValue}${styles?.MOBlineHeightUnit || styles?.lineHeightUnit || 'px'}; `;
         }
         else if (style === 'fontStyle') {
             css += `${varPrefix}font-style: ${cssValue}; `;
@@ -98,14 +118,34 @@ const generateCSSStyles = (styles, varPrefix = '') => {
             css += `${varPrefix}text-transform: ${cssValue}; `;
         }
     }
-    return css;
+    css += `}\n`
+    tablet_css += `}\n`
+    mobile_css += `}\n`
+
+    if (deviceType === 'Desktop') {
+        return softMinifyCssStrings(css)
+    }
+    else if (deviceType === 'Tablet') {
+        return softMinifyCssStrings(tablet_css)
+    }
+    else if (deviceType === 'Mobile') {
+        return softMinifyCssStrings(mobile_css)
+    }
 }
 
 export const applyTypographyCSS = (cssString) => {
-    const styleTag = document.createElement('style');
-    styleTag.type = 'text/css';
-    styleTag.innerHTML = cssString;
-    document.head.appendChild(styleTag);
+    setTimeout(() => {
+        let rootDocument = document
+        const iframe = document.querySelector('[name="editor-canvas"]');
+        if (iframe) {
+            rootDocument = iframe.contentDocument || iframe.contentWindow.document;
+        }
+
+        const styleTag = rootDocument.createElement('style');
+        styleTag.type = 'text/css';
+        styleTag.innerHTML = cssString;
+        rootDocument.head.appendChild(styleTag);
+    }, 100)
 }
 
 export const loadGoogleFonts = (fontObj) => {

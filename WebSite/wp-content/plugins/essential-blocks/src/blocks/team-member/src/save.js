@@ -17,7 +17,7 @@ export default function Save({ attributes }) {
         imageNewUrl,
         imageUrl,
         imageNewClassUrl,
-        profilesOnly,
+        socialDetails,
         socialInImage,
         icnEffect,
         classHook,
@@ -72,7 +72,7 @@ export default function Save({ attributes }) {
 
                             {socialInImage && showSocials && (
                                 <SocialLinks
-                                    socialDetails={profilesOnly}
+                                    socialDetails={socialDetails}
                                     icnEffect={icnEffect}
                                     linkNewTab={showLinkNewTab}
                                     preset={preset}
@@ -125,7 +125,7 @@ export default function Save({ attributes }) {
                                                 <hr className="eb-team-member-social-separator" />
                                             )}
                                             <SocialLinks
-                                                socialDetails={profilesOnly}
+                                                socialDetails={socialDetails}
                                                 icnEffect={icnEffect}
                                                 linkNewTab={showLinkNewTab}
                                                 preset={preset}
@@ -171,7 +171,7 @@ export default function Save({ attributes }) {
                                                 <hr className="eb-team-member-social-separator" />
                                             )}
                                             <SocialLinks
-                                                socialDetails={profilesOnly}
+                                                socialDetails={socialDetails}
                                                 icnEffect={icnEffect}
                                                 linkNewTab={showLinkNewTab}
                                                 preset={preset}

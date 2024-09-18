@@ -1,4 +1,7 @@
 const attributes = {
+    blockId: {
+        type: "string"
+    },
 	tabId: {
 		type: "string",
 	},

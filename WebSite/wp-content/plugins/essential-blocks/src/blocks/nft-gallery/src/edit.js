@@ -21,7 +21,7 @@ import { Dashicon } from "@wordpress/components";
 import defaultAttributes from './attributes';
 
 function Edit(props) {
-    const { attributes, isSelected } = props;
+    const { attributes, setAttributes, isSelected } = props;
     const {
         blockId,
         blockMeta,
@@ -55,17 +55,61 @@ function Edit(props) {
         return true;
     };
 
+    const [openseaApi, setOpenseaApi] = useState("");
+
+    //Initial UseEffect
+    useEffect(() => {
+        if (!settings) {
+            setAttributes({
+                settings: {
+                    opensea: {
+                        apiKey: "",
+                        type: "items",
+                        filterBy: "",
+                        itemLimit: 6,
+                        collectionLimit: 6,
+                        orderBy: "desc",
+                    },
+                },
+            });
+        }
+
+        //Get Opensea API
+        let data = new FormData();
+        data.append("action", "opensea_api_key");
+        data.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
+        fetch(EssentialBlocksLocalize.ajax_url, {
+            method: "POST",
+            body: data,
+        }) // wrapped
+            .then((res) => res.text())
+            .then((data) => {
+                const response = JSON.parse(data);
+                if (response.success && response.data) {
+                    setOpenseaApi(response.data);
+                    // updpate api key
+
+                    if (settings) {
+                        let newSettings = { ...settings };
+                        newSettings.opensea.apiKey = response.data;
+                        setAttributes({ settings: newSettings });
+                    }
+                }
+            })
+            .catch((err) => console.log(err));
+
+    }, []);
+
     useEffect(() => {
         setLoading(true);
-
         let data = new FormData();
         data.append("action", "opensea_nft_collections");
         data.append("nft_nonce", EssentialBlocksLocalize.nft_nonce);
         data.append("nft_source", source);
         if (source === "opensea" && settings) {
-            //If Type = items and no wallet address/collection slug found, show instructions
-            if (settings.opensea.type === "items" && settings.opensea.filterBy !== "") {
-                if (settings.opensea.filterBy === "slug" && !settings.opensea.collectionSlug) {
+            //If Type = items and no collection slug found, show instructions
+            if (settings.opensea.type === "items") {
+                if (!settings.opensea.collectionSlug) {
                     setNftError({
                         status: true,
                         message: "Please insert a valid collection slug.",
@@ -73,27 +117,19 @@ function Edit(props) {
                     setNftErrorType("slug");
                     setLoading(false);
                     return;
-                } else if (settings.opensea.filterBy === "wallet" && !settings.opensea.itemWalletId) {
-                    setNftError({
-                        status: true,
-                        message: "Please insert a valid wallet Address.",
-                    });
-                    setNftErrorType("wallet");
-                    setLoading(false);
-                    return;
                 } else {
                     setNftErrorType("");
                 }
             }
 
-            //If Type = collections and no wallet address found, show instructions
+            //If Type = collections found, show instructions
             if (
                 settings.opensea.type === "collections" &&
                 (!settings.opensea.collectionWalletId || settings.opensea.collectionWalletId.length === 0)
             ) {
                 setNftError({
                     status: true,
-                    message: "Please insert a valid wallet Address.",
+                    message: "Please insert a valid creator username.",
                 });
                 setNftErrorType("wallet");
                 setLoading(false);
@@ -104,12 +140,9 @@ function Edit(props) {
             if (settings.opensea.apiKey && settings.opensea.apiKey.trim().length > 0) {
                 data.append("openseaApiKey", settings.opensea.apiKey);
             }
-            data.append("openseaItemFilterBy", settings.opensea.filterBy);
             data.append("openseaCollectionSlug", settings.opensea.collectionSlug);
-            data.append("openseaItemWalletId", settings.opensea.itemWalletId);
             data.append("openseaCollectionmWalletId", settings.opensea.collectionWalletId);
             data.append("openseaItemLimit", settings.opensea.itemLimit);
-            data.append("openseaItemOrderBy", settings.opensea.orderBy);
             data.append("openseaCollectionLimit", settings.opensea.collectionLimit);
             fetch(EssentialBlocksLocalize.ajax_url, {
                 method: "POST",
@@ -134,7 +167,7 @@ function Edit(props) {
                                     : response.data;
                         setNftError({
                             status: true,
-                            message: typeof error === "string" ? error : "Invalid Wallet Address/Collection Slug",
+                            message: typeof error === "string" ? error : "Invalid Collection Slug",
                         });
                         setNftErrorType("");
                         setLoading(false);
@@ -150,57 +183,87 @@ function Edit(props) {
         </div>
     ) : (
         <>
-            {isSelected && <Inspector {...props} setLoading={setLoading} />}
+            {isSelected && openseaApi && <Inspector {...props} setLoading={setLoading} />}
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-nft-gallery-wrapper ${blockId}`} data-id={blockId}>
                         {loading && <Loading attributes={attributes} />}
                         {!loading && (
                             <>
-                                {nftError.status && <>
-                                    <NoticeComponent
-                                        Icon={Icon}
-                                        title={__("NFT Gallery", "essential-blocks")}
-                                        description={
-                                            <>
-                                                <span style={{ color: "#cc1818" }}><Dashicon icon="warning" /> <strong>Error: {nftError.message}.</strong></span><br />
-                                                {nftErrorType == '' && <span>Please add proper NFT API&nbsp;
-                                                    <a
-                                                        target="_blank"
-                                                        href={`${EssentialBlocksLocalize?.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
-                                                    >
-                                                        Here
-                                                    </a>
-                                                    &nbsp;to display NFT Gallery Block</span>}
-                                                {nftErrorType !== '' && <span>To add <strong>collection slug/wallet.</strong> Go to General Tab of block settings.</span>}
-                                            </>
-                                        }
-                                        externalDocLink={"https://essential-blocks.com/docs/retrieve-opensea-nft-api/"}
-                                        externalDocText={
-                                            <>
-                                                Learn more about NFT Gallery Block <Dashicon icon="external" />
-                                            </>
-                                        }
-                                    />
-                                </>}
-                                {!nftError.status && (
+                                {!openseaApi && (
                                     <>
-                                        {settings.opensea.type === "items" && (
-                                            <Items data={nftData.assets} attributes={attributes} />
-                                        )}
-
-                                        {settings.opensea.type === "collections" && (
-                                            <Collections
-                                                data={
-                                                    settings.opensea.collectionWalletId ? nftData : nftData?.collections
+                                        <NoticeComponent
+                                            Icon={Icon}
+                                            title={__("NFT Gallery", "essential-blocks")}
+                                            description={
+                                                <>
+                                                    <span>Please add NFT API&nbsp;
+                                                        <a
+                                                            target="_blank"
+                                                            href={`${EssentialBlocksLocalize?.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
+                                                        >
+                                                            Here
+                                                        </a>
+                                                        &nbsp;to display NFT Gallery Block</span>
+                                                </>
+                                            }
+                                            externalDocLink={"https://essential-blocks.com/docs/retrieve-opensea-nft-api/"}
+                                            externalDocText={
+                                                <>
+                                                    Learn more about NFT Gallery Block <Dashicon icon="external" />
+                                                </>
+                                            }
+                                        />
+                                    </>
+                                )}
+                                {openseaApi && (
+                                    <>
+                                        {nftError.status && <>
+                                            <NoticeComponent
+                                                Icon={Icon}
+                                                title={__("NFT Gallery", "essential-blocks")}
+                                                description={
+                                                    <>
+                                                        <span style={{ color: "#cc1818" }}><Dashicon icon="warning" /> <strong>Error: {nftError.message}.</strong></span><br />
+                                                        {nftErrorType == '' && <span>Please add proper NFT API&nbsp;
+                                                            <a
+                                                                target="_blank"
+                                                                href={`${EssentialBlocksLocalize?.eb_admin_url}admin.php?page=essential-blocks&tab=options`}
+                                                            >
+                                                                Here
+                                                            </a>
+                                                            &nbsp;to display NFT Gallery Block</span>}
+                                                        {nftErrorType !== '' && <span>To add <strong>collection slug.</strong> Go to General Tab of block settings.</span>}
+                                                    </>
                                                 }
-                                                attributes={attributes}
+                                                externalDocLink={"https://essential-blocks.com/docs/retrieve-opensea-nft-api/"}
+                                                externalDocText={
+                                                    <>
+                                                        Learn more about NFT Gallery Block <Dashicon icon="external" />
+                                                    </>
+                                                }
                                             />
+                                        </>}
+                                        {!nftError.status && (
+                                            <>
+                                                {settings.opensea.type === "items" && (
+                                                    <Items data={nftData.nfts} attributes={attributes} />
+                                                )}
+
+                                                {settings.opensea.type === "collections" && (
+                                                    <Collections
+                                                        data={nftData?.collections}
+                                                        attributes={attributes}
+                                                    />
+                                                )}
+                                            </>
                                         )}
                                     </>
                                 )}
+
                             </>
                         )}
+
                     </div>
                 </div>
             </BlockProps.Edit >

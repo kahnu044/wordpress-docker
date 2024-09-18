@@ -40,7 +40,7 @@ import {
     generateResponsiveRangeStyles,
     generateTypographyStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const {
@@ -60,17 +60,8 @@ export default function Style(props) {
         gridPreset,
         displayImage,
         displayTitle,
-        displayCreator,
-        displayOwner,
-        displayPrice,
-        displayLastSale,
         displayButton,
         titleColor,
-        ownerTextColor,
-        ownerLinkColor,
-        showOwnerImage,
-        showOwnerText,
-        priceColor,
         buttonTextColor,
         buttonBgColor,
         buttonHoverTextColor,
@@ -477,37 +468,9 @@ export default function Style(props) {
             }` : ""
         }
 
-        ${(displayPrice || displayLastSale) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_price {
-                color: ${priceColor};
-                ${priceTypoStylesDesktop}
-                ${priceMarginDesktop}
-            }` : ""
-        }
         ${(gridPreset === 'preset-1') ?
             `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_price_wrapper {
                 min-height: 20px;
-            }` : ""
-        }
-        ${(displayCreator || displayOwner) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator {
-                color: ${ownerTextColor};
-                ${ownerTypoStylesDesktop}
-                ${creatorMarginDesktop}
-            }
-            ${showOwnerText ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator a {
-                    color: ${ownerLinkColor};
-                    ${ownerTypoStylesDesktop}
-                }` : ""
-            }
-
-            ${showOwnerImage ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
-                    ${creatorImageHeightDesktop}
-                    ${creatorImageWidthDesktop}
-                    ${creatorImgBdrRdsDesktop}
-                }` : ""
             }` : ""
         }
 
@@ -560,32 +523,6 @@ export default function Style(props) {
             }` : ""
         }
 
-        ${(displayPrice || displayLastSale) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_price {
-                ${priceTypoStylesTab}
-                ${priceMarginTab}
-            }` : ""
-        }
-        ${(displayCreator || displayOwner) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator {
-                ${ownerTypoStylesTab}
-                ${creatorMarginTab}
-            }
-            ${showOwnerText ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator a {
-                    ${ownerTypoStylesTab}
-                }` : ""
-            }
-
-            ${showOwnerImage ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
-                    ${creatorImageHeightTab}
-                    ${creatorImageWidthTab}
-                    ${creatorImgBdrRdsTab}
-                }` : ""
-            }` : ""
-        }
-
         ${displayButton ?
             `.eb-nft-gallery-wrapper.${blockId} .eb_nft_item .eb_nft_content .eb_nft_button button {
                 ${buttonMarginTab}
@@ -627,32 +564,6 @@ export default function Style(props) {
             `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_title {
                 ${titleTypoStylesMobile}
                 ${titleMarginMobile}
-            }` : ""
-        }
-
-        ${(displayPrice || displayLastSale) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_price {
-                ${priceTypoStylesMobile}
-                ${priceMarginMobile}
-            }` : ""
-        }
-        ${(displayCreator || displayOwner) ?
-            `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator {
-                ${ownerTypoStylesMobile}
-                ${creatorMarginMobile}
-            }
-            ${showOwnerText ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator a {
-                    ${ownerTypoStylesMobile}
-                }` : ""
-            }
-
-            ${showOwnerImage ?
-                `.eb-nft-gallery-wrapper.${blockId} .eb_nft_content .eb_nft_creator img {
-                    ${creatorImageHeightMobile}
-                    ${creatorImageWidthMobile}
-                    ${creatorImgBdrRdsMobile}
-                }` : ""
             }` : ""
         }
 

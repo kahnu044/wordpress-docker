@@ -17,5 +17,9 @@
       "background": false
     }
   },
-  "editorScript": "essential-blocks-editor-script"
+  "editorScript": "essential-blocks-editor-script",
+  "usesContext": [
+    "postID",
+    "postType"
+  ]
 }

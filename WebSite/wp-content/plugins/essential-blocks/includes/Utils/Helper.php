@@ -707,7 +707,26 @@ public static function get_product_gallery_image_html( $attachment_id, $main_ima
 
    return  $image;
 }
+    /**
+     * return value from json array
+     *
+     * @param array $arr
+     *
+     * @return array
+     */
+    public static function get_value_from_json_array($arr) {
+        if ( isset( $arr ) && is_array( $arr ) && count( $arr ) > 0 ) {
+                $values    = [];
+                foreach ( $arr as $key => $value ) {
+                    if ( is_array( $value ) && count( $value ) > 0 && isset( $value[ 'value' ] ) ) {
+                        array_push( $values, $value[ 'value' ] );
+                        }
+                    }
 
-
-
+                if ( count( $values ) > 0 ) {
+                    return $values;
+                }
+        }
+        return [];
+    }
 }

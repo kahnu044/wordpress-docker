@@ -12,15 +12,20 @@
 	);
 
     $post_thumbnail_id = $product->get_image_id();
-    $attachment_ids = $product->get_gallery_image_ids();
-    
+    $attachment_ids = $product->get_gallery_image_ids();  
+
+    $wrapper_classes = [
+        $blockId,
+        is_array($attachment_ids) && count($attachment_ids) <= 4 ? 'eb-product-images-disable-nav' : ''
+    ];
+
 ?>
 
 
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
-    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?><?php echo esc_attr( $classHook ); ?>">
+    <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?> <?php echo esc_attr( $classHook ); ?>">
         <div
-            class="<?php echo esc_attr( $blockId ); ?> eb-product-images-wrapper"
+            class="<?php echo esc_attr( implode(" ",$wrapper_classes )); ?> eb-product-images-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
             data-settings="<?php echo esc_attr(json_encode($settings)); ?>"
             data-nav-settings="<?php echo esc_attr(json_encode($nav_settings)); ?>"

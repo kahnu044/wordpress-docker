@@ -3,7 +3,7 @@
   "title": "Taxonomy",
   "name": "essential-blocks/taxonomy",
   "category": "essential-blocks",
-  "description": "Taxonomy Blocks",
+  "description": "Display and organize content by categories, tags, product SKUs, etc. to make it easy for users to navigate",
   "apiVersion": 2,
   "textdomain": "essential-blocks",
   "supports": {

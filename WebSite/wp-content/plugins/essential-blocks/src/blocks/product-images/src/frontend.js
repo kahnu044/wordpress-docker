@@ -23,7 +23,7 @@ domReady( function () {
                 slidesToScroll: 1,
                 arrows: false,
                 fade: true,
-                asNavFor: ".eb-product-image_slider-footer",
+                asNavFor: `.${wrapperId} .eb-product-image_slider-footer`,
                 adaptiveHeight: largeImageSettings?.adaptiveHeight
             });
         })(jQuery);
@@ -32,9 +32,9 @@ domReady( function () {
             $(sliderFooter).slick({
                 slidesToShow: 4,
                 slidesToScroll: 1,
-                asNavFor: ".eb-product-image_slider-body",
+                asNavFor: `.${wrapperId} .eb-product-image_slider-body`,
                 dots: false,
-                arrows: true,
+                arrows: !navSettings?.disableNavArrow,
                 focusOnSelect: true,
                 vertical: (navSettings?.galleryPosition == 'left' || navSettings?.galleryPosition == 'right') ? true : false,
                 centerMode: true,

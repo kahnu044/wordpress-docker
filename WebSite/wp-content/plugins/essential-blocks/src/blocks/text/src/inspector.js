@@ -6,7 +6,8 @@ import {
     SelectControl,
     Button,
     ButtonGroup,
-    BaseControl
+    BaseControl,
+    PanelRow
 } from "@wordpress/components";
 
 /**
@@ -125,6 +126,11 @@ function Inspector(props) {
                                 setAttributes={setAttributes}
                                 onChange={(text) => setAttributes({ text: text })}
                             />
+                        </>
+                    )}
+
+                    {source !== 'dynamic-content' && (
+                        <>
                             <ResponsiveRangeController
                                 baseLabel={__("Column Count", "essential-blocks")}
                                 controlName={COLUMNCOUNT}
@@ -138,9 +144,9 @@ function Inspector(props) {
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
-                <InspectorPanel.PanelBody title={__("Text Styles", "essential-blocks")} initialOpen={true}>
-                    {source !== 'dynamic-content' && (
-                        <>
+                {source !== 'dynamic-content' && (
+                    <>
+                        <InspectorPanel.PanelBody title={__("Text Styles", "essential-blocks")} initialOpen={true}>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={TEXT_TYPOGRAPHY}
@@ -156,48 +162,51 @@ function Inspector(props) {
                                 color={hoverColor}
                                 attributeName={'hoverColor'}
                             />
-                        </>
-                    )}
-                </InspectorPanel.PanelBody>
+                        </InspectorPanel.PanelBody>
 
-                <InspectorPanel.PanelBody title={__("Column Style", "essential-blocks")}>
-                    <ResponsiveRangeController
-                        baseLabel={__("Column Gap", "essential-blocks")}
-                        controlName={COLUMNGAP}
-                        min={0}
-                        max={100}
-                        step={1}
-                    />
-                    <ResponsiveRangeController
-                        baseLabel={__("Column Min Width", "essential-blocks")}
-                        controlName={COLUMNWIDTH}
-                        min={0}
-                        max={500}
-                        step={1}
-                    />
-                    <SelectControl
-                        label={__("Column Rule Style", "essential-blocks")}
-                        value={columnRuleStyle}
-                        options={COLUMNRULESTYLE}
-                        onChange={(value) => setAttributes({ columnRuleStyle: value })}
-                    />
-                    {columnRuleStyle !== 'none' && (
-                        <>
-                            <ColorControl
-                                label={__("Column Rule Color", "essential-blocks")}
-                                color={columnRuleColor}
-                                attributeName={'columnRuleColor'}
-                            />
+                        <InspectorPanel.PanelBody title={__("Column Style", "essential-blocks")}>
                             <ResponsiveRangeController
-                                baseLabel={__("Column Rule Width", "essential-blocks")}
-                                controlName={COLUMNRULEWIDTH}
+                                baseLabel={__("Column Gap", "essential-blocks")}
+                                controlName={COLUMNGAP}
                                 min={0}
                                 max={100}
                                 step={1}
                             />
-                        </>
-                    )}
-                </InspectorPanel.PanelBody>
+                            <ResponsiveRangeController
+                                baseLabel={__("Column Min Width", "essential-blocks")}
+                                controlName={COLUMNWIDTH}
+                                min={0}
+                                max={500}
+                                step={1}
+                            />
+                            <SelectControl
+                                label={__("Column Rule Style", "essential-blocks")}
+                                value={columnRuleStyle}
+                                options={COLUMNRULESTYLE}
+                                onChange={(value) => setAttributes({ columnRuleStyle: value })}
+                            />
+                            {columnRuleStyle !== 'none' && (
+                                <>
+                                    <ColorControl
+                                        label={__("Column Rule Color", "essential-blocks")}
+                                        color={columnRuleColor}
+                                        attributeName={'columnRuleColor'}
+                                    />
+                                    <ResponsiveRangeController
+                                        baseLabel={__("Column Rule Width", "essential-blocks")}
+                                        controlName={COLUMNRULEWIDTH}
+                                        min={0}
+                                        max={100}
+                                        step={1}
+                                    />
+                                </>
+                            )}
+                        </InspectorPanel.PanelBody>
+                    </>
+                )}
+                {source === 'dynamic-content' && (
+                    <p style={{ padding: '10px 15px' }}>No style control available for <strong>Dynamic Content</strong></p>
+                )}
             </InspectorPanel.Style>
         </InspectorPanel>
     );

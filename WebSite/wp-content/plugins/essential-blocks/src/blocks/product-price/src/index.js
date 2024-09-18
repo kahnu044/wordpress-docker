@@ -14,7 +14,7 @@ ebConditionalRegisterBlockType(metadata, {
         __("WooCommerce Product Price", "essential-blocks"),
         __("Product Price", "essential-blocks"),
         __("Price", "essential-blocks"),
-        __("eb price", "essential-blocks"),
+        __("sale price", "essential-blocks"),
     ],
     icon: Icon,
     attributes,

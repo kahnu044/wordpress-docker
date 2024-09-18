@@ -56,11 +56,11 @@ import {
     ColorControl,
     ResponsiveSelectController,
     EBIconPicker,
-    InspectorPanel
-} from "@essential-blocks/controls";
+    InspectorPanel, EBDisplayIcon,
+} from '@essential-blocks/controls'
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, preview, setPreview, setVideoPlayIcon } = props;
     const {
         resOption,
         showBar,
@@ -99,6 +99,26 @@ function Inspector(props) {
             });
         }
     }, [videoOptions]);
+
+    useEffect(() => {
+        if (imageOverlay && previewImage) {
+            setPreview(previewImage);
+        } else {
+            setPreview(false);
+        }
+    }, [imageOverlay, previewImage]);
+
+    useEffect(() => {
+        if (customPlayIcon) {
+            if (placeholderCustomPlayIconType === "image") {
+                setVideoPlayIcon(<img src={customPlayIconURL} />);
+            } else {
+                setVideoPlayIcon(<EBDisplayIcon icon={customPlayIconlib} />);
+            }
+        } else {
+            setVideoPlayIcon(null);
+        }
+    }, [customPlayIcon, customPlayIconURL, placeholderCustomPlayIconType, customPlayIconlib]);
 
     const [selfhostVideo, setSelfhostVideo] = useState(false);
 
@@ -139,14 +159,15 @@ function Inspector(props) {
                                 <ToggleControl
                                     label={__("Autoplay", "essential-blocks")}
                                     checked={videoConfig.autoplay}
-                                    onChange={(autoplay) =>
+                                    onChange={(autoplay) =>{
                                         setAttributes({
                                             videoConfig: {
                                                 ...videoConfig,
                                                 autoplay: autoplay,
+                                                muted: autoplay && !preview
                                             },
                                         })
-                                    }
+                                    }}
                                 />
                                 {videoConfig.autoplay && (
                                     <PanelRow>
@@ -184,7 +205,19 @@ function Inspector(props) {
                         <ToggleControl
                             label={__("Show Controls", "essential-blocks")}
                             checked={showBar}
-                            onChange={(showBar) => setAttributes({ showBar })}
+                            onChange={(showBar) => {
+                                const url = videoURL;
+                                setAttributes({
+                                    showBar,
+                                    videoURL: ''
+                                })
+                                setTimeout(() => {
+                                    setAttributes({
+                                        videoURL: url
+                                    });
+                                }, 100);
+
+                            }}
                         />
 
                         {showBar && selfhostVideo && (

@@ -76,7 +76,7 @@ import {
     conBdShadowConst,
 } from "./constants/borderShadowConstants";
 
-const Inspector = ({ attributes, setAttributes, clientId }) => {
+const Inspector = ({ attributes, setAttributes, clientId}) => {
     const {
         resOption,
         accordionType,

@@ -358,7 +358,7 @@
 	background: rgb(0 0 0 / 25%);
 }
 
-.eb-woo-products-gallery.grid-preset-3 .grid-preset-anchor {
+.eb-woo-products-gallery .grid-preset-anchor {
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -367,7 +367,7 @@
 	z-index: 1;
 }
 
-.eb-woo-products-gallery.grid-preset-3 .eb-woo-product-button-list>a {
+.eb-woo-products-gallery .eb-woo-product-button-list > a {
 	z-index: 9999;
 }
 

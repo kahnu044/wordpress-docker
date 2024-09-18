@@ -12,7 +12,8 @@ ebConditionalRegisterBlockType(metadata, {
     keywords: [
         __("Taxonomy", "essential-blocks"),
         __("taxonomy block", "essential-blocks"),
-        __("eb", "essential-blocks"),
+        __("category", "essential-blocks"),
+        __("tags", "essential-blocks"),
     ],
     icon: Icon,
     attributes,

@@ -178,13 +178,46 @@ const attributes = {
         default: "center",
     },
 
-    profilesOnly: {
-        type: "array",
-    },
-
     socialDetails: {
         type: "array",
-        default: [],
+        default: [
+            {
+                title: "Facebook",
+                icon: "fab fa-facebook-f",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+            {
+                title: "Twitter",
+                icon: "fab fa-x-twitter",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+            {
+                title: "LinkedIn",
+                icon: "fab fa-linkedin-in",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+            {
+                title: "YouTube",
+                icon: "fab fa-youtube",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+        ],
     },
 
     //

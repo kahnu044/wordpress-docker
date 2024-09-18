@@ -12,8 +12,9 @@ ebConditionalRegisterBlockType(metadata, {
     keywords: [
         __("WooCommerce Product Details", "essential-blocks"),
         __("Product Details", "essential-blocks"),
-        __("Details", "essential-blocks"),
-        __("eb product details", "essential-blocks"),
+        __("Product summary", "essential-blocks"),
+        __("Product review", "essential-blocks"),
+        __("Additional information", "essential-blocks"),
     ],
     icon: Icon,
     attributes,

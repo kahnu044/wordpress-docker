@@ -83,12 +83,10 @@ function Edit(props) {
         style: <Style {...props} />
     };
 
-
-    //Set Image Sources on Change Image/Size
-    useEffect(() => {
+    const onImageChange = newImages => {
         const currentSources = [];
-
-        const mergedImages = images.map(image => {
+        newImages = newImages || images;
+        const mergedImages = newImages.map(image => {
             const matchingSource = sources.find(src => src.id === image.id);
             if (matchingSource) {
                 Object.keys(matchingSource).forEach(key => {
@@ -99,7 +97,6 @@ function Edit(props) {
             }
             return image;
         });
-
         mergedImages.map((image) => {
             let item = {};
             if (image.sizes && imageSize && imageSize.length > 0) {
@@ -116,19 +113,18 @@ function Edit(props) {
             item.openNewTab = image.openNewTab ? image.openNewTab : false;
             item.isValidUrl = image.isValidUrl ? image.isValidUrl : true;
             sources.length > 0 &&
-                sources.map((source) => {
-                    if (source.id === image.id) {
-                        item.filter = source.filter;
-                        // item.customLink = source.customLink;
-                        // item.openNewTab = source.openNewTab;
-                        // item.isValidUrl = source.isValidUrl;
-                    }
-                });
+            sources.map((source) => {
+                if (source.id === image.id) {
+                    item.filter = source.filter;
+                    // item.customLink = source.customLink;
+                    // item.openNewTab = source.openNewTab;
+                    // item.isValidUrl = source.isValidUrl;
+                }
+            });
             currentSources.push(item);
         });
-
-        setAttributes({ sources: currentSources });
-    }, [images, imageSize]);
+        setAttributes({ sources: currentSources, images: newImages });
+    }
 
     // Get only urls for Lightbox
     let urls = [];
@@ -238,7 +234,7 @@ function Edit(props) {
         sources,
         columnsRange,
         imageGapRange,
-        imageHeightRange, ,
+        imageHeightRange,
         imageWidthRange,
         imageMaxHeightRange,
         imageMaxWidthRange,
@@ -299,12 +295,13 @@ function Edit(props) {
                 <Inspector
                     attributes={attributes}
                     setAttributes={setAttributes}
+                    onImageChange={onImageChange}
                 />
             )}
             <>
                 {urls.length === 0 && (
                     <MediaPlaceholder
-                        onSelect={(images) => setAttributes({ images })}
+                        onSelect={onImageChange}
                         accept="image/*"
                         allowedTypes={["image"]}
                         multiple
@@ -335,7 +332,7 @@ function Edit(props) {
                                                         Object.assign(item, correspondingItem);
                                                     }
                                                 });
-                                                setAttributes({ images: newImages })
+                                                onImageChange(newImages);
                                             }}
                                             allowedTypes={["image"]}
                                             multiple

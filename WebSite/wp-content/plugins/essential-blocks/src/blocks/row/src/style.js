@@ -25,7 +25,7 @@ import {
     generateResponsiveRangeStyles,
     generateResponsiveSelectControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -372,7 +372,7 @@ export default function Style(props) {
 			${rowHeightName === "equalH" ? `align-items: unset;` : ""}
 		}
 
-		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .eb-parent-wrapper{
+		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column{
 			${rowHeightName === "minH" ? wrapHeightDesktop : ""}
 			${rowHeightName === "equalH"
             ? `
@@ -382,7 +382,7 @@ export default function Style(props) {
             : ""
         }
 		}
-		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .eb-parent-wrapper > * {
+		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column > * {
 			${rowHeightName === "equalH" ? `width: 100%;` : ""}
 		}
 
@@ -411,7 +411,7 @@ export default function Style(props) {
         }
 		}
 
-		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .eb-parent-wrapper{
+		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column{
 			${`gap: ${TABclGp_Range}px;`}
 			${rowHeightName === "minH" ? wrapHeightTab || wrapHeightDesktop : ""}
 		}
@@ -441,7 +441,7 @@ export default function Style(props) {
         }
 		}
 
-		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .eb-parent-wrapper{
+		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column{
 			${`gap: ${MOBclGp_Range}px;`}
 			${rowHeightName === "minH" ? wrapHeightMobile || wrapHeightDesktop : ""}
 		}

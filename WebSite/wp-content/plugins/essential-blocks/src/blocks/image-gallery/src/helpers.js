@@ -28,7 +28,7 @@ export const handleCustomURL = (customLink, id, images, setAttributes) => {
         return item;
     });
 
-    setAttributes({ images: updatedImageArray });
+    setAttributes({ sources: updatedImageArray });
 };
 
 export const handleOpenNewTab = (openNewTab, id, images, setAttributes) => {
@@ -39,5 +39,5 @@ export const handleOpenNewTab = (openNewTab, id, images, setAttributes) => {
         return item;
     });
 
-    setAttributes({ images: updatedImageArray });
+    setAttributes({ sources: updatedImageArray });
 };

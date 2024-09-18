@@ -42,7 +42,7 @@ class NFT extends ThirdPartyIntegration {
         $limit = 6;
 
         if ( isset( $_POST['nft_source'] ) && sanitize_text_field( $_POST['nft_source'] ) === 'opensea' ) {
-            $opensea_api = '58e12cdaed664ad3806393f7fe3e1066';
+            $opensea_api = '';
             $settings    = get_option( 'eb_settings' );
 
             if ( isset( $_POST['openseaApiKey'] ) ) {
@@ -56,9 +56,9 @@ class NFT extends ThirdPartyIntegration {
             if ( isset( $_POST['openseaType'] ) ) {
                 // To retrieve Collections
                 if ( $_POST['openseaType'] === 'collections' ) {
-                    $url    = $this->url( 'collections' );
+                    $url    = $this->url( 'collections', 'v2/' );
                     $values = [
-                        'asset_owner' => Helper::is_isset( 'openseaCollectionmWalletId' ),
+                        'creator_username' => Helper::is_isset( 'openseaCollectionmWalletId' ),
                         'offset'      => Helper::is_isset( 'offset', 0 ),
                         'limit'       => Helper::is_isset( 'openseaCollectionLimit', $limit )
                     ];
@@ -66,22 +66,16 @@ class NFT extends ThirdPartyIntegration {
                 }
                 // To retrieve Assets
                 elseif ( $_POST['openseaType'] === 'items' ) {
-                    $url    = $this->url( 'assets' );
+                    $collection_slug = Helper::is_isset( 'openseaCollectionSlug' );
+                    $url    = $this->url( 'collection/'.$collection_slug.'/nfts', 'v2/' );
                     $values = [
-                        'include_orders'  => Helper::is_isset( 'openseaItemIncludeOrder', true ),
-                        'limit'           => Helper::is_isset( 'openseaItemLimit', $limit ),
-                        'order_direction' => Helper::is_isset( 'openseaItemOrderBy', 'desc' )
+                        'limit' => Helper::is_isset( 'openseaItemLimit', $limit ),
                     ];
-                    if ( isset( $_POST['openseaItemFilterBy'] ) ) {
-                        if ( $_POST['openseaItemFilterBy'] === 'slug' ) {
-                            $values['collection_slug'] = Helper::is_isset( 'openseaCollectionSlug' );
-                        } elseif ( $_POST['openseaItemFilterBy'] === 'wallet' ) {
-                            $values['owner'] = Helper::is_isset( 'openseaItemWalletId' );
-                        }
-                    }
+
                     $param = array_merge( $param, $values );
                 }
             }
+
             $response = HttpRequest::get_instance()->get(
                 $url,
                 [
@@ -117,7 +111,6 @@ class NFT extends ThirdPartyIntegration {
 
         wp_send_json_error( "Couldn't found data" );
     }
-
     public function save_api() {
         if ( ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );

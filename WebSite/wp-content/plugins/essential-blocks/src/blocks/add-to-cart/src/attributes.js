@@ -180,7 +180,7 @@ const attributes = {
     ...generateDimensionsAttributes(VARIABLE_FIELD_PADDING, {
         top: 10,
         bottom: 10,
-        right: 15,
+        right: 30,
         left: 15,
         isLinked: false,
     }),

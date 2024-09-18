@@ -14,5 +14,14 @@
   },
   "parent": [
     "essential-blocks/accordion"
+  ],
+  "usesContext": [
+    "eb/accordionParentBlockId",
+    "eb/accordionInheritedAccordionType",
+    "eb/accordionInheritedDisplayIcon",
+    "eb/accordionInheritedTabIcon",
+    "eb/accordionInheritedExpandedIcon",
+    "eb/accordionInheritedTagName",
+    "eb/accordionFaqSchema"
   ]
 }

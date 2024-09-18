@@ -10,7 +10,11 @@ import {
     GALLERY_ICON_SIZE,
     //
     LARGE_IMAGE_HEIGHT,
-    LARGE_IMAGE_BORDER
+    LARGE_IMAGE_WIDTH,
+    LARGE_IMAGE_BORDER,
+    FEATURE_IMG_MARGIN,
+    THUMBNAILS_IMAGE_BORDER,
+    ACTIVE_THUMBNAILS_IMAGE_BORDER
 } from "./constants/constants";
 
 import {
@@ -50,8 +54,8 @@ const attributes = {
         default: "cover"
     },
     useAdaptiveHeight: {
-        type: "string",
-        default: true,
+        type: "boolean",
+        default: false,
     },
     galleryArrowColor: {
         type: "string",
@@ -65,61 +69,24 @@ const attributes = {
     galleryArrowBackgroundHoverColor: {
         type: "string",
     },
-    // old
-    metaLabelColor: {
-        type: "string",
-        default: ""
-    },
-    metaValueColor: {
-        type: "string",
-        default: ""
-    },
-    metaDisplay: {
-        type: "string",
-        default: "inline",
-    },
-    showAuthor: {
-        type: 'boolean',
-        default: true,
-    },
-    showProductSku: {
-        type: 'boolean',
-        default: true,
-    },
-    authorLabel: {
-        type: "string",
-        default: "Author: ",
-    },
-    showDate: {
-        type: 'boolean',
-        default: true,
-    },
-    dateLabel: {
-        type: "string",
-        default: "Published Date: ",
-    },
-    productSkuLabel: {
-        type: "string",
-        default: "SKU: ",
-    },
-    contentLists: {
-        type: "array",
-        default: ["author", "date", "product_sku"],
-    },
-    enableContents: {
-        type: "array",
-        default: ["author", "date", "product_sku"],
-    },
     type: {
         type: "string",
         default: "post",
+    },
+    featureImgAlignment: {
+        type: 'string',
+        default: 'center',
+    },
+    disableNavArrow: {
+        type: "boolean",
+        default: false,
     },
     ...generateResponsiveRangeAttributes(GALLERY_COLUMNS, {
         defaultRange: 4,
         noUnits: true,
         defaultUnit: ""
     }),
-    ...generateResponsiveRangeAttributes(GALLERY_COLUMN_GAP),
+    ...generateResponsiveRangeAttributes(GALLERY_COLUMN_GAP, {defaultRange: 10}),
     ...generateResponsiveRangeAttributes(GALLERY_COLUMN_SPACE),
     ...generateResponsiveRangeAttributes(GALLERY_ICON_SIZE),
     // typography attributes ⬇
@@ -128,6 +95,7 @@ const attributes = {
     // margin padding attributes ⬇
     ...generateDimensionsAttributes(WRAPPER_MARGIN),
     ...generateDimensionsAttributes(WRAPPER_PADDING),
+    ...generateDimensionsAttributes(FEATURE_IMG_MARGIN),
 
     // border shadow attributes ⬇
     ...generateBorderShadowAttributes(WRAPPER_BORDER_SHADOW, {
@@ -135,7 +103,8 @@ const attributes = {
         // noBorder: true,
     }),
     ...generateBorderShadowAttributes(LARGE_IMAGE_BORDER),
-
+    ...generateBorderShadowAttributes(THUMBNAILS_IMAGE_BORDER),
+    ...generateBorderShadowAttributes(ACTIVE_THUMBNAILS_IMAGE_BORDER),
     // background attributes ⬇
     ...generateBackgroundAttributes(WRAPPER_BG, {
         noOverlay: true,
@@ -145,7 +114,11 @@ const attributes = {
         defaultTabAlign: "flex-start",
         defaultMobileAlign: "flext-start",
     }),
-    ...generateResponsiveRangeAttributes(LARGE_IMAGE_HEIGHT),
+    ...generateResponsiveRangeAttributes(LARGE_IMAGE_HEIGHT, {
+        defaultRange: 410,
+        defaultUnit: 'px'
+    }),
+    ...generateResponsiveRangeAttributes(LARGE_IMAGE_WIDTH),
 };
 
 export default attributes;

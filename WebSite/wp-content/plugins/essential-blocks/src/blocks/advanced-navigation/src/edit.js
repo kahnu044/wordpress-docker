@@ -2,20 +2,14 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import {
-    InnerBlocks,
-} from "@wordpress/block-editor";
-import { useEffect, Fragment, memo } from "@wordpress/element";
-import { select, dispatch } from "@wordpress/data";
-
-const { times } = lodash;
-
+import { InnerBlocks } from "@wordpress/block-editor";
+import { Fragment, memo } from "@wordpress/element";
+import { select } from "@wordpress/data";
 import { createHigherOrderComponent } from "@wordpress/compose";
 
 /**
  * Internal dependencies
  */
-
 import {
     BlockProps,
     withBlockContext
@@ -23,6 +17,8 @@ import {
 import Inspector from "./inspector";
 import defaultAttributes from './attributes';
 import Style from "./style";
+
+import { editUseEffect } from "./handleEditUseEffect"
 
 const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
@@ -157,25 +153,14 @@ const Edit = (props) => {
     } = props;
 
     const {
-        // responsive control attributes ⬇
-        resOption,
-
-        // blockMeta is for keeping all the styles
-        blockMeta,
-        // blockId attribute for making unique className and other uniqueness
         blockId,
-        //
         layout,
-        //
         navAlign,
         preset,
         verticalPreset,
-        dropdownOpenOnClick,
         navBtnType,
         showDropdownIcon,
-        flexWrap,
         navVerticalAlign,
-        hamburgerMenu,
         hamburgerCloseIconAlign,
         classHook,
     } = attributes;
@@ -186,114 +171,9 @@ const Edit = (props) => {
         style: <Style {...props} />
     };
 
-    //
-    useEffect(() => {
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
+    editUseEffect(props) //editUseEffect Hook
 
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { replaceInnerBlocks, updateBlockAttributes } = dispatch(
-            "core/block-editor"
-        );
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    className: `${layout} ${layout == "is-horizontal" ? navAlign : navVerticalAlign
-                        } ${flexWrap === true ? "no-wrap" : ""}`,
-                });
-            });
-        }
-    }, [layout, navAlign, flexWrap, navVerticalAlign]);
-
-    // Open on click
-    useEffect(() => {
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
-
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { replaceInnerBlocks, updateBlockAttributes } = dispatch(
-            "core/block-editor"
-        );
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    openSubmenusOnClick: dropdownOpenOnClick,
-                });
-            });
-        }
-    }, [dropdownOpenOnClick]);
-
-    // show submenu Icon
-    useEffect(() => {
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { replaceInnerBlocks, updateBlockAttributes } = dispatch(
-            "core/block-editor"
-        );
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    showSubmenuIcon: showDropdownIcon,
-                });
-            });
-        }
-    }, [showDropdownIcon]);
-
-    // icon
-    useEffect(() => {
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { replaceInnerBlocks, updateBlockAttributes } = dispatch(
-            "core/block-editor"
-        );
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    hasIcon: navBtnType,
-                });
-            });
-        }
-    }, [navBtnType]);
-
-    // hamburger screen
-    useEffect(() => {
-        const parentBlocks = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
-        const innerBlocks = parentBlocks?.innerBlocks;
-
-        const { replaceInnerBlocks, updateBlockAttributes } = dispatch(
-            "core/block-editor"
-        );
-
-        if (innerBlocks) {
-            times(innerBlocks.length, (n) => {
-                updateBlockAttributes(innerBlocks[n].clientId, {
-                    overlayMenu: hamburgerMenu,
-                });
-            });
-        }
-    }, [hamburgerMenu]);
-
-    if (layout == "is-horizontal") {
-        var layoutPreset = preset;
-    } else {
-        var layoutPreset = verticalPreset;
-    }
+    const layoutPreset = layout === "is-horizontal" ? preset : verticalPreset;
 
     return (
         <>

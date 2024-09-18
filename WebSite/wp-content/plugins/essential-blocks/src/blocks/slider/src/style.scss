@@ -127,6 +127,9 @@
 	}
 	.eb-slider-init {
 		&.slick-initialized {
+			&::before {
+				display: none;
+			}
 			.eb-slider-item {
 				visibility: visible;
 			}

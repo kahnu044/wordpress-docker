@@ -41,8 +41,9 @@ class ProductImages extends Block
     public function __construct()
     {
         $this->default_attributes = [
-            'adaptiveHeight'  => true,
-            'galleryPosition' => 'bottom'
+            'useAdaptiveHeight'  => true,
+            'galleryPosition' => 'bottom',
+            'disableNavArrow' => false
          ];
     }
 
@@ -79,18 +80,20 @@ class ProductImages extends Block
         }
 
         $attributes = wp_parse_args( $attributes, $this->default_attributes );
+        error_log(print_r($attributes,1));
 
         $className = isset( $attributes[ "className" ] ) ? $attributes[ "className" ] : "";
         $classHook = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';
 
         // large image slider settings
         $settings = [
-            'adaptiveHeight' => isset( $attributes[ 'adaptiveHeight' ] ) ? $attributes[ 'adaptiveHeight' ] : true
+            'adaptiveHeight' => isset( $attributes[ 'useAdaptiveHeight' ] ) ? $attributes[ 'useAdaptiveHeight' ] : true
          ];
 
         // nav settings
         $nav_settings = [
-            'galleryPosition' => isset( $attributes[ 'galleryPosition' ] ) ? $attributes[ 'galleryPosition' ] : 'bottom'
+            'galleryPosition' => isset( $attributes[ 'galleryPosition' ] ) ? $attributes[ 'galleryPosition' ] : 'bottom',
+            'disableNavArrow' => isset( $attributes['disableNavArrow'] ) ? $attributes['disableNavArrow'] : false
          ];
 
         ob_start();

@@ -14,5 +14,14 @@
       "full"
     ]
   },
-  "editorScript": "essential-blocks-editor-script"
+  "editorScript": "essential-blocks-editor-script",
+  "providesContext": {
+    "eb/accordionParentBlockId": "blockId",
+    "eb/accordionInheritedAccordionType": "accordionType",
+    "eb/accordionInheritedDisplayIcon": "displayIcon",
+    "eb/accordionInheritedTabIcon": "tabIcon",
+    "eb/accordionInheritedExpandedIcon": "expandedIcon",
+    "eb/accordionInheritedTagName": "tagName",
+    "eb/accordionFaqSchema": "faqSchema"
+  }
 }

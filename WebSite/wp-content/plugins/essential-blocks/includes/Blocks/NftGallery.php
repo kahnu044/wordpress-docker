@@ -23,7 +23,8 @@ class NftGallery extends Block {
 	public function register_scripts() {
 		$this->assets_manager->register(
 			'nft-gallery-frontend',
-			$this->path() . '/frontend.js'
+			$this->path() . '/frontend.js',
+            ['essential-blocks-vendor-bundle']
 		);
 	}
 }
