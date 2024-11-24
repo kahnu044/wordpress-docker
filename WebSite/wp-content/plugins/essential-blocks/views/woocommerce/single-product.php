@@ -64,8 +64,11 @@
                 ]
             );
         },
-        'button-list' => function () use ( $helper ) {
-            $helper::views( 'woocommerce/button-list' );
+        'button-list' => function () use ( $helper, $showDetailBtn, $detailBtnText ) {
+            $helper::views( 'woocommerce/button-list',[
+                'showDetailBtn' => $showDetailBtn,
+                'detailBtnText' => $detailBtnText
+            ] );
         }
     ];
 
@@ -74,19 +77,19 @@
 ?>
 
 <div class="eb-woo-products-col">
-	<div class="eb-woo-product">
-		<?php if ( 'grid' === $layout && 'grid-preset-3' === $gridPreset ): ?>
-			<a class="grid-preset-anchor" href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>"></a>
-		<?php endif;?>
+    <div class="eb-woo-product">
+        <?php if ( 'grid' === $layout && 'grid-preset-3' === $gridPreset ): ?>
+        <a class="grid-preset-anchor" href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>"></a>
+        <?php endif;?>
 
-		<div class="eb-woo-product-image-wrapper">
-        <?php if ( 'grid' === $layout && 'grid-preset-3' !== $gridPreset ): ?>
-			<a class="grid-preset-anchor" href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>"></a>
-		<?php endif;?>
-			<div class="eb-woo-product-image">
-				<?php if ( 'list' === $layout ): ?>
-					<a href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>">
-					<?php
+        <div class="eb-woo-product-image-wrapper">
+            <?php if ( 'grid' === $layout && 'grid-preset-3' !== $gridPreset ): ?>
+            <a class="grid-preset-anchor" href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>"></a>
+            <?php endif;?>
+            <div class="eb-woo-product-image">
+                <?php if ( 'list' === $layout ): ?>
+                <a href="<?php echo esc_attr( esc_url( get_permalink() ) ); ?>">
+                    <?php
                         endif;
 
                         echo wp_kses_post( $product->get_image( 'woocommerce_thumbnail' ) );
@@ -99,23 +102,26 @@
                             echo wp_kses_post( '</a>' );
                         }
                     ?>
-			</div>
+            </div>
 
-			<?php if ( 'grid' === $layout ): ?>
-				<div class="eb-woo-product-overlay">
-					<?php $helper::views( 'woocommerce/button-list' );?>
-				</div>
-			<?php endif;?>
-		</div>
-		<div class="eb-woo-product-content-wrapper">
-			<div class="eb-woo-product-content">
-				<?php
+            <?php if ( 'grid' === $layout ): ?>
+            <div class="eb-woo-product-overlay">
+                <?php $helper::views( 'woocommerce/button-list', [
+                'showDetailBtn' => $showDetailBtn,
+                'detailBtnText' => $detailBtnText
+            ] );?>
+            </div>
+            <?php endif;?>
+        </div>
+        <div class="eb-woo-product-content-wrapper">
+            <div class="eb-woo-product-content">
+                <?php
                     $_sequence = ( 'list' === $layout ) ? $_list_sequence : $_grid_sequence;
                     foreach ( $_sequence as $_sq_function ) {
                         $_sq_function();
                     }
                 ?>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>

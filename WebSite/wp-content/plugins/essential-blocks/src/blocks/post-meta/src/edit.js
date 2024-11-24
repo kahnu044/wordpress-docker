@@ -12,9 +12,10 @@ import { compose } from "@wordpress/compose";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes'
-import { 
+import {
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBDisplayIcon
 } from "@essential-blocks/controls";
 
 function Edit(props) {
@@ -28,12 +29,16 @@ function Edit(props) {
         productSkuLabel,
         metaDisplay,
         classHook,
+        authorIcon,
+        dateIcon,
+        skuIcon,
+        showMetaIcon
     } = attributes;
 
     const postType = select("core/editor").getCurrentPostType();
     const isContentEnabled = (contentName) => enableContents.includes(contentName);
 
-    useEffect(()=> {
+    useEffect(() => {
 
         if (postType === "templately_library") {
             let type = 'post';
@@ -61,16 +66,16 @@ function Edit(props) {
             setAttributes({ type: selectPostType })
         }
 
-        if( type !== null && type !== 'product') {
+        if (type !== null && type !== 'product') {
             let list = [...enableContents];
             const index = list.indexOf('product_sku');
             if (index !== -1) {
                 list.splice(index, 1);
             }
-            setAttributes({enableContents: list})
+            setAttributes({ enableContents: list })
         }
 
-    },[])
+    }, [])
 
 
     // you must declare this variable
@@ -84,12 +89,12 @@ function Edit(props) {
 
         const currentDate = new Date();
 
-        
+
         const year = currentDate.getFullYear();
         const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
         const day = ('0' + currentDate.getDate()).slice(-2);
 
-        
+
         return `${year}-${month}-${day}`;
     }
 
@@ -103,20 +108,29 @@ function Edit(props) {
                         <div className={`eb-post-metadata eb-post-meta-${metaDisplay}`}>
                             {isContentEnabled("author") && (
                                 <div className="eb-post-metadata-item eb-post-metadata-author">
+                                    {showMetaIcon == true && authorIcon && (
+                                        <EBDisplayIcon icon={authorIcon} className={`eb-post-metadata-icon`} />
+                                    )}
                                     <span className="eb-post-metadata-label">{authorLabel} </span>
                                     <span className="eb-post-metadata-value">Author</span>
                                 </div>
                             )}
                             {isContentEnabled("date") && (
                                 <div className="eb-post-metadata-item eb-post-metadata-date">
+                                    {showMetaIcon == true && dateIcon && (
+                                        <EBDisplayIcon icon={dateIcon} className={`eb-post-metadata-icon`} />
+                                    )}
                                     <span className="eb-post-metadata-label">{dateLabel} </span>
                                     <span className="eb-post-metadata-value">{getCurrentDate()}</span>
                                 </div>
                             )}
                             {isContentEnabled("product_sku") && type === 'product' && (
                                 <div className="eb-post-metadata-item eb-post-metadata-product_sku">
+                                    {showMetaIcon == true && skuIcon && (
+                                        <EBDisplayIcon icon={skuIcon} className={`eb-post-metadata-icon`} />
+                                    )}
                                     <span className="eb-post-metadata-label">{productSkuLabel} </span>
-                                    <span className="eb-post-metadata-value">{__("Product SKU","essential-blocks")}</span>
+                                    <span className="eb-post-metadata-value">{__("Product SKU", "essential-blocks")}</span>
                                 </div>
                             )}
                         </div>

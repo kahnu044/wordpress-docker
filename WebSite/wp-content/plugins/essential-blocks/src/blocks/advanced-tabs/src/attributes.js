@@ -84,6 +84,20 @@ const attributes = {
     },
 
     //
+
+    oldTabTitles: {
+        type: 'array',
+        source: 'query',
+        selector: '.tabTitles li',
+        query: {
+            text: {
+                type: 'string',
+                source: 'html',
+                selector: '.tab-title-text',
+            },
+
+        }
+    },
     tabTitles: {
         type: "array",
         default: [

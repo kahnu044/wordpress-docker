@@ -26,15 +26,12 @@ abstract class Block
     protected $dir            = '';
     protected $is_pro         = false;
 
-    // WordPress older than 6.1 don't support array, needs to handle if multiple value needed
-    // protected $editor_scripts = ['essential-blocks-editor-script'];
-    // protected $editor_styles = ['essential-blocks-editor-css'];
     protected $editor_scripts   = [  ];
     protected $editor_styles    = [  ];
     protected $animation_script = 'essential-blocks-eb-animation';
     protected $animation_style  = 'essential-blocks-animation';
 
-    protected $frontend_styles  = [ 'essential-blocks-frontend-style' ];
+    protected $frontend_styles  = [  ];
     protected $frontend_scripts = [  ];
 
     /**
@@ -67,7 +64,6 @@ abstract class Block
         return apply_filters( 'essential_blocks_block_path', $path, $this->is_pro, $name, $wp_version_check );
     }
 
-
     public function path( $name = '' )
     {
         if ( empty( $name ) ) {
@@ -91,11 +87,13 @@ abstract class Block
         // Enqueue Animation
         wp_enqueue_style( $this->animation_style );
 
-        if ( empty( $this->frontend_styles ) ) {
+        $frontend_styles = $this->frontend_styles;
+
+        if ( empty( $frontend_styles ) ) {
             return;
         }
 
-        foreach ( $this->frontend_styles as $handle ) {
+        foreach ( $frontend_styles as $handle ) {
             wp_enqueue_style( $handle );
         }
     }
@@ -146,7 +144,7 @@ abstract class Block
             };
         }
 
-        if (  ( ! empty( $this->frontend_scripts ) || ! empty( $this->frontend_styles ) ) && ! method_exists( $this, 'render_callback' ) ) {
+        if ( ( ! empty( $this->frontend_scripts ) || ! empty( $this->frontend_styles ) ) && ! method_exists( $this, 'render_callback' ) ) {
             $_args[ 'render_callback' ] = function ( $attributes, $content ) {
                 if ( ! is_admin() ) {
                     $this->load_scripts();

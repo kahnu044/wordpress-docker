@@ -42,10 +42,6 @@
 				align-items: center;
 				gap: 5px;
 
-				.ebnft_label {
-					font-size: .85em;
-				}
-
 				.ebnft_currency {
 					line-height: 1;
 
@@ -107,10 +103,11 @@
 
 						button {
 							width: 100%;
-							 a {
+
+							a {
 								border-top-left-radius: 0;
 								border-top-right-radius: 0;
-							 }
+							}
 						}
 					}
 

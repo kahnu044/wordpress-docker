@@ -11,6 +11,8 @@ import {
     QUANTITY_PADDING,
     VARIABLE_FIELD_BORDER,
     VARIABLE_FIELD_PADDING,
+    btnWidth,
+    quantityWidth
 } from "./constants/constants";
 import {
     btnTypo,
@@ -31,6 +33,7 @@ import {
     generateDimensionsControlStyles,
     generateBorderShadowStyles,
     generateBackgroundControlStyles,
+    generateResponsiveRangeStyles,
     StyleComponent
 } from "@essential-blocks/controls";
 
@@ -43,8 +46,13 @@ export default function Style(props) {
 
         quantityColor,
         quantityBGColor,
+        quantityActiveColor,
+        quantityActiveBGColor,
+        quantityActiveBorderColor,
         btnColor,
         btnBGColor,
+        btnDisableColor,
+        btnDisableBGColor,
         hoverBtnBGColor,
         hoverBtnColor,
 
@@ -232,6 +240,27 @@ export default function Style(props) {
         attributes,
     });
 
+    const {
+        rangeStylesDesktop: btnWidthDesktop,
+        rangeStylesTab: btnWidthTab,
+        rangeStylesMobile: btnWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: btnWidth,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: quantityWidthDesktop,
+        rangeStylesTab: quantityWidthTab,
+        rangeStylesMobile: quantityWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: quantityWidth,
+        customUnit: "px",
+        property: "width",
+        attributes,
+    });
+
     // all desktop styls start
     // Desktop Wrapper
     const desktopWrapper = `
@@ -260,9 +289,18 @@ export default function Style(props) {
 			${quantityTypoStylesDesktop}
             color: ${quantityColor};
             background-color: ${quantityBGColor};
+            ${quantityWidthDesktop}
             ${quantityPaddingDesktop}
             ${quantityShadowStyesDesktop}
             transition: ${quantityShadowTransitionStyle};
+		}
+        .${blockId}.eb-add-to-cart-wrapper .quantity .qty:focus,
+        .${blockId}.eb-add-to-cart-wrapper .quantity .qty:active,
+        .${blockId}.eb-add-to-cart-wrapper .eb-quantity input:focus,
+        .${blockId}.eb-add-to-cart-wrapper .eb-quantity input:active{
+            color: ${quantityActiveColor};
+            background-color: ${quantityActiveBGColor};
+            border-color: ${quantityActiveBorderColor};
 		}
 
         .${blockId}.eb-add-to-cart-wrapper .quantity .qty:hover,
@@ -275,8 +313,15 @@ export default function Style(props) {
             color: ${btnColor};
             background-color: ${btnBGColor};
             ${buttonPaddingDesktop}
+            ${btnWidthDesktop}
             ${btnShadowStyesDesktop}
             transition: ${btnShadowTransitionStyle};
+		}
+        .${blockId}.eb-add-to-cart-wrapper .single_add_to_cart_button.disabled,
+        .${blockId}.eb-add-to-cart-wrapper .eb-cart-btn:disabled{
+            color: ${btnDisableColor};
+            background-color: ${btnDisableBGColor};
+            opacity: 1;
 		}
         .${blockId}.eb-add-to-cart-wrapper .single_add_to_cart_button:hover,
         .${blockId}.eb-add-to-cart-wrapper .eb-cart-btn:hover {
@@ -353,6 +398,7 @@ export default function Style(props) {
 			${btnTypoStylesTab}
             ${buttonPaddingTab}
             ${btnShadowStyesTab}
+            ${btnWidthTab}
 		}
 
         .${blockId}.eb-add-to-cart-wrapper .single_add_to_cart_button:hover,
@@ -422,6 +468,7 @@ export default function Style(props) {
 			${btnTypoStylesMobile}
             ${buttonPaddingMobile}
             ${btnShadowStyesMobile}
+            ${btnWidthMobile}
 		}
         .${blockId}.eb-add-to-cart-wrapper .single_add_to_cart_button:hover,
         .${blockId}.eb-add-to-cart-wrapper .eb-cart-btn:hover {

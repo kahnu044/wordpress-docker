@@ -10,7 +10,7 @@ class PostCarousel extends PostBlock
         'essential-blocks-slickjs'
      ];
     protected $frontend_styles = [
-        'essential-blocks-frontend-style',
+
         'essential-blocks-slick-style',
         'essential-blocks-fontawesome',
         'essential-blocks-common-style'
@@ -30,7 +30,9 @@ class PostCarousel extends PostBlock
         'titleLength'      => '10',
         'leftArrowIcon'    => 'fas fa-chevron-circle-left',
         'rightArrowIcon'   => 'fas fa-chevron-circle-right',
-        'addIcon'          => false
+        'addIcon'          => false,
+        'showFallbackImg'  => false,
+        'fallbackImgUrl'   => ''
      ];
 
     public function get_default_attributes()
@@ -96,6 +98,8 @@ class PostCarousel extends PostBlock
                 $_essential_attrs[ $key ] = $attributes[ $key ];
             }
         );
+
+        $_essential_attrs[ 'showFallbackImg' ] = isset( $_essential_attrs[ 'showFallbackImg' ] ) ? $_essential_attrs[ 'showFallbackImg' ] : false;
 
         if ( isset( $_essential_attrs[ 'showBlockContent' ] ) && $_essential_attrs[ 'showBlockContent' ] === false ) {
             return;

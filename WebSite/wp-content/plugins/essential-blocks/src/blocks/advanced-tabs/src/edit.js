@@ -101,7 +101,9 @@ const Edit = (props) => {
     };
 
     const onTabTitleChange = (text, index) => {
-        const newTabTitles = tabTitles.map((item, i) => {
+        const tabTitlesCopy = tabTitles.map(item => ({ ...item }));
+
+        const newTabTitles = tabTitlesCopy.map((item, i) => {
             if (i === index) {
                 item.text = text;
             }

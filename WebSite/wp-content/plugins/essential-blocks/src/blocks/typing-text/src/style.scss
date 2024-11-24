@@ -34,21 +34,6 @@
 	margin-top: 10px;
 }
 
-.eb-typed-sortable-trash {
-	font-size: 16px;
-	border-left: 1px solid gray;
-	line-height: 2.5em;
-	flex: 1;
-	text-align: center;
-	padding: 8px;
-}
-
-.eb-typed-sortable-trash:hover {
-	background: #f44336;
-	color: #ffffff;
-	cursor: pointer;
-}
-
 // Icon style
 .st0t {
 	fill: url(#SVGID_1_TYPED);
@@ -63,6 +48,6 @@
 }
 
 // for background overlay
-.eb-typed-wrapper > * {
+.eb-typed-wrapper>* {
 	position: relative;
 }

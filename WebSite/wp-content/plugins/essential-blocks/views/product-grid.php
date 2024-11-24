@@ -14,15 +14,13 @@
 ?>
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
     <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?> <?php echo esc_attr( $classHook ); ?>">
-        <div
-            class="<?php echo esc_attr( $blockId ); ?> eb-woo-products-wrapper"
+        <div class="<?php echo esc_attr( $blockId ); ?> eb-woo-products-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
             data-querydata='<?php echo esc_attr( json_encode( $queryData ) ); ?>'
             data-attributes='<?php echo esc_attr( json_encode( $essentialAttr ) ); ?>'>
             <?php do_action( 'eb_woo_product_grid_taxonomy_filter', $essentialAttr );?>
             <div class="<?php echo esc_attr( $presetClass ); ?> eb-woo-products-gallery">
                 <?php
-
                     if ( $query->have_posts() ) {
                         while ( $query->have_posts() ) {
                             $query->the_post();
@@ -45,7 +43,9 @@
                                     'gridPreset'        => $gridPreset,
                                     'saleBadgeAlign'    => $saleBadgeAlign,
                                     'saleText'          => $saleText,
-                                    'productDescLength' => $productDescLength
+                                    'productDescLength' => $productDescLength,
+                                    'showDetailBtn' => $showDetailBtn,
+                                    'detailBtnText' => $detailBtnText
                                 ]
                             );
                         }

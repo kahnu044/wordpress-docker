@@ -1,10 +1,10 @@
 import { useBlockProps } from "@wordpress/block-editor";
 import {
-sanitizeURL
+    sanitizeURL
 } from "@essential-blocks/controls";
 import InfoboxContainer from "./components/infobox-save";
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 export default function save({ attributes }) {
     const {
@@ -29,6 +29,11 @@ export default function save({ attributes }) {
         subTitleTag,
         btnEffect,
         classHook,
+        showMedia,
+        enableTitle,
+        addBtnIcon,
+        btnIconPosition,
+        btnIcon
     } = attributes;
 
     const requiredProps = {
@@ -53,6 +58,11 @@ export default function save({ attributes }) {
         subTitleTag,
         btnEffect,
         classHook,
+        showMedia,
+        enableTitle,
+        addBtnIcon,
+        btnIconPosition,
+        btnIcon
     };
 
     return (
@@ -67,7 +77,7 @@ export default function save({ attributes }) {
                     <InfoboxContainer requiredProps={requiredProps} />
                 </a>
             ) : (
-                <InfoboxContainer requiredProps={requiredProps} />
+                <InfoboxContainer requiredProps={requiredProps} attributes={attributes} />
             )}
         </BlockProps.Save>
     );

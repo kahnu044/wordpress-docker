@@ -4,7 +4,7 @@
  * Plugin URI: https://wordpress.org/plugins/carousel-block
  * Description: A responsive carousel slider block for Gutenberg. Add any blocks to slides.
  * Author URI: http://virgiliudiaconu.com/
- * Version: 1.0.14
+ * Version: 1.0.16
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  *
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'CB_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 
 class Carousel_Slider_Block {
-    const VERSION = '1.0.14'; // Plugin version
+    const VERSION = '1.0.16'; // Plugin version
 
     /**
      * Actions and filters.
@@ -66,7 +66,7 @@ class Carousel_Slider_Block {
                 true
             );
             wp_enqueue_script(
-                'carousel-block-slick-init',
+                'carousel-block-view-init',
                 plugins_url( '/vendor/slick/init.js', __FILE__ ),
                 [ 'jquery', 'carousel-block-slick-script' ],
                 self::VERSION,

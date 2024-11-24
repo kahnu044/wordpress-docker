@@ -1,13 +1,8 @@
-.eb-button {
+.eb-button-wrapper {
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	&-wrapper {
-		display: flex;
-		flex-direction: column;
-	}
-
+	flex-direction: column;
+}
+.eb-button {
 	a.eb-button-anchor {
 		display: flex;
 		align-items: center;

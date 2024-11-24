@@ -500,7 +500,7 @@ class Mailer extends MailerAbstract {
 		$result = $email;
 
 		if ( ! empty( $name ) ) {
-			$result = "{$name} <{$email}>";
+			$result = "\"{$name}\" <{$email}>";
 		}
 
 		return $result;

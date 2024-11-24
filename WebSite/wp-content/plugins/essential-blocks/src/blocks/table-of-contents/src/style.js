@@ -280,7 +280,8 @@ export default function Style(props) {
 		  }
 
 		  .${blockId}.eb-toc-container .eb-toc-wrapper li:hover,
-          .${blockId}.eb-toc-container .eb-toc-wrapper li.eb-toc-active > a{
+          .${blockId}.eb-toc-container .eb-toc-wrapper li.eb-toc-active > a,
+          .${blockId}.eb-toc-container .eb-toc-wrapper li.eb-toc-highlight > a {
 			  color:${contentHoverColor};
 		  }
 

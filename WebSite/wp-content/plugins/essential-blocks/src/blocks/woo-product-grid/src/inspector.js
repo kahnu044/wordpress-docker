@@ -25,12 +25,14 @@ import {
     typoPrefix_sale,
     typoPrefix_desc,
     typoPrefix_btn,
+    typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
 } from "./constants/typographyConstants";
 import {
     LAYOUT,
     RATING_ICON_SIZE,
     BTN_BORDER_SHADOW,
+    VIEW_BTN_BORDER_SHADOW,
     SALE_BADGE_ALIGN,
     SALE_BADGE_BORDER,
     WRAPPER_MARGIN,
@@ -47,6 +49,7 @@ import {
     PRICE_MARGIN,
     RATING_MARGIN,
     BUTTON_MARGIN,
+    VIEW_BUTTON_MARGIN,
     DESC_MARGIN,
     IMG_GAP,
     IMG_WIDTH,
@@ -70,7 +73,7 @@ import {
     MorePosts,
     InspectorPanel,
     SortControl
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
     const {
@@ -92,6 +95,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         btnHoverColor,
         btnBackgroundColor,
         btnBackgroundHoverColor,
+        viewbtnColor,
+        viewbtnHoverColor,
+        viewbtnBackgroundColor,
+        viewbtnBackgroundHoverColor,
         saleBadgeAlign,
         saleText,
         saleTextColor,
@@ -120,6 +127,8 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         loadMoreActiveBgColor,
         ratingStyle,
         enableContents,
+        showDetailBtn,
+        detailBtnText,
     } = attributes;
 
     const changeLayout = (preset) => {
@@ -130,7 +139,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
             changeListPreset(listPreset);
         }
     };
- 
+
     const textToNumber = (value) => {
         if (value < 0) {
             setAttributes({ productDescLength: 0 });
@@ -184,7 +193,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
 
     return (
         <>
-            <InspectorPanel 
+            <InspectorPanel
                 advancedControlProps={{
                     marginPrefix: WRAPPER_MARGIN,
                     paddingPrefix: WRAPPER_PADDING,
@@ -316,6 +325,30 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             attributes,
                             setAttributes,
                             makeEnableContent
+                        )}
+
+                        <ToggleControl
+                            label={__("Show View Button", "essential-blocks")}
+                            checked={showDetailBtn}
+                            onChange={() => {
+                                setAttributes({
+                                    showDetailBtn: !showDetailBtn,
+                                });
+                            }}
+                        />
+
+                        {showDetailBtn && (
+                            <>
+                                <TextControl
+                                    label={__("Button Text", "essential-blocks")}
+                                    value={detailBtnText}
+                                    onChange={(text) =>
+                                        setAttributes({
+                                            detailBtnText: text,
+                                        })
+                                    }
+                                />
+                            </>
                         )}
                     </InspectorPanel.PanelBody>
                     <WoocommerceQuery
@@ -691,6 +724,47 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             <BorderShadowControl
                                 controlName={BTN_BORDER_SHADOW}
                             />
+
+                            {showDetailBtn && (
+                                <InspectorPanel.PanelBody title={__("View Button", "essential-blocks")} initialOpen={false}>
+                                    <>
+                                        <TypographyDropdown
+                                            baseLabel={__("Typography", "essential-blocks")}
+                                            typographyPrefixConstant={typoPrefix_viewbtn}
+                                        />
+                                        <ColorControl
+                                            label={__("Text Color", "essential-blocks")}
+                                            color={viewbtnColor}
+                                            attributeName={'viewbtnColor'}
+                                        />
+                                        <ColorControl
+                                            label={__("Text Hover Color", "essential-blocks")}
+                                            color={viewbtnHoverColor}
+                                            attributeName={'viewbtnHoverColor'}
+                                        />
+                                        <ColorControl
+                                            label={__("Background Color", "essential-blocks")}
+                                            color={viewbtnBackgroundColor}
+                                            attributeName={'viewbtnBackgroundColor'}
+                                        />
+                                        <ColorControl
+                                            label={__("Background Hover Color", "essential-blocks")}
+                                            color={viewbtnBackgroundHoverColor}
+                                            attributeName={'viewbtnBackgroundHoverColor'}
+                                        />
+                                        <ResponsiveDimensionsControl
+                                            controlName={VIEW_BUTTON_MARGIN}
+                                            baseLabel={__("Space", "essential-blocks")}
+                                        />
+                                        <BaseControl>
+                                            <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
+                                        </BaseControl>
+                                        <BorderShadowControl
+                                            controlName={VIEW_BTN_BORDER_SHADOW}
+                                        />
+                                    </>
+                                </InspectorPanel.PanelBody>
+                            )}
                         </>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Sale Badge Style", "essential-blocks")} initialOpen={false}>

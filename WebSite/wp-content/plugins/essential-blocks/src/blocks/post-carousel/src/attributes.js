@@ -346,6 +346,20 @@ const attributes = {
         default: "dot-circle",
     },
 
+    showFallbackImg: {
+        type: "boolean",
+        default: false,
+    },
+    fallbackImgUrl: {
+        type: "string",
+    },
+    fallbackImgId: {
+        type: "string",
+    },
+    fallbackImgAlt: {
+        type: "string",
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(EBPG_TITLE_TYPOGRAPHY, {
         fontSize: 18

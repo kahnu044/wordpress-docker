@@ -1,4 +1,13 @@
 .eb-add-to-cart-wrapper {
+	&.layout-stacked {
+
+		.quantity,
+		.eb-quantity {
+			display: block !important;
+			margin-bottom: 10px !important;
+		}
+	}
+
 	.cart.variations_form table.variations {
 
 		th.label,

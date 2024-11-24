@@ -4,11 +4,13 @@ import {
     typoPrefix_sale,
     typoPrefix_desc,
     typoPrefix_btn,
+    typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
 } from "./constants/typographyConstants";
 import {
     RATING_ICON_SIZE,
     BTN_BORDER_SHADOW,
+    VIEW_BTN_BORDER_SHADOW,
     SALE_BADGE_BORDER,
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
@@ -23,6 +25,7 @@ import {
     PRICE_MARGIN,
     RATING_MARGIN,
     BUTTON_MARGIN,
+    VIEW_BUTTON_MARGIN,
     DESC_MARGIN,
     IMG_GAP,
     IMG_HEIGHT,
@@ -41,7 +44,7 @@ import {
     generateBorderShadowStyles,
     generateBackgroundControlStyles,
     StyleComponent,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name, isContentEnabled } = props;
@@ -61,6 +64,10 @@ export default function Style(props) {
         btnHoverColor,
         btnBackgroundColor,
         btnBackgroundHoverColor,
+        viewbtnColor,
+        viewbtnHoverColor,
+        viewbtnBackgroundColor,
+        viewbtnBackgroundHoverColor,
         saleTextColor,
         saleTextBackgroundColor,
         contentAlignment,
@@ -161,6 +168,18 @@ export default function Style(props) {
         controlName: BTN_BORDER_SHADOW,
         attributes,
     });
+    const {
+        styesDesktop: viewbtnShadowStyesDesktop,
+        styesTab: viewbtnShadowStyesTab,
+        styesMobile: viewbtnShadowStyesMobile,
+        stylesHoverDesktop: viewbtnShadowStylesHoverDesktop,
+        stylesHoverTab: viewbtnShadowStylesHoverTab,
+        stylesHoverMobile: viewbtnShadowStylesHoverMobile,
+        transitionStyle: viewbtnShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: VIEW_BTN_BORDER_SHADOW,
+        attributes,
+    });
 
     /* BUTTON SPACE/MARGIN */
     const {
@@ -169,6 +188,15 @@ export default function Style(props) {
         dimensionStylesMobile: buttonMarginMobile,
     } = generateDimensionsControlStyles({
         controlName: BUTTON_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+    const {
+        dimensionStylesDesktop: viewbuttonMarginDesktop,
+        dimensionStylesTab: viewbuttonMarginTab,
+        dimensionStylesMobile: viewbuttonMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: VIEW_BUTTON_MARGIN,
         styleFor: "margin",
         attributes,
     });
@@ -369,6 +397,14 @@ export default function Style(props) {
         attributes,
         prefixConstant: typoPrefix_btn,
     });
+    const {
+        typoStylesDesktop: viewbtnTypoStylesDesktop,
+        typoStylesTab: viewbtnTypoStylesTab,
+        typoStylesMobile: viewbtnTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_viewbtn,
+    });
 
     //image border & shadow
     const {
@@ -518,7 +554,10 @@ export default function Style(props) {
         }
         }
 
-		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.added_to_cart {
+		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.added_to_cart {
 			${btnShadowStyesDesktop}
 			${buttonMarginDesktop}
 			${btnTypoStylesDesktop}
@@ -666,6 +705,77 @@ export default function Style(props) {
 			background-color: ${loadMoreActiveBgColor};
 		}
 	`;
+
+    const viewBtnStylesDesktop = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button.eb-woo-product-detail {
+			${viewbtnShadowStyesDesktop}
+			${viewbuttonMarginDesktop}
+			${viewbtnTypoStylesDesktop}
+			${viewbtnColor ? `color: ${viewbtnColor};` : ""}
+			${viewbtnBackgroundColor ? `background: ${viewbtnBackgroundColor};` : ""}
+			transition: all 0.3s, ${viewbtnShadowTransitionStyle};
+		}
+
+        ${gridPreset !== "grid-preset-3"
+            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+            .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverDesktop}
+			${viewbtnHoverColor ? `color: ${viewbtnHoverColor};` : ""}
+			${viewbtnBackgroundHoverColor ? `background: ${viewbtnBackgroundHoverColor};` : ""}
+		}`
+            : ""
+        }
+
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverDesktop}
+			${viewbtnHoverColor ? `color: ${viewbtnHoverColor};` : ""}
+			${viewbtnBackgroundHoverColor ? `background: ${viewbtnBackgroundHoverColor};` : ""}
+		}
+
+    `;
+    const viewBtnStylesTab = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button.eb-woo-product-detail {
+			${viewbtnShadowStyesTab}
+			${viewbuttonMarginTab}
+			${viewbtnTypoStylesTab}
+		}
+
+        ${gridPreset !== "grid-preset-3"
+            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+            .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverTab}
+		}`
+            : ""
+        }
+
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverTab}
+		}
+
+    `;
+    const viewBtnStylesMobile = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-button-list a.button.eb-woo-product-detail {
+			${viewbtnShadowStyesMobile}
+			${viewbuttonMarginMobile}
+			${viewbtnTypoStylesMobile}
+		}
+
+        ${gridPreset !== "grid-preset-3"
+            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+            .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverMobile}
+		}`
+            : ""
+        }
+
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
+			${viewbtnShadowStylesHoverMobile}
+		}
+
+    `;
 
     const tabStyles = `
 		.eb-woo-products-wrapper.${blockId} {
@@ -945,13 +1055,13 @@ export default function Style(props) {
 	`;
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
-    const desktopAllStyles = softMinifyCssStrings(`${desktopStyles}`);
+    const desktopAllStyles = softMinifyCssStrings(`${desktopStyles} ${viewBtnStylesDesktop}`);
 
     // all css styles for Tab in strings ⬇
-    const tabAllStyles = softMinifyCssStrings(`${tabStyles}`);
+    const tabAllStyles = softMinifyCssStrings(`${tabStyles} ${viewBtnStylesTab}`);
 
     // all css styles for Mobile in strings ⬇
-    const mobileAllStyles = softMinifyCssStrings(`${mobileStyles}`);
+    const mobileAllStyles = softMinifyCssStrings(`${mobileStyles} ${viewBtnStylesMobile}`);
 
     return (
         <>

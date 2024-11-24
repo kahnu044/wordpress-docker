@@ -22,6 +22,7 @@ import {
     FILTER_BORDER_SHADOW,
     LOADMORE_PADDING,
     LOADMORE_BORDER,
+    LOADMORE_KEYS
 } from "./constants";
 
 import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY } from "./typoConstants";
@@ -33,7 +34,8 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
-    StyleComponent
+    StyleComponent,
+    EBButton
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -598,33 +600,26 @@ export default function Style(props) {
 
     const loadmoreStylesDesktop = `
 		.eb-parent-${blockId} .eb-img-gallery-loadmore {
-            color: ${loadmoreColor};
 			background-color: ${loadmoreBGColor};
-			${loadmoreTypographyDesktop}
-			${loadmorePaddingDesktop}
-			${loadmoreBDShadowDesktop}
-			transition:${loadmoreBDShadowTransitionStyle};
 		}
 		.eb-parent-${blockId} .eb-img-gallery-loadmore:hover {
-            color: ${loadmoreHvColor};
 			background-color: ${loadmoreHvBGColor};
-			${loadmoreBDShadowHoverDesktop}
 		}
 	`;
-    const loadmoreStylesTab = `
-		.eb-parent-${blockId} .eb-img-gallery-loadmore {
-			${loadmoreTypographyTab}
-			${loadmorePaddingTab}
-			${loadmoreBDShadowTab}
-		}
-	`;
-    const loadmoreStylesMobile = `
-		.eb-parent-${blockId} .eb-img-gallery-loadmore {
-			${loadmoreTypographyMobile}
-			${loadmorePaddingMobile}
-			${loadmoreBDShadowMobile}
-		}
-	`;
+
+
+    const wrapperClass = 'eb-parent';
+    const { btnDesktopStyle: btnLoadmoreDesktopStyle, btnTabStyle: btnLoadmoreTabStyle, btnMobileStyle: btnLoadmoreMobileStyle } = EBButton.Style(
+        blockId,
+        wrapperClass,
+        LOADMORE_KEYS,
+        '',
+        'eb-img-gallery-loadmore',
+        LOADMORE_TYPOGRAPHY,
+        '',
+        LOADMORE_BORDER,
+        LOADMORE_PADDING
+    );
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
@@ -632,6 +627,7 @@ export default function Style(props) {
 		${imageStylesDesktop}
 		${filterStylesDesktop}
 		${loadmoreStylesDesktop}
+		${btnLoadmoreDesktopStyle}
 	`);
 
     // all css styles for Tab in strings ⬇
@@ -639,7 +635,7 @@ export default function Style(props) {
 		${wrapperStylesTab}
 		${imageStylesTab}
 		${filterStylesTab}
-		${loadmoreStylesTab}
+		${btnLoadmoreDesktopStyle}
 	`);
 
     // all css styles for Mobile in strings ⬇
@@ -647,7 +643,7 @@ export default function Style(props) {
 		${wrapperStylesMobile}
 		${imageStylesMobile}
 		${filterStylesMobile}
-		${loadmoreStylesMobile}
+		${btnLoadmoreDesktopStyle}
 	`);
 
     return (

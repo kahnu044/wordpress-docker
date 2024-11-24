@@ -47,3 +47,9 @@ export const SOURCES = [
     { label: "Current Post", value: "current-post" },
     { label: "All ", value: "all-taxonomies" },
 ];
+
+export const VERTICAL_ALIGN = [
+    { label: __("Top", "essential-blocks"), value: "flex-start" },
+    { label: __("Middle", "essential-blocks"), value: "center" },
+    { label: __("Bottom", "essential-blocks"), value: "flex-end" },
+];

@@ -176,7 +176,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         onChange={(value) => onFeatureChange("link", value, i)}
                     />
                 )}
-                {featureIcon && (
+                {showFeatureIcon && (
                     <>
                         <EBIconPicker
                             value={each.icon}

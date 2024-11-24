@@ -29,7 +29,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -192,8 +192,8 @@ const attributes = {
     ...generateDimensionsAttributes(wrapMarginConst),
     ...generateDimensionsAttributes(wrapPaddingConst),
     // typography attributes
-    ...generateTypographyAttributes(typoPrefix_text,{
-        fontSize: 18,
+    ...generateTypographyAttributes(typoPrefix_text, {
+        fontSize: 16,
     }),
     ...generateTypographyAttributes(typoPrefix_close),
 

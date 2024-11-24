@@ -31,7 +31,7 @@ import {
     withBlockContext
 } from "@essential-blocks/controls";
 
-const Edit =(props) => {
+const Edit = (props) => {
     const { attributes, setAttributes, isSelected } = props;
     const {
         blockId,
@@ -66,7 +66,10 @@ const Edit =(props) => {
         enableThumbnailSort,
         defaultFilter,
         version,
-        showBlockContent
+        showBlockContent,
+        showFallbackImg,
+        fallbackImgUrl,
+        fallbackImgAlt,
     } = attributes;
 
     const dateFormat = getSettings().formats.date;
@@ -569,12 +572,21 @@ const Edit =(props) => {
                                                                                     )}
                                                                                 {post._embedded &&
                                                                                     !post._embedded["wp:featuredmedia"] && (
-                                                                                        <img
-                                                                                            src={
-                                                                                                EssentialBlocksLocalize?.placeholder_image
-                                                                                            }
-                                                                                            alt="No Thumbnail Available"
-                                                                                        />
+                                                                                        <>
+                                                                                            {showFallbackImg && fallbackImgUrl && (
+                                                                                                <img
+                                                                                                    src={fallbackImgUrl}
+                                                                                                    alt={`${fallbackImgAlt ? fallbackImgAlt : `No Thumbnail Available`}`}
+                                                                                                />
+                                                                                            )}
+
+                                                                                            {(!showFallbackImg || (showFallbackImg && fallbackImgUrl === undefined)) && (
+                                                                                                <img
+                                                                                                    src={EssentialBlocksLocalize?.placeholder_image}
+                                                                                                    alt="No Thumbnail Available"
+                                                                                                />
+                                                                                            )}
+                                                                                        </>
                                                                                     )}
                                                                             </div>
                                                                         )}
@@ -603,12 +615,21 @@ const Edit =(props) => {
                                                                                     )}
                                                                                 {post._embedded &&
                                                                                     !post._embedded["wp:featuredmedia"] && (
-                                                                                        <img
-                                                                                            src={
-                                                                                                EssentialBlocksLocalize?.placeholder_image
-                                                                                            }
-                                                                                            alt="No Thumbnail Available"
-                                                                                        />
+                                                                                        <>
+                                                                                            {showFallbackImg && fallbackImgUrl && (
+                                                                                                <img
+                                                                                                    src={fallbackImgUrl}
+                                                                                                    alt={`${fallbackImgAlt ? fallbackImgAlt : `No Thumbnail Available`}`}
+                                                                                                />
+                                                                                            )}
+
+                                                                                            {(!showFallbackImg || (showFallbackImg && fallbackImgUrl === undefined)) && (
+                                                                                                <img
+                                                                                                    src={EssentialBlocksLocalize?.placeholder_image}
+                                                                                                    alt="No Thumbnail Available"
+                                                                                                />
+                                                                                            )}
+                                                                                        </>
                                                                                     )}
                                                                             </div>
                                                                         </div>
@@ -963,12 +984,21 @@ const Edit =(props) => {
                                                                             )}
                                                                         {post._embedded &&
                                                                             !post._embedded["wp:featuredmedia"] && (
-                                                                                <img
-                                                                                    src={
-                                                                                        EssentialBlocksLocalize?.placeholder_image
-                                                                                    }
-                                                                                    alt="No Thumbnail Available"
-                                                                                />
+                                                                                <>
+                                                                                    {showFallbackImg && fallbackImgUrl && (
+                                                                                        <img
+                                                                                            src={fallbackImgUrl}
+                                                                                            alt={`${fallbackImgAlt ? fallbackImgAlt : `No Thumbnail Available`}`}
+                                                                                        />
+                                                                                    )}
+
+                                                                                    {(!showFallbackImg || (showFallbackImg && fallbackImgUrl === undefined)) && (
+                                                                                        <img
+                                                                                            src={EssentialBlocksLocalize?.placeholder_image}
+                                                                                            alt="No Thumbnail Available"
+                                                                                        />
+                                                                                    )}
+                                                                                </>
                                                                             )}
                                                                     </div>
                                                                 )}
@@ -999,12 +1029,21 @@ const Edit =(props) => {
                                                                                 )}
                                                                             {post._embedded &&
                                                                                 !post._embedded["wp:featuredmedia"] && (
-                                                                                    <img
-                                                                                        src={
-                                                                                            EssentialBlocksLocalize?.placeholder_image
-                                                                                        }
-                                                                                        alt="No Thumbnail Available"
-                                                                                    />
+                                                                                    <>
+                                                                                        {showFallbackImg && fallbackImgUrl && (
+                                                                                            <img
+                                                                                                src={fallbackImgUrl}
+                                                                                                alt={`${fallbackImgAlt ? fallbackImgAlt : `No Thumbnail Available`}`}
+                                                                                            />
+                                                                                        )}
+
+                                                                                        {(!showFallbackImg || (showFallbackImg && fallbackImgUrl === undefined)) && (
+                                                                                            <img
+                                                                                                src={EssentialBlocksLocalize?.placeholder_image}
+                                                                                                alt="No Thumbnail Available"
+                                                                                            />
+                                                                                        )}
+                                                                                    </>
                                                                                 )}
                                                                         </div>
                                                                     </div>

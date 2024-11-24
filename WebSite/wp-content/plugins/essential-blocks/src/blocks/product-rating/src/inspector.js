@@ -109,7 +109,7 @@ function Inspector(props) {
                                 onChange={(text) => setAttributes({ ratingURL: text })}
                             /> */}
                             <DynamicInputControl
-                                label="Singluar Caption"
+                                label="Singular Caption"
                                 attrName="singluarCaption"
                                 inputValue={singluarCaption}
                                 setAttributes={setAttributes}

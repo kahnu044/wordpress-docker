@@ -2,9 +2,9 @@
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gutenberg Plugin
 Requires at least: 5.8
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 5.0.0
+Stable tag: 5.0.9
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -240,38 +240,46 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
-= 5.0.0 - 12/09/2024 =
-- Added: New Block | Text
-- Added: New Block | Taxonomy
-- Added: New Block | Post Meta
-- Added: New Block | Breadcrumbs
-- Added: New Block | Woo Add to Cart
-- Added: New Block | Woo Product Price
-- Added: New Block | Woo Product Images
-- Added: New Block | Woo Product Rating
-- Added: New Block | Woo Product Details
-- Added: Product Grid | Related product query option
-- Fixed: Advanced Heading | Dynamic Title loading issue in FSE
-- Fixed: Row Block | Columns equal height not working in frontend
-- Fixed: Slider Block| Loading animation always showing
-- Fixed: Synced Pattern issue fix
-- Few minor bug fixes & improvements
+= 5.0.9 - 13/11/2024 =
+- Fixed: Pricing Table | Icon control not showing for feature items
+- Minor bug fixes and improvements
 
-= 4.9.1 - 03/09/2024 =
-- Added: Responsive typography support
-- Added: Product Grid | Product image clicable option
-- Fixed: Post Carousel | Posts not showing for default query
-- Fixed: NFT Gallery | API updated to v2.0
-- Fixed: Slider | Loading icon showing all time if image is transparent
-- Fixed: Image Gallery | Image size settings reverted to default
-- Fixed: Toggle Content | z-index conflict with Astra theme
-- Few minor bug fixes & improvements
+= 5.0.8 - 07/11/2024 =
+- Fixed: Flickering effect due to delayed CSS loading
+- Fixed: Infobox | Alignment issues with icons and content for Preset 3 & 4
+- Fixed: Infobox | Image border radius resetting on editor reload
+- Fixed: Slider | "Slides to show" option not displaying correctly on frontend
 
-= 4.9.0 - 27/08/2024 =
-- Improved: Optimized codebase for better performance and efficiency
-- Fixed: Synced Pattern re-render issue in some blocks
-- Fixed: EB Post Carousel | Throwing PHP warning
-- Few minor bug fixes & improvements
+= 5.0.7 - 01/11/2024 =
+- Fixed: Predefined CSS not loading properly
+- Fixed: Progress Bar | Style broken in frontend
+- Fixed: Feature List | Icon not showing in frontend
+
+= 5.0.6 - 30/10/2024 =
+- Improved: Optimized predefined CSS loading
+- Improved: Dual Button | Added support for nofollow and download attributes
+- Improved: Infobox | Enhanced styling options with additional control settings
+- Fixed: Post Grid | Resolved issue with taxonomy filter settings resetting
+- Fixed: Slider | Corrected HTML input error display in the editor
+- Minor bug fixes and improvements
+
+= 5.0.5 - 22/10/2024 =
+- Fixed: Toggle Content & Advanced Tabs | Mismatched inner blocks data for click events
+- Fixed: Advanced Tabs | Tab Titles data not saving
+- Improved: Post Grid | Sorting controls moved to the relevant controls panel
+- Minor bug fixes and improvements
+
+= 5.0.4 - 14/10/2024 =
+- Fixed: Post Carousel | Image size changing unexpectedly
+- Fixed: Accordion | Toggle feature not working properly
+- Fixed: Add to Cart | Error shown if WooCommerce plugin is not active
+- Minor bug fixes and improvements
+
+= 5.0.3 - 09/10/2024 =
+- Fixed: Animation not working in site editor
+- Fixed: Predefined font size conflict with Theme/Global settings
+- Fixed: Post Grid & Post Carousel | Featured image size issue with lazy load plugin
+- Fixed: Inspector Help Panel position issue
 
 [See changelog for all versions](https://essential-blocks.com/changelog).
 

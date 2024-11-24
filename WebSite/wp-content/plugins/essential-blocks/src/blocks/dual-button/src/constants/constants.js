@@ -60,3 +60,18 @@ export const CONTENT_POSITION = [
     { label: __(<Dashicon icon={"editor-aligncenter"} />), value: "center" },
     { label: __(<Dashicon icon={"editor-alignright"} />), value: "flex-end" }
 ];
+
+
+export const BUTTON_ONE_KEYS = {
+    buttonText: 'buttonTextOne',
+    textColor: 'textOneColor',
+    hoverTextColor: 'hoverTextOneColor',
+    buttonURL: 'buttonURLOne'
+}
+
+export const BUTTON_TWO_KEYS = {
+    buttonText: 'buttonTextTwo',
+    textColor: 'textTwoColor',
+    hoverTextColor: 'hoverTextTwoColor',
+    buttonURL: 'buttonURLTwo'
+}

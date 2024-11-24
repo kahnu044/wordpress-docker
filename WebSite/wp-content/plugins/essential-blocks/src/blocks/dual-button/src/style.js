@@ -9,6 +9,8 @@ import {
     BUTTONS_GAP,
     BUTTONS_CONNECTOR_SIZE,
     BUTTONS_CONNECTOR_ICON_SIZE,
+    BUTTON_ONE_KEYS,
+    BUTTON_TWO_KEYS
 } from "./constants/constants";
 import {
     BUTTONS_TYPOGRAPHY,
@@ -21,39 +23,28 @@ import {
     generateDimensionsControlStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
-    generateBackgroundControlStyles,
-    StyleComponent
+    useBlockAttributes,
+    StyleComponent,
+    EBButton
  } from "@essential-blocks/controls";
 
 export default function Style(props) {
-    const { attributes, setAttributes, name } = props;
+    const {  setAttributes, name } = props;
+
+    const attributes = useBlockAttributes();
+
     const {
         blockId,
-        blockMeta,
-        // responsive control attribute ⬇
-        resOption,
-        preset,
         contentPosition,
-        buttonTextOne,
-        buttonTextTwo,
-        textOneColor,
-        hoverTextOneColor,
-        textTwoColor,
-        hoverTextTwoColor,
-        innerButtonText,
         innerButtonColor,
         innerButtonTextColor,
-        innerButtonIcon,
-        showConnector,
         connectorType,
         buttonTextAlign,
-        classHook,
         buttonsWidthType,
     } = attributes;
 
     //
     // CSS/styling Codes Starts from Here
-
     const {
         typoStylesDesktop: buttonsTypoStylesDesktop,
         typoStylesTab: buttonsTypoStylesTab,
@@ -90,34 +81,6 @@ export default function Style(props) {
         controlName: BUTTONS_PADDING,
         styleFor: "padding",
         attributes,
-    });
-
-    const {
-        styesDesktop: buttonOneBDShadowDesktop,
-        styesTab: buttonOneBDShadowTab,
-        styesMobile: buttonOneBDShadowMobile,
-        stylesHoverDesktop: buttonOneBDShadowHoverDesktop,
-        stylesHoverTab: buttonOneBDShadowHoverTab,
-        stylesHoverMobile: buttonOneBDShadowHoverMobile,
-        transitionStyle: buttonOneBDShadowtransitionStyle,
-    } = generateBorderShadowStyles({
-        controlName: BUTTON_ONE_BORDER_SHADOW,
-        attributes,
-        noShadow: true,
-    });
-
-    const {
-        styesDesktop: buttonTwoBDShadowDesktop,
-        styesTab: buttonTwoBDShadowTab,
-        styesMobile: buttonTwoBDShadowMobile,
-        stylesHoverDesktop: buttonTwoBDShadowHoverDesktop,
-        stylesHoverTab: buttonTwoBDShadowHoverTab,
-        stylesHoverMobile: buttonTwoBDShadowHoverMobile,
-        transitionStyle: buttonTwoBDShadowtransitionStyle,
-    } = generateBorderShadowStyles({
-        controlName: BUTTON_TWO_BORDER_SHADOW,
-        attributes,
-        noShadow: true,
     });
 
     // responsive range controller
@@ -181,24 +144,6 @@ export default function Style(props) {
         attributes,
     });
 
-    // button background styles
-    const {
-        backgroundStylesDesktop: btnOneBg,
-        hoverBackgroundStylesDesktop: btnOneHoverBg,
-        bgTransitionStyle: btnOneBgTransition,
-    } = generateBackgroundControlStyles({
-        attributes,
-        controlName: BUTTON_ONE_BACKGROUND,
-    });
-    const {
-        backgroundStylesDesktop: btnTwoBg,
-        hoverBackgroundStylesDesktop: btnTwoHoverBg,
-        bgTransitionStyle: btnTwoBgTransition,
-    } = generateBackgroundControlStyles({
-        attributes,
-        controlName: BUTTON_TWO_BACKGROUND,
-    });
-
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-button-group-wrapper.${blockId}{
@@ -225,14 +170,16 @@ export default function Style(props) {
 
     // Buttons Common styles css in strings ⬇
     const buttonsCommonStyleDesktop = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor {
 			${buttonsPaddingStylesDesktop}
 			${buttonsWidthType === "custom" ? buttonWidthStyleDesktop : "width: auto;"}
 			${buttonGapDesktop}
 			text-align: ${buttonTextAlign};
 			cursor: pointer;
 		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor .eb-button-text {
 			${buttonsTypoStylesDesktop}
 		}
 
@@ -248,116 +195,31 @@ export default function Style(props) {
 	`;
 
     const buttonsCommonStyleTab = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor {
 			${buttonsPaddingStylesTab}
 			${buttonsWidthType === "custom" ? buttonWidthStyleTab : "width: auto;"}
 			${buttonGapTab}
 		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor .eb-button-text {
 			${buttonsTypoStylesTab}
 		}
 	`;
 
     const buttonsCommonStyleMobile = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor {
 			${buttonsPaddingStylesMobile}
 			${buttonsWidthType === "custom" ? buttonWidthStyleMobile : "width: auto;"}
 			${buttonGapMobile}
 		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text {
+		.eb-button-group-wrapper.${blockId} .eb-button-parent .eb-button-text,
+        .eb-button-group-wrapper.${blockId} .eb-button-anchor .eb-button-text {
 			${buttonsTypoStylesMobile}
 		}
 	`;
-
-    // Buttons One styles css in strings ⬇
-    const buttonOneStyleDesktop = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one {
-			${buttonOneBDShadowDesktop}
-			transition:${buttonOneBDShadowtransitionStyle};
-			${btnOneBg}
-			transition: ${btnOneBgTransition.replace(/[^0-9.]/g, "")}s;
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one:hover,
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one:focus {
-			${buttonOneBDShadowHoverDesktop}
-			${btnOneHoverBg}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one .eb-button-one-text {
-			color: ${textOneColor};
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one:hover .eb-button-one-text {
-			color: ${hoverTextOneColor};
-		}
-	`;
-    const buttonOneStyleTab = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one {
-			${buttonOneBDShadowTab}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one:hover {
-			${buttonOneBDShadowHoverTab}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one .eb-button-one-text {
-
-		}
-	`;
-    const buttonOneStyleMobile = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one {
-			${buttonOneBDShadowMobile}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one:hover {
-			${buttonOneBDShadowHoverMobile}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-one .eb-button-one-text {
-
-		}
-	`;
-
-    // Buttons Two styles css in strings ⬇
-    const buttonTwoStyleDesktop = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two {
-			${buttonTwoBDShadowDesktop}
-			${buttonGapDesktop}
-			transition:${buttonTwoBDShadowtransitionStyle};
-			${btnTwoBg}
-			transition: ${btnOneBgTransition.replace(/[^0-9.]/g, "")}s;
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two:hover,
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two:focus {
-			${buttonTwoBDShadowHoverDesktop}
-			${btnTwoHoverBg}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two .eb-button-two-text {
-			color: ${textTwoColor};
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two:hover .eb-button-two-text {
-			color: ${hoverTextTwoColor};
-		}
-	`;
-    const buttonTwoStyleTab = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two {
-			${buttonTwoBDShadowTab}
-			${buttonGapTab}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two:hover {
-			${buttonTwoBDShadowHoverTab}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two .eb-button-two-text {
-
-		}
-	`;
-    const buttonTwoStyleMobile = `
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two {
-			${buttonTwoBDShadowMobile}
-			${buttonGapMobile}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two:hover {
-			${buttonTwoBDShadowHoverMobile}
-		}
-		.eb-button-group-wrapper.${blockId} .eb-button-parent.eb-button-two .eb-button-two-text {
-
-		}
-	`;
-
+    
     // Connector styles css in strings ⬇
     const connectorStylesDesktop = `
 		.eb-button-group-wrapper.${blockId} .eb-button-group__midldeInner span {
@@ -397,31 +259,56 @@ export default function Style(props) {
 		}
 	`;
 
+    const wrapperClass = 'eb-button-group-wrapper';
+    const {btnDesktopStyle: btnOneDesktopStyle, btnTabStyle: btnOneTabStyle, btnMobileStyle: btnOneMobileStyle } = EBButton.Style(
+        blockId, 
+        wrapperClass,
+        BUTTON_ONE_KEYS,
+        'btn1',
+        'eb-button-one',
+        '',
+        BUTTON_ONE_BACKGROUND,
+        BUTTON_ONE_BORDER_SHADOW,
+        ''
+    );
+
+    const {btnDesktopStyle: btnTwoDesktopStyle, btnTabStyle: btnTwoTabStyle, btnMobileStyle: btnTwoMobileStyle } = EBButton.Style(
+        blockId, 
+        wrapperClass,
+        BUTTON_TWO_KEYS,
+        'btn2',
+        'eb-button-two',
+        '',
+        BUTTON_TWO_BACKGROUND,
+        BUTTON_TWO_BORDER_SHADOW,
+        ''
+    );
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
-			${wrapperStylesDesktop}
-			${buttonsCommonStyleDesktop}
-			${buttonOneStyleDesktop}
-			${buttonTwoStyleDesktop}
-			${connectorStylesDesktop}
-		`);
+        ${wrapperStylesDesktop}
+        ${buttonsCommonStyleDesktop}
+        ${connectorStylesDesktop}
+        ${btnOneDesktopStyle}
+        ${btnTwoDesktopStyle}
+    `);
 
     // all css styles for Tab in strings ⬇
     const tabAllStyles = softMinifyCssStrings(`
 			${wrapperStylesTab}
 			${buttonsCommonStyleTab}
-			${buttonOneStyleTab}
-			${buttonTwoStyleTab}
 			${connectorStylesTab}
+            ${btnOneTabStyle}
+            ${btnTwoTabStyle}
 		`);
 
     // all css styles for Mobile in strings ⬇
     const mobileAllStyles = softMinifyCssStrings(`
 			${wrapperStylesMobile}
 			${buttonsCommonStyleMobile}
-			${buttonOneStyleMobile}
-			${buttonTwoStyleMobile}
 			${connectorStylesMobile}
+            ${btnOneMobileStyle}
+            ${btnTwoMobileStyle}
 		`);
 
     return (

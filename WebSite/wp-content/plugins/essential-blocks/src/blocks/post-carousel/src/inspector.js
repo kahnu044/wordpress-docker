@@ -3,6 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useState, useRef } from "@wordpress/element";
+import { MediaUpload } from "@wordpress/block-editor";
 import {
     PanelRow,
     SelectControl,
@@ -80,7 +81,8 @@ import {
     faArrowIcons,
     DynamicInputControl,
     EBIconPicker,
-    InspectorPanel
+    InspectorPanel,
+    ImageAvatar
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -154,6 +156,10 @@ function Inspector(props) {
         adaptiveHeight,
         arrows,
         dotPreset,
+        showFallbackImg,
+        fallbackImgUrl,
+        fallbackImgId,
+        fallbackImgAlt,
     } = attributes;
 
     const [metaOptions, setMetaOptions] = useState([]);
@@ -349,6 +355,63 @@ function Inspector(props) {
                                         min={0}
                                         max={100}
                                         step={1}
+                                    />
+                                )}
+
+
+                                <ToggleControl
+                                    label={__("Show Fallback Image?")}
+                                    checked={showFallbackImg}
+                                    onChange={() => {
+                                        setAttributes({
+                                            showFallbackImg: !showFallbackImg,
+                                        });
+                                    }}
+                                />
+
+                                {showFallbackImg && !fallbackImgUrl && (
+                                    <MediaUpload
+                                        onSelect={({
+                                            id,
+                                            url,
+                                            alt,
+                                        }) =>
+                                            setAttributes({
+                                                fallbackImgUrl: url,
+                                                fallbackImgId: id,
+                                                fallbackImgAlt: alt,
+                                            })
+                                        }
+                                        type="image"
+                                        value={fallbackImgId}
+                                        render={({
+                                            open,
+                                        }) => {
+                                            return (
+                                                <Button
+                                                    className="eb-background-control-inspector-panel-img-btn components-button"
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
+                                                    icon="format-image"
+                                                    onClick={
+                                                        open
+                                                    }
+                                                />
+                                            );
+                                        }}
+                                    />
+                                )}
+
+                                {showFallbackImg && fallbackImgUrl && (
+                                    <ImageAvatar
+                                        imageUrl={fallbackImgUrl}
+                                        onDeleteImage={() =>
+                                            setAttributes({
+                                                fallbackImgUrl: null,
+                                            })
+                                        }
                                     />
                                 )}
                             </>

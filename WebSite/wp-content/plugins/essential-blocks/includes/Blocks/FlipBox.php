@@ -3,16 +3,18 @@ namespace EssentialBlocks\Blocks;
 
 use EssentialBlocks\Core\Block;
 
-class FlipBox extends Block {
-    protected $frontend_styles = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome'];
+class FlipBox extends Block
+{
+    protected $frontend_styles = [ 'essential-blocks-fontawesome' ];
 
-    protected $frontend_scripts = ['essential-blocks-flipbox-frontend'];
+    protected $frontend_scripts = [ 'essential-blocks-flipbox-frontend' ];
 
     /**
      * Register all other scripts
      * @return void
      */
-    public function register_scripts() {
+    public function register_scripts()
+    {
         $this->assets_manager->register(
             'flipbox-frontend',
             $this->path() . '/frontend.js'
@@ -24,7 +26,8 @@ class FlipBox extends Block {
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return 'flipbox';
     }
 }

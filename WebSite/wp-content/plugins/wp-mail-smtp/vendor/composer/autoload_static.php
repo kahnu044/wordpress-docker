@@ -4,11 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
+class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
 {
     public static $files = array (
         '2bb094e40611cb5eccea789f32aff634' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-mbstring/bootstrap.php',
-        '1fd84176824b5a44e7bd8da85eca7e14' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-php72/bootstrap.php',
         '606299e0d90ec13f1e6b53164b8387df' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-intl-idn/bootstrap.php',
         '2d822e735b5b1897d96a7a28221d6513' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/deprecation-contracts/function.php',
         '6fe0d6ea1deb6acc74bbe64573a83e1c' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/functions_include.php',
@@ -225,6 +224,8 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Pro\\Alerts\\OptionsInterface' => __DIR__ . '/../..' . '/src/Pro/Alerts/OptionsInterface.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\CustomWebhook\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/CustomWebhook/Handler.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\CustomWebhook\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/CustomWebhook/Options.php',
+        'WPMailSMTP\\Pro\\Alerts\\Providers\\DiscordWebhook\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/DiscordWebhook/Handler.php',
+        'WPMailSMTP\\Pro\\Alerts\\Providers\\DiscordWebhook\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/DiscordWebhook/Options.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\Email\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/Email/Handler.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\Email\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/Email/Options.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\SlackWebhook\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/SlackWebhook/Handler.php',
@@ -258,6 +259,7 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\DeliveryStatus' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/DeliveryStatus.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\DeliveryVerification' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/DeliveryVerification.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Mailgun\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Mailgun/DeliveryVerifier.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Mailjet\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Mailjet/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Postmark\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Postmark/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\SMTP2GO\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/SMTP2GO/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\SMTPcom\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/SMTPcom/DeliveryVerifier.php',
@@ -315,6 +317,10 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Processor' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Processor.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Provider' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Provider.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Subscriber' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Subscriber.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailjet\\Events\\Failed' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailjet/Events/Failed.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailjet\\Processor' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailjet/Processor.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailjet\\Provider' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailjet/Provider.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailjet\\Subscriber' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailjet/Subscriber.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Postmark\\Events\\Failed' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Postmark/Events/Failed.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Postmark\\Processor' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Postmark/Processor.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Postmark\\Provider' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Postmark/Provider.php',
@@ -383,6 +389,7 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Pro\\Tasks\\Logs\\BulkVerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/BulkVerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\ExportCleanupTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/ExportCleanupTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\Mailgun\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Mailgun/VerifySentStatusTask.php',
+        'WPMailSMTP\\Pro\\Tasks\\Logs\\Mailjet\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Mailjet/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\Postmark\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Postmark/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\ResendTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/ResendTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\SMTP2GO\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/SMTP2GO/VerifySentStatusTask.php',
@@ -410,6 +417,8 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Providers\\MailerInterface' => __DIR__ . '/../..' . '/src/Providers/MailerInterface.php',
         'WPMailSMTP\\Providers\\Mailgun\\Mailer' => __DIR__ . '/../..' . '/src/Providers/Mailgun/Mailer.php',
         'WPMailSMTP\\Providers\\Mailgun\\Options' => __DIR__ . '/../..' . '/src/Providers/Mailgun/Options.php',
+        'WPMailSMTP\\Providers\\Mailjet\\Mailer' => __DIR__ . '/../..' . '/src/Providers/Mailjet/Mailer.php',
+        'WPMailSMTP\\Providers\\Mailjet\\Options' => __DIR__ . '/../..' . '/src/Providers/Mailjet/Options.php',
         'WPMailSMTP\\Providers\\OptionsAbstract' => __DIR__ . '/../..' . '/src/Providers/OptionsAbstract.php',
         'WPMailSMTP\\Providers\\OptionsInterface' => __DIR__ . '/../..' . '/src/Providers/OptionsInterface.php',
         'WPMailSMTP\\Providers\\Outlook\\Options' => __DIR__ . '/../..' . '/src/Providers/Outlook/Options.php',
@@ -851,7 +860,6 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
         'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Intl\\Idn\\Resources\\unidata\\DisallowedRanges' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-intl-idn/Resources/unidata/DisallowedRanges.php',
         'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Intl\\Idn\\Resources\\unidata\\Regex' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-intl-idn/Resources/unidata/Regex.php',
         'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-mbstring/Mbstring.php',
-        'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-php72/Php72.php',
         'WPMailSMTP\\WP' => __DIR__ . '/../..' . '/src/WP.php',
         'WPMailSMTP\\WPMailArgs' => __DIR__ . '/../..' . '/src/WPMailArgs.php',
         'WPMailSMTP\\WPMailInitiator' => __DIR__ . '/../..' . '/src/WPMailInitiator.php',
@@ -860,9 +868,9 @@ class ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit473736c55a35b9a077f93cfc42f4bbf5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$classMap;
 
         }, null, ClassLoader::class);
     }

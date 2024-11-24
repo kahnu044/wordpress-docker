@@ -61,6 +61,7 @@ jQuery(document).ready(function($) {
                 console.error('AJAX Error:', errorThrown);
                 $('#loader').hide();
                 alert('Failed to deactivate plugin. Please try again.');
+                location.reload();
             }
         });
         
@@ -96,6 +97,7 @@ jQuery(document).ready(function($) {
         });
         location.reload();
     });
+    
     // if ($(".zl-form-control-wrap input").attr('aria-invalid') == 'true') {
     //     $('.zl-form-control-wrap .mfcf7-zl-multifile-name').append(localStorage.getItem('zlfilename'));
     //     $('.zl-form-control-wrap .mfcf7_zl_delete_file').show();

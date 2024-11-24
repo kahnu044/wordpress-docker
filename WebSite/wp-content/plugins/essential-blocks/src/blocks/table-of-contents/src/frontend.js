@@ -41,6 +41,11 @@ window.addEventListener("DOMContentLoaded", function () {
         return 'Invalid icon type';
     }
 
+    const isInViewport = (element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+      }
+
     const EBTableOfContents = {
         init: function () {
             this._run();
@@ -233,9 +238,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
             for (let node of nodes) {
                 const isSmooth = node.getAttribute("data-smooth") === "true";
-                const wrapperOffset = parseFloat(
-                    node.getAttribute("data-top-offset")
-                );
+                const wrapperOffset = parseFloat( node.getAttribute("data-top-offset") );
                 if (isSmooth) {
                     const listItems = node.querySelectorAll('a[href^="#"]');
                     listItems.forEach((anchor) => {
@@ -350,6 +353,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 let enableCopyLink =
                     container &&
                     container.getAttribute("data-copy-link") == "true";
+                
+                let highlightOnScroll = container && container.getAttribute("data-highlight-scroll");
 
                 let copyLinkHtml = enableCopyLink
                     ? `<span class="eb-tooltip dashicons dashicons-clipboard"><span class="eb-tooltiptext">Copied!</span></span></span>`
@@ -433,6 +438,21 @@ window.addEventListener("DOMContentLoaded", function () {
                                 });
                             }
                         });
+                    }
+
+                    if( 'true' === highlightOnScroll ) {
+                        document.addEventListener("scroll", function(){
+                            headers.forEach(item => {
+                                const anchor = document.getElementById(item.link);
+                                const tocItem = document.querySelector(`.eb-toc__list a[href="#${item.link}"]`);
+                        
+                                if (anchor && isInViewport(anchor)) {
+                                  tocItem.parentElement.classList.add('eb-toc-highlight');
+                                } else if (tocItem) {
+                                  tocItem.parentElement.classList.remove('eb-toc-highlight');
+                                }
+                              });
+                        })
                     }
                 }
             }

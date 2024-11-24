@@ -15,6 +15,7 @@ import {
 } from "@wordpress/components";
 import { withSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
+import { MediaUpload } from "@wordpress/block-editor";
 
 /**
  * External Dependencies
@@ -77,8 +78,6 @@ import {
     FILTER_ITEM_TYPOGRAPHY,
 } from "./constants/typographyPrefixConstants";
 
-import objAttributes from "./attributes";
-
 import {
     ColorControl,
     ResponsiveDimensionsControl,
@@ -93,14 +92,14 @@ import {
     EBIconPicker,
     SortControl,
     InspectorPanel,
-    ButtonGroupControl
- } from "@essential-blocks/controls";
+    ButtonGroupControl,
+    ImageAvatar
+} from "@essential-blocks/controls";
 
 function Inspector(props) {
     const { attributes, setAttributes, taxonomyData, setQueryResults } = props;
     const { terms, taxonomies } = taxonomyData;
     const {
-        resOption,
         preset,
         queryData,
         postTerms,
@@ -178,10 +177,13 @@ function Inspector(props) {
         enableContents,
         enableThumbnailSort,
         defaultFilter,
+        showFallbackImg,
+        fallbackImgUrl,
+        fallbackImgId,
+        fallbackImgAlt,
     } = attributes;
 
     const [metaOptions, setMetaOptions] = useState([]);
-    const [defaultFilterOptions, setDefaultFilterOptions] = useState('');
 
     /**
      * Prepare Post Terms
@@ -218,6 +220,7 @@ function Inspector(props) {
      */
     const prevSource = useRef(queryData?.source);
     const prevterms = useRef(postTerms);
+    const selectedTaxonomyRef = useRef(selectedTaxonomy);
 
 
     useEffect(() => {
@@ -242,8 +245,6 @@ function Inspector(props) {
             prevSource.current = queryData.source;
         }
     }, [queryData?.source]);
-
-    const ucFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
     const makeEnableContent = (showItem, itemName) => {
         let newEnableContents = [...enableContents];
@@ -280,9 +281,12 @@ function Inspector(props) {
         }
     }, [enableThumbnailSort]);
 
-    useEffect(()=>{
-        setAttributes({selectedTaxonomyItems: '[{"value":"all","label":"All"}]'})
-    },[selectedTaxonomy])
+    useEffect(() => {
+        if (selectedTaxonomyRef.current !== selectedTaxonomy) {
+            selectedTaxonomyRef.current = selectedTaxonomy
+            setAttributes({ selectedTaxonomyItems: '[{"value":"all","label":"All"}]' })
+        }
+    }, [selectedTaxonomy])
 
     return (
         <>
@@ -354,9 +358,65 @@ function Inspector(props) {
                                 )}
 
                                 <EbImageSizeSelector
-                                    attrname={"thumbnailSize"}
+                                    attrName={"thumbnailSize"}
                                     setAttributes={setAttributes}
                                 />
+
+                                <ToggleControl
+                                    label={__("Show Fallback Image?")}
+                                    checked={showFallbackImg}
+                                    onChange={() => {
+                                        setAttributes({
+                                            showFallbackImg: !showFallbackImg,
+                                        });
+                                    }}
+                                />
+
+                                {showFallbackImg && !fallbackImgUrl && (
+                                    <MediaUpload
+                                        onSelect={({
+                                            id,
+                                            url,
+                                            alt,
+                                        }) =>
+                                            setAttributes({
+                                                fallbackImgUrl: url,
+                                                fallbackImgId: id,
+                                                fallbackImgAlt: alt,
+                                            })
+                                        }
+                                        type="image"
+                                        value={fallbackImgId}
+                                        render={({
+                                            open,
+                                        }) => {
+                                            return (
+                                                <Button
+                                                    className="eb-background-control-inspector-panel-img-btn components-button"
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
+                                                    icon="format-image"
+                                                    onClick={
+                                                        open
+                                                    }
+                                                />
+                                            );
+                                        }}
+                                    />
+                                )}
+
+                                {showFallbackImg && fallbackImgUrl && (
+                                    <ImageAvatar
+                                        imageUrl={fallbackImgUrl}
+                                        onDeleteImage={() =>
+                                            setAttributes({
+                                                fallbackImgUrl: null,
+                                            })
+                                        }
+                                    />
+                                )}
                             </>
                         )}
 
@@ -629,12 +689,8 @@ function Inspector(props) {
                                 />
                             </>
                         )}
-                    </InspectorPanel.PanelBody>
 
-                    <InspectorPanel.PanelBody
-                        title={__("Sortable Content", "essential-blocks-pro")}
-                        initialOpen={false}
-                    >
+                        <PanelRow className="separator">Sortable Content</PanelRow>
                         {(preset == "style-1" || preset == "style-2" || preset == "style-3") &&
                             showThumbnail && (
                                 <ToggleControl
@@ -646,7 +702,8 @@ function Inspector(props) {
                                         });
                                     }}
                                 />
-                            )}
+                            )
+                        }
                         <SortControl
                             items={enableContents}
                             labelKey=""
@@ -694,19 +751,8 @@ function Inspector(props) {
                                 </div>
                                 {selectedTaxonomy && selectedTaxonomy.length > 0 && (
                                     <>
-                                        <SelectControl
-                                            label={__(
-                                                "Default Selected Filter",
-                                                "essential-blocks"
-                                            )}
-                                            value={defaultFilter}
-                                            options={defaultFilterOptions}
-                                            onChange={(selected) =>
-                                                setAttributes({ defaultFilter: selected })
-                                            }
-                                        />
                                         <div className="eb-control-item-wrapper">
-                                            <PanelRow>Select Taxonomy</PanelRow>
+                                            <PanelRow>Select Taxonomy 2</PanelRow>
                                             <Select2
                                                 name="select-header-meta"
                                                 value={

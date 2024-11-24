@@ -6,8 +6,7 @@ use EssentialBlocks\Utils\Helper;
 
 class ProductDetails extends Block
 {
-    protected $frontend_styles = [ 'essential-blocks-frontend-style', 'essential-blocks-frontend-style' ];
-    private $attributesList    = [  ];
+    private $attributesList = [  ];
     /**
      * Unique name of the block.
      *

@@ -124,9 +124,15 @@ const attributes = {
         default: true,
     },
     // typography attributes
-    ...generateTypographyAttributes(typoPrefix_caption),
-    ...generateTypographyAttributes(typoPrefix_meta),
-    ...generateTypographyAttributes(typoPrefix_header),
+    ...generateTypographyAttributes(typoPrefix_caption, {
+        fontSize: 14
+    }),
+    ...generateTypographyAttributes(typoPrefix_meta, {
+        fontSize: 14
+    }),
+    ...generateTypographyAttributes(typoPrefix_header, {
+        fontSize: 14
+    }),
 
     ...generateResponsiveRangeAttributes(NUMBER_OF_COLUMNS, {
         defaultRange: 3,

@@ -1,6 +1,6 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-sanitizeURL, BlockProps
+    sanitizeURL, BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -27,7 +27,8 @@ const Save = ({ attributes }) => {
         isRTLEnable,
         titleTag,
         contentTag,
-        version
+        version,
+        showLightbox
     } = attributes;
 
     //Slider Settings
@@ -72,29 +73,24 @@ const Save = ({ attributes }) => {
             <div
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
-                {
-                    blockId && (
-                        <script dangerouslySetInnerHTML={{
-                            __html:
-                                `var ${blockId.replaceAll('-', '_')} = ${JSON.stringify(settings)};`
-                        }}></script>
-                    )
-                }
                 <div
                     className={`eb-slider-wrapper ${blockId}`}
                     data-blockid={blockId}
                     data-version={version}
+                    data-settings={btoa(JSON.stringify(settings))}
                     data-arrowNextIcon={arrowNextIcon}
                     data-arrowPrevIcon={arrowPrevIcon}
+                    data-lightbox={version === 'v2' ? showLightbox : false}
                 >
                     <div className={`eb-slider-init ${sliderTypeClass}`}>
                         {images.map((image, index) => (
                             <div
                                 className={`eb-slider-item ${sliderContentType}`}
                                 key={index}
+                                data-src={image.url}
                             >
-                                {image.buttonUrl && image.isValidUrl ? 
-                                    <div><a 
+                                {image.buttonUrl && image.isValidUrl ?
+                                    <div><a
                                         href={sanitizeURL(image.buttonUrl)}
                                         target={
                                             image.openNewTab
@@ -107,7 +103,7 @@ const Save = ({ attributes }) => {
                                             src={image.url}
                                         />
                                     </a></div>
-                                 : <div><img
+                                    : <div><img
                                         className="eb-slider-image"
                                         src={image.url}
                                     /></div>
@@ -194,7 +190,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </BlockProps.Save>
+        </BlockProps.Save >
     );
 };
 

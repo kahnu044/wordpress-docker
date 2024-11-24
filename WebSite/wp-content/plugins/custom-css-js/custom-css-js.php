@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI: https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version: 3.47
+ * Version: 3.49
  * Author: SilkyPress.com
  * Author URI: https://www.silkypress.com
  * License: GPL2
@@ -12,7 +12,7 @@
  * Domain Path: /languages/
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 9.0 
+ * WC tested up to: 9.7 
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -106,6 +106,8 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		 */
 		public function print_code_actions() {
 			foreach ( $this->search_tree as $_key => $_value ) {
+				if ( strpos( $_key, 'block' ) !== false ) continue;
+
 				$action = 'wp_';
 				if ( strpos( $_key, 'admin' ) !== false ) {
 					$action = 'admin_';
@@ -125,6 +127,8 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 
 				add_action( $action, array( $this, 'print_' . $_key ), $priority );
 			}
+
+			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 		}
 
 		/**
@@ -157,7 +161,9 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 			$type_attr = ( 'js' === $type && ! current_theme_supports( 'html5', 'script' ) ) ? ' type="text/javascript"' : '';
 			$type_attr = ( 'css' === $type && ! current_theme_supports( 'html5', 'style' ) ) ? ' type="text/css"' : $type_attr;
 
-			$upload_url = str_replace( array( 'https://', 'http://' ), '//', CCJ_UPLOAD_URL ) . '/';
+			if ( ! apply_filters( 'ccj_default_url_protocol', false ) ) {
+				$upload_url = str_replace( array( 'https://', 'http://' ), '//', CCJ_UPLOAD_URL ) . '/';
+			}
 
 			if ( 'internal' === $where ) {
 
@@ -223,12 +229,58 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 
 
 		/**
+		 * Load the CSS/JS custom codes to the Block editor.
+		 */
+		function enqueue_block_editor_assets() {
+
+			global $wp_version;
+
+			if ( ! isset( $this->search_tree ) || ! is_array( $this->search_tree ) || count( $this->search_tree ) === 0 ) return;
+
+			// Default values for the CCJ_codes variable.
+			$CCJ_codes = [
+				'internal' => [],
+				'external' => [],
+				'path' => CCJ_UPLOAD_URL . '/',
+				'jquery' => false,
+				'wp_version' => $wp_version, 
+			];
+
+			// Get the jQuery path.
+			$suffix     = wp_scripts_get_suffix();
+			$guessurl   = site_url();
+			$guessurl   = ( ! $guessurl ) ? wp_guess_url() : $guessurl;
+			$jquery_url = $guessurl . '/wp-includes/js/jquery/jquery' . $suffix . '.js';
+
+			// Fill in the values for the CCJ_codes variable.
+			foreach ( $this->search_tree as $_where => $_files ) {
+				if ( strpos( $_where, 'html' ) !== false ) continue;
+				if ( strpos( $_where, 'block' ) === false ) continue;
+				if ( ! is_array( $_files ) || count( $_files ) === 0 ) continue;
+
+				$type = ( strpos( $_where, 'internal' ) !== false ) ? 'internal' : 'external';
+
+				// Add the 'internal' or 'external' file name to the array.
+				$CCJ_codes[ $type ] = array_merge( $CCJ_codes[ $type ], $_files );
+
+				// Should the jQuery library be loaded in the Block editor?
+				$CCJ_codes['jquery'] = ( strpos( $_where, 'js' ) !== false ) ? $jquery_url : $CCJ_codes['jquery']; 
+			}
+
+			// Load the "ccj_block_editor.js" script.
+			wp_register_script( 'ccj_block_editor', plugins_url( '/', CCJ_PLUGIN_FILE ) . 'assets/ccj_block_editor.js', [], CCJ_VERSION );
+			wp_localize_script( 'ccj_block_editor', 'CCJ_codes', $CCJ_codes );
+			wp_enqueue_script( 'ccj_block_editor' );
+		}
+
+
+		/**
 		 * Set constants for later use
 		 */
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.47',
+				'CCJ_VERSION'     => '3.49',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,

@@ -2,10 +2,12 @@
 
 namespace EssentialBlocks\Utils;
 
-class CSSParser {
+class CSSParser
+{
     private static $instance;
 
-    public static function init() {
+    public static function init()
+    {
         if ( null === self::$instance ) {
             self::$instance = new self;
         }
@@ -16,24 +18,25 @@ class CSSParser {
     /**
      * Get Responsive Breakpoints
      */
-    public static function get_responsive_breakpoints( $size = 'mobile' ) {
-        $settings     = get_option( 'eb_settings', [] );
-        $settingsData = [];
+    public static function get_responsive_breakpoints( $size = 'mobile' )
+    {
+        $settings     = get_option( 'eb_settings', [  ] );
+        $settingsData = [  ];
 
         if ( array_key_exists( 'responsiveBreakpoints', $settings ) ) {
-            $settingsData = $settings['responsiveBreakpoints'];
+            $settingsData = $settings[ 'responsiveBreakpoints' ];
             if ( gettype( $settingsData ) === 'string' && strlen( $settingsData ) > 0 ) {
                 $settingsData = (array) json_decode( html_entity_decode( stripslashes( $settingsData ) ) );
             }
         } else {
-            $settings['responsiveBreakpoints'] = [
+            $settings[ 'responsiveBreakpoints' ] = [
                 'tablet' => 1024,
                 'mobile' => 767
-            ];
+             ];
 
             update_option( 'eb_settings', $settings );
 
-            $settingsData = $settings['responsiveBreakpoints'];
+            $settingsData = $settings[ 'responsiveBreakpoints' ];
         }
 
         return $settingsData[ $size ];
@@ -42,52 +45,56 @@ class CSSParser {
     /**
      * Recursive function for parsing blocks
      */
-    public static function eb_block_style_recursive( $block, &$eb_blocks ) {
+    public static function eb_block_style_recursive( $block, &$eb_blocks, &$blocknames )
+    {
         if ( count( $block ) > 0 ) {
             foreach ( $block as $item ) {
-                $attributes = $item['attrs'];
+                $attributes = $item[ 'attrs' ];
 
-                $isCustomCssError = isset($attributes['isCustomCssError']) ? $attributes['isCustomCssError'] : false;
+                $isCustomCssError = isset( $attributes[ 'isCustomCssError' ] ) ? $attributes[ 'isCustomCssError' ] : false;
 
                 $blockId = "";
-                if ( isset( $attributes['blockId'] ) && ! empty( $attributes['blockId'] ) ) {
-                    $blockId = $attributes['blockId'];
+                if ( isset( $attributes[ 'blockId' ] ) && ! empty( $attributes[ 'blockId' ] ) ) {
+                    $blockId = $attributes[ 'blockId' ];
+                    if ( isset( $item[ 'blockName' ] ) ) {
+                        $blocknames[  ] = $item[ 'blockName' ];
+                    }
                 }
                 $blockMeta = "";
-                if ( isset( $attributes['blockMeta'] ) && ! empty( $attributes['blockMeta'] ) ) {
-                    $blockMeta = $attributes['blockMeta'];
+                if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
+                    $blockMeta = $attributes[ 'blockMeta' ];
                 }
                 $commonStyles = "";
-                if ( isset( $attributes['commonStyles'] ) && ! empty( $attributes['commonStyles'] ) ) {
-                    $commonStyles = $attributes['commonStyles'];
+                if ( isset( $attributes[ 'commonStyles' ] ) && ! empty( $attributes[ 'commonStyles' ] ) ) {
+                    $commonStyles = $attributes[ 'commonStyles' ];
                 }
                 $customCss = "";
-                if ( !$isCustomCssError && isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
+                if ( ! $isCustomCssError && isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
                     // $customCss = $attributes[ 'customCss' ];
-                    $customCss = str_replace('eb_selector', "." . $blockId, $attributes['customCss']);
+                    $customCss = str_replace( 'eb_selector', "." . $blockId, $attributes[ 'customCss' ] );
                 }
 
-                if ( isset( $attributes['ref'] ) && ! empty( $attributes['ref'] ) && $item["blockName"] === "core/block" ) {
-                    $reusable_block                                    = get_post( $attributes['ref'] );
-                    $reusable_content                                  = ! empty( $reusable_block ) ? parse_blocks( $reusable_block->post_content ) : [];
-                    $reusable_blocks                                   = [];
-                    $eb_blocks["reusableBlocks"][ $attributes['ref'] ] = self::eb_block_style_recursive( $reusable_content, $reusable_blocks );
+                if ( isset( $attributes[ 'ref' ] ) && ! empty( $attributes[ 'ref' ] ) && $item[ "blockName" ] === "core/block" ) {
+                    $reusable_block                                        = get_post( $attributes[ 'ref' ] );
+                    $reusable_content                                      = ! empty( $reusable_block ) ? parse_blocks( $reusable_block->post_content ) : [  ];
+                    $reusable_blocks                                       = [  ];
+                    $eb_blocks[ "reusableBlocks" ][ $attributes[ 'ref' ] ] = self::eb_block_style_recursive( $reusable_content, $reusable_blocks, $blocknames );
                 } else {
-                    if ( isset( $item["innerBlocks"] ) && count( $item["innerBlocks"] ) > 0 ) {
-                        self::eb_block_style_recursive( $item['innerBlocks'], $eb_blocks );
-                        if ( isset( $attributes['blockMeta'] ) && ! empty( $attributes['blockMeta'] ) ) {
+                    if ( isset( $item[ "innerBlocks" ] ) && count( $item[ "innerBlocks" ] ) > 0 ) {
+                        self::eb_block_style_recursive( $item[ 'innerBlocks' ], $eb_blocks, $blocknames );
+                        if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
                             $eb_blocks[ $blockId ] = [
                                 'blockMeta'    => $blockMeta,
                                 'commonStyles' => $commonStyles,
                                 'customCss'    => $customCss
-                            ];
+                             ];
                         }
-                    } else if ( isset( $attributes['blockMeta'] ) && ! empty( $attributes['blockMeta'] ) ) {
+                    } else if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
                         $eb_blocks[ $blockId ] = [
                             'blockMeta'    => $blockMeta,
                             'commonStyles' => $commonStyles,
                             'customCss'    => $customCss
-                        ];
+                         ];
                     }
                 }
             }
@@ -99,7 +106,8 @@ class CSSParser {
     /**
      * Blockarray to Style Array Function
      */
-    public static function blocks_to_style_array( $blocks, $styles = [] ) {
+    public static function blocks_to_style_array( $blocks, $styles = [  ] )
+    {
         if ( is_array( $blocks ) && count( $blocks ) > 0 ) {
             foreach ( $blocks as $blockId => $block ) {
                 if ( 'reusableBlocks' === $blockId ) {
@@ -114,22 +122,22 @@ class CSSParser {
                         'tab'       => "",
                         'mobile'    => "",
                         'customCss' => ""
-                    ];
+                     ];
 
                     if ( is_array( $block ) && count( $block ) > 0 ) {
                         foreach ( $block as $value ) {
                             if ( is_array( $value ) && count( $value ) > 0 ) {
-                                if ( isset( $value["desktop"] ) ) {
-                                    $styles[ $blockId ]["desktop"] .= $value["desktop"];
+                                if ( isset( $value[ "desktop" ] ) ) {
+                                    $styles[ $blockId ][ "desktop" ] .= $value[ "desktop" ];
                                 }
-                                if ( isset( $value["tab"] ) ) {
-                                    $styles[ $blockId ]["tab"] .= $value["tab"];
+                                if ( isset( $value[ "tab" ] ) ) {
+                                    $styles[ $blockId ][ "tab" ] .= $value[ "tab" ];
                                 }
-                                if ( isset( $value["mobile"] ) ) {
-                                    $styles[ $blockId ]["mobile"] .= $value["mobile"];
+                                if ( isset( $value[ "mobile" ] ) ) {
+                                    $styles[ $blockId ][ "mobile" ] .= $value[ "mobile" ];
                                 }
-                            } else if ( isset( $block['customCss'] ) && is_string( $block['customCss'] ) && strlen( $block['customCss'] ) > 0 ) {
-                                $styles[ $blockId ]["customCss"] .= $block['customCss'];
+                            } else if ( isset( $block[ 'customCss' ] ) && is_string( $block[ 'customCss' ] ) && strlen( $block[ 'customCss' ] ) > 0 ) {
+                                $styles[ $blockId ][ "customCss" ] .= $block[ 'customCss' ];
                             }
                         }
                     }
@@ -148,7 +156,8 @@ class CSSParser {
      * @return string
      * @since 1.0.2
      */
-    public static function build_css( $style_object ) {
+    public static function build_css( $style_object )
+    {
         $block_styles = $style_object;
 
         $css = '';
@@ -186,7 +195,8 @@ class CSSParser {
      * Helper function to get string between 2 string
      * @since 3.3.0
      */
-    public static function get_between_data( $string, $start, $end ) {
+    public static function get_between_data( $string, $start, $end )
+    {
         $pos_string   = stripos( $string, $start );
         $substr_data  = substr( $string, $pos_string );
         $string_two   = substr( $substr_data, strlen( $start ) );
@@ -203,7 +213,8 @@ class CSSParser {
     /**
      * Is Gutenberg Editor
      */
-    public static function eb_stylehandler_is_gutenberg_editor( $pagenow, $param ) {
+    public static function eb_stylehandler_is_gutenberg_editor( $pagenow, $param )
+    {
         if ( $pagenow == 'post-new.php' || $pagenow == 'post.php' || $pagenow == 'site-editor.php' ) {
             return true;
         }

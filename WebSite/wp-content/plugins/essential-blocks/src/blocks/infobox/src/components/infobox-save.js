@@ -1,8 +1,11 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-EBDisplayIcon, sanitizeURL
+    EBDisplayIcon, sanitizeURL, EBButton
 } from "@essential-blocks/controls";
-export default function InfoboxContainer({ requiredProps }) {
+import {
+    BUTTON_KEYS
+} from "../constants";
+export default function InfoboxContainer({ requiredProps, attributes }) {
     const {
         blockId,
         infoboxIcon,
@@ -24,56 +27,70 @@ export default function InfoboxContainer({ requiredProps }) {
         subTitleTag,
         btnEffect,
         classHook,
+        showMedia,
+        enableTitle,
+        addBtnIcon,
+        btnIconPosition,
+        btnIcon
     } = requiredProps;
 
     return (
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
             <div className={`${blockId} eb-infobox-wrapper`}>
                 <div className="infobox-wrapper-inner">
-                    {media === "icon" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-icon number-or-icon">
-                                <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
-                            </div>
-                        </div>
-                    ) : null}
+                    {showMedia && (
+                        <>
+                            {media === "icon" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className="eb-icon number-or-icon">
+                                        <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
+                                    </div>
+                                </div>
+                            ) : null}
 
-                    {media === "number" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-infobox-num-wrapper number-or-icon">
-                                <span className="eb-infobox-number">
-                                    {number}
-                                </span>
-                            </div>
-                        </div>
-                    ) : null}
+                            {media === "number" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className="eb-infobox-num-wrapper number-or-icon">
+                                        <span className="eb-infobox-number">
+                                            {number}
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : null}
 
-                    {media === "image" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-infobox-image-wrapper">
-                                <img
-                                    className="eb-infobox-image"
-                                    src={imageUrl}
-                                    alt={imageAlt}
-                                />
-                            </div>
-                        </div>
-                    ) : null}
+                            {media === "image" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className="eb-infobox-image-wrapper">
+                                        <img
+                                            className="eb-infobox-image"
+                                            src={imageUrl}
+                                            alt={imageAlt}
+                                        />
+                                    </div>
+                                </div>
+                            ) : null}
+
+                        </>
+                    )}
 
                     <div className="contents-wrapper">
-                        <RichText.Content
-                            tagName={titleTag}
-                            className="title"
-                            value={title}
-                        />
+                        {enableTitle && (
+                            <>
+                                <RichText.Content
+                                    tagName={titleTag}
+                                    className="title"
+                                    value={title}
+                                />
 
-                        {enableSubTitle ? (
-                            <RichText.Content
-                                tagName={subTitleTag}
-                                className="subtitle"
-                                value={subTitle}
-                            />
-                        ) : null}
+                                {enableSubTitle ? (
+                                    <RichText.Content
+                                        tagName={subTitleTag}
+                                        className="subtitle"
+                                        value={subTitle}
+                                    />
+                                ) : null}
+                            </>
+                        )}
 
                         {enableDescription ? (
                             <RichText.Content
@@ -84,17 +101,12 @@ export default function InfoboxContainer({ requiredProps }) {
                         ) : null}
 
                         {enableButton && !isInfoClick ? (
-                            <div className="eb-infobox-btn-wrapper">
-                                <a
-                                    href={infoboxLink == undefined ? '' : sanitizeURL(infoboxLink)}
-                                    target={linkNewTab ? "_blank" : "_self"}
-                                    rel="noopener noreferrer"
-                                    className={`infobox-btn  ${btnEffect || " "
-                                        }`}
-                                >
-                                    {buttonText}
-                                </a>
-                            </div>
+                            <EBButton.Content
+                                attributes={attributes}
+                                className={`infobox-btn  ${btnEffect || " "}`}
+                                buttonAttrProps={BUTTON_KEYS}
+                                btnWrapperClassName='eb-infobox-btn-wrapper'
+                            />
                         ) : null}
                     </div>
                 </div>

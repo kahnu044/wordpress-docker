@@ -74,7 +74,10 @@ const Edit = (props) => {
         leftArrowIcon,
         rightArrowIcon,
         cover,
-        showBlockContent
+        showBlockContent,
+        showFallbackImg,
+        fallbackImgUrl,
+        fallbackImgAlt,
     } = attributes;
 
     const [queryResults, setQueryResults] = useState(false);
@@ -184,7 +187,7 @@ const Edit = (props) => {
                             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                                 <div
                                     className={`eb-post-carousel-wrapper ${blockId} ${dotPreset} ${preset} ${dots ? "eb-slider-dots" : ""
-                                    } ${adaptiveHeight ? "equal-height" : ""}`}
+                                        } ${adaptiveHeight ? "equal-height" : ""}`}
                                     data-id={blockId}
                                 >
                                     <Slider {...settings} ref={slider}>
@@ -306,23 +309,23 @@ const Edit = (props) => {
 
                                                 const postTermsVal = {};
                                                 post._embedded &&
-                                                post._embedded["wp:term"] &&
-                                                post._embedded["wp:term"].length > 0 &&
-                                                post._embedded["wp:term"].map((item) => {
-                                                    let termObj = {};
-                                                    let termName = "";
-                                                    item.length > 0 &&
-                                                    item.map((term) => {
-                                                        termName = term.taxonomy;
-                                                        termObj[term.slug] = {
-                                                            name: term.name,
-                                                            id: term.id,
-                                                            link: term.link,
-                                                            slug: term.slug,
-                                                        };
+                                                    post._embedded["wp:term"] &&
+                                                    post._embedded["wp:term"].length > 0 &&
+                                                    post._embedded["wp:term"].map((item) => {
+                                                        let termObj = {};
+                                                        let termName = "";
+                                                        item.length > 0 &&
+                                                            item.map((term) => {
+                                                                termName = term.taxonomy;
+                                                                termObj[term.slug] = {
+                                                                    name: term.name,
+                                                                    id: term.id,
+                                                                    link: term.link,
+                                                                    slug: term.slug,
+                                                                };
+                                                            });
+                                                        postTermsVal[termName] = termObj;
                                                     });
-                                                    postTermsVal[termName] = termObj;
-                                                });
 
                                                 const postTermsHtml = {};
                                                 if (Object.keys(postTermsVal).length > 0) {
@@ -335,8 +338,8 @@ const Edit = (props) => {
                                                         }
                                                         let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
                                                         Object.keys(postTermsVal[term]).length > 0 &&
-                                                        Object.keys(postTermsVal[term]).map((item, index) => {
-                                                            markup += `
+                                                            Object.keys(postTermsVal[term]).map((item, index) => {
+                                                                markup += `
 													<a
 														key=${index}
 														href=${postTermsVal[term][item].link}
@@ -345,7 +348,7 @@ const Edit = (props) => {
 														${postTermsVal[term][item].name}
 													</a>
 												`;
-                                                        });
+                                                            });
                                                         markup += `</div>`;
                                                         postTermsHtml[term] = markup;
                                                     });
@@ -473,10 +476,21 @@ const Edit = (props) => {
                                                                                 />
                                                                             )}
                                                                         {post._embedded && !post._embedded["wp:featuredmedia"] && (
-                                                                            <img
-                                                                                src={EssentialBlocksLocalize?.placeholder_image}
-                                                                                alt="No Thumbnail Available"
-                                                                            />
+                                                                            <>
+                                                                                {showFallbackImg && fallbackImgUrl && (
+                                                                                    <img
+                                                                                        src={fallbackImgUrl}
+                                                                                        alt={`${fallbackImgAlt ? fallbackImgAlt : `No Thumbnail Available`}`}
+                                                                                    />
+                                                                                )}
+
+                                                                                {(!showFallbackImg || (showFallbackImg && fallbackImgUrl === undefined)) && (
+                                                                                    <img
+                                                                                        src={EssentialBlocksLocalize?.placeholder_image}
+                                                                                        alt="No Thumbnail Available"
+                                                                                    />
+                                                                                )}
+                                                                            </>
                                                                         )}
                                                                     </div>
                                                                 )}

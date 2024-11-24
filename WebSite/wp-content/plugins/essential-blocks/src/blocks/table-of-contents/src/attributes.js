@@ -401,6 +401,10 @@ const attributes = {
         type: "string",
         default: 'h2',
     },
+    enableHighlight: {
+        type: "boolean",
+        default: false,
+    },
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_title, {
         fontSize: 20,

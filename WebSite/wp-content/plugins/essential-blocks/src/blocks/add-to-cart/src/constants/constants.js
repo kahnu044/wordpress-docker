@@ -15,6 +15,8 @@ export const QUANTITY_PADDING = "quantityPadding";
 
 export const VARIABLE_FIELD_BORDER = "variableBorderShadow";
 export const VARIABLE_FIELD_PADDING = "variablePadding";
+export const btnWidth = "btnWidth_";
+export const quantityWidth = "quantityWidth_";
 
 export const ALIGNMENT = [
     { label: __(<Dashicon icon={"editor-alignleft"} />), value: "flex-start" },
@@ -27,9 +29,20 @@ export const PRICE_TYPES = [
     { label: __("Sale Price", "essential-blocks"), value: "sale" },
 ];
 
+export const DISPLAY_TYPES = [
+    { label: __("Inline", "essential-blocks"), value: "inline" },
+    { label: __("Stacked", "essential-blocks"), value: "stacked" },
+];
+
 export const PRODUCT_TYPES = [
     { label: __("Simple Product", "essential-blocks"), value: "simple" },
     { label: __("Grouped Product", "essential-blocks"), value: "grouped" },
     { label: __("External/Affiliate Product", "essential-blocks"), value: "external" },
     { label: __("Variable Product", "essential-blocks"), value: "variable" },
+];
+
+export const sizeUnitTypes = [
+    { label: "px", value: "px" },
+    { label: "%", value: "%" },
+    { label: "em", value: "em" },
 ];

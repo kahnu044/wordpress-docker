@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import { memo } from "@wordpress/element";
-
 /**
  * Internal depencencies
  */
@@ -12,19 +11,22 @@ import Style from "./style";
 import defaultAttributes from './attributes';
 
 import {
-    DynamicInputValueHandler,
     EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBButton
 } from "@essential-blocks/controls";
 
+import { 
+    BUTTON_ONE_KEYS,
+    BUTTON_TWO_KEYS
+} from "./constants/constants";
+
 function Edit(props) {
-    const { attributes, setAttributes, isSelected } = props;
+    const { attributes, isSelected } = props;
     const {
         blockId,
         preset,
-        buttonTextOne,
-        buttonTextTwo,
         innerButtonText,
         innerButtonIcon,
         showConnector,
@@ -49,30 +51,12 @@ function Edit(props) {
                         className={`eb-button-group-wrapper ${blockId} ${preset}`}
                         data-id={blockId}
                     >
-                        {/* Button One */}
-                        <a
-                            className={"eb-button-parent eb-button-one"}
-                            // style={buttonStyleOne}
-                            onMouseEnter={() => setAttributes({ isHoverOne: true })}
-                            onMouseLeave={() => setAttributes({ isHoverOne: false })}
-                        >
-                            <DynamicInputValueHandler
-                                className={"eb-button-text eb-button-one-text"}
-                                placeholder="Add Text.."
-                                value={buttonTextOne}
-                                onChange={(newText) =>
-                                    setAttributes({ buttonTextOne: newText })
-                                }
-                                allowedFormats={[
-                                    "core/bold",
-                                    "core/italic",
-                                    "core/link",
-                                    "core/strikethrough",
-                                    "core/underline",
-                                    "core/text-color",
-                                ]}
-                            />
-                        </a>
+                        <EBButton 
+                            isSelected={isSelected}
+                            className={'eb-button-one'}
+                            buttonAttrProps={BUTTON_ONE_KEYS}
+                            urlInput={false}
+                        />
 
                         {/* Connector */}
 
@@ -90,29 +74,12 @@ function Edit(props) {
                         )}
 
                         {/* Button Two */}
-                        <a
-                            className={"eb-button-parent eb-button-two"}
-                            // style={buttonStyleTwo}
-                            onMouseEnter={() => setAttributes({ isHoverTwo: true })}
-                            onMouseLeave={() => setAttributes({ isHoverTwo: false })}
-                        >
-                            <DynamicInputValueHandler
-                                className={"eb-button-text eb-button-two-text"}
-                                placeholder="Add Text.."
-                                value={buttonTextTwo}
-                                onChange={(newText) =>
-                                    setAttributes({ buttonTextTwo: newText })
-                                }
-                                allowedFormats={[
-                                    "core/bold",
-                                    "core/italic",
-                                    "core/link",
-                                    "core/strikethrough",
-                                    "core/underline",
-                                    "core/text-color",
-                                ]}
-                            />
-                        </a>
+                        <EBButton 
+                            isSelected={isSelected}
+                            className={'eb-button-two'}
+                            buttonAttrProps={BUTTON_TWO_KEYS}
+                            urlInput={false}
+                        />
                     </div>
                 </div>
             </BlockProps.Edit>

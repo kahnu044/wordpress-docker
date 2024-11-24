@@ -45,7 +45,9 @@ export default function Style(props) {
         prefixColor,
         suffixColor,
         displayStyle,
-        separatorColor
+        separatorColor,
+        suffixVerticalAlign,
+        prefixVerticalAlign
     } = attributes;
 
     const {
@@ -263,6 +265,10 @@ export default function Style(props) {
             ${taxonomiesBDShadowHoverDesktop}
         }
 
+        .${blockId}.eb-taxonomies-wrapper .prefix-wrap {
+            align-self: ${prefixVerticalAlign};
+        }
+
         .${blockId}.eb-taxonomies-wrapper .prefix-wrap *:not(i){
             color: ${prefixColor};
             ${prefixTypoStylesDesktop}
@@ -271,6 +277,10 @@ export default function Style(props) {
         .${blockId}.eb-taxonomies-wrapper .prefix-wrap i {
             color: ${prefixColor};
             ${prefixIconSizeDesktop}
+        }
+
+        .${blockId}.eb-taxonomies-wrapper .suffix-wrap {
+            align-self: ${suffixVerticalAlign};
         }
 
         .${blockId}.eb-taxonomies-wrapper .suffix-wrap *:not(i){

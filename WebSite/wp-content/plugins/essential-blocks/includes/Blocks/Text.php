@@ -5,7 +5,6 @@ use EssentialBlocks\Core\Block;
 
 class Text extends Block
 {
-    protected $frontend_styles = [ 'essential-blocks-frontend-style' ];
 
     /**
      * Unique name of the block.

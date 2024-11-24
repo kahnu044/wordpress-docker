@@ -5,7 +5,7 @@ Tags: gutenberg, blocks, gutenberg blocks, editor, block
 Requires at least: 5.6
 Requires PHP: 7.4
 Tested up to: 6.6
-Stable tag: 2.15.2
+Stable tag: 2.16.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -211,36 +211,40 @@ When you use the Spectra along with the free Astra theme, you get a huge library
 
 == Credits ==
 
-Our external packages use [Rating Star Component](https://github.com/n49/react-stars) that are distributed under the terms of the ISC. While [Slick](https://github.com/akiran/react-slick), [Lottie](https://github.com/chenqingspring/react-lottie) and [Striptags](https://github.com/ericnorris/striptags) is distributed under the terms of the MIT. Additionally, we incorporate [dnd kit](https://github.com/clauderic/dnd-kit) licensed under the MIT License.
+Our external packages use [Rating Star Component](https://github.com/n49/react-stars) that are distributed under the terms of the ISC. While [Slick](https://github.com/akiran/react-slick), [Lottie](https://github.com/chenqingspring/react-lottie) and [Striptags](https://github.com/ericnorris/striptags) is distributed under the terms of the MIT. Additionally, we incorporate [FontAwesome v6](https://fontawesome.com/license/free) under the CC BY 4.0 License, and [dnd kit](https://github.com/clauderic/dnd-kit) licensed under the MIT License.
 
 == Changelog ==
 
-= 2.15.2 - Thursday, 29th August 2024 =
-* Improvement: Container - Added a children-width option for flex columns.
-* Fix: Container - Resolved an issue wherein the "Children Width" option would not work as intended.
-* Fix: FAQ - Resolved an issue wherein the question icon color would not appear correctly in the editor as compared to the frontend.
-* Fix: FAQ - Resolved an issue wherein HTML anchor would not work as intended.
-* Fix: Quick Action Bar - Resolved an issue wherein the Quick Access Bar would become non-functional after editing a pattern.
-* Fix: Global - Resolved a DOMException issue for iFrames in the block editor with the Stripe plugin.
+= 2.16.5 - Friday, 15th November 2024 =
+* This update addressed a security bug. Props to zer0gh0st (D.Sim) for privately reporting it to our team. Please make sure you are using the latest version on your website. 
 
-= 2.15.1 - Tuesday, 6th August 2024 =
-* This update addressed a security bug. Props to Patchstack for privately reporting it to our team. Please make sure you are using the latest version on your website.
+= 2.16.4 - Wednesday, 13th November 2024 =
+* Fix: Customizer - Resolved an issue wherein the Astra customizer panels would get an additional spacing when Spectra is active.
+* Fix: Buttons - Resolved an issue wherein the core buttons block could not be transformed to a Spectra buttons block.
+* Fix: Editor - Resolved an issue wherein tooltips would be spaced incorrectly in the block settings panels.
 
-= 2.15.0 - Thursday, 1st August 2024 =
-* Improvement: Container - Added an order option for grid layout to set the order in which the inner container should be.
-* Improvement: Info Box - Added an overall border option.
-* Improvement: Separator - Added overall block margin and padding settings.
-* Improvement: Image Gallery - Added keyboard accessibility for click events.
-* Improvement: Icon - Added keyboard accessibility for link click.
-* Fix: Image & Image Gallery - Resolved an issue wherein the caption's text-decoration would not sync with the Astra theme's body font settings when "Default" is set.
-* Fix: Image Gallery & Social Share - Resolved an issue wherein synced patterns for these blocks would cause the page to freeze.
-* Fix: Global - Resolved an issue causing the editor to freeze when dynamic content was used in the sync pattern.
+= 2.16.3 - Saturday, 2nd November 2024 =
+* This update addressed a security bug. Props to zer0gh0st (D.Sim) for privately reporting it to our team. Please make sure you are using the latest version on your website.
 
-= 2.14.1 - Tuesday, 16th July 2024 =
-* Improvement: Added compatibility with WordPress v6.6.
-* Improvement: What's New - Improved the ability to see the new updates for Spectra in the form of a feed under the Dashboard.
-* Fix: Global - Resolved an issue wherein the last modified dates would be altered after running the `Ultimate Addons for Gutenberg` database update.
-* Deprecated: Header Titlebar - Safely removed the Header Titlebar functionality to allow support for the WordPress 6.6 command palette.
+= 2.16.2 - Wednesday, 23rd October 2024 =
+* Updated the AI Assistant and Design Kit Libraries.
+
+= 2.16.1 - Friday, 11th October 2024 =
+* Fix: Admin - Resolved an issue wherein notices would be hidden on admin screens other than the popup builder screen.
+* Fix: Design Library - Added a cleanup for any temporary `ast-block-template_data` autoload options that remained in the database.
+
+= 2.16.0 - Wednesday, 9th October 2024 =
+* Improvement: Tabs - Enhanced accessibility in the tabs and improved the content accessibility.
+* Improvement: Global - Added a placeholder for inherited values in all spacing controls.
+* Fix: Container - Resolved an issue wherein the sticky container would not work as expected with the image gallery of the carousel type.
+* Fix: Container - Resolved an issue wherein sticky containers would not work as intended when margins were set for them.
+* Fix: Buttons - Resolved an issue wherein the button sizes would not work as expected in the editor responsive views.
+* Fix: Global - Resolved an issue wherein assets would not load for custom taxonomy templates when using Full Site Editing.
+* Fix: Global - Resolved an issue wherein the CSS would not load for Spectra blocks in custom templates for specific products using Full Site Editing.
+
+= 2.15.3 - Wednesday, 18th September 2024 =
+* Fix: Global - Resolved an issue causing the editor to freeze when the Info box and Separator blocks were used in the sync pattern.
+* Fix: Global - Resolved an issue wherein the Design Library would alter the appearance List and Heading blocks in the editor.
 
 The full changelog is available [here](https://wpspectra.com/whats-new/).
 

@@ -30,6 +30,8 @@ export default function Style(props) {
         metaLabelColor,
         metaValueColor,
         enableContents,
+        metaIconColor,
+        metaIconSize
     } = attributes;
 
     // CSS/styling Codes Starts from Here
@@ -183,7 +185,7 @@ export default function Style(props) {
 			${wrapperBDShadowHoverMobile}
 		}
 	`;
-   
+
     const elementList = enableContents.map((item) => {
         return `.eb-post-meta-wrapper.${blockId} .eb-post-metadata-${item} {
             ${isContentEnabled(item) && `order: ${enableContents.indexOf(item) + 1}`};
@@ -194,6 +196,11 @@ export default function Style(props) {
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata .eb-post-metadata-label {
             color: ${metaLabelColor};
             ${labelTypoStylesDesktop}
+        }
+        .eb-post-meta-wrapper.${blockId} .eb-post-metadata .eb-post-metadata-icon {
+            color: ${metaIconColor};
+            font-size: ${metaIconSize}px;
+            margin-right: 5px;
         }
     `;
 
@@ -215,13 +222,13 @@ export default function Style(props) {
             ${valueTypoStylesDesktop}
         }
     `;
-    
+
     const metaValueTab = `
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata .eb-post-metadata-value {
             ${valueTypoStylesTab}
         }
     `;
-    
+
     const metaValueMobile = `
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata .eb-post-metadata-value {
             ${valueTypoStylesMobile}

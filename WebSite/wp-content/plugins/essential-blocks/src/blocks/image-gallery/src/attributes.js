@@ -16,10 +16,11 @@ import {
     FILTER_PADDING,
     FILTER_MARGIN,
     FILTER_BORDER_SHADOW,
+    LOADMORE_KEYS,
     LOADMORE_PADDING,
     LOADMORE_BORDER,
 } from "./constants";
-import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY } from "./typoConstants";
+import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY, CAPTION_TYPOGRAPHY } from "./typoConstants";
 import { __ } from "@wordpress/i18n";
 
 import {
@@ -28,6 +29,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    EBButton
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -191,10 +193,6 @@ const attributes = {
         default: false,
     },
 
-    loadmoreBtnText: {
-        type: "string",
-        default: "Load More",
-    },
     // cant delete it as we migrate it to imagesPerPage attribute
     imagesPerPage: {
         type: "number",
@@ -204,18 +202,7 @@ const attributes = {
         type: "number",
         default: 3,
     },
-    loadmoreColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    loadmoreHvColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    loadmoreBGColor: {
-        type: "string",
-        default: "var(--eb-global-button-background-color)",
-    },
+
     enableInfiniteScroll: {
         type: "boolean",
         default: false,
@@ -224,9 +211,6 @@ const attributes = {
     // typography attributes ⬇
     ...generateTypographyAttributes(FILTER_TYPOGRAPHY, {
         fontSize: 13,
-    }),
-    ...generateTypographyAttributes(LOADMORE_TYPOGRAPHY, {
-        fontSize: 16,
     }),
 
     // margin padding attributes ⬇
@@ -325,29 +309,51 @@ const attributes = {
         // noShadow: true,
         // noBorder: true,
     }),
-
-    ...generateBorderShadowAttributes(LOADMORE_BORDER, {
-        bdrDefaults: {
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
+    ...EBButton?.addAttributes(
+        LOADMORE_KEYS,
+        '',
+        true,
+        {
+            key: LOADMORE_TYPOGRAPHY,
+            default: {
+                fontSize: 16
+            }
         },
-        rdsDefaults: {
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
+        true,
+        '',
+        true,
+        {
+            key: LOADMORE_BORDER,
+            default: {
+                bdrDefaults: {
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                },
+                rdsDefaults: {
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    isLinked: false,
+                },
+                // noShadow: true,
+                // noBorder: true,
+            }
         },
-    }),
-    ...generateDimensionsAttributes(LOADMORE_PADDING, {
-        top: 14,
-        bottom: 14,
-        right: 14,
-        left: 14,
-        isLinked: true,
-    }),
-
+        true,
+        {
+            key: LOADMORE_PADDING,
+            default: {
+                top: 14,
+                bottom: 14,
+                right: 14,
+                left: 14,
+                isLinked: true,
+            }
+        }
+    ),
 };
 
 export default attributes;

@@ -318,9 +318,8 @@ const Edit = (props) => {
 
     let postFeaturedImage;
 
-    if (!featuredImage) {
-        postFeaturedImage = __('Seems like you haven\'t added a Featured Image for this post. Please make sure to add a Featured Image and try again.');
-
+    if ( !featuredImage) {
+        postFeaturedImage = __('Seems like you haven\'t added a Featured Image for this post. Please make sure to add a Featured Image and try again.', "essential-blocks");
     } else {
         // We have a Featured image so show a Placeholder if is loading.
         postFeaturedImage = !media ? (
@@ -575,7 +574,7 @@ const Edit = (props) => {
                                                 </>)}
 
 
-                                            {imgSource === 'featured-img' && (
+                                            {imgSource === 'featured-img' && eb_conditional_localize.editor_type !== 'edit-site' && (
                                                 <>
                                                     {!!enableLink ? (
                                                         <a

@@ -76,8 +76,9 @@ import {
     stripHtmlTags,
     faArrowIcons,
     EBIconPicker,
-    InspectorPanel
- } from "@essential-blocks/controls";
+    InspectorPanel,
+    isValidHtml
+} from "@essential-blocks/controls";
 
 function Inspector(props) {
     const { attributes, setAttributes, slider } = props;
@@ -120,12 +121,14 @@ function Inspector(props) {
         arrowPrevIcon,
         arrowNextIcon,
         titleTag,
-        contentTag
+        contentTag,
+        showLightbox,
+        version
     } = attributes;
 
     return (
         <>
-        <InspectorPanel 
+            <InspectorPanel
                 advancedControlProps={{
                     marginPrefix: WRAPPER_MARGIN,
                     paddingPrefix: WRAPPER_PADDING,
@@ -134,492 +137,538 @@ function Inspector(props) {
                 }}>
                 <InspectorPanel.General>
 
-                <InspectorPanel.PanelBody title={__("General", "essential-blocks")}>
-                    <SelectControl
-                        label={__("Slider Type", "essential-blocks")}
-                        value={sliderType}
-                        options={SLIDER_TYPE}
-                        onChange={(value) =>
-                            setAttributes({
-                                sliderType: value,
-                            })
-                        }
-                    />
-
-                    <ToggleControl
-                        label={__("Show Arrows", "essential-blocks")}
-                        checked={arrows}
-                        onChange={() => {
-                            setAttributes({
-                                arrows: !arrows,
-                            });
-                        }}
-                    />
-                    <ToggleControl
-                        label={__("Adaptive Height", "essential-blocks")}
-                        checked={adaptiveHeight}
-                        onChange={() => {
-                            setAttributes({
-                                adaptiveHeight: !adaptiveHeight,
-                            });
-                        }}
-                    />
-
-                    <ToggleControl
-                        label={__("Autoplay", "essential-blocks")}
-                        checked={autoplay}
-                        onChange={() => {
-                            autoplay ? slider.current.slickPlay() : slider.current.slickPause();
-                            setAttributes({
-                                autoplay: !autoplay,
-                            });
-                        }}
-                    />
-
-                    <ToggleControl
-                        label={__("Dots", "essential-blocks")}
-                        checked={dots}
-                        onChange={() => setAttributes({ dots: !dots })}
-                    />
-
-                    <ToggleControl
-                        label={__("Fade", "essential-blocks")}
-                        checked={fade}
-                        onChange={() => setAttributes({ fade: !fade })}
-                    />
-
-                    <ToggleControl
-                        label={__("Infinite", "essential-blocks")}
-                        checked={infinite}
-                        onChange={() =>
-                            setAttributes({
-                                infinite: !infinite,
-                            })
-                        }
-                    />
-
-                    <ToggleControl
-                        label={__("Vertical Slide", "essential-blocks")}
-                        checked={vertical}
-                        onChange={() =>
-                            setAttributes({
-                                vertical: !vertical,
-                            })
-                        }
-                    />
-
-                    <ToggleControl
-                        label={__("Pause on Hover", "essential-blocks")}
-                        checked={pauseOnHover}
-                        onChange={() =>
-                            setAttributes({
-                                pauseOnHover: !pauseOnHover,
-                            })
-                        }
-                    />
-
-                    <ToggleControl
-                        label={__("Custom Height", "essential-blocks")}
-                        checked={isCustomHeight}
-                        onChange={() =>
-                            setAttributes({
-                                isCustomHeight: !isCustomHeight,
-                            })
-                        }
-                    />
-
-                    {isCustomHeight && (
-                        <ResponsiveRangeController
-                            baseLabel={__("Image Height", "essential-blocks")}
-                            controlName={CUSTOM_HEIGHT}
-                            units={HEIGHT_UNIT_TYPES}
-                            min={1}
-                            max={1200}
-                            step={1}
-                        />
-                    )}
-
-                    {!fade && (
-                        <ResponsiveRangeController
-                            baseLabel={__("Slides to Show", "essential-blocks")}
-                            controlName={SLIDE_TO_SHOW}
-                            units={[]}
-                            min={1}
-                            max={8}
-                            step={1}
-                        />
-                    )}
-
-                    {autoplay && (
-                        <RangeControl
-                            label={__("Autoplay Speed", "essential-blocks")}
-                            value={autoplaySpeed}
-                            onChange={(autoplaySpeed) =>
+                    <InspectorPanel.PanelBody title={__("General", "essential-blocks")}>
+                        <SelectControl
+                            label={__("Slider Type", "essential-blocks")}
+                            value={sliderType}
+                            options={SLIDER_TYPE}
+                            onChange={(value) =>
                                 setAttributes({
-                                    autoplaySpeed,
+                                    sliderType: value,
                                 })
                             }
-                            min={0}
-                            max={8000}
                         />
-                    )}
 
-                    <RangeControl
-                        label={__("Animation Speed", "essential-blocks")}
-                        value={speed}
-                        onChange={(speed) => setAttributes({ speed })}
-                        min={0}
-                        max={3000}
-                    />
+                        <ToggleControl
+                            label={__("Show Arrows", "essential-blocks")}
+                            checked={arrows}
+                            onChange={() => {
+                                setAttributes({
+                                    arrows: !arrows,
+                                });
+                            }}
+                        />
+                        <ToggleControl
+                            label={__("Adaptive Height", "essential-blocks")}
+                            checked={adaptiveHeight}
+                            onChange={() => {
+                                setAttributes({
+                                    adaptiveHeight: !adaptiveHeight,
+                                });
+                            }}
+                        />
 
-                    {arrows && (
-                        <>
-                            <EBIconPicker
-                                value={arrowPrevIcon}
-                                onChange={(arrowPrevIcon) =>
+                        <ToggleControl
+                            label={__("Autoplay", "essential-blocks")}
+                            checked={autoplay}
+                            onChange={() => {
+                                autoplay ? slider.current.slickPlay() : slider.current.slickPause();
+                                setAttributes({
+                                    autoplay: !autoplay,
+                                });
+                            }}
+                        />
+
+                        <ToggleControl
+                            label={__("Dots", "essential-blocks")}
+                            checked={dots}
+                            onChange={() => setAttributes({ dots: !dots })}
+                        />
+
+                        <ToggleControl
+                            label={__("Fade", "essential-blocks")}
+                            checked={fade}
+                            onChange={() => setAttributes({ fade: !fade })}
+                        />
+
+                        <ToggleControl
+                            label={__("Infinite", "essential-blocks")}
+                            checked={infinite}
+                            onChange={() =>
+                                setAttributes({
+                                    infinite: !infinite,
+                                })
+                            }
+                        />
+
+                        <ToggleControl
+                            label={__("Vertical Slide", "essential-blocks")}
+                            checked={vertical}
+                            onChange={() =>
+                                setAttributes({
+                                    vertical: !vertical,
+                                })
+                            }
+                        />
+
+                        <ToggleControl
+                            label={__("Pause on Hover", "essential-blocks")}
+                            checked={pauseOnHover}
+                            onChange={() =>
+                                setAttributes({
+                                    pauseOnHover: !pauseOnHover,
+                                })
+                            }
+                        />
+
+                        <ToggleControl
+                            label={__("Custom Height", "essential-blocks")}
+                            checked={isCustomHeight}
+                            onChange={() =>
+                                setAttributes({
+                                    isCustomHeight: !isCustomHeight,
+                                })
+                            }
+                        />
+
+                        {isCustomHeight && (
+                            <ResponsiveRangeController
+                                baseLabel={__("Image Height", "essential-blocks")}
+                                controlName={CUSTOM_HEIGHT}
+                                units={HEIGHT_UNIT_TYPES}
+                                min={1}
+                                max={1200}
+                                step={1}
+                            />
+                        )}
+
+                        {!fade && (
+                            <ResponsiveRangeController
+                                baseLabel={__("Slides to Show", "essential-blocks")}
+                                controlName={SLIDE_TO_SHOW}
+                                units={[]}
+                                min={1}
+                                max={8}
+                                step={1}
+                            />
+                        )}
+
+                        {autoplay && (
+                            <RangeControl
+                                label={__("Autoplay Speed", "essential-blocks")}
+                                value={autoplaySpeed}
+                                onChange={(autoplaySpeed) =>
                                     setAttributes({
-                                        arrowPrevIcon,
+                                        autoplaySpeed,
                                     })
                                 }
-                                title={__("Arrow Prev Icon", "essential-blocks")}
-                                icons={{ fontAwesome: faArrowIcons }}
-                                disableDashicon={true}
+                                min={0}
+                                max={8000}
                             />
-                            <EBIconPicker
-                                value={arrowNextIcon}
-                                onChange={(arrowNextIcon) =>
-                                    setAttributes({
-                                        arrowNextIcon,
-                                    })
-                                }
-                                title={__("Arrow Next Icon", "essential-blocks")}
-                                icons={{ fontAwesome: faArrowIcons }}
-                                disableDashicon={true}
-                            />
-                        </>
-                    )}
-                </InspectorPanel.PanelBody>
+                        )}
 
-                <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")}>
-                    {sliderType === "content" && (
-                        <>
-                            <SelectControl
-                                label={__("Content Styles", "essential-blocks")}
-                                value={sliderContentType}
-                                options={SLIDER_CONTENT_TYPE}
-                                onChange={(value) =>
-                                    setAttributes({
-                                        sliderContentType: value,
-                                    })
-                                }
-                            />
+                        <RangeControl
+                            label={__("Animation Speed", "essential-blocks")}
+                            value={speed}
+                            onChange={(speed) => setAttributes({ speed })}
+                            min={0}
+                            max={3000}
+                        />
 
-                            <SelectControl
-                                label={__("Title Tag", "essential-blocks")}
-                                value={titleTag}
-                                options={TAGS_TYPE}
-                                onChange={(titleTag) => {
-                                    setAttributes({
-                                        titleTag
-                                    });
-                                }}
-                            />
-                            <SelectControl
-                                label={__("Content Tag", "essential-blocks")}
-                                value={contentTag}
-                                options={TAGS_TYPE}
-                                onChange={(contentTag) => {
-                                    setAttributes({
-                                        contentTag,
-                                    });
-                                }}
-                            />
+                        {arrows && (
+                            <>
+                                <EBIconPicker
+                                    value={arrowPrevIcon}
+                                    onChange={(arrowPrevIcon) =>
+                                        setAttributes({
+                                            arrowPrevIcon,
+                                        })
+                                    }
+                                    title={__("Arrow Prev Icon", "essential-blocks")}
+                                    icons={{ fontAwesome: faArrowIcons }}
+                                    disableDashicon={true}
+                                />
+                                <EBIconPicker
+                                    value={arrowNextIcon}
+                                    onChange={(arrowNextIcon) =>
+                                        setAttributes({
+                                            arrowNextIcon,
+                                        })
+                                    }
+                                    title={__("Arrow Next Icon", "essential-blocks")}
+                                    icons={{ fontAwesome: faArrowIcons }}
+                                    disableDashicon={true}
+                                />
+                            </>
+                        )}
 
-                            <Divider />
-                        </>
-                    )}
-                    {images.map((item, index) => {
-                        return (
-                            <InspectorPanel.PanelBody
-                                title={
-                                    item.title && item.title.length > 0
-                                        ? stripHtmlTags(item.title)
-                                        : "Slider " + (index + 1)
-                                }
-                                initialOpen={false}
-                                onToggle={() =>
-                                    setAttributes({
-                                        initialSlide: index,
-                                    })
-                                }
-                                className="eb-slider-item-single-panel"
-                                key={index}
-                            >
-                                {sliderType === "content" && (
-                                    <>
-                                        <TextControl
-                                            label={__("Title Text", "essential-blocks")}
-                                            value={item.title}
-                                            onChange={(text) =>
-                                                handleTitle(text, index, images, setAttributes)
-                                            }
-                                        />
-                                        <TextareaControl
-                                            label={__("Subtitle", "essential-blocks")}
-                                            value={item.subtitle}
-                                            onChange={(text) =>
-                                                handleSubtitle(text, index, images, setAttributes)
-                                            }
-                                        />
-                                        <ToggleControl
-                                            label={__("Show Button", "essential-blocks")}
-                                            checked={item.showButton}
-                                            onChange={() =>
-                                                handleShowButton(
-                                                    !item.showButton,
-                                                    index,
-                                                    images,
-                                                    setAttributes
-                                                )
-                                            }
-                                        />
-                                        {item.showButton && (
-                                            <>
-                                                <TextControl
-                                                    label={__("Button Text", "essential-blocks")}
-                                                    value={item.buttonText}
-                                                    onChange={(text) =>
-                                                        handleButtonText(
-                                                            text,
-                                                            index,
-                                                            images,
-                                                            setAttributes
-                                                        )
-                                                    }
-                                                />
-                                                <TextControl
-                                                    label={__("Button URL", "essential-blocks")}
-                                                    value={item.buttonUrl}
-                                                    onChange={(text) =>
-                                                        handleButtonURL(
-                                                            text,
-                                                            index,
-                                                            images,
-                                                            setAttributes
-                                                        )
-                                                    }
-                                                />
-                                                {item.buttonUrl &&
-                                                    item.buttonUrl.length > 0 &&
-                                                    !item.isValidUrl && (
-                                                        <span className="error">
-                                                            URL is not valid
-                                                        </span>
-                                                    )}
-                                                <ToggleControl
-                                                    label={__(
-                                                        "Open in New Tab",
-                                                        "essential-blocks"
-                                                    )}
-                                                    checked={item.openNewTab}
-                                                    onChange={() =>
-                                                        handleOpenNewTab(
-                                                            !item.openNewTab,
-                                                            index,
-                                                            images,
-                                                            setAttributes
-                                                        )
-                                                    }
-                                                />
+                        {version === 'v2' && (
+                            <>
+                                <Divider />
 
-                                                <ToggleControl
-                                                    label={__(
-                                                        "Add Second Button",
-                                                        "essential-blocks"
-                                                    )}
-                                                    checked={
-                                                        item.showSecondButton
-                                                    }
-                                                    onChange={() =>
-                                                        handleShowSecondButton(
-                                                            !item.showSecondButton,
-                                                            index,
-                                                            images,
-                                                            setAttributes
-                                                        )
-                                                    }
-                                                />
+                                <ToggleControl
+                                    label={__("Show Lightbox", "essential-blocks")}
+                                    checked={showLightbox}
+                                    onChange={() => {
+                                        setAttributes({
+                                            showLightbox: !showLightbox,
+                                        });
+                                    }}
+                                />
+                            </>
+                        )}
 
-                                                {item.showSecondButton && (
-                                                    <>
-                                                        <TextControl
-                                                            label={__(
-                                                                "Second Button Text",
-                                                                "essential-blocks"
-                                                            )}
-                                                            value={
-                                                                item.secondButtonText
-                                                            }
-                                                            onChange={(
-                                                                text
-                                                            ) =>
-                                                                handleSecondButtonText(
-                                                                    text,
-                                                                    index,
-                                                                    images,
-                                                                    setAttributes
-                                                                )
-                                                            }
-                                                        />
-                                                        <TextControl
-                                                            label={__(
-                                                                "Second Button URL",
-                                                                "essential-blocks"
-                                                            )}
-                                                            value={
-                                                                item.secondButtonUrl
-                                                            }
-                                                            onChange={(
-                                                                text
-                                                            ) =>
-                                                                handleSecondButtonURL(
-                                                                    text,
-                                                                    index,
-                                                                    images,
-                                                                    setAttributes
-                                                                )
-                                                            }
-                                                        />
-                                                        {item.secondButtonUrl &&
-                                                            item
-                                                                .secondButtonUrl
-                                                                .length >
-                                                            0 &&
-                                                            !item.isValidUrl && (
-                                                                <span className="error">
-                                                                    URL
-                                                                    is
-                                                                    not
-                                                                    valid
-                                                                </span>
-                                                            )}
-                                                        <ToggleControl
-                                                            label={__(
-                                                                "Open in New Tab",
-                                                                "essential-blocks"
-                                                            )}
-                                                            checked={
-                                                                item.secondButtonOpenNewTab
-                                                            }
-                                                            onChange={() =>
-                                                                handleSecondButtonOpenNewTab(
-                                                                    !item.secondButtonOpenNewTab,
-                                                                    index,
-                                                                    images,
-                                                                    setAttributes
-                                                                )
-                                                            }
-                                                        />
-                                                    </>
-                                                )}
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                                {sliderType === "image" && (
-                                    <>
-                                        <TextControl
-                                            label={__("URL", "essential-blocks")}
-                                            value={item.buttonUrl}
-                                            onChange={(text) =>
-                                                handleButtonURL(text, index, images, setAttributes)
-                                            }
-                                        />
-                                        {item.buttonUrl &&
-                                            item.buttonUrl.length > 0 &&
-                                            !item.isValidUrl && (
-                                                <span className="error">URL is not valid</span>
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")}>
+                        {sliderType === "content" && (
+                            <>
+                                <SelectControl
+                                    label={__("Content Styles", "essential-blocks")}
+                                    value={sliderContentType}
+                                    options={SLIDER_CONTENT_TYPE}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            sliderContentType: value,
+                                        })
+                                    }
+                                />
+
+                                <SelectControl
+                                    label={__("Title Tag", "essential-blocks")}
+                                    value={titleTag}
+                                    options={TAGS_TYPE}
+                                    onChange={(titleTag) => {
+                                        setAttributes({
+                                            titleTag
+                                        });
+                                    }}
+                                />
+                                <SelectControl
+                                    label={__("Content Tag", "essential-blocks")}
+                                    value={contentTag}
+                                    options={TAGS_TYPE}
+                                    onChange={(contentTag) => {
+                                        setAttributes({
+                                            contentTag,
+                                        });
+                                    }}
+                                />
+
+                                <Divider />
+                            </>
+                        )}
+                        {images.map((item, index) => {
+                            return (
+                                <InspectorPanel.PanelBody
+                                    title={
+                                        item.title && item.title.length > 0
+                                            ? stripHtmlTags(item.title)
+                                            : "Slider " + (index + 1)
+                                    }
+                                    initialOpen={false}
+                                    onToggle={() =>
+                                        setAttributes({
+                                            initialSlide: index,
+                                        })
+                                    }
+                                    className="eb-slider-item-single-panel"
+                                    key={index}
+                                >
+                                    {sliderType === "content" && (
+                                        <>
+                                            <TextControl
+                                                label={__("Title Text", "essential-blocks")}
+                                                value={item.title}
+                                                type="text"
+                                                onChange={(text) =>
+                                                    handleTitle(text, index, images, setAttributes)
+                                                }
+                                            />
+                                            {!isValidHtml(item.title) && (
+                                                <PanelRow className="eb-instruction-row">
+                                                    <div className="eb-instruction">
+                                                        <strong>Note:</strong> Invalid HTML Tag.
+                                                    </div>
+                                                </PanelRow>
                                             )}
-                                        <ToggleControl
-                                            label={__("Open in New Tab", "essential-blocks")}
-                                            checked={item.openNewTab}
-                                            onChange={() =>
-                                                handleOpenNewTab(
-                                                    !item.openNewTab,
-                                                    index,
-                                                    images,
-                                                    setAttributes
-                                                )
-                                            }
-                                        />
-                                    </>
-                                )}
-                            </InspectorPanel.PanelBody>
-                        );
-                    })}
-                </InspectorPanel.PanelBody>
+                                            <TextareaControl
+                                                label={__("Subtitle", "essential-blocks")}
+                                                value={item.subtitle}
+                                                onChange={(text) =>
+                                                    handleSubtitle(text, index, images, setAttributes)
+                                                }
+                                            />
+                                            {!isValidHtml(item.subtitle) && (
+                                                <PanelRow className="eb-instruction-row">
+                                                    <div className="eb-instruction">
+                                                        <strong>Note:</strong> Invalid HTML Tag.
+                                                    </div>
+                                                </PanelRow>
+                                            )}
+                                            <ToggleControl
+                                                label={__("Show Button", "essential-blocks")}
+                                                checked={item.showButton}
+                                                onChange={() =>
+                                                    handleShowButton(
+                                                        !item.showButton,
+                                                        index,
+                                                        images,
+                                                        setAttributes
+                                                    )
+                                                }
+                                            />
+                                            {item.showButton && (
+                                                <>
+                                                    <TextControl
+                                                        label={__("Button Text", "essential-blocks")}
+                                                        value={item.buttonText}
+                                                        onChange={(text) =>
+                                                            handleButtonText(
+                                                                text,
+                                                                index,
+                                                                images,
+                                                                setAttributes
+                                                            )
+                                                        }
+                                                    />
+                                                    {!isValidHtml(item.buttonText) && (
+                                                        <PanelRow className="eb-instruction-row">
+                                                            <div className="eb-instruction">
+                                                                <strong>Note:</strong> Invalid HTML Tag.
+                                                            </div>
+                                                        </PanelRow>
+                                                    )}
+                                                    <TextControl
+                                                        label={__("Button URL", "essential-blocks")}
+                                                        value={item.buttonUrl}
+                                                        onChange={(text) =>
+                                                            handleButtonURL(
+                                                                text,
+                                                                index,
+                                                                images,
+                                                                setAttributes
+                                                            )
+                                                        }
+                                                    />
+                                                    {item.buttonUrl &&
+                                                        item.buttonUrl.length > 0 &&
+                                                        !item.isValidUrl && (
+                                                            <span className="error">
+                                                                URL is not valid
+                                                            </span>
+                                                        )}
+                                                    <ToggleControl
+                                                        label={__(
+                                                            "Open in New Tab",
+                                                            "essential-blocks"
+                                                        )}
+                                                        checked={item.openNewTab}
+                                                        onChange={() =>
+                                                            handleOpenNewTab(
+                                                                !item.openNewTab,
+                                                                index,
+                                                                images,
+                                                                setAttributes
+                                                            )
+                                                        }
+                                                    />
+
+                                                    <ToggleControl
+                                                        label={__(
+                                                            "Add Second Button",
+                                                            "essential-blocks"
+                                                        )}
+                                                        checked={
+                                                            item.showSecondButton
+                                                        }
+                                                        onChange={() =>
+                                                            handleShowSecondButton(
+                                                                !item.showSecondButton,
+                                                                index,
+                                                                images,
+                                                                setAttributes
+                                                            )
+                                                        }
+                                                    />
+
+                                                    {item.showSecondButton && (
+                                                        <>
+                                                            <TextControl
+                                                                label={__(
+                                                                    "Second Button Text",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                value={
+                                                                    item.secondButtonText
+                                                                }
+                                                                onChange={(
+                                                                    text
+                                                                ) =>
+                                                                    handleSecondButtonText(
+                                                                        text,
+                                                                        index,
+                                                                        images,
+                                                                        setAttributes
+                                                                    )
+                                                                }
+                                                            />
+                                                            {!isValidHtml(item.secondButtonText) && (
+                                                                <PanelRow className="eb-instruction-row">
+                                                                    <div className="eb-instruction">
+                                                                        <strong>Note:</strong> Invalid HTML Tag.
+                                                                    </div>
+                                                                </PanelRow>
+                                                            )}
+                                                            <TextControl
+                                                                label={__(
+                                                                    "Second Button URL",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                value={
+                                                                    item.secondButtonUrl
+                                                                }
+                                                                onChange={(
+                                                                    text
+                                                                ) =>
+                                                                    handleSecondButtonURL(
+                                                                        text,
+                                                                        index,
+                                                                        images,
+                                                                        setAttributes
+                                                                    )
+                                                                }
+                                                            />
+                                                            {item.secondButtonUrl &&
+                                                                item
+                                                                    .secondButtonUrl
+                                                                    .length >
+                                                                0 &&
+                                                                !item.isValidUrl && (
+                                                                    <span className="error">
+                                                                        URL
+                                                                        is
+                                                                        not
+                                                                        valid
+                                                                    </span>
+                                                                )}
+                                                            <ToggleControl
+                                                                label={__(
+                                                                    "Open in New Tab",
+                                                                    "essential-blocks"
+                                                                )}
+                                                                checked={
+                                                                    item.secondButtonOpenNewTab
+                                                                }
+                                                                onChange={() =>
+                                                                    handleSecondButtonOpenNewTab(
+                                                                        !item.secondButtonOpenNewTab,
+                                                                        index,
+                                                                        images,
+                                                                        setAttributes
+                                                                    )
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                        </>
+                                    )}
+                                    {sliderType === "image" && (
+                                        <>
+                                            <TextControl
+                                                label={__("URL", "essential-blocks")}
+                                                value={item.buttonUrl}
+                                                onChange={(text) =>
+                                                    handleButtonURL(text, index, images, setAttributes)
+                                                }
+                                            />
+                                            {item.buttonUrl &&
+                                                item.buttonUrl.length > 0 &&
+                                                !item.isValidUrl && (
+                                                    <span className="error">URL is not valid</span>
+                                                )}
+                                            <ToggleControl
+                                                label={__("Open in New Tab", "essential-blocks")}
+                                                checked={item.openNewTab}
+                                                onChange={() =>
+                                                    handleOpenNewTab(
+                                                        !item.openNewTab,
+                                                        index,
+                                                        images,
+                                                        setAttributes
+                                                    )
+                                                }
+                                            />
+                                        </>
+                                    )}
+                                </InspectorPanel.PanelBody>
+                            );
+                        })}
+                    </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody title={__("Settings", "essential-blocks")} initialOpen={true}>
-                    <ResponsiveRangeController
-                        baseLabel={__("Slides Gap", "essential-blocks")}
-                        controlName={SLIDES_GAP}
-                        units={[]}
-                        min={0}
-                        max={100}
-                        step={1}
-                    />
-
-                    {sliderType === "content" && sliderContentType === "content-1" && (
-                        <ColorControl
-                            label={__("Overlay Color", "essential-blocks")}
-                            color={overlayColor}
-                            attributeName={'overlayColor'}
+                        <ResponsiveRangeController
+                            baseLabel={__("Slides Gap", "essential-blocks")}
+                            controlName={SLIDES_GAP}
+                            units={[]}
+                            min={0}
+                            max={100}
+                            step={1}
                         />
-                    )}
-                    {sliderType === "content" && (
-                        <>
-                            <PanelRow>Text Align</PanelRow>
-                            <ButtonGroup>
-                                {TEXT_ALIGN.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={textAlign === item.value}
-                                        isSecondary={textAlign !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                textAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
 
-                            {sliderContentType != "content-2" && (
-                                <>
-                                    <PanelRow>Vertical Align</PanelRow>
-                                    <ButtonGroup>
-                                        {VERTICAL_ALIGN.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={verticalAlign === item.value}
-                                                isSecondary={verticalAlign !== item.value}
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        verticalAlign: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </>
-                            )}
-                        </>
-                    )}
+                        {sliderType === "content" && sliderContentType === "content-1" && (
+                            <ColorControl
+                                label={__("Overlay Color", "essential-blocks")}
+                                color={overlayColor}
+                                attributeName={'overlayColor'}
+                            />
+                        )}
+                        {sliderType === "content" && (
+                            <>
+                                <PanelRow>Text Align</PanelRow>
+                                <ButtonGroup>
+                                    {TEXT_ALIGN.map((item, index) => (
+                                        <Button
+                                            key={index}
+                                            isPrimary={textAlign === item.value}
+                                            isSecondary={textAlign !== item.value}
+                                            onClick={() =>
+                                                setAttributes({
+                                                    textAlign: item.value,
+                                                })
+                                            }
+                                        >
+                                            {item.label}
+                                        </Button>
+                                    ))}
+                                </ButtonGroup>
+
+                                {sliderContentType != "content-2" && (
+                                    <>
+                                        <PanelRow>Vertical Align</PanelRow>
+                                        <ButtonGroup>
+                                            {VERTICAL_ALIGN.map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isPrimary={verticalAlign === item.value}
+                                                    isSecondary={verticalAlign !== item.value}
+                                                    onClick={() =>
+                                                        setAttributes({
+                                                            verticalAlign: item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
+                                        </ButtonGroup>
+                                    </>
+                                )}
+                            </>
+                        )}
                     </InspectorPanel.PanelBody>
 
                     {sliderType === "content" && (
@@ -881,54 +930,54 @@ function Inspector(props) {
                     )}
 
                     {dots && (
-                            <InspectorPanel.PanelBody title={__("Dot", "essential-blocks")} initialOpen={false}>
-                                <ColorControl
-                                    label={__("Color", "essential-blocks")}
-                                    color={dotsColor}
-                                    attributeName={'dotsColor'}
-                                />
-                                <ColorControl
-                                    label={__("Active Color", "essential-blocks")}
-                                    color={dotsActiveColor}
-                                    attributeName={'dotsActiveColor'}
-                                />
+                        <InspectorPanel.PanelBody title={__("Dot", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={dotsColor}
+                                attributeName={'dotsColor'}
+                            />
+                            <ColorControl
+                                label={__("Active Color", "essential-blocks")}
+                                color={dotsActiveColor}
+                                attributeName={'dotsActiveColor'}
+                            />
 
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Dots Size",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={DOTS_SIZE}
-                                    units={FONT_UNIT_TYPES}
-                                    min={1}
-                                    max={50}
-                                    step={1}
-                                />
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Dots Gap",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={DOTS_GAP}
-                                    units={UNIT_TYPES}
-                                    min={0}
-                                    max={50}
-                                    step={1}
-                                />
-                                <ResponsiveRangeController
-                                    baseLabel={__("Dots Position", "essential-blocks")}
-                                    controlName={DOTS_POSITION}
-                                    units={UNIT_TYPES}
-                                    min={-50}
-                                    max={100}
-                                    step={1}
-                                />
-                            </InspectorPanel.PanelBody>
+                            <ResponsiveRangeController
+                                baseLabel={__(
+                                    "Dots Size",
+                                    "essential-blocks"
+                                )}
+                                controlName={DOTS_SIZE}
+                                units={FONT_UNIT_TYPES}
+                                min={1}
+                                max={50}
+                                step={1}
+                            />
+                            <ResponsiveRangeController
+                                baseLabel={__(
+                                    "Dots Gap",
+                                    "essential-blocks"
+                                )}
+                                controlName={DOTS_GAP}
+                                units={UNIT_TYPES}
+                                min={0}
+                                max={50}
+                                step={1}
+                            />
+                            <ResponsiveRangeController
+                                baseLabel={__("Dots Position", "essential-blocks")}
+                                controlName={DOTS_POSITION}
+                                units={UNIT_TYPES}
+                                min={-50}
+                                max={100}
+                                step={1}
+                            />
+                        </InspectorPanel.PanelBody>
                     )}
                 </InspectorPanel.Style>
             </InspectorPanel>
         </>
-        
+
     );
 }
 

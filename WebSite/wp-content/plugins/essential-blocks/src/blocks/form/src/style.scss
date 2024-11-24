@@ -251,7 +251,6 @@
 		}
 
 		label {
-			font-size: 15px;
 			line-height: 1.2em;
 			display: block;
 			margin-bottom: 5px;
@@ -259,7 +258,6 @@
 		}
 
 		input:not([type="radio"]):not([type="checkbox"]) {
-			// font-size: 14px;
 			line-height: 1.2em;
 			min-height: 40px;
 			height: auto;
@@ -272,7 +270,6 @@
 		// Textarea
 		textarea {
 			line-height: 1.2rem;
-			font-size: 14px;
 			min-height: 40px;
 			padding: 15px;
 			border-radius: 4px;
@@ -398,7 +395,6 @@
 
 		// select
 		select {
-			font-size: 14px;
 			line-height: 1.5em;
 			width: 100%;
 			min-height: 40px;
@@ -436,7 +432,6 @@
 			.eb-form-validation {
 				display: block;
 				color: #ca3521;
-				font-size: 14px;
 				font-style: normal;
 				font-weight: 400;
 				line-height: 20px;

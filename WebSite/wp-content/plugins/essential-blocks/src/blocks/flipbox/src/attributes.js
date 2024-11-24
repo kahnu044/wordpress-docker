@@ -43,7 +43,7 @@ import {
     generateResponsiveRangeAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import { flipboxFrontWrapper, flipboxBackWrapper } from "./constants/backgroundsConstants";
 

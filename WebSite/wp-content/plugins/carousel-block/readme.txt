@@ -1,11 +1,11 @@
 === Carousel Slider Block for Gutenberg ===
 Contributors: virgildia
 Donate link: http://virgiliudiaconu.com/
-Tags: carousel, slide, gutenberg, slideshow, block
+Tags: carousel, slide, gutenberg, slideshow, slider
 Requires at least: 6.1
-Tested up to: 6.5.2
+Tested up to: 6.6.2
 Requires PHP: 7.0
-Stable tag: 1.0.14
+Stable tag: 1.0.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,3 +129,9 @@ Reverted Slick init to working solution - outside the WP block build process.
 
 = 1.0.14 = 
 Update CSS for image block centering. 
+
+= 1.0.15 = 
+Button block appender fix.
+
+= 1.0.16 = 
+Fix slider init.

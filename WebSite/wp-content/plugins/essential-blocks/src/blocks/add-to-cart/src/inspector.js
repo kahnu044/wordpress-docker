@@ -26,7 +26,11 @@ import {
     VARIABLE_FIELD_BORDER,
     VARIABLE_FIELD_PADDING,
     PRICE_TYPES,
-    PRODUCT_TYPES
+    PRODUCT_TYPES,
+    DISPLAY_TYPES,
+    sizeUnitTypes,
+    btnWidth,
+    quantityWidth
 } from "./constants/constants";
 import {
     btnTypo,
@@ -39,6 +43,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 import {
     ResponsiveDimensionsControl,
+    ResponsiveRangeController,
     TypographyDropdown,
     ColorControl,
     InspectorPanel,
@@ -53,8 +58,12 @@ function Inspector(props) {
         cartBtnText,
         quantityColor,
         quantityBGColor,
+        quantityActiveColor,
+        quantityActiveBGColor,
         btnColor,
         btnBGColor,
+        btnDisableColor,
+        btnDisableBGColor,
         hoverBtnBGColor,
         hoverBtnColor,
         variableLabelColor,
@@ -65,6 +74,10 @@ function Inspector(props) {
         regularPriceColor,
         salePriceColor,
         productType,
+        displayType,
+        buttonSwitcher,
+        quantitySwitcher,
+        quantityActiveBorderColor
     } = attributes;
 
     return (
@@ -79,7 +92,7 @@ function Inspector(props) {
                 <InspectorPanel.PanelBody title={__("Settings", "essential-blocks")} initialOpen={true}>
                     <SelectControl
                         label={__(
-                            "Product Type (Preview)",
+                            "Choose Product Type (Only for Preview)",
                             "essential-blocks"
                         )}
                         value={productType}
@@ -89,6 +102,10 @@ function Inspector(props) {
                                 productType: type,
                             });
                         }}
+                        help={__(
+                            "Note: This option is only to see how different types of products would look in your Single Product page.",
+                            "essential-blocks"
+                        )}
                     />
                     <ToggleControl
                         label={__("Show Quantity")}
@@ -99,6 +116,21 @@ function Inspector(props) {
                             });
                         }}
                     />
+                    {showQuantity && (
+                        <SelectControl
+                            label={__(
+                                "Display Type",
+                                "essential-blocks"
+                            )}
+                            value={displayType}
+                            options={DISPLAY_TYPES}
+                            onChange={(type) => {
+                                setAttributes({
+                                    displayType: type,
+                                });
+                            }}
+                        />
+                    )}
                     <DynamicInputControl
                         label={__("Button Text", "essential-blocks")}
                         attrName="cartBtnText"
@@ -118,34 +150,28 @@ function Inspector(props) {
                             title={__("Grouped Product", "essential-blocks")}
                             initialOpen={true}
                         >
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__(
-                                        "Product Label",
+                            <InspectorPanel.PanelBody
+                                title={__("Product Label", "essential-blocks")}
+                                initialOpen={true}
+                            >
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
                                         "essential-blocks"
                                     )}
-                                </h3>
-                            </BaseControl>
-                            <Divider />
-
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    groupedNameTypo
-                                }
-                            />
-
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={groupedNameColor}
-                                attributeName={'groupedNameColor'}
-                            />
+                                    typographyPrefixConstant={
+                                        groupedNameTypo
+                                    }
+                                />
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={groupedNameColor}
+                                    attributeName={'groupedNameColor'}
+                                />
+                            </InspectorPanel.PanelBody>
 
                             <BaseControl >
                                 <ButtonGroup>
@@ -217,76 +243,67 @@ function Inspector(props) {
                             title={__("Variable Product", "essential-blocks")}
                             initialOpen={true}
                         >
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__(
-                                        "Label",
+                            <InspectorPanel.PanelBody
+                                title={__("Label", "essential-blocks")}
+                                initialOpen={true}
+                            >
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
                                         "essential-blocks"
                                     )}
-                                </h3>
-                            </BaseControl>
-                            <Divider />
+                                    typographyPrefixConstant={
+                                        variableLabelTypo
+                                    }
+                                />
 
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    variableLabelTypo
-                                }
-                            />
-
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={variableLabelColor}
-                                attributeName={'variableLabelColor'}
-                            />
-
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__(
-                                        "Field",
+                                <ColorControl
+                                    label={__(
+                                        "Color",
                                         "essential-blocks"
                                     )}
-                                </h3>
-                            </BaseControl>
-                            <Divider />
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    variableFieldTypo
-                                }
-                            />
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={variableFieldColor}
-                                attributeName={'variableFieldColor'}
-                            />
-                            <ColorControl
-                                label={__(
-                                    "Background",
-                                    "essential-blocks"
-                                )}
-                                color={variableFieldBgColor}
-                                attributeName={'variableFieldBgColor'}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={VARIABLE_FIELD_PADDING}
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
+                                    color={variableLabelColor}
+                                    attributeName={'variableLabelColor'}
+                                />
+                            </InspectorPanel.PanelBody>
+
+                            <InspectorPanel.PanelBody
+                                title={__("Variable Product", "essential-blocks")}
+                                initialOpen={true}
+                            >
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        variableFieldTypo
+                                    }
+                                />
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={variableFieldColor}
+                                    attributeName={'variableFieldColor'}
+                                />
+                                <ColorControl
+                                    label={__(
+                                        "Background",
+                                        "essential-blocks"
+                                    )}
+                                    color={variableFieldBgColor}
+                                    attributeName={'variableFieldBgColor'}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={VARIABLE_FIELD_PADDING}
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                            </InspectorPanel.PanelBody>
 
                             <BaseControl>
                                 <h3 className="eb-control-title">
@@ -304,119 +321,305 @@ function Inspector(props) {
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody
                     title={__("Quantity", "essential-blocks")}
-                    initialOpen={true}
+                    initialOpen={false}
                 >
-                    <>
-                        <TypographyDropdown
-                            baseLabel={__(
-                                "Typography",
-                                "essential-blocks"
+                    <ResponsiveRangeController
+                        baseLabel={__(
+                            "Width",
+                            "essential-blocks"
+                        )}
+                        controlName={quantityWidth}
+                        units={
+                            sizeUnitTypes
+                        }
+                        min={0}
+                        max={500}
+                        step={1}
+                    />
+
+                    <TypographyDropdown
+                        baseLabel={__(
+                            "Typography",
+                            "essential-blocks"
+                        )}
+                        typographyPrefixConstant={
+                            quantityTypo
+                        }
+                    />
+
+                    <BaseControl>
+                        <ButtonGroup>
+                            {[
+                                {
+                                    label: __(
+                                        "Normal",
+                                        "essential-blocks"
+                                    ),
+                                    value: "normal",
+                                },
+                                {
+                                    label: __(
+                                        "Active",
+                                        "essential-blocks"
+                                    ),
+                                    value: "active",
+                                },
+                            ].map(
+                                (
+                                    { value, label },
+                                    index
+                                ) => (
+                                    <Button
+                                        key={index}
+                                        // isLarge
+                                        isPrimary={
+                                            quantitySwitcher ===
+                                            value
+                                        }
+                                        isSecondary={
+                                            quantitySwitcher !==
+                                            value
+                                        }
+                                        onClick={() =>
+                                            setAttributes({
+                                                quantitySwitcher: value
+                                            })
+                                        }
+                                    >
+                                        {label}
+                                    </Button>
+                                )
                             )}
-                            typographyPrefixConstant={
-                                quantityTypo
-                            }
-                        />
-                        <ColorControl
-                            label={__(
-                                "Color",
-                                "essential-blocks"
-                            )}
-                            color={quantityColor}
-                            attributeName={'quantityColor'}
-                        />
-                        <ColorControl
-                            label={__(
-                                "Background Color",
-                                "essential-blocks"
-                            )}
-                            color={quantityBGColor}
-                            attributeName={'quantityBGColor'}
-                        />
-                        <ResponsiveDimensionsControl
-                            controlName={QUANTITY_PADDING}
-                            baseLabel={__(
-                                "Padding",
-                                "essential-blocks"
-                            )}
-                        />
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__(
-                                    "Border",
+                        </ButtonGroup>
+                    </BaseControl>
+
+                    {quantitySwitcher == 'normal' && (
+                        <>
+                            <ColorControl
+                                label={__(
+                                    "Color",
                                     "essential-blocks"
                                 )}
-                            </h3>
-                        </BaseControl>
-                        <BorderShadowControl
-                            controlName={QUANTITY_BORDER}
-                        />
-                    </>
+                                color={quantityColor}
+                                attributeName={'quantityColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Background Color",
+                                    "essential-blocks"
+                                )}
+                                color={quantityBGColor}
+                                attributeName={'quantityBGColor'}
+                            />
+                        </>
+                    )}
+                    {quantitySwitcher == 'active' && (
+                        <>
+                            <ColorControl
+                                label={__(
+                                    "Color",
+                                    "essential-blocks"
+                                )}
+                                color={quantityActiveColor}
+                                attributeName={'quantityActiveColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Background Color",
+                                    "essential-blocks"
+                                )}
+                                color={quantityActiveBGColor}
+                                attributeName={'quantityActiveBGColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Border Color",
+                                    "essential-blocks"
+                                )}
+                                color={quantityActiveBorderColor}
+                                attributeName={'quantityActiveBorderColor'}
+                            />
+                        </>
+                    )}
+
+                    <ResponsiveDimensionsControl
+                        controlName={QUANTITY_PADDING}
+                        baseLabel={__(
+                            "Padding",
+                            "essential-blocks"
+                        )}
+                    />
+                    <BaseControl>
+                        <h3 className="eb-control-title">
+                            {__(
+                                "Border",
+                                "essential-blocks"
+                            )}
+                        </h3>
+                    </BaseControl>
+                    <BorderShadowControl
+                        controlName={QUANTITY_BORDER}
+                    />
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody
-                    title={__("Button", "essential-blocks")}
-                    initialOpen={true}
+                    title={__("Add to Cart Button", "essential-blocks")}
+                    initialOpen={false}
                 >
-                    <>
-                        <TypographyDropdown
-                            baseLabel={__(
-                                "Typography",
-                                "essential-blocks"
+                    <ResponsiveRangeController
+                        baseLabel={__(
+                            "Width",
+                            "essential-blocks"
+                        )}
+                        controlName={btnWidth}
+                        units={
+                            sizeUnitTypes
+                        }
+                        min={0}
+                        max={500}
+                        step={1}
+                    />
+                    <TypographyDropdown
+                        baseLabel={__(
+                            "Typography",
+                            "essential-blocks"
+                        )}
+                        typographyPrefixConstant={
+                            btnTypo
+                        }
+                    />
+
+                    <BaseControl>
+                        <ButtonGroup>
+                            {[
+                                {
+                                    label: __(
+                                        "Normal",
+                                        "essential-blocks"
+                                    ),
+                                    value: "normal",
+                                },
+                                {
+                                    label: __(
+                                        "Hover",
+                                        "essential-blocks"
+                                    ),
+                                    value: "hover",
+                                },
+                                {
+                                    label: __(
+                                        "Disable",
+                                        "essential-blocks"
+                                    ),
+                                    value: "disable",
+                                },
+                            ].map(
+                                (
+                                    { value, label },
+                                    index
+                                ) => (
+                                    <Button
+                                        key={index}
+                                        // isLarge
+                                        isPrimary={
+                                            buttonSwitcher ===
+                                            value
+                                        }
+                                        isSecondary={
+                                            buttonSwitcher !==
+                                            value
+                                        }
+                                        onClick={() =>
+                                            setAttributes({
+                                                buttonSwitcher: value
+                                            })
+                                        }
+                                    >
+                                        {label}
+                                    </Button>
+                                )
                             )}
-                            typographyPrefixConstant={
-                                btnTypo
-                            }
-                        />
-                        <ColorControl
-                            label={__(
-                                "Color",
-                                "essential-blocks"
-                            )}
-                            color={btnColor}
-                            attributeName={'btnColor'}
-                        />
-                        <ColorControl
-                            label={__(
-                                "Background Color",
-                                "essential-blocks"
-                            )}
-                            color={btnBGColor}
-                            attributeName={'btnBGColor'}
-                        />
-                        <ColorControl
-                            label={__(
-                                "Hover Color",
-                                "essential-blocks"
-                            )}
-                            color={hoverBtnColor}
-                            attributeName={'hoverBtnColor'}
-                        />
-                        <ColorControl
-                            label={__(
-                                "Background Hover Color",
-                                "essential-blocks"
-                            )}
-                            color={hoverBtnBGColor}
-                            attributeName={'hoverBtnBGColor'}
-                        />
-                        <ResponsiveDimensionsControl
-                            controlName={BUTTON_PADDING}
-                            baseLabel={__(
-                                "Padding",
-                                "essential-blocks"
-                            )}
-                        />
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__(
-                                    "Border",
+                        </ButtonGroup>
+                    </BaseControl>
+
+                    {buttonSwitcher === "normal" && (
+                        <>
+                            <ColorControl
+                                label={__(
+                                    "Color",
                                     "essential-blocks"
                                 )}
-                            </h3>
-                        </BaseControl>
-                        <BorderShadowControl
-                            controlName={BUTTON_BORDER}
-                        />
-                    </>
+                                color={btnColor}
+                                attributeName={'btnColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Background Color",
+                                    "essential-blocks"
+                                )}
+                                color={btnBGColor}
+                                attributeName={'btnBGColor'}
+                            />
+                        </>
+                    )}
+                    {buttonSwitcher === "hover" && (
+                        <>
+                            <ColorControl
+                                label={__(
+                                    "Hover Color",
+                                    "essential-blocks"
+                                )}
+                                color={hoverBtnColor}
+                                attributeName={'hoverBtnColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Background Hover Color",
+                                    "essential-blocks"
+                                )}
+                                color={hoverBtnBGColor}
+                                attributeName={'hoverBtnBGColor'}
+                            />
+                        </>
+                    )}
+                    {buttonSwitcher === "disable" && (
+                        <>
+                            <ColorControl
+                                label={__(
+                                    "Color",
+                                    "essential-blocks"
+                                )}
+                                color={btnDisableColor}
+                                attributeName={'btnDisableColor'}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Background Color",
+                                    "essential-blocks"
+                                )}
+                                color={btnDisableBGColor}
+                                attributeName={'btnDisableBGColor'}
+                            />
+                        </>
+                    )}
+
+                    <ResponsiveDimensionsControl
+                        controlName={BUTTON_PADDING}
+                        baseLabel={__(
+                            "Padding",
+                            "essential-blocks"
+                        )}
+                    />
+                    <BaseControl>
+                        <h3 className="eb-control-title">
+                            {__(
+                                "Border",
+                                "essential-blocks"
+                            )}
+                        </h3>
+                    </BaseControl>
+                    <BorderShadowControl
+                        controlName={BUTTON_BORDER}
+                    />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.Style>
         </InspectorPanel >

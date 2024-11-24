@@ -29,16 +29,16 @@ import {
     handleTitle,
     handleSubtitle,
     handleButtonText,
-    handleSecondButtonText
+    handleSecondButtonText,
+    sanitizeHtml
 } from "./helpers";
 import {
     generateResponsiveRangeStyles,
-    isValidHtml,
     EBDisplayIcon,
     sanitizeURL,
     BlockProps,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 /**
  * External dependencies
  */
@@ -96,8 +96,12 @@ const Edit = (props) => {
         if (titleTag == undefined) { setAttributes({ titleTag: 'h2' }) }
         if (contentTag == undefined) { setAttributes({ contentTag: 'p' }) }
 
-        if (!version) {
-            setAttributes({ version: 'v2' });
+        if (!version || version == 'v2') {
+            setAttributes({ version: 'v3' });
+        }
+
+        if (parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")) == 1) {
+            setAttributes({ adaptiveHeight: true });
         }
     }, []);
 
@@ -383,13 +387,8 @@ const Edit = (props) => {
                                                         <RichText
                                                             tagName={titleTag}
                                                             className="eb-slider-title"
-                                                            value={
-                                                                isValidHtml(
-                                                                    image.title
-                                                                )
-                                                                    ? image.title
-                                                                    : "Invalid HTML Tag"
-                                                            }
+                                                            value={sanitizeHtml(image.title)}
+                                                            // value={image.title}
                                                             allowedFormats={[
                                                                 "core/bold",
                                                                 "core/italic",
@@ -414,13 +413,7 @@ const Edit = (props) => {
                                                         <RichText
                                                             tagName={contentTag}
                                                             className="eb-slider-subtitle"
-                                                            value={
-                                                                isValidHtml(
-                                                                    image.subtitle
-                                                                )
-                                                                    ? image.subtitle
-                                                                    : "Invalid HTML Tag"
-                                                            }
+                                                            value={sanitizeHtml(image.subtitle)}
                                                             allowedFormats={[
                                                                 "core/bold",
                                                                 "core/italic",
@@ -462,13 +455,7 @@ const Edit = (props) => {
                                                                 rel="noopener"
                                                             >
                                                                 <RichText
-                                                                    value={
-                                                                        isValidHtml(
-                                                                            image.buttonText
-                                                                        )
-                                                                            ? image.buttonText
-                                                                            : "Invalid HTML Tag"
-                                                                    }
+                                                                    value={sanitizeHtml(image.buttonText)}
                                                                     allowedFormats={[
                                                                         "core/bold",
                                                                         "core/italic",
@@ -510,13 +497,7 @@ const Edit = (props) => {
                                                                 rel="noopener"
                                                             >
                                                                 <RichText
-                                                                    value={
-                                                                        isValidHtml(
-                                                                            image.secondButtonText
-                                                                        )
-                                                                            ? image.secondButtonText
-                                                                            : "Invalid HTML Tag"
-                                                                    }
+                                                                    value={sanitizeHtml(image.secondButtonText)}
                                                                     allowedFormats={[
                                                                         "core/bold",
                                                                         "core/italic",

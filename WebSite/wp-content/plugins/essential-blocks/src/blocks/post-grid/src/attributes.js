@@ -53,7 +53,7 @@ import {
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
     generateResponsiveAlignAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     EBPG_TITLE_TYPOGRAPHY,
@@ -483,6 +483,19 @@ const attributes = {
     defaultFilter: {
         type: "string"
     },
+    showFallbackImg: {
+        type: "boolean",
+        default: false,
+    },
+    fallbackImgUrl: {
+        type: "string",
+    },
+    fallbackImgId: {
+        type: "string",
+    },
+    fallbackImgAlt: {
+        type: "string",
+    },
     ...generateDimensionsAttributes(SEARCH_CONTENT_PADDING, {
         top: 0,
         bottom: 0,
@@ -661,22 +674,22 @@ const attributes = {
     }),
 
     // typography attributes ⬇
-    ...generateTypographyAttributes(EBPG_TITLE_TYPOGRAPHY,{
+    ...generateTypographyAttributes(EBPG_TITLE_TYPOGRAPHY, {
         fontSize: 18,
     }),
-    ...generateTypographyAttributes(EBPG_CONTENT_TYPOGRAPHY,{
+    ...generateTypographyAttributes(EBPG_CONTENT_TYPOGRAPHY, {
         fontSize: 15,
     }),
-    ...generateTypographyAttributes(EBPG_READMORE_TYPOGRAPHY,{
+    ...generateTypographyAttributes(EBPG_READMORE_TYPOGRAPHY, {
         fontSize: 13,
     }),
-    ...generateTypographyAttributes(EBPG_META_TYPOGRAPHY,{
+    ...generateTypographyAttributes(EBPG_META_TYPOGRAPHY, {
         fontSize: 13,
     }),
-    ...generateTypographyAttributes(EBPG_LOAD_MORE_TYPOGRAPHY,{
+    ...generateTypographyAttributes(EBPG_LOAD_MORE_TYPOGRAPHY, {
         fontSize: 14,
     }),
-    ...generateTypographyAttributes(FILTER_ITEM_TYPOGRAPHY,{
+    ...generateTypographyAttributes(FILTER_ITEM_TYPOGRAPHY, {
         fontSize: 16,
     }),
 

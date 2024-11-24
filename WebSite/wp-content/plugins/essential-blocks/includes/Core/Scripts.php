@@ -39,11 +39,14 @@ class Scripts
 
         add_action( 'enqueue_block_editor_assets', [ $this, 'block_editor_assets' ] );
         add_action( 'enqueue_block_editor_assets', [ $this, 'frontend_backend_assets' ] );
-        add_action( 'wp_enqueue_scripts', [ $this, 'frontend_backend_assets' ] );
-        add_filter( 'eb_generated_css_frontend_deps', function ( $deps ) {
-            return array_merge( $deps, [ 'essential-blocks-frontend-style' ] );
-        } );
+        add_action( 'wp_enqueue_scripts', [ $this, 'frontend_backend_assets' ], 20 );
         add_action( 'init', [ $this, 'localize_enqueue_scripts' ] );
+
+        //Add Global frontend inline styles to frontend styles via hook
+        add_action( 'eb_frontend_assets', function () {
+            $global_styles_css = self::global_styles();
+            wp_add_inline_style( 'essential-blocks-frontend-style', $global_styles_css );
+        } );
     }
 
     public function block_editor_assets()
@@ -59,6 +62,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'fslightbox-js', 'js/fslightbox.min.js' );
         wpdev_essential_blocks()->assets->register( 'masonry', 'js/masonry.min.js' );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
+        wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
         wpdev_essential_blocks()->assets->register( 'patterns', 'js/eb-patterns.js' );
         wpdev_essential_blocks()->assets->register( 'editor-breakpoint', 'js/eb-editor-breakpoint.js' );
         wpdev_essential_blocks()->assets->register(
@@ -82,6 +86,7 @@ class Scripts
             'essential-blocks-masonry',
             'essential-blocks-typedjs',
             'essential-blocks-slickjs',
+            'essential-blocks-slick-lightbox-js',
             'essential-blocks-patterns',
             'essential-blocks-store',
             'essential-blocks-editor-breakpoint'
@@ -110,18 +115,17 @@ class Scripts
 
         $editor_styles_deps = [
             'essential-blocks-slick-style',
+            'essential-blocks-slick-lightbox-style',
             'essential-blocks-fslightbox-style',
             'essential-blocks-twenty-twenty-style-image-comparison',
             'essential-blocks-hover-effects-style',
             'essential-blocks-hover-css',
-            'essential-blocks-frontend-style',
+            'essential-blocks-editor-style',
             'essential-blocks-block-common',
             'essential-blocks-common-style'
          ];
 
         if ( $this->isEnableFontAwesome == 'true' ) {
-            $editor_styles_deps[  ] = 'essential-blocks-fontpicker-material-theme';
-            $editor_styles_deps[  ] = 'essential-blocks-fontpicker-default-theme';
             $editor_styles_deps[  ] = 'essential-blocks-fontawesome';
         }
 
@@ -137,6 +141,8 @@ class Scripts
 
         // register styles
         wpdev_essential_blocks()->assets->register( 'editor-css', 'admin/controls/controls.css', $editor_styles_deps );
+        $global_styles_css = self::global_styles();
+        wp_add_inline_style( 'essential-blocks-editor-css', $global_styles_css );
     }
 
     /**
@@ -151,26 +157,22 @@ class Scripts
 
         wpdev_essential_blocks()->assets->register( 'babel-bundle', 'vendors/js/bundle.babel.js' );
         wpdev_essential_blocks()->assets->register( 'vendor-bundle', 'vendors/js/bundles.js', [ 'essential-blocks-babel-bundle' ] );
+        wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
+        wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
 
         //Register block combined styles
-        $css_file                        = 'eb-style' . DIRECTORY_SEPARATOR . 'frontend' . DIRECTORY_SEPARATOR . 'style.css';
-        $css_with_custom_breakpoint_path = wp_upload_dir()[ 'basedir' ] . DIRECTORY_SEPARATOR . $css_file;
-        $frontend_css_file               = 'admin/editor/editor.css';
-        if ( file_exists( $css_with_custom_breakpoint_path ) ) {
-            $frontend_css_file = wp_upload_dir()[ 'baseurl' ] . '/eb-style/frontend/style.css';
-        }
-        wpdev_essential_blocks()->assets->register( 'frontend-style', $frontend_css_file );
+        $editor_css_file = 'admin/editor/editor.css';
+        wpdev_essential_blocks()->assets->register( 'editor-style', $editor_css_file );
 
         if ( $this->isEnableFontAwesome == 'true' ) {
             wpdev_essential_blocks()->assets->register( 'fontawesome', 'fontawesome/css/all.min.css' );
-            wpdev_essential_blocks()->assets->register( 'fontpicker-default-theme', 'css/fonticonpicker.base-theme.react.css' );
-            wpdev_essential_blocks()->assets->register( 'fontpicker-material-theme', 'css/fonticonpicker.material-theme.react.css' );
         }
         wpdev_essential_blocks()->assets->register( 'hover-css', 'css/hover-min.css' );
         wpdev_essential_blocks()->assets->register( 'hover-effects-style', 'css/hover-effects.css' );
         wpdev_essential_blocks()->assets->register( 'twenty-twenty-style-image-comparison', 'css/twentytwenty.css' );
         wpdev_essential_blocks()->assets->register( 'fslightbox-style', 'css/fslightbox.min.css' );
         wpdev_essential_blocks()->assets->register( 'slick-style', 'css/slick.css' );
+        wpdev_essential_blocks()->assets->register( 'slick-lightbox-style', 'css/slick-lightbox.css' );
         wpdev_essential_blocks()->assets->register( 'block-common', 'css/block-common.css' );
         wpdev_essential_blocks()->assets->register( 'common-style', 'css/eb-common.css' );
         wpdev_essential_blocks()->assets->register( 'typedjs', 'js/typed.min.js' );
@@ -182,12 +184,9 @@ class Scripts
         // dashicon
         wp_enqueue_style( 'dashicons' );
         wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js' );
-
-        //Run Global frontend styles
-        self::global_frontend_styles();
     }
 
-    private function global_frontend_styles()
+    public function global_styles()
     {
         //Get global values from wp_option
         $global_settings = wp_unslash( get_option( 'eb_global_styles' ) );
@@ -266,11 +265,13 @@ class Scripts
             {$custom_typography_css__var}
             {$global_typography_css}
         ";
-        wp_add_inline_style( 'essential-blocks-frontend-style', $custom_css );
 
+        //Load Google fonts
         if ( is_array( $google_fonts ) && ! empty( $google_fonts ) ) {
             Helper::load_google_font( $google_fonts, 'eb-global-fonts' );
         }
+
+        return $custom_css;
     }
 
     private function get_google_fonts( $fontArr )

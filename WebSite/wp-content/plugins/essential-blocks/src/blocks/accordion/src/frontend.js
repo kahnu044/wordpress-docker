@@ -17,6 +17,30 @@ document.addEventListener("DOMContentLoaded", function (event) {
             titleNodes.push(item.querySelector(".eb-accordion-title-wrapper"));
         });
 
+        let accordionType = accordion.getAttribute("data-accordion-type");
+        let hashTag = window.location.hash.substr(1);
+        let hashTagExists = false;
+
+        // Take action based on accordion type
+        accordionType === "toggle"
+            ? setToggleAction(titleNodes)
+            : setAccordionAction(titleNodes);
+
+        window.addEventListener('hashchange', () => {
+            hashTag = window.location.hash.substr(1);
+            titleNodes.forEach(function (item) {
+                let id = item.parentElement.getAttribute('id');
+                if (id === hashTag) {
+                    hashTagExists = true;
+                    if( accordionType === "toggle") {
+                        onToggleTabClick.call(item);
+                    } else {
+                        onAccordionTabClick.call(item);
+                    }
+                }
+            });
+        });
+
         titleNodes.forEach(function (item, index) {
             let uniqueId = Math.random().toString(36).substr(2, 7);
             item.setAttribute("id", "eb-accordion-header-" + uniqueId);
@@ -73,7 +97,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const testEl = document.createElement("span");
 
         // Get all data attributes
-        let accordionType = accordion.getAttribute("data-accordion-type");
         let tabIcon = accordion.getAttribute("data-tab-icon") || "_ _";
         let expandedIcon =
             accordion.getAttribute("data-expanded-icon") || "_ _";
@@ -131,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 contentNodes[i].parentElement.classList.add(hide);
             }
         }
-
+        
         function changeAllExpandIcons(accordion) {
             let iconNodes = accordion.querySelectorAll(".eb-accordion-icon");
             // Replace expand icon with tab icon & change color
@@ -146,15 +169,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
-        // Take action based on accordion type
-        accordionType === "toggle"
-            ? setToggleAction(titleNodes)
-            : setAccordionAction(titleNodes);
-
         // Toggle action here
         function setToggleAction(titleNodes) {
             for (let i = 0;i < titleNodes.length;i++) {
                 let selectedTab = titleNodes[i];
+
+                if (hashTag && !hashTagExists) {
+                    let id = selectedTab.parentElement.getAttribute('id');
+                    if (id === hashTag) {
+                        hashTagExists = true;
+                        onToggleTabClick.call(selectedTab);
+                    }
+                }
 
                 (function (selectedTab) {
                     selectedTab.addEventListener("click", onToggleTabClick);
@@ -168,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
-        function onToggleTabClick(event) {
+        function onToggleTabClick() {
             let clickedTab = this;
             let contentNode = this.nextElementSibling;
             let isCollapsed =
@@ -193,7 +219,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
         function setAccordionAction(titleNodes) {
             for (let i = 0;i < titleNodes.length;i++) {
                 let selectedTab = titleNodes[i];
-                (function (selectedTab) {
+                if (hashTag && !hashTagExists) {
+                    let id = selectedTab.parentElement.getAttribute('id');
+                    if (id === hashTag) {
+                        hashTagExists = true;
+                        onAccordionTabClick.call(selectedTab);
+                    }
+                }
+                
+                (function (selectedTab) {                   
                     selectedTab.addEventListener("click", onAccordionTabClick);
                     selectedTab.addEventListener("keydown", function (event) {
                         if (event.key === " " || event.key === "Enter") {
@@ -201,7 +235,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                             onAccordionTabClick.call(selectedTab);
                         }
                     });
-                })(selectedTab);
+                })(selectedTab);  
             }
         }
 
@@ -252,7 +286,6 @@ const hideAccordionContents = (accordion, transitionDuration) => {
 
 /* SLIDE UP */
 const slideUp = (target, duration = 500) => {
-
     target.style.transitionProperty = 'height, margin, padding';
     target.style.transitionDuration = duration + 'ms';
     target.style.boxSizing = 'border-box';
@@ -280,11 +313,12 @@ const slideUp = (target, duration = 500) => {
 
 /* SLIDE DOWN */
 const slideDown = (target, duration = 500) => {
-
     target.style.removeProperty('display');
     let display = window.getComputedStyle(target).display;
     if (display === 'none') display = 'block';
-    target.style.display = display;
+    setTimeout( function(){
+        target.style.display = display;
+    }, duration + 1);
     let height = target.offsetHeight;
     target.style.overflow = 'hidden';
     target.style.height = 0;

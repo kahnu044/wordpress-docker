@@ -1,6 +1,72 @@
 /**
  * Helper Functions
  */
+const validTags = [
+    // Document metadata
+    'html', 'head', 'title', 'base', 'link', 'meta', 'style',
+
+    // Sectioning root
+    'body',
+
+    // Content sectioning
+    'header', 'nav', 'section', 'article', 'aside', 'footer', 'address', 'main',
+
+    // Text content
+    'p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd', 'figure', 'figcaption', 'div',
+
+    // Inline text semantics
+    'a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'ruby', 'rb', 'rt', 'rtc', 'rp',
+    'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'sup', 'i', 'b', 'u', 'mark', 'bdi', 'bdo', 'span',
+    'br', 'wbr',
+
+    // Image and multimedia
+    'img', 'map', 'area', 'audio', 'video', 'track', 'embed', 'object', 'param', 'source', 'iframe', 'picture',
+
+    // Embedded content
+    'canvas', 'noscript', 'script', 'del', 'ins',
+
+    // Table content
+    'table', 'caption', 'colgroup', 'col', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th',
+
+    // Forms
+    'form', 'fieldset', 'legend', 'label', 'input', 'button', 'select', 'datalist', 'optgroup', 'option',
+    'textarea', 'output', 'progress', 'meter',
+
+    // Interactive elements
+    'details', 'summary', 'dialog', 'menu', 'menuitem',
+
+    // Web components
+    'slot', 'template',
+
+    // Scripting
+    'script', 'noscript', 'template',
+
+    // Other HTML5 tags
+    'article', 'aside', 'bdi', 'bdo', 'data', 'figcaption', 'figure', 'main', 'mark', 'nav', 'output',
+    'progress', 'section', 'summary', 'time', 'template'
+];
+
+export const sanitizeHtml = (htmlString) => {
+    // Parse the HTML string into a DOM object
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
+
+    // Get all elements in the document
+    const allElements = doc.body.getElementsByTagName("*");
+
+    // Convert HTMLCollection to an array and iterate through all elements
+    Array.from(allElements).forEach((element) => {
+        // If the tag is not in the whitelist, remove it
+        if (!validTags.includes(element.tagName.toLowerCase())) {
+            // Replace invalid tags with just their text content
+            element.replaceWith(document.createTextNode(element.textContent));
+        }
+    });
+
+    // Return the sanitized HTML string
+    return doc.body.innerHTML;
+};
+
 export const handleTitle = (text, id, images, setAttributes) => {
     let updatedImageArray = images.map((item) => {
         if (item.id == id) {
@@ -48,11 +114,11 @@ export const handleButtonText = (buttonText, id, images, setAttributes) => {
 const validURL = (str) => {
     var pattern = new RegExp(
         "^(https?:\\/\\/)?" + // protocol
-            "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-            "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-            "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-            "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-            "(\\#[-a-z\\d_]*)?$",
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
         "i"
     ); // fragment locator
     return !!pattern.test(str);

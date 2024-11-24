@@ -3,16 +3,19 @@
 		border: 1px solid #f5f5f5;
 		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
 		padding: 5px 0;
+
 		.author__info {
 			display: flex;
 			align-items: center;
 			padding: 8px 10px;
+
 			.author__thumb {
 				height: 40px;
 				min-width: 40px;
 				flex: 0 0 40px;
 				border-radius: 50%;
 				margin-right: 12px;
+
 				img {
 					height: 100%;
 					width: 100%;
@@ -20,38 +23,45 @@
 					border-radius: 50%;
 				}
 			}
+
 			.author__name {
-				font-size: 14px;
 				font-weight: 400;
 				color: #222;
 				margin: 0;
 			}
 		}
+
 		.instagram__gallery__thumb {
 			font-size: 0;
+
 			img {
 				width: 100%;
 			}
+
 			.eb-instagram-caption {
-				font-size: 14px;
 				padding: 8px 10px;
+
 				p {
 					margin-top: 5px;
 					margin-bottom: 0px;
 				}
 			}
 		}
+
 		.eb-instagram-meta {
 			display: flex;
 			align-items: center;
 			padding: 8px 10px;
+
 			span {
 				margin-right: 5px;
 			}
 		}
+
 		&.instagram__gallery__item--content__inner {
 			&:hover {
 				.instagram__gallery__thumb {
+
 					&::before,
 					.eb-instagram-caption {
 						opacity: 1;
@@ -59,8 +69,10 @@
 					}
 				}
 			}
+
 			.instagram__gallery__thumb {
 				position: relative;
+
 				&::before {
 					position: absolute;
 					top: 0;
@@ -72,6 +84,7 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 				}
+
 				.eb-instagram-caption {
 					position: absolute;
 					left: 0;
@@ -84,21 +97,26 @@
 				}
 			}
 		}
+
 		&.instagram__gallery__item--overlay__simple {
 			&:hover {
+
 				.instagram__gallery__thumb::before,
 				.instagram__gallery__thumb::after {
 					opacity: 1;
 					z-index: 1;
 				}
 			}
+
 			.author__info,
 			.instagram__gallery__thumb .eb-instagram-caption,
 			.eb-instagram-meta {
 				display: none;
 			}
+
 			.instagram__gallery__thumb {
 				position: relative;
+
 				&::before {
 					position: absolute;
 					top: 0;
@@ -110,14 +128,14 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 				}
+
 				&::after {
 					position: absolute;
 					top: 0;
 					left: 0;
 					bottom: 0;
 					right: 0;
-					background: url(../assets/images/instagram-icon-white.svg) no-repeat
-						center center;
+					background: url(../assets/images/instagram-icon-white.svg) no-repeat center center;
 					background-size: 30px 30px;
 					content: "";
 					opacity: 0;
@@ -125,9 +143,12 @@
 				}
 			}
 		}
+
 		&.instagram__gallery__item--overlay__basic {
 			position: relative;
+
 			&:hover {
+
 				.eb-instagram-meta,
 				.instagram__gallery__thumb::before,
 				.instagram__gallery__thumb .eb-instagram-caption {
@@ -135,11 +156,14 @@
 					z-index: 1;
 				}
 			}
+
 			.author__info {
 				display: none;
 			}
+
 			.instagram__gallery__thumb {
 				position: relative;
+
 				&::before {
 					position: absolute;
 					top: 0;
@@ -151,6 +175,7 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 				}
+
 				.eb-instagram-caption {
 					position: absolute;
 					top: 0;
@@ -160,10 +185,10 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 					padding: 10px 15px;
-					font-size: 14px;
 					color: #fff;
 				}
 			}
+
 			.eb-instagram-meta {
 				position: absolute;
 				bottom: 0;
@@ -176,9 +201,12 @@
 				transition: opacity 0.3s ease;
 			}
 		}
+
 		&.instagram__gallery__item--overlay__standard {
 			position: relative;
+
 			&:hover {
+
 				.eb-instagram-meta,
 				.instagram__gallery__thumb::before,
 				.instagram__gallery__thumb .eb-instagram-caption {
@@ -186,11 +214,14 @@
 					z-index: 1;
 				}
 			}
+
 			.author__info {
 				display: none;
 			}
+
 			.instagram__gallery__thumb {
 				position: relative;
+
 				&::before {
 					position: absolute;
 					top: 0;
@@ -202,6 +233,7 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 				}
+
 				.eb-instagram-caption {
 					position: absolute;
 					bottom: 20px;
@@ -210,30 +242,33 @@
 					opacity: 0;
 					transition: opacity 0.3s ease;
 					padding: 10px 15px;
-					font-size: 14px;
 					color: #fff;
 				}
 			}
+
 			.eb-instagram-meta {
 				position: absolute;
 				bottom: 20px;
 				left: 15px;
 				opacity: 0;
 				transition: opacity 0.3s ease;
-				font-size: 14px;
+
 				span {
 					display: none;
 				}
+
 				.like__count {
 					color: #fff;
 				}
 			}
 		}
+
 		&.has__equal__height {
 			.thumb__wrap {
 				position: relative;
 				overflow: hidden;
 				padding-top: 100%;
+
 				img {
 					height: 100%;
 					width: 100%;
@@ -248,6 +283,7 @@
 }
 
 .instagram__gallery__item {
+
 	&.instagram__gallery__item--overlay__simple,
 	&.instagram__gallery__item--overlay__standard,
 	&.instagram__gallery__item--overlay__basic {

@@ -3,22 +3,24 @@ namespace EssentialBlocks\Blocks;
 
 use EssentialBlocks\Core\Block;
 
-class AdvancedVideo extends Block {
+class AdvancedVideo extends Block
+{
 
     protected $editor_scripts = [
         'essential-blocks-hls',
         'essential-blocks-flv',
         'essential-blocks-dash'
-    ];
-    protected $frontend_scripts = ['essential-blocks-advanced-video-frontend'];
-    protected $frontend_styles  = ['essential-blocks-frontend-style', 'essential-blocks-fontawesome'];
+     ];
+    protected $frontend_scripts = [ 'essential-blocks-advanced-video-frontend' ];
+    protected $frontend_styles  = [ 'essential-blocks-fontawesome' ];
 
     /**
      * Unique name of the block.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return 'advanced-video';
     }
 
@@ -27,7 +29,8 @@ class AdvancedVideo extends Block {
      *
      * @return void
      */
-    public function register_scripts() {
+    public function register_scripts()
+    {
         $this->assets_manager->register(
             'advanced-video-frontend',
             $this->path() . '/frontend.js',
@@ -36,7 +39,7 @@ class AdvancedVideo extends Block {
                 'essential-blocks-hls',
                 'essential-blocks-flv',
                 'essential-blocks-dash'
-            ]
+             ]
         );
     }
 }

@@ -4,6 +4,7 @@ import {
     typoPrefix_sale,
     typoPrefix_desc,
     typoPrefix_btn,
+    typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
     SOLD_COUNT_TEXT,
     FILTER_ITEM_TYPOGRAPHY
@@ -12,6 +13,7 @@ import {
 import {
     RATING_ICON_SIZE,
     BTN_BORDER_SHADOW,
+    VIEW_BTN_BORDER_SHADOW,
     SALE_BADGE_BORDER,
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
@@ -25,6 +27,7 @@ import {
     PRICE_MARGIN,
     RATING_MARGIN,
     BUTTON_MARGIN,
+    VIEW_BUTTON_MARGIN,
     DESC_MARGIN,
     COLUMNS,
     IMG_GAP,
@@ -48,7 +51,7 @@ import {
     generateDimensionsAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     // responsive control attributes ⬇
@@ -323,12 +326,38 @@ const attributes = {
         type: "array",
         default: ["rating", "title", "price"],
     },
+    showDetailBtn: {
+        type: "boolean",
+        default: true,
+    },
+    detailBtnText: {
+        type: "string",
+        default: "Visit Product",
+    },
+    viewbtnColor: {
+        type: "string",
+        default: "var(--eb-global-heading-text-color)",
+    },
+    viewbtnHoverColor: {
+        type: "string",
+        default: "var(--eb-global-background-color)",
+    },
+    viewbtnBackgroundColor: {
+        type: "string",
+        default: "var(--eb-global-background-color)",
+    },
+    viewbtnBackgroundHoverColor: {
+        type: "string",
+        default: "var(--eb-global-tertiary-color)",
+    },
+
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_price),
     ...generateTypographyAttributes(typoPrefix_sale),
     ...generateTypographyAttributes(typoPrefix_desc),
     ...generateTypographyAttributes(typoPrefix_btn),
-    ...generateTypographyAttributes(EBWG_LOAD_MORE_TYPOGRAPHY,{
+    ...generateTypographyAttributes(typoPrefix_viewbtn),
+    ...generateTypographyAttributes(EBWG_LOAD_MORE_TYPOGRAPHY, {
         fontSize: 14,
     }),
     ...generateResponsiveRangeAttributes(RATING_ICON_SIZE),
@@ -342,6 +371,7 @@ const attributes = {
         defaultRange: 4,
     }),
     ...generateBorderShadowAttributes(BTN_BORDER_SHADOW),
+    ...generateBorderShadowAttributes(VIEW_BTN_BORDER_SHADOW),
     ...generateBorderShadowAttributes(SALE_BADGE_BORDER, {
         noShadow: true,
         noBdrHover: true,
@@ -370,6 +400,7 @@ const attributes = {
     ...generateDimensionsAttributes(RATING_MARGIN),
     ...generateDimensionsAttributes(PRICE_MARGIN),
     ...generateDimensionsAttributes(BUTTON_MARGIN),
+    ...generateDimensionsAttributes(VIEW_BUTTON_MARGIN),
     ...generateDimensionsAttributes(DESC_MARGIN),
     TABcolumnsRange: {
         type: "number",

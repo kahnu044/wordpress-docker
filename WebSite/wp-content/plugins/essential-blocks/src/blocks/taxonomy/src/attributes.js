@@ -43,6 +43,10 @@ const attributes = {
         type: "string",
         default: 'none'
     },
+    prefixVerticalAlign: {
+        type: "string",
+        default: 'flex-start'
+    },
     prefixIcon: {
         type: "string",
         default: 'fas fa-list'
@@ -58,6 +62,10 @@ const attributes = {
     suffixType: {
         type: "string",
         default: 'none'
+    },
+    suffixVerticalAlign: {
+        type: "string",
+        default: 'flex-start'
     },
     suffixIcon: {
         type: "string",

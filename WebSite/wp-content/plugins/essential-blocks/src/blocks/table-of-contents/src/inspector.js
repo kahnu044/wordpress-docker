@@ -117,7 +117,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         closeBtnBgColor,
         closeBtnBgHvColor,
         closeBtnSize,
-        closeIconSize
+        closeIconSize,
+        enableHighlight,
     } = attributes;
 
     const [options, setOptions] = useState(HEADERS);
@@ -430,7 +431,18 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     })
                                 }
                             />
-
+                            <ToggleControl
+                                label={__(
+                                    "Enable Highlight On Scroll",
+                                    "essential-blocks"
+                                )}
+                                checked={enableHighlight}
+                                onChange={() =>
+                                    setAttributes({
+                                        enableHighlight: !enableHighlight,
+                                    })
+                                }
+                            />
                             <ToggleControl
                                 label={__(
                                     "Enable Copy Link",

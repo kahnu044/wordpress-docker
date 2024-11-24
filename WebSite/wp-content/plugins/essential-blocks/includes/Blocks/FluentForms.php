@@ -66,8 +66,7 @@ class FluentForms extends Block
             'fluentform-public-default',
             plugins_url() . '/fluentform/assets/css/fluentform-public-default.css',
             [
-                'essential-blocks-fluent-form-styles',
-                'essential-blocks-editor-css'
+                'essential-blocks-fluent-form-styles'
              ]
         );
         $this->assets_manager->register(

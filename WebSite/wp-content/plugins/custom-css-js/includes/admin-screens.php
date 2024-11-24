@@ -214,9 +214,12 @@ class CustomCSSandJS_Admin {
 	 */
 	public function cm_localize() {
 
+		global $wp_version;
+
 		$settings = get_option( 'ccj_settings', array() );
 
 		$vars = array(
+			'wp_version'     => $wp_version,
 			'autocomplete'   => isset( $settings['ccj_autocomplete'] ) && ! $settings['ccj_autocomplete'] ? false : true,
 			'active'         => __( 'Active', 'custom-css-js' ),
 			'inactive'       => __( 'Inactive', 'custom-css-js' ),
@@ -930,6 +933,8 @@ End of comment */ ',
 	 * Get an array with all the information for building the code's options
 	 */
 	function get_options_meta() {
+		global $wp_version;
+
 		$options = array(
 			'linking'      => array(
 				'title'   => __( 'Linking type', 'custom-css-js' ),
@@ -969,6 +974,10 @@ End of comment */ ',
 					'frontend' => array(
 						'title'    => __( 'In Frontend', 'custom-css-js' ),
 						'dashicon' => 'tagcloud',
+					),
+					'block' => array(
+						'title'    => __( 'In Block editor', 'custom-css-js' ),
+						'dashicon' => 'layout',
 					),
 					'admin'    => array(
 						'title'    => __( 'In Admin', 'custom-css-js' ),
@@ -1024,6 +1033,18 @@ End of comment */ ',
 				'disabled' => true,
 			),
 		);
+
+		if ( version_compare( $wp_version, '6.6', '<' ) ) {
+			$in_block_tipsy = __( 'The "In Block editor" option is available only for "Linking type: External File". For WordPress >= 6.6 the "In Block editor" option is available for both linking types.', 'custom-css-js' );
+			$in_block_tipsy = htmlentities( $in_block_tipsy );
+			$in_block_tipsy = '<span rel="tipsy" class="dashicons dashicons-editor-help tipsy-no-html" style="margin: 7px 3px 0 3px; display: none;" title="' . $in_block_tipsy . '"></span>';
+			$options['side']['values']['block']['title'] .= $in_block_tipsy; 
+		}
+
+		if ( ! version_compare( $wp_version, '5.0' ) || class_exists( 'Classic_Editor' ) ) {
+			// Remove the "In Block editor" option only for WP < 5 or if the "Classic Editor" plugin installed
+			unset( $options['side']['values']['block'] );
+		}
 
 		if ( is_multisite() && is_super_admin() && is_main_site() ) {
 			$options['multisite'] = array(
@@ -1188,7 +1209,7 @@ End of comment */ ',
 		}
 
 		$options['side'] = [];
-		foreach ( ['frontend', 'admin', 'login'] as $_side ) {
+		foreach ( ['frontend', 'block', 'admin', 'login'] as $_side ) {
 			if ( isset( $_POST[ 'custom_code_side-' . $_side ] ) && $_POST[ 'custom_code_side-' . $_side ] == '1' ) {
 				$options['side'][] = $_side;
 			}
@@ -1397,14 +1418,14 @@ endif;
 					$selected  = ( isset( $a['disabled'] ) && $a['disabled'] ) ? ' disabled="disabled"' : '';
 					$selected .= ( in_array( $__key, $current_values ) ) ? ' checked="checked" ' : '';
 					$output   .= '<input type="checkbox" ' . $selected . ' value="1" name="' . $id . '" id="' . $id . '">' . PHP_EOL;
-					$output   .= '<label class="' . $dashicons . '" for="' . $id . '"> ' . esc_attr( $__value['title'] ) . '</label><br />' . PHP_EOL;
+					$output   .= '<label class="' . $dashicons . '" for="' . $id . '"> ' . $__value['title'] . '</label><br />' . PHP_EOL;
 				}
 			} else {
 				$dashicons = isset( $a['dashicon'] ) ? 'dashicons-before dashicons-' . $a['dashicon'] : '';
 				$selected  = ( isset( $options[ $_key ] ) && $options[ $_key ] == '1' ) ? ' checked="checked" ' : '';
 				$selected .= ( isset( $a['disabled'] ) && $a['disabled'] ) ? ' disabled="disabled"' : '';
 				$output   .= '<input type="checkbox" ' . $selected . ' value="1" name="' . $name . '" id="' . $name . '">' . PHP_EOL;
-				$output   .= '<label class="' . $dashicons . '" for="' . $name . '"> ' . esc_attr( $a['title'] ) . '</label>' . PHP_EOL;
+				$output   .= '<label class="' . $dashicons . '" for="' . $name . '"> ' . $a['title'] . '</label>' . PHP_EOL;
 			}
 			$output .= '</div>' . PHP_EOL;
 		}

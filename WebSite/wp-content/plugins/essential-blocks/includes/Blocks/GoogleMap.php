@@ -22,8 +22,6 @@ class GoogleMap extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-google-map-frontend', 'essential-blocks-google-map-script' ];
 
-    protected $frontend_styles = [ 'essential-blocks-frontend-style' ];
-
     /**
      * Unique name of the block.
      *

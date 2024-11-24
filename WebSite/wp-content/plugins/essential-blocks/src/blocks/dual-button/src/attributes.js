@@ -12,6 +12,8 @@ import {
     BUTTONS_GAP,
     BUTTONS_CONNECTOR_SIZE,
     BUTTONS_CONNECTOR_ICON_SIZE,
+    BUTTON_ONE_KEYS,
+    BUTTON_TWO_KEYS
 } from "./constants/constants";
 
 // import {
@@ -28,6 +30,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    EBButton
 } from "@essential-blocks/controls";
 
 import { BUTTONS_TYPOGRAPHY, BUTTONS_CONNECTOR_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
@@ -49,7 +52,6 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
-
     preset: {
         type: "string",
         default: "button-1",
@@ -61,38 +63,6 @@ const attributes = {
     buttonWidth: {
         type: "number",
         default: "auto",
-    },
-    buttonTextOne: {
-        type: "string",
-        default: "Button One",
-    },
-    buttonTextTwo: {
-        type: "string",
-        default: "Button Two",
-    },
-    textOneColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    hoverTextOneColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    textTwoColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    hoverTextTwoColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-    buttonURLOne: {
-        type: "string",
-        default: "#",
-    },
-    buttonURLTwo: {
-        type: "string",
-        default: "#",
     },
     buttonTextAlign: {
         type: "string",
@@ -142,14 +112,80 @@ const attributes = {
         type: "string",
         default: "custom",
     },
-    buttonOneNewWindow: {
-        type: "boolean",
-        default: false,
-    },
-    buttonTwoNewWindow: {
-        type: "boolean",
-        default: false,
-    },
+    ...EBButton?.addAttributes(
+        BUTTON_ONE_KEYS, 
+        'btn1',
+        false,
+        '', 
+        true, 
+        {
+            key: BUTTON_ONE_BACKGROUND, 
+            default: {
+                noOverlay: true,
+                noMainBgi: true,
+                defaultFillColor: "var(--eb-global-secondary-color)",
+                defaultHovFillColor: "var(--eb-global-primary-color)",
+                defaultBgGradient: "var(--eb-gradient-background-color)",
+            }
+        },
+        true,
+        {key: BUTTON_ONE_BORDER_SHADOW, default: {
+            bdrDefaults: {
+                top: 2,
+                bottom: 2,
+                right: 2,
+                left: 2,
+            },
+            rdsDefaults: {
+                top: 20,
+                bottom: 0,
+                right: 0,
+                left: 20,
+                isLinked: false,
+            },
+            // noShadow: true,
+            // noBorder: true,
+        }},
+        false,
+        ''
+    ),
+    ...EBButton?.addAttributes(
+        BUTTON_TWO_KEYS, 
+        'btn2',
+        false,
+        '',
+        true,
+        {
+            key: BUTTON_TWO_BACKGROUND,
+            default: {
+                noOverlay: true,
+                noMainBgi: true,
+                defaultFillColor: "var(--eb-global-tertiary-color)",
+                defaultHovFillColor: "var(--eb-global-primary-color)",
+                defaultBgGradient: "var(--eb-gradient-background-color)",
+            }
+        },
+        true,
+        {
+            key: BUTTON_TWO_BORDER_SHADOW,
+            default: {
+                bdrDefaults: {
+                    top: 2,
+                    bottom: 2,
+                    right: 2,
+                    left: 2,
+                },
+                rdsDefaults: {
+                    top: 0,
+                    bottom: 20,
+                    right: 20,
+                    left: 0,
+                    isLinked: false,
+                },
+                // noShadow: true,
+            }
+        }
+    ),
 
     // typography attributes ⬇
     ...generateTypographyAttributes(BUTTONS_TYPOGRAPHY, {
@@ -171,48 +207,48 @@ const attributes = {
     }),
 
     // border shadow attributes ⬇
-    ...generateBorderShadowAttributes(BUTTON_ONE_BORDER_SHADOW, {
-        bdrDefaults: {
-            top: 2,
-            bottom: 2,
-            right: 2,
-            left: 2,
-        },
-        rdsDefaults: {
-            top: 20,
-            bottom: 0,
-            right: 0,
-            left: 20,
-            isLinked: false,
-        },
-        // noShadow: true,
-        // noBorder: true,
-    }),
-    ...generateBorderShadowAttributes(BUTTON_TWO_BORDER_SHADOW, {
-        bdrDefaults: {
-            top: 2,
-            bottom: 2,
-            right: 2,
-            left: 2,
-        },
-        rdsDefaults: {
-            top: 0,
-            bottom: 20,
-            right: 20,
-            left: 0,
-            isLinked: false,
-        },
-        // noShadow: true,
-    }),
+    // ...generateBorderShadowAttributes(BUTTON_ONE_BORDER_SHADOW, {
+    //     bdrDefaults: {
+    //         top: 2,
+    //         bottom: 2,
+    //         right: 2,
+    //         left: 2,
+    //     },
+    //     rdsDefaults: {
+    //         top: 20,
+    //         bottom: 0,
+    //         right: 0,
+    //         left: 20,
+    //         isLinked: false,
+    //     },
+    //     // noShadow: true,
+    //     // noBorder: true,
+    // }),
+    // ...generateBorderShadowAttributes(BUTTON_TWO_BORDER_SHADOW, {
+    //     bdrDefaults: {
+    //         top: 2,
+    //         bottom: 2,
+    //         right: 2,
+    //         left: 2,
+    //     },
+    //     rdsDefaults: {
+    //         top: 0,
+    //         bottom: 20,
+    //         right: 20,
+    //         left: 0,
+    //         isLinked: false,
+    //     },
+    //     // noShadow: true,
+    // }),
 
     // background attributes ⬇
-    ...generateBackgroundAttributes(BUTTON_ONE_BG, {
-        defaultFillColor: "#3074ff",
-        defaultBgGradient: "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
-    }),
-    ...generateBackgroundAttributes(BUTTON_TWO_BG, {
-        defaultFillColor: "#3074ff",
-    }),
+    // ...generateBackgroundAttributes(BUTTON_ONE_BG, {
+    //     defaultFillColor: "#3074ff",
+    //     defaultBgGradient: "linear-gradient(45deg, rgba(120,102,255,0.8) 0% , rgba(195,120,242,0.4) 100%)",
+    // }),
+    // ...generateBackgroundAttributes(BUTTON_TWO_BG, {
+    //     defaultFillColor: "#3074ff",
+    // }),
 
     // range controller
     ...generateResponsiveRangeAttributes(BUTTONS_WIDTH, {
@@ -229,20 +265,20 @@ const attributes = {
     }),
 
     // background Attributes
-    ...generateBackgroundAttributes(BUTTON_ONE_BACKGROUND, {
-        noOverlay: true,
-        noMainBgi: true,
-        defaultFillColor: "var(--eb-global-secondary-color)",
-        defaultHovFillColor: "var(--eb-global-primary-color)",
-        defaultBgGradient: "var(--eb-gradient-background-color)",
-    }),
-    ...generateBackgroundAttributes(BUTTON_TWO_BACKGROUND, {
-        noOverlay: true,
-        noMainBgi: true,
-        defaultFillColor: "var(--eb-global-tertiary-color)",
-        defaultHovFillColor: "var(--eb-global-primary-color)",
-        defaultBgGradient: "var(--eb-gradient-background-color)",
-    }),
+    // ...generateBackgroundAttributes(BUTTON_ONE_BACKGROUND, {
+    //     noOverlay: true,
+    //     noMainBgi: true,
+    //     defaultFillColor: "var(--eb-global-secondary-color)",
+    //     defaultHovFillColor: "var(--eb-global-primary-color)",
+    //     defaultBgGradient: "var(--eb-gradient-background-color)",
+    // }),
+    // ...generateBackgroundAttributes(BUTTON_TWO_BACKGROUND, {
+    //     noOverlay: true,
+    //     noMainBgi: true,
+    //     defaultFillColor: "var(--eb-global-tertiary-color)",
+    //     defaultHovFillColor: "var(--eb-global-primary-color)",
+    //     defaultBgGradient: "var(--eb-gradient-background-color)",
+    // }),
 };
 
 export default attributes;

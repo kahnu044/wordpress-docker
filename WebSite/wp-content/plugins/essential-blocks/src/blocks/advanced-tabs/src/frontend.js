@@ -1,4 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
+    let SetEqualHeightOfMultiColumnBlock = false;
+    if (window?.eb_frontend && window?.eb_frontend.SetEqualHeightOfMultiColumnBlock === 'function') {
+        SetEqualHeightOfMultiColumnBlock = window.eb_frontend.SetEqualHeightOfMultiColumnBlock
+    }
+
     const allTabsTitlesList = document.querySelectorAll(
         ".eb-advanced-tabs-wrapper > .eb-tabs-nav > ul.tabTitles"
     );
@@ -9,35 +14,46 @@ window.addEventListener("DOMContentLoaded", () => {
 
     for (const titleListsWrap of allTabsTitlesList) {
         // close all tabs initially
-        let listWrap = titleListsWrap.closest(
-            ".eb-advanced-tabs-wrapper"
-        );
+        let listWrap = titleListsWrap.closest(".eb-advanced-tabs-wrapper");
         const closeAllTabs = listWrap.getAttribute('data-close-all-tabs');
 
-        // select active tab
+        const tabContentWrappers = titleListsWrap.closest(
+            ".eb-advanced-tabs-wrapper"
+        ).children[1].children;
+
+        // Ensure display of all tab contents is initially set properly
+        for (const tabContentWrap of tabContentWrappers) {
+            // Adding a transitionend event to handle display
+            tabContentWrap.addEventListener('transitionend', function () {
+                if (tabContentWrap.classList.contains("inactive")) {
+                    tabContentWrap.style.display = 'none';  // Hide content after transition ends
+                }
+            }, { once: true });
+
+            // Initial display setup: hide all tab contents initially
+            tabContentWrap.style.display = 'none';
+        }
+
+        // Get the initially active tab element if available
         const activeTabElement = titleListsWrap.querySelector("li.active");
         if (activeTabElement) {
-            const dataTitleTabId = activeTabElement.getAttribute(
-                "data-title-tab-id"
-            );
-
-            const tabContentWrappers = titleListsWrap.closest(
-                ".eb-advanced-tabs-wrapper"
-            ).children[1].children;
-
+            // Show content for the initially active tab
+            const dataTitleTabId = activeTabElement.getAttribute("data-title-tab-id");
             for (const tabContentWrap of tabContentWrappers) {
-                if (tabContentWrap.dataset.tabId == dataTitleTabId) {
+                if (tabContentWrap.dataset.tabId === dataTitleTabId) {
                     tabContentWrap.classList.add("active");
+                    tabContentWrap.classList.remove("inactive");
+                    tabContentWrap.style.display = 'block';  // Ensure active tab's content is displayed
                 } else {
                     tabContentWrap.classList.add("inactive");
+                    tabContentWrap.classList.remove("active");
+                    tabContentWrap.style.display = 'none';
                 }
             }
         }
 
         // set min height for vertical tab
-        let verticalTab = titleListsWrap.closest(
-            ".eb-advanced-tabs-wrapper.vertical"
-        );
+        let verticalTab = titleListsWrap.closest(".eb-advanced-tabs-wrapper.vertical");
         const isMinHeight = verticalTab?.getAttribute("data-min-height");
 
         if (verticalTab && isMinHeight === 'true') {
@@ -47,14 +63,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 ".eb-tabs-contents .eb-tab-wrapper.active"
             ).style.minHeight = navHeight + "px";
         }
-        //
+
+        // Handle hash navigation and click events
         const tabTitlesLiTags = titleListsWrap.children;
         var hashMatched = false;
+
         for (const titleLiTag of tabTitlesLiTags) {
             if (hashTag !== "") {
-                const customId = titleLiTag.getAttribute(
-                    "data-title-custom-id"
-                );
+                const customId = titleLiTag.getAttribute("data-title-custom-id");
                 if (customId === hashTag) {
                     for (const titleLiTag of tabTitlesLiTags) {
                         titleLiTag.classList.add("inactive");
@@ -63,29 +79,26 @@ window.addEventListener("DOMContentLoaded", () => {
                     titleLiTag.classList.remove("inactive");
                     titleLiTag.classList.add("active");
                     hashMatched = true;
-                    const tabContentWrappers = titleListsWrap.closest(
-                        ".eb-advanced-tabs-wrapper"
-                    ).children[1].children;
 
+                    // Toggle tab content visibility
                     for (const tabContentWrap of tabContentWrappers) {
-                        if (
-                            tabContentWrap.dataset.tabId ===
-                            titleLiTag.dataset.titleTabId
-                        ) {
+                        if (tabContentWrap.dataset.tabId === titleLiTag.dataset.titleTabId) {
+                            tabContentWrap.style.display = 'block';
                             tabContentWrap.classList.add("active");
                             tabContentWrap.classList.remove("inactive");
                         } else {
                             tabContentWrap.classList.add("inactive");
                             tabContentWrap.classList.remove("active");
+                            tabContentWrap.style.display = 'none';
                         }
                     }
                 }
             }
 
             titleLiTag.addEventListener("click", (e) => {
-                //
                 const thisLiTag = e.currentTarget;
 
+                // Update tab titles' active/inactive status
                 for (const singleLiTag of tabTitlesLiTags) {
                     if (singleLiTag !== thisLiTag) {
                         singleLiTag.classList.add("inactive");
@@ -96,28 +109,31 @@ window.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                const tabContentWrappers = titleListsWrap.closest(
-                    ".eb-advanced-tabs-wrapper"
-                ).children[1].children;
-
+                // Toggle tab content visibility on click
                 for (const tabContentWrap of tabContentWrappers) {
-                    if (
-                        tabContentWrap.dataset.tabId ===
-                        thisLiTag.dataset.titleTabId
-                    ) {
+                    if (tabContentWrap.dataset.tabId === thisLiTag.dataset.titleTabId) {
+                        tabContentWrap.style.display = 'block';  // Ensure the new active tab content is visible
                         tabContentWrap.classList.add("active");
                         tabContentWrap.classList.remove("inactive");
+                        /* For MultiColumn Block */
+                        setTimeout(function () {
+                            const multiColumn = tabContentWrap.querySelector('.eb-mcpt-wrap');
+                            if (SetEqualHeightOfMultiColumnBlock && multiColumn) {
+                                SetEqualHeightOfMultiColumnBlock(multiColumn);
+                            }
+                        }, 10)
+                        /* For MultiColumn Block */
 
                         const imageGalleres = tabContentWrap.querySelectorAll(
                             ".eb-img-gallery-filter-wrapper"
                         );
-
                         imageGalleres.forEach((imageGallery) => {
                             imageGallery
                                 .querySelector(".eb-img-gallery-filter-item")
                                 .click();
                         });
-                        // add min height for vertical
+
+                        // Adjust min height for vertical tabs if needed
                         const navHeight = titleLiTag.closest(".tabTitles")
                             .offsetHeight;
                         if (verticalTab && isMinHeight === 'true') {
@@ -128,10 +144,12 @@ window.addEventListener("DOMContentLoaded", () => {
                     } else {
                         tabContentWrap.classList.add("inactive");
                         tabContentWrap.classList.remove("active");
+                        tabContentWrap.style.display = 'none';
                     }
                 }
             });
         }
+
         if (
             hashMatched == false &&
             activeTabElement === null &&
@@ -154,13 +172,16 @@ window.addEventListener("DOMContentLoaded", () => {
                     if (closeAllTabs === 'true') {
                         item.classList.add("inactive");
                         item.classList.remove("active");
+                        item.style.display = 'none';
                     } else {
                         item.classList.add("active");
                         item.classList.remove("inactive");
+                        item.style.display = 'block';
                     }
                 } else {
                     item.classList.add("inactive");
                     item.classList.remove("active");
+                    item.style.display = 'none';
                 }
             });
         }

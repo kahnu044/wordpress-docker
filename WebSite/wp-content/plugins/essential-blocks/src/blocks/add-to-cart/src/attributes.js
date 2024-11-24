@@ -3,13 +3,14 @@ import {
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
     WRAPPER_BORDER_SHADOW,
-
     BUTTON_BORDER,
     BUTTON_PADDING,
     QUANTITY_BORDER,
     QUANTITY_PADDING,
     VARIABLE_FIELD_BORDER,
     VARIABLE_FIELD_PADDING,
+    btnWidth,
+    quantityWidth
 } from "./constants/constants";
 
 import {
@@ -66,7 +67,16 @@ const attributes = {
         type: "string",
         default: "var(--eb-global-text-color)",
     },
+    quantityActiveBorderColor: {
+        type: "string",
+    },
     quantityBGColor: {
+        type: "string",
+    },
+    quantityActiveColor: {
+        type: "string",
+    },
+    quantityActiveBGColor: {
         type: "string",
     },
     btnColor: {
@@ -76,6 +86,12 @@ const attributes = {
     btnBGColor: {
         type: "string",
         default: "var(--eb-global-button-background-color)",
+    },
+    btnDisableColor: {
+        type: "string",
+    },
+    btnDisableBGColor: {
+        type: "string",
     },
     hoverBtnBGColor: {
         type: "string",
@@ -101,6 +117,18 @@ const attributes = {
     },
     regularPriceColor: {
         type: "string",
+    },
+    displayType: {
+        type: "string",
+        default: "inline"
+    },
+    buttonSwitcher: {
+        type: "string",
+        default: "normal"
+    },
+    quantitySwitcher: {
+        type: "string",
+        default: "normal"
     },
 
     // typography attributes
@@ -185,6 +213,8 @@ const attributes = {
         isLinked: false,
     }),
 
+    ...generateResponsiveRangeAttributes(btnWidth),
+    ...generateResponsiveRangeAttributes(quantityWidth),
 };
 
 export default attributes;

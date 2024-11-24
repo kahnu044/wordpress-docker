@@ -22,8 +22,13 @@ import Style from "./style";
 import defaultAttributes from './attributes';
 
 import {
+    LOADMORE_KEYS
+} from "./constants";
+
+import {
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBButton
 } from "@essential-blocks/controls";
 
 function Edit(props) {
@@ -113,14 +118,14 @@ function Edit(props) {
             item.openNewTab = image.openNewTab ? image.openNewTab : false;
             item.isValidUrl = image.isValidUrl ? image.isValidUrl : true;
             sources.length > 0 &&
-            sources.map((source) => {
-                if (source.id === image.id) {
-                    item.filter = source.filter;
-                    // item.customLink = source.customLink;
-                    // item.openNewTab = source.openNewTab;
-                    // item.isValidUrl = source.isValidUrl;
-                }
-            });
+                sources.map((source) => {
+                    if (source.id === image.id) {
+                        item.filter = source.filter;
+                        // item.customLink = source.customLink;
+                        // item.openNewTab = source.openNewTab;
+                        // item.isValidUrl = source.isValidUrl;
+                    }
+                });
             currentSources.push(item);
         });
         setAttributes({ sources: currentSources, images: newImages });
@@ -455,14 +460,14 @@ function Edit(props) {
                             </div>
 
                             {enableLoadMore && (
-                                <button
-                                    {...(enableInfiniteScroll ? { disabled: true } : {})}
-                                    className={`eb-img-gallery-loadmore ${enableInfiniteScroll ? 'loadmore-disable' : ''}`}>
-                                    {enableInfiniteScroll && (
-                                        <img src={`${EssentialBlocksLocalize.eb_plugins_url}/assets/images/loading.svg`} />
-                                    )}
-                                    {loadmoreBtnText}
-                                </button>
+                                <EBButton
+                                    isSelected={isSelected}
+                                    type="button"
+                                    className={`eb-img-gallery-loadmore ${enableInfiniteScroll ? 'loadmore-disable' : ''}`}
+                                    buttonAttrProps={LOADMORE_KEYS}
+                                    disable={enableInfiniteScroll ? true : false}
+                                    loadingIcon={enableInfiniteScroll ? true : false}
+                                />
                             )}
 
                         </div>

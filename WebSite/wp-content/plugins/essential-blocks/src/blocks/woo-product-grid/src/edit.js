@@ -10,7 +10,7 @@ import {
     BlockProps,
     BrowseTemplate,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 /**
  * Internal dependencies
@@ -46,7 +46,9 @@ const Edit = (props) => {
         cover,
         ratingStyle,
         enableContents,
-        showBlockContent
+        showBlockContent,
+        showDetailBtn,
+        detailBtnText
     } = attributes;
 
     const [queryResults, setQueryResults] = useState(false);
@@ -84,7 +86,7 @@ const Edit = (props) => {
 
     const ratingHtml = (rating) => {
         let html = "";
-        for (let i = 1;i <= 5;i++) {
+        for (let i = 1; i <= 5; i++) {
             if (i <= rating) {
                 html += `<span class="eb-woo-product-rating filled"><i class="fas fa-star"></i></span>`;
             } else {
@@ -98,7 +100,7 @@ const Edit = (props) => {
         const totalPages = Math.floor(options.totalPosts / perPage);
         let html = "";
         html += `<button class="ebpg-pagination-item-previous">${options.prevTxt}</button>`;
-        for (let i = 1;i <= totalPages;i++) {
+        for (let i = 1; i <= totalPages; i++) {
             if (i === 1) {
                 html += `<button class="ebpg-pagination-item active">${i}</button>`;
             } else if (i <= 3) {
@@ -244,6 +246,13 @@ const Edit = (props) => {
                                                                                                 )
                                                                                                 : item.add_to_cart_text}
                                                                                         </a>
+
+                                                                                        {showDetailBtn && (
+                                                                                            <a
+                                                                                                href="#"
+                                                                                                className="eb-woo-product-detail button asdfasdf"
+                                                                                            >{detailBtnText}</a>
+                                                                                        )}
                                                                                     </div>
                                                                                 </div>
                                                                             )}
@@ -396,6 +405,15 @@ const Edit = (props) => {
                                                                                             )
                                                                                             : item.add_to_cart_text}
                                                                                     </a>
+
+                                                                                    {showDetailBtn && (
+                                                                                        <a
+                                                                                            href="#"
+                                                                                            className="eb-woo-product-detail button"
+                                                                                        >
+                                                                                            {detailBtnText}
+                                                                                        </a>
+                                                                                    )}
                                                                                 </div>
                                                                             </div>
                                                                         </div>

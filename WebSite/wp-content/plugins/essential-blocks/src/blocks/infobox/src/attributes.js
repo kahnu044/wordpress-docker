@@ -20,7 +20,8 @@ import {
 
 import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
 
-import { wrpBdShadow, btnBdShd } from "./constants/borderShadowConstants";
+import { wrpBdShadow, btnBdShd, mediaBdShd } from "./constants/borderShadowConstants";
+import { BUTTON_KEYS } from "./constants";
 
 import {
     mediaIconSize,
@@ -35,6 +36,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    EBButton
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -203,22 +205,7 @@ const attributes = {
     },
 
     //
-    buttonText: {
-        type: "string",
-        default: "Learn More",
-    },
 
-    //
-    buttonTextColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
-
-    //
-    buttonHvrTextColor: {
-        type: "string",
-        default: "var(--eb-global-button-text-color)",
-    },
 
     // //
     // buttonBgColor: {
@@ -226,19 +213,7 @@ const attributes = {
     // },
 
     //
-    btnEffect: {
-        type: "string"
-    },
-
-    //
-    infoboxLink: {
-        type: "string",
-    },
-    linkNewTab: {
-        type: "boolean",
-        default: false,
-    },
-
+    
     //
     title: {
         type: "text",
@@ -319,16 +294,33 @@ const attributes = {
     //
     mediaAlignment: {
         type: "string",
+        default: "center",
     },
 
     //
     contentsAlignment: {
         type: "string",
+        default: "center",
     },
 
-    btnAlignment: {
-        type: "string",
+    // btnAlignment: {
+    //     type: "string",
+    //     default: "center",
+    // },
+
+    enableTitle: {
+        type: "boolean",
+        default: true,
     },
+    showMedia: {
+        type: "boolean",
+        default: true,
+    },
+    iconView: {
+        type: "string",
+        default: "default",
+    },
+    iconShape: { type: "string", default: "circle" },
 
     // Responsive Range Controller attributes
     ...generateResponsiveRangeAttributes(mediaIconSize, {
@@ -377,19 +369,6 @@ const attributes = {
         top: 15,
         isLinked: false,
     }),
-    ...generateDimensionsAttributes(buttonPadding, {
-        top: 15,
-        bottom: 15,
-        right: 30,
-        left: 30,
-        isLinked: false,
-    }),
-    // ...generateDimensionsAttributes(buttonRadius, {
-    // 	top: 10,
-    // 	bottom: 10,
-    // 	right: 10,
-    // 	left: 10,
-    // }),
     ...generateDimensionsAttributes(titlePadding, {
         top: 10,
         bottom: 10,
@@ -423,23 +402,6 @@ const attributes = {
     // }),
     // ...generateDimensionsAttributes(wrp_radius),
 
-    ...generateBorderShadowAttributes(btnBdShd, {
-        // bdrDefaults: {
-        // 	top: 10,
-        // 	bottom: 10,
-        // 	right: 10,
-        // 	left: 10,
-        // },
-        rdsDefaults: {
-            top: 10,
-            bottom: 10,
-            right: 10,
-            left: 10,
-        },
-        // noShadow: true,
-        // noBorder: true,
-    }),
-
     ...generateBorderShadowAttributes(wrpBdShadow, {
         // bdrDefaults: {
         // 	top: 10,
@@ -461,6 +423,19 @@ const attributes = {
         // defaultBdrStyle: "solid",
     }),
 
+    ...generateBorderShadowAttributes(mediaBdShd, {
+        // rdsDefaults: {
+        // 	top: 0,
+        // 	bottom: 50,
+        // 	right: 500,
+        // 	left: 1000,
+        // 	isLinked: false,
+        // },
+        // noShadow: true,
+        // noBorder: true,
+
+    }),
+
     // background attributes ⬇
     ...generateBackgroundAttributes(infoWrapBg, {
         isBgDefaultGradient: true,
@@ -470,13 +445,52 @@ const attributes = {
         // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
 
-    // background attributes ⬇
-    ...generateBackgroundAttributes(infoBtnBg, {
-        defaultFillColor: "var(--eb-global-button-background-color)",
-        // defaultHovFillColor: "var(--eb-global-secondary-color)",
-        defaultBgGradient: "var(--eb-gradient-background-color)",
-        forButton: true
-    }),
+    ...EBButton?.addAttributes(
+        BUTTON_KEYS,
+        '',
+        false,
+        '',
+        true,
+        {
+            key: infoBtnBg,
+            default: {
+                noOverlay: true,
+                noMainBgi: true,
+                defaultFillColor: "var(--eb-global-button-background-color)",
+                defaultBgGradient: "var(--eb-gradient-background-color)",
+            }
+        },
+        true,
+        {
+            key: btnBdShd, default: {
+                bdrDefaults: {
+                    top: 2,
+                    bottom: 2,
+                    right: 2,
+                    left: 2,
+                },
+                rdsDefaults: {
+                    top: 10,
+                    bottom: 10,
+                    right: 10,
+                    left: 10,
+                },
+                // noShadow: true,
+                // noBorder: true,
+            }
+        },
+        true,
+        {
+            key: buttonPadding,
+            default: {
+                top: 15,
+                bottom: 15,
+                right: 30,
+                left: 30,
+                isLinked: false,
+            }
+        }
+    ),
 };
 
 export default attributes;

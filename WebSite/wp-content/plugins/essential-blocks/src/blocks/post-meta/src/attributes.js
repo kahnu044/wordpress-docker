@@ -83,6 +83,31 @@ const attributes = {
         type: "string",
         default: null
     },
+    authorIcon: {
+        type: "string",
+        default: 'far fa-circle-user',
+    },
+    dateIcon: {
+        type: "string",
+        default: 'far fa-calendar-days',
+    },
+    skuIcon: {
+        type: "string",
+        default: 'fas fa-barcode',
+    },
+    showMetaIcon: {
+        type: 'boolean',
+        default: true,
+    },
+    metaIconColor: {
+        type: "string",
+        default: ""
+    },
+    metaIconSize: {
+        type: "number",
+        default: 20,
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(typographyObjs)),
 

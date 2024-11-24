@@ -221,6 +221,60 @@
             );
 
             /**
+             * Black Friday
+             */
+            $black_friday_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🛍️ This Black Friday, transform your website design with <strong>Essential Blocks PRO</strong> upgrade now & grab up to 40% discount.</p>
+        <a class="button button-primary" href="https://essential-blocks.com/bfcm24-pricing" target="_blank"><svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.0688 9.24424L14.2136 7.82369C14.2908 7.06574 14.3418 6.56525 14.3018 6.24991L14.3158 6.25C14.9698 6.25 15.5 5.69036 15.5 5C15.5 4.30964 14.9698 3.75 14.3158 3.75C13.6618 3.75 13.1316 4.30964 13.1316 5C13.1316 5.31222 13.24 5.5977 13.4193 5.81677C13.1619 5.98447 12.8254 6.33832 12.3188 6.87093L12.3188 6.87096L12.3188 6.87096C11.9286 7.28129 11.7334 7.48645 11.5158 7.51822C11.3952 7.53583 11.2723 7.51773 11.1609 7.46596C10.9599 7.37254 10.8259 7.1189 10.5578 6.61163L9.14509 3.93783C8.97975 3.6249 8.84136 3.36298 8.71658 3.15221C9.22844 2.87656 9.57895 2.31482 9.57895 1.66667C9.57895 0.746192 8.87203 0 8 0C7.12797 0 6.42105 0.746192 6.42105 1.66667C6.42105 2.31482 6.77156 2.87656 7.28342 3.15221C7.15864 3.36299 7.02027 3.62487 6.85491 3.93783L5.44215 6.61163C5.17413 7.1189 5.04011 7.37254 4.83911 7.46596C4.72774 7.51773 4.60485 7.53583 4.48424 7.51822C4.26656 7.48645 4.07143 7.28129 3.68118 6.87096C3.17463 6.33834 2.83807 5.98447 2.58068 5.81677C2.75998 5.5977 2.86842 5.31222 2.86842 5C2.86842 4.30964 2.33823 3.75 1.68421 3.75C1.03019 3.75 0.5 4.30964 0.5 5C0.5 5.69036 1.03019 6.25 1.68421 6.25L1.69819 6.24991C1.65817 6.56525 1.70917 7.06574 1.7864 7.82368L1.93116 9.24424C2.01151 10.0328 2.07833 10.783 2.16016 11.4583H13.8398C13.9217 10.783 13.9885 10.0328 14.0688 9.24424Z" fill="white"/>
+<path d="M7.1411 15H8.8589C11.0978 15 12.2172 15 12.9642 14.2943C13.2902 13.9863 13.4966 13.431 13.6456 12.7083H2.35444C2.50341 13.431 2.70984 13.9863 3.03585 14.2943C3.78276 15 4.90221 15 7.1411 15Z" fill="white"/>
+</svg> Upgrade To PRO</a>
+        <button data-dismiss="true" class="dismiss-btn button button-link">No, I prefer to pay full price</button>';
+            $black_friday_notice = [
+                'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
+                'html'      => $black_friday_message
+             ];
+
+            //Black Friday Notice Add
+            $notices->add(
+                'black_friday',
+                $black_friday_notice,
+                [
+                    'start'       => $notices->time(),
+                    'expire'      => strtotime( '11:59:59pm 5th December, 2024' ),
+                    'classes'     => 'eb-notice put-dismiss-notice',
+                    'dismissible' => true,
+                    'refresh'     => ESSENTIAL_BLOCKS_VERSION,
+                    'do_action'   => 'eb_black_friday_campaign',
+                    'display_if'  => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
+                 ]
+            );
+
+            /**
+             * Early bird specials
+             */
+            $early_bird_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🔥 Essential Blocks PRO: Get access to premium Gutenberg blocks, features & website templates</p>
+        <a class="button button-primary" href="https://essential-blocks.com/eb-pro-upgrade" target="_blank">Upgrade to PRO Now</a>
+        <button data-dismiss="true" class="dismiss-btn button button-secondary">I Don\'t Want To Save Money</button>';
+            $early_bird_notice = [
+                'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
+                'html'      => $early_bird_message
+             ];
+
+            //Early bird Notice Add
+            $notices->add(
+                'early_bird',
+                $early_bird_notice,
+                [
+                    'start'       => $notices->strtotime( '+1 days' ),
+                    'classes'     => 'eb-notice put-dismiss-notice',
+                    'dismissible' => true,
+                    'refresh'     => ESSENTIAL_BLOCKS_VERSION,
+                    'do_action'   => 'eb_early_bird_campaign',
+                    'display_if'  => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
+                 ]
+            );
+
+            /**
              * Review Notice
              *
              * @var mixed $message
@@ -277,32 +331,6 @@
                      ]
                  ]
              ];
-
-            /**
-             * Early bird specials
-             */
-            $b_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🔥 Essential Blocks PRO: Get access to premium Gutenberg blocks, features & website templates</p>
-        <a class="button button-primary" href="https://essential-blocks.com/eb-pro-upgrade" target="_blank">Upgrade to PRO Now</a>
-        <button data-dismiss="true" class="dismiss-btn button button-secondary">I Don\'t Want To Save Money</button>';
-            $_black_friday_notice = [
-                'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
-                'html'      => $b_message
-             ];
-
-            //Black Fridy Notice Add
-            $notices->add(
-                'early_bird',
-                $_black_friday_notice,
-                [
-                    'start'       => $notices->time(),
-                    // 'start'       => $notices->strtotime( '+2 days' ),
-                    'classes'     => 'eb-notice put-dismiss-notice',
-                    'dismissible' => true,
-                    'refresh'     => ESSENTIAL_BLOCKS_VERSION,
-                    'do_action'   => 'eb_early_bird_campaign',
-                    'display_if'  => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
-                 ]
-            );
 
             // Review Notice Add
             $notices->add(

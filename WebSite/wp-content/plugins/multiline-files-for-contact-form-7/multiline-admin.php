@@ -409,9 +409,19 @@ add_action( 'admin_footer', 'mfcf7_zl_deactivation_popup' );
 
 function mfcf7_zl_custom_handle_deactivation_plugin_form_submission(){
 
+	if ( ! isset($_POST['_wpnonce']) || ! wp_verify_nonce($_POST['_wpnonce'], 'custom_plugin_deactivate_nonce') ) {
+        wp_send_json_error(array('message' => esc_html__('Nonce verification failed. Please refresh the page and try again.', 'zl-mfcf7')));
+        return;
+    }
+
     // Log the start of the function
-
-
+	if ( ! current_user_can( 'administrator' ) ) {
+		 // Set a transient or option to show the admin notice
+		 set_transient('mfcf7_zl_deactivation_error', esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7'), 30);
+        
+		 wp_send_json_error(array('message' => esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7')));
+        
+    }
 
     if (isset($_POST['reason'])) {
 
@@ -462,19 +472,33 @@ function mfcf7_zl_custom_handle_deactivation_plugin_form_submission(){
         wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
 
     }
-
-
-
 }
 
 add_action('wp_ajax_custom_plugin_deactivate', 'mfcf7_zl_custom_handle_deactivation_plugin_form_submission');
 
+function mfcf7_zl_show_admin_notice() {
+    if ($error_message = get_transient('mfcf7_zl_deactivation_error')) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p>' . esc_html($error_message) . '</p>';
+        echo '</div>';
+
+        // Delete the transient after displaying the notice
+        delete_transient('mfcf7_zl_deactivation_error');
+    }
+}
+add_action('admin_notices', 'mfcf7_zl_show_admin_notice');
 
 
 // callback function when user select deactived without reason
 
 function mfcf7_zl_handle_deactivation_plugin_without_feedback(){
-
+	if ( ! current_user_can( 'administrator' ) ) {
+        // Send a JSON response indicating the lack of permission
+        wp_send_json_error( array( 'message' => esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7') ) );
+		add_action('admin_notices', 'mfcf7_zl_permission_error_notice');
+    	return;
+    }
+	
 	update_option('mfcf7_zl_plugin_deactivate_request', true);
 
 	wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
@@ -482,3 +506,10 @@ function mfcf7_zl_handle_deactivation_plugin_without_feedback(){
 }
 
 add_action('wp_ajax_deactive_plugin_without_feedback', 'mfcf7_zl_handle_deactivation_plugin_without_feedback');
+function mfcf7_zl_permission_error_notice() {
+    ?>
+    <div class="notice notice-error is-dismissible">
+        <p><?php echo esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7'); ?></p>
+    </div>
+    <?php
+}

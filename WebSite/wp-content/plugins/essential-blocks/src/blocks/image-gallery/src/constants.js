@@ -25,6 +25,11 @@ export const FILTER_BORDER_SHADOW = "filterBorderShadow";
 export const LOADMORE_PADDING = "loadmorePadding";
 export const LOADMORE_BORDER = "loadmoreBorderShadow";
 
+export const LOADMORE_KEYS = {
+    buttonText: 'loadmoreBtnText',
+    textColor: 'loadmoreColor',
+    hoverTextColor: 'loadmoreHvColor',
+}
 
 export const VERTICAL_ALIGN = [
     { label: __("Top", "essential-blocks"), value: "top" },

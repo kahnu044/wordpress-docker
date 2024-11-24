@@ -14,12 +14,7 @@ import {
 /**
  * Internal depencencies
  */
-
-import objAttributes from "./attributes";
-
 import {
-    NORMAL_HOVER,
-    UNIT_TYPES,
     BUTTON_ONE_BACKGROUND,
     BUTTON_TWO_BACKGROUND,
     BUTTON_ONE_BORDER_SHADOW,
@@ -35,54 +30,46 @@ import {
     CONTENT_POSITION,
     BUTTONS_CONNECTOR_ICON_SIZE,
     BUTTON_WIDTH_TYPE,
+    BUTTON_ONE_KEYS,
+    BUTTON_TWO_KEYS,
+    UNIT_TYPES
 } from "./constants/constants";
 
-import { BUTTONS_TYPOGRAPHY, BUTTONS_CONNECTOR_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
+import { 
+    BUTTONS_TYPOGRAPHY, 
+    BUTTONS_CONNECTOR_TYPOGRAPHY 
+} from "./constants/typographyPrefixConstants";
 
 import {
     ColorControl,
     ResponsiveDimensionsControl,
     TypographyDropdown,
-    BorderShadowControl,
     ResponsiveRangeController,
-    BackgroundControl,
-    DynamicInputControl,
     EBIconPicker,
-    InspectorPanel
+    InspectorPanel,
+    EBButton
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
     const { attributes, setAttributes } = props;
     const {
-        resOption,
         preset,
         contentPosition,
-        textOneColor,
-        hoverTextOneColor,
-        textTwoColor,
-        hoverTextTwoColor,
-        buttonTextOne,
-        buttonURLOne,
-        buttonTextTwo,
-        buttonURLTwo,
         innerButtonText,
         innerButtonColor,
         innerButtonTextColor,
         innerButtonIcon,
         showConnector,
         connectorType,
-        buttonsColorType,
         buttonTextAlign,
         buttonsWidthType,
-        buttonOneNewWindow,
-        buttonTwoNewWindow,
     } = attributes;
 
     const changePreset = (selected) => {
-        setAttributes({ preset: selected });
         switch (selected) {
             case "preset-1":
                 setAttributes({
+                    preset: selected,
                     showConnector: true,
                     buttonOneBorderShadowRds_Top: "20",
                     buttonOneBorderShadowRds_Bottom: "0",
@@ -97,6 +84,7 @@ function Inspector(props) {
                 break;
             case "preset-2":
                 setAttributes({
+                    preset: selected,
                     showConnector: false,
                     buttonOneBorderShadowRds_Top: "30",
                     buttonOneBorderShadowRds_Bottom: "30",
@@ -111,6 +99,7 @@ function Inspector(props) {
                 break;
             case "preset-3":
                 setAttributes({
+                    preset: selected,
                     showConnector: false,
                     buttonOneBorderShadowRds_Top: "0",
                     buttonOneBorderShadowRds_Bottom: "0",
@@ -125,6 +114,7 @@ function Inspector(props) {
                 break;
             case "preset-4":
                 setAttributes({
+                    preset: selected,
                     showConnector: false,
                     buttonOneBorderShadowRds_Top: "30",
                     buttonOneBorderShadowRds_Bottom: "30",
@@ -181,59 +171,6 @@ function Inspector(props) {
                                 ))}
                             </ButtonGroup>
                         </BaseControl>
-
-                        <DynamicInputControl
-                            label={__("Button One Text","essential-blocks")}
-                            attrName="buttonTextOne"
-                            inputValue={buttonTextOne}
-                            setAttributes={setAttributes}
-                            onChange={(text) => setAttributes({ buttonTextOne: text })}
-                        />
-                        <DynamicInputControl
-                            label={__("Button One Link","essential-blocks")}
-                            attrName="buttonURLOne"
-                            inputValue={buttonURLOne}
-                            setAttributes={setAttributes}
-                            onChange={(text) => setAttributes({ buttonURLOne: text })}
-                        />
-
-                        {buttonURLOne && (
-                            <ToggleControl
-                                label={__("Open in New Tab", "essential-blocks")}
-                                checked={buttonOneNewWindow}
-                                onChange={() =>
-                                    setAttributes({
-                                        buttonOneNewWindow: !buttonOneNewWindow,
-                                    })
-                                }
-                            />
-                        )}
-
-                        <DynamicInputControl
-                            label={__("Button Two Text","essential-blocks")}
-                            attrName="buttonTextTwo"
-                            inputValue={buttonTextTwo}
-                            setAttributes={setAttributes}
-                            onChange={(text) => setAttributes({ buttonTextTwo: text })}
-                        />
-                        <DynamicInputControl
-                            label={__("Button Two Link","essential-blocks")}
-                            attrName="buttonURLTwo"
-                            inputValue={buttonURLTwo}
-                            setAttributes={setAttributes}
-                            onChange={(text) => setAttributes({ buttonURLTwo: text })}
-                        />
-                        {buttonURLTwo && (
-                            <ToggleControl
-                                label={__("Open in New Tab", "essential-blocks")}
-                                checked={buttonTwoNewWindow}
-                                onChange={() =>
-                                    setAttributes({
-                                        buttonTwoNewWindow: !buttonTwoNewWindow,
-                                    })
-                                }
-                            />
-                        )}
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Buttons", "essential-blocks")} initialOpen={true}>
                         <BaseControl label={__("Button Width Type", "essential-blocks")}>
@@ -356,6 +293,22 @@ function Inspector(props) {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
+                    <EBButton.GeneralTab 
+                        label={__("Button One","essential-blocks")}
+                        buttonAttrProps={BUTTON_ONE_KEYS}
+                        attrPrefix="btn1"
+                        hasIcon={false}
+                        hasAlignment={false}
+                        hasWidth={false}
+                    />
+                    <EBButton.GeneralTab 
+                        label={__("Button Two","essential-blocks")}
+                        buttonAttrProps={BUTTON_TWO_KEYS}
+                        attrPrefix="btn2"
+                        hasIcon={false}
+                        hasAlignment={false}
+                        hasWidth={false}
+                    />
                 </>
             </InspectorPanel.General>
             <InspectorPanel.Style>
@@ -365,104 +318,33 @@ function Inspector(props) {
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={BUTTONS_TYPOGRAPHY}
                         />
-
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Button One Background", "essential-blocks")}
-                            </h3>
-                        </BaseControl>
-                        <BackgroundControl
-                            controlName={BUTTON_ONE_BACKGROUND}
-                            noOverlay={true}
-                            noMainBgi={true}
+                        <EBButton.StyleTab 
+                            label={__("Button One","essential-blocks")}
+                            buttonAttrProps={BUTTON_ONE_KEYS}
+                            attrPrefix="btn1"
+                            hasTypography={false}
+                            background={BUTTON_ONE_BACKGROUND}
+                            border={BUTTON_ONE_BORDER_SHADOW}
+                            hasPadding={false}
+                            hasHoverEffect={false}
                         />
-
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Button Two Background", "essential-blocks")}
-                            </h3>
-                        </BaseControl>
-                        <BackgroundControl
-                            controlName={BUTTON_TWO_BACKGROUND}
-                            noOverlay={true}
-                            noMainBgi={true}
+                        <EBButton.StyleTab 
+                            label={__("Button Two","essential-blocks")}
+                            buttonAttrProps={BUTTON_TWO_KEYS}
+                            attrPrefix="btn2"
+                            hasTypography={false}
+                            typography={BUTTONS_TYPOGRAPHY}
+                            background={BUTTON_TWO_BACKGROUND}
+                            border={BUTTON_TWO_BORDER_SHADOW}
+                            hasPadding={false}
+                            padding={BUTTONS_PADDING}
+                            hasHoverEffect={false}
                         />
-
-                        <BaseControl>
-                            <h3 className="eb-control-title">{__("Text Color", "essential-blocks")}</h3>
-                        </BaseControl>
-
-                        <ButtonGroup className="eb-inspector-btn-group">
-                            {NORMAL_HOVER.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={buttonsColorType === item.value}
-                                    isSecondary={buttonsColorType !== item.value}
-                                    onClick={() => setAttributes({ buttonsColorType: item.value })}
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-
-                        {buttonsColorType === "normal" && (
-                            <>
-                                <ColorControl
-                                    label={__("Button One", "essential-blocks")}
-                                    color={textOneColor}
-                                    attributeName={'textOneColor'}
-                                />
-                                <ColorControl
-                                    label={__("Button Two", "essential-blocks")}
-                                    color={textTwoColor}
-                                    attributeName={'textTwoColor'}
-                                />
-                            </>
-                        )}
-
-                        {buttonsColorType === "hover" && (
-                            <>
-                                <ColorControl
-                                    label={__("Button One Hover", "essential-blocks")}
-                                    color={hoverTextOneColor}
-                                    attributeName={'hoverTextOneColor'}
-                                />
-                                <ColorControl
-                                    label={__("Button Two Hover", "essential-blocks")}
-                                    color={hoverTextTwoColor}
-                                    attributeName={'hoverTextTwoColor'}
-                                />
-                            </>
-                        )}
-
-                        <InspectorPanel.PanelBody
-                            className={"eb-subpanel"}
-                            title={__("Button One Border", "essential-blocks")}
-                            initialOpen={true}
-                        >
-                            <BorderShadowControl
-                                controlName={BUTTON_ONE_BORDER_SHADOW}
-                                noShadow
-                            />
-                        </InspectorPanel.PanelBody>
-
-                        <InspectorPanel.PanelBody
-                            className={"eb-subpanel"}
-                            title={__("Button Two Border", "essential-blocks")}
-                            initialOpen={true}
-                        >
-                            <BorderShadowControl
-                                controlName={BUTTON_TWO_BORDER_SHADOW}
-                                noShadow
-                            />
-                        </InspectorPanel.PanelBody>
-
                         <ResponsiveDimensionsControl
                             controlName={BUTTONS_PADDING}
                             baseLabel={__("Padding","essential-blocks")}
                         />
                     </InspectorPanel.PanelBody>
-
                     <InspectorPanel.PanelBody title={__("Connector", "essential-blocks")} initialOpen={false}>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}

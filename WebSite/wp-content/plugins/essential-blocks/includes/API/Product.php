@@ -302,7 +302,6 @@ class Product extends Base
                 $query_args[ 'tax_query' ] = $tax_query;
             }
         }
-        // For Old Query Data [Beofre 4.3.2]
         else {
             if ( ! empty( $attr[ 'category' ] ) ) {
                 $query_args[ 'tax_query' ][] = [
@@ -310,6 +309,16 @@ class Product extends Base
                         'taxonomy' => 'product_cat',
                         'field'    => 'term_id',
                         'terms'    => explode( ',', $attr[ 'category' ] )
+                     ]
+                 ];
+            }
+            if ( ! empty( $attr[ 'excludeCategory' ] ) ) {
+                $query_args[ 'tax_query' ][] = [
+                    [
+                        'taxonomy' => 'product_cat',
+                        'field'    => 'term_id',
+                        'terms'    => explode( ',', $attr[ 'excludeCategory' ] ),
+                        'operator' => 'NOT IN',
                      ]
                  ];
             }
@@ -321,6 +330,16 @@ class Product extends Base
                         'taxonomy' => 'product_tag',
                         'field'    => 'term_id',
                         'terms'    => explode( ',', $attr[ 'tag' ] )
+                     ]
+                 ];
+            }
+            if ( ! empty( $attr[ 'excludeTag' ] ) ) {
+                $query_args[ 'tax_query' ][] = [
+                    [
+                        'taxonomy' => 'product_tag',
+                        'field'    => 'term_id',
+                        'terms'    => explode( ',', $attr[ 'excludeTag' ] ),
+                        'operator' => 'NOT IN',
                      ]
                  ];
             }
@@ -339,6 +358,13 @@ class Product extends Base
 
         if(isset($attr['post__in']) && is_array($attr['post__in']) && count($attr['post__in'])>0) {
             $query_args[ 'post__in' ] = $attr['post__in'];
+        }
+
+        if(! empty($attr['include'])) {
+            $query_args[ 'post__in' ] = explode( ',', $attr[ 'include' ]);
+        }
+        if(! empty($attr['exclude'])) {
+            $query_args[ 'post__not_in' ] = explode( ',', $attr[ 'exclude' ]);
         }
 
         return $query_args;

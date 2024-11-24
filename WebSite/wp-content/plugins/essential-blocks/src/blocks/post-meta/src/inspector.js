@@ -8,6 +8,7 @@ import {
     Button,
     ButtonGroup,
     BaseControl,
+    RangeControl
 } from "@wordpress/components";
 
 /**
@@ -34,8 +35,9 @@ import {
     ResponsiveAlignControl,
     SortControl,
     InspectorPanel,
-    ResponsiveRangeController
-}  from "@essential-blocks/controls";
+    ResponsiveRangeController,
+    EBIconPicker
+} from "@essential-blocks/controls";
 
 export default function Inspector(props) {
     const { attributes, setAttributes } = props;
@@ -51,7 +53,13 @@ export default function Inspector(props) {
         productSkuLabel,
         type,
         metaLabelColor,
-        metaValueColor
+        metaValueColor,
+        authorIcon,
+        dateIcon,
+        skuIcon,
+        showMetaIcon,
+        metaIconColor,
+        metaIconSize
     } = attributes;
 
     const toggleContent = (value, isChecked) => {
@@ -68,7 +76,7 @@ export default function Inspector(props) {
                 list.splice(index, 1);
             }
         }
-        setAttributes({enableContents: list})
+        setAttributes({ enableContents: list })
     }
 
     return (
@@ -85,7 +93,7 @@ export default function Inspector(props) {
                     initialOpen={true}
                 >
                     <ResponsiveAlignControl
-                        baseLabel={__( "Alignment", "essential-blocks" )}
+                        baseLabel={__("Alignment", "essential-blocks")}
                         controlName={META_ALIGNMENT}
                         options={TEXT_ALIGN}
                         resOption={resOption}
@@ -111,61 +119,97 @@ export default function Inspector(props) {
                         </ButtonGroup>
                     </BaseControl>
                     <ToggleControl
-                        label={__("Author","essential-blocks")}
+                        label={__("Author", "essential-blocks")}
                         checked={showAuthor}
                         onChange={() => {
                             setAttributes({
                                 showAuthor: !showAuthor,
                             });
-                            toggleContent('author',!showAuthor)
+                            toggleContent('author', !showAuthor)
                         }}
                     />
                     <ToggleControl
-                        label={__("Published Date","essential-blocks")}
+                        label={__("Published Date", "essential-blocks")}
                         checked={showDate}
                         onChange={() => {
                             setAttributes({
                                 showDate: !showDate,
                             });
-                            toggleContent('date',!showDate)
+                            toggleContent('date', !showDate)
                         }}
                     />
 
                     {'product' === type && (
                         <ToggleControl
-                            label={__("Product SKU","essential-blocks")}
+                            label={__("Product SKU", "essential-blocks")}
                             checked={showProductSku}
                             onChange={() => {
                                 setAttributes({
                                     showProductSku: !showProductSku,
                                 });
-                                toggleContent('product_sku',!showProductSku)
+                                toggleContent('product_sku', !showProductSku)
                             }}
                         />
                     )}
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Meta Label", "essential-blocks")} initialOpen={false}>
+                <InspectorPanel.PanelBody title={__("Meta Content", "essential-blocks")} initialOpen={false}>
+                    <ToggleControl
+                        label={__("Show Meta Icon", "essential-blocks")}
+                        checked={showMetaIcon}
+                        onChange={() => {
+                            setAttributes({
+                                showMetaIcon: !showMetaIcon,
+                            });
+                        }}
+                    />
                     {showAuthor && (
-                        <TextControl
-                            label={__("Author Label")}
-                            value={ authorLabel }
-                            onChange={ ( value ) => setAttributes( {authorLabel: value} ) }
-                        />
+                        <>
+                            <TextControl
+                                label={__("Author Label")}
+                                value={authorLabel}
+                                onChange={(value) => setAttributes({ authorLabel: value })}
+                            />
+
+                            {showMetaIcon == true && (
+                                <EBIconPicker
+                                    value={authorIcon}
+                                    attributeName={'authorIcon'}
+                                />
+                            )}
+                        </>
                     )}
-                    
+
                     {showDate && (
-                        <TextControl
-                            label={__("Date Label")}
-                            value={ dateLabel }
-                            onChange={ ( value ) => setAttributes( {dateLabel: value} ) }
-                        />
+                        <>
+                            <TextControl
+                                label={__("Date Label")}
+                                value={dateLabel}
+                                onChange={(value) => setAttributes({ dateLabel: value })}
+                            />
+                            {showMetaIcon == true && (
+                                <EBIconPicker
+                                    value={dateIcon}
+                                    attributeName={'dateIcon'}
+                                />
+                            )}
+                        </>
+
                     )}
                     {'product' === type && showProductSku && (
-                        <TextControl
-                            label={__("Product SKU Label")}
-                            value={ productSkuLabel }
-                            onChange={ ( value ) => setAttributes( {productSkuLabel: value} ) }
-                        />
+                        <>
+                            <TextControl
+                                label={__("Product SKU Label")}
+                                value={productSkuLabel}
+                                onChange={(value) => setAttributes({ productSkuLabel: value })}
+                            />
+                            {showMetaIcon == true && (
+                                <EBIconPicker
+                                    value={skuIcon}
+                                    attributeName={'skuIcon'}
+                                />
+                            )}
+                        </>
+
                     )}
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody
@@ -183,7 +227,7 @@ export default function Inspector(props) {
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
-                <InspectorPanel.PanelBody title={__("General","essential-blocks")} initialOpen={true}>
+                <InspectorPanel.PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                     <ResponsiveRangeController
                         noUnits
                         baseLabel={__(
@@ -196,7 +240,7 @@ export default function Inspector(props) {
                         step={1}
                     />
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Meta Label","essential-blocks")} initialOpen={true}>
+                <InspectorPanel.PanelBody title={__("Meta Label", "essential-blocks")} initialOpen={true}>
                     <TypographyDropdown
                         baseLabel={__("Typography", "essential-blocks")}
                         typographyPrefixConstant={META_LABEL}
@@ -206,8 +250,34 @@ export default function Inspector(props) {
                         color={metaLabelColor}
                         attributeName={'metaLabelColor'}
                     />
+
+                    {showMetaIcon == true && (
+                        <>
+                            <ColorControl
+                                label={__("Icon Color", "essential-blocks")}
+                                color={metaIconColor}
+                                attributeName={'metaIconColor'}
+                            />
+                            <RangeControl
+                                label={__(
+                                    "Icon Size",
+                                    "essential-blocks"
+                                )}
+                                value={metaIconSize}
+                                onChange={(metaIconSize) =>
+                                    setAttributes({
+                                        metaIconSize,
+                                    })
+                                }
+                                min={0}
+                                max={300}
+                                step={1}
+                                allowReset={true}
+                            />
+                        </>
+                    )}
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Meta Value","essential-blocks")} initialOpen={true}>
+                <InspectorPanel.PanelBody title={__("Meta Value", "essential-blocks")} initialOpen={true}>
                     <TypographyDropdown
                         baseLabel={__("Typography", "essential-blocks")}
                         typographyPrefixConstant={META_VALUE}

@@ -51,12 +51,14 @@ export default function TabOptions() {
                 "essential-blocks"
             ),
             doc: "https://essential-blocks.com/docs/configure-google-fonts/",
+            default: true
         },
         enableFontawesome: {
             logo: `${EssentialBlocksLocalize.image_url}/admin/logo-fontawesome.png`,
             title: "Font Awesome",
             description: __("Enable Font Awesome to get access to 2,000+ exclusive icon library and toolkit for all the fully customizable blocks of Essential Blocks.", "essential-blocks"),
-        },
+            default: true
+        }
     };
 
     const apiIntegrations = applyFilters('eb_admin_option_integrations', {
@@ -279,18 +281,8 @@ export default function TabOptions() {
                                     <div className="block-content">
                                         <label className="eb-admin-checkbox-label">
                                             <Switch
-                                                checked={
-                                                    settingsData[item] ===
-                                                        "false"
-                                                        ? false
-                                                        : true
-                                                }
-                                                onChange={(checked) =>
-                                                    handleOptimizationSwitch(
-                                                        item,
-                                                        checked
-                                                    )
-                                                }
+                                                checked={!settingsData[item] ? (optimizations[item]?.default) : (settingsData[item] === "false" ? false : true)}
+                                                onChange={(checked) => handleOptimizationSwitch(item, checked)}
                                                 defaultChecked={true}
                                                 disabled={false}
                                                 checkedChildren="ON"

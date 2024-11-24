@@ -6,7 +6,6 @@ use EssentialBlocks\Core\Block;
 class ParallaxSlider extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-parallax-slider-frontend' ];
-    protected $frontend_styles  = [ 'essential-blocks-frontend-style' ];
     /**
      * Unique name of the block.
      *

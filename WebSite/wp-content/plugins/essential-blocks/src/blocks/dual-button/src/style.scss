@@ -46,32 +46,39 @@
 
 //Styles for Preset Designs
 .eb-button-group-wrapper .eb-button-parent,
-.eb-button-group-wrapper .eb-button-parent:focus {
+.eb-button-group-wrapper .eb-button-parent:focus,
+.eb-button-group-wrapper .eb-button-anchor,
+.eb-button-group-wrapper .eb-button-anchor:focus {
 	text-decoration: none !important;
 }
-.eb-button-group-wrapper .eb-button-parent .eb-button-text {
+.eb-button-group-wrapper .eb-button-parent .eb-button-text,
+.eb-button-group-wrapper .eb-button-anchor .eb-button-text {
 	line-height: 1.8;
 }
 .eb-button-group-wrapper.preset-4 {
 	flex-direction: column !important;
 	
-	.eb-button-parent.eb-button-one {
+	.eb-button-parent.eb-button-one,
+	.eb-button-anchore.eb-button-one {
 		margin-top: 0 !important;
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 	}
-	.eb-button-parent.eb-button-two {
+	.eb-button-parent.eb-button-two,
+	.eb-button-anchor.eb-button-two {
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 		margin-bottom: 0 !important;
 	}
 }
-.eb-button-group-wrapper:not(.preset-4) .eb-button-parent.eb-button-one {
+.eb-button-group-wrapper:not(.preset-4) .eb-button-parent.eb-button-one,
+.eb-button-group-wrapper:not(.preset-4) .eb-button-anchor.eb-button-one {
 	margin-top: 0 !important;
 	margin-left: 0 !important;
 	margin-bottom: 0 !important;
 }
-.eb-button-group-wrapper:not(.preset-4) .eb-button-parent.eb-button-two {
+.eb-button-group-wrapper:not(.preset-4) .eb-button-parent.eb-button-two,
+.eb-button-group-wrapper:not(.preset-4) .eb-button-anchor.eb-button-two {
 	margin-top: 0 !important;
 	margin-right: 0 !important;
 	margin-bottom: 0 !important;

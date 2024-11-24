@@ -3,7 +3,7 @@
  */
 import { RichText } from "@wordpress/block-editor";
 import {
-EBDisplayIcon, sanitizeURL, BlockProps
+EBDisplayIcon, sanitizeURL, BlockProps, EBButton
 } from "@essential-blocks/controls";
 
 const save = ({ attributes }) => {
@@ -31,25 +31,9 @@ const save = ({ attributes }) => {
                     className={`eb-button-wrapper eb-button-alignment ${blockId}`}
                 >
                     <div className="eb-button">
-                        <a
-                            className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
-                                }`}
-                            href={buttonURL ? sanitizeURL(buttonURL) : ""}
-                            {...(newWindow && { target: "_blank" })}
-                            rel={addNofollow ? "nofollow noopener" : "noopener"}
-                        >
-                            {addIcon && iconPosition === "left" ? (
-                                <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-left hvr-icon"} />
-                            ) : (
-                                ""
-                            )}
-                            <RichText.Content value={buttonText} />
-                            {addIcon && iconPosition === "right" ? (
-                                <EBDisplayIcon icon={icon} className={"eb-button-icon eb-button-icon-right hvr-icon"} />
-                            ) : (
-                                ""
-                            )}
-                        </a>
+                        <EBButton.Content 
+                            attributes={attributes}
+                        />
                     </div>
                 </div>
             </div>

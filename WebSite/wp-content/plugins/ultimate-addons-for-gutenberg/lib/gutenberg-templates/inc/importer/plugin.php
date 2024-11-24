@@ -461,6 +461,8 @@ class Plugin {
 		$content = isset( $_REQUEST['content'] ) ? stripslashes( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$category = isset( $_REQUEST['category'] ) ? intval( $_REQUEST['category'] ) : '';
 
+		$block_id = isset( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : '';
+
 		// Empty mapping? Then return.
 		if ( ! empty( $ids_mapping ) ) {
 			// Replace ID's.
@@ -519,8 +521,12 @@ class Plugin {
 			$content = $this->maybe_import_images( $content );
 		}
 
+		// Flush the object when import is successful.
+		delete_option( 'ast-block-templates_data-' . $block_id );
+
 		// Update content.
 		wp_send_json_success( $content );
+
 	}
 
 	/**
@@ -853,8 +859,9 @@ class Plugin {
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return;
 		}
-
-		$post_types = get_post_types( array( 'public' => true ), 'names' );
+		
+		$exclude_post_types = apply_filters( 'ast_block_templates_exclude_post_types', array() );
+		$post_types = array_diff( get_post_types( array( 'public' => true ), 'names' ), $exclude_post_types );
 
 		$current_screen = get_current_screen();
 
@@ -895,17 +902,15 @@ class Plugin {
 		if ( is_callable( 'BSF_License_Manager::bsf_is_active_license' ) ) {
 			$license_status = \BSF_License_Manager::bsf_is_active_license( 'astra-pro-sites' );
 		}
-		$astra_theme_css = apply_filters( 'astra_dynamic_theme_css', '' );
-		$astra_theme_css = str_replace( ':root', '', $astra_theme_css );
-		$astra_theme_css = preg_replace( '/(?<!-)(\\bbody\\b)(?!-)/i', '', $astra_theme_css );
 
 		$upload_dir = wp_upload_dir();
 		$common_style_url = trailingslashit( $upload_dir['basedir'] ) . 'uag-plugin/custom-style-blocks.css';
 
 		if ( ! file_exists( $common_style_url ) ) {
 			$this->regenerate_spectra_css();
-			$common_css_content = file_exists( $common_style_url ) ? file_get_contents( $common_style_url ) : '';
 		}
+
+		$common_css_content = file_exists( $common_style_url ) ? file_get_contents( $common_style_url ) : '';
 
 		if ( empty( $common_css_content ) ) {
 			$common_css_content = Sync_Library::instance()->get_server_spectra_common_css();
@@ -918,17 +923,6 @@ class Plugin {
 
 		if ( defined( 'ASTRA_THEME_VERSION' ) ) {
 			$astra_customizer_css = ( class_exists( 'Astra_Dynamic_CSS' ) ) ? \Astra_Dynamic_CSS::return_output( '' ) : '';
-			//phpcs:disable
-			// ob_start();
-			// $ast_header = astra_header_markup();
-			// $ast_header = ob_get_clean();
-
-			// ob_start();
-			// $ast_footer = astra_footer_markup();
-			// $ast_footer = ob_get_clean();
-			// $static_css_path = ASTRA_THEME_DIR . 'assets/css/minified/main.min.css';
-			//phpcs:enable
-
 		}
 
 		$server_astra_customizer_css = Helper::instance()->get_block_template_customiser_css();
@@ -947,11 +941,13 @@ class Plugin {
 			'ast_block_templates_authorization_url_param', array(
 				'type' => 'token',
 				'scs-authorize' => true,
+				'source' => 'spectra',
 			)
 		);
 
 		$credit_request_params = array(
 			'success_url' => isset( $_SERVER['REQUEST_URI'] ) ? urlencode( $this->remove_query_params( network_home_url() . $_SERVER['REQUEST_URI'], $remove_parameters ) . '&ast_action=credits' ) : '', // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			'source' => 'spectra',
 		);
 
 		$spec_ai_auth_url = add_query_arg( $request_params, ZIPWP_APP );
@@ -968,6 +964,14 @@ class Plugin {
 			$business_details = $this->maybe_parse_social_profiles( $business_details );
 		}
 		$pro_url = apply_filters( 'ast_block_templates_pro_url', 'https://wpastra.com/starter-templates-plans/?utm_source=gutenberg-templates&utm_medium=dashboard&utm_campaign=Starter-Template-Backend' );
+
+		$wp_stylesheet_path = ABSPATH . 'wp-includes/css/dist/block-library/style.min.css';
+
+		$wp_stylesheet = '';
+		if ( file_exists( $wp_stylesheet_path ) ) {
+			$wp_stylesheet = file_get_contents( $wp_stylesheet_path ); //phpcs:ignore
+			$wp_stylesheet = preg_replace( '/html/i', '.st-block-container', (string) $wp_stylesheet );
+		}
 
 		wp_localize_script(
 			'ast-block-templates',
@@ -996,7 +1000,6 @@ class Plugin {
 					'license_status'          => $license_status,
 					'isPro'                   => defined( 'ASTRA_PRO_SITES_NAME' ) ? true : false,
 					'getProURL'               => esc_url( defined( 'ASTRA_PRO_SITES_NAME' ) ? ( admin_url( 'plugins.php?bsf-inline-license-form=astra-pro-sites' ) ) : $pro_url ),
-					'astra_theme_css'         => isset( $astra_theme_css ) ? $astra_theme_css : '',
 					'site_url'                => site_url(),
 					'home_url'                => home_url(),
 					'global-styles'           => preg_replace( '/(?<!-)(\\bbody\\b)(?!-)/i', '.st-block-container', wp_get_global_stylesheet() ),
@@ -1057,6 +1060,7 @@ class Plugin {
 					'zipwp_ai_auth_nonce' => wp_create_nonce( 'zip_ai_auth_nonce' ),
 					'gutenberg_plugin_status' => is_plugin_active( 'gutenberg/gutenberg.php' ),
 					'is_personalized' => get_option( 'ast-templates-ai-content', false ),
+					'wp_stylesheet' => $wp_stylesheet,
 				)
 			)
 		);
@@ -1430,15 +1434,21 @@ class Plugin {
 	 * Get all blocks
 	 *
 	 * @since 1.0.0
+	 * @param  int $start Start Page.
+	 * @param  int $end End Page.
 	 * @return array All Elementor Blocks.
 	 */
-	public function get_all_blocks() {
-		$blocks         = array();
-		$blocks_pages   = array();
-		$blocks_wireframe   = array();
-		$total_requests = (int) Helper::instance()->get_block_templates_requests();
+	public function get_all_blocks( $start = 0, $end = 0 ) {
+		$blocks = array();
+		$blocks_pages = array();
+		$blocks_wireframe = array();
 
-		for ( $page = 1; $page <= $total_requests; $page++ ) {
+		if ( 0 === $start && 0 === $end ) {
+			$start = 1;
+			$end = (int) Helper::instance()->get_block_templates_requests();
+		}
+
+		for ( $page = $start; $page <= $end; $page++ ) {
 			$current_page_data = Helper::instance()->get_blocks_templates( $page );
 			if ( ! empty( $current_page_data ) ) {
 				foreach ( $current_page_data as $page_id => $page_data ) {
@@ -1453,6 +1463,7 @@ class Plugin {
 					}
 				}
 			}
+			unset( $current_page_data );
 		}
 
 		return array(

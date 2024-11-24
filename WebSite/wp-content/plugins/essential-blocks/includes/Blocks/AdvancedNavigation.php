@@ -6,7 +6,7 @@ use EssentialBlocks\Core\Block;
 class AdvancedNavigation extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-advanced-navigation-frontend' ];
-    protected $frontend_styles  = [ 'essential-blocks-frontend-style', 'essential-blocks-fontawesome' ];
+    protected $frontend_styles  = [ 'essential-blocks-fontawesome' ];
 
     /**
      * Unique name of the block.

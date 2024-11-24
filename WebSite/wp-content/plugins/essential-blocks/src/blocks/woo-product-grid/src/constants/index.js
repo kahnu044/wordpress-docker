@@ -35,6 +35,7 @@ export const IMG_HEIGHT = "imgHeight";
 
 // BORDER & SHADOW
 export const BTN_BORDER_SHADOW = "btnBorder";
+export const VIEW_BTN_BORDER_SHADOW = "viewbtnBorder";
 export const SALE_BADGE_BORDER = "saleBorder";
 export const IMAGE_BORDER_SHADOW = "imgBorder";
 
@@ -48,6 +49,7 @@ export const TITLE_MARGIN = "titleMargin";
 export const PRICE_MARGIN = "priceMargin";
 export const RATING_MARGIN = "ratingMargin";
 export const BUTTON_MARGIN = "btnMargin";
+export const VIEW_BUTTON_MARGIN = "viewbtnMargin";
 export const DESC_MARGIN = "descMargin";
 export const LOADMORE_PADDING = "loadMorePadding";
 export const LOADMORE_MARGIN = "loadMoreMargin";

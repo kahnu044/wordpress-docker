@@ -2,10 +2,8 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { Dashicon } from "@wordpress/components";
 import { memo } from "@wordpress/element";
 import {
-    URLInput,
     BlockControls,
     BlockAlignmentToolbar,
 } from "@wordpress/block-editor";
@@ -17,27 +15,18 @@ import {
 import Inspector from "./inspector";
 
 import {
-    DynamicInputValueHandler,
-    EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBButton
 } from "@essential-blocks/controls";
 import Style from "./style";
 import defaultAttributes from './attributes';
 
 function Edit(props) {
-    const { attributes, setAttributes, isSelected, clientId, className, name } = props;
+    const { attributes, setAttributes, isSelected } = props;
     const {
-        blockMeta,
         blockId,
-        resOption,
-        addIcon,
-        icon,
-        iconPosition,
-        buttonText,
-        buttonURL,
         buttonAlign,
-        hoverEffect,
         classHook,
         type,
     } = attributes;
@@ -77,51 +66,13 @@ function Edit(props) {
             </BlockControls>
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-
-                    <div className={`eb-button-wrapper eb-button-alignment ${blockId}`}>
+                    <div className={`eb-button-wrapper eb-button-editor ${blockId}`}>
                         <div className={`eb-button eb-button-${type}`}>
-                            <a
-                                className={`eb-button-anchor${hoverEffect ? ` ${hoverEffect}` : ""
-                                    }`}
-                            >
-                                {addIcon && iconPosition === "left" ? (
-                                    <EBDisplayIcon
-                                        icon={icon}
-                                        className={`eb-button-icon eb-button-icon-left hvr-icon`}
-                                    />
-                                ) : (
-                                    ""
-                                )}
-                                <DynamicInputValueHandler
-                                    placeholder={__("Add Text..", "essential-blocks")}
-                                    className="eb-button-text"
-                                    value={buttonText}
-                                    onChange={(newText) => setAttributes({ buttonText: newText })}
-                                    allowedFormats={[
-                                        "core/bold",
-                                        "core/italic",
-                                        "core/strikethrough",
-                                    ]}
-                                />
-                                {addIcon && iconPosition === "right" ? (
-                                    <EBDisplayIcon
-                                        icon={icon}
-                                        className={`eb-button-icon eb-button-icon-left hvr-icon`}
-                                    />
-                                ) : (
-                                    ""
-                                )}
-                            </a>
+                            <EBButton 
+                                isSelected={isSelected} 
+                                urlInput={true}
+                            />
                         </div>
-                        {isSelected && (
-                            <div className="eb-button-link">
-                                <Dashicon icon="admin-links" />
-                                <URLInput
-                                    value={buttonURL}
-                                    onChange={(newURL) => setAttributes({ buttonURL: newURL })}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
             </BlockProps.Edit>

@@ -592,6 +592,85 @@
         }
 
         /**
+         * Get HTML for a gallery image.
+         *
+         * Hooks: woocommerce_gallery_thumbnail_size, woocommerce_gallery_image_size and woocommerce_gallery_full_size accept name based image sizes, or an array of width/height values.
+         *
+         * @param int  $attachment_id Attachment ID.
+         * @param bool $main_image Is this the main image or a thumbnail?.
+         * @return string
+         */
+        public static function get_product_gallery_image_html( $attachment_id, $main_image = false )
+        {
+            $gallery_thumbnail = wc_get_image_size( 'gallery_thumbnail' );
+            $thumbnail_size    = apply_filters( 'woocommerce_gallery_thumbnail_size', [ $gallery_thumbnail[ 'width' ], $gallery_thumbnail[ 'height' ] ] );
+            $image_size        = apply_filters( 'woocommerce_gallery_image_size', $main_image ? 'woocommerce_single' : $thumbnail_size );
+            $full_size         = apply_filters( 'woocommerce_gallery_full_size', apply_filters( 'woocommerce_product_thumbnails_large_size', 'full' ) );
+            $thumbnail_src     = wp_get_attachment_image_src( $attachment_id, $thumbnail_size );
+            $full_src          = wp_get_attachment_image_src( $attachment_id, $full_size );
+            $alt_text          = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+            $image             = wp_get_attachment_image(
+                $attachment_id,
+                $image_size,
+                false,
+                [
+                    'class'                   => 'eb-product-gallery-image',
+                    'alt'                     => $alt_text,
+                    'data-large_image'        => esc_url( $full_src[ 0 ] ),
+                    'data-large_image_width'  => esc_attr( $full_src[ 1 ] ),
+                    'data-large_image_height' => esc_attr( $full_src[ 2 ] )
+                 ]
+            );
+
+            return $image;
+        }
+
+        /**
+         * return value from json array
+         *
+         * @param array $arr
+         *
+         * @return array
+         */
+        public static function get_value_from_json_array( $arr )
+        {
+            if ( isset( $arr ) && is_array( $arr ) && count( $arr ) > 0 ) {
+                $values = [  ];
+                foreach ( $arr as $key => $value ) {
+                    if ( is_array( $value ) && count( $value ) > 0 && isset( $value[ 'value' ] ) ) {
+                        array_push( $values, $value[ 'value' ] );
+                    }
+                }
+
+                if ( count( $values ) > 0 ) {
+                    return $values;
+                }
+            }
+            return [  ];
+        }
+
+        /**
+         * Essential Blocks Settings (by key)
+         *
+         * @param string $key array key.
+         *
+         * @return array | boolean
+         * @since   5.1.0
+         */
+        public static function get_eb_settings( $key = '' )
+        {
+            $settings = get_option( 'eb_settings', [  ] );
+            if ( strlen( $key ) > 0 ) {
+                if ( isset( $settings[ $key ] ) ) {
+                    return $settings[ $key ];
+                } else {
+                    return false;
+                }
+            }
+            return $settings;
+        }
+
+        /**
          * Version Update warning
          *
          * @param mixed $current_version
@@ -618,115 +697,59 @@
         ?>
 <style>
 hr.eb-update-warning__separator {
-    margin: 15px -13px;
-    border-color: #dba618;
+margin: 15px -13px;
+border-color: #dba618;
 }
 
 .eb-update-warning .dashicons {
-    display: inline-block;
-    color: #F49B07;
+display: inline-block;
+color: #F49B07;
 }
 
 .eb-update-warning .eb-update-warning__title {
-    display: inline-block;
-    font-size: 1.05em;
-    color: #444;
-    font-weight: 500;
-    margin-bottom: 10px;
+display: inline-block;
+font-size: 1.05em;
+color: #444;
+font-weight: 500;
+margin-bottom: 10px;
 }
 
 .eb-update-warning__message {
-    margin-bottom: 15px;
+margin-bottom: 15px;
 }
 
 .update-message.notice-warning p:empty {
-    display: none;
+display: none;
 }
 </style>
 <hr class="eb-update-warning__separator" />
 <div class="eb-update-warning">
-    <div>
+<div>
+    <span class="dashicons dashicons-info"></span>
+    <div class="eb-update-warning__title">
+        <?php echo esc_html__( 'Heads up!', 'essential-blocks' ); ?>
+    </div>
+    <div class="eb-update-warning__message">
+        <?php echo wp_kses_post( $notice ); ?>
+    </div>
+
+    <?php
+        if ( $upgrade_notice !== false ) {
+                ?>
+    <hr class="eb-update-warning__separator" />
+    <div class="eb-update-warning__message">
         <span class="dashicons dashicons-info"></span>
         <div class="eb-update-warning__title">
-            <?php echo esc_html__( 'Heads up!', 'essential-blocks' ); ?>
+            <?php echo esc_html__( 'What\'s new?', 'essential-blocks' ); ?>
         </div>
         <div class="eb-update-warning__message">
-            <?php echo wp_kses_post( $notice ); ?>
+            <?php echo wp_kses_post( $upgrade_notice ); ?>
         </div>
-
-        <?php
-            if ( $upgrade_notice !== false ) {
-                    ?>
-        <hr class="eb-update-warning__separator" />
-        <div class="eb-update-warning__message">
-            <span class="dashicons dashicons-info"></span>
-            <div class="eb-update-warning__title">
-                <?php echo esc_html__( 'What\'s new?', 'essential-blocks' ); ?>
-            </div>
-            <div class="eb-update-warning__message">
-                <?php echo wp_kses_post( $upgrade_notice ); ?>
-            </div>
-        </div>
-        <?php
-        }?>
     </div>
+    <?php
+    }?>
+</div>
 </div>
 <?php
-    }
-
-
-/**
-* Get HTML for a gallery image.
-*
-* Hooks: woocommerce_gallery_thumbnail_size, woocommerce_gallery_image_size and woocommerce_gallery_full_size accept name based image sizes, or an array of width/height values.
-*
-* @param int  $attachment_id Attachment ID.
-* @param bool $main_image Is this the main image or a thumbnail?.
-* @return string
-*/
-public static function get_product_gallery_image_html( $attachment_id, $main_image = false ) {
-   $gallery_thumbnail = wc_get_image_size( 'gallery_thumbnail' );
-   $thumbnail_size    = apply_filters( 'woocommerce_gallery_thumbnail_size', array( $gallery_thumbnail['width'], $gallery_thumbnail['height'] ) );
-   $image_size        = apply_filters( 'woocommerce_gallery_image_size', $main_image ? 'woocommerce_single' : $thumbnail_size );
-   $full_size         = apply_filters( 'woocommerce_gallery_full_size', apply_filters( 'woocommerce_product_thumbnails_large_size', 'full' ) );
-   $thumbnail_src     = wp_get_attachment_image_src( $attachment_id, $thumbnail_size );
-   $full_src          = wp_get_attachment_image_src( $attachment_id, $full_size );
-   $alt_text          = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
-   $image             = wp_get_attachment_image(
-       $attachment_id,
-       $image_size,
-       false,
-       [
-        'class' => 'eb-product-gallery-image',
-        'alt' => $alt_text,
-        'data-large_image'        => esc_url( $full_src[0] ),
-        'data-large_image_width'  => esc_attr( $full_src[1] ),
-        'data-large_image_height' => esc_attr( $full_src[2] ),
-       ]
-   );
-
-   return  $image;
-}
-    /**
-     * return value from json array
-     *
-     * @param array $arr
-     *
-     * @return array
-     */
-    public static function get_value_from_json_array($arr) {
-        if ( isset( $arr ) && is_array( $arr ) && count( $arr ) > 0 ) {
-                $values    = [];
-                foreach ( $arr as $key => $value ) {
-                    if ( is_array( $value ) && count( $value ) > 0 && isset( $value[ 'value' ] ) ) {
-                        array_push( $values, $value[ 'value' ] );
-                        }
-                    }
-
-                if ( count( $values ) > 0 ) {
-                    return $values;
-                }
-        }
-        return [];
     }
 }

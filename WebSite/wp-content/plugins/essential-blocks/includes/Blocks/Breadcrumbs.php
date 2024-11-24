@@ -6,7 +6,7 @@ use EssentialBlocks\Utils\Helper;
 
 class Breadcrumbs extends Block
 {
-    protected $frontend_styles = [ 'essential-blocks-frontend-style', 'essential-blocks-fontawesome' ];
+    protected $frontend_styles = [ 'essential-blocks-fontawesome' ];
 
     private $attributesList = [  ];
     /**

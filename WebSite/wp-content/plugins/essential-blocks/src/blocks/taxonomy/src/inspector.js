@@ -34,6 +34,7 @@ import {
     SUFFIX_ICON_SIZE,
     DISPLAY_STYLE,
     ALIGNMENT,
+    VERTICAL_ALIGN
 } from "./constants/constants";
 import {
     TAXONOMIES_TYPOGRAPHY,
@@ -76,6 +77,8 @@ function Inspector(props) {
         separator,
         separatorColor,
         taxonomyLimit,
+        suffixVerticalAlign,
+        prefixVerticalAlign
     } = attributes;
 
     const taxOptions = taxonomies?.map(taxonomy => taxonomy.visibility.public ? {
@@ -200,6 +203,36 @@ function Inspector(props) {
                                     />
                                 </>
                             )}
+
+                            {displayStyle == 'display-inline' && (
+                                <BaseControl label={__("Vertical Align", "essential-blocks")}>
+                                    <ButtonGroup id="eb-accordion-image-icon">
+                                        {VERTICAL_ALIGN.map(
+                                            (
+                                                { label, value },
+                                                index
+                                            ) => (
+                                                <Button
+                                                    key={index}
+                                                    isSecondary={
+                                                        prefixVerticalAlign !== value
+                                                    }
+                                                    isPrimary={
+                                                        prefixVerticalAlign === value
+                                                    }
+                                                    onClick={() =>
+                                                        setAttributes({
+                                                            prefixVerticalAlign: value,
+                                                        })
+                                                    }
+                                                >
+                                                    {label}
+                                                </Button>
+                                            )
+                                        )}
+                                    </ButtonGroup>
+                                </BaseControl>
+                            )}
                         </>
                     )}
 
@@ -253,6 +286,36 @@ function Inspector(props) {
                                         }
                                     />
                                 </>
+                            )}
+
+                            {displayStyle == 'display-inline' && (
+                                <BaseControl label={__("Vertical Align", "essential-blocks")}>
+                                    <ButtonGroup id="eb-accordion-image-icon">
+                                        {VERTICAL_ALIGN.map(
+                                            (
+                                                { label, value },
+                                                index
+                                            ) => (
+                                                <Button
+                                                    key={index}
+                                                    isSecondary={
+                                                        suffixVerticalAlign !== value
+                                                    }
+                                                    isPrimary={
+                                                        suffixVerticalAlign === value
+                                                    }
+                                                    onClick={() =>
+                                                        setAttributes({
+                                                            suffixVerticalAlign: value,
+                                                        })
+                                                    }
+                                                >
+                                                    {label}
+                                                </Button>
+                                            )
+                                        )}
+                                    </ButtonGroup>
+                                </BaseControl>
                             )}
                         </>
                     )}

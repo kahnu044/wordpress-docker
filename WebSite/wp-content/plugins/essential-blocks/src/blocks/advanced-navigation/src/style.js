@@ -143,8 +143,7 @@ export default function Style(props) {
         typoStylesMobile: navDropdownTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefixNavDropdown,
-        defaultFontSize: 16,
+        prefixConstant: typoPrefixNavDropdown
     });
 
     const {
@@ -153,8 +152,7 @@ export default function Style(props) {
         typoStylesMobile: navHamburgerTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefixNavHamburger,
-        defaultFontSize: 16,
+        prefixConstant: typoPrefixNavHamburger
     });
 
     const {
@@ -163,8 +161,7 @@ export default function Style(props) {
         typoStylesMobile: hamburgerBtnTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefixHamburgerBtn,
-        defaultFontSize: 16,
+        prefixConstant: typoPrefixHamburgerBtn
     });
     // styles related to generateTypographyStyles end
 

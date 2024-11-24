@@ -3,16 +3,17 @@ namespace EssentialBlocks\Blocks;
 
 use EssentialBlocks\Core\Block;
 
-class ImageGallery extends Block {
-    protected $frontend_scripts = ['essential-blocks-image-gallery-frontend'];
-    protected $frontend_styles  = ['essential-blocks-frontend-style'];
+class ImageGallery extends Block
+{
+    protected $frontend_scripts = [ 'essential-blocks-image-gallery-frontend' ];
 
     /**
      * Unique name of the block.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return 'image-gallery';
     }
 
@@ -21,7 +22,8 @@ class ImageGallery extends Block {
      *
      * @return void
      */
-    public function register_scripts() {
+    public function register_scripts()
+    {
         $this->assets_manager->register(
             'image-gallery-frontend',
             $this->path() . '/frontend.js'
@@ -35,19 +37,20 @@ class ImageGallery extends Block {
      * @param string $content
      * @return mixed
      */
-    public function render_callback( $attributes, $content ) {
+    public function render_callback( $attributes, $content )
+    {
         if ( ! is_admin() ) {
             $disableLightBox = false;
-            if ( isset( $attributes['disableLightBox'] ) && $attributes['disableLightBox'] == true ) {
+            if ( isset( $attributes[ 'disableLightBox' ] ) && $attributes[ 'disableLightBox' ] == true ) {
                 $disableLightBox = true;
             }
 
-            $enableFilter = false;
+            $enableFilter  = false;
             $enableIsotope = false;
-            if ( isset( $attributes['enableFilter'] ) && $attributes['enableFilter'] == true ) {
+            if ( isset( $attributes[ 'enableFilter' ] ) && $attributes[ 'enableFilter' ] == true ) {
                 $enableFilter = true;
             }
-            if ( isset( $attributes['enableIsotope'] ) && $attributes['enableIsotope'] == true ) {
+            if ( isset( $attributes[ 'enableIsotope' ] ) && $attributes[ 'enableIsotope' ] == true ) {
                 $enableIsotope = true;
             }
             if ( $enableFilter || $enableIsotope ) {
@@ -67,7 +70,7 @@ class ImageGallery extends Block {
                 $this->assets_manager->enqueue(
                     'fslightbox',
                     'js/fslightbox.min.js',
-                    ['jquery']
+                    [ 'jquery' ]
                 );
 
                 $this->assets_manager->enqueue(

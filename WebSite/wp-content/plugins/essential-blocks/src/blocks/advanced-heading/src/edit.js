@@ -100,25 +100,22 @@ function Edit(props) {
             )}
 
             <BlockProps.Edit {...enhancedProps}>
+                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                    {source == 'dynamic-title' && currentPostId == 0 && (
+                        <>
+                            {editorType === 'edit-site' && (
+                                <TagName className="eb-ah-title">Dynamic Title</TagName>
+                            )}
+                            {editorType !== 'edit-site' && (
+                                <div className="eb-loading" >
+                                    <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
+                                </div >
+                            )}
+                        </>
+                    )}
 
-                {source == 'dynamic-title' && currentPostId == 0 && (
-                    <>
-                        {editorType === 'edit-site' && (
-                            <TagName className="eb-ah-title">Dynamic Title</TagName>
-                        )}
-                        {editorType !== 'edit-site' && (
-                            <div className="eb-loading" >
-                                <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
-                            </div >
-                        )}
-                    </>
-                )}
-
-                {((source == 'dynamic-title' && currentPostId != 0) || source == 'custom') && (
-                    <>
-                        <div
-                            className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                        >
+                    {((source == 'dynamic-title' && currentPostId != 0) || source == 'custom') && (
+                        <>
                             <div
                                 className={`eb-advance-heading-wrapper ${blockId} ${preset}`}
                                 data-id={blockId}
@@ -214,9 +211,9 @@ function Edit(props) {
                                     </div>
                                 )}
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
+                </div>
             </BlockProps.Edit>
         </>
     );

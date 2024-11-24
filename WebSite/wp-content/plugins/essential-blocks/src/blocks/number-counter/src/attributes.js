@@ -268,7 +268,7 @@ export default {
     // Background attributes ⬇
     ...generateBackgroundAttributes(WrapBg, {
         // isBgDefaultGradient: true,
-        defaultFillColor: "var(--eb-global-background-color)",
+        defaultFillColor: "#fff",
         defaultBgGradient: "var(--eb-gradient-background-color)",
     }),
     // border & shadow attributes ⬇

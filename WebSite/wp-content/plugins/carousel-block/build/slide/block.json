@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "title": "Slide",
   "parent": [
-    "cb/carousel-block"
+    "cb/carousel"
   ],
   "category": "design",
   "description": "A single slide within the carousel.",

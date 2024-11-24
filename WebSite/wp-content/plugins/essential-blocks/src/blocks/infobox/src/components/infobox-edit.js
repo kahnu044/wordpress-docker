@@ -6,8 +6,12 @@ import { Button } from "@wordpress/components";
  * Internal dependencies
  */
 import {
-DynamicInputValueHandler, EBDisplayIcon
+    DynamicInputValueHandler, EBDisplayIcon, EBButton
 } from "@essential-blocks/controls";
+import {
+    BUTTON_KEYS
+} from "../constants";
+
 export default function InfoboxContainer({ attributes, setAttributes }) {
     const {
         blockId,
@@ -30,107 +34,89 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
         buttonText,
         btnEffect,
         classHook,
+        showMedia,
+        enableTitle,
+        addBtnIcon,
+        btnIconPosition,
+        btnIcon,
+        iconView,
+        iconShape
     } = attributes;
 
     return (
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
             <div className={`${blockId} eb-infobox-wrapper`}>
                 <div className="infobox-wrapper-inner">
-                    {media === "icon" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-icon number-or-icon">
-                                <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
-                            </div>
-                        </div>
-                    ) : null}
+                    {showMedia && (
+                        <>
+                            {media === "icon" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className={`eb-icon number-or-icon`}>
+                                        <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
+                                    </div>
+                                </div>
+                            ) : null}
 
-                    {media === "number" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-infobox-num-wrapper number-or-icon">
-                                <span className="eb-infobox-number">
-                                    {number}
-                                </span>
-                            </div>
-                        </div>
-                    ) : null}
+                            {media === "number" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className="eb-infobox-num-wrapper number-or-icon">
+                                        <span className="eb-infobox-number">
+                                            {number}
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : null}
 
-                    {media === "image" ? (
-                        <div className="icon-img-wrapper">
-                            <div className="eb-infobox-image-wrapper">
-                                <MediaUpload
-                                    onSelect={({ id, url, alt }) =>
-                                        setAttributes({
-                                            imageUrl: url,
-                                            imageId: id,
-                                            imageAlt: alt,
-                                        })
-                                    }
-                                    type="image"
-                                    value={imageId}
-                                    render={({ open }) => {
-                                        if (!imageUrl) {
-                                            return (
-                                                <Button
-                                                    className="eb-infobox-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks"
-                                                    )}
-                                                    icon="format-image"
-                                                    onClick={open}
-                                                />
-                                            );
-                                        } else {
-                                            return (
-                                                <img
-                                                    className="eb-infobox-image"
-                                                    src={imageUrl}
-                                                />
-                                            );
-                                        }
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    ) : null}
+                            {media === "image" ? (
+                                <div className="icon-img-wrapper">
+                                    <div className="eb-infobox-image-wrapper">
+                                        <MediaUpload
+                                            onSelect={({ id, url, alt }) =>
+                                                setAttributes({
+                                                    imageUrl: url,
+                                                    imageId: id,
+                                                    imageAlt: alt,
+                                                })
+                                            }
+                                            type="image"
+                                            value={imageId}
+                                            render={({ open }) => {
+                                                if (!imageUrl) {
+                                                    return (
+                                                        <Button
+                                                            className="eb-infobox-img-btn components-button"
+                                                            label={__(
+                                                                "Upload Image",
+                                                                "essential-blocks"
+                                                            )}
+                                                            icon="format-image"
+                                                            onClick={open}
+                                                        />
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <img
+                                                            className="eb-infobox-image"
+                                                            src={imageUrl}
+                                                        />
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ) : null}
+
+                        </>
+                    )}
 
                     <div className="contents-wrapper">
-                        <RichText
-                            tagName={titleTag}
-                            className="title"
-                            value={title}
-                            onChange={(title) => setAttributes({ title })}
-                        />
-
-                        {enableSubTitle ? (
-                            <RichText
-                                tagName={subTitleTag}
-                                className="subtitle"
-                                value={subTitle}
-                                onChange={(subTitle) =>
-                                    setAttributes({ subTitle })
-                                }
-                            />
-                        ) : null}
-
-                        {enableDescription ? (
-                            <RichText
-                                tagName="p"
-                                className="description"
-                                value={description}
-                                onChange={(description) =>
-                                    setAttributes({ description })
-                                }
-                            />
-                        ) : null}
-
-                        {enableButton && !isInfoClick ? (
-                            <div className="eb-infobox-btn-wrapper">
+                        {enableTitle && (
+                            <>
                                 <DynamicInputValueHandler
-                                    tagName="a"
-                                    className={`infobox-btn ${btnEffect || " "
-                                        }`}
-                                    value={buttonText}
+                                    tagName={titleTag}
+                                    className="title"
+                                    value={title}
                                     allowedFormats={[
                                         "core/bold",
                                         "core/italic",
@@ -138,17 +124,54 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                         "core/underline",
                                     ]}
                                     onChange={(text) =>
-                                        setAttributes({ buttonText: text })
+                                        setAttributes({ title: text })
                                     }
                                 />
-                                {/* <a
-                                    href={infoboxLink}
-                                    // style={{ pointerEvents: "none" }}
+
+                                {enableSubTitle ? (
+                                    <DynamicInputValueHandler
+                                        tagName={subTitleTag}
+                                        className="subtitle"
+                                        value={subTitle}
+                                        allowedFormats={[
+                                            "core/bold",
+                                            "core/italic",
+                                            "core/strikethrough",
+                                            "core/underline",
+                                        ]}
+                                        onChange={(text) =>
+                                            setAttributes({ subTitle: text })
+                                        }
+                                    />
+                                ) : null}
+                            </>
+                        )}
+
+
+                        {enableDescription ? (
+                            <DynamicInputValueHandler
+                                tagName="p"
+                                className="description"
+                                value={description}
+                                allowedFormats={[
+                                    "core/bold",
+                                    "core/italic",
+                                    "core/strikethrough",
+                                    "core/underline",
+                                ]}
+                                onChange={(text) =>
+                                    setAttributes({ description: text })
+                                }
+                            />
+                        ) : null}
+
+                        {enableButton && !isInfoClick ? (
+                                <EBButton
                                     className={`infobox-btn ${btnEffect || " "}`}
-                                >
-                                    {buttonText}
-                                </a> */}
-                            </div>
+                                    buttonAttrProps={BUTTON_KEYS}
+                                    urlInput={false}
+                                    btnWrapperClassName='eb-infobox-btn-wrapper'
+                                />
                         ) : null}
                     </div>
                 </div>

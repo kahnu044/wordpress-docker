@@ -8,7 +8,7 @@ use EssentialBlocks\Utils\Helper;
 class Form extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-form-frontend' ];
-    protected $frontend_styles  = [ 'essential-blocks-frontend-style', 'essential-blocks-fontawesome' ];
+    protected $frontend_styles  = [ 'essential-blocks-fontawesome' ];
 
     /**
      * Default attributes

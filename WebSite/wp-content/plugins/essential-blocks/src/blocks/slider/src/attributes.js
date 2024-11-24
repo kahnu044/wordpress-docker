@@ -33,7 +33,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     resOption: {
@@ -221,18 +221,22 @@ const attributes = {
     version: {
         type: "string",
     },
+    showLightbox: {
+        type: "boolean",
+        default: false,
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(TITLE_TYPOGRAPHY, {
         fontSize: 24,
     }),
-    ...generateTypographyAttributes(SUBTITLE_TYPOGRAPHY,{
+    ...generateTypographyAttributes(SUBTITLE_TYPOGRAPHY, {
         fontSize: 16,
     }),
     ...generateTypographyAttributes(BUTTON_TYPOGRAPHY, {
         fontSize: 14,
     }),
-    ...generateTypographyAttributes(BUTTON2_TYPOGRAPHY,{
+    ...generateTypographyAttributes(BUTTON2_TYPOGRAPHY, {
         fontSize: 14,
     }),
 

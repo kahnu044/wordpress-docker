@@ -6,7 +6,6 @@ use EssentialBlocks\Core\Block;
 class Popup extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-popup-frontend' ];
-    protected $frontend_styles  = [ 'essential-blocks-frontend-style' ];
     /**
      * Unique name of the block.
      *

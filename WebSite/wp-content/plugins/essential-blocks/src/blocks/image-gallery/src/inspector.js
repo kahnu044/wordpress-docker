@@ -53,6 +53,7 @@ import {
     FILTER_BORDER_SHADOW,
     LOADMORE_PADDING,
     LOADMORE_BORDER,
+    LOADMORE_KEYS
 } from "./constants";
 
 import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY } from "./typoConstants";
@@ -66,9 +67,9 @@ import {
     ResponsiveRangeController,
     ColorControl,
     EbImageSizeSelector,
-    DynamicInputControl,
     SortControl,
-    InspectorPanel
+    InspectorPanel,
+    EBButton
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -107,10 +108,6 @@ function Inspector(props) {
         enableIsotope,
         enableLoadMore,
         loadmoreBtnText,
-        loadmoreColor,
-        loadmoreHvColor,
-        loadmoreBGColor,
-        loadmoreHvBGColor,
         enableInfiniteScroll,
         imagesPerPageCount
     } = attributes;
@@ -667,13 +664,6 @@ function Inspector(props) {
 
                         {enableLoadMore && (
                             <>
-                                <DynamicInputControl
-                                    label={__("Button Text", "essential-blocks")}
-                                    attrName="loadmoreBtnText"
-                                    inputValue={loadmoreBtnText}
-                                    setAttributes={setAttributes}
-                                    onChange={(text) => setAttributes({ loadmoreBtnText: text })}
-                                />
                                 <RangeControl
                                     label={__(
                                         "Images Per Page",
@@ -688,6 +678,14 @@ function Inspector(props) {
                                     min={1}
                                     max={sources?.length - 1}
                                     allowReset={true}
+                                />
+                                <EBButton.GeneralTab
+                                    label={__("Button", "essential-blocks")}
+                                    type='button'
+                                    buttonAttrProps={LOADMORE_KEYS}
+                                    hasIcon={false}
+                                    hasAlignment={false}
+                                    hasWidth={false}
                                 />
                             </>
                         )}
@@ -1231,69 +1229,16 @@ function Inspector(props) {
                     )}
 
                     {(enableFilter || enableIsotope) && enableLoadMore && (
-                        <InspectorPanel.PanelBody
-                            title={__("Load More Button", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <>
-                                <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
-                                    )}
-                                    typographyPrefixConstant={
-                                        LOADMORE_TYPOGRAPHY
-                                    }
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Text Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={loadmoreColor}
-                                    attributeName={'loadmoreColor'}
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Text Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={loadmoreHvColor}
-                                    attributeName={'loadmoreHvColor'}
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Background Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={loadmoreBGColor}
-                                    attributeName={'loadmoreBGColor'}
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Background Hover Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={loadmoreHvBGColor}
-                                    attributeName={'loadmoreHvBGColor'}
-                                />
-                                <ResponsiveDimensionsControl
-                                    controlName={LOADMORE_PADDING}
-                                    baseLabel={__(
-                                        "Padding",
-                                        "essential-blocks"
-                                    )}
-                                />
-                                <InspectorPanel.PanelBody
-                                    title={__("Border", "essential-blocks")}
-                                    initialOpen={false}
-                                >
-                                    <BorderShadowControl
-                                        controlName={LOADMORE_BORDER}
-                                    />
-                                </InspectorPanel.PanelBody>
-                            </>
-                        </InspectorPanel.PanelBody>
+                        <EBButton.StyleTab
+                            label={__("Load More Button", "essential-blocks")}
+                            buttonAttrProps={LOADMORE_KEYS}
+                            hasTypography={true}
+                            typography={LOADMORE_TYPOGRAPHY}
+                            border={LOADMORE_BORDER}
+                            hasPadding={true}
+                            padding={LOADMORE_PADDING}
+                            hasHoverEffect={false}
+                        />
                     )}
                 </>
             </InspectorPanel.Style>

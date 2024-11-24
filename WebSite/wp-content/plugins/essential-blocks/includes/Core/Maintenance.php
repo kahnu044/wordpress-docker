@@ -3,6 +3,7 @@
 namespace EssentialBlocks\Core;
 
 use EssentialBlocks\Core\BlocksPatterns;
+use EssentialBlocks\Modules\StyleHandler;
 use EssentialBlocks\Traits\HasSingletone;
 
 class Maintenance
@@ -37,6 +38,9 @@ class Maintenance
 
             //update all blocks in db
             update_option( 'essential_all_blocks', Blocks::all() );
+
+            //Regenerate Assets
+            StyleHandler::init()->remove_frontend_assets();
         }
     }
 

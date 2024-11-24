@@ -15,9 +15,6 @@ class WPForms extends Block
             'type' => 'string'
          ]
      ];
-    protected $frontend_styles = [
-        'essential-blocks-frontend-style'
-     ];
 
     /**
      * Unique name of the block.

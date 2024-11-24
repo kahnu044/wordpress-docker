@@ -207,7 +207,6 @@ export default function Style(props) {
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li {
             ${tabTitleBGColor ? `background-color: ${tabTitleBGColor};` : ""}
-            ${tabTitlePaddingDesktop}
             ${tabTitleMarginDesktop}
             ${tabTitleBDShadowDesktop}
 		}
@@ -220,6 +219,7 @@ export default function Style(props) {
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li a {
 			${tabTitleTypoStylesDesktop}
             ${tabTitleColor ? `color: ${tabTitleColor};` : ""}
+            ${tabTitlePaddingDesktop}
 		}
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li:hover a,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li:hover a {
@@ -288,7 +288,6 @@ export default function Style(props) {
 
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li {
-            ${tabTitlePaddingTab}
             ${tabTitleMarginTab}
             ${tabTitleBDShadowTab}
 		}
@@ -299,6 +298,7 @@ export default function Style(props) {
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li a,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li a {
 			${tabTitleTypoStylesTab}
+            ${tabTitlePaddingTab}
 		}
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs .panel,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs .panel {
@@ -337,7 +337,6 @@ export default function Style(props) {
 
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li {
-            ${tabTitlePaddingMobile}
             ${tabTitleMarginMobile}
             ${tabTitleBDShadowMobile}
 		}
@@ -348,6 +347,7 @@ export default function Style(props) {
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li a,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs ul.tabs li a {
 			${tabTitleTypoStylesMobile}
+            ${tabTitlePaddingMobile}
 		}
         html body.woocommerce .${blockId}.eb-product-details-wrapper .woocommerce-tabs .panel,
         .${blockId}.eb-product-details-wrapper .woocommerce-tabs .panel {

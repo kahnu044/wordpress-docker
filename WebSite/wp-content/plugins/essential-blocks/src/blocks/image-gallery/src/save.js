@@ -1,6 +1,10 @@
 import {
-sanitizeURL, BlockProps
+    sanitizeURL, BlockProps, EBButton
 } from "@essential-blocks/controls";
+
+import {
+    LOADMORE_KEYS
+} from "./constants";
 
 const Save = ({ attributes }) => {
     const {
@@ -39,6 +43,12 @@ const Save = ({ attributes }) => {
             ["data-fslightbox"]: "gallery",
             ["data-type"]: "image",
         };
+    }
+
+    let buttonData = {
+        imagesPerPage: imagesPerPageCount,
+        loadmore: enableLoadMore,
+        infiniteScroll: enableInfiniteScroll,
     }
 
     return (
@@ -113,7 +123,7 @@ const Save = ({ attributes }) => {
                                     source.caption &&
                                     source.caption.length > 0 && (
                                         <>
-                                            <span className={`eb-gallery-img-caption ${horizontalAlign} ${verticalAlign}`} dangerouslySetInnerHTML={{__html: source.caption}}></span>
+                                            <span className={`eb-gallery-img-caption ${horizontalAlign} ${verticalAlign}`} dangerouslySetInnerHTML={{ __html: source.caption }}></span>
                                         </>
                                     )}
                             </span>
@@ -169,17 +179,15 @@ const Save = ({ attributes }) => {
 
                 {enableLoadMore && (
                     <>
-                        <button
-                            {...(enableInfiniteScroll ? { disabled: true } : {})}
-                            data-images-per-page={imagesPerPageCount}
-                            data-loadmore={enableLoadMore}
-                            data-infinite-scroll={enableInfiniteScroll}
-                            className={`eb-img-gallery-loadmore ${enableInfiniteScroll ? 'loadmore-disable' : ''}`}>
-                            {enableInfiniteScroll && (
-                                <img className="eb-install-loader" src={`${EssentialBlocksLocalize.eb_plugins_url}/assets/images/loading.svg`} />
-                            )}
-                            {loadmoreBtnText}
-                        </button>
+                        <EBButton.Content
+                            attributes={attributes}
+                            type="button"
+                            className={`eb-img-gallery-loadmore ${enableInfiniteScroll ? 'loadmore-disable' : ''}`}
+                            buttonAttrProps={LOADMORE_KEYS}
+                            buttonData={buttonData}
+                            disable={false}
+                            loadingIcon={enableInfiniteScroll ? true : false}
+                        />
                     </>
                 )}
             </div>

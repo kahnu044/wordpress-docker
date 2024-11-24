@@ -7,7 +7,7 @@ use EssentialBlocks\Utils\Helper;
 class ProductImages extends Block
 {
     protected $frontend_styles = [
-        'essential-blocks-frontend-style',
+
         'essential-blocks-slick-style'
      ];
 
@@ -41,9 +41,9 @@ class ProductImages extends Block
     public function __construct()
     {
         $this->default_attributes = [
-            'useAdaptiveHeight'  => true,
-            'galleryPosition' => 'bottom',
-            'disableNavArrow' => false
+            'useAdaptiveHeight' => true,
+            'galleryPosition'   => 'bottom',
+            'disableNavArrow'   => false
          ];
     }
 
@@ -80,7 +80,7 @@ class ProductImages extends Block
         }
 
         $attributes = wp_parse_args( $attributes, $this->default_attributes );
-        error_log(print_r($attributes,1));
+        error_log( print_r( $attributes, 1 ) );
 
         $className = isset( $attributes[ "className" ] ) ? $attributes[ "className" ] : "";
         $classHook = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';
@@ -93,7 +93,7 @@ class ProductImages extends Block
         // nav settings
         $nav_settings = [
             'galleryPosition' => isset( $attributes[ 'galleryPosition' ] ) ? $attributes[ 'galleryPosition' ] : 'bottom',
-            'disableNavArrow' => isset( $attributes['disableNavArrow'] ) ? $attributes['disableNavArrow'] : false
+            'disableNavArrow' => isset( $attributes[ 'disableNavArrow' ] ) ? $attributes[ 'disableNavArrow' ] : false
          ];
 
         ob_start();

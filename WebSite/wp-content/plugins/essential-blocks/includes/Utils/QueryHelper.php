@@ -62,6 +62,29 @@ class QueryHelper
                         );
                     }
                 }
+
+                if ( is_array( $taxonomy ) && count( $taxonomy ) > 0 && isset( $taxonomy[ 'exclude' ] ) ) {
+                    $tax_exclude_obj = json_decode( $taxonomy[ 'exclude' ] ); // decode value from json strong to array
+                    $tax_values    = [];
+
+                    // If value is Array and has value, push the value to $tax_values array
+                    if ( is_array( $tax_exclude_obj ) && count( $tax_exclude_obj ) > 0 ) {
+                        foreach ( $tax_exclude_obj as $tax_item ) {
+                            array_push( $tax_values, $tax_item->value );
+                        }
+
+                        // Push taxonomy array to $tax_query
+                        array_push(
+                            $tax_query,
+                            [
+                                'taxonomy' => $taxonomy_key,
+                                'field'    => 'id',
+                                'terms'    => $tax_values,
+                                'operator' => 'NOT IN',
+                             ]
+                        );
+                    }
+                }
             }
 
             if ( count( $tax_query ) > 0 ) {

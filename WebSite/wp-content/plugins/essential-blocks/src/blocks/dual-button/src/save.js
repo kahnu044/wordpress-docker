@@ -1,23 +1,22 @@
 import {
-EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIcon,
+    BlockProps,
+    EBButton
 } from "@essential-blocks/controls";
+import {
+    BUTTON_ONE_KEYS,
+    BUTTON_TWO_KEYS
+} from "./constants/constants"
 
-import { RichText } from "@wordpress/block-editor";
 const Save = ({ attributes }) => {
     const {
         blockId,
         preset,
-        buttonTextOne,
-        buttonTextTwo,
-        buttonURLOne,
-        buttonURLTwo,
         innerButtonText,
         innerButtonIcon,
         showConnector,
         connectorType,
         classHook,
-        buttonOneNewWindow,
-        buttonTwoNewWindow,
     } = attributes;
 
     return (
@@ -31,18 +30,13 @@ const Save = ({ attributes }) => {
                     className={`eb-button-group-wrapper ${blockId} ${preset}`}
                     data-id={blockId}
                 >
-                    <a
-                        className={"eb-button-parent eb-button-one"}
-                        href={buttonURLOne === '#' ? '' : sanitizeURL(buttonURLOne)}
-                        {...(buttonOneNewWindow && { target: "_blank" })}
-                        rel="noopener"
-                    >
-                        <RichText.Content
-                            tagName="div"
-                            className="eb-button-text eb-button-one-text"
-                            value={buttonTextOne}
-                        />
-                    </a>
+                    <EBButton.Content 
+                        attributes={attributes}
+                        className="eb-button-one"
+                        buttonAttrProps={BUTTON_ONE_KEYS}
+                        attrPrefix="btn1"
+                        tagName={"div"}
+                    />
 
                     {showConnector && (
                         <div className="eb-button-group__midldeInner">
@@ -58,18 +52,13 @@ const Save = ({ attributes }) => {
                         </div>
                     )}
 
-                    <a
-                        className={"eb-button-parent eb-button-two"}
-                        href={buttonURLTwo === '#' ? '' : sanitizeURL(buttonURLTwo)}
-                        {...(buttonTwoNewWindow && { target: "_blank" })}
-                        rel="noopener"
-                    >
-                        <RichText.Content
-                            tagName="div"
-                            className="eb-button-text eb-button-two-text"
-                            value={buttonTextTwo}
-                        />
-                    </a>
+                    <EBButton.Content 
+                        attributes={attributes}
+                        className="eb-button-two"
+                        buttonAttrProps={BUTTON_TWO_KEYS}
+                        attrPrefix="btn2"
+                        tagName="div"
+                    />
                 </div>
             </div>
         </BlockProps.Save>

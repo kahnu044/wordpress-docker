@@ -34,7 +34,8 @@ function Edit(props) {
 
         showQuantity,
         cartBtnText,
-        productType
+        productType,
+        displayType
     } = attributes;
 
     // you must declare this variable
@@ -55,7 +56,7 @@ function Edit(props) {
 
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`} >
-                    <div className={`eb-add-to-cart-wrapper ${blockId}`} data-id={blockId}>
+                    <div className={`eb-add-to-cart-wrapper ${blockId} ${showQuantity ? `layout-${displayType}` : ''}`} data-id={blockId}>
                         <ProductTypeMarkup product={productType} showQuantity={showQuantity} cartBtnText={cartBtnText} />
                     </div>
                 </div>
