@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6
+class ComposerStaticInit44de4e5f0aa4b88b3af8f8f2bf13a294
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -40,7 +40,6 @@ class ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6
         'Appsero\\Client' => __DIR__ . '/..' . '/appsero/client/src/Client.php',
         'Appsero\\Insights' => __DIR__ . '/..' . '/appsero/client/src/Insights.php',
         'Appsero\\License' => __DIR__ . '/..' . '/appsero/client/src/License.php',
-        'Appsero\\Updater' => __DIR__ . '/..' . '/appsero/client/src/Updater.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'GraphQLRelay\\Connection\\ArrayConnection' => __DIR__ . '/..' . '/ivome/graphql-relay-php/src/Connection/ArrayConnection.php',
         'GraphQLRelay\\Connection\\Connection' => __DIR__ . '/..' . '/ivome/graphql-relay-php/src/Connection/Connection.php',
@@ -242,6 +241,7 @@ class ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6
         'GraphQL\\Validator\\Rules\\VariablesInAllowedPosition' => __DIR__ . '/..' . '/webonyx/graphql-php/src/Validator/Rules/VariablesInAllowedPosition.php',
         'GraphQL\\Validator\\SDLValidationContext' => __DIR__ . '/..' . '/webonyx/graphql-php/src/Validator/SDLValidationContext.php',
         'GraphQL\\Validator\\ValidationContext' => __DIR__ . '/..' . '/webonyx/graphql-php/src/Validator/ValidationContext.php',
+        'WPGraphQL' => __DIR__ . '/../..' . '/src/WPGraphQL.php',
         'WPGraphQL\\Admin\\Admin' => __DIR__ . '/../..' . '/src/Admin/Admin.php',
         'WPGraphQL\\Admin\\AdminNotices' => __DIR__ . '/../..' . '/src/Admin/AdminNotices.php',
         'WPGraphQL\\Admin\\GraphiQL\\GraphiQL' => __DIR__ . '/../..' . '/src/Admin/GraphiQL/GraphiQL.php',
@@ -455,9 +455,9 @@ class ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit81b3d8cf7e43ac25fb8e09f087fbe0a6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit44de4e5f0aa4b88b3af8f8f2bf13a294::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit44de4e5f0aa4b88b3af8f8f2bf13a294::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit44de4e5f0aa4b88b3af8f8f2bf13a294::$classMap;
 
         }, null, ClassLoader::class);
     }
