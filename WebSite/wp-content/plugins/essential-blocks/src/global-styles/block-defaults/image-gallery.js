@@ -32,7 +32,6 @@ import {
     IMAGE_BORDER_SHADOW,
     CAPTION_MARGIN,
     CAPTION_PADDING,
-    CAPTION_TYPOGRAPHY,
     CAPTION_WIDTH,
     TEXT_ALIGN,
     HORIZONTAL_ALIGN,
@@ -51,14 +50,12 @@ import {
     FILTER_BORDER_SHADOW,
 } from "@essential-blocks/blocks/image-gallery/src/constants";
 
-import { FILTER_TYPOGRAPHY } from "@essential-blocks/blocks/image-gallery/src/typoConstants";
+import { CAPTION_TYPOGRAPHY, FILTER_TYPOGRAPHY } from "@essential-blocks/blocks/image-gallery/src/typoConstants";
 
 import objAttributes from "@essential-blocks/blocks/image-gallery/src/attributes";
 
 function ImageGallery(props) {
     const { blockDefaults, setBlockDefaults, name, deviceType, handleBlockDefault } = props;
-
-
 
     const {
         layouts,

@@ -23,7 +23,7 @@ import {
     BlockProps,
     BrowseTemplate,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const Edit = (props) => {
     const {
@@ -64,7 +64,8 @@ const Edit = (props) => {
         showFeatureLine,
         showRibbon,
         showBlockContent,
-        showFeatureIcon
+        showFeatureIcon,
+        titleTagName
     } = attributes;
 
     // you must declare this variable
@@ -113,6 +114,8 @@ const Edit = (props) => {
 
     // ribbon Class
     const ribbonClass = showRibbon ? ` featured ${ribbonStyle}` : "";
+
+    const TitleTagName = titleTagName;
 
     return (
         <>
@@ -228,9 +231,9 @@ const Edit = (props) => {
                                                         </span>
                                                     </div>
                                                     <div className="eb-pricing-header">
-                                                        <h2 className="eb-pricing-title">
+                                                        <TitleTagName className="eb-pricing-title">
                                                             {title}
-                                                        </h2>
+                                                        </TitleTagName>
                                                         {showSubtitle && (
                                                             <span className="eb-pricing-subtitle">
                                                                 {subtitle}
@@ -371,9 +374,9 @@ const Edit = (props) => {
                                                         </div>
                                                     )}
                                                     <div className="eb-pricing-header">
-                                                        <h2 className="eb-pricing-title">
+                                                        <TitleTagName className="eb-pricing-title">
                                                             {title}
-                                                        </h2>
+                                                        </TitleTagName>
                                                         {showSubtitle && (
                                                             <span className="eb-pricing-subtitle">
                                                                 {subtitle}

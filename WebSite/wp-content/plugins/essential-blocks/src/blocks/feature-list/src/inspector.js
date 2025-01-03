@@ -51,8 +51,6 @@ import {
     typoPrefix_content,
 } from "./constants/typographyPrefixConstants";
 
-import objAttributes from "./attributes";
-
 import {
     ColorControl,
     ResponsiveRangeController,

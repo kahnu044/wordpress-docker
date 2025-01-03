@@ -9,7 +9,6 @@ const { omit } = lodash;
  * Inteanal dependencies
  */
 import AccordionIcon from "./components/accordion-icon";
-
 import attributes from "./attributes";
 
 const deprecated = [
@@ -26,17 +25,23 @@ const deprecated = [
                 displayIcon,
                 tabIcon,
                 expandedIcon,
-                transitionDuration
+                transitionDuration,
             } = attributes;
             return (
                 <div {...useBlockProps.save()}>
-                    <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
                         <div
                             className={`eb-accordion-container ${blockId}`}
                             data-accordion-type={accordionType || "toggle"}
                             data-tab-icon={displayIcon ? tabIcon : ""}
                             data-expanded-icon={displayIcon ? expandedIcon : ""}
-                            data-transition-duration={transitionDuration ? Number(transitionDuration) * 1000 : 500}
+                            data-transition-duration={
+                                transitionDuration
+                                    ? Number(transitionDuration) * 1000
+                                    : 500
+                            }
                         >
                             <div className="eb-accordion-inner">
                                 <InnerBlocks.Content />
@@ -63,7 +68,9 @@ const deprecated = [
             } = attributes;
             return (
                 <div {...useBlockProps.save()}>
-                    <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
                         <div
                             className={`eb-accordion-container ${blockId}`}
                             data-accordion-type={accordionType || "toggle"}
@@ -132,8 +139,8 @@ const deprecated = [
                     {
                         title: item.title,
                     },
-                    [createBlock("core/paragraph", { content: item.content })]
-                )
+                    [createBlock("core/paragraph", { content: item.content })],
+                ),
             );
 
             return [omit(attributes, ["accordions"]), iBlocks];
@@ -168,7 +175,9 @@ const deprecated = [
                                         key={index}
                                     >
                                         <div className="eb-accordion-title-wrapper">
-                                            {displayIcon && <AccordionIcon icon={tabIcon} />}
+                                            {displayIcon && (
+                                                <AccordionIcon icon={tabIcon} />
+                                            )}
 
                                             <RichText.Content
                                                 tagName={tagName}
@@ -256,7 +265,9 @@ const deprecated = [
                                     key={index}
                                 >
                                     <div className="eb-accordion-title-wrapper">
-                                        {displayIcon && <AccordionIcon icon={tabIcon} />}
+                                        {displayIcon && (
+                                            <AccordionIcon icon={tabIcon} />
+                                        )}
 
                                         <RichText.Content
                                             tagName="h3"

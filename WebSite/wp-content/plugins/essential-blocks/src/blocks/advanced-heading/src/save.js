@@ -8,8 +8,11 @@ const Save = ({ attributes }) => {
     const {
         blockId,
         preset,
+        effects,
         tagName: TagName,
         titleText,
+        title2Text,
+        title3Text,
         subtitleTagName,
         displaySubtitle,
         subtitleText,
@@ -27,6 +30,39 @@ const Save = ({ attributes }) => {
     if (source == 'dynamic-title') return null;
     const linkTarget = openInNewTab ? "_blank" : undefined;
 
+    const Content = () => {
+        return (
+            <>
+                <RichText.Content
+                    tagName={'span'}
+                    className="first-title"
+                    value={titleText}
+                />
+                {title2Text && (
+                    <>
+                        &nbsp;
+                        <RichText.Content
+                            tagName={'span'}
+                            className="second-title"
+                            value={title2Text}
+                        />
+                    </>
+                )}
+
+                {title3Text && (
+                    <>
+                        &nbsp;
+                        <RichText.Content
+                            tagName={'span'}
+                            className="third-title"
+                            value={title3Text}
+                        />
+                    </>
+                )}
+            </>
+        )
+    }
+
     return (
         <BlockProps.Save
             attributes={attributes}
@@ -35,7 +71,7 @@ const Save = ({ attributes }) => {
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
                 <div
-                    className={`eb-advance-heading-wrapper ${blockId} ${preset}`}
+                    className={`eb-advance-heading-wrapper ${blockId} ${preset} ${effects}`}
                     data-id={blockId}
                 >
                     {displaySeperator && seperatorPosition === "top" && (
@@ -45,25 +81,21 @@ const Save = ({ attributes }) => {
                             )}
                         </div>
                     )}
-                    {enableLink && titleLink.length > 0 && (
-                        <TagName className="eb-ah-title">
+                    <TagName className="eb-ah-title">
+                        {enableLink && titleLink.length > 0 ? (
                             <a
                                 href={titleLink}
                                 target={linkTarget}
                                 rel={linkTarget === "_blank" ? "noopener" : undefined}
                             >
-                                {titleText}
+                                <Content />
                             </a>
-                        </TagName>
-                    )}
+                        ) : (
+                            <Content />
+                        )}
+                    </TagName>
 
-                    {(!enableLink || (enableLink && titleLink.length == 0)) && (
-                        <RichText.Content
-                            tagName={TagName}
-                            className="eb-ah-title"
-                            value={titleText}
-                        />
-                    )}
+
 
                     {displaySubtitle && (
                         <RichText.Content

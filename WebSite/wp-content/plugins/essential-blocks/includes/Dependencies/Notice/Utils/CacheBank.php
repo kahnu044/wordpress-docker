@@ -6,6 +6,8 @@ use PriyoMukul\WPNotice\Notices;
 
 #[\AllowDynamicProperties]
 class CacheBank {
+	use Helper;
+
 	private static $instance;
 
 	private static $accounts = [];
@@ -92,23 +94,30 @@ class CacheBank {
 	}
 
 	public function notices() {
-		if ( get_transient( $this->priority_key ) ) {
-			return;
-		}
-
 		$notice = $this->get();
+
+		if( $notice && ! $notice->dev_mode ) {
+			if ( get_transient( $this->priority_key ) ) {
+				return;
+			}
+		}
 
 		if ( $notice instanceof Notices ) {
 			$notice->notices();
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function scripts() {
-		if ( get_transient( $this->priority_key ) ) {
-			return;
-		}
-
 		$notice = $this->get();
+
+		if( $notice && ! $notice->dev_mode ) {
+			if ( get_transient( $this->priority_key ) ) {
+				return;
+			}
+		}
 
 		if ( $notice instanceof Notices ) {
 			$notice->scripts();
@@ -125,23 +134,27 @@ class CacheBank {
 	 * @return array
 	 */
 	private function eligible_notices( $notices = [], $queue = [] ) {
-		$_sorted_queue = [];
-
-		if ( ! empty ( $queue ) ) {
-			array_walk( $queue, function ( $value, $key ) use ( &$_sorted_queue, $notices ) {
-				$notice = isset( $notices[ $key ] ) ? $notices[ $key ] : null;
-				if ( ! is_null( $notice ) ) {
-					if ( ! $notice->dismiss->is_dismissed() && ! $notice->is_expired() ) {
-						$_sorted_queue[ $notice->options( 'start' ) ] = $key;
-					}
-				}
-			} );
-		}
-
-		ksort( $_sorted_queue );
-
-		return $_sorted_queue;
+		return $this->get_sorted_queue($notices, $queue);
 	}
 
+	public function clear_notices_in_( $screens, $app, $re_initiate = false ) {
+		add_action( 'in_admin_header', function() use( $screens, $app, $re_initiate ) {
+			$this->clear( $screens, $app, $re_initiate );
+		} );
+	}
 
+	public function clear( $screens, $app, $re_initiate = false ) {
+		$current_screen = get_current_screen();
+
+		if( in_array( $current_screen->id, $screens, true ) ) {
+			remove_all_actions( 'admin_notices' );
+
+			if( $re_initiate ) {
+				self::$accounts = [];
+				self::$instance = new self();
+				self::$instance->create_account( $app );
+				self::$instance->calculate_deposits( $app );
+			}
+		}
+	}
 }

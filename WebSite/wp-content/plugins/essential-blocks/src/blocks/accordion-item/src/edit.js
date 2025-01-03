@@ -2,61 +2,70 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { InnerBlocks, MediaUpload, } from "@wordpress/block-editor";
+import { InnerBlocks, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { useRef, memo , useEffect} from "@wordpress/element";
-import Inspector from "./inspector";
+import { useRef, memo, useEffect } from "@wordpress/element";
 import Style from "./style";
-import defaultAttributes from './attributes';
+import defaultAttributes from "./attributes";
 import {
     EBDisplayIcon,
     getIconClass,
     DynamicInputValueHandler,
     BlockProps,
-    withBlockContext
+    withBlockContext,
 } from "@essential-blocks/controls";
 
 const Edit = (props) => {
-    const { attributes, setAttributes, isSelected, clientId, context } = props;
+    const { attributes, setAttributes, context } = props;
     const {
         blockId,
-        title,
-        clickable,
         parentBlockId,
         inheritedTagName,
         inheritedDisplayIcon,
         inheritedTabIcon,
         inheritedExpandedIcon,
-        titlePrefixType,
-        titlePrefixText,
-        titlePrefixIcon,
-        titlePrefixImgUrl,
-        titlePrefixImgId,
-        titleSuffixType,
-        titleSuffixText,
-        titleSuffixIcon,
-        titleSuffixImgUrl,
-        titleSuffixImgId,
+        accordionLists,
+        itemId,
+        accordionType,
+        inheritedAccordionType
     } = attributes;
 
     const enhancedProps = {
         ...props,
         rootClass: `eb-guten-block-main-parent-wrapper eb-accordion-item`,
-        blockPrefix: 'eb-accordion-item',
-        style: <Style {...props} />
+        blockPrefix: "eb-accordion-item",
+        style: <Style {...props} />,
     };
 
     const accordionTitle = useRef(null);
+
     const handleSlidingOfAccordion = () => {
+        let title = accordionTitle.current.querySelector(".eb-accordion-title");
+        if( title ) {
+            title.setAttribute("contenteditable", false)
+        }
         let contentWrapper = accordionTitle.current.nextElementSibling;
         let tabIcon = accordionTitle.current.getAttribute("data-tab-icon");
-        let expandedIcon = accordionTitle.current.getAttribute("data-expanded-icon");
+        let expandedIcon =
+            accordionTitle.current.getAttribute("data-expanded-icon");
         let iconWrapper = accordionTitle.current.children[0].children[0];
+        let accordionItem = accordionTitle.current.closest(".eb-accordion-wrapper");
+        let allAccordionItems = accordionTitle.current
+                .closest(".eb-accordion-inner")
+                .querySelectorAll(".eb-accordion-wrapper");
+        accordionItem.classList.toggle("eb-accordion-hidden");
 
+        if (accordionType === "horizontal") {
+            allAccordionItems.forEach((element) => {
+                element.classList.remove("editor-expanded");
+            });
+            accordionItem.classList.toggle("editor-expanded");
+        }
+        
         if (contentWrapper.style.display === "block") {
             contentWrapper.style.display = "none";
-
-            if (iconWrapper.tagName === 'I') {
+            contentWrapper.style.opacity = "0";
+            if (iconWrapper.tagName === "I" ||  iconWrapper.tagName === "SPAN") {
                 iconWrapper.removeAttribute("class");
                 tabIcon = getIconClass(tabIcon).split(" ");
                 for (let i = 0; i < tabIcon.length; i++) {
@@ -64,11 +73,10 @@ const Edit = (props) => {
                 }
                 iconWrapper.classList.add("eb-accordion-icon");
             }
-
         } else {
             contentWrapper.style.display = "block";
             contentWrapper.style.opacity = "1";
-            if (iconWrapper.tagName === 'I') {
+            if (iconWrapper.tagName === "I" ||  iconWrapper.tagName === "SPAN") {
                 iconWrapper.removeAttribute("class");
                 expandedIcon = getIconClass(expandedIcon).split(" ");
                 for (let i = 0; i < expandedIcon.length; i++) {
@@ -81,14 +89,17 @@ const Edit = (props) => {
 
     useEffect(() => {
         setAttributes({
-            parentBlockId:  context["eb/accordionParentBlockId"],
-            inheritedAccordionType:  context["eb/accordionInheritedAccordionType"],
+            parentBlockId: context["eb/accordionParentBlockId"],
+            inheritedAccordionType:
+                context["eb/accordionInheritedAccordionType"],
             inheritedDisplayIcon: context["eb/accordionInheritedDisplayIcon"],
             inheritedTabIcon: context["eb/accordionInheritedTabIcon"],
             inheritedExpandedIcon: context["eb/accordionInheritedExpandedIcon"],
             inheritedTagName: context["eb/accordionInheritedTagName"],
             faqSchema: context["eb/accordionFaqSchema"],
-        })
+            accordionLists: context["eb/accordionLists"],
+            accordionType: context["eb/accordionType"],
+        });
     }, [
         context["eb/accordionParentBlockId"],
         context["eb/accordionInheritedAccordionType"],
@@ -96,50 +107,75 @@ const Edit = (props) => {
         context["eb/accordionInheritedTabIcon"],
         context["eb/accordionInheritedExpandedIcon"],
         context["eb/accordionInheritedTagName"],
-        context["eb/accordionFaqSchema"]
-    ])
+        context["eb/accordionFaqSchema"],
+        context["eb/accordionLists"],
+        context["eb/accordionType"],
+    ]);
+
+    const foundItem = accordionLists?.find((item) => item.id == itemId);
 
     return (
         <>
-            {isSelected && <Inspector {...props} />}
             <BlockProps.Edit {...enhancedProps}>
                 <div
-                    className={`${blockId} eb-accordion-wrapper for_edit_page`}
-                    data-clickable={clickable}
+                    className={`${blockId} eb-accordion-wrapper-${parentBlockId} eb-accordion-wrapper for_edit_page eb-accordion-hidden`}
+                    data-clickable={foundItem?.clickable}
                 >
                     <div
-                        className={`eb-accordion-title-wrapper eb-accordion-title-wrapper-${parentBlockId}`}
+                        className={`eb-accordion-title-wrapper eb-accordion-title-wrapper-${parentBlockId}${inheritedAccordionType == "horizontal" ? " eb-accordion-horizontal-enable" : ""}`}
                         onClick={handleSlidingOfAccordion}
                         ref={accordionTitle}
                         data-tab-icon={inheritedTabIcon}
                         data-expanded-icon={inheritedExpandedIcon}
+                        {...(accordionType === 'image' && foundItem?.imageUrl
+                            ? { "data-image-url": foundItem?.imageUrl }
+                            : {})}
+                        {...(accordionType === 'image' && foundItem?.imageAlt
+                            ? { "data-image-alt": foundItem?.imageAlt }
+                            : {})}
                     >
                         {inheritedDisplayIcon && (
-                            <span className={`eb-accordion-icon-wrapper eb-accordion-icon-wrapper-${parentBlockId}`}>
-                                <EBDisplayIcon icon={inheritedTabIcon} className="eb-accordion-icon" />
+                            <span
+                                className={`eb-accordion-icon-wrapper eb-accordion-icon-wrapper-${parentBlockId}`}
+                            >
+                                <EBDisplayIcon
+                                    icon={inheritedTabIcon}
+                                    className="eb-accordion-icon"
+                                />
                             </span>
                         )}
 
-                        <div className={`eb-accordion-title-content-wrap title-content-${parentBlockId}`}>
-                            {titlePrefixType !== 'none' && (
+                        <div
+                            className={`eb-accordion-title-content-wrap title-content-${parentBlockId}`}
+                        >
+                            {foundItem?.titlePrefixType !== "none" && (
                                 <>
-                                    {titlePrefixType === 'text' && titlePrefixText && (
-                                        <DynamicInputValueHandler
-                                            value={titlePrefixText}
-                                            tagName='span'
-                                            className="eb-accordion-title-prefix-text"
-                                            onChange={(titlePrefixText) =>
-                                                setAttributes({ titlePrefixText })
-                                            }
-                                            readOnly={true}
-                                        />
-                                    )}
+                                    {foundItem?.titlePrefixType === "text" &&
+                                        foundItem?.titlePrefixText && (
+                                            <DynamicInputValueHandler
+                                                value={
+                                                    foundItem?.titlePrefixText
+                                                }
+                                                tagName="span"
+                                                className="eb-accordion-title-prefix-text"
+                                                onChange={(text) =>
+                                                    foundItem?.titlePrefixText
+                                                }
+                                                readOnly={true}
+                                            />
+                                        )}
 
-                                    {titlePrefixType === 'icon' && titlePrefixIcon && (
-                                        <EBDisplayIcon icon={titlePrefixIcon} className={`eb-accordion-title-prefix-icon`} />
-                                    )}
+                                    {foundItem?.titlePrefixType === "icon" &&
+                                        foundItem?.titlePrefixIcon && (
+                                            <EBDisplayIcon
+                                                icon={
+                                                    foundItem?.titlePrefixIcon
+                                                }
+                                                className={`eb-accordion-title-prefix-icon`}
+                                            />
+                                        )}
 
-                                    {titlePrefixType === "image" ? (
+                                    {foundItem?.titlePrefixType === "image" ? (
                                         <MediaUpload
                                             onSelect={({ id, url, alt }) =>
                                                 setAttributes({
@@ -149,15 +185,17 @@ const Edit = (props) => {
                                                 })
                                             }
                                             type="image"
-                                            value={titlePrefixImgId}
+                                            value={foundItem?.titlePrefixImgId}
                                             render={({ open }) => {
-                                                if (!titlePrefixImgUrl) {
+                                                if (
+                                                    !foundItem?.titlePrefixImgUrl
+                                                ) {
                                                     return (
                                                         <Button
                                                             className="eb-accordion-img-btn components-button"
                                                             label={__(
                                                                 "Upload Image",
-                                                                "essential-blocks"
+                                                                "essential-blocks",
                                                             )}
                                                             icon="format-image"
                                                             onClick={open}
@@ -167,7 +205,9 @@ const Edit = (props) => {
                                                     return (
                                                         <img
                                                             className="eb-accordion-title-prefix-img"
-                                                            src={titlePrefixImgUrl}
+                                                            src={
+                                                                foundItem?.titlePrefixImgUrl
+                                                            }
                                                         />
                                                     );
                                                 }
@@ -177,7 +217,7 @@ const Edit = (props) => {
                                 </>
                             )}
                             <DynamicInputValueHandler
-                                value={title}
+                                value={foundItem?.title}
                                 tagName={inheritedTagName}
                                 className="eb-accordion-title"
                                 allowedFormats={[
@@ -188,31 +228,38 @@ const Edit = (props) => {
                                     "core/underline",
                                     "core/text-color",
                                 ]}
-                                onChange={(title) =>
-                                    setAttributes({ title })
-                                }
+                                onChange={() => {
+                                    null;
+                                }}
                                 readOnly={true}
                             />
 
-                            {titleSuffixType !== 'none' && (
+                            {foundItem?.titleSuffixType !== "none" && (
                                 <>
-                                    {titleSuffixType === 'text' && titleSuffixText && (
-                                        <DynamicInputValueHandler
-                                            value={titleSuffixText}
-                                            tagName='span'
-                                            className="eb-accordion-title-suffix-text"
-                                            onChange={(titleSuffixText) =>
-                                                setAttributes({ titleSuffixText })
-                                            }
-                                            readOnly={true}
-                                        />
-                                    )}
+                                    {foundItem?.titleSuffixType === "text" &&
+                                        foundItem?.titleSuffixText && (
+                                            <DynamicInputValueHandler
+                                                value={
+                                                    foundItem?.titleSuffixText
+                                                }
+                                                tagName="span"
+                                                className="eb-accordion-title-suffix-text"
+                                                onChange={(text) => text}
+                                                readOnly={true}
+                                            />
+                                        )}
 
-                                    {titleSuffixType === 'icon' && titleSuffixIcon && (
-                                        <EBDisplayIcon icon={titleSuffixIcon} className={`eb-accordion-title-suffix-icon`} />
-                                    )}
+                                    {foundItem?.titleSuffixType === "icon" &&
+                                        foundItem?.titleSuffixIcon && (
+                                            <EBDisplayIcon
+                                                icon={
+                                                    foundItem?.titleSuffixIcon
+                                                }
+                                                className={`eb-accordion-title-suffix-icon`}
+                                            />
+                                        )}
 
-                                    {titleSuffixType === "image" ? (
+                                    {foundItem?.titleSuffixType === "image" ? (
                                         <MediaUpload
                                             onSelect={({ id, url, alt }) =>
                                                 setAttributes({
@@ -222,15 +269,17 @@ const Edit = (props) => {
                                                 })
                                             }
                                             type="image"
-                                            value={titleSuffixImgId}
+                                            value={foundItem?.titleSuffixImgId}
                                             render={({ open }) => {
-                                                if (!titleSuffixImgUrl) {
+                                                if (
+                                                    !foundItem?.titleSuffixImgUrl
+                                                ) {
                                                     return (
                                                         <Button
                                                             className="eb-accordion-img-btn components-button"
                                                             label={__(
                                                                 "Upload Image",
-                                                                "essential-blocks"
+                                                                "essential-blocks",
                                                             )}
                                                             icon="format-image"
                                                             onClick={open}
@@ -240,7 +289,9 @@ const Edit = (props) => {
                                                     return (
                                                         <img
                                                             className="eb-accordion-title-suffix-img"
-                                                            src={titleSuffixImgUrl}
+                                                            src={
+                                                                foundItem?.titleSuffixImgUrl
+                                                            }
                                                         />
                                                     );
                                                 }
@@ -263,6 +314,6 @@ const Edit = (props) => {
             </BlockProps.Edit>
         </>
     );
-}
+};
 
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

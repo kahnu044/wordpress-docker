@@ -53,7 +53,7 @@ import BlankIcon from "./icons/blank.svg";
 import defaultAttributes from './attributes'
 import Style from "./style";
 
-const Edit= (props) =>  {
+const Edit = (props) => {
     const {
         attributes,
         setAttributes,

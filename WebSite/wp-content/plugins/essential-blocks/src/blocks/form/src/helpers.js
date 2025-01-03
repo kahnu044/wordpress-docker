@@ -1,6 +1,3 @@
-import { DefaultBlockAppender } from "@wordpress/block-editor";
-
-
 /**
  * Generate validate rules
  * @param {*} obj
@@ -56,10 +53,7 @@ export const getFormFields = (obj) => {
     if (obj?.innerBlocks && obj?.innerBlocks.length > 0) {
         for (const innerBlock of obj.innerBlocks) {
             const innerBlockRules = getFormFields(innerBlock);
-            if (
-                typeof innerBlockRules === "object" &&
-                Object.keys(innerBlockRules).length > 0
-            ) {
+            if (typeof innerBlockRules === "object" && Object.keys(innerBlockRules).length > 0) {
                 result = {
                     ...result,
                     ...innerBlockRules,

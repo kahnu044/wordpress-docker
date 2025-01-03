@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import {
-EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIcon, sanitizeURL, BlockProps
 } from "@essential-blocks/controls";
 
 const Save = ({ attributes }) => {
@@ -37,7 +37,8 @@ const Save = ({ attributes }) => {
         newWindow,
         showFeatureLine = true,
         showBlockContent,
-        showFeatureIcon
+        showFeatureIcon,
+        titleTagName
     } = attributes;
 
     if (!showBlockContent) {
@@ -46,6 +47,7 @@ const Save = ({ attributes }) => {
 
     // ribbon Class
     const ribbonClass = showRibbon ? ` featured ${ribbonStyle}` : "";
+    const TitleTagName = titleTagName;
 
     return (
         <BlockProps.Save attributes={attributes}>
@@ -110,7 +112,7 @@ const Save = ({ attributes }) => {
                                         </div>
 
                                         <div className="eb-pricing-header">
-                                            <h2 className="eb-pricing-title">{title}</h2>
+                                            <TitleTagName className="eb-pricing-title">{title}</TitleTagName>
                                             {showSubtitle && <span className="eb-pricing-subtitle">{subtitle}</span>}
                                         </div>
                                     </div>
@@ -196,7 +198,7 @@ const Save = ({ attributes }) => {
                                         </div>
                                     )}
                                     <div className="eb-pricing-header">
-                                        <h2 className="eb-pricing-title">{title}</h2>
+                                        <TitleTagName className="eb-pricing-title">{title}</TitleTagName>
                                         {showSubtitle && <span className="eb-pricing-subtitle">{subtitle}</span>}
                                     </div>
                                     {pricingStyle !== "style-3" && (

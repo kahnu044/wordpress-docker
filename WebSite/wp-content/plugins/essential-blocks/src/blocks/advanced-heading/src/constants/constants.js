@@ -7,11 +7,18 @@ export const WRAPPER_MARGIN = "wrpMargin";
 export const WRAPPER_PADDING = "wrpPadding";
 export const WRAPPER_BORDER_SHADOW = "wrpBorderShadow";
 export const TITLE_MARGIN = "titleMargin";
+export const TITLE1_PADDING = "title1Padding";
+export const TITLE1_BORDER_SHADOW = "title1bdrshdw";
+export const TITLE2_PADDING = "title2Padding";
+export const TITLE2_BORDER_SHADOW = "title2bdrshdw";
+export const TITLE3_PADDING = "title3Padding";
+export const TITLE3_BORDER_SHADOW = "title3bdrshdw";
 export const SUBTITLE_MARGIN = "subtitleMargin";
 export const SEPARATOR_MARGIN = "separatorMargin";
 export const SEPARATOR_LINE_SIZE = "separatorLineSize";
 export const SEPARATOR_ICON_SIZE = "separatorIconSize";
 export const SEPARATOR_WIDTH = "separatorWidth";
+export const ALIGNMENT = "align";
 
 export const UNIT_TYPES = [
     { label: "px", value: "px" },
@@ -75,4 +82,10 @@ export const SEPERATOR_STYLES = [
 export const SOURCE = [
     { label: __("Custom", "essential-blocks"), value: "custom" },
     { label: __("Dynamic Title", "essential-blocks"), value: "dynamic-title" },
+];
+
+export const EFFECTS = [
+    { label: __("None", "essential-blocks"), value: "" },
+    { label: __("Marquee", "essential-blocks"), value: "marquee" },
+    { label: __("Waviy Reflect", "essential-blocks"), value: "waviy" },
 ];

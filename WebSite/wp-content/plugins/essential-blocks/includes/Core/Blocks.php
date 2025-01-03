@@ -9,14 +9,14 @@ class Blocks
 {
     use HasSingletone;
 
-    private $enabled_blocks = [  ];
+    private $enabled_blocks = [];
     private $settings       = null;
     private $dir            = '';
 
     public function __construct( $settings )
     {
         $this->settings       = $settings;
-        $this->enabled_blocks = $this->enabled();
+        // $this->enabled_blocks = $this->enabled();
 
         $this->dir = ESSENTIAL_BLOCKS_BLOCK_DIR;
     }
@@ -55,6 +55,9 @@ class Blocks
                 return isset( $a[ 'visibility' ] ) && $a[ 'visibility' ] === 'true' ? $a : false;
             }
         );
+
+        $this->enabled_blocks = $enabled_blocks;
+
         return $enabled_blocks;
     }
 

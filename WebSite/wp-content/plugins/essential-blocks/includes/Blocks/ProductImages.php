@@ -1,5 +1,5 @@
 <?php
-namespace EssentialBlocks\blocks;
+namespace EssentialBlocks\Blocks;
 
 use EssentialBlocks\Core\Block;
 use EssentialBlocks\Utils\Helper;
@@ -80,7 +80,6 @@ class ProductImages extends Block
         }
 
         $attributes = wp_parse_args( $attributes, $this->default_attributes );
-        error_log( print_r( $attributes, 1 ) );
 
         $className = isset( $attributes[ "className" ] ) ? $attributes[ "className" ] : "";
         $classHook = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';

@@ -17,25 +17,8 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
-
     itemId: {
-        type: "string",
-    },
-    title: {
-        type: "string",
-    },
-    titleColor: {
-        type: "string",
-    },
-    clickable: {
-        type: "boolean",
-        default: false,
-    },
-    accordionColor: {
-        type: "string",
-    },
-    iconColor: {
-        type: "string",
+        type: "number",
     },
     inheritedAccordionType: {
         type: "string",
@@ -62,6 +45,29 @@ const attributes = {
     parentBlockId: {
         type: "string",
     },
+    accordionLists: {
+        type: "array",
+    },
+    accordionType: {
+        type: "string",
+        default: "accordion"
+    },
+    title: {
+        type: "string",
+    },
+    titleColor: {
+        type: "string",
+    },
+    clickable: {
+        type: "boolean",
+        default: false,
+    },
+    accordionColor: {
+        type: "string",
+    },
+    iconColor: {
+        type: "string",
+    },
     titlePrefixType: {
         type: "string",
         default: "none",
@@ -73,7 +79,7 @@ const attributes = {
 
     titlePrefixImgUrl: {
         type: "string",
-        default: ''
+        default: "",
     },
     titlePrefixImgId: {
         type: "string",
@@ -93,7 +99,7 @@ const attributes = {
 
     titleSuffixImgUrl: {
         type: "string",
-        default: ''
+        default: "",
     },
     titleSuffixImgId: {
         type: "string",

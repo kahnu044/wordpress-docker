@@ -38,7 +38,7 @@ export default function Style(props) {
         fieldBgColor,
         fieldValidationColor,
         fieldValidationBorderColor,
-        iconColor,
+        iconColor = "#B8C2D2",
         fieldPaddingLeft,
         fieldPaddingUnit,
         iconSizeRange,

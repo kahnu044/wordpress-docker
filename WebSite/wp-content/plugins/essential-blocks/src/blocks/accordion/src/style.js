@@ -6,10 +6,22 @@ import {
     typoPrefix_title,
     typoPrefix_content,
     titlePrefixText,
-    titleSuffixText
+    titleSuffixText,
 } from "./constants/typographyPrefixConstants";
 
-import { rangeIconSize, accGapRange, titlePrefixIconSize, titlePrefixImgWidth, titlePrefixGap, titleSuffixIconSize, titleSuffixImgWidth, titleSuffixGap } from "./constants/rangeNames";
+import {
+    rangeIconSize,
+    accGapRange,
+    titlePrefixIconSize,
+    titlePrefixImgWidth,
+    titlePrefixGap,
+    titleSuffixIconSize,
+    titleSuffixImgWidth,
+    titleSuffixGap,
+    imageWidth,
+    imageHeight,
+    horizontalHeight,
+} from "./constants/rangeNames";
 
 import {
     wrapMarginConst,
@@ -20,6 +32,14 @@ import {
     tabPaddingConst,
     conMarginConst,
     conPaddingConst,
+    imgContainerPadding,
+    imgContainerMargin,
+    accordionMargin,
+    accordionPadding,
+    titlePrefixPadding,
+    titleSuffixPadding,
+    titlePrefixMargin,
+    titleSuffixMargin,
 } from "./constants/dimensionsConstants";
 
 import {
@@ -27,6 +47,10 @@ import {
     iconBgConst,
     tabBgConst,
     conBgConst,
+    accordionBackground,
+    accordionExpandedBackground,
+    titlePrefixBG,
+    titleSuffixBG,
 } from "./constants/backgroundsConstants";
 
 import {
@@ -34,6 +58,10 @@ import {
     iconBdShadowConst,
     tabBdShadowConst,
     conBdShadowConst,
+    accordionBorder,
+    accordionExpandedBorder,
+    titlePrefixBorder,
+    titleSuffixBorder,
 } from "./constants/borderShadowConstants";
 
 import {
@@ -43,34 +71,31 @@ import {
     generateTypographyStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
-    StyleComponent
-} from '@essential-blocks/controls';
+    StyleComponent,
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
     const {
-        resOption,
         blockId,
-        blockMeta,
-        classHook,
-
-        //
         displayIcon,
         titleColor = "#fff",
         contentColor = "#555",
         contentAlign = "left",
-        iconColor = "#4a5059",
+        iconColor,
         iconPosition,
         titleAlignment,
         hoverTitleColor,
         activeBgColor,
         activeTitleColor,
-        //
+        activeIconColor,
         icnZ_Range,
         TABicnZ_Range,
         MOBicnZ_Range,
         titlePrefixColor,
-        titleSuffixColor
+        titleSuffixColor,
+        imageContainerWidth,
+        transitionDuration,
     } = attributes;
 
     // styles related to generateTypographyStyles start ⬇
@@ -338,7 +363,18 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: accGapRange,
         customUnit: "px",
-        property: "padding-top",
+        property: "margin-top",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: accHorizontalGapDesktop,
+        rangeStylesTab: accHorizontalGapTab,
+        rangeStylesMobile: accHorizontalGapMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: accGapRange,
+        customUnit: "px",
+        property: "margin-left",
         attributes,
     });
 
@@ -435,6 +471,223 @@ export default function Style(props) {
     });
     // styles related to generateResponsiveRangeStyles end
 
+    // image container
+    const {
+        dimensionStylesDesktop: imgContainerPaddingDesktop,
+        dimensionStylesTab: imgContainerPaddingTab,
+        dimensionStylesMobile: imgContainerPaddingMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: imgContainerPadding,
+        styleFor: "padding",
+    });
+    const {
+        dimensionStylesDesktop: imgContainerMarginDesktop,
+        dimensionStylesTab: imgContainerMarginTab,
+        dimensionStylesMobile: imgContainerMarginMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: imgContainerMargin,
+        styleFor: "margin",
+    });
+
+    const {
+        rangeStylesDesktop: imageWidthDesktop,
+        rangeStylesTab: imageWidthTab,
+        rangeStylesMobile: imageWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: imageWidth,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: imageHeightDesktop,
+        rangeStylesTab: imageHeightTab,
+        rangeStylesMobile: imageHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: imageHeight,
+        property: "height",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: accordionMarginDesktop,
+        dimensionStylesTab: accordionMarginTab,
+        dimensionStylesMobile: accordionMarginMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: accordionMargin,
+        styleFor: "margin",
+    });
+
+    const {
+        dimensionStylesDesktop: accordionPaddingDesktop,
+        dimensionStylesTab: accordionPaddingTab,
+        dimensionStylesMobile: accordionPaddingMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: accordionPadding,
+        styleFor: "padding",
+    });
+
+    const {
+        backgroundStylesDesktop: accordionBackgroundStylesDesktop,
+        hoverBackgroundStylesDesktop: accordionHoverBackgroundStylesDesktop,
+        bgTransitionStyle: accordionBgTransitionStyle,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: accordionBackground,
+        noOverlay: true,
+        noMainBgi: true,
+        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+    });
+
+    const {
+        backgroundStylesDesktop: accordionExpandedBackgroundStylesDesktop,
+        hoverBackgroundStylesDesktop:
+            accordionExpandedHoverBackgroundStylesDesktop,
+        bgTransitionStyle: accordionExpandedBgTransitionStyle,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: accordionExpandedBackground,
+        noOverlay: true,
+        noMainBgi: true,
+        // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+    });
+
+    const {
+        styesDesktop: accordionBdShdStyesDesktop,
+        styesTab: accordionBdShdStyesTab,
+        styesMobile: accordionBdShdStyesMobile,
+        stylesHoverDesktop: accordionBdShdStylesHoverDesktop,
+        stylesHoverTab: accordionBdShdStylesHoverTab,
+        stylesHoverMobile: accordionBdShdStylesHoverMobile,
+        transitionStyle: accordionBdShdTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: accordionBorder,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
+    const {
+        styesDesktop: accordionExpandedBdShdStyesDesktop,
+        styesTab: accordionExpandedBdShdStyesTab,
+        styesMobile: accordionExpandedBdShdStyesMobile,
+        stylesHoverDesktop: accordionExpandedBdShdStylesHoverDesktop,
+        stylesHoverTab: accordionExpandedBdShdStylesHoverTab,
+        stylesHoverMobile: accordionExpandedBdShdStylesHoverMobile,
+        transitionStyle: accordionExpandedBdShdTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: accordionExpandedBorder,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
+    const {
+        rangeStylesDesktop: horizontalHeightDesktop,
+        rangeStylesTab: horizontalHeightTab,
+        rangeStylesMobile: horizontalHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: horizontalHeight,
+        property: "",
+        attributes,
+    });
+
+    const {
+        backgroundStylesDesktop: titlePrefixBGStylesDesktop,
+        hoverBackgroundStylesDesktop: titlePrefixBGHoverStylesDesktop,
+        bgTransitionStyle: titlePrefixBgStyleTransition,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: titlePrefixBG,
+        noOverlay: true,
+        noMainBgi: true,
+    });
+
+    const {
+        backgroundStylesDesktop: titleSuffixBGStylesDesktop,
+        hoverBackgroundStylesDesktop: titleSuffixBGHoverStylesDesktop,
+        bgTransitionStyle: titleSuffixBgStyleTransition,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: titleSuffixBG,
+        noOverlay: true,
+        noMainBgi: true,
+    });
+
+    const {
+        dimensionStylesDesktop: titlePrefixPaddingDesktop,
+        dimensionStylesTab: titlePrefixPaddingTab,
+        dimensionStylesMobile: titlePrefixPaddingMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: titlePrefixPadding,
+        styleFor: "padding",
+    });
+
+    const {
+        dimensionStylesDesktop: titlePrefixMarginDesktop,
+        dimensionStylesTab: titlePrefixMarginTab,
+        dimensionStylesMobile: titlePrefixMarginMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: titlePrefixMargin,
+        styleFor: "margin",
+    });
+
+    const {
+        dimensionStylesDesktop: titleSuffixPaddingDesktop,
+        dimensionStylesTab: titleSuffixPaddingTab,
+        dimensionStylesMobile: titleSuffixPaddingMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: titleSuffixPadding,
+        styleFor: "padding",
+    });
+
+    const {
+        dimensionStylesDesktop: titleSuffixMarginDesktop,
+        dimensionStylesTab: titleSuffixMarginTab,
+        dimensionStylesMobile: titleSuffixMarginMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: titleSuffixMargin,
+        styleFor: "margin",
+    });
+
+    const {
+        styesDesktop: titlePrefixBdShdStyesDesktop,
+        styesTab: titlePrefixBdShdStyesTab,
+        styesMobile: titlePrefixBdShdStyesMobile,
+        stylesHoverDesktop: titlePrefixBdShdStylesHoverDesktop,
+        stylesHoverTab: titlePrefixBdShdStylesHoverTab,
+        stylesHoverMobile: titlePrefixBdShdStylesHoverMobile,
+        transitionStyle: titlePrefixBdShdTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: titlePrefixBorder,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
+    const {
+        styesDesktop: titleSuffixBdShdStyesDesktop,
+        styesTab: titleSuffixBdShdStyesTab,
+        styesMobile: titleSuffixBdShdStyesMobile,
+        stylesHoverDesktop: titleSuffixBdShdStylesHoverDesktop,
+        stylesHoverTab: titleSuffixBdShdStylesHoverTab,
+        stylesHoverMobile: titleSuffixBdShdStylesHoverMobile,
+        transitionStyle: titleSuffixBdShdTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: titleSuffixBorder,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
     const wrapperStylesDesktop = `
 
 	.eb-accordion-item.is-selected .eb-accordion-content-wrapper-${blockId} {
@@ -469,10 +722,15 @@ export default function Style(props) {
 	}
 
 
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper + .eb-accordion-wrapper{
+	.${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) > .eb-accordion-inner > .eb-accordion-wrapper + .eb-accordion-wrapper, 
+    .${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) .eb-accordion-item {
 		${accGapDesktop}
 	}
 
+    .${blockId}.eb-accordion-container.eb-accordion-type-horizontal > .eb-accordion-inner  > .eb-accordion-wrapper + .eb-accordion-wrapper, 
+    .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-item {
+        ${accHorizontalGapDesktop}
+    }
 
 	.${blockId}.eb-accordion-container{
 		${wrpMarginDesktop}
@@ -498,8 +756,9 @@ export default function Style(props) {
 	}
 
 
-${displayIcon
-            ? `
+${
+    displayIcon
+        ? `
 		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 			display: flex;
 			justify-content: center;
@@ -522,17 +781,20 @@ ${displayIcon
 			color: ${iconColor};
 			${iconSizeDesktop}
 			${icnZ_Range ? `width:${icnZ_Range}px;` : ""}
+			${icnZ_Range ? `height:${icnZ_Range}px;` : ""}
 		}
 
 		`
-            : ""
-        }
+        : ""
+}
 
-	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId} {
+	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId}
+    {
 		cursor: pointer;
 		display: flex;
 		align-items: center;
-		flex-direction: ${iconPosition === "right" && displayIcon ? "row-reverse" : "row"
+		flex-direction: ${
+            iconPosition === "right" && displayIcon ? "row-reverse" : "row"
         };
 		${tabBackgroundStylesDesktop}
 		${tabMarginDesktop}
@@ -540,6 +802,14 @@ ${displayIcon
 		${tabBdShdStyesDesktop}
 		transition:${tabBgTransitionStyle}, ${tabBdShdTransitionStyle};
 	}
+
+    .${blockId}.eb-accordion-container .eb-accordion-content .title-content-${blockId} {
+		${tabBackgroundStylesDesktop}
+		${tabMarginDesktop}
+		${tabPaddingDesktop}
+		${tabBdShdStyesDesktop}
+		transition:${tabBgTransitionStyle}, ${tabBdShdTransitionStyle};
+    }
 
 	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId}:hover{
 		${tabHoverBackgroundStylesDesktop}
@@ -554,66 +824,110 @@ ${displayIcon
         color:${titleColor};
 		${titleTypoStylesDesktop}
     }
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-text{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-text {
 		color:${titlePrefixColor};
+        ${titlePrefixBGStylesDesktop}
 		${titlePrefixTextTypoDesktop}
+        ${titlePrefixMarginDesktop}
+        ${titlePrefixPaddingDesktop}
+        ${titlePrefixBdShdStyesDesktop}
+        transition: ${titlePrefixBgStyleTransition}, ${titlePrefixBdShdTransitionStyle};
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon {
 		color:${titlePrefixColor};
+        ${titlePrefixBGStylesDesktop}
 		${titlePrefixIconWidthDesktop}
 		${titlePrefixIconHeightDesktop}
 		${titlePrefixIconSizeDesktop}
+        ${titlePrefixMarginDesktop}
+        ${titlePrefixPaddingDesktop}
+        ${titlePrefixBdShdStyesDesktop}
+        transition: ${titlePrefixBgStyleTransition}, ${titlePrefixBdShdTransitionStyle};
 	}
+    
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
+        ${titlePrefixBGHoverStylesDesktop}
+        ${titlePrefixBdShdStylesHoverDesktop}
+    }
+
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-img{
 		${titlePrefixImgWidthDesktop}
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-text{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-text {
 		color:${titleSuffixColor};
+        ${titleSuffixBGStylesDesktop}
 		${titleSuffixTextTypoDesktop}
+        ${titleSuffixPaddingDesktop}
+        ${titleSuffixMarginDesktop}
+        ${titleSuffixBdShdStyesDesktop}
+        transition: ${titleSuffixBgStyleTransition}, ${titleSuffixBdShdTransitionStyle};
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon {
 		color:${titleSuffixColor};
+        ${titleSuffixBGStylesDesktop}
 		${titleSuffixIconWidthDesktop}
 		${titleSuffixIconHeightDesktop}
 		${titleSuffixIconSizeDesktop}
+        ${titleSuffixPaddingDesktop}
+        ${titleSuffixMarginDesktop}
+        ${titleSuffixBdShdStyesDesktop}
+        transition: ${titleSuffixBgStyleTransition}, ${titleSuffixBdShdTransitionStyle};
 	}
+
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {
+        ${titleSuffixBGHoverStylesDesktop}
+        ${titleSuffixBdShdStylesHoverDesktop}
+    }
+
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-img{
 		${titleSuffixImgWidthDesktop}
 	}
 
-${activeTitleColor
+    ${
+        activeIconColor
             ? `
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) h3.eb-accordion-title,
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper.expanded_tab h3.eb-accordion-title{
+            .${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper-${blockId} .eb-accordion-icon {
+		${activeIconColor ? `color: ${activeIconColor} !important;` : ""}
+	}
+        `
+            : ""
+    }
+
+
+${
+    activeTitleColor
+        ? `
+	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper-${blockId} .eb-accordion-title {
 		${activeTitleColor ? `color: ${activeTitleColor} !important;` : ""}
 	}
 	`
-            : ""
-        }
+        : ""
+}
 
-${activeBgColor
-            ? `
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper-${blockId},
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper.expanded_tab .eb-accordion-title-wrapper-${blockId}{
-		${activeBgColor
-                ? `background-color: ${activeBgColor} !important; background-image: unset`
-                : ""
-            }
+${
+    activeBgColor
+        ? `
+	.${blockId}.eb-accordion-container .eb-accordion-wrapper:not(.eb-accordion-hidden,.for_edit_page) .eb-accordion-title-wrapper-${blockId} {
+		${activeBgColor ? `background: ${activeBgColor} !important;` : ""}
 	}
 	`
-            : ""
-        }
+        : ""
+}
 
-	${hoverTitleColor
+	${
+        hoverTitleColor
             ? `
 			.${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title{
 				color:${hoverTitleColor};
 			}
 			`
             : ""
-        }
+    }
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} > .eb-accordion-content {
 		color:${contentColor};
 		text-align:${contentAlign};
 		${conBackgroundStylesDesktop}
@@ -624,7 +938,7 @@ ${activeBgColor
 		transition:${conBdShdTransitionStyle}, ${conBgTransitionStyle};
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover > .eb-accordion-content{
 		${conHoverBackgroundStylesDesktop}
 		${conBdShdStylesHoverDesktop}
 	}
@@ -633,9 +947,15 @@ ${activeBgColor
 
     const wrapperStylesTab = `
 
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper + .eb-accordion-wrapper{
+	.${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) > .eb-accordion-inner >  .eb-accordion-wrapper + .eb-accordion-wrapper, 
+    .${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) .eb-accordion-item {
 		${accGapTab}
 	}
+
+     .${blockId}.eb-accordion-container.eb-accordion-type-horizontal > .eb-accordion-inner > .eb-accordion-wrapper + .eb-accordion-wrapper, 
+     .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-item  {
+        ${accHorizontalGapTab}
+    }
 
 
 	.${blockId}.eb-accordion-container{
@@ -660,8 +980,9 @@ ${activeBgColor
 
 
 
-${displayIcon
-            ? `
+${
+    displayIcon
+        ? `
 		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 			${iconMarginTab}
 			${iconPaddingTab}
@@ -676,11 +997,12 @@ ${displayIcon
 		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
 			${iconSizeTab}
 			${TABicnZ_Range ? `width:${TABicnZ_Range}px;` : ""}
+			${TABicnZ_Range ? `height:${TABicnZ_Range}px;` : ""}
 		}
 
 		`
-            : ""
-        }
+        : ""
+}
 
 
 
@@ -702,47 +1024,74 @@ ${displayIcon
 
 .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-text{
 		${titlePrefixTextTypoTab}
+        ${titlePrefixMarginTab}
+        ${titlePrefixPaddingTab}
+        ${titlePrefixBdShdStyesTab}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
 		${titlePrefixIconWidthTab}
 		${titlePrefixIconHeightTab}
 		${titlePrefixIconSizeTab}
+        ${titlePrefixMarginTab}
+        ${titlePrefixPaddingTab}
+        ${titlePrefixBdShdStyesTab}
 	}
+
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
+        ${titlePrefixBdShdStylesHoverTab}
+    }
+
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-img{
 		${titlePrefixImgWidthTab}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-text{
 		${titleSuffixTextTypoTab}
+        ${titleSuffixPaddingTab}
+        ${titleSuffixMarginTab}
+        ${titleSuffixBdShdStyesTab}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
 		${titleSuffixIconWidthTab}
 		${titleSuffixIconHeightTab}
 		${titleSuffixIconSizeTab}
+        ${titleSuffixPaddingTab}
+        ${titleSuffixMarginTab}
+        ${titleSuffixBdShdStyesTab}
 	}
+
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {
+        ${titleSuffixBdShdStylesHoverTab}
+    }
+
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-img{
 		${titleSuffixImgWidthTab}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} > .eb-accordion-content{
 		${contentTypoStylesTab}
 		${conMarginTab}
 		${conPaddingTab}
 		${conBdShdStyesTab}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover > .eb-accordion-content{
 		${conBdShdStylesHoverTab}
 	}
-
-
-
 	`;
 
     const wrapperStylesMobile = `
 
-	.${blockId}.eb-accordion-container .eb-accordion-wrapper + .eb-accordion-wrapper{
+	.${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) > .eb-accordion-inner >  .eb-accordion-wrapper + .eb-accordion-wrapper, 
+    .${blockId}.eb-accordion-container:not(.eb-accordion-type-horizontal) .eb-accordion-item {
 		${accGapMobile}
 	}
+
+     .${blockId}.eb-accordion-container.eb-accordion-type-horizontal  > .eb-accordion-inner >  .eb-accordion-wrapper + .eb-accordion-wrapper, 
+     .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-item {
+        ${accHorizontalGapMobile}
+    }
 
 	.${blockId}.eb-accordion-container{
 		${wrpMarginMobile}
@@ -766,7 +1115,8 @@ ${displayIcon
 
 
 
-	${displayIcon
+	${
+        displayIcon
             ? `
 			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId}{
 				${iconMarginMobile}
@@ -781,11 +1131,11 @@ ${displayIcon
 			.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
 				${iconSizeMobile}
 				${MOBicnZ_Range ? `width:${MOBicnZ_Range}px;` : ""}
+				${MOBicnZ_Range ? `height:${MOBicnZ_Range}px;` : ""}
 			}
-
 			`
             : ""
-        }
+    }
 
 
 	.${blockId}.eb-accordion-container .eb-accordion-title-wrapper-${blockId} {
@@ -803,54 +1153,229 @@ ${displayIcon
 		${titleTypoStylesMobile}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId} > .eb-accordion-content{
 		${contentTypoStylesMobile}
 		${conMarginMobile}
 		${conPaddingMobile}
 		${conBdShdStyesMobile}
 	}
 
-	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover .eb-accordion-content{
+	.${blockId}.eb-accordion-container .eb-accordion-content-wrapper-${blockId}:hover > .eb-accordion-content{
 		${conBdShdStylesHoverMobile}
 	}
 
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-text{
 		${titlePrefixTextTypoMobile}
+        ${titlePrefixMarginMobile}
+        ${titlePrefixPaddingMobile}
+        ${titlePrefixBdShdStyesMobile}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
 		${titlePrefixIconWidthMobile}
 		${titlePrefixIconHeightMobile}
 		${titlePrefixIconSizeMobile}
+        ${titlePrefixMarginMobile}
+        ${titlePrefixPaddingMobile}
+        ${titlePrefixBdShdStyesMobile}
 	}
+    
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
+        ${titlePrefixBdShdStylesHoverMobile}
+    }
+    
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-img{
 		${titlePrefixImgWidthMobile}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-text{
 		${titleSuffixTextTypoMobile}
+        ${titleSuffixPaddingMobile}
+        ${titleSuffixMarginMobile}
+        ${titleSuffixBdShdStyesMobile}
 	}
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
 		${titleSuffixIconWidthMobile}
 		${titleSuffixIconHeightMobile}
 		${titleSuffixIconSizeMobile}
+        ${titleSuffixPaddingMobile}
+        ${titleSuffixMarginMobile}
+        ${titleSuffixBdShdStyesMobile}
 	}
+    
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
+    .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {
+        ${titleSuffixBdShdStylesHoverMobile}
+    }
+
     .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-img{
 		${titleSuffixImgWidthMobile}
 	}
 	`;
 
+    const imageContainerStylesDesktop = `
+	    .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-container {
+            width: ${imageContainerWidth}%;
+            ${imgContainerMarginDesktop}
+            ${imgContainerPaddingDesktop}
+        }
+        
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-inner {
+            width: ${100 - imageContainerWidth}%;
+        }
+
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-container img,
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-wrapper-mobile img {
+            ${imageWidthDesktop}
+            ${imageHeightDesktop}
+        }
+    `;
+
+    const imageContainerStylesTab = `
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-content .eb-accordion-image-wrapper-mobile {
+            ${imgContainerPaddingTab}
+            ${imgContainerMarginTab}
+        }
+        
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-container img,
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-wrapper-mobile img {
+            ${imageWidthTab}
+            ${imageHeightTab}
+        }
+    `;
+
+    const imageContainerStylesMobile = `
+         .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-content .eb-accordion-image-wrapper-mobile {
+            ${imgContainerPaddingMobile}
+            ${imgContainerMarginMobile}
+        }
+
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-container img,
+        .${blockId}.eb-accordion-container.eb-accordion-type-image .eb-accordion-image-wrapper-mobile img {
+            ${imageWidthMobile}
+            ${imageHeightMobile}
+        }
+    `;
+
+    const singleAccordionStylesDesktop = `
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper {
+            ${accordionMarginDesktop}
+            ${accordionPaddingDesktop}
+            ${accordionBdShdStyesDesktop}
+            ${accordionBackgroundStylesDesktop}
+            transition: ${accordionBgTransitionStyle}, ${accordionBdShdTransitionStyle};
+        }
+
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:hover {
+            ${accordionHoverBackgroundStylesDesktop}
+            ${accordionBdShdStylesHoverDesktop}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:not(.eb-accordion-hidden) {
+            ${accordionExpandedBackgroundStylesDesktop}
+            ${accordionExpandedBdShdStyesDesktop}
+            transition: ${accordionExpandedBgTransitionStyle}, ${accordionExpandedBdShdTransitionStyle};
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:hover:not(.eb-accordion-hidden) {
+            ${accordionExpandedHoverBackgroundStylesDesktop}
+            ${accordionExpandedBdShdStylesHoverDesktop}
+        }
+    `;
+
+    const singleAccordionStylesTab = `
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper {
+            ${accordionMarginTab}
+            ${accordionPaddingTab}
+            ${accordionBdShdStyesTab}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:hover {
+            ${accordionBdShdStylesHoverTab}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:not(.eb-accordion-hidden) {
+            ${accordionExpandedBdShdStyesTab}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:not(.eb-accordion-hidden) {
+            ${accordionExpandedBdShdStylesHoverTab}
+        }
+    `;
+
+    const singleAccordionStylesMobile = `
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper {
+            ${accordionMarginMobile}
+            ${accordionPaddingMobile}
+            ${accordionBdShdStyesMobile}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover,
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:hover {
+            ${accordionBdShdStylesHoverMobile}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:not(.eb-accordion-hidden) {
+            ${accordionExpandedBdShdStyesMobile}
+        }
+        .${blockId}.eb-accordion-container > .eb-accordion-inner > .eb-accordion-wrapper:hover:not(.eb-accordion-hidden),
+        .${blockId}.eb-accordion-container .eb-accordion-wrapper-${blockId}.eb-accordion-wrapper:hover:not(.eb-accordion-hidden) {
+            ${accordionExpandedBdShdStylesHoverMobile}
+        }
+    `;
+
+    const horizontalAccordionStylesDesktop = `
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-inner,
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .block-editor-block-list__layout {
+            min-height: ${horizontalHeightDesktop.replace(/[:;]/g, "")};
+            max-height: ${horizontalHeightDesktop.replace(/[:;]/g, "")};
+        }
+        
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-inner .eb-accordion-wrapper:not(.for_edit_page) {
+            transition: all ${Number(transitionDuration) * 1000}ms ease;
+        }
+    `;
+
+    const horizontalAccordionStylesTab = `
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-inner,
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .block-editor-block-list__layout {
+            min-height: ${horizontalHeightTab.replace(/[:;]/g, "")}
+            max-height: ${horizontalHeightTab.replace(/[:;]/g, "")}
+        }
+    `;
+
+    const horizontalAccordionStylesMobile = `
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .eb-accordion-inner,
+        .${blockId}.eb-accordion-container.eb-accordion-type-horizontal .block-editor-block-list__layout {
+            min-height: ${horizontalHeightMobile.replace(/[:;]/g, "")}
+            max-height: ${horizontalHeightMobile.replace(/[:;]/g, "")}
+        }
+    `;
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
+        ${imageContainerStylesDesktop}
+        ${singleAccordionStylesDesktop}
+        ${horizontalAccordionStylesDesktop}
 	`);
 
     // all css styles for Tab in strings ⬇
     const tabAllStyles = softMinifyCssStrings(`
 		${wrapperStylesTab}
+        ${imageContainerStylesTab}
+        ${singleAccordionStylesTab}
+        ${horizontalAccordionStylesTab}
 	`);
 
     // all css styles for Mobile in strings ⬇
     const mobileAllStyles = softMinifyCssStrings(`
 		${wrapperStylesMobile}
+        ${imageContainerStylesMobile}
+        ${singleAccordionStylesMobile}
+        ${horizontalAccordionStylesMobile}
 	`);
 
     return (

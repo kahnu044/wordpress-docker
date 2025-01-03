@@ -22,8 +22,10 @@ ebConditionalRegisterBlockType(metadata, {
     attributes: Attributes,
     keywords: [
         __("images", "essential-blocks"),
+        __("filter", "essential-blocks"),
         __("photos", "essential-blocks"),
         __("eb image gallery", "essential-blocks"),
+        __("filterable gallery", "essential-blocks"),
     ],
     edit: Edit,
     save: Save,

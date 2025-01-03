@@ -61,6 +61,7 @@ import {
     LOADMORE_MARGIN,
     LOADMORE_BORDER_SHADOW,
     RATING_STYLE,
+    FIT_STYLES
 } from "./constants";
 
 import {
@@ -129,6 +130,8 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         enableContents,
         showDetailBtn,
         detailBtnText,
+        autoFit,
+        fitStyles
     } = attributes;
 
     const changeLayout = (preset) => {
@@ -562,6 +565,20 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     })
                                 }
                             />
+                            <ToggleControl
+                                label={__("Auto Fit Image?", "essential-blocks")}
+                                checked={autoFit}
+                                onChange={(autoFit) => setAttributes({ autoFit })}
+                            />
+
+                            {autoFit && (
+                                <SelectControl
+                                    label={__("Image Fit Options", "essential-blocks")}
+                                    value={fitStyles}
+                                    options={FIT_STYLES}
+                                    onChange={(fitStyles) => setAttributes({ fitStyles })}
+                                />
+                            )}
                             <Divider />
                             <ColorControl
                                 label={__("Image Wrapper Background", "essential-blocks")}

@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 5.0.9
+Stable tag: 5.2.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -99,7 +99,7 @@ Design without limits in WordPress block editor, using 60+ of the most useful Es
 - **[Image Comparison](https://essential-blocks.com/demo/image-comparison/)** - Let your viewers compare two images interactively
 - **[Wrapper](https://essential-blocks.com/demo/wrapper/)** - Place any block within the wrapper and style the wrapper
 - **[Instagram Feed](https://essential-blocks.com/demo/instagram-feed/)** - Display your Instagram posts beautifully
-- **[Image Gallery](https://essential-blocks.com/demo/image-gallery/)** - Show your image gallery with a beautiful grid and lightbox
+- **[Filterable Gallery](https://essential-blocks.com/demo/filterable-gallery/)** - Show your image gallery with a beautiful grid and lightbox
 - **[Advanced Heading](https://essential-blocks.com/demo/advanced-heading/)** - Advanced Heading block with lots of customization options
 - **[Dual Button](https://essential-blocks.com/demo/dual-button/)** - Show dual button with nice text or icon separator
 - **[Parallax Slider](https://essential-blocks.com/demo/parallax-slider/)** - Create a fancy slider to showcase your team or any image gallery
@@ -240,46 +240,38 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
-= 5.0.9 - 13/11/2024 =
-- Fixed: Pricing Table | Icon control not showing for feature items
+= 5.2.1 - 24/12/2024 =
+- Few bug fixes and improvements
+
+= 5.2.0 - 24/12/2024 =
+- Revamped: Filterable Gallery | Added new Presets & Styling controls
+- Added: Advanced Heading | Multiple heading support with new styles
+- Added: Gradient border color support for Border control
+- Fixed: Accordion | Horizontal Accordion broken in nested Accordion block
+- Fixed: Accordion | Animation conflict with other blocks
+- Fixed: Post Carousel | PHP notice fixed
+- Fixed: Infobox | Alignment reset to center on reload in editor
+- Improved: Pricing Table | Enable/disable icons for each feature item
+- Improved: Pricing Table | Added title tag change control
+- Few bug fixes and improvements
+
+= 5.1.1 - 19/12/2024 =
+- Fixed: Site templates Header/Footer predefined CSS not loading on the frontend
+- Fixed: Global Styles not loading in Full Site Editor
+- Improved: Security enhancement
 - Minor bug fixes and improvements
 
-= 5.0.8 - 07/11/2024 =
-- Fixed: Flickering effect due to delayed CSS loading
-- Fixed: Infobox | Alignment issues with icons and content for Preset 3 & 4
-- Fixed: Infobox | Image border radius resetting on editor reload
-- Fixed: Slider | "Slides to show" option not displaying correctly on frontend
-
-= 5.0.7 - 01/11/2024 =
-- Fixed: Predefined CSS not loading properly
-- Fixed: Progress Bar | Style broken in frontend
-- Fixed: Feature List | Icon not showing in frontend
-
-= 5.0.6 - 30/10/2024 =
-- Improved: Optimized predefined CSS loading
-- Improved: Dual Button | Added support for nofollow and download attributes
-- Improved: Infobox | Enhanced styling options with additional control settings
-- Fixed: Post Grid | Resolved issue with taxonomy filter settings resetting
-- Fixed: Slider | Corrected HTML input error display in the editor
+= 5.1.0 - 04/12/2024 =
+- Improved: Accordion Block | Added New Presets
+- Improved: Accordion Block | More Styling controls & options
+- Added: Woo Product Grid | Featured image size option
+- Fixed: Widget CSS not loading on the frontend
+- Fixed: FSE templates CSS not loading on the frontend
+- Fixed: Form Block | Custom fields data not being sent in emails
+- Fixed: Woo Product Grid | Showing PHP notice for an undefined variable
+- Fixed: Advanced Navigation | Overlapping issue with Post Grid
+- Fixed: Advanced Tabs | Global typography not applying to title font size
 - Minor bug fixes and improvements
-
-= 5.0.5 - 22/10/2024 =
-- Fixed: Toggle Content & Advanced Tabs | Mismatched inner blocks data for click events
-- Fixed: Advanced Tabs | Tab Titles data not saving
-- Improved: Post Grid | Sorting controls moved to the relevant controls panel
-- Minor bug fixes and improvements
-
-= 5.0.4 - 14/10/2024 =
-- Fixed: Post Carousel | Image size changing unexpectedly
-- Fixed: Accordion | Toggle feature not working properly
-- Fixed: Add to Cart | Error shown if WooCommerce plugin is not active
-- Minor bug fixes and improvements
-
-= 5.0.3 - 09/10/2024 =
-- Fixed: Animation not working in site editor
-- Fixed: Predefined font size conflict with Theme/Global settings
-- Fixed: Post Grid & Post Carousel | Featured image size issue with lazy load plugin
-- Fixed: Inspector Help Panel position issue
 
 [See changelog for all versions](https://essential-blocks.com/changelog).
 

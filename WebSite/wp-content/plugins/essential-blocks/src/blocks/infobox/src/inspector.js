@@ -130,8 +130,10 @@ function Inspector(props) {
         iconShape
     } = attributes;
 
-    useEffect(() => {
-        switch (layoutPreset) {
+    const changePreset = (selected) => {
+        setAttributes({ layoutPreset: selected })
+
+        switch (selected) {
             case "preset1":
                 setAttributes({
                     flexDirection: "column",
@@ -176,7 +178,7 @@ function Inspector(props) {
                 });
                 break;
         }
-    }, [layoutPreset]);
+    }
 
     useEffect(() => {
         if (media == 'none') {
@@ -260,9 +262,6 @@ function Inspector(props) {
 
     }, [media, iconView, iconShape]);
 
-    console.log('attr', iconView);
-
-
     return (
         <InspectorPanel advancedControlProps={{
             marginPrefix: wrapperMargin,
@@ -287,9 +286,7 @@ function Inspector(props) {
                             )}
                             value={layoutPreset}
                             options={LAYOUT_TYPES}
-                            onChange={(layoutPreset) =>
-                                setAttributes({ layoutPreset })
-                            }
+                            onChange={(layoutPreset) => changePreset(layoutPreset)}
                         />
 
                         <Divider />

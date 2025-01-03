@@ -3,8 +3,8 @@
 namespace EssentialBlocks\API;
 
 use EssentialBlocks\Utils\Helper;
-use EssentialBlocks\blocks\PostGrid as PostGridBlock;
-use EssentialBlocks\blocks\PostCarousel as PostCarouselBlock;
+use EssentialBlocks\Blocks\PostGrid as PostGridBlock;
+use EssentialBlocks\Blocks\PostCarousel as PostCarouselBlock;
 
 class PostBlock extends Base
 {

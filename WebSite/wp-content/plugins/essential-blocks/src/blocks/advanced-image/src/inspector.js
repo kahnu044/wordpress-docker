@@ -159,6 +159,12 @@ function Inspector(props) {
                     imgBorderShadowRds_Left: "15",
                     imgBorderShadowRds_Right: "15",
                     imgBorderShadowRds_Unit: "px",
+
+                    imgBorderShadowHRds_Bottom: "15",
+                    imgBorderShadowHRds_Top: "15",
+                    imgBorderShadowHRds_Left: "15",
+                    imgBorderShadowHRds_Right: "15",
+                    imgBorderShadowHRds_Unit: "px",
                 });
                 break;
             case "square":
@@ -168,6 +174,12 @@ function Inspector(props) {
                     imgBorderShadowRds_Left: "0",
                     imgBorderShadowRds_Right: "0",
                     imgBorderShadowRds_Unit: "px",
+
+                    imgBorderShadowHRds_Bottom: "0",
+                    imgBorderShadowHRds_Top: "0",
+                    imgBorderShadowHRds_Left: "0",
+                    imgBorderShadowHRds_Right: "0",
+                    imgBorderShadowHRds_Unit: "px",
                 });
                 break;
             case "circle":
@@ -177,6 +189,12 @@ function Inspector(props) {
                     imgBorderShadowRds_Left: "50",
                     imgBorderShadowRds_Right: "50",
                     imgBorderShadowRds_Unit: "%",
+
+                    imgBorderShadowHRds_Bottom: "50",
+                    imgBorderShadowHRds_Top: "50",
+                    imgBorderShadowHRds_Left: "50",
+                    imgBorderShadowHRds_Right: "50",
+                    imgBorderShadowHRds_Unit: "%",
                 });
                 break;
             default:

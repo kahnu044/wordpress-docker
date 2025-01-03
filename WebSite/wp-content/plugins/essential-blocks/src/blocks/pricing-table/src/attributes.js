@@ -335,6 +335,10 @@ const attributes = {
         type: "string",
         default: "#7967ff",
     },
+    titleTagName: {
+        type: "string",
+        default: "h2",
+    },
     ...generateResponsiveRangeAttributes(buttonIconSpacing, {
         defaultRange: 0,
         noUnits: true,

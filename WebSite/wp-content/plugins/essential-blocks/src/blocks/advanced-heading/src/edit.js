@@ -38,9 +38,12 @@ function Edit(props) {
     const {
         blockId,
         preset,
+        effects,
         align,
         tagName,
         titleText,
+        title2Text,
+        title3Text,
         subtitleTagName,
         subtitleText,
         displaySubtitle,
@@ -51,7 +54,8 @@ function Edit(props) {
         classHook,
         source,
         currentPostId,
-        currentPostType
+        currentPostType,
+        version
     } = attributes;
 
     // you must declare this variable
@@ -65,6 +69,7 @@ function Edit(props) {
         if (source == undefined) {
             setAttributes({ source: 'custom' })
         }
+        setAttributes({ version: '2' })
     }, [])
 
     useEffect(() => {
@@ -101,7 +106,7 @@ function Edit(props) {
 
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                    {source == 'dynamic-title' && currentPostId == 0 && (
+                    {source === 'dynamic-title' && currentPostId === 0 && (
                         <>
                             {editorType === 'edit-site' && (
                                 <TagName className="eb-ah-title">Dynamic Title</TagName>
@@ -114,10 +119,10 @@ function Edit(props) {
                         </>
                     )}
 
-                    {((source == 'dynamic-title' && currentPostId != 0) || source == 'custom') && (
+                    {((source === 'dynamic-title' && currentPostId !== 0) || source === 'custom') && (
                         <>
                             <div
-                                className={`eb-advance-heading-wrapper ${blockId} ${preset}`}
+                                className={`eb-advance-heading-wrapper ${blockId} ${preset} ${effects}`}
                                 data-id={blockId}
                             >
                                 {displaySeperator && seperatorPosition === "top" && (
@@ -128,7 +133,7 @@ function Edit(props) {
                                     </div>
                                 )}
 
-                                {source == 'dynamic-title' && (
+                                {source === 'dynamic-title' && (
                                     <>
                                         {currentPostId > 0 && (
                                             <DynamicInputValueHandler
@@ -158,27 +163,74 @@ function Edit(props) {
 
                                 )}
 
-                                {source == 'custom' && (
-                                    <DynamicInputValueHandler
-                                        value={titleText}
-                                        tagName={tagName}
-                                        className="eb-ah-title"
-                                        allowedFormats={[
-                                            "core/bold",
-                                            "core/italic",
-                                            "core/link",
-                                            "core/strikethrough",
-                                            "core/underline",
-                                            "core/text-color",
-                                        ]}
-                                        onChange={(titleText) =>
-                                            setAttributes({ titleText })
-                                        }
-                                        readOnly={true}
-                                    />
+                                {source === 'custom' && (
+                                    <TagName
+                                        className={`eb-ah-title`}
+                                    >
+                                        <DynamicInputValueHandler
+                                            value={titleText}
+                                            tagName={'span'}
+                                            className="first-title"
+                                            allowedFormats={[
+                                                "core/bold",
+                                                "core/italic",
+                                                "core/link",
+                                                "core/strikethrough",
+                                                "core/underline",
+                                                "core/text-color",
+                                            ]}
+                                            onChange={(titleText) =>
+                                                setAttributes({ titleText })
+                                            }
+                                            readOnly={true}
+                                        />
+                                        {title2Text && (
+                                            <>
+                                                &nbsp;<DynamicInputValueHandler
+                                                    value={title2Text}
+                                                    tagName={'span'}
+                                                    className="second-title"
+                                                    allowedFormats={[
+                                                        "core/bold",
+                                                        "core/italic",
+                                                        "core/link",
+                                                        "core/strikethrough",
+                                                        "core/underline",
+                                                        "core/text-color",
+                                                    ]}
+                                                    onChange={(title2Text) =>
+                                                        setAttributes({ title2Text })
+                                                    }
+                                                    readOnly={true}
+                                                />
+                                            </>
+                                        )}
+                                        {title2Text && (
+                                            <>
+                                                &nbsp;
+                                                <DynamicInputValueHandler
+                                                    value={title3Text}
+                                                    tagName={'span'}
+                                                    className="third-title"
+                                                    allowedFormats={[
+                                                        "core/bold",
+                                                        "core/italic",
+                                                        "core/link",
+                                                        "core/strikethrough",
+                                                        "core/underline",
+                                                        "core/text-color",
+                                                    ]}
+                                                    onChange={(title3Text) =>
+                                                        setAttributes({ title3Text })
+                                                    }
+                                                    readOnly={true}
+                                                />
+                                            </>
+                                        )}
+                                    </TagName>
                                 )}
 
-                                {source == 'custom' && displaySubtitle && (
+                                {source === 'custom' && displaySubtitle && (
                                     <DynamicInputValueHandler
                                         tagName={subtitleTagName}
                                         className="eb-ah-subtitle"

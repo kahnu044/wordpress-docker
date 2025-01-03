@@ -14,6 +14,8 @@ import { __ } from "@wordpress/i18n";
 import {
 ImageAvatar
 } from "@essential-blocks/controls";
+import { escapeHTML } from "@wordpress/escape-html";
+import { safeHTML } from "@wordpress/dom";
 
 // Style objects
 const trashStyle = {
@@ -288,7 +290,7 @@ const SortableMarker = ({ marker, map, setAttributes }) => {
         const newMarker = { ...marker[position] };
         const newMarkerList = [...marker];
         newMarkerList[position] = newMarker;
-        newMarkerList[position][key] = value;
+        newMarkerList[position][key] = safeHTML(value);
         setAttributes({ marker: [...newMarkerList] });
     };
 

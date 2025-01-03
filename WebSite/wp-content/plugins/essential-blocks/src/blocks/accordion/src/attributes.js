@@ -2,7 +2,7 @@ import {
     typoPrefix_title,
     typoPrefix_content,
     titlePrefixText,
-    titleSuffixText
+    titleSuffixText,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -14,18 +14,51 @@ import {
     tabPaddingConst,
     conMarginConst,
     conPaddingConst,
+    imgContainerPadding,
+    imgContainerMargin,
+    accordionMargin,
+    accordionPadding,
+    titlePrefixPadding,
+    titleSuffixPadding,
+    titlePrefixMargin,
+    titleSuffixMargin,
 } from "./constants/dimensionsConstants";
 
-import { WrpBgConst, iconBgConst, tabBgConst, conBgConst } from "./constants/backgroundsConstants";
+import {
+    WrpBgConst,
+    iconBgConst,
+    tabBgConst,
+    conBgConst,
+    accordionBackground,
+    accordionExpandedBackground,
+    titlePrefixBG,
+    titleSuffixBG,
+} from "./constants/backgroundsConstants";
 
 import {
     WrpBdShadowConst,
     iconBdShadowConst,
     tabBdShadowConst,
     conBdShadowConst,
+    accordionBorder,
+    accordionExpandedBorder,
+    titlePrefixBorder,
+    titleSuffixBorder,
 } from "./constants/borderShadowConstants";
 
-import { rangeIconSize, accGapRange, titlePrefixIconSize, titlePrefixImgWidth, titlePrefixGap, titleSuffixIconSize, titleSuffixImgWidth, titleSuffixGap } from "./constants/rangeNames";
+import {
+    rangeIconSize,
+    accGapRange,
+    titlePrefixIconSize,
+    titlePrefixImgWidth,
+    titlePrefixGap,
+    titleSuffixIconSize,
+    titleSuffixImgWidth,
+    titleSuffixGap,
+    imageWidth,
+    imageHeight,
+    horizontalHeight,
+} from "./constants/rangeNames";
 
 import {
     generateDimensionsAttributes,
@@ -33,7 +66,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
-} from '@essential-blocks/controls';
+} from "@essential-blocks/controls";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -68,15 +101,16 @@ const attributes = {
     },
     tabIcon: {
         type: "string",
+        default: "dashicons-plus-alt2",
     },
     expandedIcon: {
         type: "string",
+        default: "dashicons-minus",
     },
     transitionDuration: {
         type: "number",
         default: 0.5,
     },
-
     contentAlign: {
         type: "string",
         default: "left",
@@ -93,17 +127,14 @@ const attributes = {
         type: "string",
         default: "var(--eb-global-text-color)",
     },
-
     iconColor: {
         type: "string",
         default: "var(--eb-global-primary-color)",
     },
-
     iconPosition: {
         type: "string",
         default: "right",
     },
-
     hoverTitleColor: {
         type: "string",
     },
@@ -112,6 +143,10 @@ const attributes = {
         default: "",
     },
     activeTitleColor: {
+        type: "string",
+        default: "",
+    },
+    activeIconColor: {
         type: "string",
         default: "",
     },
@@ -127,8 +162,6 @@ const attributes = {
         type: "boolean",
         default: false,
     },
-
-
     titlePrefixColor: {
         type: "string",
         default: "#000",
@@ -137,8 +170,18 @@ const attributes = {
         type: "string",
         default: "#000",
     },
-
-
+    accordionLists: {
+        type: "array",
+        default: [],
+    },
+    imageContainerWidth: {
+        type: "number",
+        default: 50,
+    },
+    titleOrientation: {
+        type: "string",
+        default: "bottom-top",
+    },
     ...generateResponsiveRangeAttributes(titlePrefixIconSize, {
         defaultRange: 20,
     }),
@@ -160,7 +203,6 @@ const attributes = {
     ...generateResponsiveRangeAttributes(titleSuffixGap, {
         defaultRange: 15,
     }),
-
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_title, {
         fontSize: 18,
@@ -178,9 +220,9 @@ const attributes = {
     // Responsive Range Controller attributes starts
 
     // ...generateResponsiveRangeAttributes(wrapperWidth, {
-    // 	// noUnits: true,
-    // 	defaultUnit: "%",
-    // 	defaultRange: 100,
+    //  // noUnits: true,
+    //  defaultUnit: "%",
+    //  defaultRange: 100,
     // }),
     ...generateResponsiveRangeAttributes(rangeIconSize, {
         noUnits: true,
@@ -190,7 +232,11 @@ const attributes = {
         noUnits: true,
         defaultRange: 15,
     }),
-
+    ...generateResponsiveRangeAttributes(imageWidth),
+    ...generateResponsiveRangeAttributes(imageHeight),
+    ...generateResponsiveRangeAttributes(horizontalHeight, {
+        defaultRange: 450,
+    }),
     // Responsive Range Controller attributes ends
 
     // boxs background attributes ⬇
@@ -206,13 +252,29 @@ const attributes = {
     ...generateBackgroundAttributes(tabBgConst, {
         // isBgDefaultGradient: true,
         noMainBgi: true,
-        defaultFillColor: "var(--eb-global-background-color)",
+        defaultFillColor: "#FFFFFF00",
         noOverlay: true,
     }),
     ...generateBackgroundAttributes(conBgConst, {
         noMainBgi: true,
         // defaultFillColor: "var(--eb-gradient-background-color)",
         noOverlay: true,
+    }),
+    ...generateBackgroundAttributes(accordionBackground, {
+        noOverlay: true,
+        noMainBgi: true,
+    }),
+    ...generateBackgroundAttributes(accordionExpandedBackground, {
+        noOverlay: true,
+        noMainBgi: true,
+    }),
+    ...generateBackgroundAttributes(titlePrefixBG, {
+        noOverlay: true,
+        noMainBgi: true,
+    }),
+    ...generateBackgroundAttributes(titleSuffixBG, {
+        noOverlay: true,
+        noMainBgi: true,
     }),
 
     // boxs background attributes ends
@@ -226,6 +288,10 @@ const attributes = {
         defaultBdrColor: "#aaaaaa",
         defaultBdrStyle: "solid",
     }),
+    ...generateBorderShadowAttributes(accordionBorder),
+    ...generateBorderShadowAttributes(accordionExpandedBorder),
+    ...generateBorderShadowAttributes(titlePrefixBorder),
+    ...generateBorderShadowAttributes(titleSuffixBorder),
 
     // boxs BorderShadow attributes ends
 
@@ -235,6 +301,8 @@ const attributes = {
     ...generateDimensionsAttributes(wrapPaddingConst),
     ...generateDimensionsAttributes(iconMarginConst),
     ...generateDimensionsAttributes(iconPaddingConst),
+    ...generateDimensionsAttributes(imgContainerPadding),
+    ...generateDimensionsAttributes(imgContainerMargin),
     ...generateDimensionsAttributes(tabMarginConst),
     ...generateDimensionsAttributes(tabPaddingConst, {
         top: 15,
@@ -251,6 +319,12 @@ const attributes = {
         right: 15,
         // isLinked: false,
     }),
+    ...generateDimensionsAttributes(accordionMargin),
+    ...generateDimensionsAttributes(accordionPadding),
+    ...generateDimensionsAttributes(titlePrefixMargin),
+    ...generateDimensionsAttributes(titlePrefixPadding),
+    ...generateDimensionsAttributes(titleSuffixMargin),
+    ...generateDimensionsAttributes(titleSuffixPadding),
 
     // dimensions Control related Attributes ends
 };

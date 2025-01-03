@@ -159,11 +159,14 @@ function Edit(props) {
         let widthPerChildTab = (50).toFixed(2);
         let widthPerChildMobile = (100).toFixed(2);
 
-        const getBlock = select("core/block-editor").getBlocksByClientId(
-            clientId
-        )[0];
+        const getBlock = select("core/block-editor").getBlocksByClientId(clientId)[0];
         const getBlockInnerBlocks = getBlock && getBlock.innerBlocks ? getBlock.innerBlocks : [];
         let innerBlocks = [...getBlockInnerBlocks];
+
+        //If no innerBlocks, return
+        if (innerBlocks.length === 0) {
+            return
+        }
 
         // If total rows are more than 6, then remove the extra rows
         if (desktopColNumber > 6) {

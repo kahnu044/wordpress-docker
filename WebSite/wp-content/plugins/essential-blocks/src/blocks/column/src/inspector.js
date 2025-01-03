@@ -124,13 +124,15 @@ function Inspector(props) {
     }, []);
 
     return (
-        <InspectorPanel advancedControlProps={{
-            marginPrefix: cWrapMarginConst,
-            paddingPrefix: cWrapPaddingConst,
-            backgroundPrefix: WrpBgConst,
-            borderPrefix: WrpBdShadowConst,
-            hasMargin: true
-        }}>
+        <InspectorPanel
+            hideTabs={['styles']}
+            advancedControlProps={{
+                marginPrefix: cWrapMarginConst,
+                paddingPrefix: cWrapPaddingConst,
+                backgroundPrefix: WrpBgConst,
+                borderPrefix: WrpBdShadowConst,
+                hasMargin: true
+            }}>
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                     <div
@@ -194,7 +196,7 @@ function Inspector(props) {
                             {resOption == "Tablet" && (
                                 <WithResponsiveOptions
                                     noUnits={true}
-                                    label={__("Column Width (%)","essential-blocks")}
+                                    label={__("Column Width (%)", "essential-blocks")}
                                     controlName={wrapperWidth}
                                 >
                                     <RangeControl
@@ -213,7 +215,7 @@ function Inspector(props) {
                             {resOption == "Mobile" && (
                                 <WithResponsiveOptions
                                     noUnits={true}
-                                    label={__("Column Width (%)","essential-blocks")}
+                                    label={__("Column Width (%)", "essential-blocks")}
                                     controlName={wrapperWidth}
                                 >
                                     <RangeControl
@@ -257,7 +259,7 @@ function Inspector(props) {
                     {/* <PanelRow>{'Please Select "Custom Order" from "Row Block Controls -> Columns Order" to make this work'}  </PanelRow> */}
 
                     <ResponsiveSelectController
-                        baseLabel={__("Overflow","essential-blocks")}
+                        baseLabel={__("Overflow", "essential-blocks")}
                         controlName={rowOverflowPrefix}
                         options={ROW_OVERFLOWS}
                         resOption={resOption}

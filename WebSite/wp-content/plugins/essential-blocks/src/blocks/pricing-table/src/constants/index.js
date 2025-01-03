@@ -57,6 +57,16 @@ export const RIBBON_ALIGNMENT_VERTICAL = [
     { label: __("Bottom", "essential-blocks"), value: "bottom" },
 ];
 
+export const HEADING = [
+    { label: __("H1", "essential-blocks"), value: "h1" },
+    { label: __("H2", "essential-blocks"), value: "h2" },
+    { label: __("H3", "essential-blocks"), value: "h3" },
+    { label: __("H4", "essential-blocks"), value: "h4" },
+    { label: __("H5", "essential-blocks"), value: "h5" },
+    { label: __("H6", "essential-blocks"), value: "h6" },
+    { label: __("P", "essential-blocks"), value: "p" },
+];
+
 // Responsive Range Controller
 export const buttonIconSpacing = "btnIconSpace";
 export const buttonIconSize = "btnIconSize";

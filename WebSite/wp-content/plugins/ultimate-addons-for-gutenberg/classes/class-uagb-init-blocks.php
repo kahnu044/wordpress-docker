@@ -394,7 +394,7 @@ class UAGB_Init_Blocks {
 			$taxonomies = get_object_taxonomies( $post_type, 'objects' );
 			$data       = array();
 
-			$get_singular_name = get_post_type_object( $post_type );
+			$get_taxonomy_names = get_post_type_object( $post_type ); // Renaming this variable to follow proper naming convention.
 			foreach ( $taxonomies as $tax_slug => $tax ) {
 				if ( ! $tax->public || ! $tax->show_ui || ! $tax->show_in_rest ) {
 					continue;
@@ -413,7 +413,8 @@ class UAGB_Init_Blocks {
 							'name'          => $t_obj->name,
 							'count'         => $t_obj->count,
 							'link'          => get_term_link( $t_obj->term_id ),
-							'singular_name' => $get_singular_name->labels->singular_name,
+							'singular_name' => $get_taxonomy_names ? $get_taxonomy_names->labels->singular_name : 'Post',
+							'plural_name'   => $get_taxonomy_names ? $get_taxonomy_names->labels->name : 'Posts', // Adding this field to use it on the editor.
 						);
 					}
 
@@ -443,7 +444,8 @@ class UAGB_Init_Blocks {
 							'name'          => $t_obj->name,
 							'count'         => $t_obj->count,
 							'link'          => get_term_link( $t_obj->term_id ),
-							'singular_name' => $get_singular_name->labels->singular_name,
+							'singular_name' => $get_taxonomy_names ? $get_taxonomy_names->labels->singular_name : 'Post',
+							'plural_name'   => $get_taxonomy_names ? $get_taxonomy_names->labels->name : 'Posts', // Adding this field to use it on the editor.
 							'children'      => $child_cat_arr,
 						);
 
@@ -476,7 +478,8 @@ class UAGB_Init_Blocks {
 							'name'          => $t_obj->name,
 							'count'         => $t_obj->count,
 							'link'          => get_term_link( $t_obj->term_id ),
-							'singular_name' => $get_singular_name->labels->singular_name,
+							'singular_name' => $get_taxonomy_names ? $get_taxonomy_names->labels->singular_name : 'Post',
+							'plural_name'   => $get_taxonomy_names ? $get_taxonomy_names->labels->name : 'Posts', // Adding this field to use it on the editor.
 							'children'      => $child_cat_empty_tax_arr,
 						);
 					}
@@ -752,6 +755,12 @@ class UAGB_Init_Blocks {
 		$inherit_from_theme               = 'deleted' !== UAGB_Admin_Helper::get_admin_settings_option( 'uag_btn_inherit_from_theme_fallback', 'deleted' ) ? 'disabled' : UAGB_Admin_Helper::get_admin_settings_option( 'uag_btn_inherit_from_theme', 'disabled' );
 		$astra_theme_settings_available   = defined( 'ASTRA_THEME_SETTINGS' );
 		$astra_theme_body_text_decoration = $astra_theme_settings_available && function_exists( 'astra_get_font_extras' ) && function_exists( 'astra_get_option' ) ? astra_get_font_extras( astra_get_option( 'body-font-extras' ), 'text-decoration' ) : '';
+		$installed_plugins                = get_plugins();
+		$status                           = isset( $installed_plugins['spectra-pro/spectra-pro.php'] ) 
+					? ( is_plugin_active( 'spectra-pro/spectra-pro.php' ) 
+						? 'active' 
+						: 'inactive' ) 
+					: 'not-installed';
 
 		$localized_params = array(
 			'cf7_is_active'                           => class_exists( 'WPCF7_ContactForm' ),
@@ -802,7 +811,7 @@ class UAGB_Init_Blocks {
 			'auto_block_recovery'                     => UAGB_Admin_Helper::get_admin_settings_option( 'uag_auto_block_recovery' ),
 			'font_awesome_5_polyfill'                 => array(),
 			'spectra_custom_fonts'                    => apply_filters( 'spectra_system_fonts', array() ),
-			'spectra_pro_status'                      => is_plugin_active( 'spectra-pro/spectra-pro.php' ),
+			'spectra_pro_status'                      => $status,
 			'spectra_custom_css_example'              => __(
 				'Use custom class added in block\'s advanced settings to target your desired block. Examples:
 		.my-class {text-align: center;} // my-class is a custom selector',

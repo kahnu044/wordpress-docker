@@ -86,6 +86,8 @@ export default function Style(props) {
         loadMoreActiveColor,
         loadMoreActiveBgColor,
         enableContents,
+        autoFit,
+        fitStyles
     } = attributes;
 
     const contentAlignmentClass =
@@ -632,6 +634,7 @@ export default function Style(props) {
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image img {
 			${imageWidthDesktop}
 			${autoHeight ? `height: auto;` : imageHeightDesktop}
+            ${autoFit ? `object-fit: ${fitStyles};` : `object-fit: unset;`}
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {

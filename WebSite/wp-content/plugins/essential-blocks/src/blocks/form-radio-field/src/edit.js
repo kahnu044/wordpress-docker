@@ -15,7 +15,7 @@ import {
     withBlockContext,
     getBlockParentClientId,
     filterBlocksByName
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes'
@@ -26,6 +26,7 @@ const Edit = (props) => {
         setAttributes,
         isSelected,
         clientId,
+        name
     } = props;
     const {
         blockId,

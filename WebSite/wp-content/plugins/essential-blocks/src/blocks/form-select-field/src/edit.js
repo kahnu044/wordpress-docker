@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, memo} from "@wordpress/element";
+import { useEffect, memo } from "@wordpress/element";
 import { select } from "@wordpress/data"
 
 /**
@@ -16,7 +16,7 @@ import {
     DynamicFormFieldValueHandler,
     BlockProps,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import Inspector from "./inspector";
 import Style from "./style";
@@ -28,6 +28,7 @@ const Edit = (props) => {
         setAttributes,
         isSelected,
         clientId,
+        name
     } = props;
     const {
         blockId,

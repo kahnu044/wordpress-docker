@@ -1,12 +1,14 @@
 import { createRoot, createRef } from "@wordpress/element";
+import domReady from '@wordpress/dom-ready';
 /**
  * External dependencies
  */
 
 import Slider from "react-slick";
 
-window.addEventListener("DOMContentLoaded", (event) => {
-    const wrappers = document.getElementsByClassName(`eb-slider-wrapper`);
+domReady(function () {
+    //Execute after DOM loads.
+    const wrappers = document.getElementsByClassName('eb-slider-wrapper');
 
     for (let wrapper of wrappers) {
         let version = wrapper.getAttribute("data-version");
@@ -209,19 +211,17 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
             let slickType = wrapper.querySelector('.eb-slider-init');
 
-            (function ($) {
-                $(slickType).slick(settings);
 
-                if (showLightbox == 'true') {
-                    $(slickType).slickLightbox({
-                        src: 'data-src',
-                        itemSelector: '.eb-slider-item',
-                        navigateByKeyboard: true,
-                        imageMaxHeight: 0.7,
-                    });
-                }
+            jQuery(slickType).slick(settings);
 
-            })(jQuery);
+            if (showLightbox == 'true') {
+                jQuery(slickType).slickLightbox({
+                    src: 'data-src',
+                    itemSelector: '.eb-slider-item',
+                    navigateByKeyboard: true,
+                    imageMaxHeight: 0.7,
+                });
+            }
         }
         if (version === 'v3') {
             let settingsData = atob(wrapper.getAttribute("data-settings"));
@@ -244,32 +244,31 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
             let slickType = wrapper.querySelector('.eb-slider-init');
 
-            (function ($) {
-                $(slickType).slick({
-                    arrows,
-                    autoplay,
-                    dots,
-                    infinite,
-                    pauseOnHover,
-                    slidesToShow: slideToShowRange,
-                    autoplaySpeed,
-                    speed,
-                    adaptiveHeight,
-                    prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
-                    nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
-                    responsive: [...responsive],
+            jQuery(slickType).slick({
+                arrows,
+                autoplay,
+                dots,
+                infinite,
+                pauseOnHover,
+                slidesToShow: slideToShowRange,
+                autoplaySpeed,
+                speed,
+                adaptiveHeight,
+                prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
+                nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
+                responsive: [...responsive],
+            });
+
+            if (showLightbox == 'true') {
+                jQuery(slickType).slickLightbox({
+                    src: 'data-src',
+                    itemSelector: '.eb-slider-item',
+                    navigateByKeyboard: true,
+                    imageMaxHeight: 0.7,
                 });
+            }
 
-                if (showLightbox == 'true') {
-                    $(slickType).slickLightbox({
-                        src: 'data-src',
-                        itemSelector: '.eb-slider-item',
-                        navigateByKeyboard: true,
-                        imageMaxHeight: 0.7,
-                    });
-                }
 
-            })(jQuery);
         }
     }
 });

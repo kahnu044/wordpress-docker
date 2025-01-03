@@ -40,6 +40,7 @@ import {
     featuresIconSize,
     RIBBON_ALIGNMENT_HORIZONTAL,
     RIBBON_ALIGNMENT_VERTICAL,
+    HEADING
 } from "./constants";
 
 import {
@@ -68,7 +69,7 @@ import {
     EBIconPicker,
     SortControl,
     InspectorPanel
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
     const {
@@ -126,7 +127,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         showFeatureLine,
         pricingTopBgColor,
         showFeatureIcon,
-        featureIcon
+        featureIcon,
+        titleTagName
     } = attributes;
 
     const onFeatureAdd = () => {
@@ -181,6 +183,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         <EBIconPicker
                             value={each.icon}
                             onChange={(value) => onFeatureChange("icon", value, i)}
+                            hasReset
                         />
 
                         {each.icon && (
@@ -253,6 +256,24 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 })
                             }
                         />
+                        <BaseControl
+                            label={__("Title Level", "essential-blocks")}
+                            id="eb-advance-heading-alignment"
+                        >
+                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                {HEADING.map((item, key) => (
+                                    <Button
+                                        key={key}
+                                        // isLarge
+                                        isPrimary={titleTagName === item.value}
+                                        isSecondary={titleTagName !== item.value}
+                                        onClick={() => setAttributes({ titleTagName: item.value })}
+                                    >
+                                        {item.label}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                        </BaseControl>
                         <ToggleControl
                             label={__("Show Subtitle?")}
                             checked={showSubtitle}
@@ -1484,10 +1505,10 @@ const Inspector = ({ attributes, setAttributes }) => {
                         </InspectorPanel.PanelBody>
                     )}
                 </InspectorPanel.Style>
-            </InspectorPanel>
-                
+            </InspectorPanel >
+
         </>
-        
+
     );
 };
 

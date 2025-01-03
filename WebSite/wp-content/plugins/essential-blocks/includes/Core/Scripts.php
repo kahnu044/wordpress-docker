@@ -3,8 +3,8 @@
 namespace EssentialBlocks\Core;
 
 use EssentialBlocks\Utils\Helper;
-use EssentialBlocks\blocks\WPForms;
-use EssentialBlocks\blocks\FluentForms;
+use EssentialBlocks\Blocks\WPForms;
+use EssentialBlocks\Blocks\FluentForms;
 use EssentialBlocks\Traits\HasSingletone;
 
 class Scripts
@@ -42,11 +42,14 @@ class Scripts
         add_action( 'wp_enqueue_scripts', [ $this, 'frontend_backend_assets' ], 20 );
         add_action( 'init', [ $this, 'localize_enqueue_scripts' ] );
 
-        //Add Global frontend inline styles to frontend styles via hook
-        add_action( 'eb_frontend_assets', function () {
-            $global_styles_css = self::global_styles();
-            wp_add_inline_style( 'essential-blocks-frontend-style', $global_styles_css );
-        } );
+        //Load Global styles
+        add_action( 'wp_head', [ $this, 'print_global_styles' ] );
+    }
+
+    public function print_global_styles()
+    {
+        $global_styles = $this->global_styles();
+        echo "<style id='essential-blocks-global-styles'> $global_styles </style>";
     }
 
     public function block_editor_assets()
@@ -63,6 +66,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'masonry', 'js/masonry.min.js' );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
+        wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
         wpdev_essential_blocks()->assets->register( 'patterns', 'js/eb-patterns.js' );
         wpdev_essential_blocks()->assets->register( 'editor-breakpoint', 'js/eb-editor-breakpoint.js' );
         wpdev_essential_blocks()->assets->register(
@@ -87,6 +91,7 @@ class Scripts
             'essential-blocks-typedjs',
             'essential-blocks-slickjs',
             'essential-blocks-slick-lightbox-js',
+            'essential-blocks-tweenMaxjs',
             'essential-blocks-patterns',
             'essential-blocks-store',
             'essential-blocks-editor-breakpoint'
@@ -141,8 +146,9 @@ class Scripts
 
         // register styles
         wpdev_essential_blocks()->assets->register( 'editor-css', 'admin/controls/controls.css', $editor_styles_deps );
-        $global_styles_css = self::global_styles();
-        wp_add_inline_style( 'essential-blocks-editor-css', $global_styles_css );
+
+        $global_styles = $this->global_styles();
+        wp_add_inline_style( 'essential-blocks-editor-css', $global_styles );
     }
 
     /**
@@ -159,6 +165,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'vendor-bundle', 'vendors/js/bundles.js', [ 'essential-blocks-babel-bundle' ] );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
+        wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
 
         //Register block combined styles
         $editor_css_file = 'admin/editor/editor.css';
@@ -184,6 +191,11 @@ class Scripts
         // dashicon
         wp_enqueue_style( 'dashicons' );
         wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js' );
+
+        // GSAP
+        wpdev_essential_blocks()->assets->register( 'gsap', 'js/gsap/gsap.min.js' );
+        wpdev_essential_blocks()->assets->register( 'gsap-scrolltrigger', 'js/gsap/ScrollTrigger.min.js', [ 'essential-blocks-gsap' ] );
+        wpdev_essential_blocks()->assets->register( 'splittype', 'js/gsap/splittype.min.js', [ 'essential-blocks-gsap' ] );
     }
 
     public function global_styles()
@@ -270,7 +282,6 @@ class Scripts
         if ( is_array( $google_fonts ) && ! empty( $google_fonts ) ) {
             Helper::load_google_font( $google_fonts, 'eb-global-fonts' );
         }
-
         return $custom_css;
     }
 

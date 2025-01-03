@@ -85,3 +85,9 @@ export const CONTENT_LISTS = [
     { label: "em", value: "em" },
     { label: "%", value: "%" },
 ];
+
+export const FIT_STYLES = [
+    { label: __("Fill", "essential-blocks"), value: "fill" },
+    { label: __("Contain", "essential-blocks"), value: "contain" },
+    { label: __("Cover", "essential-blocks"), value: "cover" },
+];

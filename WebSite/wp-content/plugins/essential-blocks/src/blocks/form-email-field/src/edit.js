@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect,memo } from "@wordpress/element";
+import { useEffect, memo } from "@wordpress/element";
 import { select } from "@wordpress/data";
 /**
  * Internal dependencies
@@ -14,17 +14,18 @@ import {
     withBlockContext,
     filterBlocksByName,
     getBlockParentClientId,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes'
 
-const Edit = (props)  => {
+const Edit = (props) => {
     const {
         attributes,
         setAttributes,
         isSelected,
         clientId,
+        name
     } = props;
 
     const {

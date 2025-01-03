@@ -1,4 +1,5 @@
 import { __ } from "@wordpress/i18n";
+import { Dashicon } from "@wordpress/components";
 
 // Default colors
 const DARK_GRAY = "#4a5059";
@@ -17,6 +18,8 @@ export const MAX_HEIGHT = 2000;
 export const ACCORDION_TYPES = [
     { label: __("Accordion", "essential-blocks"), value: "accordion" },
     { label: __("Toggle", "essential-blocks"), value: "toggle" },
+    { label: __("Accordion With Image", "essential-blocks"), value: "image" },
+    { label: __("Horizontal Accordion", "essential-blocks"), value: "horizontal" },
 ];
 
 export const ACCORDION_STYLES = [
@@ -114,9 +117,9 @@ export const TITLE_ALIGNMENT = [
 ];
 
 export const CONTENT_ALIGN = [
-    { label: __("Left", "essential-blocks"), value: "left" },
-    { label: __("Center", "essential-blocks"), value: "center" },
-    { label: __("Right", "essential-blocks"), value: "right" },
+    { label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
+    { label: __(<Dashicon icon={"editor-aligncenter"} />), value: "center" },
+    { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },
 ];
 
 export const COLOR_TYPES = [
@@ -163,4 +166,16 @@ export const sizeUnitTypes = [
     { label: "px", value: "px" },
     { label: "%", value: "%" },
     { label: "em", value: "em" },
+];
+
+export const MEDIA_TYPES = [
+    { label: __("image", "essential-blocks"), value: "image" },
+    { label: __("icon", "essential-blocks"), value: "icon" },
+    { label: __("Text", "essential-blocks"), value: "text" },
+    { label: __("none", "essential-blocks"), value: "none" },
+];
+
+export const TITLE_ORIENTATION = [
+    { label: __("Bottom To Top", "essential-blocks"), value: "bottom-top" },
+    { label: __("Top To Bottom", "essential-blocks"), value: "top-bottom" },
 ];

@@ -96,7 +96,6 @@ export const ApiInfo = (props) => {
             })
             .then((response) => response.json())
             .then((responseData) => {
-                // console.log(typeof responseData, responseData);
                 setShowForm(false);
 
                 setLoadingApi(false);

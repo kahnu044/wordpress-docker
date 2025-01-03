@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "title": "Image Gallery",
+  "title": "Filterable Gallery",
   "name": "essential-blocks/image-gallery",
   "description": "Impress your audience with high-resolution images",
   "category": "essential-blocks",

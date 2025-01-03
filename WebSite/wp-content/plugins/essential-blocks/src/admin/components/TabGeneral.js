@@ -277,25 +277,20 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.0.9", "essential-blocks")}
+                                    {__("Version: 5.2.1", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("13/11/2024", "essential-blocks")}
+                                        {__("24/12/2024", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Fixed: Pricing Table | Icon control not showing for feature items",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Minor bug fixes and improvements",
+                                            "Few bug fixes and improvements",
                                             "essential-blocks"
                                         )}
                                     </li>
                                 </ul>
+
                             </div>
                             {applyFilters("eb_admin_general_changelog", "")}
                             <div className="eb_all_changelog_btn">

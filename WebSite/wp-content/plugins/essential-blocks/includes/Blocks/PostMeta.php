@@ -1,5 +1,5 @@
 <?php
-namespace EssentialBlocks\blocks;
+namespace EssentialBlocks\Blocks;
 
 use EssentialBlocks\Utils\Helper;
 use EssentialBlocks\Core\Block;

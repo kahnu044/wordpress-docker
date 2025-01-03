@@ -17,7 +17,7 @@ class PageTemplates
      */
     public function __construct()
     {
-        $this->templates = [  ];
+        $this->templates = [];
 
         add_filter( 'theme_page_templates', [ $this, 'add_new_template' ] );
         add_filter( 'theme_post_templates', [ $this, 'add_new_template' ] );
@@ -28,12 +28,22 @@ class PageTemplates
         // Add a filter to the template include to determine if the page has our.
         // template assigned and return it's path.
         add_filter( 'template_include', [ $this, 'view_template' ] );
+        add_action( 'init', [ $this, 'add_templates'] );
+        // $this->templates = [
+        //     'essential-blocks-fullwidth-template.php' => __( 'Essential Blocks Fullwidth Template', 'essential-blocks' ),
+        //     'essential-blocks-blank-template.php'     => __( 'Essential Blocks Blank Template', 'essential-blocks' )
+        // ];
+    }
 
+    /**
+     * add init functionalities
+     */
+    public function add_templates() {
         // Add your templates to this array.
         $this->templates = [
             'essential-blocks-fullwidth-template.php' => __( 'Essential Blocks Fullwidth Template', 'essential-blocks' ),
             'essential-blocks-blank-template.php'     => __( 'Essential Blocks Blank Template', 'essential-blocks' )
-         ];
+        ];
     }
 
     /**

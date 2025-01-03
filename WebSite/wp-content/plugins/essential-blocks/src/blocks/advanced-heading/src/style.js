@@ -5,14 +5,23 @@ import {
     WRAPPER_PADDING,
     WRAPPER_BORDER_SHADOW,
     TITLE_MARGIN,
+    TITLE1_PADDING,
+    TITLE1_BORDER_SHADOW,
+    TITLE2_PADDING,
+    TITLE2_BORDER_SHADOW,
+    TITLE3_PADDING,
+    TITLE3_BORDER_SHADOW,
     SUBTITLE_MARGIN,
     SEPARATOR_MARGIN,
     SEPARATOR_LINE_SIZE,
     SEPARATOR_ICON_SIZE,
     SEPARATOR_WIDTH,
+    ALIGNMENT,
 } from "./constants/constants";
 import {
     TITLE_TYPOGRAPHY,
+    TITLE2_TYPOGRAPHY,
+    TITLE3_TYPOGRAPHY,
     SUBTITLE_TYPOGRAPHY,
 } from "./constants/typographyPrefixConstants";
 
@@ -26,8 +35,11 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
-    StyleComponent
- } from "@essential-blocks/controls";
+    generateResponsiveAlignStyles,
+    StyleComponent,
+    getTextColorCss,
+    getBorderColorCss
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -36,7 +48,9 @@ export default function Style(props) {
         blockId,
         blockMeta,
         preset,
-        align,
+        effects,
+        marqueeSpeed,
+        marqueePauseOnHover,
         tagName,
         titleText,
         subtitleTagName,
@@ -45,6 +59,16 @@ export default function Style(props) {
         displaySeperator,
         titleColor,
         titleHoverColor,
+        titleBgColor,
+        titleHoverBgColor,
+        title2Color,
+        title2HoverColor,
+        title2BgColor,
+        title2HoverBgColor,
+        title3Color,
+        title3HoverColor,
+        title3BgColor,
+        title3HoverBgColor,
         subtitleColor,
         subtitleHoverColor,
         separatorColor,
@@ -66,6 +90,22 @@ export default function Style(props) {
     } = generateTypographyStyles({
         attributes,
         prefixConstant: TITLE_TYPOGRAPHY,
+    });
+    const {
+        typoStylesDesktop: title2TypographyDesktop,
+        typoStylesTab: title2TypographyTab,
+        typoStylesMobile: title2TypographyMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: TITLE2_TYPOGRAPHY,
+    });
+    const {
+        typoStylesDesktop: title3TypographyDesktop,
+        typoStylesTab: title3TypographyTab,
+        typoStylesMobile: title3TypographyMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: TITLE3_TYPOGRAPHY,
     });
 
     const {
@@ -99,7 +139,7 @@ export default function Style(props) {
         attributes,
     });
 
-    /* Title Margin */
+    /* Title Margin & Padding */
     const {
         dimensionStylesDesktop: titleMarginDesktop,
         dimensionStylesTab: titleMarginTab,
@@ -107,6 +147,71 @@ export default function Style(props) {
     } = generateDimensionsControlStyles({
         controlName: TITLE_MARGIN,
         styleFor: "margin",
+        attributes,
+    });
+    const {
+        dimensionStylesDesktop: title1PaddingDesktop,
+        dimensionStylesTab: title1PaddingTab,
+        dimensionStylesMobile: title1PaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TITLE1_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+    const {
+        dimensionStylesDesktop: title2PaddingDesktop,
+        dimensionStylesTab: title2PaddingTab,
+        dimensionStylesMobile: title2PaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TITLE2_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+    const {
+        dimensionStylesDesktop: title3PaddingDesktop,
+        dimensionStylesTab: title3PaddingTab,
+        dimensionStylesMobile: title3PaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TITLE3_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+
+    // generateBorderShadowStyles for Titles ⬇
+    const {
+        styesDesktop: title1BDShadowDesktop,
+        styesTab: title1BDShadowTab,
+        styesMobile: title1BDShadowMobile,
+        stylesHoverDesktop: title1BDShadowHoverDesktop,
+        stylesHoverTab: title1BDShadowHoverTab,
+        stylesHoverMobile: title1BDShadowHoverMobile,
+        transitionStyle: title1BDShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: TITLE1_BORDER_SHADOW,
+        attributes,
+    });
+    const {
+        styesDesktop: title2BDShadowDesktop,
+        styesTab: title2BDShadowTab,
+        styesMobile: title2BDShadowMobile,
+        stylesHoverDesktop: title2BDShadowHoverDesktop,
+        stylesHoverTab: title2BDShadowHoverTab,
+        stylesHoverMobile: title2BDShadowHoverMobile,
+        transitionStyle: title2BDShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: TITLE2_BORDER_SHADOW,
+        attributes,
+    });
+    const {
+        styesDesktop: title3BDShadowDesktop,
+        styesTab: title3BDShadowTab,
+        styesMobile: title3BDShadowMobile,
+        stylesHoverDesktop: title3BDShadowHoverDesktop,
+        stylesHoverTab: title3BDShadowHoverTab,
+        stylesHoverMobile: title3BDShadowHoverMobile,
+        transitionStyle: title3BDShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: TITLE3_BORDER_SHADOW,
         attributes,
     });
 
@@ -199,15 +304,25 @@ export default function Style(props) {
         controlName: WRAPPER_BG,
     });
 
+    const {
+        alignStylesDesktop: alignDesktop,
+        alignStylesTab: alignTab,
+        alignStylesMobile: alignMobile,
+    } = generateResponsiveAlignStyles({
+        controlName: ALIGNMENT,
+        property: "",
+        attributes,
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-advance-heading-wrapper.${blockId}{
 			position: relative;
-			text-align: ${align};
+			text-align: ${alignDesktop};
 			${wrapperMarginDesktop}
 			${wrapperPaddingDesktop}
-			${wrapperBDShadowDesktop}
 			${wrapperBackgroundStylesDesktop}
+			${wrapperBDShadowDesktop}
 			transition:${wrapperBgTransitionStyle}, ${wrapperBDShadowTransition};
 		}
 
@@ -227,6 +342,7 @@ export default function Style(props) {
 	`;
     const wrapperStylesTab = `
 		.eb-advance-heading-wrapper.${blockId}{
+			text-align: ${alignTab};
 			${wrapperMarginTab}
 			${wrapperPaddingTab}
 			${wrapperBDShadowTab}
@@ -247,6 +363,7 @@ export default function Style(props) {
 	`;
     const wrapperStylesMobile = `
 		.eb-advance-heading-wrapper.${blockId}{
+			text-align: ${alignMobile};
 			${wrapperMarginMobile}
 			${wrapperPaddingMobile}
 			${wrapperBDShadowMobile}
@@ -266,41 +383,142 @@ export default function Style(props) {
 		}
 	`;
 
+    const handleTitleLineHeight = () => {
+        const css = `.eb-advance-heading-wrapper.${blockId} .eb-ah-title {line-height: 0}`
+        if (typeof titleTypographyDesktop === 'string' && titleTypographyDesktop.trim().length > 0 && titleTypographyDesktop.includes('line-height')) {
+            return css
+        }
+        else if (typeof title2TypographyDesktop === 'string' && title2TypographyDesktop.trim().length > 0 && title2TypographyDesktop.includes('line-height')) {
+            return css
+        }
+        else if (typeof title3TypographyDesktop === 'string' && title3TypographyDesktop.trim().length > 0 && title3TypographyDesktop.includes('line-height')) {
+            return css
+        }
+        return ''
+    }
+
     // Title styles css in strings ⬇
     const titleStylesDesktop = `
+        ${effects === 'marquee' ? (
+            `.eb-advance-heading-wrapper.${blockId}.marquee .eb-ah-title {
+                animation-duration: ${marqueeSpeed}s;
+            }
+            .eb-advance-heading-wrapper.${blockId}.marquee .eb-ah-title:hover {
+                animation-play-state: ${marqueePauseOnHover === true ? 'pause' : 'running'};
+            }`
+        ) : ''}
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-title {
-			text-align: ${align};
-			color: ${titleColor};
-			${titleTypographyDesktop}
+			text-align: ${alignDesktop};
 			${titleMarginDesktop}
-		}
-        .eb-advance-heading-wrapper.${blockId} .eb-ah-title a{
-            color: ${titleColor};
         }
-		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title,
-        .eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title a {
-			color: ${titleHoverColor};
+        ${handleTitleLineHeight()}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .first-title {
+            background: ${titleBgColor};
+            ${getTextColorCss(titleColor)}
+			${titleTypographyDesktop}
+			${title1PaddingDesktop}
+			${title1BDShadowDesktop}
+			transition:${title1BDShadowTransitionStyle};
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .first-title {
+            background: ${titleHoverBgColor};
+            ${getTextColorCss(titleHoverColor)}
+			${title1BDShadowHoverDesktop}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .second-title {
+            background: ${title2BgColor};
+            ${getTextColorCss(title2Color)}
+			${title2TypographyDesktop}
+			${title2PaddingDesktop}
+			${title2BDShadowDesktop}
+			transition:${title2BDShadowTransitionStyle};
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .second-title {
+            background: ${title2HoverBgColor};
+            ${getTextColorCss(title2HoverColor)}
+			${title2BDShadowHoverDesktop}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .third-title {
+            background: ${title3BgColor};
+            ${getTextColorCss(title3Color)}
+			${title3TypographyDesktop}
+			${title3PaddingDesktop}
+			${title3BDShadowDesktop}
+			transition:${title3BDShadowTransitionStyle};
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .third-title {
+            background: ${title3HoverBgColor};
+            ${getTextColorCss(title3HoverColor)}
+			${title3BDShadowHoverDesktop}
 		}
 	`;
 
     const titleStylesTab = `
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-title {
-			${titleTypographyTab}
+			text-align: ${alignTab};
 			${titleMarginTab}
+        }
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .first-title {
+			${titleTypographyTab}
+			${title1PaddingTab}
+			${title1BDShadowTab}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .first-title {
+			${title1BDShadowHoverTab}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .second-title {
+			${title2TypographyTab}
+			${title2PaddingTab}
+			${title2BDShadowTab}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .second-title {
+			${title2BDShadowHoverTab}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .third-title {
+			${title3TypographyTab}
+			${title3PaddingTab}
+			${title3BDShadowTab}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .third-title {
+			${title3BDShadowHoverTab}
 		}
 	`;
 
     const titleStylesMobile = `
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-title {
-			${titleTypographyMobile}
+			text-align: ${alignMobile};
 			${titleMarginMobile}
+        }
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .first-title {
+			${titleTypographyMobile}
+			${title1PaddingMobile}
+			${title1BDShadowMobile}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .first-title {
+			${title1BDShadowHoverMobile}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .second-title {
+			${title2TypographyMobile}
+			${title2PaddingMobile}
+			${title2BDShadowMobile}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .second-title {
+			${title2BDShadowHoverMobile}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-title .third-title {
+			${title3TypographyMobile}
+			${title3PaddingMobile}
+			${title3BDShadowMobile}
+        }
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-title .third-title {
+			${title3BDShadowHoverMobile}
 		}
 	`;
 
     // Sub Title styles css in strings ⬇
     const subtitleStylesDesktop = `
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-subtitle {
-			text-align: ${align};
+			text-align: ${alignDesktop};
 			color: ${subtitleColor};
 			${subtitleTypographyDesktop}
 			${subtitleMarginDesktop}
@@ -312,6 +530,7 @@ export default function Style(props) {
 
     const subtitleStylesTab = `
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-subtitle {
+			text-align: ${alignTab};
 			${subtitleTypographyTab}
 			${subtitleMarginTab}
 		}
@@ -319,6 +538,7 @@ export default function Style(props) {
 
     const subtitleStylesMobile = `
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-subtitle {
+			text-align: ${alignMobile};
 			${subtitleTypographyMobile}
 			${subtitleMarginMobile}
 		}
@@ -332,22 +552,28 @@ export default function Style(props) {
 		}
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.line {
 			border-style: none none ${seperatorStyle};
-			border-color: ${separatorColor};
+            ${getBorderColorCss(separatorColor)}
 			${separatorLineSizeDesktop}
 			${separatorLineWidthDesktop}
-			${align === "center" ? "margin-left: auto; margin-right: auto" : ""}
-			${align === "right" ? "margin-left: auto; margin-right: 0" : ""}
+			${alignDesktop === "center" ? "margin-left: auto; margin-right: auto" : ""}
+			${alignDesktop === "right" ? "margin-left: auto; margin-right: 0" : ""}
 		}
 		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-separator.line {
-			border-color: ${separatorHoverColor};
+            ${getBorderColorCss(separatorHoverColor)}
 		}
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.icon {
-			text-align: ${align};
-			color: ${separatorColor};
+			text-align: ${alignDesktop};
+			${getTextColorCss(separatorColor)}
 			${separatorIconSizeDesktop}
 		}
 		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-separator.icon {
-			color: ${separatorHoverColor};
+            ${getTextColorCss(separatorHoverColor)}
+		}
+        .eb-advance-heading-wrapper.${blockId} .eb-ah-separator.icon > *{
+			${getTextColorCss(separatorColor)}
+		}
+		.eb-advance-heading-wrapper.${blockId}:hover .eb-ah-separator.icon > *{
+            ${getTextColorCss(separatorHoverColor)}
 		}
 	`;
 
@@ -358,6 +584,9 @@ export default function Style(props) {
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.line {
 			${separatorLineSizeTab}
 			${separatorLineWidthTab}
+            ${alignTab === "left" ? "margin-left: 0; margin-right: 0" : ""}
+            ${alignTab === "center" ? "margin-left: auto; margin-right: auto" : ""}
+			${alignTab === "right" ? "margin-left: auto; margin-right: 0" : ""}
 		}
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.icon {
 			${separatorIconSizeTab}
@@ -371,6 +600,9 @@ export default function Style(props) {
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.line {
 			${separatorLineSizeMobile}
 			${separatorLineWidthMobile}
+            ${(alignMobile || alignTab) === "left" ? "margin-left: 0; margin-right: 0" : ""}
+            ${(alignMobile || alignTab) === "center" ? "margin-left: auto; margin-right: auto" : ""}
+			${(alignMobile || alignTab) === "right" ? "margin-left: auto; margin-right: 0" : ""}
 		}
 		.eb-advance-heading-wrapper.${blockId} .eb-ah-separator.icon {
 			${separatorIconSizeMobile}

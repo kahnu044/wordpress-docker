@@ -3,55 +3,56 @@
  */
 
 import {
-softMinifyCssStrings, StyleComponent
+    softMinifyCssStrings,
+    StyleComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
-    const {
-        resOption,
-        blockId,
-        blockMeta,
-        title,
-        titleColor,
-        clickable,
-        iconColor,
-        accordionColor,
-        parentBlockId,
-        titlePrefixColor,
-        titleSuffixIconColor,
-    } = attributes;
+    const { blockId, parentBlockId, accordionLists, itemId } = attributes;
+
+    const foundItem = accordionLists?.find((item) => item.id == itemId);
 
     // CSS/styling Codes Starts from Here
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
-	${accordionColor
-            ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper {
-		background-image: unset;
-		background-color: ${accordionColor};
-	}`
+        ${
+            foundItem?.accordionColor
+                ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId},
+                .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .title-content-${parentBlockId} {
+            background: ${foundItem?.accordionColor};
+        }`
             : ""
         }
-	${titleColor
-            ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title {
-		color: ${titleColor};
-	}`
+        ${
+            foundItem?.titleColor
+                ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title,
+                .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title {
+            color: ${foundItem?.titleColor};
+        }`
             : ""
         }
-	${iconColor
-            ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-icon {
-		color: ${iconColor};
-	}`
+        ${
+            foundItem?.iconColor
+                ? `.${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-icon {
+            color: ${foundItem?.iconColor};
+        }`
             : ""
         }
-        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-prefix-text,
-        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-prefix-icon {
-            color: ${titlePrefixColor};
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title-prefix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title-prefix-icon,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-prefix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-prefix-icon {
+            color: ${foundItem?.titlePrefixColor};
+            background: ${foundItem?.titlePrefixBGColor}
         }
-        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-suffix-text,
-        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-suffix-icon {
-            color: ${titleSuffixIconColor};
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title-suffix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title-suffix-icon,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-suffix-text,
+        .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-suffix-icon {
+            color: ${foundItem?.titleSuffixIconColor};
+            background: ${foundItem?.titleSuffixBGColor};
         }
 
 	`);

@@ -4,11 +4,18 @@ import {
     WRAPPER_PADDING,
     WRAPPER_BORDER_SHADOW,
     TITLE_MARGIN,
+    TITLE1_PADDING,
+    TITLE1_BORDER_SHADOW,
+    TITLE2_PADDING,
+    TITLE2_BORDER_SHADOW,
+    TITLE3_PADDING,
+    TITLE3_BORDER_SHADOW,
     SUBTITLE_MARGIN,
     SEPARATOR_MARGIN,
     SEPARATOR_LINE_SIZE,
     SEPARATOR_ICON_SIZE,
     SEPARATOR_WIDTH,
+    ALIGNMENT
 } from "./constants/constants";
 
 import {
@@ -17,9 +24,10 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    generateResponsiveAlignAttributes
 } from "@essential-blocks/controls";
 
-import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
+import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY, TITLE2_TYPOGRAPHY, TITLE3_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
 
 const attributes = {
     resOption: {
@@ -43,6 +51,17 @@ const attributes = {
         type: "string",
         default: "button-1",
     },
+    effects: {
+        type: "string",
+    },
+    marqueeSpeed: {
+        type: "number",
+        default: 10
+    },
+    marqueePauseOnHover: {
+        type: "boolean",
+        default: true
+    },
     tagName: {
         type: "string",
         default: "h2",
@@ -50,6 +69,12 @@ const attributes = {
     titleText: {
         type: "string",
         default: "Essential Blocks Advanced Heading",
+    },
+    title2Text: {
+        type: "string",
+    },
+    title3Text: {
+        type: "string",
     },
     subtitleTagName: {
         type: "string",
@@ -59,25 +84,43 @@ const attributes = {
         type: "string",
         default: "Essential Blocks Advance Subtitle",
     },
-    topSpace: {
-        type: "number",
-    },
-    topSpaceUnit: {
-        type: "string",
-        default: "px",
-    },
-    bottomSpace: {
-        type: "number",
-    },
-    bottomSpaceUnit: {
-        type: "string",
-        default: "px",
-    },
     titleColor: {
         type: "string",
         default: "var(--eb-global-heading-color)",
     },
     titleHoverColor: {
+        type: "string",
+    },
+    titleBgColor: {
+        type: "string",
+    },
+    titleHoverBgColor: {
+        type: "string",
+    },
+    title2Color: {
+        type: "string",
+        default: "var(--eb-global-heading-color)",
+    },
+    title2HoverColor: {
+        type: "string",
+    },
+    title2BgColor: {
+        type: "string",
+    },
+    title2HoverBgColor: {
+        type: "string",
+    },
+    title3Color: {
+        type: "string",
+        default: "var(--eb-global-heading-color)",
+    },
+    title3HoverColor: {
+        type: "string",
+    },
+    title3BgColor: {
+        type: "string",
+    },
+    title3HoverBgColor: {
         type: "string",
     },
     subtitleColor: {
@@ -93,10 +136,6 @@ const attributes = {
     },
     separatorHoverColor: {
         type: "string",
-    },
-    align: {
-        type: "string",
-        default: "left",
     },
     displaySubtitle: {
         type: "boolean",
@@ -146,10 +185,21 @@ const attributes = {
     currentPostType: {
         type: "string",
     },
+    version: {
+        type: 'string',
+        default: '1'
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(TITLE_TYPOGRAPHY),
+    ...generateTypographyAttributes(TITLE2_TYPOGRAPHY),
+    ...generateTypographyAttributes(TITLE3_TYPOGRAPHY),
     ...generateTypographyAttributes(SUBTITLE_TYPOGRAPHY),
+
+    // Responsive Alignment attributes ⬇
+    ...generateResponsiveAlignAttributes(ALIGNMENT, {
+        defaultAlign: "left",
+    }),
 
     // margin padding attributes ⬇
     ...generateDimensionsAttributes(WRAPPER_MARGIN),
@@ -161,6 +211,9 @@ const attributes = {
         left: 0,
         isLinked: false,
     }),
+    ...generateDimensionsAttributes(TITLE1_PADDING),
+    ...generateDimensionsAttributes(TITLE2_PADDING),
+    ...generateDimensionsAttributes(TITLE3_PADDING),
     ...generateDimensionsAttributes(SUBTITLE_MARGIN, {
         top: 0,
         bottom: 20,
@@ -175,6 +228,9 @@ const attributes = {
         left: 0,
         isLinked: false,
     }),
+    ...generateBorderShadowAttributes(TITLE1_BORDER_SHADOW),
+    ...generateBorderShadowAttributes(TITLE2_BORDER_SHADOW),
+    ...generateBorderShadowAttributes(TITLE3_BORDER_SHADOW),
 
     // border shadow attributes ⬇
     ...generateBorderShadowAttributes(WRAPPER_BORDER_SHADOW, {

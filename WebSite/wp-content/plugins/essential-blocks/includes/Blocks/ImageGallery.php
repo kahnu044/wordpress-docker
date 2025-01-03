@@ -5,7 +5,14 @@ use EssentialBlocks\Core\Block;
 
 class ImageGallery extends Block
 {
-    protected $frontend_scripts = [ 'essential-blocks-image-gallery-frontend' ];
+    protected $frontend_scripts = [
+        'essential-blocks-image-gallery-frontend',
+        'essential-blocks-tweenMaxjs',
+        'essential-blocks-gsap-scrolltrigger',
+        'essential-blocks-splittype'
+     ];
+
+    protected $frontend_styles = [ 'essential-blocks-fontawesome' ];
 
     /**
      * Unique name of the block.
@@ -28,6 +35,7 @@ class ImageGallery extends Block
             'image-gallery-frontend',
             $this->path() . '/frontend.js'
         );
+        $this->assets_manager->register( 'tweenMaxjs', 'js/TweenMax.min.js' );
     }
 
     /**
@@ -50,20 +58,16 @@ class ImageGallery extends Block
             if ( isset( $attributes[ 'enableFilter' ] ) && $attributes[ 'enableFilter' ] == true ) {
                 $enableFilter = true;
             }
-            if ( isset( $attributes[ 'enableIsotope' ] ) && $attributes[ 'enableIsotope' ] == true ) {
-                $enableIsotope = true;
-            }
-            if ( $enableFilter || $enableIsotope ) {
-                $this->assets_manager->enqueue(
-                    'isotope',
-                    'js/isotope.pkgd.min.js'
-                );
 
-                $this->assets_manager->enqueue(
-                    'image-loaded',
-                    'js/images-loaded.min.js'
-                );
-            }
+            $this->assets_manager->enqueue(
+                'isotope',
+                'js/isotope.pkgd.min.js'
+            );
+
+            $this->assets_manager->enqueue(
+                'image-loaded',
+                'js/images-loaded.min.js'
+            );
 
             // Load Lighbox Resource if Lightbox isn't disbaled
             if ( ! $disableLightBox ) {

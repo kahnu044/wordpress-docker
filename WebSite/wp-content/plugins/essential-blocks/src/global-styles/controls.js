@@ -2,9 +2,9 @@ import { __ } from "@wordpress/i18n";
 import { applyFilters } from "@wordpress/hooks";
 import { useState, useEffect, useCallback } from "@wordpress/element";
 import { PanelBody, Button, Popover, Dashicon, TabPanel } from "@wordpress/components";
-import { store as editorStore } from '@wordpress/editor';
+import { store as editorStore, PluginSidebar as PluginSidebarEditor } from '@wordpress/editor';
 import { dispatch, useSelect, withSelect } from "@wordpress/data";
-import { PluginSidebar } from "@wordpress/edit-post"
+import { PluginSidebar as PluginSidebarEditPost } from "@wordpress/edit-post"
 import {
     BlockPreview,
     PanelColorSettings
@@ -68,6 +68,8 @@ import Wpforms from "./block-defaults/wpforms";
 import Wrapper from "./block-defaults/wrapper";
 import GoogleMap from "./block-defaults/google-map";
 import Form from "./block-defaults/form";
+
+const PluginSidebar = PluginSidebarEditor || PluginSidebarEditPost;
 
 const blockComponentObject = {
     advanced_heading: {

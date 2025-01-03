@@ -20,6 +20,8 @@
     "eb/accordionInheritedTabIcon",
     "eb/accordionInheritedExpandedIcon",
     "eb/accordionInheritedTagName",
-    "eb/accordionFaqSchema"
+    "eb/accordionFaqSchema",
+    "eb/accordionLists",
+    "eb/accordionType"
   ]
 }

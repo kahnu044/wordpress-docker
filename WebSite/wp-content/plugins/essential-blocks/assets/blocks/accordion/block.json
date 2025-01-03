@@ -22,6 +22,8 @@
     "eb/accordionInheritedTabIcon": "tabIcon",
     "eb/accordionInheritedExpandedIcon": "expandedIcon",
     "eb/accordionInheritedTagName": "tagName",
-    "eb/accordionFaqSchema": "faqSchema"
+    "eb/accordionFaqSchema": "faqSchema",
+    "eb/accordionLists": "accordionLists",
+    "eb/accordionType": "accordionType"
   }
 }

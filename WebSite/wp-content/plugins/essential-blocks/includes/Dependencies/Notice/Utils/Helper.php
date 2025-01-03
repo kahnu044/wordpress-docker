@@ -44,4 +44,23 @@ trait Helper {
 	private function error( $message ) {
 		throw new Exception( $message );
 	}
+
+	public function get_sorted_queue( $notices = [], $queue = [] ) {
+		$_sorted_queue = [];
+
+		if ( ! empty ( $queue ) ) {
+			array_walk( $queue, function ( $value, $key ) use ( &$_sorted_queue, $notices ) {
+				$notice = isset( $notices[ $key ] ) ? $notices[ $key ] : null;
+				if ( ! is_null( $notice ) ) {
+					if ( ! $notice->dismiss->is_dismissed() && ! $notice->is_expired() ) {
+						$_sorted_queue[ $notice->options( 'start' ) ] = $key;
+					}
+				}
+			} );
+		}
+
+		ksort( $_sorted_queue );
+
+		return $_sorted_queue;
+	}
 }

@@ -28,7 +28,8 @@ class AdvancedHeading extends Block
         'seperatorType'     => 'line',
         'separatorIcon'     => 'fas fa-arrow-circle-down',
         'enableLink'        => false,
-        'openInNewTab'      => false
+        'openInNewTab'      => false,
+        'effects'           => ''
      ];
 
     /**
@@ -55,6 +56,10 @@ class AdvancedHeading extends Block
 
             if ( ! $title ) {
                 return '';
+            }
+
+            if ( isset( $attributes[ "version" ] ) && $attributes[ "version" ] === '2' ) {
+                $title = sprintf( '<span class="first-title">%s</span>', $title );
             }
 
             $tag_name = $attributes[ 'tagName' ];
@@ -103,7 +108,8 @@ class AdvancedHeading extends Block
             $_wrapper_classes = [
                 'eb-advance-heading-wrapper',
                 $attributes[ 'blockId' ],
-                $attributes[ 'preset' ]
+                $attributes[ 'preset' ],
+                $attributes[ 'effects' ]
              ];
 
             $parent_attributes  = get_block_wrapper_attributes( [ 'class' => implode( ' ', $_parent_classes ) ] );

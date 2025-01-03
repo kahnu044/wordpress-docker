@@ -1,6 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { ebConditionalRegisterBlockType } from "@essential-blocks/controls";
 import "./style.scss";
+import "./editor.scss";
 import Edit from "./edit";
 import save from "./save";
 import attributes from "./attributes";

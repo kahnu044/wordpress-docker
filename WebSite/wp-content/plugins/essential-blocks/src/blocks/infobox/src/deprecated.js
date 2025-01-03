@@ -137,8 +137,6 @@ const deprecated = [
                 classHook,
             };
 
-            // console.log('showMedia', showMedia);
-
             return (
                 <BlockProps.Save attributes={attributes}>
                     {isInfoClick ? (

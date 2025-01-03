@@ -350,6 +350,14 @@ const attributes = {
         type: "string",
         default: "var(--eb-global-tertiary-color)",
     },
+    autoFit: {
+        type: "boolean",
+        default: true,
+    },
+    fitStyles: {
+        type: "string",
+        default: "cover",
+    },
 
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_price),

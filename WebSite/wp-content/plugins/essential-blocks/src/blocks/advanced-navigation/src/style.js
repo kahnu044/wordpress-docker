@@ -352,6 +352,7 @@ export default function Style(props) {
     // styles related to generateBorderShadowStyles end
 
     // all common (editor&frontEnd) css styles for large screen width (desktop/laptop) in strings ⬇
+
     const desktopAllStylesCommon = softMinifyCssStrings(`
 
 		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation:not(ul.wp-block-navigation){
@@ -377,6 +378,10 @@ export default function Style(props) {
 		}
 
 
+
+		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation__container{
+
+        }
 
 		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item{
 			${navMarginDesktop}

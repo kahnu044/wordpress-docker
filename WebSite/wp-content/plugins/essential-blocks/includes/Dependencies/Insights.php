@@ -1,6 +1,8 @@
 <?php
     namespace EssentialBlocks\Dependencies;
 
+use Error;
+
     class Insights {
         /**
          * WP Insights Version

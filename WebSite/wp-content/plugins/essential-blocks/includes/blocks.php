@@ -139,14 +139,14 @@ $free_blocks = [
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/image-comparison/icon.svg'
      ],
     'image_gallery'       => [
-        'label'      => __( 'Image Gallery', 'essential-blocks' ),
+        'label'      => __( 'Filterable Gallery', 'essential-blocks' ),
         'value'      => 'image_gallery',
         'visibility' => 'true',
         'status'     => 'popular',
         'category'   => 'creative',
         'object'     => ImageGallery::get_instance(),
-        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/image-gallery/',
-        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-image-gallery/',
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/filterable-gallery/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-filterable-gallery/',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/image-gallery/icon.svg'
      ],
     'infobox'             => [

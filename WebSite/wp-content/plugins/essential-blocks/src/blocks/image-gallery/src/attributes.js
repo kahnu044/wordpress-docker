@@ -19,8 +19,16 @@ import {
     LOADMORE_KEYS,
     LOADMORE_PADDING,
     LOADMORE_BORDER,
+    DESCRIPTION_MARGIN,
+    DESCRIPTION_PADDING,
+    ICON_BORDER_SHADOW,
+    CONTENT_PADDING,
+    CONTENT_MARGIN,
+    CONTENT_BORDER_SHADOW,
+    OVERLAY_PADDING,
+    FILTER_WRAPPER_BORDER_SHADOW,
 } from "./constants";
-import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY, CAPTION_TYPOGRAPHY } from "./typoConstants";
+import { FILTER_TYPOGRAPHY, LOADMORE_TYPOGRAPHY, CAPTION_TYPOGRAPHY, DESCRIPTION_TYPOGRAPHY, NOT_FOUND_TYPOGRAPHY } from "./typoConstants";
 import { __ } from "@wordpress/i18n";
 
 import {
@@ -69,6 +77,10 @@ const attributes = {
         default: "grid",
     },
     displayCaption: {
+        type: "boolean",
+        default: false,
+    },
+    displayDescription: {
         type: "boolean",
         default: false,
     },
@@ -208,8 +220,111 @@ const attributes = {
         default: false,
     },
 
+    presets: {
+        type: "string",
+        default: 'default',
+    },
+    lightboxIcon: {
+        type: "string",
+        default: 'fas fa-plus',
+    },
+    linkIcon: {
+        type: "string",
+        default: 'fas fa-link',
+    },
+    imageClickable: {
+        type: "boolean",
+        default: true,
+    },
+    descriptionColor: {
+        type: "string",
+        default: "var(--eb-global-button-text-color)",
+    },
+    descriptionBGColor: {
+        type: "string",
+    },
+    iconType: {
+        type: "string",
+        default: "normal",
+    },
+    iconColor: {
+        type: "string",
+        default: "#444F62",
+    },
+    iconHoverColor: {
+        type: "string",
+        default: "#2673FF",
+    },
+    iconBGColor: {
+        type: "string",
+        default: "#ffffff",
+    },
+    iconHoverBGColor: {
+        type: "string",
+        default: "",
+    },
+    iconWidth: {
+        type: "number",
+        default: 40,
+    },
+    iconSize: {
+        type: "number",
+        default: 16,
+    },
+    contentAlign: {
+        type: "string",
+        default: 'center',
+    },
+    contentBGColor: {
+        type: "string",
+        default: 'var(--eb-global-secondary-color)',
+    },
+    maskColor: {
+        type: "string",
+        default: '#fff',
+    },
+    filterWrapperBGColor: {
+        type: "string",
+    },
+    enableSearch: {
+        type: "boolean",
+        default: false,
+    },
+    unevenWidth: {
+        type: "boolean",
+        default: false,
+    },
+
+    notFoundColor: {
+        type: "string",
+        default: "var(--eb-global-text-color)",
+    },
+    notFoundText: {
+        type: "string",
+        default: "Image Not Found! Try Again"
+    },
+    version: {
+        type: "string",
+    },
+    enableEmptyGrid: {
+        type: "boolean",
+        default: true,
+    },
+
     // typography attributes ⬇
+    ...generateTypographyAttributes(NOT_FOUND_TYPOGRAPHY, {
+        fontSize: 14,
+    }),
     ...generateTypographyAttributes(FILTER_TYPOGRAPHY, {
+        fontSize: 13,
+    }),
+    ...generateTypographyAttributes(LOADMORE_TYPOGRAPHY, {
+        fontSize: 16,
+    }),
+    ...generateTypographyAttributes(CAPTION_TYPOGRAPHY, {
+        fontSize: 13,
+    }),
+    ...generateTypographyAttributes(DESCRIPTION_TYPOGRAPHY, {
         fontSize: 13,
     }),
 
@@ -224,6 +339,20 @@ const attributes = {
         isLinked: false,
     }),
     ...generateDimensionsAttributes(CAPTION_PADDING, {
+        top: 5,
+        bottom: 5,
+        right: 10,
+        left: 10,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(DESCRIPTION_MARGIN, {
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        isLinked: false,
+    }),
+    ...generateDimensionsAttributes(DESCRIPTION_PADDING, {
         top: 5,
         bottom: 5,
         right: 10,
@@ -262,10 +391,14 @@ const attributes = {
     // range controller Separator Line Grid Column
     ...generateResponsiveRangeAttributes(GRID_COLUMNS, {
         defaultRange: 3,
+        defaultRangeTAB: 2,
+        defaultRangeMOB: 1,
     }),
     // range controller Separator Image Gap
     ...generateResponsiveRangeAttributes(IMAGE_GAP, {
         defaultRange: 10,
+        defaultRangeTAB: 10,
+        defaultRangeMOB: 10,
     }),
     // range controller Separator Caption Width
     ...generateResponsiveRangeAttributes(CAPTION_WIDTH),
@@ -299,6 +432,7 @@ const attributes = {
         isLinked: false,
     }),
     // border shadow attributes ⬇
+    ...generateBorderShadowAttributes(FILTER_WRAPPER_BORDER_SHADOW),
     ...generateBorderShadowAttributes(FILTER_BORDER_SHADOW, {
         bdrDefaults: {
             top: 0,
@@ -309,6 +443,14 @@ const attributes = {
         // noShadow: true,
         // noBorder: true,
     }),
+
+    ...generateDimensionsAttributes(OVERLAY_PADDING),
+    ...generateDimensionsAttributes(CONTENT_MARGIN),
+    ...generateDimensionsAttributes(CONTENT_PADDING),
+    // border shadow attributes ⬇
+    ...generateBorderShadowAttributes(CONTENT_BORDER_SHADOW),
+
+    ...generateBorderShadowAttributes(ICON_BORDER_SHADOW),
     ...EBButton?.addAttributes(
         LOADMORE_KEYS,
         '',

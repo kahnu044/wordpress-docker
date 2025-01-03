@@ -12,8 +12,9 @@ import Save from "./save";
 import attributes from "./attributes";
 import metadata from "../block.json";
 import "./style.scss";
+import "./editor.scss";
 
-import {  ebConditionalRegisterBlockType  } from "@essential-blocks/controls";
+import { ebConditionalRegisterBlockType } from "@essential-blocks/controls";
 
 if (eb_conditional_localize && eb_conditional_localize.editor_type !== 'edit-widgets') {
     ebConditionalRegisterBlockType(metadata, {

@@ -29,7 +29,13 @@ function Edit(props) {
         showMedia,
         iconView,
         iconShape,
-        layoutPreset
+        layoutPreset,
+        flexDirection,
+        contentAlignment,
+        mediaAlignSelf,
+        contentsAlignment,
+        mediaAlignment,
+        btnAlign,
     } = attributes;
 
     // you must declare this variable
@@ -52,6 +58,25 @@ function Edit(props) {
         if (iconShape === undefined) {
             setAttributes({ iconShape: 'circle' });
         }
+        if (flexDirection === undefined) {
+            setAttributes({ flexDirection: 'column' });
+        }
+        if (contentAlignment === undefined) {
+            setAttributes({ contentAlignment: 'center' });
+        }
+        if (mediaAlignSelf === undefined) {
+            setAttributes({ mediaAlignSelf: 'center' });
+        }
+        if (contentsAlignment === undefined) {
+            setAttributes({ contentsAlignment: 'center' });
+        }
+        if (mediaAlignment === undefined) {
+            setAttributes({ mediaAlignment: 'center' });
+        }
+        if (btnAlign === undefined) {
+            setAttributes({ btnAlign: 'center' });
+        }
+
     }, [])
 
     return (

@@ -5,14 +5,14 @@ $footerMeta = ! is_array( $footerMeta ) ? (array) $footerMeta : $footerMeta;
 
 $headerMeta = array_map(
 	function ( $item ) {
-		return $item->value;
+		return isset($item->value) ? $item->value : '';
 	},
 	$headerMeta
 );
 
 $footerMeta = array_map(
 	function ( $item ) {
-		return $item->value;
+		return isset($item->value) ? $item->value : '';
 	},
 	$footerMeta
 );

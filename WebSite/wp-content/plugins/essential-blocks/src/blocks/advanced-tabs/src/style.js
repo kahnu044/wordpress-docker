@@ -44,7 +44,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name, isClickTab } = props;
@@ -490,7 +490,6 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-title-text{
-			font-size: inherit;
 			margin: 0;
 			padding: 0;
 			${textColor ? `color:${textColor};` : ""}

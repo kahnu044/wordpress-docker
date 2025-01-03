@@ -208,7 +208,22 @@ function Inspector(props) {
         //Set Meta Options
         if (updatedMeta.then) {
             updatedMeta.then((resp) => {
-                setMetaOptions(resp);
+                const modifiedArray = resp.map(item => ({
+                    ...item,
+                    options: item.options.map(option => {
+                        if (typeof option.label === "object") {
+                            const prefix = EssentialBlocksProLocalize?.eb_dynamic_tags 
+                                ? `${EssentialBlocksProLocalize.eb_dynamic_tags}/` 
+                                : "";
+                            return {
+                                ...option.label,
+                                value: `${prefix}${option.label.value}/settings=[]`
+                            };
+                        }
+                        return { ...option };
+                    })
+                }));
+                setMetaOptions(modifiedArray);
             });
         } else {
             setMetaOptions(updatedMeta);

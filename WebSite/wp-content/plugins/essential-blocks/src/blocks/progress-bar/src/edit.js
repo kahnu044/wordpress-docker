@@ -175,7 +175,7 @@ const Edit = (props) => {
                                     layout === "circle_fill") && (
                                         <>
                                             <div
-                                                class="eb-progressbar-circle-pie"
+                                                className="eb-progressbar-circle-pie"
                                                 ref={circle_pie}
                                             >
                                                 <div
@@ -268,15 +268,15 @@ const Edit = (props) => {
                                     layout === "line_rainbow") && (
                                         <>
                                             {displayProgress && (
-                                                <span class="eb-progressbar-count-wrap">
-                                                    <span class="eb-progressbar-count">
+                                                <span className="eb-progressbar-count-wrap">
+                                                    <span className="eb-progressbar-count">
                                                         {progress}
                                                     </span>
-                                                    <span class="postfix">%</span>
+                                                    <span className="postfix">%</span>
                                                 </span>
                                             )}
                                             <span
-                                                class="eb-progressbar-line-fill"
+                                                className="eb-progressbar-line-fill"
                                                 ref={line}
                                             ></span>
                                         </>
@@ -284,8 +284,8 @@ const Edit = (props) => {
 
                                 {layout === "box" && (
                                     <>
-                                        <div class="eb-progressbar-box-inner-content">
-                                            {/* <attributes.titleTag class="eb-progressbar-title">
+                                        <div className="eb-progressbar-box-inner-content">
+                                            {/* <attributes.titleTag className="eb-progressbar-title">
                                                 {title}
                                             </attributes.titleTag> */}
                                             {title && (
@@ -302,18 +302,18 @@ const Edit = (props) => {
                                                 />
                                             )}
                                             {displayProgress && (
-                                                <span class="eb-progressbar-count-wrap">
-                                                    <span class="eb-progressbar-count">
+                                                <span className="eb-progressbar-count-wrap">
+                                                    <span className="eb-progressbar-count">
                                                         {progress}
                                                     </span>
-                                                    <span class="postfix">
+                                                    <span className="postfix">
                                                         %
                                                     </span>
                                                 </span>
                                             )}
                                         </div>
                                         <div
-                                            class="eb-progressbar-box-fill"
+                                            className="eb-progressbar-box-fill"
                                             ref={box}
                                         ></div>
                                     </>
@@ -322,11 +322,11 @@ const Edit = (props) => {
                             {(layout === "half_circle" ||
                                 layout === "half_circle_fill") && (
                                     <>
-                                        <div class="eb-progressbar-half-circle-after">
-                                            <span class="eb-progressbar-prefix-label">
+                                        <div className="eb-progressbar-half-circle-after">
+                                            <span className="eb-progressbar-prefix-label">
                                                 {prefix}
                                             </span>
-                                            <span class="eb-progressbar-postfix-label">
+                                            <span className="eb-progressbar-postfix-label">
                                                 {suffix}
                                             </span>
                                         </div>
