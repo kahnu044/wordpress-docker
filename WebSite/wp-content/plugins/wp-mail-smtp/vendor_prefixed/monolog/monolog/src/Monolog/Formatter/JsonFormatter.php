@@ -166,6 +166,9 @@ class JsonFormatter extends \WPMailSMTP\Vendor\Monolog\Formatter\NormalizerForma
             if ($data instanceof \JsonSerializable) {
                 return $data;
             }
+            if (\get_class($data) === '__PHP_Incomplete_Class') {
+                return new \ArrayObject($data);
+            }
             if (\method_exists($data, '__toString')) {
                 return $data->__toString();
             }
