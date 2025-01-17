@@ -29,7 +29,8 @@ export default function Save({ attributes }) {
         showDesignation,
         hoverPreset,
         isContentOverlay,
-        showBlockContent
+        showBlockContent,
+        titleTag
     } = attributes;
 
     if (!showBlockContent) {
@@ -93,7 +94,7 @@ export default function Save({ attributes }) {
                                     <div className="eb-team-member-texts">
                                         {name && (
                                             <RichText.Content
-                                                tagName="h3"
+                                                tagName={titleTag}
                                                 className="eb-team-member-name"
                                                 value={name}
                                             />
@@ -140,7 +141,7 @@ export default function Save({ attributes }) {
                                     <div className="eb-team-member-texts">
                                         {name && (
                                             <RichText.Content
-                                                tagName="h3"
+                                                tagName={titleTag}
                                                 className="eb-team-member-name"
                                                 value={name}
                                             />

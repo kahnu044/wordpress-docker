@@ -99,11 +99,18 @@ const Edit = (props) => {
         if (!version || version == 'v2') {
             setAttributes({ version: 'v3' });
         }
+        if (version === 'v3') {
+            setAttributes({ version: 'v4' });
+        }
 
         if (parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")) == 1) {
             setAttributes({ adaptiveHeight: true });
         }
     }, []);
+
+    useEffect(() => {
+        vertical ? setAttributes({ fade: false }) : null;
+    }, [vertical])
 
     // you must declare this variable
     const enhancedProps = {
@@ -220,29 +227,20 @@ const Edit = (props) => {
                     item.subtitle = thisImage[0].subtitle
                         ? thisImage[0].subtitle
                         : "Essential Blocks Slider Subtitle";
-                    item.showButton = thisImage[0].showButton
-                        ? thisImage[0].showButton
-                        : true;
+                    item.showButton = thisImage[0].showButton ?? true;
                     item.buttonText = thisImage[0].buttonText
                         ? thisImage[0].buttonText
                         : "See More";
                     item.buttonUrl = thisImage[0].buttonUrl;
-                    item.openNewTab = thisImage[0].openNewTab
-                        ? thisImage[0].openNewTab
-                        : false;
+                    item.openNewTab = thisImage[0].openNewTab ?? false;
                     item.isValidUrl = thisImage[0].isValidUrl;
 
-                    item.showSecondButton = thisImage[0].showSecondButton
-                        ? thisImage[0].showSecondButton
-                        : false;
+                    item.showSecondButton = thisImage[0].showSecondButton ?? false;
                     item.secondButtonText = thisImage[0].secondButtonText
                         ? thisImage[0].secondButtonText
                         : "See More";
                     item.secondButtonUrl = thisImage[0].secondButtonUrl;
-                    item.secondButtonOpenNewTab = thisImage[0]
-                        .secondButtonOpenNewTab
-                        ? thisImage[0].secondButtonOpenNewTab
-                        : false;
+                    item.secondButtonOpenNewTab = thisImage[0].secondButtonOpenNewTab ?? false;
                 } else {
                     item.title = selectedImage.caption
                         ? selectedImage.caption

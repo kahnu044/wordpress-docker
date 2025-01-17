@@ -12,7 +12,7 @@ if ( $showContent ) {
     $content  = $block_object->truncate( wp_kses_post( wp_strip_all_tags( $_content ) ), $contentLength );
 
     if ( post_password_required( $result->ID ) ) {
-        $content = __( 'This content is password protected.' );
+        $content = __( 'This content is password protected.', 'essential-blocks' );
     }
 
     $post_classes = $block_object->get_name() == 'post-grid' ? 'ebpg-grid-post-excerpt' : 'ebpg-carousel-post-excerpt';

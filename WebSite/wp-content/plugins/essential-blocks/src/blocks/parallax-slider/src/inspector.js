@@ -9,6 +9,7 @@ import {
     ButtonGroup,
     RangeControl,
     TextControl,
+    BaseControl
 } from "@wordpress/components";
 /**
  * Internal dependencies
@@ -31,6 +32,7 @@ import {
     VERTICAL_ALIGN,
     UNIT_TYPES,
     GAP_UNIT_TYPES,
+    HEADER_TAGS
 } from "./constants/constants";
 import { TITLE_TYPOGRAPHY, BUTTON_TYPOGRAPHY } from "./constants/typography-constant";
 
@@ -41,7 +43,7 @@ import {
     ResponsiveRangeController,
     ColorControl,
     InspectorPanel
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
     const {
@@ -59,6 +61,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         buttonHoverBackgroundColor,
         horizontalAlign,
         verticalAlign,
+        slideTitleTag
     } = attributes;
 
     const validUrl = (type, value, index) => {
@@ -131,6 +134,38 @@ const Inspector = ({ attributes, setAttributes }) => {
                             max={200}
                             step={1}
                         />
+                        <BaseControl
+                            label={__(
+                                "Slide Title Tag",
+                                "essential-blocks"
+                            )}
+                        >
+                            <ButtonGroup>
+                                {HEADER_TAGS.map(
+                                    (header, index) => (
+                                        <Button
+                                            key={index}
+                                            isSecondary={
+                                                slideTitleTag !==
+                                                header.value
+                                            }
+                                            isPrimary={
+                                                slideTitleTag ===
+                                                header.value
+                                            }
+                                            onClick={() =>
+                                                setAttributes({
+                                                    slideTitleTag:
+                                                        header.value,
+                                                })
+                                            }
+                                        >
+                                            {header.label}
+                                        </Button>
+                                    )
+                                )}
+                            </ButtonGroup>
+                        </BaseControl>
                     </InspectorPanel.PanelBody>
 
                     <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")} initialOpen={false}>

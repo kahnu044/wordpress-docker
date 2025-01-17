@@ -38,6 +38,7 @@ function Edit(props) {
         newWindow,
         link,
         classHook,
+        titleTag: TitleTag
     } = attributes;
 
     if (!imageURL) {
@@ -108,7 +109,7 @@ function Edit(props) {
                                 <figure className={`effect-${effectName}`}>
                                     <img src={imageURL} alt={imageAltTag} />
                                     <figcaption>
-                                        <h2 className="eb-interactive-promo-header">{header}</h2>
+                                        <TitleTag className="eb-interactive-promo-header">{header}</TitleTag>
                                         <p className="eb-interactive-promo-content">{content}</p>
                                         {link && (
                                             <a

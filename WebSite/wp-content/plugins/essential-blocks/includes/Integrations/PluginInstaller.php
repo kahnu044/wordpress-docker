@@ -21,7 +21,7 @@ class PluginInstaller extends ThirdPartyIntegration {
 	 */
 	public function plugin_install() {
 		if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
-			wp_send_json_error( __( 'Could not install the plugin.' ) );
+			wp_send_json_error( __( 'Could not install the plugin.', 'essential-blocks' ) );
 			die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
 		}
 		if ( ! current_user_can( 'activate_plugins' ) ) {
@@ -36,7 +36,7 @@ class PluginInstaller extends ThirdPartyIntegration {
 			$response              = $installer->install( $plugin );
 			wp_send_json_success( $response );
 		} else {
-			wp_send_json_error( __( 'Could not install the plugin.' ) );
+			wp_send_json_error( __( 'Could not install the plugin.', 'essential-blocks' ) );
 		}
 		wp_die();
 	}

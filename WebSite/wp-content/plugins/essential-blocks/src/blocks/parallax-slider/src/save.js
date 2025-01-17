@@ -1,5 +1,5 @@
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -8,7 +8,8 @@ const Save = ({ attributes }) => {
         intensity,
         startIndex,
         hasBtnShadow,
-        classHook
+        classHook,
+        slideTitleTag: TitleTag
     } = attributes;
 
     return (
@@ -34,7 +35,7 @@ const Save = ({ attributes }) => {
                                             />
                                         </div>
                                         <article className="slide__content">
-                                            <h2 className="slide__headline">{slide.title}</h2>
+                                            <TitleTag className="slide__headline">{slide.title}</TitleTag>
                                             <button
                                                 className="slide__action btn"
                                                 data-link={slide.link}

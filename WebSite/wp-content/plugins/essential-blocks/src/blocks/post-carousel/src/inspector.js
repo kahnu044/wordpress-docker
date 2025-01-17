@@ -500,16 +500,23 @@ function Inspector(props) {
 
                         {showTitle && (
                             <>
-                                <SelectControl
-                                    label={__("Title Tag", "essential-blocks")}
-                                    value={titleTag}
-                                    options={TITLE_TAGS}
-                                    onChange={(value) => {
-                                        setAttributes({
-                                            titleTag: value,
-                                        });
-                                    }}
-                                />
+                                <BaseControl label={__("Title Tag", "essential-blocks")}>
+                                    <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                        {TITLE_TAGS.map((item, key) => (
+                                            <Button
+                                                key={key}
+                                                // isLarge
+                                                isPrimary={titleTag === item.value}
+                                                isSecondary={titleTag !== item.value}
+                                                onClick={() =>
+                                                    setAttributes({ titleTag: item.value })
+                                                }
+                                            >
+                                                {item.label}
+                                            </Button>
+                                        ))}
+                                    </ButtonGroup>
+                                </BaseControl>
 
                                 <RangeControl
                                     label="Title Words"

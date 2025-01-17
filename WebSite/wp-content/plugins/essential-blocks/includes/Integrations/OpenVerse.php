@@ -205,11 +205,11 @@ class OpenVerse extends ThirdPartyIntegration
                 echo esc_url( wp_get_attachment_url( $this->do_upload( $mediaUrl, $filename ) ) );
             } catch ( \Exception $e ) {
                 // echo esc_html( 'Upload failed, details: ' . $e->getMessage() );
-                echo $mediaUrl; //Return original Media URL
+                echo esc_url($mediaUrl); //Return original Media URL
             }
         } else {
             // The user does not have the capability to upload media
-            echo $mediaUrl; //Return original Media URL
+            echo esc_url($mediaUrl); //Return original Media URL
         }
 
         wp_die();

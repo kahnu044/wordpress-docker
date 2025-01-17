@@ -42,7 +42,7 @@ trait Helper {
 	 * @throws Exception
 	 */
 	private function error( $message ) {
-		throw new Exception( $message );
+		throw new Exception( esc_html($message) );
 	}
 
 	public function get_sorted_queue( $notices = [], $queue = [] ) {

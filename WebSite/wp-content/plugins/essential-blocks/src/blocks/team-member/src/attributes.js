@@ -355,6 +355,10 @@ const attributes = {
         type: "string",
         default: "hover-left",
     },
+    titleTag: {
+        type: "string",
+        default: "h3",
+    },
 
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_descs, {

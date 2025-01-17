@@ -161,3 +161,12 @@ export const FLIP_MODE = [
     { label: __("Hover", "essential-blocks"), value: "hover" },
     { label: __("Click", "essential-blocks"), value: "click" },
 ];
+
+export const HEADER_TAGS = [
+    { label: __("H1", "essential-blocks"), value: "h1" },
+    { label: __("H2", "essential-blocks"), value: "h2" },
+    { label: __("H3", "essential-blocks"), value: "h3" },
+    { label: __("H4", "essential-blocks"), value: "h4" },
+    { label: __("H5", "essential-blocks"), value: "h5" },
+    { label: __("H6", "essential-blocks"), value: "h6" },
+];

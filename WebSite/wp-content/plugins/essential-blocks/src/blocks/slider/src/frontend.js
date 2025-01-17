@@ -223,7 +223,7 @@ domReady(function () {
                 });
             }
         }
-        if (version === 'v3') {
+        if (version === 'v3' || version === 'v4') {
             let settingsData = atob(wrapper.getAttribute("data-settings"));
             let settings = JSON.parse(settingsData);
 
@@ -237,6 +237,8 @@ domReady(function () {
             let responsive = settings.responsive
             let autoplaySpeed = settings.autoplaySpeed;
             let speed = settings.speed;
+            let vertical = settings.vertical;
+            let fade = vertical ? false : settings.fade;
 
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
@@ -245,15 +247,18 @@ domReady(function () {
             let slickType = wrapper.querySelector('.eb-slider-init');
 
             jQuery(slickType).slick({
+                lazyLoad: 'ondemand',
                 arrows,
+                adaptiveHeight,
                 autoplay,
+                autoplaySpeed,
                 dots,
+                fade,
                 infinite,
                 pauseOnHover,
                 slidesToShow: slideToShowRange,
-                autoplaySpeed,
                 speed,
-                adaptiveHeight,
+                vertical,
                 prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
                 nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
                 responsive: [...responsive],

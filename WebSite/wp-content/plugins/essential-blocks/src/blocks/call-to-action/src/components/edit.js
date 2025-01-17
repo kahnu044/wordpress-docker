@@ -41,6 +41,7 @@ function Edit(props) {
         buttonSize,
         btnHoverEffect,
         classHook,
+        subtitleTag,
     } = attributes;
 
     const enhancedProps = {
@@ -81,7 +82,7 @@ function Edit(props) {
                                         showSubtitle && (
                                             <DynamicInputValueHandler
                                                 key={index}
-                                                tagName="h4"
+                                                tagName={subtitleTag}
                                                 className="eb-cia-subtitle"
                                                 placeholder={__("Add subtitle...")}
                                                 value={subtitle}

@@ -24,6 +24,7 @@ import {
     wrapperMargin,
     wrapperPadding,
     imageBorderShadow,
+    HEADER_TAGS
 } from "./constants";
 import {
     typoPrefix_header,
@@ -55,6 +56,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         isBackgroundGradient,
         backgroundColor,
         backgroundGradient,
+        titleTag
     } = attributes;
 
     return (
@@ -124,6 +126,38 @@ const Inspector = ({ attributes, setAttributes }) => {
                         value={header}
                         onChange={(header) => setAttributes({ header })}
                     />
+                    <BaseControl
+                        label={__(
+                            "Header Tag",
+                            "essential-blocks"
+                        )}
+                    >
+                        <ButtonGroup>
+                            {HEADER_TAGS.map(
+                                (header, index) => (
+                                    <Button
+                                        key={index}
+                                        isSecondary={
+                                            titleTag !==
+                                            header.value
+                                        }
+                                        isPrimary={
+                                            titleTag ===
+                                            header.value
+                                        }
+                                        onClick={() =>
+                                            setAttributes({
+                                                titleTag:
+                                                    header.value,
+                                            })
+                                        }
+                                    >
+                                        {header.label}
+                                    </Button>
+                                )
+                            )}
+                        </ButtonGroup>
+                    </BaseControl>
                     <TextareaControl
                         label={__("Content", "essential-blocks")}
                         value={content}

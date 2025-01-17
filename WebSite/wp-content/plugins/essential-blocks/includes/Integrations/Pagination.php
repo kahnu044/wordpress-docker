@@ -16,7 +16,7 @@ class Pagination extends ThirdPartyIntegration {
      * Get Post Grid Pagination
      */
     public function post_grid_block_pagination_callback() {
-        if ( ! wp_verify_nonce( $_POST['post_grid_pagination_nonce'], 'eb-pagination-nonce' ) ) {
+        if ( ! wp_verify_nonce( sanitize_key($_POST['post_grid_pagination_nonce']), 'eb-pagination-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 

@@ -21,7 +21,7 @@ import {
     sanitizeURL,
     BlockProps,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 function Edit(props) {
     const {
@@ -61,6 +61,8 @@ function Edit(props) {
         align,
         contentPosition,
         classHook,
+        frontTitleTag,
+        backTitleTag,
     } = attributes;
 
     // you must declare this variable
@@ -166,7 +168,7 @@ function Edit(props) {
                                                                     "essential-blocks"
                                                                 )
                                                         }
-                                                        tagName="h3"
+                                                        tagName={frontTitleTag}
                                                         className="eb-flipbox-front-title"
                                                         allowedFormats={[
                                                             "core/bold",
@@ -196,7 +198,7 @@ function Edit(props) {
                                                                 "essential-blocks"
                                                             )
                                                     }
-                                                    tagName="h3"
+                                                    tagName={frontTitleTag}
                                                     className="eb-flipbox-front-title"
                                                     allowedFormats={[
                                                         "core/bold",
@@ -310,7 +312,7 @@ function Edit(props) {
                                                                     "essential-blocks"
                                                                 )
                                                         }
-                                                        tagName="h3"
+                                                        tagName={backTitleTag}
                                                         className="eb-flipbox-back-title"
                                                         allowedFormats={[
                                                             "core/bold",
@@ -338,7 +340,7 @@ function Edit(props) {
                                                                 "essential-blocks"
                                                             )
                                                     }
-                                                    tagName="h3"
+                                                    tagName={backTitleTag}
                                                     className="eb-flipbox-back-title"
                                                     allowedFormats={[
                                                         "core/bold",

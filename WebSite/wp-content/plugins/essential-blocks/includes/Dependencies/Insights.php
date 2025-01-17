@@ -393,7 +393,7 @@ use Error;
              */
             $plugin = $this->plugin_data();
             if ( empty( $plugin ) ) {
-                $body['message'] .= __( 'We can\'t detect any plugin information. This is most probably because you have not included the code in the plugin main file.', 'plugin-usage-tracker' );
+                $body['message'] .= __( 'We can\'t detect any plugin information. This is most probably because you have not included the code in the plugin main file.', 'essential-blocks' );
                 $body['status'] = 'NOT FOUND';
             } else {
                 if ( isset( $plugin['Name'] ) ) {

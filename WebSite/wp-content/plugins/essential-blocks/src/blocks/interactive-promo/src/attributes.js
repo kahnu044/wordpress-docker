@@ -9,7 +9,7 @@ import {
     generateTypographyAttributes,
     generateBorderShadowAttributes,
     generateDimensionsAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -95,6 +95,10 @@ const attributes = {
     },
     backgroundGradient: {
         type: "string",
+    },
+    titleTag: {
+        type: "string",
+        default: "h2",
     },
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_header),

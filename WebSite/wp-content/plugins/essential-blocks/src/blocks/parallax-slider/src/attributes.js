@@ -31,7 +31,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     resOption: {
@@ -112,6 +112,10 @@ const attributes = {
     verticalAlign: {
         type: "string",
         default: "center",
+    },
+    slideTitleTag: {
+        type: "string",
+        default: "h2",
     },
 
     // typography attributes ⬇

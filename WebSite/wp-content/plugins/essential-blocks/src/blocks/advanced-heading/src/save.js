@@ -1,7 +1,8 @@
 import { RichText } from "@wordpress/block-editor";
 import {
     EBDisplayIcon,
-    BlockProps
+    BlockProps,
+    sanitizeURL
 } from "@essential-blocks/controls";
 
 const Save = ({ attributes }) => {
@@ -84,7 +85,7 @@ const Save = ({ attributes }) => {
                     <TagName className="eb-ah-title">
                         {enableLink && titleLink.length > 0 ? (
                             <a
-                                href={titleLink}
+                                href={sanitizeURL(titleLink)}
                                 target={linkTarget}
                                 rel={linkTarget === "_blank" ? "noopener" : undefined}
                             >

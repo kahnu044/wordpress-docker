@@ -57,11 +57,6 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
-
-    images: {
-        type: "array",
-        default: [],
-    },
     sources: {
         type: "array",
         default: [],
@@ -309,6 +304,10 @@ const attributes = {
     enableEmptyGrid: {
         type: "boolean",
         default: true,
+    },
+    cover: {
+        type: "string",
+        default: "",
     },
 
     // typography attributes ⬇

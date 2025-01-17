@@ -277,15 +277,15 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.2.1", "essential-blocks")}
+                                    {__("Version: 5.2.3", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("24/12/2024", "essential-blocks")}
+                                        {__("15/01/2025", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Few bug fixes and improvements",
+                                            "Fixed: Filterable Gallery | Editor not working if filterable gallery is used",
                                             "essential-blocks"
                                         )}
                                     </li>

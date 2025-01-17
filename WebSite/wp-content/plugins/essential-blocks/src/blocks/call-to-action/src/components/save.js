@@ -23,6 +23,7 @@ const save = ({ attributes }) => {
         showButton,
         classHook,
         linkNewTab,
+        subtitleTag
     } = attributes;
     return (
         <BlockProps.Save
@@ -49,7 +50,7 @@ const save = ({ attributes }) => {
                                     showSubtitle && (
                                         <RichText.Content
                                             key={index}
-                                            tagName="h4"
+                                            tagName={subtitleTag}
                                             className="eb-cia-subtitle"
                                             value={subtitle}
                                         />

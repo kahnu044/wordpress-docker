@@ -358,6 +358,10 @@ const attributes = {
         type: "string",
         default: "cover",
     },
+    titleTag: {
+        type: "string",
+        default: "h3",
+    },
 
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_price),

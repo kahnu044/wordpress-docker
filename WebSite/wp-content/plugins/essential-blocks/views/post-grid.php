@@ -20,8 +20,8 @@
     <div class="<?php echo esc_attr( implode( ' ', $_parent_classes ) ); ?>">
         <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-grid-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
-            data-querydata="<?php echo esc_attr( json_encode( $queryData ) ); ?>"
-            data-attributes="<?php echo esc_attr( json_encode( $essentialAttr ) ); ?>">
+            data-querydata="<?php echo esc_attr( wp_json_encode( $queryData ) ); ?>"
+            data-attributes="<?php echo esc_attr( wp_json_encode( $essentialAttr ) ); ?>">
 
             <?php
                 /**

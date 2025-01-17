@@ -394,9 +394,9 @@ class TableOfContents extends Block
 
         $output .= '</div>'; // header
         $output .= '<div class="eb-toc-wrapper ' . implode( " ", $wrapper_class ) . '"
-        data-headers="' . htmlspecialchars( json_encode( $headers ), ENT_QUOTES, 'UTF-8' ) . '"
-        data-visible="' . json_encode( $visibleHeaders ) . '"
-        data-delete-headers="' . htmlspecialchars( json_encode( $deleteHeaderList ), ENT_QUOTES, 'UTF-8' ) . '"
+        data-headers="' . htmlspecialchars( wp_json_encode( $headers ), ENT_QUOTES, 'UTF-8' ) . '"
+        data-visible="' . wp_json_encode( $visibleHeaders ) . '"
+        data-delete-headers="' . htmlspecialchars( wp_json_encode( $deleteHeaderList ), ENT_QUOTES, 'UTF-8' ) . '"
         data-smooth="' . $isSmooth . '"
         data-top-offset="' . $topOffset . '"
         >';

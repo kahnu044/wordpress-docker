@@ -102,6 +102,7 @@
             $menu_notice = ( $this->menu_notice_should_show() ) ? '<span class="eb-menu-notice">1</span>' : '';
             add_menu_page(
                 __( 'Essential Blocks', 'essential-blocks' ),
+                /* translators: 1: notice number */
                 sprintf( __( 'Essential Blocks %s', 'essential-blocks' ), $menu_notice ),
                 'activate_plugins',
                 'essential-blocks',
@@ -684,8 +685,7 @@
                 $custom_css = "
                 .notice:not(.wpdeveloper-licensing-notice) {
                     display: none !important;
-                }"
-                ;
+                }";
                 wp_add_inline_style( 'admin-bar', $custom_css );
             }
 
@@ -701,8 +701,7 @@
                 }
 				#toplevel_page_essential-blocks .eb-menu-notice {
                     display:block !important;
-                }"
-                ;
+                }";
                 wp_add_inline_style( 'admin-bar', $custom_css );
             }
         }
@@ -754,14 +753,14 @@
         public function promotion_message_on_admin_screen()
         {
         ?>
-    <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
-        <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
-        <?php
-            printf(
-                        __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.2.0</strong> with new & improved <strong>Filterable Gallery</strong> with new presets, styling controls & many more. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
-                        esc_url( 'https://essential-blocks.com/changelog/' )
-                    );
-                ?>
+        <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
+            <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
+            <?php
+                printf(
+                            __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.2.0</strong> with new & improved <strong>Filterable Gallery</strong> with new presets, styling controls & many more. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
+                            esc_url( 'https://essential-blocks.com/changelog/' )
+                        );
+                    ?>
     </div>
     <?php
         }

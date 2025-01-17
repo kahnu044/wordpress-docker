@@ -3,7 +3,7 @@
  */
 import { RichText } from "@wordpress/block-editor";
 import {
-EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIcon, sanitizeURL, BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -35,6 +35,8 @@ const Save = ({ attributes }) => {
         flipMode,
         isMouseLeaveOn,
         classHook,
+        frontTitleTag,
+        backTitleTag,
     } = attributes;
 
     const sanitizeLink = sanitizeURL(link)
@@ -98,14 +100,14 @@ const Save = ({ attributes }) => {
                                                 className="title-link"
                                             >
                                                 <RichText.Content
-                                                    tagName="h3"
+                                                    tagName={frontTitleTag}
                                                     className="eb-flipbox-front-title"
                                                     value={frontTitle}
                                                 />
                                             </a>
                                         ) : (
                                             <RichText.Content
-                                                tagName="h3"
+                                                tagName={frontTitleTag}
                                                 className="eb-flipbox-front-title"
                                                 value={frontTitle}
                                             />
@@ -171,14 +173,14 @@ const Save = ({ attributes }) => {
                                                 rel="noopener"
                                             >
                                                 <RichText.Content
-                                                    tagName="h3"
+                                                    tagName={backTitleTag}
                                                     className="eb-flipbox-back-title"
                                                     value={backTitle}
                                                 />
                                             </a>
                                         ) : (
                                             <RichText.Content
-                                                tagName="h3"
+                                                tagName={backTitleTag}
                                                 className="eb-flipbox-back-title"
                                                 value={backTitle}
                                             />

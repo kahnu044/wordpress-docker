@@ -91,3 +91,12 @@ export const FIT_STYLES = [
     { label: __("Contain", "essential-blocks"), value: "contain" },
     { label: __("Cover", "essential-blocks"), value: "cover" },
 ];
+
+export const TITLE_TAGS = [
+    { label: "H1", value: "h1" },
+    { label: "H2", value: "h2" },
+    { label: "H3", value: "h3" },
+    { label: "H4", value: "h4" },
+    { label: "H5", value: "h5" },
+    { label: "H6", value: "h6" },
+];

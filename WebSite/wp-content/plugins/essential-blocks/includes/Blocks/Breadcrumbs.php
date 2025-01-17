@@ -180,7 +180,7 @@ class Breadcrumbs extends Block
                 if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) {
                     $output .= ' (';
                 }
-                $output .= __( 'Page' ) . ' ' . get_query_var( 'paged' );
+                $output .= __( 'Page', 'essential-blocks' ) . ' ' . get_query_var( 'paged' );
                 if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) {
                     $output .= ')';
                 }

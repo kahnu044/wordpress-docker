@@ -609,7 +609,7 @@ $new_blocks = [
         'object'     => Breadcrumbs::get_instance(),
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/breadcrumbs/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-breadcrumbs/',
-        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/breadcrumb/icon.svg'
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/breadcrumbs/icon.svg'
      ]
  ];
 

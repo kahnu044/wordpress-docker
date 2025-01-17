@@ -1,5 +1,13 @@
 .wp-admin .eb-toc-container {
 	overflow: hidden;
+
+
+}
+
+body.admin-bar {
+	.eb-toc-container.eb-toc-sticky-top {
+		top: 30px !important;
+	}
 }
 
 .eb-toc-container {
@@ -408,6 +416,15 @@
 			}
 		}
 	}
+
+	&.eb-toc-sticky-top,
+	&.eb-toc-sticky-bottom {
+
+		.eb-toc-button {
+			transform: none
+		}
+	}
+
 }
 
 .eb-toc__heading-anchor {

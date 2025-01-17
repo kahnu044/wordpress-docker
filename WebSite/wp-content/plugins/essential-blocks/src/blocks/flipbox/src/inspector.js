@@ -29,6 +29,7 @@ import {
     FRONT_IMAGE_UNITS,
     CONTENT_POSITION,
     FLIP_MODE,
+    HEADER_TAGS
 } from "./constants";
 
 import {
@@ -43,7 +44,7 @@ import {
     DynamicInputControl,
     EBIconPicker,
     InspectorPanel
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     flipboxFrontWrapper,
@@ -132,6 +133,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         linkOpenNewTab,
         flipMode,
         isMouseLeaveOn,
+        frontTitleTag,
+        backTitleTag,
     } = attributes;
 
     // Genereate different button styles
@@ -152,7 +155,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                 hasBackground: false
             }}>
                 <InspectorPanel.General>
-                    <InspectorPanel.PanelBody title={__('Selected Side',"essential-blocks")} initialOpen={true}>
+                    <InspectorPanel.PanelBody title={__('Selected Side', "essential-blocks")} initialOpen={true}>
                         <BaseControl>
                             <ButtonGroup id="eb-flipbox-sides">
                                 {FLIPBOX_SIDES.map(
@@ -443,87 +446,87 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     )}
                                     id="eb-flipbox-front-image"
                                 >
-                                    </BaseControl>
-                                    {frontImageUrl ? (
-                                        <>
-                                            <ImageAvatar
-                                                imageUrl={
-                                                    frontImageUrl
-                                                }
-                                                onDeleteImage={() =>
-                                                    setAttributes(
-                                                        {
-                                                            frontImageUrl: null,
-                                                        }
-                                                    )
-                                                }
-                                            />
-
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Size",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    frontImgSizeAttr
-                                                }
-                                                units={
-                                                    FRONT_IMAGE_UNITS
-                                                }
-                                                min={0}
-                                                max={300}
-                                                step={1}
-                                            />
-
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Radius",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    frontImgRadiusAttr
-                                                }
-                                                units={
-                                                    FRONT_IMAGE_UNITS
-                                                }
-                                                min={0}
-                                                max={100}
-                                            />
-                                        </>
-                                    ) : (
-                                        <MediaUpload
-                                            onSelect={(media) =>
-                                                setAttributes({
-                                                    frontImageId:
-                                                        media.id,
-                                                    frontImageUrl:
-                                                        media.url,
-                                                    frontImageAlt: media?.alt
-                                                        ? media.alt
-                                                        : media.caption,
-                                                })
+                                </BaseControl>
+                                {frontImageUrl ? (
+                                    <>
+                                        <ImageAvatar
+                                            imageUrl={
+                                                frontImageUrl
                                             }
-                                            type="image"
-                                            value={frontImageId}
-                                            render={({
-                                                open,
-                                            }) =>
-                                                !frontImageUrl && (
-                                                    <Button
-                                                        className="eb-flipbox-upload-button"
-                                                        label={__(
-                                                            "Upload Image",
-                                                            "essential-blocks"
-                                                        )}
-                                                        icon="format-image"
-                                                        onClick={
-                                                            open
-                                                        }
-                                                    />
+                                            onDeleteImage={() =>
+                                                setAttributes(
+                                                    {
+                                                        frontImageUrl: null,
+                                                    }
                                                 )
                                             }
                                         />
-                                    )}
+
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Image Size",
+                                                "essential-blocks"
+                                            )}
+                                            controlName={
+                                                frontImgSizeAttr
+                                            }
+                                            units={
+                                                FRONT_IMAGE_UNITS
+                                            }
+                                            min={0}
+                                            max={300}
+                                            step={1}
+                                        />
+
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Image Radius",
+                                                "essential-blocks"
+                                            )}
+                                            controlName={
+                                                frontImgRadiusAttr
+                                            }
+                                            units={
+                                                FRONT_IMAGE_UNITS
+                                            }
+                                            min={0}
+                                            max={100}
+                                        />
+                                    </>
+                                ) : (
+                                    <MediaUpload
+                                        onSelect={(media) =>
+                                            setAttributes({
+                                                frontImageId:
+                                                    media.id,
+                                                frontImageUrl:
+                                                    media.url,
+                                                frontImageAlt: media?.alt
+                                                    ? media.alt
+                                                    : media.caption,
+                                            })
+                                        }
+                                        type="image"
+                                        value={frontImageId}
+                                        render={({
+                                            open,
+                                        }) =>
+                                            !frontImageUrl && (
+                                                <Button
+                                                    className="eb-flipbox-upload-button"
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
+                                                    icon="format-image"
+                                                    onClick={
+                                                        open
+                                                    }
+                                                />
+                                            )
+                                        }
+                                    />
+                                )}
                             </InspectorPanel.PanelBody>
                         )}
                     {selectedSide === "back" &&
@@ -577,84 +580,84 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     )}
                                 >
                                 </BaseControl> */}
-                                    {backImageUrl ? (
-                                        <>
-                                            <ImageAvatar
-                                                imageUrl={
-                                                    backImageUrl
-                                                }
-                                                onDeleteImage={() =>
-                                                    setAttributes(
-                                                        {
-                                                            backImageUrl: null,
-                                                        }
-                                                    )
-                                                }
-                                            />
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Size",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    backImgSizeAttr
-                                                }
-                                                units={
-                                                    FRONT_IMAGE_UNITS
-                                                }
-                                                min={0}
-                                                max={300}
-                                            />
-
-                                            <ResponsiveRangeController
-                                                baseLabel={__(
-                                                    "Image Radius",
-                                                    "essential-blocks"
-                                                )}
-                                                controlName={
-                                                    backImgRadiusAttr
-                                                }
-                                                units={
-                                                    FRONT_IMAGE_UNITS
-                                                }
-                                                min={0}
-                                                max={100}
-                                            />
-                                        </>
-                                    ) : (
-                                        <MediaUpload
-                                            onSelect={(media) =>
-                                                setAttributes({
-                                                    backImageId:
-                                                        media.id,
-                                                    backImageUrl:
-                                                        media.url,
-                                                    backImageAlt: media?.alt
-                                                        ? media.alt
-                                                        : media.caption,
-                                                })
+                                {backImageUrl ? (
+                                    <>
+                                        <ImageAvatar
+                                            imageUrl={
+                                                backImageUrl
                                             }
-                                            type="image"
-                                            value={backImageId}
-                                            render={({
-                                                open,
-                                            }) =>
-                                                !backImageUrl && (
-                                                    <Button
-                                                        className="eb-flipbox-upload-button"
-                                                        label={__(
-                                                            "Upload Image",
-                                                            "essential-blocks"
-                                                        )}
-                                                        icon="format-image"
-                                                        onClick={
-                                                            open
-                                                        }
-                                                    />
+                                            onDeleteImage={() =>
+                                                setAttributes(
+                                                    {
+                                                        backImageUrl: null,
+                                                    }
                                                 )
                                             }
                                         />
-                                    )}
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Image Size",
+                                                "essential-blocks"
+                                            )}
+                                            controlName={
+                                                backImgSizeAttr
+                                            }
+                                            units={
+                                                FRONT_IMAGE_UNITS
+                                            }
+                                            min={0}
+                                            max={300}
+                                        />
+
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Image Radius",
+                                                "essential-blocks"
+                                            )}
+                                            controlName={
+                                                backImgRadiusAttr
+                                            }
+                                            units={
+                                                FRONT_IMAGE_UNITS
+                                            }
+                                            min={0}
+                                            max={100}
+                                        />
+                                    </>
+                                ) : (
+                                    <MediaUpload
+                                        onSelect={(media) =>
+                                            setAttributes({
+                                                backImageId:
+                                                    media.id,
+                                                backImageUrl:
+                                                    media.url,
+                                                backImageAlt: media?.alt
+                                                    ? media.alt
+                                                    : media.caption,
+                                            })
+                                        }
+                                        type="image"
+                                        value={backImageId}
+                                        render={({
+                                            open,
+                                        }) =>
+                                            !backImageUrl && (
+                                                <Button
+                                                    className="eb-flipbox-upload-button"
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
+                                                    icon="format-image"
+                                                    onClick={
+                                                        open
+                                                    }
+                                                />
+                                            )
+                                        }
+                                    />
+                                )}
                             </InspectorPanel.PanelBody>
                         )}
                     <InspectorPanel.PanelBody
@@ -678,6 +681,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         });
                                     }}
                                 />
+
                                 {showFrontTitle && (
                                     <>
                                         <DynamicInputControl
@@ -698,6 +702,39 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 })
                                             }
                                         />
+
+                                        <BaseControl
+                                            label={__(
+                                                "Title Tag",
+                                                "essential-blocks"
+                                            )}
+                                        >
+                                            <ButtonGroup>
+                                                {HEADER_TAGS.map(
+                                                    (header, index) => (
+                                                        <Button
+                                                            key={index}
+                                                            isSecondary={
+                                                                frontTitleTag !==
+                                                                header.value
+                                                            }
+                                                            isPrimary={
+                                                                frontTitleTag ===
+                                                                header.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    frontTitleTag:
+                                                                        header.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {header.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
                                     </>
                                 )}
                                 <ToggleControl
@@ -739,22 +776,56 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     }}
                                 />
                                 {showBackTitle && (
-                                    <DynamicInputControl
-                                        label={__(
-                                            "Back Title",
-                                            "essential-blocks"
-                                        )}
-                                        attrName="backTitle"
-                                        inputValue={backTitle}
-                                        setAttributes={
-                                            setAttributes
-                                        }
-                                        onChange={(text) =>
-                                            setAttributes({
-                                                backTitle: text,
-                                            })
-                                        }
-                                    />
+                                    <>
+                                        <DynamicInputControl
+                                            label={__(
+                                                "Back Title",
+                                                "essential-blocks"
+                                            )}
+                                            attrName="backTitle"
+                                            inputValue={backTitle}
+                                            setAttributes={
+                                                setAttributes
+                                            }
+                                            onChange={(text) =>
+                                                setAttributes({
+                                                    backTitle: text,
+                                                })
+                                            }
+                                        />
+                                        <BaseControl
+                                            label={__(
+                                                "Title Tag",
+                                                "essential-blocks"
+                                            )}
+                                        >
+                                            <ButtonGroup>
+                                                {HEADER_TAGS.map(
+                                                    (header, index) => (
+                                                        <Button
+                                                            key={index}
+                                                            isSecondary={
+                                                                backTitleTag !==
+                                                                header.value
+                                                            }
+                                                            isPrimary={
+                                                                backTitleTag ===
+                                                                header.value
+                                                            }
+                                                            onClick={() =>
+                                                                setAttributes({
+                                                                    backTitleTag:
+                                                                        header.value,
+                                                                })
+                                                            }
+                                                        >
+                                                            {header.label}
+                                                        </Button>
+                                                    )
+                                                )}
+                                            </ButtonGroup>
+                                        </BaseControl>
+                                    </>
                                 )}
                                 <ToggleControl
                                     label={__(

@@ -186,7 +186,7 @@ class FaqSchema {
 					}
 				}
 
-				$block_inner_html = trim( strip_tags( $block['innerHTML'] ) );
+				$block_inner_html = trim( wp_strip_all_tags( $block['innerHTML'] ) );
 				$question         = ! empty( $block_inner_html ) ? $block_inner_html : '';
 
 				if ( strpos( self::$faq_schema, '}]}</script>' ) !== false ) {

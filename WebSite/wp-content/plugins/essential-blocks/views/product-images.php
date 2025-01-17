@@ -27,8 +27,8 @@
         <div
             class="<?php echo esc_attr( implode(" ",$wrapper_classes )); ?> eb-product-images-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
-            data-settings="<?php echo esc_attr(json_encode($settings)); ?>"
-            data-nav-settings="<?php echo esc_attr(json_encode($nav_settings)); ?>"
+            data-settings="<?php echo esc_attr(wp_json_encode($settings)); ?>"
+            data-nav-settings="<?php echo esc_attr(wp_json_encode($nav_settings)); ?>"
         >
 
             <?php 

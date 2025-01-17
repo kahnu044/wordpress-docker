@@ -11,7 +11,7 @@ import {
     BaseControl,
     PanelRow,
 } from "@wordpress/components";
-
+import { useEffect, useState } from '@wordpress/element'
 /**
  * Internal depencencies
  */
@@ -57,8 +57,9 @@ import {
     DynamicInputControl,
     ResponsiveAlignControl,
     InspectorPanel, ButtonGroupControl,
+    sanitizeURL
 } from '@essential-blocks/controls'
-import { useEffect } from '@wordpress/element'
+
 
 function Inspector(props) {
     const { attributes, setAttributes, media, prevImageSize, oldImageData } = props;
@@ -86,6 +87,8 @@ function Inspector(props) {
         widthRange,
         heightRange
     } = attributes;
+
+    const [ urlError, setUrlError ] = useState("");
 
     const changImgSource = (selected) => {
         switch (selected) {
@@ -347,6 +350,19 @@ function Inspector(props) {
         prevImageSize.current = imageSize;
     }, [imageSize]);
 
+    const onUrlBlur = (link) => {
+        if (link === "" || sanitizeURL(link) !== "#") {
+            setUrlError("");
+        } else {
+            setUrlError(
+                __(
+                    "Invalid URL. Please include http:// or https://",
+                    "essential-blocks",
+                ),
+            );
+        }
+    };
+
     return (
         <InspectorPanel advancedControlProps={{
             marginPrefix: WRAPPER_MARGIN,
@@ -482,7 +498,10 @@ function Inspector(props) {
                                         imageLink: link,
                                     })
                                 }
+                                onBlur={(link) => onUrlBlur(link)}
+                                help={__("Use http:// or https:// for links", "essential-blocks")}
                             />
+                             {urlError && <span className="eb-alert-error">{urlError}</span>}
                         </>
                     )}
                     {enableLink && (

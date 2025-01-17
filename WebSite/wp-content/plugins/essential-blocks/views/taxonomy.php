@@ -18,6 +18,6 @@
 <div class="<?php echo esc_attr( implode( ' ', $_parent_classes ) ); ?>">
     <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?>"
         data-id="<?php echo esc_attr( $blockId ); ?>">
-        <?php echo $prefix_markup . $categories . $suffix_markup; ?>
+        <?php echo wp_kses($prefix_markup . $categories . $suffix_markup, 'post'); ?>
     </div>
 </div>

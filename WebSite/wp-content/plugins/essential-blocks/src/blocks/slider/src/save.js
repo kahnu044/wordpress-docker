@@ -100,12 +100,12 @@ const Save = ({ attributes }) => {
                                         rel="noopener">
                                         <img
                                             className="eb-slider-image"
-                                            src={image.url}
+                                            data-lazy={image.url}
                                         />
                                     </a></div>
                                     : <div><img
                                         className="eb-slider-image"
-                                        src={image.url}
+                                        data-lazy={image.url}
                                     /></div>
                                 }
                                 {sliderType === "content" && (

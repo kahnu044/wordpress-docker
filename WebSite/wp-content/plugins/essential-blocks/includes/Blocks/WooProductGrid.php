@@ -88,7 +88,8 @@ class WooProductGrid extends Block
             'externalCartText'      => __( "Buy Now", "essential-blocks" ),
             'defaultCartText'       => __( "Read More", "essential-blocks" ),
             'showDetailBtn'         => true,
-            'detailBtnText'         => isset( $attributes[ 'detailBtnText' ] ) ? $attributes[ 'detailBtnText' ] : __( "Visit Product", "essential-blocks" )
+            'detailBtnText'         => isset( $attributes[ 'detailBtnText' ] ) ? $attributes[ 'detailBtnText' ] : __( "Visit Product", "essential-blocks" ),
+            'titleTag'              => 'h3',
          ];
 
         foreach ( $_essential_attributes as $key => $value ) {

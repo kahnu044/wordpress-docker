@@ -257,6 +257,14 @@ const attributes = {
         type: "boolean",
         default: true,
     },
+    frontTitleTag: {
+        type: "string",
+        default: 'h3',
+    },
+    backTitleTag: {
+        type: "string",
+        default: 'h3',
+    },
     // typography attributes ⬇
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_content),

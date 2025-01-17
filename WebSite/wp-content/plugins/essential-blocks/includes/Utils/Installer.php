@@ -80,7 +80,7 @@ class Installer {
 			} elseif ( is_null( $result ) ) {
 				global $wp_filesystem;
 				$response['code']    = 'unable_to_connect_to_filesystem';
-				$response['message'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
+				$response['message'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'essential-blocks' );
 
 				if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 					$response['message'] = esc_html( $wp_filesystem->errors->get_error_message() );

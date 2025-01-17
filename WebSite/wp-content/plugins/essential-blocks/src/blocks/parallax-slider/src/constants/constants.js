@@ -16,39 +16,39 @@ export const CONTENTS_PADDING = "contentsPadding";
 export const SLIDE_BORDER_RADIUS = "slideBorderRadius";
 
 export const NORMAL_HOVER = [
-	{ label: "Normal", value: "normal" },
-	{ label: "Hover", value: "hover" },
+    { label: "Normal", value: "normal" },
+    { label: "Hover", value: "hover" },
 ];
 
 export const HORIZONTAL_ALIGN = [
-	{ label: __("Left", "essential-blocks"), value: "flex-start" },
-	{ label: __("Center", "essential-blocks"), value: "center" },
-	{ label: __("Right", "essential-blocks"), value: "flex-end" },
+    { label: __("Left", "essential-blocks"), value: "flex-start" },
+    { label: __("Center", "essential-blocks"), value: "center" },
+    { label: __("Right", "essential-blocks"), value: "flex-end" },
 ];
 
 export const VERTICAL_ALIGN = [
-	{ label: __("Top", "essential-blocks"), value: "flex-start" },
-	{ label: __("Middle", "essential-blocks"), value: "center" },
-	{ label: __("Bottom", "essential-blocks"), value: "flex-end" },
+    { label: __("Top", "essential-blocks"), value: "flex-start" },
+    { label: __("Middle", "essential-blocks"), value: "center" },
+    { label: __("Bottom", "essential-blocks"), value: "flex-end" },
 ];
 
 export const TEXT_ALIGN = [
-	{ label: __("Left", "essential-blocks"), value: "left" },
-	{ label: __("Right", "essential-blocks"), value: "right" },
-	{ label: __("Center", "essential-blocks"), value: "center" },
-	{ label: __("Justify", "essential-blocks"), value: "justify" },
+    { label: __("Left", "essential-blocks"), value: "left" },
+    { label: __("Right", "essential-blocks"), value: "right" },
+    { label: __("Center", "essential-blocks"), value: "center" },
+    { label: __("Justify", "essential-blocks"), value: "justify" },
 ];
 
 export const UNIT_TYPES = [
-	{ label: "px", value: "px" },
-	{ label: "em", value: "em" },
-	{ label: "vh", value: "vh" },
+    { label: "px", value: "px" },
+    { label: "em", value: "em" },
+    { label: "vh", value: "vh" },
 ];
 
 export const GAP_UNIT_TYPES = [
-	{ label: "px", value: "px" },
-	{ label: "em", value: "em" },
-	{ label: "%", value: "%" },
+    { label: "px", value: "px" },
+    { label: "em", value: "em" },
+    { label: "%", value: "%" },
 ];
 
 export const COLORS = [
@@ -64,4 +64,13 @@ export const COLORS = [
     { name: 'Pale cyan blue', color: '#8ed1fc' },
     { name: 'Vivid cyan blue', color: '#3593e3' },
     { name: 'Vivid purple', color: '#9b51e0' },
+];
+
+export const HEADER_TAGS = [
+    { label: __("H1", "essential-blocks"), value: "h1" },
+    { label: __("H2", "essential-blocks"), value: "h2" },
+    { label: __("H3", "essential-blocks"), value: "h3" },
+    { label: __("H4", "essential-blocks"), value: "h4" },
+    { label: __("H5", "essential-blocks"), value: "h5" },
+    { label: __("H6", "essential-blocks"), value: "h6" },
 ];

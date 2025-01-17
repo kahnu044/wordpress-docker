@@ -119,7 +119,6 @@ function Inspector(props) {
         filterActColor,
         filterActBGColor,
         addCustomLink,
-        images,
         enableIsotope,
         enableLoadMore,
         loadmoreBtnText,
@@ -793,8 +792,8 @@ function Inspector(props) {
     }, [enableInfiniteScroll])
 
     useEffect(() => {
-        if (images.length > 0) {
-            images && typeof imageSize !== 'undefined' && onImageChange(images);
+        if (sources.length > 0) {
+            sources && typeof imageSize !== 'undefined' && onImageChange(sources);
         }
     }, [imageSize]);
 
@@ -1351,14 +1350,13 @@ function Inspector(props) {
                                 }, {});
 
                                 // Sort array2 based on the order in array1
-                                images.sort((a, b) => sourcesMap[a.id] - sourcesMap[b.id]);
+                                sources.sort((a, b) => sourcesMap[a.id] - sourcesMap[b.id]);
 
-                                setAttributes({ sources, images })
+                                setAttributes({ sources })
                             }}
                             onDeleteItem={index => {
                                 setAttributes({
                                     sources: attributes.sources.filter((each, i) => i !== index),
-                                    images: attributes.images.filter((each, i) => i !== index),
                                 })
                             }}
                             hasSettings={true}

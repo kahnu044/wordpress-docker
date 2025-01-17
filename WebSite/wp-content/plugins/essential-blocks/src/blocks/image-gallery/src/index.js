@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { registerBlockType } from "@wordpress/blocks";
 
 /**
  * Internal dependencies
@@ -10,7 +9,6 @@ import { registerBlockType } from "@wordpress/blocks";
 import Save from "./save";
 import Edit from "./edit";
 import Attributes from "./attributes";
-import example from "./example";
 import deprecated from "./deprecated";
 import "./style.scss";
 import metadata from "../block.json";
@@ -29,6 +27,10 @@ ebConditionalRegisterBlockType(metadata, {
     ],
     edit: Edit,
     save: Save,
-    example,
     deprecated,
+    example: {
+        attributes: {
+            cover: `${EssentialBlocksLocalize?.image_url}/block-preview/image-gallery.jpg`,
+        },
+    },
 });

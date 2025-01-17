@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import {
-sanitizeURL, BlockProps
+    sanitizeURL, BlockProps
 } from "@essential-blocks/controls";
 
 const Save = ({ attributes }) => {
@@ -16,6 +16,7 @@ const Save = ({ attributes }) => {
         newWindow,
         link,
         classHook,
+        titleTag: TitleTag
     } = attributes;
 
     return (
@@ -30,7 +31,7 @@ const Save = ({ attributes }) => {
                             <figure className={`effect-${effectName}`}>
                                 <img src={imageURL} alt={imageAltTag} />
                                 <figcaption>
-                                    <h2 className="eb-interactive-promo-header">{header}</h2>
+                                    <TitleTag className="eb-interactive-promo-header">{header}</TitleTag>
                                     <p className="eb-interactive-promo-content">{content}</p>
                                     {link && (
                                         <a

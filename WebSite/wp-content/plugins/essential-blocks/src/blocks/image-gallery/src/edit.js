@@ -4,7 +4,6 @@
 import { __ } from "@wordpress/i18n";
 import {
     MediaUpload,
-    MediaPlaceholder,
     BlockControls,
 } from "@wordpress/block-editor";
 import {
@@ -47,7 +46,6 @@ function Edit(props) {
         resOption,
         blockId,
         blockMeta,
-        images,
         layouts,
         sources,
         displayCaption,
@@ -97,7 +95,8 @@ function Edit(props) {
         version,
         showBlockContent,
         enableEmptyGrid,
-        imageSizeType
+        imageSizeType,
+        cover
     } = attributes;
 
     // you must declare this variable
@@ -109,7 +108,8 @@ function Edit(props) {
 
     const onImageChange = newImages => {
         const currentSources = [];
-        newImages = newImages || images;
+        newImages = newImages || sources;
+
         const mergedImages = newImages.map(image => {
             const matchingSource = sources.find(src => src.id === image.id);
             if (matchingSource) {
@@ -124,13 +124,7 @@ function Edit(props) {
 
         mergedImages.map((image) => {
             let item = {};
-            if (image.sizes && imageSize && imageSize.length > 0) {
-                item.url = image.sizes[imageSize]
-                    ? image.sizes[imageSize].url
-                    : image.url;
-            } else {
-                item.url = image.url;
-            }
+
             item.caption = image.caption;
             item.id = image.id;
             item.alt = image.alt;
@@ -138,6 +132,15 @@ function Edit(props) {
             item.customLink = image.customLink ? image.customLink : "";
             item.openNewTab = image.openNewTab ? image.openNewTab : false;
             item.isValidUrl = image.isValidUrl ? image.isValidUrl : true;
+            item.sizes = image.sizes ? image.sizes : null;
+            if (image.sizes && imageSize && imageSize.length > 0) {
+                item.url = image.sizes[imageSize]
+                    ? image.sizes[imageSize].url
+                    : image.url;
+            } else {
+                item.url = image.url;
+            }
+
             sources.length > 0 &&
                 sources.map((source) => {
                     if (source.id === image.id) {
@@ -149,12 +152,12 @@ function Edit(props) {
                 });
             currentSources.push(item);
         });
-        setAttributes({ sources: currentSources, images: newImages });
+        setAttributes({ sources: currentSources });
     }
 
     // Get only urls for Lightbox
     let urls = [];
-    images.map((image) => urls.push(image.url));
+    sources.map((image) => urls.push(image.url));
 
     // handle deprecation
     useEffect(() => {
@@ -260,7 +263,6 @@ function Edit(props) {
                     },
                 ],
             });
-
         }
 
         if (lightboxIcon === undefined) {
@@ -284,7 +286,7 @@ function Edit(props) {
     }, []);
 
     // isotopeEA filter
-    const isotopeEA = useRef();
+    const isotopeEA = useRef(null);
     // store the filter keyword in a state
     const [filterKey, setFilterKey] = useState("*");
 
@@ -294,32 +296,44 @@ function Edit(props) {
             return;
         }
 
-        const imageGallery = document.querySelector(`.${blockId}`);
-        if (imageGallery) {
-            imagesLoaded(imageGallery, function () {
-                if (layouts == "grid") {
-                    isotopeEA.current = new Isotope(`.${blockId}`, {
-                        itemSelector: ".eb-gallery-img-content",
-                        percentPosition: true,
-                        layoutMode: "fitRows",
-                    });
-                } else {
-                    isotopeEA.current = new Isotope(`.${blockId}`, {
-                        itemSelector: ".eb-gallery-img-content",
-                        percentPosition: true,
-                        layoutMode: "masonry",
-                        masonry: {
-                            columnWidth: '.grid-sizer',
-                        },
-                    });
+        const initializeIsotope = () => {
+            const imageGallery = document.querySelector(`.${blockId}`);
+            if (!imageGallery) return;
+
+            imagesLoaded(imageGallery, () => {
+                // Destroy existing instance
+                if (isotopeEA.current?.destroy) {
+                    isotopeEA.current.destroy();
+                    isotopeEA.current = null;
                 }
 
-                // cleanup
-                if (resOption === "Desktop") {
-                    return () => isotopeEA.current.destroy();
-                }
+                // Define layout options
+                const layoutMode = layouts === "grid" ? "fitRows" : "masonry";
+
+                // Initialize Isotope
+                isotopeEA.current = new Isotope(imageGallery, {
+                    itemSelector: ".eb-gallery-img-content",
+                    layoutMode,
+                    transitionDuration: '0.5s',
+                    percentPosition: layoutMode !== "fitRows",
+                    masonry: layoutMode !== "fitRows" ? { columnWidth: unevenWidth ? '.grid-sizer' : '.eb-gallery-img-content' } : null,
+                });
+
             });
-        }
+        };
+
+        // Reinitialize Isotope on layout change
+        setTimeout(() => {
+            initializeIsotope();
+        }, 500)
+
+        // Cleanup on unmount
+        return () => {
+            if (isotopeEA.current?.destroy) {
+                isotopeEA.current.destroy();
+                isotopeEA.current = null;
+            }
+        };
 
     }, [
         imageSizeType,
@@ -329,7 +343,6 @@ function Edit(props) {
         layouts,
         unevenWidth,
         enableEmptyGrid,
-        images,
         imageSize,
         enableFilterAll,
         filterItems,
@@ -362,14 +375,14 @@ function Edit(props) {
             return;
         }
 
-        if (enableFilter) {
+        if (enableFilter && isotopeEA.current) {
             const imageGallery = document.querySelector(`.${blockId}`);
             const notFoundDiv = imageGallery?.closest(".eb-parent-wrapper").querySelector('#eb-img-gallery-not-found');
             if (imageGallery) {
                 imagesLoaded(imageGallery, function () {
                     filterKey === "*"
-                        ? isotopeEA.current.arrange({ filter: `*` })
-                        : isotopeEA.current.arrange({
+                        ? isotopeEA.current?.arrange({ filter: `*` })
+                        : isotopeEA.current?.arrange({
                             filter: `.${filterKey}`,
                         });
 
@@ -409,7 +422,11 @@ function Edit(props) {
         return isWide ? "wide" : "";
     }
 
-    return (
+    return cover.length ? (
+        <div>
+            <img src={cover} alt="filterable gallery" style={{ maxWidth: "100%" }} />
+        </div>
+    ) : (
         <>
             {isSelected && showBlockContent && sources.length > 0 && (
                 <Inspector
@@ -418,21 +435,6 @@ function Edit(props) {
                     onImageChange={onImageChange}
                 />
             )}
-            {/* <>
-                {urls.length === 0 && (
-                    <MediaPlaceholder
-                        onSelect={onImageChange}
-                        accept="image/*"
-                        allowedTypes={["image"]}
-                        multiple
-                        labels={{
-                            title: "Images",
-                            instructions:
-                                "Drag media files, upload or select files from your library.",
-                        }}
-                    />
-                )}
-            </> */}
             <BlockProps.Edit {...enhancedProps}>
                 <BrowseTemplate
                     {...props}
@@ -451,10 +453,10 @@ function Edit(props) {
                                         <ToolbarItem>
                                             {() => (
                                                 <MediaUpload
-                                                    value={images.map((img) => img.id)}
-                                                    onSelect={(...images) => {
-                                                        const newImages = images[0]
-                                                        const mergedArray = new Map(images.map(item => [item.id, item]));
+                                                    value={sources.map((img) => img.id)}
+                                                    onSelect={(...sources) => {
+                                                        const newImages = sources[0]
+                                                        const mergedArray = new Map(sources.map(item => [item.id, item]));
                                                         newImages.forEach(item => {
                                                             const correspondingItem = mergedArray.get(item.id);
                                                             if (correspondingItem) {
@@ -751,7 +753,7 @@ function Edit(props) {
 
                                 <MediaUpload
                                     onSelect={(newImage) => {
-                                        let updatedImages = [...images, ...newImage];
+                                        let updatedImages = [...sources, ...newImage];
                                         let newSources = [];
 
                                         updatedImages.map((image) => {
@@ -775,7 +777,6 @@ function Edit(props) {
                                         });
 
                                         setAttributes({
-                                            images: updatedImages,
                                             sources: newSources,
                                         });
                                     }}

@@ -23,8 +23,8 @@
         <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) ); ?> eb-post-carousel-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
             data-querydata="<?php echo esc_attr( serialize( $queryData ) ); ?>"
-            data-slidersettings="<?php echo esc_attr( json_encode( $sliderSettings ) ); ?>"
-            data-attributes="<?php echo esc_attr( json_encode( $essentialAttr ) ); ?>">
+            data-slidersettings="<?php echo esc_attr( wp_json_encode( $sliderSettings ) ); ?>"
+            data-attributes="<?php echo esc_attr( wp_json_encode( $essentialAttr ) ); ?>">
 
             <div class="<?php echo esc_attr( implode( ' ', $_eb_classes ) ); ?>"
                 data-id="<?php echo esc_attr( $blockId ); ?>">

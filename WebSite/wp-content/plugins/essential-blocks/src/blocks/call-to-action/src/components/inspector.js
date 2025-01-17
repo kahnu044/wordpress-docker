@@ -79,6 +79,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         linkNewTab,
         buttonPosition,
         btnHoverEffect,
+        subtitleTag,
     } = attributes;
 
     return (
@@ -406,6 +407,38 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={false}
                         >
+                            <BaseControl
+                                label={__(
+                                    "Subtitle Tag",
+                                    "essential-blocks"
+                                )}
+                            >
+                                <ButtonGroup>
+                                    {HEADER_TAGS.map(
+                                        (header, index) => (
+                                            <Button
+                                                key={index}
+                                                isSecondary={
+                                                    subtitleTag !==
+                                                    header.value
+                                                }
+                                                isPrimary={
+                                                    subtitleTag ===
+                                                    header.value
+                                                }
+                                                onClick={() =>
+                                                    setAttributes({
+                                                        subtitleTag:
+                                                            header.value,
+                                                    })
+                                                }
+                                            >
+                                                {header.label}
+                                            </Button>
+                                        )
+                                    )}
+                                </ButtonGroup>
+                            </BaseControl>
                             <TypographyDropdown
                                 baseLabel={__(
                                     "Typography",

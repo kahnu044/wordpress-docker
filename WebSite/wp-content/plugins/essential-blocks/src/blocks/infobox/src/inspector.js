@@ -189,7 +189,7 @@ function Inspector(props) {
         }
     }, [media]);
 
-    useEffect(() => {
+    const changeIconShape = (media, iconView, iconShape) => {
         if (media === "icon") {
             if (iconView !== 'default') {
                 if (iconView == 'framed') {
@@ -245,6 +245,7 @@ function Inspector(props) {
                         mediaBgRadiusisLinked: true,
                     });
                 }
+
             } else {
                 setAttributes({
                     mediaBgRadiusBottom: "20",
@@ -259,8 +260,7 @@ function Inspector(props) {
                 });
             }
         }
-
-    }, [media, iconView, iconShape]);
+    }
 
     return (
         <InspectorPanel advancedControlProps={{
@@ -478,11 +478,10 @@ function Inspector(props) {
                                                     isPrimary={
                                                         media === value
                                                     }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            media: value,
-                                                        })
-                                                    }
+                                                    onClick={() => {
+                                                        setAttributes({ media: value })
+                                                        changeIconShape(media, iconView, iconShape)
+                                                    }}
                                                 >
                                                     {label}
                                                 </Button>
@@ -501,20 +500,20 @@ function Inspector(props) {
                                             label={__("Icon View", "essential-blocks")}
                                             value={iconView}
                                             options={SHAPE_VIEW}
-                                            onChange={(iconView) =>
-                                                setAttributes({ iconView })
-                                            }
+                                            onChange={(iconView) => {
+                                                setAttributes({ iconView });
+                                                changeIconShape(media, iconView, iconShape);
+                                            }}
                                         />
                                         {iconView !== "default" && (
                                             <SelectControl
                                                 label={__("Icon Shape", "essential-blocks")}
                                                 value={iconShape}
                                                 options={ICON_SHAPE}
-                                                onChange={(newIconShape) =>
-                                                    setAttributes({
-                                                        iconShape: newIconShape,
-                                                    })
-                                                }
+                                                onChange={(newIconShape) => {
+                                                    setAttributes({ iconShape: newIconShape });
+                                                    changeIconShape(media, iconView, newIconShape);
+                                                }}
                                             />
                                         )}
                                     </>

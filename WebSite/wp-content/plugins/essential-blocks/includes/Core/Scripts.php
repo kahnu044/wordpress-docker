@@ -49,7 +49,7 @@ class Scripts
     public function print_global_styles()
     {
         $global_styles = $this->global_styles();
-        echo "<style id='essential-blocks-global-styles'> $global_styles </style>";
+        echo '<style id="essential-blocks-global-styles">' .  esc_html($global_styles) . '</style>';
     }
 
     public function block_editor_assets()
@@ -523,8 +523,8 @@ class Scripts
         if ( is_admin() ) {
             $admin_localize_array = [
                 'admin_nonce'         => wp_create_nonce( 'admin-nonce' ),
-                'fluent_form_lists'   => json_encode( FluentForms::form_list() ),
-                'wpforms_lists'       => json_encode( WPForms::form_list() ),
+                'fluent_form_lists'   => wp_json_encode( FluentForms::form_list() ),
+                'wpforms_lists'       => wp_json_encode( WPForms::form_list() ),
                 'all_blocks'          => $plugin::$blocks->all(),
                 'all_blocks_default'  => $plugin::$blocks->defaults( true, false ),
                 'get_plugins'         => Helper::get_plugin_list_for_localize(),

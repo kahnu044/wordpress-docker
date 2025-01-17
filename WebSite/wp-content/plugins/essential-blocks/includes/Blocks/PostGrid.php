@@ -78,7 +78,7 @@ class PostGrid extends PostBlock
             if ( $defaultFilter !== "all" ) {
                 $taxonomy  = json_decode( $attributes[ 'selectedTaxonomy' ] );
                 $category  = get_term_by( 'slug', sanitize_text_field( $defaultFilter ), sanitize_text_field( $taxonomy->value ) );
-                $catString = json_encode( [ [
+                $catString = wp_json_encode( [ [
                     "label" => $category->name,
                     "value" => $category->term_id
                  ] ] );

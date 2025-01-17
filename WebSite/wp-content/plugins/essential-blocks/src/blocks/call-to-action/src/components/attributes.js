@@ -113,7 +113,7 @@ const attributes = {
     },
     subtitleTag: {
         type: "string",
-        default: "h3",
+        default: "h4",
     },
     subtitleColor: {
         type: "string",
@@ -178,7 +178,7 @@ const attributes = {
     ...generateTypographyAttributes(typoPrefix_subtitle),
     ...generateTypographyAttributes(typoPrefix_desc),
     ...generateTypographyAttributes(typoPrefix_btn),
-    
+
     // dimension
     ...generateDimensionsAttributes(WRAPPER_MARGIN, {
         top: 28,

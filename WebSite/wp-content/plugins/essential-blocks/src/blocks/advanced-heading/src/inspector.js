@@ -57,7 +57,8 @@ import {
     ColorControl,
     EBIconPicker,
     InspectorPanel,
-    isGradientColor
+    isGradientColor,
+    sanitizeURL
 } from '@essential-blocks/controls';
 import { PanelRow } from "@wordpress/components";
 
@@ -102,6 +103,8 @@ function Inspector(props) {
         titleLink,
         openInNewTab
     } = attributes;
+
+    const [ urlError, setUrlError ] = useState("");
 
     const changePreset = (selected) => {
         switch (selected) {
@@ -209,6 +212,19 @@ function Inspector(props) {
                 break;
             default:
                 return false;
+        }
+    };
+
+    const onUrlBlur = (link) => {
+        if (link === "" || sanitizeURL(link) !== "#") {
+            setUrlError("");
+        } else {
+            setUrlError(
+                __(
+                    "Invalid URL. Please include http:// or https://",
+                    "essential-blocks",
+                ),
+            );
         }
     };
 
@@ -382,7 +398,10 @@ function Inspector(props) {
                                         titleLink: link,
                                     })
                                 }
+                                onBlur={(link) => onUrlBlur(link)}
+                                help={__("Use http:// or https://", "essential-blocks")}
                             />
+                            {urlError && <span className="eb-alert-error">{urlError}</span>}
                         </>
                     )}
                     {enableLink && (

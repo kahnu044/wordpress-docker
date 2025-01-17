@@ -14,8 +14,10 @@
                 );
             }
         },
-        'title'  => function () use ( $helper ) {
-            $helper::views( 'woocommerce/title' );
+        'title'  => function () use ( $helper, $titleTag ) {
+            $helper::views( 'woocommerce/title',[
+                'titleTag' => $titleTag
+            ] );
         },
         'price'  => function () use ( $helper, $product, $showPrice ) {
             if ( $showPrice ) {
@@ -32,8 +34,10 @@
     $_grid_sequence = apply_filters( 'eb_woo_product_grid_grid_sequence', $grid_sequence, $helper, $product, $otherArgs );
 
     $list_sequence = [
-        'title'       => function () use ( $helper ) {
-            $helper::views( 'woocommerce/title' );
+        'title'       => function () use ( $helper,$titleTag ) {
+            $helper::views( 'woocommerce/title',[
+                'titleTag' => $titleTag
+            ] );
         },
         'price'       => function () use ( $helper, $product, $showPrice ) {
             if ( $showPrice ) {

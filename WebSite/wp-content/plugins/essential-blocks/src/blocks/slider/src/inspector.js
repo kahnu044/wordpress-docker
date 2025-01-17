@@ -136,8 +136,7 @@ function Inspector(props) {
                     backgroundPrefix: WRAPPER_BG,
                 }}>
                 <InspectorPanel.General>
-
-                    <InspectorPanel.PanelBody title={__("General", "essential-blocks")}>
+                    <InspectorPanel.PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
                         <SelectControl
                             label={__("Slider Type", "essential-blocks")}
                             value={sliderType}
@@ -210,6 +209,12 @@ function Inspector(props) {
                                 })
                             }
                         />
+
+                        {vertical && (
+                            <PanelRow>
+                                <em>{__("Fade will disable if enable Vertical Slide", "essential-blocks")}</em>
+                            </PanelRow>
+                        )}
 
                         <ToggleControl
                             label={__("Pause on Hover", "essential-blocks")}
@@ -320,7 +325,7 @@ function Inspector(props) {
 
                     </InspectorPanel.PanelBody>
 
-                    <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")}>
+                    <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")} initialOpen={false}>
                         {sliderType === "content" && (
                             <>
                                 <SelectControl

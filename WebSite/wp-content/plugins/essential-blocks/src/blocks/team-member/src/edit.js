@@ -52,7 +52,8 @@ function Edit(props) {
         showDesignation,
         isContentOverlay,
         preset,
-        showBlockContent
+        showBlockContent,
+        titleTag
     } = attributes;
 
     //
@@ -181,7 +182,7 @@ function Edit(props) {
                                                 <div className="eb-team-member-texts">
                                                     <DynamicInputValueHandler
                                                         value={name}
-                                                        tagName="h3"
+                                                        tagName={titleTag}
                                                         className="eb-team-member-name"
                                                         onChange={(name) =>
                                                             setAttributes({
@@ -240,7 +241,7 @@ function Edit(props) {
                                                 <div className="eb-team-member-texts">
                                                     <DynamicInputValueHandler
                                                         value={name}
-                                                        tagName="h3"
+                                                        tagName={titleTag}
                                                         className="eb-team-member-name"
                                                         onChange={(name) =>
                                                             setAttributes({

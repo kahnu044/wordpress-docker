@@ -77,7 +77,7 @@ class Product extends Base
         // for filter by taxonomy
         if ( isset( $request[ "taxonomy" ] ) && isset( $request[ "category" ] ) ) {
             $category  = get_term_by( 'slug', sanitize_text_field( $request[ "category" ] ), sanitize_text_field( $request[ "taxonomy" ] ) );
-            $catString = json_encode( [ [
+            $catString = wp_json_encode( [ [
                 "label" => $category->name,
                 "value" => $category->term_id
              ] ] );

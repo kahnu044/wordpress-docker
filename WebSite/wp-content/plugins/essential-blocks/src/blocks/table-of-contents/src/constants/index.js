@@ -269,6 +269,14 @@ export const STICKY_POSITION = [
         label: __("Right", "essential-blocks"),
         value: "right",
     },
+    {
+        label: __("Top", "essential-blocks"),
+        value: "top",
+    },
+    {
+        label: __("Bottom", "essential-blocks"),
+        value: "bottom",
+    },
 ];
 export const PRESET = [
     {

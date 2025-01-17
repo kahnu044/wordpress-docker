@@ -33,7 +33,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -442,6 +442,19 @@ export default function Style(props) {
 						left: 0;
 					}
 
+                    .${blockId}.eb-toc-container.eb-toc-sticky-top.eb-toc-is-sticky {
+						position:fixed;
+						left: ${topSpace === 0 || topSpace ? topSpace : 25}%;
+						z-index:999;
+						top: 0;
+					}
+                    .${blockId}.eb-toc-container.eb-toc-sticky-bottom.eb-toc-is-sticky {
+						position:fixed;
+						left: ${topSpace === 0 || topSpace ? topSpace : 25}%;
+						z-index:999;
+						bottom: 0;
+					}
+
 				  .${blockId}.eb-toc-container.eb-toc-is-sticky .eb-toc-wrapper{
 					  ${contentHeight ? `min-height:${contentHeight}px;` : ""}
 				  }
@@ -456,6 +469,10 @@ export default function Style(props) {
 					left: auto;
 					transform-origin: right top;
 					transform: rotate(90deg) translate(100%, 0);
+				  }
+				  .${blockId}.eb-toc-container.eb-toc-is-sticky button.eb-toc-button.eb-toc-button-bottom {
+					bottom: 0;
+					top: auto;
 				  }
 
                   .${blockId}.eb-toc-container .eb-toc-close{

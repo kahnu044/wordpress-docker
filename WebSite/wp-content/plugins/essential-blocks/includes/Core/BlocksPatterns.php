@@ -197,7 +197,7 @@ class BlocksPatterns
             if ( ! file_exists( $cache_file_dir ) ) {
                 mkdir( $cache_file_dir, 0777, true );
             }
-            file_put_contents( $cache_file_dir . '/patterns.json', json_encode( $data ) );
+            file_put_contents( $cache_file_dir . '/patterns.json', wp_json_encode( $data ) );
             return true;
         } catch ( Exception $e ) {
             return false;

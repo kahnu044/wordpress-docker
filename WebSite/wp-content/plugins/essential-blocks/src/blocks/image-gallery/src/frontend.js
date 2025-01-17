@@ -1,8 +1,6 @@
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    const imageGalleries = document.querySelectorAll(
-        `.eb-gallery-img-wrapper.eb-filterable-img-gallery, .eb-gallery-img-wrapper.enable-isotope`
-    );
+    const imageGalleries = document.querySelectorAll(`.eb-gallery-img-wrapper`);
 
     for (let imageGallery of imageGalleries) {
         let wrapperid = imageGallery.getAttribute("data-id");
@@ -104,10 +102,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 percentPosition: layoutMode !== "fitRows",
                 masonry: layoutMode !== "fitRows" ? { columnWidth: uneven ? '.grid-sizer' : '.eb-gallery-img-content' } : null,
                 filter: function (itemElem, itemElem2) {
+                    const element = itemElem || itemElem2; // Fallback to the one that's defined
+                    if (!element) {
+                        return false;
+                    }
+
                     // Perform filtering based on text search and selected filter
-                    const textContent = itemElem2.textContent || "";
-                    const matchesSearch = qsRegex ? textContent.match(qsRegex) : true;
-                    const matchesFilter = filterValue === '*' || itemElem2.matches(filterValue);
+                    var textContent = element?.textContent || "";
+                    var matchesSearch = qsRegex ? textContent.match(qsRegex) : true;
+                    var matchesFilter = filterValue === '*' || element.matches(filterValue);
 
                     // Check both search and filter criteria
                     return matchesSearch && matchesFilter;
@@ -128,10 +131,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
                     iso.arrange({
                         filter: function (itemElem, itemElem2) {
+                            const element = itemElem || itemElem2; // Fallback to the one that's defined
+                            if (!element) {
+                                return false;
+                            }
+
                             // Perform filtering based on text search and selected filter
-                            const textContent = itemElem2.textContent || "";
-                            const matchesSearch = qsRegex ? textContent.match(qsRegex) : true;
-                            const matchesFilter = filterValue === '*' || itemElem2.matches(filterValue);
+                            var textContent = element?.textContent || "";
+                            var matchesSearch = qsRegex ? textContent.match(qsRegex) : true;
+                            var matchesFilter = filterValue === '*' || element.matches(filterValue);
 
                             // Check both search and filter criteria
                             return matchesSearch && matchesFilter;

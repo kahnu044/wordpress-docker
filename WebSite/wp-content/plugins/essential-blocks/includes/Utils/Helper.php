@@ -29,7 +29,7 @@
                     $settingsData = (array) json_decode( html_entity_decode( stripslashes( $settingsData ) ) );
                 }
             } else {
-                $settings[ 'responsiveBreakpoints' ] = json_encode( [
+                $settings[ 'responsiveBreakpoints' ] = wp_json_encode( [
                     'tablet' => 1024,
                     'mobile' => 767
                  ] );

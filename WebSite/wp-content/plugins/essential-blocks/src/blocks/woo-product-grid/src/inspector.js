@@ -61,7 +61,8 @@ import {
     LOADMORE_MARGIN,
     LOADMORE_BORDER_SHADOW,
     RATING_STYLE,
-    FIT_STYLES
+    FIT_STYLES,
+    TITLE_TAGS
 } from "./constants";
 
 import {
@@ -131,7 +132,8 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         showDetailBtn,
         detailBtnText,
         autoFit,
-        fitStyles
+        fitStyles,
+        titleTag
     } = attributes;
 
     const changeLayout = (preset) => {
@@ -353,6 +355,24 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 />
                             </>
                         )}
+
+                        <BaseControl label={__("Title Tag", "essential-blocks")}>
+                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                {TITLE_TAGS.map((item, key) => (
+                                    <Button
+                                        key={key}
+                                        // isLarge
+                                        isPrimary={titleTag === item.value}
+                                        isSecondary={titleTag !== item.value}
+                                        onClick={() =>
+                                            setAttributes({ titleTag: item.value })
+                                        }
+                                    >
+                                        {item.label}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                        </BaseControl>
                     </InspectorPanel.PanelBody>
                     <WoocommerceQuery
                         title={"Product Query"}

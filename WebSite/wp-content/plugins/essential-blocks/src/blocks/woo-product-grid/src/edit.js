@@ -48,7 +48,8 @@ const Edit = (props) => {
         enableContents,
         showBlockContent,
         showDetailBtn,
-        detailBtnText
+        detailBtnText,
+        titleTag: TitleTag
     } = attributes;
 
     const [queryResults, setQueryResults] = useState(false);
@@ -293,13 +294,13 @@ const Edit = (props) => {
                                                                                             </span>
                                                                                         </div>
                                                                                     )}
-                                                                                <h3
+                                                                                <TitleTag
                                                                                     className="eb-woo-product-title"
                                                                                     dangerouslySetInnerHTML={{
                                                                                         __html:
                                                                                             item.title,
                                                                                     }}
-                                                                                ></h3>
+                                                                                ></TitleTag>
                                                                                 {showPrice && (
                                                                                     <p
                                                                                         className="eb-woo-product-price"
@@ -328,13 +329,13 @@ const Edit = (props) => {
                                                                             )}
                                                                         >
                                                                             <div className="eb-woo-product-content">
-                                                                                <h3
+                                                                                <TitleTag
                                                                                     className="eb-woo-product-title"
                                                                                     dangerouslySetInnerHTML={{
                                                                                         __html:
                                                                                             item.title,
                                                                                     }}
-                                                                                ></h3>
+                                                                                ></TitleTag>
                                                                                 {showPrice && (
                                                                                     <p
                                                                                         className="eb-woo-product-price"

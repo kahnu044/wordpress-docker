@@ -82,7 +82,8 @@ import {
     separatorTypes,
     ContentsVerticalAligns,
     HOVER_EFFECT,
-    HOVER_ALIGN
+    HOVER_ALIGN,
+    TITLE_TAGS
 } from "./constants";
 
 function Inspector({ attributes, setAttributes }) {
@@ -143,7 +144,8 @@ function Inspector({ attributes, setAttributes }) {
         showDesignation,
         showSocialTitle,
         isContentOverlay,
-        socialInImage
+        socialInImage,
+        titleTag
     } = attributes;
 
     const resRequiredProps = {
@@ -1124,6 +1126,23 @@ function Inspector({ attributes, setAttributes }) {
                         title={__("Name", "essential-blocks")}
                         initialOpen={false}
                     >
+                        <BaseControl label={__("Tag", "essential-blocks")}>
+                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
+                                {TITLE_TAGS.map((item, key) => (
+                                    <Button
+                                        key={key}
+                                        // isLarge
+                                        isPrimary={titleTag === item.value}
+                                        isSecondary={titleTag !== item.value}
+                                        onClick={() =>
+                                            setAttributes({ titleTag: item.value })
+                                        }
+                                    >
+                                        {item.label}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                        </BaseControl>
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={nameColor}
