@@ -14,11 +14,10 @@ read -p "Enter the commit message : " commit_msg
 # Commit the changes
 git commit -m $commit_msg
 
-
 # Ask the user for the branch name
 read -p "Enter the branch name: " branch_name
 
 # Push the code to the branch
 git push origin $branch_name
 
-echo "Thanks kanhu, push completed successfully"
+echo "Thanks, push completed successfully"
