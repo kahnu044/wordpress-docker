@@ -4,7 +4,7 @@
  * Plugin Name: MultiLine files for Contact Form 7
  * Description: Upload unlimited files one by one to contact form 7
  * Plugin URI: https://wordpress.org/plugins/multiline-files-for-contact-form-7/
- * Version: 2.9.1
+ * Version: 3.0.0
  * Author: Zluck Solutions
  * Author URI: https://profiles.wordpress.org/zluck
  * Text Domain: zl-mfcf7
@@ -16,7 +16,7 @@
 
 // Prevent direct access to the file
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 // Include the deactivation handler
@@ -38,7 +38,8 @@ if (is_plugin_active('contact-form-7/wp-contact-form-7.php')) {
 }
 
 // This code display warning when user active plugin without contact form 7
-function mfcf7_zl_warning_if_cf7_deactivated(){
+function mfcf7_zl_warning_if_cf7_deactivated()
+{
 	echo '<div class="notice notice-error">
 		  		<p>Important: Mfcf7 plugin only compatible with contact form 7. Please install or activate contact form 7 plugin first. </p>
 		  </div>';
@@ -61,29 +62,31 @@ register_activation_hook(__FILE__, 'mfcf7_zl_admin_notice_activation_hook');
 //function responsible for deactive plugin 
 // Check for the deactivation request on the next page load
 add_action('admin_init', 'mfcf7_zl_plugin_check_deactivation_request');
-function mfcf7_zl_plugin_check_deactivation_request() {
+function mfcf7_zl_plugin_check_deactivation_request()
+{
 
-    if (get_option('mfcf7_zl_plugin_deactivate_request', false)) {
+	if (get_option('mfcf7_zl_plugin_deactivate_request', false)) {
 
-        // Perform the actual deactivation
+		// Perform the actual deactivation
 
-        deactivate_plugins(plugin_basename(__FILE__));
+		deactivate_plugins(plugin_basename(__FILE__));
 
-        // Display the admin notice
+		// Display the admin notice
 
-        add_action('admin_notices', 'mfcf7_zl_plugin_deactivation_notice');
+		add_action('admin_notices', 'mfcf7_zl_plugin_deactivation_notice');
 
-        update_option('mfcf7_zl_plugin_deactivate_request', false);
-    }
+		update_option('mfcf7_zl_plugin_deactivate_request', false);
+	}
 }
 
 // Display notice after deavtivate
-function mfcf7_zl_plugin_deactivation_notice() {
-    ?>
-    <div class="notice notice-success is-dismissible">
-        <p><?php echo esc_html__('Plugin deactivated successfully.', 'zl-mfcf7'); ?></p>
-    </div>
-    <?php
+function mfcf7_zl_plugin_deactivation_notice()
+{
+?>
+	<div class="notice notice-success is-dismissible">
+		<p><?php echo esc_html__('Plugin deactivated successfully.', 'zl-mfcf7'); ?></p>
+	</div>
+<?php
 }
 
 // display notices after 1,3,5 days
@@ -113,22 +116,28 @@ function mfcf7_zl_plugin_button_style()
 {
 	wp_enqueue_style('mfcf7_zl_button_style', plugin_dir_url(__FILE__) . 'css/style.css?12');
 }
+
 /* Define Shortcode handler */
 add_action('wpcf7_init', 'mfcf7_zl_add_shortcode_multilinefile');
 function mfcf7_zl_add_shortcode_multilinefile()
 {
 	// global $latest_contact_form_7;
 	// if ($latest_contact_form_7)
-	wpcf7_add_form_tag(array('multilinefile', 'multilinefile*'), 'mfcf7_zl_multilinefile_shortcode_handler', array(
-		'name-attr' => true,
-		'file-uploading' => true,
-	));
+	wpcf7_add_form_tag(
+		array('multilinefile', 'multilinefile*'),
+		'mfcf7_zl_multilinefile_shortcode_handler',
+		array(
+			'name-attr' => true,
+			'file-uploading' => true,
+		)
+	);
 	// else
 	// 	wpcf7_add_shortcode(array('multilinefile', 'multilinefile*'), 'mfcf7_zl_multilinefile_shortcode_handler', array(
 	// 		'name-attr' => true,
 	// 		'file-uploading' => true,
 	// 	));
 }
+
 function mfcf7_zl_multilinefile_shortcode_handler($tag)
 {
 	$html = '';
@@ -142,11 +151,14 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	}
 
 	$error_in_validation = wpcf7_get_validation_error($tag->name);
+
 	$class = wpcf7_form_controls_class($tag->type);
 	if ($error_in_validation) {
 		$class .= ' wpcf7-not-valid';
 	}
+
 	$atts = array();
+
 	$atts['size'] = $tag->get_size_option('40');
 	$atts['class'] = $tag->get_class_option($class);
 	$atts['id'] = $tag->get_id_option();
@@ -154,9 +166,11 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	$atts['accept'] = $tag->get_option('accept', null, true);
 	$atts['multiple'] = 'multiple';
 	$values = isset($tag->values[0]) ? $tag->values[0] : '';
+
 	if (empty($values)) {
 		$values = __('Upload', 'zl-mfcf7');
 	}
+
 	$upload_label = $atts['value'] = $values;
 	$accept_wildcard = '';
 	$accept_wildcard = $tag->get_option('accept_wildcard');
@@ -164,14 +178,19 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	if ($tag->is_required()) {
 		$atts['aria-required'] = 'true';
 	}
+
 	if (!empty($accept_wildcard)) {
 		$atts['accept'] = $atts['accept'] . '/*';
 	}
+
 	$atts['aria-invalid'] = $error_in_validation ? 'true' : 'false';
+
 	$atts['type'] = 'file';
 	$atts['name'] = $tag->name . '[]';
+
 	$atts = apply_filters('cf7_multilinefile_atts', $atts);
 	$atts = wpcf7_format_atts($atts);
+
 	$html .= sprintf(
 		apply_filters('cf7_multilinefile_input', '<span class="mfcf7-zl-multiline-sample" style="display:none"><p class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s <span class="mfcf7-zl-multifile-name"></span><a href="javascript:void(0);" class="mfcf7_zl_delete_file"><span class="delete-file" aria-hidden="true">&#x274C;</span></a></p></span>', $atts),
 		sanitize_html_class($tag->name),
@@ -241,19 +260,19 @@ function mfcf7_zlchange_attachments($cf7, &$abort, $object)
 	if ($submission) {
 
 		$multitags = empty($submission->get_contact_form()->scan_form_tags(array('type' => 'multilinefile'))) ? $submission->get_contact_form()->scan_form_tags(array('type' => 'multilinefile*')) : $submission->get_contact_form()->scan_form_tags(array('type' => 'multilinefile'));
-		
-		if(!empty($submission->get_contact_form()->scan_form_tags(array('type' => 'file'))) && !empty($submission->get_contact_form()->scan_form_tags(array('type' => 'file*')))){
+
+		if (!empty($submission->get_contact_form()->scan_form_tags(array('type' => 'file'))) && !empty($submission->get_contact_form()->scan_form_tags(array('type' => 'file*')))) {
 			$filenotrequired = $submission->get_contact_form()->scan_form_tags(array('type' => 'file'));
 			$filerequired    = $submission->get_contact_form()->scan_form_tags(array('type' => 'file*'));
 			$cf7_file        = array_merge($filerequired, $filenotrequired);
-		}else{
+		} else {
 			$cf7_file = empty($submission->get_contact_form()->scan_form_tags(array('type' => 'file'))) ? $submission->get_contact_form()->scan_form_tags(array('type' => 'file*')) : $submission->get_contact_form()->scan_form_tags(array('type' => 'file'));
 		}
-		
-		if(is_array($cf7_file) && !empty($cf7_file)){
+
+		if (is_array($cf7_file) && !empty($cf7_file)) {
 			$multitags = array_merge($cf7_file, $multitags);
 		}
-		
+
 		$getuploadfiles = $submission->uploaded_files();
 
 		foreach ($multitags as $m_key => $multitag) {
@@ -282,17 +301,16 @@ function mfcf7_zlchange_attachments($cf7, &$abort, $object)
 			}
 		}
 	}
-		
+
 	if ($single_img != '' && $attachments != '') {
 
-		$properties['mail']['attachments'] = $attachments.PHP_EOL.$single_img;
-
+		$properties['mail']['attachments'] = $attachments . PHP_EOL . $single_img;
 	} else if ($attachments != '') {
 		$properties['mail']['attachments'] = $attachments;
 	} else {
 		$properties['mail']['attachments'] = $single_img;
 	}
-	
+
 	$cf7->set_properties($properties);
 }
 
