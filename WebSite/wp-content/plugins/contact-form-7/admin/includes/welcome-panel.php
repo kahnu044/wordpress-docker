@@ -276,7 +276,7 @@ function wpcf7_welcome_panel_screen_settings( $screen_settings, $screen ) {
 	);
 
 	$checkbox_id = 'wpcf7-welcome-panel-show';
-	$checked = ! in_array( wpcf7_version( 'only_major=1' ), $vers );
+	$checked = ! in_array( wpcf7_version( 'only_major=1' ), $vers, true );
 
 	$checkbox = sprintf(
 		'<input %s />',
@@ -292,7 +292,7 @@ function wpcf7_welcome_panel_screen_settings( $screen_settings, $screen ) {
 <legend>%1$s</legend>
 <label for="%2$s">%3$s %4$s</label>
 </fieldset>',
- 		esc_html( __( 'Welcome panel', 'contact-form-7' ) ),
+		esc_html( __( 'Welcome panel', 'contact-form-7' ) ),
 		esc_attr( $checkbox_id ),
 		$checkbox,
 		esc_html( __( 'Show welcome panel', 'contact-form-7' ) )
