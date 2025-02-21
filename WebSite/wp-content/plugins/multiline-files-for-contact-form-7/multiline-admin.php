@@ -319,8 +319,6 @@ function mfcf7_zl_deactivation_popup()
 
 	?>
 
-	<div class="admin_click">click here</div>
-
 	<!-- Popup HTML Structure -->
 
 	<div class="admin-popup-container" style="display:none;">
