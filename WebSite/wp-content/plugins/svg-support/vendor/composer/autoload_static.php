@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit61c7f72a5d76a6a96ee3c8825ef2f87a
+class ComposerStaticInit29fab2f613f30eec84da12d27bbe9308
 {
     public static $prefixLengthsPsr4 = array (
         'e' => 
@@ -22,14 +22,25 @@ class ComposerStaticInit61c7f72a5d76a6a96ee3c8825ef2f87a
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'enshrined\\svgSanitize\\ElementReference\\Resolver' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/ElementReference/Resolver.php',
+        'enshrined\\svgSanitize\\ElementReference\\Subject' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/ElementReference/Subject.php',
+        'enshrined\\svgSanitize\\ElementReference\\Usage' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/ElementReference/Usage.php',
+        'enshrined\\svgSanitize\\Exceptions\\NestingException' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/Exceptions/NestingException.php',
+        'enshrined\\svgSanitize\\Helper' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/Helper.php',
+        'enshrined\\svgSanitize\\Sanitizer' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/Sanitizer.php',
+        'enshrined\\svgSanitize\\data\\AllowedAttributes' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/AllowedAttributes.php',
+        'enshrined\\svgSanitize\\data\\AllowedTags' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/AllowedTags.php',
+        'enshrined\\svgSanitize\\data\\AttributeInterface' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/AttributeInterface.php',
+        'enshrined\\svgSanitize\\data\\TagInterface' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/TagInterface.php',
+        'enshrined\\svgSanitize\\data\\XPath' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/XPath.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit61c7f72a5d76a6a96ee3c8825ef2f87a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit61c7f72a5d76a6a96ee3c8825ef2f87a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit61c7f72a5d76a6a96ee3c8825ef2f87a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit29fab2f613f30eec84da12d27bbe9308::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit29fab2f613f30eec84da12d27bbe9308::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit29fab2f613f30eec84da12d27bbe9308::$classMap;
 
         }, null, ClassLoader::class);
     }

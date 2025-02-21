@@ -3,13 +3,15 @@
 Plugin Name: 	SVG Support
 Plugin URI:		http://wordpress.org/plugins/svg-support/
 Description: 	Upload SVG files to the Media Library and render SVG files inline for direct styling/animation of an SVG's internal elements using CSS/JS.
-Version: 		2.5.8
-Author: 		Benbodhi
+Version: 		2.5.11
 Author URI: 	https://benbodhi.com
 Text Domain: 	svg-support
 Domain Path:	/languages
 License: 		GPLv2 or later
 License URI:	http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 5.8
+Requires PHP: 	7.4
+Block: 			true
 
 	Copyright 2013 and beyond | Benbodhi (email : wp@benbodhi.com)
 
@@ -20,15 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Global variables
+ * Global variables and constants
  */
 global $bodhi_svgs_options;
-$bodhi_svgs_options = array();										// Defining global array
-$svgs_plugin_version = '2.5.8';										// for use on admin pages
-$plugin_file = plugin_basename(__FILE__);							// plugin file for reference
-define( 'BODHI_SVGS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );	// define the absolute plugin path for includes
-define( 'BODHI_SVGS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );		// define the plugin url for use in enqueue
-$bodhi_svgs_options = get_option('bodhi_svgs_settings', array());	// Retrieve our plugin settings from the options table, ensure it's an array
+$bodhi_svgs_options = array();                                     // Defining global array
+define('BODHI_SVGS_VERSION', get_file_data(__FILE__, array('Version' => 'Version'))['Version']);
+define('BODHI_SVGS_PLUGIN_FILE', __FILE__);                        // define the absolute plugin file path
+define('BODHI_SVGS_PLUGIN_PATH', plugin_dir_path(__FILE__));       // define the absolute plugin path for includes
+define('BODHI_SVGS_PLUGIN_URL', plugin_dir_url(__FILE__));         // define the plugin url for use in enqueue
+$bodhi_svgs_options = get_option('bodhi_svgs_settings', array());  // Retrieve our plugin settings
 
 // ensure $bodhi_svgs_options is always an array
 if (!is_array($bodhi_svgs_options)) {
@@ -68,26 +70,45 @@ include( BODHI_SVGS_PLUGIN_PATH . 'functions/featured-image.php' );			// allow i
 // }
 
 /**
- * Version based conditional / Check for stored plugin version
- *
- * Versions prior to 2.3 did not store the version number,
- * If no version number is stored, store current plugin version number.
- * If there is a version number stored, update it with the new version number.
+ * Handle version updates and migrations
+ * 
+ * Handles version comparisons for all format types:
+ * - Single digit versions (1, 2)
+ * - Zero versions (0, 0.1, 0.5.26)
+ * - Two-digit versions (1.0, 2.1, 2.5)
+ * - Three-digit versions (1.5.17, 2.5.9)
+ * - Fresh installs ('0.0.0')
+ * - Legacy versions (null, empty, invalid)
  */
-// get the stored plugin version
-$svgs_plugin_version_stored = get_option( 'bodhi_svgs_plugin_version' );
-// only run this if there is no stored version number (have never stored the number in previous versions)
-if ( empty( $svgs_plugin_version_stored ) ) {
-
-	// add plugin version number to options table
-	update_option( 'bodhi_svgs_plugin_version', $svgs_plugin_version );
-
-} else {
-
-	// update plugin version number in options table
-	update_option( 'bodhi_svgs_plugin_version', $svgs_plugin_version );
-
+function bodhi_svgs_version_updates() {
+    // Get stored version, defaulting to '0.0.0' if none exists
+    // This handles null, empty string, boolean false, and invalid version strings
+    $stored_version = get_option('bodhi_svgs_plugin_version', '0.0.0');
+    
+    // Ensure we have a valid version string
+    if (!is_string($stored_version) || empty($stored_version)) {
+        $stored_version = '0.0.0';
+    }
+    
+    // Skip if already at current version
+    if ($stored_version === BODHI_SVGS_VERSION) {
+        return;
+    }
+    
+    // Run version-specific updates
+    // This will run for all versions before 2.5.9, including:
+    // - All 0.x versions
+    // - All 1.x versions
+    // - All 2.x versions up to 2.5.8
+    // - Fresh installs and invalid versions ('0.0.0')
+    if (version_compare($stored_version, '2.5.9', '<')) {
+        bodhi_svgs_cleanup_duplicate_meta();
+    }
+    
+    // Update version in database
+    update_option('bodhi_svgs_plugin_version', BODHI_SVGS_VERSION);
 }
+add_action('admin_init', 'bodhi_svgs_version_updates');
 
 /**
  * Defaults for better security in versions >= 2.5
