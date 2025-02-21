@@ -33,25 +33,29 @@
 .eb-tabs-contents {
 	.eb-tab-wrapper {
 		box-sizing: border-box;
-
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(10px);
+		transition: all 0.4s ease-in-out;
+		.eb-tab-inner {
+			margin-top: 10px;
+		}
 		&.active {
 			opacity: 1;
-			height: auto;
 			visibility: visible;
-			z-index: 1111;
+			transform: translateY(0);
 		}
-
 		&.inactive {
-			opacity: 0;
 			height: 0;
 			width: 100%;
 			padding: 0 !important;
 			margin: 0 !important;
-			visibility: hidden;
 			position: absolute;
 			top: 0;
 			overflow: hidden;
-			transition: none !important;
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(10px);
 		}
 	}
 }

@@ -30,7 +30,7 @@ import {
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
     generateBackgroundAttributes
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -409,7 +409,7 @@ const attributes = {
     ...generateTypographyAttributes(typoPrefix_title, {
         fontSize: 20,
     }),
-    ...generateTypographyAttributes(typoPrefix_content,{
+    ...generateTypographyAttributes(typoPrefix_content, {
         fontSize: 14,
     }),
 
@@ -439,11 +439,15 @@ const attributes = {
         type: "string",
         default: "#fff",
     },
+    alignment: {
+        type: "string",
+        default: "align-custom",
+    },
 
     // //
     ...generateBackgroundAttributes(WrpBgConst, {
-    	defaultFillColor: "var(--eb-global-background-color)",
-    	noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
+        defaultFillColor: "var(--eb-global-background-color)",
+        noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
 
     //

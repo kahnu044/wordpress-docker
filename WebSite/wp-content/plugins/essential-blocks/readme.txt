@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 5.2.3
+Stable tag: 5.3.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -239,6 +239,19 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.3.0 - 18/02/2025 =
+- Added: New Block | Lottie Animation
+- Fixed: Table of Contents | Design issue fixes
+- Fixed: Progress Bar | Display Alternate Value Based on Percentage Setting
+- Fixed: Advanced Image | Image height getting reset
+- Fixed: Toggle Content | Design control for active item and other design improvements
+- Fixed: Advanced Heading | Background overlay over title
+- Fixed: Editor broken and shows error after update plugin
+- Fixed: Blocks patterns cache update cron broken
+- Fixed: Reset control for Box Shadow
+- Improved: Security Enhancement
+- Few minor bug fixes & improvements
 
 = 5.2.3 - 15/01/2025 =
 - Fixed: Filterable Gallery | Editor not working if filterable gallery is used

@@ -163,6 +163,10 @@ const attributes = {
     activeBg: {
         type: "string",
     },
+    contentStyles: {
+        type: "string",
+        default: "primary",
+    },
     shadowColor: {
         type: "string",
     },
@@ -181,6 +185,12 @@ const attributes = {
     inset: {
         type: "boolean",
         default: false,
+    },
+    backgroundColorSecondary: {
+        type: "string",
+    },
+    controllerColorSecondary: {
+        type: "string",
     },
 
     // typography attributes

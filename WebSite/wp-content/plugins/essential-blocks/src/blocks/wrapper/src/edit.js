@@ -111,6 +111,7 @@ function Edit(props) {
                                     }`}
                             >
                                 <InnerBlocks
+                                    templateLock={false}
                                     renderAppender={
                                         select(
                                             "core/block-editor"

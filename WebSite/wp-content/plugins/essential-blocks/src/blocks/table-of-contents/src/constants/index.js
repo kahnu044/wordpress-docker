@@ -288,3 +288,15 @@ export const PRESET = [
         value: "style-2",
     },
 ];
+export const ALIGNMENTS_VERTICAL = [
+    { label: __("Top", "essential-blocks"), value: "align-top" },
+    { label: __("Middle", "essential-blocks"), value: "align-middle" },
+    { label: __("Bottom", "essential-blocks"), value: "align-bottom" },
+    { label: __("Custom", "essential-blocks"), value: "align-custom" },
+];
+export const ALIGNMENTS_HORIZONTAL = [
+    { label: __("Left", "essential-blocks"), value: "align-left" },
+    { label: __("Center", "essential-blocks"), value: "align-center" },
+    { label: __("Right", "essential-blocks"), value: "align-right" },
+    { label: __("Custom", "essential-blocks"), value: "align-custom" },
+];

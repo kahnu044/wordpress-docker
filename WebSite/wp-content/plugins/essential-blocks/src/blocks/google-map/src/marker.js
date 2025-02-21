@@ -12,9 +12,9 @@ import {
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import {
-ImageAvatar
+    ImageAvatar
 } from "@essential-blocks/controls";
-import { escapeHTML } from "@wordpress/escape-html";
+import { escapeAttribute } from "@wordpress/escape-html";
 import { safeHTML } from "@wordpress/dom";
 
 // Style objects
@@ -290,7 +290,7 @@ const SortableMarker = ({ marker, map, setAttributes }) => {
         const newMarker = { ...marker[position] };
         const newMarkerList = [...marker];
         newMarkerList[position] = newMarker;
-        newMarkerList[position][key] = safeHTML(value);
+        newMarkerList[position][key] = escapeAttribute(safeHTML(value));
         setAttributes({ marker: [...newMarkerList] });
     };
 

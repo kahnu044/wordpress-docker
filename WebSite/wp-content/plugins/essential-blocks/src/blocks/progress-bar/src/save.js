@@ -5,7 +5,7 @@ import { useBlockProps } from "@wordpress/block-editor";
 
 import { CONTAINER_CLASS, WRAPPER_CLASS, STRIPE_CLASS } from "./constants";
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 const save = ({ attributes }) => {
     const {
@@ -22,6 +22,10 @@ const save = ({ attributes }) => {
         prefix,
         suffix,
         classHook,
+        totalRange,
+        valueDivider,
+        valueType,
+        absoluteProgress,
     } = attributes;
 
     const stripeClass = showStripe ? " " + STRIPE_CLASS[stripeAnimation] : "";
@@ -44,6 +48,9 @@ const save = ({ attributes }) => {
                             data-layout={layout}
                             data-count={progress}
                             data-duration={animationDuration}
+                            data-type={valueType}
+                            data-absolute={absoluteProgress}
+                            data-totalRange={totalRange}
                         >
                             {(layout === "circle" || layout === "circle_fill") && (
                                 <>
@@ -60,8 +67,24 @@ const save = ({ attributes }) => {
                                         )}
                                         {displayProgress && (
                                             <span className="eb-progressbar-count-wrap">
-                                                <span className="eb-progressbar-count">{progress}</span>
-                                                <span className="postfix">%</span>
+                                                <span className="eb-progress-count-wrap">
+                                                    <span className="eb-progressbar-count">
+                                                        {valueType === 'absolute' ? absoluteProgress : progress}
+                                                    </span>
+                                                    {valueType === 'percentage' && (
+                                                        <span className="postfix">%</span>
+                                                    )}
+                                                </span>
+                                                {valueType === 'absolute' && (
+                                                    <>
+                                                        <span className="value-divider">{valueDivider}</span>
+                                                        <span className="eb-progress-total-range-wrap">
+                                                            <span className="eb-progressbar-count">
+                                                                {totalRange}
+                                                            </span>
+                                                        </span>
+                                                    </>
+                                                )}
                                             </span>
                                         )}
                                     </div>
@@ -82,8 +105,24 @@ const save = ({ attributes }) => {
                                         </attributes.titleTag>
                                         {displayProgress && (
                                             <span className="eb-progressbar-count-wrap">
-                                                <span className="eb-progressbar-count">{progress}</span>
-                                                <span className="postfix">%</span>
+                                                <span className="eb-progress-count-wrap">
+                                                    <span className="eb-progressbar-count">
+                                                        {valueType === 'absolute' ? absoluteProgress : progress}
+                                                    </span>
+                                                    {valueType === 'percentage' && (
+                                                        <span className="postfix">%</span>
+                                                    )}
+                                                </span>
+                                                {valueType === 'absolute' && (
+                                                    <>
+                                                        <span className="value-divider">{valueDivider}</span>
+                                                        <span className="eb-progress-total-range-wrap">
+                                                            <span className="eb-progressbar-count">
+                                                                {totalRange}
+                                                            </span>
+                                                        </span>
+                                                    </>
+                                                )}
                                             </span>
                                         )}
                                     </div>
@@ -94,8 +133,24 @@ const save = ({ attributes }) => {
                                 <>
                                     {displayProgress && (
                                         <span className="eb-progressbar-count-wrap">
-                                            <span className="eb-progressbar-count">{progress}</span>
-                                            <span className="postfix">%</span>
+                                            <span className="eb-progress-count-wrap">
+                                                <span className="eb-progressbar-count">
+                                                    {valueType === 'absolute' ? absoluteProgress : progress}
+                                                </span>
+                                                {valueType === 'percentage' && (
+                                                    <span className="postfix">%</span>
+                                                )}
+                                            </span>
+                                            {valueType === 'absolute' && (
+                                                <>
+                                                    <span className="value-divider">{valueDivider}</span>
+                                                    <span className="eb-progress-total-range-wrap">
+                                                        <span className="eb-progressbar-count">
+                                                            {totalRange}
+                                                        </span>
+                                                    </span>
+                                                </>
+                                            )}
                                         </span>
                                     )}
                                     <span className="eb-progressbar-line-fill"></span>
@@ -110,8 +165,24 @@ const save = ({ attributes }) => {
                                         </attributes.titleTag>
                                         {displayProgress && (
                                             <span className="eb-progressbar-count-wrap">
-                                                <span className="eb-progressbar-count">{progress}</span>
-                                                <span className="postfix">%</span>
+                                                <span className="eb-progress-count-wrap">
+                                                    <span className="eb-progressbar-count">
+                                                        {valueType === 'absolute' ? absoluteProgress : progress}
+                                                    </span>
+                                                    {valueType === 'percentage' && (
+                                                        <span className="postfix">%</span>
+                                                    )}
+                                                </span>
+                                                {valueType === 'absolute' && (
+                                                    <>
+                                                        <span className="value-divider">{valueDivider}</span>
+                                                        <span className="eb-progress-total-range-wrap">
+                                                            <span className="eb-progressbar-count">
+                                                                {totalRange}
+                                                            </span>
+                                                        </span>
+                                                    </>
+                                                )}
                                             </span>
                                         )}
                                     </div>

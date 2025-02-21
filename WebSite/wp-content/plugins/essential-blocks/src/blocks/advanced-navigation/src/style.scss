@@ -54,9 +54,13 @@
 		}
 	}
 
+	&:not(.v2) {
+		.wp-block-navigation:not(ul.wp-block-navigation) {
+			box-shadow: 0px 22px 35px rgba(98, 103, 145, 0.15);
+		}
+	}
 
 	.wp-block-navigation:not(ul.wp-block-navigation) {
-		box-shadow: 0px 22px 35px rgba(98, 103, 145, 0.15);
 		gap: 0;
 	}
 

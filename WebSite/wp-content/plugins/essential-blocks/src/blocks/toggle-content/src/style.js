@@ -31,7 +31,7 @@ import {
     generateBorderShadowStyles,
     generateTypographyStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -70,6 +70,8 @@ export default function Style(props) {
 
         [`${typoPrefix_tgl}FontSize`]: fontSize,
         [`${typoPrefix_tgl}SizeUnit`]: sizeUnit,
+        backgroundColorSecondary,
+        controllerColorSecondary,
     } = attributes;
 
     const [isPrimary, setPrimary] = useState(
@@ -270,8 +272,7 @@ export default function Style(props) {
 		position:absolute;
 		content:"";
 		z-index:1;
-		background-color: ${controllerColor || DEFAULT_CONTROLLER_COLOR};
-		background-image:${controllerType === "gradient" ? controllerGradient : "none"};
+		background: ${controllerColor || DEFAULT_CONTROLLER_COLOR};
 		transition:0.4s;
 	}
 
@@ -284,8 +285,7 @@ export default function Style(props) {
 	.${blockId}.eb-toggle-wrapper .eb-text-switch-label,
 	.${blockId}.eb-toggle-wrapper .eb-toggle-slider{
 		${switchStyle === "toggle" ? `${btnHeightDesktop}` : ""}
-		background-color:${backgroundColor || DEFAULT_BACKGROUND};
-		background-image:${backgroundType === "gradient" ? backgroundGradient : "none"};
+		background:${backgroundColor || DEFAULT_BACKGROUND};
 		${switchStyle === "rounded" ? `border-radius:21px;` : ""}
 		border: ${borderWidth || 0}px ${borderStyle || "none"} ${borderColor || "#00000000"
         };
@@ -336,6 +336,13 @@ export default function Style(props) {
 	.${blockId}.eb-toggle-wrapper .eb-switch-names{
 		${fontSize ? `font-size:${fontSize}${sizeUnit || "px"};` : ""}
 	}
+
+    .${blockId}.eb-toggle-wrapper.eb-toggle-secondary .eb-toggle-slider{
+        background:${backgroundColorSecondary ? backgroundColorSecondary : backgroundColor} !important;
+    }
+    .${blockId}.eb-toggle-wrapper.eb-toggle-secondary .eb-toggle-controller{
+        background:${controllerColorSecondary ? controllerColorSecondary : controllerColor} !important;
+    }
 
 	`;
 

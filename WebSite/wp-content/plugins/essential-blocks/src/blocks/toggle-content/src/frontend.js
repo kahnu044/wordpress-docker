@@ -131,22 +131,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
         function showPrimary() {
             switcher.checked = false;
 
+            if (block.classList.contains('eb-toggle-secondary')) {
+                block.classList.remove('eb-toggle-secondary')
+                block.classList.add('eb-toggle-primary')
+            }
+
             // Fade out secondary content
             const secondaryContent = content.children[1];
             secondaryContent.classList.remove("active");
             secondaryContent.classList.add("inactive");
 
             // Wait for the transition to finish before setting display to none
-            secondaryContent.addEventListener('transitionend', function () {
-                if (secondaryContent.classList.contains("inactive")) {
-                    secondaryContent.style.display = 'none';
-                }
-            }, { once: true });
+            // secondaryContent.addEventListener('transitionend', function () {
+            //     if (secondaryContent.classList.contains("inactive")) {
+            //         secondaryContent.style.display = 'none';
+            //     }
+            // }, { once: true });
 
             // Show primary content
             const primaryContent = content.children[0];
             primaryContent.classList.remove("inactive");
-            primaryContent.style.display = 'block';
+            // primaryContent.style.display = 'block';
 
             setTimeout(function () {
                 const multiColumn = primaryContent.querySelector('.eb-mcpt-wrap');
@@ -171,6 +176,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         function showSecondary() {
             switcher.checked = true;
+
+            if (block.classList.contains('eb-toggle-primary')) {
+                block.classList.remove('eb-toggle-primary')
+                block.classList.add('eb-toggle-secondary')
+            }
+
             // Fade out primary content
             const primaryContent = content.children[0];
             const secondaryContent = content.children[1];
@@ -178,15 +189,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             primaryContent.classList.remove("active");
             primaryContent.classList.add("inactive");
 
-            // Wait for the transition to finish before setting display to none
-            primaryContent.addEventListener('transitionend', function () {
-                if (primaryContent.classList.contains("inactive")) {
-                    primaryContent.style.display = 'none';
-                }
-            }, { once: true });
-
             // Show secondary content
-            secondaryContent.style.display = 'block';
             secondaryContent.classList.remove("inactive");
 
             setTimeout(function () {

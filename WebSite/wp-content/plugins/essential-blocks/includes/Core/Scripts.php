@@ -94,7 +94,7 @@ class Scripts
             'essential-blocks-tweenMaxjs',
             'essential-blocks-patterns',
             'essential-blocks-store',
-            'essential-blocks-editor-breakpoint'
+            'essential-blocks-editor-breakpoint',
          ];
 
         if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) {

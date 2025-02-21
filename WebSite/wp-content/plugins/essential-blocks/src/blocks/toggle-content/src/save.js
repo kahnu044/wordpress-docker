@@ -7,7 +7,7 @@ import { InnerBlocks, RichText } from "@wordpress/block-editor";
  * Internal dependencies
  */
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -61,7 +61,7 @@ const Save = ({ attributes }) => {
         <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div
-                    className={`${blockId} eb-toggle-wrapper`}
+                    className={`${blockId} eb-toggle-wrapper eb-toggle-primary`}
                     data-init-content={initialContent}
                     data-size={switchSize}
                     data-switch-style={switchStyle}

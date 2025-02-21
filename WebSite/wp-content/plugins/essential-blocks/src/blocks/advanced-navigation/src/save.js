@@ -1,6 +1,6 @@
 import { InnerBlocks } from "@wordpress/block-editor";
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 export default function save({ attributes }) {
     const {
@@ -14,6 +14,7 @@ export default function save({ attributes }) {
         hamburgerCloseIconAlign,
         navAlign,
         navVerticalAlign,
+        version
     } = attributes;
 
     if (layout == "is-horizontal") {
@@ -26,7 +27,7 @@ export default function save({ attributes }) {
         <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div
-                    className={`${blockId} eb-advanced-navigation-wrapper ${layout} ${layoutPreset} ${layout == "is-horizontal" ? navAlign : navVerticalAlign
+                    className={`${blockId} eb-advanced-navigation-wrapper ${version} ${layout} ${layoutPreset} ${layout == "is-horizontal" ? navAlign : navVerticalAlign
                         }${showDropdownIcon ? "" : "remove-dropdown-icon"} ${navBtnType === true ? "responsive-icon" : "responsive-text"
                         } ${hamburgerCloseIconAlign}`}
                 >

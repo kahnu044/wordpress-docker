@@ -389,6 +389,8 @@ export default function Style(props) {
         // noBorder: true,
     });
 
+
+    // transition:all 0.5s, ${contentBgTransitionStyle}, ${contentBdShdTransitionStyle};
     // styles related to generateBorderShadowStyles end
 
     // all common (editor&frontEnd) css styles for large screen width (desktop/laptop) in strings ⬇
@@ -577,7 +579,7 @@ export default function Style(props) {
 			${contentPaddingDesktop}
 			${contentBackgroundStylesDesktop}
 			${contentBdShdStyesDesktop}
-			transition:all 0.5s, ${contentBgTransitionStyle}, ${contentBdShdTransitionStyle};
+
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-contents .eb-tab-wrapper[data-tab-parent-id="${blockId}"]:hover{
@@ -877,10 +879,6 @@ export default function Style(props) {
             <style>
                 {!isClickTab &&
                     `
-                    .${blockId}.eb-advanced-tabs-wrapper .wp-block-essential-blocks-tab:not(:first-child) .eb-tab-wrapper,
-                    .${blockId}.eb-advanced-tabs-wrapper .wp-block:not(:first-child) .eb-tab-wrapper {
-                        display: none;
-                    }
                     a.info-click-link{
                         pointer-events: none;
                     }

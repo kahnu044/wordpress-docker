@@ -2,6 +2,7 @@
 
 namespace EssentialBlocks\Integrations;
 
+use EssentialBlocks\Utils\Helper;
 use EssentialBlocks\Utils\HttpRequest;
 
 class GoogleMap extends ThirdPartyIntegration {
@@ -15,6 +16,10 @@ class GoogleMap extends ThirdPartyIntegration {
 				),
 				'google_map_api_key_save' => array(
 					'callback' => 'google_map_api_key_save_callback',
+					'public'   => false,
+				),
+				'google_map_api_key_validation' => array(
+					'callback' => 'google_map_api_key_validation',
 					'public'   => false,
 				),
 			)
@@ -71,4 +76,24 @@ class GoogleMap extends ThirdPartyIntegration {
 
 		exit;
 	}
+
+
+    public function google_map_api_key_validation()
+    {
+        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+            die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
+        }
+        if ( ! current_user_can( 'activate_plugins' ) ) {
+            wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
+        }
+
+        $ebGoogleMapUrl  = sanitize_text_field( Helper::is_isset( 'ebGoogleMapUrl' ) );
+
+        // Registration for client id and client secret
+        $response = HttpRequest::get_instance()->get(
+            $ebGoogleMapUrl,
+        );
+
+        wp_send_json( $response );
+    }
 }

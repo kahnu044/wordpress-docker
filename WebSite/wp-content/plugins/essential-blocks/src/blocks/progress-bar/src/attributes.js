@@ -20,7 +20,7 @@ import {
     generateTypographyAttributes,
     generateResponsiveRangeAttributes,
     generateDimensionsAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     resOption: {
@@ -59,6 +59,21 @@ const attributes = {
     progress: {
         type: "number",
         default: 50,
+    },
+    totalRange: {
+        type: "number",
+        default: 100,
+    },
+    absoluteProgress: {
+        type: "number",
+    },
+    valueDivider: {
+        type: "string",
+        default: "/",
+    },
+    valueType: {
+        type: "string",
+        default: "percentage",
     },
     displayProgress: {
         type: "boolean",

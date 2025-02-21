@@ -285,5 +285,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
             });
         }
 
+        // Run re-layout when images load dynamically (if lazy loading affects)
+        document.addEventListener("lazyloaded", function () {
+            iso?.layout();
+        });
+
+        // Ensure layout is correct on window resize
+        window.addEventListener("resize", function () {
+            iso?.layout();
+        });
+
     }
 });

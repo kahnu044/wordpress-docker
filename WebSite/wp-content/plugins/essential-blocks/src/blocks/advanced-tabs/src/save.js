@@ -1,8 +1,5 @@
 import { InnerBlocks, RichText } from "@wordpress/block-editor";
-import {
-    BlockProps,
-    EBDisplayIcon
-} from "@essential-blocks/controls";
+import { BlockProps, EBDisplayIcon } from "@essential-blocks/controls";
 export default function save({ attributes }) {
     const {
         blockId,
@@ -12,12 +9,12 @@ export default function save({ attributes }) {
         classHook,
         tagName,
         closeAllTabs,
-        isMinHeightAsTitle
+        isMinHeightAsTitle,
     } = attributes;
 
     const dataAttributes = {
-        'data-min-height': isMinHeightAsTitle,
-        ...(closeAllTabs && { 'data-close-all-tabs': closeAllTabs })
+        "data-min-height": isMinHeightAsTitle,
+        ...(closeAllTabs && { "data-close-all-tabs": closeAllTabs }),
     };
 
     return (
@@ -43,14 +40,19 @@ export default function save({ attributes }) {
                                         ? { id: item.customId }
                                         : {})}
                                     className={
-                                        closeAllTabs !== true && item.isDefault ? "active" : "inactive"
+                                        closeAllTabs !== true && item.isDefault
+                                            ? "active"
+                                            : "inactive"
                                     }
                                 >
                                     {isMediaOn && (
                                         <>
                                             {item.media === "icon" &&
                                                 item.icon && (
-                                                    <EBDisplayIcon icon={item.icon} className={"tabIcon"} />
+                                                    <EBDisplayIcon
+                                                        icon={item.icon}
+                                                        className={"tabIcon"}
+                                                    />
                                                 )}
                                             {item.media === "image" &&
                                                 item.imgUrl && (
@@ -73,6 +75,6 @@ export default function save({ attributes }) {
                     </div>
                 </div>
             </div>
-        </BlockProps.Save >
+        </BlockProps.Save>
     );
 }

@@ -52,6 +52,8 @@ use EssentialBlocks\Blocks\ImageComparison;
 use EssentialBlocks\Blocks\TableOfContents;
 use EssentialBlocks\Blocks\InteractivePromo;
 use EssentialBlocks\Blocks\AdvancedNavigation;
+use EssentialBlocks\Blocks\LottieAnimation;
+
 
 $testArr = [  ];
 
@@ -610,6 +612,17 @@ $new_blocks = [
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/breadcrumbs/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-breadcrumbs/',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/breadcrumbs/icon.svg'
+    ],
+    'lottie_animation'                => [
+        'label'      => __( 'Lottie Animation', 'essential-blocks' ),
+        'value'      => 'lottie_animation',
+        'visibility' => 'true',
+        'status'     => 'new',
+        'category'   => 'creative',
+        'object'     => LottieAnimation::get_instance(),
+        'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/lottie-animation/',
+        'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-lottie-animation/',
+        'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/lottie-animation/icon.svg'
      ]
  ];
 
@@ -717,7 +730,7 @@ $pro_blocks = [
         'demo'       => ESSENTIAL_BLOCKS_SITE_URL . 'demo/offcanvas/',
         'doc'        => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-offcanvas/',
         'icon'       => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/images/blocks-icon/offcanvas.svg'
-     ]
+    ]
  ];
 
 return array_merge( $free_blocks, $new_blocks, $pro_blocks );

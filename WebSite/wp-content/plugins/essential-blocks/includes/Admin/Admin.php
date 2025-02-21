@@ -757,7 +757,7 @@
             <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
             <?php
                 printf(
-                            __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.2.0</strong> with new & improved <strong>Filterable Gallery</strong> with new presets, styling controls & many more. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
+                            __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
                             esc_url( 'https://essential-blocks.com/changelog/' )
                         );
                     ?>

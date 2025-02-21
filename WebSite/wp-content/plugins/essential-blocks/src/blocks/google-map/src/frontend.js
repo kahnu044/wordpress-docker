@@ -21,7 +21,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let themeSource = map.getAttribute("data-theme-source");
         let googleMapStyle = map.getAttribute("data-google-style");
         let snazzyMapStyle = map.getAttribute("data-snazzy-style");
-        let markers = JSON.parse(map.getAttribute("data-marker"));
+
+        let markersAttribute = map.getAttribute("data-marker");
+        let markers;
+
+        try {
+            let parsedData = JSON.parse(markersAttribute);
+            if (Array.isArray(parsedData)) {
+                markers = parsedData;
+            } else {
+                let decodedData = atob(markersAttribute);
+                markers = JSON.parse(decodedData);
+            }
+        } catch (e) {
+            let decodedData = atob(markersAttribute);
+            markers = JSON.parse(decodedData);
+        }
 
         const googleMap = new window.google.maps.Map(map, {
             center: {
@@ -64,11 +79,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 });
 
                 if (marker.title || marker.content) {
-                    const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${
-                        marker.title
-                    }</h6><div class="eb-google-map-overview-content">${
-                        marker.content ? `<p>${marker.content}</p>` : ""
-                    }</div></div>`;
+                    const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${marker.title
+                        }</h6><div class="eb-google-map-overview-content">${marker.content ? `<p>${marker.content}</p>` : ""
+                        }</div></div>`;
 
                     bounds.extend(position);
                     const infowindow = new window.google.maps.InfoWindow({

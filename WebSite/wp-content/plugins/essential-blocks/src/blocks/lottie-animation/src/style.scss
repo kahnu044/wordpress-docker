@@ -1,0 +1,49 @@
+.eb-lottie-animation-wrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+
+.wp-block-essential-blocks-lottie-animation {
+	.components-placeholder__label {
+		font-size: 22px;
+
+		svg {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}
+
+.eb-upload-json {
+	width: 100%;
+	background: #f0f0f1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #50575e;
+	font-size: 13px !important;
+	line-height: 1.4em !important;
+	margin-bottom: 10px;
+	text-transform: none !important;
+	font-weight: 400 !important;
+	height: 110px;
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	justify-content: space-between;
+
+	svg {
+		height: 25px;
+		width: 25px;
+		margin-top: 30px;
+	}
+
+	span {
+		margin-top: 20px;
+		background: #d4d4d4;
+		display: inline-block;
+		width: 100%;
+		padding: 7px;
+	}
+}

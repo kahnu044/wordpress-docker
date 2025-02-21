@@ -40,7 +40,7 @@ const Edit = (props) => {
     return (
         <BlockProps.Edit {...enhancedProps}>
             <div
-                className={`eb-tab-wrapper`}
+                className={`eb-tab-wrapper eb-tab-wrapper-editor`}
                 data-tab-id={tabId}
                 data-tab-parent-id={tabParentId}
             >

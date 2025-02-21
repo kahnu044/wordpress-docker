@@ -21,7 +21,8 @@ import {
     GradientColorControl,
     InspectorPanel,
     DynamicInputControl,
- } from "@essential-blocks/controls";
+    ButtonGroupControl
+} from "@essential-blocks/controls";
 
 import {
     LAYOUT,
@@ -34,6 +35,7 @@ import {
     BOX_HEIGHT,
     WRAPPER_MARGIN,
     TITLE_SPACE,
+    VALUE_TYPE
 } from "./constants";
 import {
     typoPrefix_title,
@@ -63,6 +65,9 @@ const Inspector = ({ attributes, setAttributes }) => {
         prefix,
         suffix,
         prefixColor,
+        totalRange,
+        valueDivider,
+        valueType
     } = attributes;
 
     return (
@@ -93,19 +98,19 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                         {(layout === "line" ||
                             layout === "line_rainbow") && (
-                            <ToggleControl
-                                label={__(
-                                    "Show Inline",
-                                    "essential-blocks"
-                                )}
-                                checked={showInline}
-                                onChange={() => {
-                                    setAttributes({
-                                        showInline: !showInline,
-                                    });
-                                }}
-                            />
-                        )}
+                                <ToggleControl
+                                    label={__(
+                                        "Show Inline",
+                                        "essential-blocks"
+                                    )}
+                                    checked={showInline}
+                                    onChange={() => {
+                                        setAttributes({
+                                            showInline: !showInline,
+                                        });
+                                    }}
+                                />
+                            )}
                         <Divider />
                         <DynamicInputControl
                             label={__(
@@ -148,6 +153,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                         />
                         <Divider />
+                        <ButtonGroupControl
+                            label={__("Value Type", "essential-blocks")}
+                            attrName={'valueType'}
+                            options={VALUE_TYPE}
+                            currentValue={valueType}
+                        />
                         <RangeControl
                             label={__(
                                 "Counter Value",
@@ -161,6 +172,38 @@ const Inspector = ({ attributes, setAttributes }) => {
                             min={0}
                             max={100}
                         />
+
+                        {valueType === 'absolute' && (
+                            <>
+                                <RangeControl
+                                    label={__(
+                                        "Total Range",
+                                        "essential-blocks"
+                                    )}
+                                    value={totalRange}
+                                    onChange={(totalRange) =>
+                                        setAttributes({ totalRange })
+                                    }
+                                    step={1}
+                                    min={0}
+                                    max={valueType === 'percentage' ? 100 : 10000}
+                                />
+                                <DynamicInputControl
+                                    label={__(
+                                        "Divider",
+                                        "essential-blocks"
+                                    )}
+                                    attrName="valueDivider"
+                                    inputValue={valueDivider}
+                                    setAttributes={setAttributes}
+                                    onChange={(valueDivider) =>
+                                        setAttributes({
+                                            valueDivider: valueDivider,
+                                        })
+                                    }
+                                />
+                            </>
+                        )}
                         <ToggleControl
                             label={__(
                                 "Show Counter?",
@@ -173,89 +216,90 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 });
                             }}
                         />
+
                         {(layout === "line" ||
                             layout === "line_rainbow") && (
-                            <>
-                                <Divider />
-                                <ToggleControl
-                                    label={__(
-                                        "Show Stripe",
-                                        "essential-blocks"
-                                    )}
-                                    checked={showStripe}
-                                    onChange={() => {
-                                        setAttributes({
-                                            showStripe: !showStripe,
-                                        });
-                                    }}
-                                />
-                                {showStripe && (
-                                    <SelectControl
+                                <>
+                                    <Divider />
+                                    <ToggleControl
                                         label={__(
-                                            "Stripe Animation",
+                                            "Show Stripe",
                                             "essential-blocks"
                                         )}
-                                        value={stripeAnimation}
-                                        options={[
-                                            {
-                                                label:
-                                                    "Left To Right",
-                                                value: "normal",
-                                            },
-                                            {
-                                                label:
-                                                    "Right To Left",
-                                                value:
-                                                    "reverse",
-                                            },
-                                            {
-                                                label:
-                                                    "Disabled",
-                                                value: "none",
-                                            },
-                                        ]}
-                                        onChange={(
-                                            stripeAnimation
-                                        ) =>
+                                        checked={showStripe}
+                                        onChange={() => {
                                             setAttributes({
-                                                stripeAnimation,
-                                            })
-                                        }
+                                                showStripe: !showStripe,
+                                            });
+                                        }}
                                     />
-                                )}
-                            </>
-                        )}
+                                    {showStripe && (
+                                        <SelectControl
+                                            label={__(
+                                                "Stripe Animation",
+                                                "essential-blocks"
+                                            )}
+                                            value={stripeAnimation}
+                                            options={[
+                                                {
+                                                    label:
+                                                        "Left To Right",
+                                                    value: "normal",
+                                                },
+                                                {
+                                                    label:
+                                                        "Right To Left",
+                                                    value:
+                                                        "reverse",
+                                                },
+                                                {
+                                                    label:
+                                                        "Disabled",
+                                                    value: "none",
+                                                },
+                                            ]}
+                                            onChange={(
+                                                stripeAnimation
+                                            ) =>
+                                                setAttributes({
+                                                    stripeAnimation,
+                                                })
+                                            }
+                                        />
+                                    )}
+                                </>
+                            )}
 
                         {(layout === "half_circle" ||
                             layout === "half_circle_fill") && (
-                            <>
-                                <Divider />
-                                <TextControl
-                                    label={__(
-                                        "Prefix",
-                                        "essential-blocks"
-                                    )}
-                                    value={prefix}
-                                    onChange={(newPrefix) =>
-                                        setAttributes({
-                                            prefix: newPrefix,
-                                        })
-                                    }
-                                />
-                                <TextControl
-                                    label={__(
-                                        "Suffix",
-                                        "essential-blocks"
-                                    )}
-                                    value={suffix}
-                                    onChange={(newSuffix) =>
-                                        setAttributes({
-                                            suffix: newSuffix,
-                                        })
-                                    }
-                                />
-                            </>
-                        )}
+                                <>
+                                    <Divider />
+                                    <TextControl
+                                        label={__(
+                                            "Prefix",
+                                            "essential-blocks"
+                                        )}
+                                        value={prefix}
+                                        onChange={(newPrefix) =>
+                                            setAttributes({
+                                                prefix: newPrefix,
+                                            })
+                                        }
+                                    />
+                                    <TextControl
+                                        label={__(
+                                            "Suffix",
+                                            "essential-blocks"
+                                        )}
+                                        value={suffix}
+                                        onChange={(newSuffix) =>
+                                            setAttributes({
+                                                suffix: newSuffix,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__(
@@ -266,66 +310,66 @@ const Inspector = ({ attributes, setAttributes }) => {
                     >
                         {(layout === "line" ||
                             layout === "line_rainbow") && (
-                            <>
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Width",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={
-                                        PROGRESSBAR_WIDTH
-                                    }
-                                    units={PX_PERCENTAGE}
-                                    min={100}
-                                    max={1000}
-                                    step={1}
-                                />
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Height",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={
-                                        PROGRESSBAR_HEIGHT
-                                    }
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    noUnits
-                                />
-                            </>
-                        )}
+                                <>
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Width",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={
+                                            PROGRESSBAR_WIDTH
+                                        }
+                                        units={PX_PERCENTAGE}
+                                        min={100}
+                                        max={1000}
+                                        step={1}
+                                    />
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Height",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={
+                                            PROGRESSBAR_HEIGHT
+                                        }
+                                        min={0}
+                                        max={100}
+                                        step={1}
+                                        noUnits
+                                    />
+                                </>
+                            )}
                         {(layout === "circle" ||
                             layout === "circle_fill" ||
                             layout === "half_circle" ||
                             layout === "half_circle_fill") && (
-                            <>
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Size",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={
-                                        PROGRESSBAR_SIZE
-                                    }
-                                    min={50}
-                                    max={500}
-                                    step={1}
-                                    noUnits
-                                />
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Stroke Width",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={STROKE_WIDTH}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    noUnits
-                                />
-                            </>
-                        )}
+                                <>
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Size",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={
+                                            PROGRESSBAR_SIZE
+                                        }
+                                        min={50}
+                                        max={500}
+                                        step={1}
+                                        noUnits
+                                    />
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Stroke Width",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={STROKE_WIDTH}
+                                        min={0}
+                                        max={100}
+                                        step={1}
+                                        noUnits
+                                    />
+                                </>
+                            )}
                         {layout === "box" && (
                             <>
                                 <ResponsiveRangeController
@@ -391,107 +435,107 @@ const Inspector = ({ attributes, setAttributes }) => {
                     >
                         {(layout === "line" ||
                             layout === "line_rainbow") && (
-                            <>
-                                <ColorControl
-                                    label={__(
-                                        "Background Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={strokeColor}
-                                    attributeName={'strokeColor'}
-                                />
-                                {layout !== "line_rainbow" && (
-                                    <>
-                                        <BaseControl>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "Fill Color",
+                                <>
+                                    <ColorControl
+                                        label={__(
+                                            "Background Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={strokeColor}
+                                        attributeName={'strokeColor'}
+                                    />
+                                    {layout !== "line_rainbow" && (
+                                        <>
+                                            <BaseControl>
+                                                <h3 className="eb-control-title">
+                                                    {__(
+                                                        "Fill Color",
+                                                        "essential-blocks"
+                                                    )}
+                                                </h3>
+                                            </BaseControl>
+                                            <ToggleControl
+                                                label={__(
+                                                    "Show Fill Gradient",
                                                     "essential-blocks"
                                                 )}
-                                            </h3>
-                                        </BaseControl>
-                                        <ToggleControl
-                                            label={__(
-                                                "Show Fill Gradient",
-                                                "essential-blocks"
+                                                checked={
+                                                    isProgressGradient
+                                                }
+                                                onChange={() => {
+                                                    setAttributes({
+                                                        isProgressGradient: !isProgressGradient,
+                                                    });
+                                                }}
+                                            />
+                                            {isProgressGradient || (
+                                                <ColorControl
+                                                    label={__(
+                                                        "Color",
+                                                        "essential-blocks"
+                                                    )}
+                                                    color={
+                                                        progressColor
+                                                    }
+                                                    attributeName={'progressColor'}
+                                                />
                                             )}
-                                            checked={
-                                                isProgressGradient
-                                            }
-                                            onChange={() => {
-                                                setAttributes({
-                                                    isProgressGradient: !isProgressGradient,
-                                                });
-                                            }}
-                                        />
-                                        {isProgressGradient || (
-                                            <ColorControl
-                                                label={__(
-                                                    "Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    progressColor
-                                                }
-                                                attributeName={'progressColor'}
-                                            />
-                                        )}
-                                        {isProgressGradient && (
-                                            <GradientColorControl
-                                                label={__(
-                                                    "Gradient Color",
-                                                    "essential-blocks"
-                                                )}
-                                                gradientColor={
-                                                    progressGradient
-                                                }
-                                                onChange={(
-                                                    progressGradient
-                                                ) =>
-                                                    setAttributes(
-                                                        {
-                                                            progressGradient,
-                                                        }
-                                                    )
-                                                }
-                                            />
-                                        )}
-                                    </>
-                                )}
-                            </>
-                        )}
+                                            {isProgressGradient && (
+                                                <GradientColorControl
+                                                    label={__(
+                                                        "Gradient Color",
+                                                        "essential-blocks"
+                                                    )}
+                                                    gradientColor={
+                                                        progressGradient
+                                                    }
+                                                    onChange={(
+                                                        progressGradient
+                                                    ) =>
+                                                        setAttributes(
+                                                            {
+                                                                progressGradient,
+                                                            }
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </>
+                                    )}
+                                </>
+                            )}
                         {(layout === "circle" ||
                             layout === "circle_fill" ||
                             layout === "half_circle" ||
                             layout === "half_circle_fill") && (
-                            <>
-                                <ColorControl
-                                    label={__(
-                                        "Background Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={backgroundColor}
-                                    attributeName={'backgroundColor'}
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Fill Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={progressColor}
-                                    attributeName={'progressColor'}
-                                />
+                                <>
+                                    <ColorControl
+                                        label={__(
+                                            "Background Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={backgroundColor}
+                                        attributeName={'backgroundColor'}
+                                    />
+                                    <ColorControl
+                                        label={__(
+                                            "Fill Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={progressColor}
+                                        attributeName={'progressColor'}
+                                    />
 
-                                <ColorControl
-                                    label={__(
-                                        "Stroke Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={strokeColor}
-                                    attributeName={'strokeColor'}
-                                />
-                            </>
-                        )}
+                                    <ColorControl
+                                        label={__(
+                                            "Stroke Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={strokeColor}
+                                        attributeName={'strokeColor'}
+                                    />
+                                </>
+                            )}
                         {layout === "box" && (
                             <>
                                 <ColorControl
@@ -618,38 +662,38 @@ const Inspector = ({ attributes, setAttributes }) => {
                     </InspectorPanel.PanelBody>
                     {(layout === "half_circle" ||
                         layout === "half_circle_fill") && (
-                        <>
-                            <InspectorPanel.PanelBody
-                                title={__(
-                                    "Prefix & Suffix",
-                                    "progress-bar"
-                                )}
-                                initialOpen={false}
-                            >
-                                <TypographyDropdown
-                                    baseLabel={__(
-                                        "Typography",
-                                        "essential-blocks"
+                            <>
+                                <InspectorPanel.PanelBody
+                                    title={__(
+                                        "Prefix & Suffix",
+                                        "progress-bar"
                                     )}
-                                    typographyPrefixConstant={
-                                        typoPrefix_prefix
-                                    }
-                                />
-                                <ColorControl
-                                    label={__(
-                                        "Color",
-                                        "essential-blocks"
-                                    )}
-                                    color={prefixColor}
-                                    attributeName={'prefixColor'}
-                                />
-                            </InspectorPanel.PanelBody>
-                        </>
-                    )}
+                                    initialOpen={false}
+                                >
+                                    <TypographyDropdown
+                                        baseLabel={__(
+                                            "Typography",
+                                            "essential-blocks"
+                                        )}
+                                        typographyPrefixConstant={
+                                            typoPrefix_prefix
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__(
+                                            "Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={prefixColor}
+                                        attributeName={'prefixColor'}
+                                    />
+                                </InspectorPanel.PanelBody>
+                            </>
+                        )}
                 </InspectorPanel.Style>
             </InspectorPanel>
         </>
-        
+
     );
 };
 

@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { RichText, InnerBlocks } from "@wordpress/block-editor";
-import { dispatch, useSelect } from "@wordpress/data";
+import { useSelect } from "@wordpress/data";
 import { useEffect, useState, useRef, memo, useId } from "@wordpress/element";
 
 const { times } = lodash;
@@ -13,22 +13,16 @@ const { times } = lodash;
 import {
     EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
 } from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from "./attributes";
 
 const Edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        clientId,
-        isSelected,
-    } = props;
+    const { attributes, setAttributes, clientId, isSelected } = props;
     const {
         blockId,
-        tabChildCount,
         tabTitles,
         isMediaOn,
         layout,
@@ -40,68 +34,70 @@ const Edit = (props) => {
     const tabWrapRef = useRef(null);
     const tabHeaderWrapRef = useRef(null);
 
-    const [activeTabId, setActiveTabId] = useState(false);
-    const [isClickTab, setIsClickTab] = useState(false);
-    const [contentMinHeight, setContentMinHeight] = useState("auto");
-    const renderId = useId()
-
     const activeDefaultTabId = (
         tabTitles.find((item) => item.isDefault) || { id: "1" }
     ).id;
+
+    const [activeTabId, setActiveTabId] = useState(activeDefaultTabId);
+    const [isClickTab, setIsClickTab] = useState(false);
+    const [contentMinHeight, setContentMinHeight] = useState("auto");
+    const renderId = useId();
+
 
     const TEMPLATE = [
         [
             "essential-blocks/tab",
             {
-                tabId: '1',
-                tabParentId: blockId
+                tabId: "1",
+                tabParentId: blockId,
             },
         ],
         [
             "essential-blocks/tab",
             {
-                tabId: '2',
-                tabParentId: blockId
+                tabId: "2",
+                tabParentId: blockId,
             },
         ],
         [
             "essential-blocks/tab",
             {
-                tabId: '3',
-                tabParentId: blockId
+                tabId: "3",
+                tabParentId: blockId,
             },
-        ]
-    ]
+        ],
+    ];
 
-    const handleTabTitleClick = (id) => {
-        setIsClickTab(true);
-
+    useEffect(() => {
         const tabsParentEl = (tabWrapRef || { current: false }).current;
 
-        if (!tabsParentEl) return false;
+        if (!tabsParentEl) return;
 
         const allTabChildWraps = tabsParentEl.querySelectorAll(
-            `.eb-tab-wrapper[data-tab-parent-id="${blockId}"]`
+            `.eb-tab-wrapper`
         );
 
-        if (allTabChildWraps.length === 0) return false;
+        if (allTabChildWraps.length === 0) return;
 
         for (const tabWrapDiv of allTabChildWraps) {
             const tabId = tabWrapDiv.dataset.tabId;
-
-            if (tabId === id) {
-                tabWrapDiv.style.display = "block";
-                tabWrapDiv.style.animation = "fadeIn 0.3s";
+            if (tabId === activeTabId) {
+                tabWrapDiv.classList.add("active");
+                tabWrapDiv.classList.remove("inactive");
             } else {
-                tabWrapDiv.style.display = "none";
+                tabWrapDiv.classList.add("inactive");
+                tabWrapDiv.classList.remove("active");
             }
         }
+    },[[tabWrapRef, activeTabId]]);
 
+    const handleTabTitleClick = (id) => {
+        setIsClickTab(true);
         setActiveTabId(`${id}`);
     };
 
     const onTabTitleChange = (text, index) => {
-        const tabTitlesCopy = tabTitles.map(item => ({ ...item }));
+        const tabTitlesCopy = tabTitles.map((item) => ({ ...item }));
 
         const newTabTitles = tabTitlesCopy.map((item, i) => {
             if (i === index) {
@@ -116,44 +112,52 @@ const Edit = (props) => {
 
     //Inline Min Height
     useEffect(() => {
-        if (layout === 'vertical' && isMinHeightAsTitle && tabHeaderWrapRef.current) {
-            setContentMinHeight(tabHeaderWrapRef.current.offsetHeight + 'px');
+        if (
+            layout === "vertical" &&
+            isMinHeightAsTitle &&
+            tabHeaderWrapRef.current
+        ) {
+            setContentMinHeight(tabHeaderWrapRef.current.offsetHeight + "px");
+        } else {
+            setContentMinHeight("auto");
         }
-        else {
-            setContentMinHeight('auto')
-        }
-    }, [attributes])
+    }, [attributes]);
 
     const { innerBlocks } = useSelect(
-        (select) => select("core/block-editor").getBlocksByClientId(clientId)[0]
+        (select) =>
+            select("core/block-editor").getBlocksByClientId(clientId)[0],
     );
-    const innerBlocksRef = useRef(innerBlocks)
+    const innerBlocksRef = useRef(innerBlocks);
     //
     useEffect(() => {
-
         if (innerBlocks.length > innerBlocksRef.current.length) {
-            innerBlocksRef.current = innerBlocks
+            innerBlocksRef.current = innerBlocks;
         }
         if (innerBlocks.length < innerBlocksRef.current.length) {
-            const difference = innerBlocksRef.current.filter(item1 =>
-                !innerBlocks.some(item2 => item2.clientId === item1.clientId)
+            const difference = innerBlocksRef.current.filter(
+                (item1) =>
+                    !innerBlocks.some(
+                        (item2) => item2.clientId === item1.clientId,
+                    ),
             );
             if (difference.length === 1) {
-                const removedTabId = difference[0]?.attributes?.tabId
-                const updatedTitles = tabTitles.filter((item) => item.id !== removedTabId)
+                const removedTabId = difference[0]?.attributes?.tabId;
+                const updatedTitles = tabTitles.filter(
+                    (item) => item.id !== removedTabId,
+                );
                 setAttributes({
                     tabTitles: updatedTitles,
-                    tabChildCount: updatedTitles.length
-                })
+                    tabChildCount: updatedTitles.length,
+                });
             }
-            innerBlocksRef.current = innerBlocks
+            innerBlocksRef.current = innerBlocks;
         }
     }, [innerBlocks]);
 
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-advanced-tabs',
-        style: <Style {...props} isClickTab={isClickTab} />
+        blockPrefix: "eb-advanced-tabs",
+        style: <Style {...props} isClickTab={isClickTab} />,
     };
 
     return (
@@ -191,7 +195,7 @@ const Edit = (props) => {
                                             className={
                                                 (activeTabId ||
                                                     activeDefaultTabId) ===
-                                                    item.id
+                                                item.id
                                                     ? "active"
                                                     : "inactive"
                                             }
@@ -200,7 +204,10 @@ const Edit = (props) => {
                                                 <>
                                                     {item.media === "icon" &&
                                                         item.icon && (
-                                                            <EBDisplayIcon icon={item.icon} className="tabIcon" />
+                                                            <EBDisplayIcon
+                                                                icon={item.icon}
+                                                                className="tabIcon"
+                                                            />
                                                         )}
                                                     {item.media === "image" &&
                                                         item.imgUrl && (
@@ -220,7 +227,7 @@ const Edit = (props) => {
                                                 onChange={(text) =>
                                                     onTabTitleChange(
                                                         text,
-                                                        index
+                                                        index,
                                                     )
                                                 }
                                             />
@@ -229,10 +236,7 @@ const Edit = (props) => {
                                 })}
                             </ul>
                         </div>
-                        <div
-                            key={renderId}
-                            className={`eb-tabs-contents`}
-                        >
+                        <div key={renderId} className={`eb-tabs-contents`}>
                             {/* Min Height Style if content min height equals to Heading */}
                             <style>
                                 {`
@@ -242,7 +246,7 @@ const Edit = (props) => {
                                 `}
                             </style>
                             <InnerBlocks
-                                templateLock="insert"
+                                templateLock={'insert'}
                                 template={TEMPLATE}
                                 allowedBlocks={["essential-blocks/tab"]}
                             />
@@ -252,6 +256,6 @@ const Edit = (props) => {
             </BlockProps.Edit>
         </>
     );
-}
+};
 
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

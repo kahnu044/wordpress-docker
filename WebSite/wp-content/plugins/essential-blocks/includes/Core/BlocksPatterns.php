@@ -47,8 +47,8 @@ class BlocksPatterns
      */
     public function init()
     {
+        $this->set_api_url();
         if ( current_user_can( 'edit_posts' ) ) {
-            $this->set_api_url();
             $this->register_category();
             $this->register_patterns();
         }
@@ -57,17 +57,18 @@ class BlocksPatterns
         }
     }
 
-	/**
-	 * Register category
-	 *
-	 * @return void
-	 */
-	public function register_category() {
-		register_block_pattern_category(
-			$this->category,
-			array( 'label' => __( 'Essential blocks', 'essential-blocks' ) )
-		);
-	}
+    /**
+     * Register category
+     *
+     * @return void
+     */
+    public function register_category()
+    {
+        register_block_pattern_category(
+            $this->category,
+            [ 'label' => __( 'Essential blocks', 'essential-blocks' ) ]
+        );
+    }
 
     /**
      * Register category

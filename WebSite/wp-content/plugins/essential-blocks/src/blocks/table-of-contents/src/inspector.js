@@ -60,7 +60,9 @@ import {
     SCROLL_OPTIONS,
     STICKY_POSITION,
     PRESET,
-    HEADING
+    HEADING,
+    ALIGNMENTS_VERTICAL,
+    ALIGNMENTS_HORIZONTAL
 } from "./constants";
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -119,6 +121,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         closeBtnSize,
         closeIconSize,
         enableHighlight,
+        alignment
     } = attributes;
 
     const [options, setOptions] = useState(HEADERS);
@@ -135,6 +138,12 @@ const Inspector = ({ attributes, setAttributes }) => {
             setAttributes({ displayTitle: true, collapsible: true });
         }
     }, [isSticky]);
+
+    useEffect(() => {
+        if (stickyPosition === 'top' || stickyPosition === 'bottom') {
+            setAttributes({ alignment: 'align-custom' });
+        }
+    }, [stickyPosition]);
 
     const setDefaultVisible = () => {
         let defaultOptions = [];
@@ -1029,24 +1038,33 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     />
                                 </ResetControl>
                             </div>
-                            <RangeControl
-                                label={`${stickyPosition === 'left' || stickyPosition === 'right'
-                                    ? __("Top Space", "essential-blocks")
-                                    : __("Left Space", "essential-blocks")
-                                    }`}
-                                help={__(
-                                    "Visible on frontend only",
-                                    "essential-blocks"
-                                )}
-                                value={topSpace}
-                                onChange={(topSpace) =>
-                                    setAttributes({
-                                        topSpace,
-                                    })
-                                }
-                                min={0}
-                                max={100}
+                            <ButtonGroupControl
+                                label={__("Alignment", "essential-blocks")}
+                                options={(stickyPosition === 'left' || stickyPosition === 'right') ? ALIGNMENTS_VERTICAL : ALIGNMENTS_HORIZONTAL}
+                                attrName={'alignment'}
+                                currentValue={alignment}
                             />
+
+                            {alignment === 'align-custom' && (
+                                <RangeControl
+                                    label={`${stickyPosition === 'left' || stickyPosition === 'right'
+                                        ? __("Top Space", "essential-blocks")
+                                        : __("Left Space", "essential-blocks")
+                                        }`}
+                                    help={__(
+                                        "Visible on frontend only",
+                                        "essential-blocks"
+                                    )}
+                                    value={topSpace}
+                                    onChange={(topSpace) =>
+                                        setAttributes({
+                                            topSpace,
+                                        })
+                                    }
+                                    min={0}
+                                    max={100}
+                                />
+                            )}
 
                             <InspectorPanel.PanelBody
                                 title={__(

@@ -12,7 +12,7 @@ import {
     BaseControl,
     ButtonGroup,
     TextControl,
-    PanelRow
+    PanelRow,
 } from "@wordpress/components";
 
 /**
@@ -29,7 +29,7 @@ import {
     InspectorPanel,
     SortControl,
     ImageAvatar,
-    EBIconPicker
+    EBIconPicker,
 } from "@essential-blocks/controls";
 
 import {
@@ -103,7 +103,7 @@ function Inspector(props) {
         enableResponsiveLayout,
         verticalToHorizontal,
         tagName,
-        closeAllTabs
+        closeAllTabs,
     } = attributes;
 
     //
@@ -126,8 +126,8 @@ function Inspector(props) {
     };
 
     const onDeleteTab = (index) => {
-        deleteTab(clientId, setAttributes, tabTitles, index)
-    }
+        deleteTab(clientId, setAttributes, tabTitles, index);
+    };
 
     const getTabsComponents = () => {
         const onTabChange = (key, value, position) => {
@@ -147,16 +147,13 @@ function Inspector(props) {
         };
 
         const handleDefaultActive = (id) => {
-            const newTabTitles = tabTitles.map((item) => {
-                if (item.id === id) {
-                    item.isDefault = !item.isDefault;
-                } else {
-                    item.isDefault = false;
-                }
-                return item;
-            });
 
-            setAttributes({ tabTitles: newTabTitles });
+            const newTabTitlesUpdate = attributes.tabTitles.map((item) => ({
+                ...item,
+                isDefault: item.id === id,
+            }));
+
+            setAttributes({ tabTitles: newTabTitlesUpdate });
         };
 
         return attributes.tabTitles.map((each, i) => (
@@ -189,11 +186,7 @@ function Inspector(props) {
                             isSecondary={each.media !== item.value}
                             isPrimary={each.media === item.value}
                             onClick={() => {
-                                onTabChange(
-                                    "media",
-                                    item.value,
-                                    i
-                                )
+                                onTabChange("media", item.value, i);
                             }}
                         >
                             {item.label}
@@ -218,12 +211,9 @@ function Inspector(props) {
                             <MediaUpload
                                 onSelect={({ id, url }) => {
                                     onTabChange(
-                                        [
-                                            "imgId",
-                                            "imgUrl",
-                                        ],
+                                        ["imgId", "imgUrl"],
                                         [id, url],
-                                        i
+                                        i,
                                     );
                                 }}
                                 type="image"
@@ -234,7 +224,7 @@ function Inspector(props) {
                                             className="eb-background-control-inspector-panel-img-btn components-button"
                                             label={__(
                                                 "Upload Image",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             )}
                                             icon="format-image"
                                             onClick={open}
@@ -249,12 +239,9 @@ function Inspector(props) {
                                 imageUrl={each.imgUrl}
                                 onDeleteImage={() => {
                                     onTabChange(
-                                        [
-                                            "imgId",
-                                            "imgUrl",
-                                        ],
+                                        ["imgId", "imgUrl"],
                                         [null, null],
-                                        i
+                                        i,
                                     );
                                 }}
                             />
@@ -267,75 +254,60 @@ function Inspector(props) {
                     onChange={(value) => onTabChange("customId", value, i)}
                     help={__(
                         "Custom ID will be added as an anchor tag. For example, if you add ‘test’ as your custom ID, the link will become like the following: https://www.example.com/#test and it will open the respective tab directly.",
-                        "essential-blocks"
+                        "essential-blocks",
                     )}
                 />
             </div>
-        ))
-    }
+        ));
+    };
 
     return (
         <>
-            <InspectorPanel advancedControlProps={{
-                marginPrefix: prefixWrapperMargin,
-                paddingPrefix: prefixWrapperPadding,
-                backgroundPrefix: prefixWrapBg,
-                borderPrefix: prefixWrapBdShadow,
-                hasMargin: true
-            }}>
+            <InspectorPanel
+                advancedControlProps={{
+                    marginPrefix: prefixWrapperMargin,
+                    paddingPrefix: prefixWrapperPadding,
+                    backgroundPrefix: prefixWrapBg,
+                    borderPrefix: prefixWrapBdShadow,
+                    hasMargin: true,
+                }}
+            >
                 <InspectorPanel.General>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Tabs List",
-                            "essential-blocks"
-                        )}
+                        title={__("Tabs List", "essential-blocks")}
                         initialOpen={true}
                     >
                         <SortControl
                             items={attributes.tabTitles}
-                            labelKey={'text'}
-                            onSortEnd={tabTitles => setAttributes({ tabTitles })}
-                            onDeleteItem={index => onDeleteTab(index)}
+                            labelKey={"text"}
+                            onSortEnd={(tabTitles) =>
+                                setAttributes({ tabTitles })
+                            }
+                            onDeleteItem={(index) => onDeleteTab(index)}
                             hasSettings={true}
                             settingsComponents={getTabsComponents()}
                             hasAddButton={true}
                             onAddItem={addNewTab}
-                            addButtonText={__(
-                                "Add Tab",
-                                "essential-blocks"
-                            )}
+                            addButtonText={__("Add Tab", "essential-blocks")}
                         ></SortControl>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Tabs Settings",
-                            "essential-blocks"
-                        )}
+                        title={__("Tabs Settings", "essential-blocks")}
                         initialOpen={false}
                     >
                         <BaseControl
-                            label={__(
-                                "Title Level",
-                                "essential-blocks"
-                            )}
+                            label={__("Title Level", "essential-blocks")}
                             id="eb-advance-heading-alignment"
                         >
                             <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                 {HEADING.map((item, key) => (
                                     <Button
                                         key={key}
-                                        isPrimary={
-                                            tagName ===
-                                            item.value
-                                        }
-                                        isSecondary={
-                                            tagName !==
-                                            item.value
-                                        }
+                                        isPrimary={tagName === item.value}
+                                        isSecondary={tagName !== item.value}
                                         onClick={() =>
                                             setAttributes({
-                                                tagName:
-                                                    item.value,
+                                                tagName: item.value,
                                             })
                                         }
                                     >
@@ -345,30 +317,19 @@ function Inspector(props) {
                             </ButtonGroup>
                         </BaseControl>
                         <SelectControl
-                            label={__(
-                                "Tabs Layout",
-                                "essential-blocks"
-                            )}
+                            label={__("Tabs Layout", "essential-blocks")}
                             value={layout}
                             options={[
                                 {
-                                    label: __(
-                                        "Horizontal",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Horizontal", "essential-blocks"),
                                     value: "horizontal",
                                 },
                                 {
-                                    label: __(
-                                        "Vertical",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Vertical", "essential-blocks"),
                                     value: "vertical",
                                 },
                             ]}
-                            onChange={(layout) =>
-                                handleLayoutChange(layout)
-                            }
+                            onChange={(layout) => handleLayoutChange(layout)}
                         />
 
                         {layout === "horizontal" && (
@@ -376,7 +337,7 @@ function Inspector(props) {
                                 <ToggleControl
                                     label={__(
                                         "Fill Titles' Wrapper",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     checked={isFillTitle}
                                     onChange={() =>
@@ -393,70 +354,79 @@ function Inspector(props) {
                                 <ToggleControl
                                     label={__(
                                         "Enable Responsive Layout",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     checked={enableResponsiveLayout}
                                     onChange={() =>
                                         setAttributes({
-                                            enableResponsiveLayout: !enableResponsiveLayout,
+                                            enableResponsiveLayout:
+                                                !enableResponsiveLayout,
                                         })
                                     }
                                 />
-                                <PanelRow className="eb-instruction"><strong>Note:</strong> Enable this option to switch the layout from vertical to horizontal on responsive devices.</PanelRow>
+                                <PanelRow className="eb-instruction">
+                                    <strong>Note:</strong> Enable this option to
+                                    switch the layout from vertical to
+                                    horizontal on responsive devices.
+                                </PanelRow>
                                 {enableResponsiveLayout && (
                                     <BaseControl
                                         label={__(
                                             "Select Devices for Horizontal Layout",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                         id="eb-advance-heading-alignment"
                                     >
                                         <ButtonGroup className="eb-advance-heading-alignment eb-verticaltohorizontal-buttongroup">
-                                            {VERTICALTOHORIZONTAL.map((item, key) => (
-                                                <Button
-                                                    key={key}
-                                                    isPrimary={
-                                                        verticalToHorizontal ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        verticalToHorizontal !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            verticalToHorizontal:
-                                                                item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
+                                            {VERTICALTOHORIZONTAL.map(
+                                                (item, key) => (
+                                                    <Button
+                                                        key={key}
+                                                        isPrimary={
+                                                            verticalToHorizontal ===
+                                                            item.value
+                                                        }
+                                                        isSecondary={
+                                                            verticalToHorizontal !==
+                                                            item.value
+                                                        }
+                                                        onClick={() =>
+                                                            setAttributes({
+                                                                verticalToHorizontal:
+                                                                    item.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        {item.label}
+                                                    </Button>
+                                                ),
+                                            )}
                                         </ButtonGroup>
                                     </BaseControl>
                                 )}
                                 <ToggleControl
                                     label={__(
                                         "Minimum Height Based on Tabs Heading Panel",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     checked={isMinHeightAsTitle}
                                     onChange={() =>
                                         setAttributes({
-                                            isMinHeightAsTitle: !isMinHeightAsTitle,
+                                            isMinHeightAsTitle:
+                                                !isMinHeightAsTitle,
                                         })
                                     }
                                 />
-                                <PanelRow className="eb-instruction"><strong>Note:</strong> When enabled, the tab content will have a minimum height equal to the height of the heading panel.</PanelRow>
+                                <PanelRow className="eb-instruction">
+                                    <strong>Note:</strong> When enabled, the tab
+                                    content will have a minimum height equal to
+                                    the height of the heading panel.
+                                </PanelRow>
                             </>
                         )}
 
                         <ToggleControl
-                            label={__(
-                                "Enable Icon",
-                                "essential-blocks"
-                            )}
+                            label={__("Enable Icon", "essential-blocks")}
                             checked={isMediaOn}
                             onChange={() =>
                                 setAttributes({
@@ -467,7 +437,7 @@ function Inspector(props) {
                         <ToggleControl
                             label={__(
                                 "Close All Tabs Initially",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                             checked={closeAllTabs}
                             onChange={() =>
@@ -481,21 +451,21 @@ function Inspector(props) {
                                 <SelectControl
                                     label={__(
                                         "Icon Layout",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     value={mediaPositon}
                                     options={[
                                         {
                                             label: __(
                                                 "Stacked",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "stacked",
                                         },
                                         {
                                             label: __(
                                                 "Inline",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "inline",
                                         },
@@ -513,62 +483,51 @@ function Inspector(props) {
                                                 {
                                                     label: __(
                                                         "Left",
-                                                        "essential-blocks"
+                                                        "essential-blocks",
                                                     ),
-                                                    value:
-                                                        "left",
+                                                    value: "left",
                                                 },
                                                 {
                                                     label: __(
                                                         "Right",
-                                                        "essential-blocks"
+                                                        "essential-blocks",
                                                     ),
-                                                    value:
-                                                        "right",
+                                                    value: "right",
                                                 },
-                                            ].map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        // isLarge
-                                                        isSecondary={
-                                                            mediaAlign !==
-                                                            item.value
-                                                        }
-                                                        isPrimary={
-                                                            mediaAlign ===
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    mediaAlign:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
+                                            ].map((item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    // isLarge
+                                                    isSecondary={
+                                                        mediaAlign !==
+                                                        item.value
+                                                    }
+                                                    isPrimary={
+                                                        mediaAlign ===
+                                                        item.value
+                                                    }
+                                                    onClick={() =>
+                                                        setAttributes({
+                                                            mediaAlign:
+                                                                item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ))}
                                         </ButtonGroup>
 
                                         <label
                                             style={{
-                                                display:
-                                                    "block",
+                                                display: "block",
                                             }}
                                         >
                                             <i>
-                                                {__("Set icon position before / after the tab title.", "essentail-blocks")}
+                                                {__(
+                                                    "Set icon position before / after the tab title.",
+                                                    "essentail-blocks",
+                                                )}
                                             </i>
                                         </label>
                                     </>
@@ -579,23 +538,18 @@ function Inspector(props) {
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Tab Title",
-                            "essential-blocks"
-                        )}
-                    // initialOpen={false}
+                        title={__("Tab Title", "essential-blocks")}
+                        // initialOpen={false}
                     >
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
-                            typographyPrefixConstant={
-                                typoPrefixTabTitle
-                            }
+                            typographyPrefixConstant={typoPrefixTabTitle}
                         />
 
                         <ResponsiveRangeController
                             baseLabel={__(
                                 "Title Min Width",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                             controlName={prefixTitleMinWidth}
                             min={0}
@@ -609,10 +563,7 @@ function Inspector(props) {
                         />
 
                         <ResponsiveRangeController
-                            baseLabel={__(
-                                "Icon Size",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Icon Size", "essential-blocks")}
                             controlName={prefixIconSize}
                             min={0}
                             max={200}
@@ -621,10 +572,7 @@ function Inspector(props) {
                         />
 
                         <ResponsiveRangeController
-                            baseLabel={__(
-                                "Icon Gap",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Icon Gap", "essential-blocks")}
                             controlName={prefixIconGap}
                             min={0}
                             max={200}
@@ -643,10 +591,7 @@ function Inspector(props) {
                         />
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Colors",
-                                "essential-blocks"
-                            )}
+                            title={__("Colors", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BaseControl>
@@ -655,57 +600,41 @@ function Inspector(props) {
                                         {
                                             label: __(
                                                 "Normal",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "normal",
                                         },
                                         {
                                             label: __(
                                                 "Hover",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "hover",
                                         },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                // isLarge
-                                                isPrimary={
-                                                    colorSwitcher ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    colorSwitcher !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setColorSwitcher(
-                                                        value
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
+                                    ].map(({ value, label }, index) => (
+                                        <Button
+                                            key={index}
+                                            // isLarge
+                                            isPrimary={colorSwitcher === value}
+                                            isSecondary={
+                                                colorSwitcher !== value
+                                            }
+                                            onClick={() =>
+                                                setColorSwitcher(value)
+                                            }
+                                        >
+                                            {label}
+                                        </Button>
+                                    ))}
                                 </ButtonGroup>
                             </BaseControl>
 
                             {colorSwitcher === "normal" && (
                                 <>
                                     <ColorControl
-                                        label={__(
-                                            "Text",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Text", "essential-blocks")}
                                         defaultColor={
-                                            objAttributes
-                                                .textColor
-                                                .default
+                                            objAttributes.textColor.default
                                         }
                                         color={textColor}
                                         onChange={(textColor) =>
@@ -716,14 +645,9 @@ function Inspector(props) {
                                     />
 
                                     <ColorControl
-                                        label={__(
-                                            "Icon",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Icon", "essential-blocks")}
                                         defaultColor={
-                                            objAttributes
-                                                .iconColor
-                                                .default
+                                            objAttributes.iconColor.default
                                         }
                                         color={iconColor}
                                         onChange={(iconColor) =>
@@ -738,19 +662,12 @@ function Inspector(props) {
                             {colorSwitcher === "hover" && (
                                 <>
                                     <ColorControl
-                                        label={__(
-                                            "Text",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Text", "essential-blocks")}
                                         defaultColor={
-                                            objAttributes
-                                                .hvTextColor
-                                                .default
+                                            objAttributes.hvTextColor.default
                                         }
                                         color={hvTextColor}
-                                        onChange={(
-                                            hvTextColor
-                                        ) =>
+                                        onChange={(hvTextColor) =>
                                             setAttributes({
                                                 hvTextColor,
                                             })
@@ -758,19 +675,12 @@ function Inspector(props) {
                                     />
 
                                     <ColorControl
-                                        label={__(
-                                            "Icon",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Icon", "essential-blocks")}
                                         defaultColor={
-                                            objAttributes
-                                                .hvIconColor
-                                                .default
+                                            objAttributes.hvIconColor.default
                                         }
                                         color={hvIconColor}
-                                        onChange={(
-                                            hvIconColor
-                                        ) =>
+                                        onChange={(hvIconColor) =>
                                             setAttributes({
                                                 hvIconColor,
                                             })
@@ -779,9 +689,7 @@ function Inspector(props) {
 
                                     <RangeControl
                                         value={colorTransition}
-                                        onChange={(
-                                            colorTransition
-                                        ) =>
+                                        onChange={(colorTransition) =>
                                             setAttributes({
                                                 colorTransition,
                                             })
@@ -795,17 +703,14 @@ function Inspector(props) {
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Background",
-                                "essential-blocks"
-                            )}
+                            title={__("Background", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BackgroundControl
                                 controlName={prefixTitleBg}
                                 noOverlay
-                            // noMainBgi
-                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                // noMainBgi
+                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </InspectorPanel.PanelBody>
 
@@ -814,19 +719,14 @@ function Inspector(props) {
                             initialOpen={false}
                         >
                             <BorderShadowControl
-                                controlName={
-                                    prefixTitleBdShadow
-                                }
-                            // noShadow
-                            // noBorder
+                                controlName={prefixTitleBdShadow}
+                                // noShadow
+                                // noBorder
                             />
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Active Colors",
-                                "essential-blocks"
-                            )}
+                            title={__("Active Colors", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BaseControl>
@@ -835,218 +735,162 @@ function Inspector(props) {
                                         {
                                             label: __(
                                                 "Normal",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "normal",
                                         },
                                         {
                                             label: __(
                                                 "Hover",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             ),
                                             value: "hover",
                                         },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    activeColorSwitcher ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    activeColorSwitcher !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setActiveColorSwitcher(
-                                                        value
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
+                                    ].map(({ value, label }, index) => (
+                                        <Button
+                                            key={index}
+                                            isPrimary={
+                                                activeColorSwitcher === value
+                                            }
+                                            isSecondary={
+                                                activeColorSwitcher !== value
+                                            }
+                                            onClick={() =>
+                                                setActiveColorSwitcher(value)
+                                            }
+                                        >
+                                            {label}
+                                        </Button>
+                                    ))}
                                 </ButtonGroup>
                             </BaseControl>
 
-                            {activeColorSwitcher ===
-                                "normal" && (
-                                    <>
-                                        <ColorControl
-                                            label={__(
-                                                "Text",
-                                                "essential-blocks"
-                                            )}
-                                            defaultColor={
-                                                objAttributes
-                                                    .actTextColor
-                                                    .default
-                                            }
-                                            color={actTextColor}
-                                            onChange={(
-                                                actTextColor
-                                            ) =>
+                            {activeColorSwitcher === "normal" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Text", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actTextColor.default
+                                        }
+                                        color={actTextColor}
+                                        onChange={(actTextColor) =>
+                                            setAttributes({
+                                                actTextColor,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Icon", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actIconColor.default
+                                        }
+                                        color={actIconColor}
+                                        onChange={(actIconColor) =>
+                                            setAttributes({
+                                                actIconColor,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
+
+                            {activeColorSwitcher === "hover" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Text", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actHvTextColor.default
+                                        }
+                                        color={actHvTextColor}
+                                        onChange={(actHvTextColor) =>
+                                            setAttributes({
+                                                actHvTextColor,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Icon", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actHvIconColor.default
+                                        }
+                                        color={actHvIconColor}
+                                        onChange={(actHvIconColor) =>
+                                            setAttributes({
+                                                actHvIconColor,
+                                            })
+                                        }
+                                    />
+
+                                    <BaseControl
+                                        label={__(
+                                            "Transition",
+                                            "essential-blocks",
+                                        )}
+                                    >
+                                        <RangeControl
+                                            value={actColorTransition}
+                                            onChange={(actColorTransition) =>
                                                 setAttributes({
-                                                    actTextColor,
+                                                    actColorTransition,
                                                 })
                                             }
+                                            step={0.1}
+                                            min={0}
+                                            max={5}
                                         />
-
-                                        <ColorControl
-                                            label={__(
-                                                "Icon",
-                                                "essential-blocks"
-                                            )}
-                                            defaultColor={
-                                                objAttributes
-                                                    .actIconColor
-                                                    .default
-                                            }
-                                            color={actIconColor}
-                                            onChange={(
-                                                actIconColor
-                                            ) =>
-                                                setAttributes({
-                                                    actIconColor,
-                                                })
-                                            }
-                                        />
-                                    </>
-                                )}
-
-                            {activeColorSwitcher ===
-                                "hover" && (
-                                    <>
-                                        <ColorControl
-                                            label={__(
-                                                "Text",
-                                                "essential-blocks"
-                                            )}
-                                            defaultColor={
-                                                objAttributes
-                                                    .actHvTextColor
-                                                    .default
-                                            }
-                                            color={actHvTextColor}
-                                            onChange={(
-                                                actHvTextColor
-                                            ) =>
-                                                setAttributes({
-                                                    actHvTextColor,
-                                                })
-                                            }
-                                        />
-
-                                        <ColorControl
-                                            label={__(
-                                                "Icon",
-                                                "essential-blocks"
-                                            )}
-                                            defaultColor={
-                                                objAttributes
-                                                    .actHvIconColor
-                                                    .default
-                                            }
-                                            color={actHvIconColor}
-                                            onChange={(
-                                                actHvIconColor
-                                            ) =>
-                                                setAttributes({
-                                                    actHvIconColor,
-                                                })
-                                            }
-                                        />
-
-                                        <BaseControl
-                                            label={__(
-                                                "Transition",
-                                                "essential-blocks"
-                                            )}
-                                        >
-                                            <RangeControl
-                                                value={
-                                                    actColorTransition
-                                                }
-                                                onChange={(
-                                                    actColorTransition
-                                                ) =>
-                                                    setAttributes({
-                                                        actColorTransition,
-                                                    })
-                                                }
-                                                step={0.1}
-                                                min={0}
-                                                max={5}
-                                            />
-                                        </BaseControl>
-                                    </>
-                                )}
+                                    </BaseControl>
+                                </>
+                            )}
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Active Background",
-                                "essential-blocks"
-                            )}
+                            title={__("Active Background", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BackgroundControl
                                 controlName={prefixActTitleBg}
                                 noOverlay
-                            // noMainBgi
-                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                                // noMainBgi
+                                // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
                             />
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__("Active Border & Shadow", "essential-blocks")}
+                            title={__(
+                                "Active Border & Shadow",
+                                "essential-blocks",
+                            )}
                             initialOpen={false}
                         >
                             <BorderShadowControl
-                                controlName={
-                                    prefixActTitleBdShadow
-                                }
-                            // noShadow
-                            // noBorder
+                                controlName={prefixActTitleBdShadow}
+                                // noShadow
+                                // noBorder
                             />
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>
 
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Tab Titles' Wrapper",
-                            "essential-blocks"
-                        )}
+                        title={__("Tab Titles' Wrapper", "essential-blocks")}
                         initialOpen={false}
                     >
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Margin Padding",
-                                "essential-blocks"
-                            )}
+                            title={__("Margin Padding", "essential-blocks")}
                         >
                             <ResponsiveDimensionsControl
                                 controlName={prefixTtlWrpMargin}
                                 baseLabel={__("Margin", "essential-blocks")}
                             />
                             <ResponsiveDimensionsControl
-                                controlName={
-                                    prefixTtlWrpPadding
-                                }
+                                controlName={prefixTtlWrpPadding}
                                 baseLabel={__("Padding", "essential-blocks")}
                             />
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Background",
-                                "essential-blocks"
-                            )}
+                            title={__("Background", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BackgroundControl
@@ -1060,9 +904,7 @@ function Inspector(props) {
                             initialOpen={false}
                         >
                             <BorderShadowControl
-                                controlName={
-                                    prefixTtlWrpBdShadow
-                                }
+                                controlName={prefixTtlWrpBdShadow}
                             />
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>
@@ -1072,30 +914,20 @@ function Inspector(props) {
                         initialOpen={false}
                     >
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Margin Padding",
-                                "essential-blocks"
-                            )}
+                            title={__("Margin Padding", "essential-blocks")}
                         >
                             <ResponsiveDimensionsControl
-                                controlName={
-                                    prefixContentMargin
-                                }
+                                controlName={prefixContentMargin}
                                 baseLabel={__("Margin", "essential-blocks")}
                             />
                             <ResponsiveDimensionsControl
-                                controlName={
-                                    prefixContentPadding
-                                }
+                                controlName={prefixContentPadding}
                                 baseLabel={__("Padding", "essential-blocks")}
                             />
                         </InspectorPanel.PanelBody>
 
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Background",
-                                "essential-blocks"
-                            )}
+                            title={__("Background", "essential-blocks")}
                             initialOpen={false}
                         >
                             <BackgroundControl
@@ -1109,9 +941,7 @@ function Inspector(props) {
                             initialOpen={false}
                         >
                             <BorderShadowControl
-                                controlName={
-                                    prefixContentBdShadow
-                                }
+                                controlName={prefixContentBdShadow}
                             />
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>
@@ -1123,7 +953,7 @@ function Inspector(props) {
                         <ToggleControl
                             label={__(
                                 "Show Caret on Active Tab",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                             checked={showCaret}
                             onChange={() =>
@@ -1138,11 +968,9 @@ function Inspector(props) {
                                 <ResponsiveRangeController
                                     baseLabel={__(
                                         "Caret Size",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    controlName={
-                                        prefixCaretSize
-                                    }
+                                    controlName={prefixCaretSize}
                                     min={0}
                                     max={100}
                                     step={1}
@@ -1152,11 +980,10 @@ function Inspector(props) {
                                 <ColorControl
                                     label={__(
                                         "Caret Color",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     defaultColor={
-                                        objAttributes.caretColor
-                                            .default
+                                        objAttributes.caretColor.default
                                     }
                                     color={caretColor}
                                     onChange={(caretColor) =>

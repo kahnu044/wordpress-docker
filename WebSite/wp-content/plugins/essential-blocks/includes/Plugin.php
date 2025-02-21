@@ -30,7 +30,7 @@ use EssentialBlocks\Integrations\PluginInstaller;
 final class Plugin
 {
     use HasSingletone;
-    public $version = '5.2.3';
+    public $version = '5.3.0';
 
     public $admin;
     /**
@@ -135,6 +135,10 @@ final class Plugin
         add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 
         add_action( 'wp_loaded', [ $this, 'wp_loaded' ] );
+
+        add_filter( 'upload_mimes', [ $this, 'eb_custom_mines_uploads' ], 20 );
+        add_filter( 'wp_check_filetype_and_ext', [ $this, 'eb_handle_filetypes' ], 10, 5 );
+
         /**
          * Initialize.
          */
@@ -208,8 +212,8 @@ final class Plugin
         $this->define( 'EB_PATTERN', true );
 
         //Those flags needs to update if notice
-        $this->define( 'EB_PROMOTION_FLAG', 6 );
-        $this->define( 'EB_ADMIN_MENU_FLAG', 6 );
+        $this->define( 'EB_PROMOTION_FLAG', 7 );
+        $this->define( 'EB_ADMIN_MENU_FLAG', 7 );
 
         //Table Name constants
         global $wpdb;
@@ -258,5 +262,37 @@ final class Plugin
     private function load_admin_dependencies()
     {
         //Admin dependency codes here
+    }
+
+    /**
+     * Add .json files suppor.
+     */
+    public function eb_custom_mines_uploads( $mimes )
+    {
+        // Allow Plain text/JSON files.
+        $mimes[ 'txt' ]    = 'text/plain';
+        $mimes[ 'json' ]   = 'application/json';
+        $mimes[ 'lottie' ] = 'application/zip';
+
+        return $mimes;
+    }
+
+    public function eb_handle_filetypes( $data, $file, $filename, $mimes, $real_mime )
+    {
+        if ( ! empty( $data[ 'ext' ] ) && ! empty( $data[ 'type' ] ) ) {
+            return $data;
+        }
+
+        $wp_file_type = wp_check_filetype( $filename, $mimes );
+
+        if ( 'json' === $wp_file_type[ 'ext' ] ) {
+            $data[ 'ext' ]  = 'json';
+            $data[ 'type' ] = 'application/json';
+        } elseif ( 'txt' === $wp_file_type[ 'ext' ] ) {
+            $data[ 'ext' ]  = 'txt';
+            $data[ 'type' ] = 'text/plain';
+        }
+
+        return $data;
     }
 }

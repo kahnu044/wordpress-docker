@@ -28,7 +28,8 @@ import {
     ResetControl,
     TypographyDropdown,
     ResponsiveRangeController,
-    InspectorPanel
+    InspectorPanel,
+    ButtonGroupControl
 } from "@essential-blocks/controls";
 
 import objAttributes from "./attributes";
@@ -72,6 +73,9 @@ const Inspector = ({ attributes, setAttributes }) => {
         blur,
         spread,
         inset,
+        contentStyles,
+        controllerColorSecondary,
+        backgroundColorSecondary
     } = attributes;
 
     return (
@@ -212,85 +216,47 @@ const Inspector = ({ attributes, setAttributes }) => {
 
                     {switchStyle !== "text" && (
                         <InspectorPanel.PanelBody
-                            title={__("Switch Background", "essential-blocks")}
+                            title={__("Switcher Controller", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <ToggleControl
-                                label={__("Gradient Background", "essential-blocks")}
-                                checked={backgroundType === "gradient"}
-                                onChange={() =>
-                                    setAttributes({
-                                        backgroundType:
-                                            backgroundType === "solid" ? "gradient" : "solid",
-                                    })
-                                }
+                            <ButtonGroupControl
+                                label={__("Styles", "essential-blocks")}
+                                attrName={'contentStyles'}
+                                options={INITIAL_CONTENT}
+                                currentValue={contentStyles}
                             />
 
-                            {backgroundType === "solid" && (
-                                <ColorControl
-                                    label={__("Background Color", "essential-blocks")}
-                                    color={backgroundColor}
-                                    attributeName={'backgroundColor'}
-                                />
-                            )}
-
-                            {backgroundType === "gradient" && (
-                                <InspectorPanel.PanelBody
-                                    title={__("Background Gradient", "essential-blocks")}
-                                // initialOpen={false}
-                                >
-                                    <GradientColorControl
-                                        gradientColor={
-                                            backgroundGradient ||
-                                            "linear-gradient(45deg,#eef2f3,#8e92ab)"
-                                        }
-                                        onChange={(backgroundGradient) =>
-                                            setAttributes({ backgroundGradient })
-                                        }
+                            {contentStyles === 'primary' && (
+                                <>
+                                    <ColorControl
+                                        label={__("Switch Background Color", "essential-blocks")}
+                                        color={backgroundColor}
+                                        attributeName={'backgroundColor'}
+                                        isGradient={true}
                                     />
-                                </InspectorPanel.PanelBody>
-                            )}
-                        </InspectorPanel.PanelBody>
-                    )}
-
-                    {switchStyle !== "text" && (
-                        <InspectorPanel.PanelBody
-                            title={__("Controller Background", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <ToggleControl
-                                label={__("Gradient Controller", "essential-blocks")}
-                                checked={controllerType === "gradient"}
-                                onChange={() =>
-                                    setAttributes({
-                                        controllerType:
-                                            controllerType === "solid" ? "gradient" : "solid",
-                                    })
-                                }
-                            />
-
-                            {controllerType === "solid" && (
-                                <ColorControl
-                                    label={__("Controller Color", "essential-blocks")}
-                                    color={controllerColor}
-                                    attributeName={'controllerColor'}
-                                />
-                            )}
-
-                            {controllerType === "gradient" && (
-                                <InspectorPanel.PanelBody
-                                    title={__("Controller Gradient", "essential-blocks")}
-                                >
-                                    <GradientColorControl
-                                        gradientColor={
-                                            controllerGradient ||
-                                            "linear-gradient(45deg,#eef2f3,#8e92ab)"
-                                        }
-                                        onChange={(controllerGradient) =>
-                                            setAttributes({ controllerGradient })
-                                        }
+                                    <ColorControl
+                                        label={__("Controller Background Color", "essential-blocks")}
+                                        color={controllerColor}
+                                        attributeName={'controllerColor'}
+                                        isGradient={true}
                                     />
-                                </InspectorPanel.PanelBody>
+                                </>
+                            )}
+                            {contentStyles === 'secondary' && (
+                                <>
+                                    <ColorControl
+                                        label={__("Switch Background Color", "essential-blocks")}
+                                        color={backgroundColorSecondary}
+                                        attributeName={'backgroundColorSecondary'}
+                                        isGradient={true}
+                                    />
+                                    <ColorControl
+                                        label={__("Controller Background Color", "essential-blocks")}
+                                        color={controllerColorSecondary}
+                                        attributeName={'controllerColorSecondary'}
+                                        isGradient={true}
+                                    />
+                                </>
                             )}
                         </InspectorPanel.PanelBody>
                     )}

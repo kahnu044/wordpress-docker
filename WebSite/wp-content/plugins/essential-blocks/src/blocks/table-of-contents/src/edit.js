@@ -23,7 +23,7 @@ import {
     EBDisplayIcon,
     BlockProps,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 import { parseTocSlug } from "./helper";
 import Inspector from "./inspector";
 import List from "./list";
@@ -133,9 +133,9 @@ const Edit = (props) => {
         cover,
         enableListStyle,
         preset,
-        itemCollapsed
+        itemCollapsed,
+        alignment,
     } = attributes;
-
 
     const isBlockJustInserted = select(
         "core/block-editor"
@@ -183,6 +183,11 @@ const Edit = (props) => {
         return _headerList;
     }, [headerList, isBlockJustInserted]);
 
+    useEffect(() => {
+        if (alignment === undefined) {
+            setAttributes({ alignment: 'align-custom' });
+        }
+    }, []);
     useEffect(() => {
         if (JSON.stringify(headerList) !== JSON.stringify(headers)) {
             setAttributes({ headers: headerList });

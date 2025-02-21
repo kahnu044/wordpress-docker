@@ -15,29 +15,16 @@ import { select, dispatch, useSelect } from "@wordpress/data";
  * Internal dependencies
  */
 import Style from "./style";
-import {
-    DEFAULT_TEMPLATE,
-} from "./constants";
-import {
-    typoPrefix_tgl,
-} from "./constants/typographyPrefixConstants";
+import { DEFAULT_TEMPLATE } from "./constants";
+import { typoPrefix_tgl } from "./constants/typographyPrefixConstants";
 
-import {
-    withBlockContext,
-    BlockProps
-} from "@essential-blocks/controls";
+import { withBlockContext, BlockProps } from "@essential-blocks/controls";
 import Inspector from "./inspector";
-import defaultAttributes from './attributes';
+import defaultAttributes from "./attributes";
 
 function Edit(props) {
-    const {
-        clientId,
-        isSelected,
-        attributes,
-        setAttributes,
-        className,
-        name
-    } = props;
+    const { clientId, isSelected, attributes, setAttributes, className, name } =
+        props;
 
     const {
         resOption,
@@ -54,10 +41,17 @@ function Edit(props) {
 
         [`${typoPrefix_tgl}FontSize`]: fontSize,
         [`${typoPrefix_tgl}SizeUnit`]: sizeUnit,
+        backgroundType,
+        backgroundColor,
+        backgroundGradient,
+        controllerType,
+        controllerColor,
+        controllerGradient,
+        controllerColorSecondary
     } = attributes;
 
     const [isPrimary, setPrimary] = useState(
-        initialContent === "primary" ? true : false
+        initialContent === "primary" ? true : false,
     );
     const [isRemoved, setRemoved] = useState(false);
 
@@ -70,48 +64,67 @@ function Edit(props) {
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-toggle',
-        style: <Style {...props} />
+        blockPrefix: "eb-toggle",
+        style: <Style {...props} />,
     };
 
     useEffect(() => {
-        if (contentRef.current) {
-            let container = contentRef.current.querySelector(
-                ".block-editor-block-list__layout"
-            );
+        setTimeout(() => {
+            if (contentRef.current) {
+                let container = contentRef.current.querySelector(
+                    ".block-editor-block-list__layout",
+                );
 
-            let childElemenets = [];
-            const child = container.children;
+                if (!container) return;
 
-            for (let i = 0; i < child.length; i++) {
-                if (child[i].classList.contains("block-editor-block-list__block")) {
-                    childElemenets.push(child[i]);
+                let childElemenets = [];
+                const child = container.children;
+                for (let i = 0; i < child.length; i++) {
+                    if (
+                        child[i].classList?.contains(
+                            "block-editor-block-list__block",
+                        )
+                    ) {
+                        childElemenets.push(child[i]);
+                    }
+                }
+
+                if (childElemenets.length === 2) {
+                    let firstChild = childElemenets[0];
+                    let lastChild = childElemenets[1];
+
+                    if (isPrimary) {
+                        firstChild.classList.add("active");
+                        firstChild.classList.remove("inactive");
+                        firstChild.dataset.activeTab = "active";
+
+                        lastChild.classList.add("inactive");
+                        lastChild.classList.remove("active");
+                        lastChild.dataset.activeTab = "inactive";
+                    } else {
+                        firstChild.classList.add("inactive");
+                        firstChild.classList.remove("active");
+                        firstChild.dataset.activeTab = "inactive";
+
+                        lastChild.classList.add("active");
+                        lastChild.classList.remove("inactive");
+                        lastChild.dataset.activeTab = "active";
+                    }
                 }
             }
-
-            if (container && childElemenets.length === 2) {
-                let firstChild = childElemenets[0];
-                let lastChild = childElemenets[1];
-
-                if (isPrimary) {
-                    hideBlock(lastChild);
-                    showBlock(firstChild);
-                } else {
-                    hideBlock(firstChild);
-                    showBlock(lastChild);
-                }
-            }
-        }
-    });
+        }, 0);
+    }, [isPrimary, primaryRef.current, secondaryRef.current]);
 
     /**
      * Get innerBlocks
      */
     const { innerBlocks } = useSelect(
-        (select) => select("core/block-editor").getBlocksByClientId(clientId)[0]
+        (select) =>
+            select("core/block-editor").getBlocksByClientId(clientId)[0],
     );
     useEffect(() => {
-        const isBlockJustInserted = select("core/block-editor").wasBlockJustInserted(clientId);
+        const isBlockJustInserted =
+            select("core/block-editor").wasBlockJustInserted(clientId);
         if (!isBlockJustInserted) {
             if (innerBlocks && innerBlocks.length === 2) {
                 setRemoved(false);
@@ -127,6 +140,10 @@ function Edit(props) {
 
         // Add label click event listender for text type switch
         setClickEvents();
+
+        //
+        backgroundType === "solid" ? setAttributes({ backgroundColor }) : setAttributes({ backgroundColor: backgroundGradient })
+        controllerType === "solid" ? setAttributes({ controllerColor }) : setAttributes({ controllerColor: controllerGradient })
     }, []);
 
     useEffect(() => {
@@ -152,25 +169,30 @@ function Edit(props) {
 
     const setClickEvents = () => {
         primaryRef.current &&
-            primaryRef.current.addEventListener("click", () => setPrimary(true));
+            primaryRef.current.addEventListener("click", () =>
+                setPrimary(true),
+            );
 
         secondaryRef.current &&
-            secondaryRef.current.addEventListener("click", () => setPrimary(false));
+            secondaryRef.current.addEventListener("click", () =>
+                setPrimary(false),
+            );
 
         primaryTextRef.current &&
-            primaryTextRef.current.addEventListener("click", () => setPrimary(true));
+            primaryTextRef.current.addEventListener("click", () =>
+                setPrimary(true),
+            );
 
         secondaryTextRef.current &&
             secondaryTextRef.current.addEventListener("click", () =>
-                setPrimary(false)
+                setPrimary(false),
             );
     };
 
-    const hideBlock = (node) => (node.style.display = "none");
-    const showBlock = (node) => (node.style.display = "block");
     const onSwitchClick = (e) => {
         setPrimary(e.target.checked);
     };
+
     const getMargin = () => {
         switch (alignment) {
             case "center":
@@ -198,10 +220,43 @@ function Edit(props) {
         };
     };
 
+    const getTransform = () => {
+        if (isPrimary) return "translateX(0px)";
+
+        switch (switchSize) {
+            case "s":
+                return "translateX(22px)";
+            case "m":
+                return "translateX(26px)";
+            case "l":
+                return "translateX(36px)";
+            case "xl":
+                return "translateX(42px)";
+        }
+    };
+
+    const getRadius = () => {
+        if (switchStyle === "rectangle") return "0px";
+
+        switch (switchSize) {
+            case "s":
+                return "10px";
+            case "m":
+                return "13px";
+            case "l":
+                return "16px";
+            case "xl":
+                return "21px";
+        }
+    };
+
     return (
         <>
             {isSelected && (
-                <Inspector attributes={attributes} setAttributes={setAttributes} />
+                <Inspector
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
             )}
 
             <BlockControls>
@@ -212,12 +267,13 @@ function Edit(props) {
             </BlockControls>
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                    <div className={`${blockId} eb-toggle-wrapper`}>
+                    <div className={`${blockId} eb-toggle-wrapper ${isPrimary ? 'eb-toggle-primary' : 'eb-toggle-secondary'}`}>
                         <div
                             className="eb-toggle-heading"
                             style={{
                                 // ...headingStyle,
-                                display: switchStyle === "toggle" ? "block" : "none",
+                                display:
+                                    switchStyle === "toggle" ? "block" : "none",
                             }}
                         >
                             <div className="eb-text-switch-wrapper">
@@ -246,7 +302,9 @@ function Edit(props) {
                                                 // style={primaryLabelStyle}
                                                 value={primaryLabelText}
                                                 onChange={(primaryLabelText) =>
-                                                    setAttributes({ primaryLabelText })
+                                                    setAttributes({
+                                                        primaryLabelText,
+                                                    })
                                                 }
                                             />
 
@@ -257,8 +315,12 @@ function Edit(props) {
                                                 // placeholder={__("Second", "essential-blocks")}
                                                 // style={secondaryLabelStyle}
                                                 value={secondaryLabelText}
-                                                onChange={(secondaryLabelText) =>
-                                                    setAttributes({ secondaryLabelText })
+                                                onChange={(
+                                                    secondaryLabelText,
+                                                ) =>
+                                                    setAttributes({
+                                                        secondaryLabelText,
+                                                    })
                                                 }
                                             />
                                         </div>
@@ -271,7 +333,8 @@ function Edit(props) {
                             className="eb-toggle-heading"
                             style={{
                                 // ...headingStyle,
-                                display: switchStyle !== "toggle" ? "block" : "none",
+                                display:
+                                    switchStyle !== "toggle" ? "block" : "none",
                             }}
                         >
                             <RichText
@@ -295,7 +358,10 @@ function Edit(props) {
                                 />
                                 <span
                                     className="eb-toggle-controller"
-                                // style={controllerStyle}
+                                    style={{
+                                        transform: getTransform(),
+                                        borderRadius: getRadius(),
+                                    }}
                                 />
                                 <span
                                     className="eb-toggle-slider"
@@ -319,11 +385,13 @@ function Edit(props) {
                                 }
                             />
                         </div>
-                        <div className="eb-toggle-content" ref={contentRef}>
+                        <div
+                            className="eb-toggle-content eb-toggle-content-editor"
+                            ref={contentRef}
+                        >
                             <InnerBlocks
-                                templateLock={false}
+                                templateLock={'insert'}
                                 template={DEFAULT_TEMPLATE}
-                                renderAppender={false}
                             />
                         </div>
                     </div>
@@ -332,5 +400,4 @@ function Edit(props) {
         </>
     );
 }
-export default memo(withBlockContext(defaultAttributes)(Edit))
-
+export default memo(withBlockContext(defaultAttributes)(Edit));

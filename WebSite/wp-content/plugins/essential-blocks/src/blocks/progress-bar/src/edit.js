@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useRef, memo} from "@wordpress/element";
+import { useEffect, useRef, memo } from "@wordpress/element";
 import {
     BlockControls,
     AlignmentToolbar,
@@ -24,7 +24,7 @@ import {
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const Edit = (props) => {
     const {
@@ -53,7 +53,23 @@ const Edit = (props) => {
         prefix,
         suffix,
         classHook,
+        totalRange,
+        valueDivider,
+        valueType,
+        absoluteProgress,
     } = attributes;
+
+    useEffect(() => {
+        if (totalRange === undefined) {
+            setAttributes({ totalRange: 100 })
+        }
+        if (valueDivider === undefined) {
+            setAttributes({ valueDivider: "/" })
+        }
+        if (valueType === undefined) {
+            setAttributes({ valueType: 'percentage' })
+        }
+    }, []);
 
     useEffect(() => {
         if (layout == "line" || layout === "line_rainbow") {
@@ -122,11 +138,18 @@ const Edit = (props) => {
         };
         const progressSetTimeout = setTimeout(changeWidthEffect, 500);
 
+        const absoluteValue = Math.round((progress / 100) * totalRange);
+        setAttributes({ absoluteProgress: absoluteValue })
+
         return () => {
             clearInterval(id);
             clearTimeout(progressSetTimeout);
         };
-    }, [layout, progress, animationDuration]);
+    }, [layout, progress, animationDuration, totalRange]);
+
+    useEffect(() => {
+        valueType === 'percentage' ? setAttributes({ totalRange: 100 }) : null;
+    }, [valueType]);
 
     // you must declare this variable
     const enhancedProps = {
@@ -189,11 +212,6 @@ const Edit = (props) => {
                                             </div>
                                             <div className="eb-progressbar-circle-inner"></div>
                                             <div className="eb-progressbar-circle-inner-content">
-                                                {/* {title && (
-                                                <attributes.titleTag className="eb-progressbar-title">
-                                                    {title}
-                                                </attributes.titleTag>
-                                            )} */}
                                                 {title && (
                                                     <DynamicInputValueHandler
                                                         value={title}
@@ -209,12 +227,24 @@ const Edit = (props) => {
                                                 )}
                                                 {displayProgress && (
                                                     <span className="eb-progressbar-count-wrap">
-                                                        <span className="eb-progressbar-count">
-                                                            {progress}
+                                                        <span className="eb-progress-count-wrap">
+                                                            <span className="eb-progressbar-count">
+                                                                {valueType === 'absolute' ? absoluteProgress : progress}
+                                                            </span>
+                                                            {valueType === 'percentage' && (
+                                                                <span className="postfix">%</span>
+                                                            )}
                                                         </span>
-                                                        <span className="postfix">
-                                                            %
-                                                        </span>
+                                                        {valueType === 'absolute' && (
+                                                            <>
+                                                                <span className="value-divider">{valueDivider}</span>
+                                                                <span className="eb-progress-total-range-wrap">
+                                                                    <span className="eb-progressbar-count">
+                                                                        {totalRange}
+                                                                    </span>
+                                                                </span>
+                                                            </>
+                                                        )}
                                                     </span>
                                                 )}
                                             </div>
@@ -234,9 +264,6 @@ const Edit = (props) => {
                                                 <div className="eb-progressbar-circle-inner"></div>
                                             </div>
                                             <div className="eb-progressbar-circle-inner-content">
-                                                {/* <attributes.titleTag className="eb-progressbar-title">
-                                                {title}
-                                            </attributes.titleTag> */}
                                                 {title && (
                                                     <DynamicInputValueHandler
                                                         value={title}
@@ -252,12 +279,24 @@ const Edit = (props) => {
                                                 )}
                                                 {displayProgress && (
                                                     <span className="eb-progressbar-count-wrap">
-                                                        <span className="eb-progressbar-count">
-                                                            {progress}
+                                                        <span className="eb-progress-count-wrap">
+                                                            <span className="eb-progressbar-count">
+                                                                {valueType === 'absolute' ? absoluteProgress : progress}
+                                                            </span>
+                                                            {valueType === 'percentage' && (
+                                                                <span className="postfix">%</span>
+                                                            )}
                                                         </span>
-                                                        <span className="postfix">
-                                                            %
-                                                        </span>
+                                                        {valueType === 'absolute' && (
+                                                            <>
+                                                                <span className="value-divider">{valueDivider}</span>
+                                                                <span className="eb-progress-total-range-wrap">
+                                                                    <span className="eb-progressbar-count">
+                                                                        {totalRange}
+                                                                    </span>
+                                                                </span>
+                                                            </>
+                                                        )}
                                                     </span>
                                                 )}
                                             </div>
@@ -269,10 +308,24 @@ const Edit = (props) => {
                                         <>
                                             {displayProgress && (
                                                 <span className="eb-progressbar-count-wrap">
-                                                    <span className="eb-progressbar-count">
-                                                        {progress}
+                                                    <span className="eb-progress-count-wrap">
+                                                        <span className="eb-progressbar-count">
+                                                            {valueType === 'absolute' ? absoluteProgress : progress}
+                                                        </span>
+                                                        {valueType === 'percentage' && (
+                                                            <span className="postfix">%</span>
+                                                        )}
                                                     </span>
-                                                    <span className="postfix">%</span>
+                                                    {valueType === 'absolute' && (
+                                                        <>
+                                                            <span className="value-divider">{valueDivider}</span>
+                                                            <span className="eb-progress-total-range-wrap">
+                                                                <span className="eb-progressbar-count">
+                                                                    {totalRange}
+                                                                </span>
+                                                            </span>
+                                                        </>
+                                                    )}
                                                 </span>
                                             )}
                                             <span
@@ -285,9 +338,6 @@ const Edit = (props) => {
                                 {layout === "box" && (
                                     <>
                                         <div className="eb-progressbar-box-inner-content">
-                                            {/* <attributes.titleTag className="eb-progressbar-title">
-                                                {title}
-                                            </attributes.titleTag> */}
                                             {title && (
                                                 <DynamicInputValueHandler
                                                     value={title}
@@ -303,12 +353,24 @@ const Edit = (props) => {
                                             )}
                                             {displayProgress && (
                                                 <span className="eb-progressbar-count-wrap">
-                                                    <span className="eb-progressbar-count">
-                                                        {progress}
+                                                    <span className="eb-progress-count-wrap">
+                                                        <span className="eb-progressbar-count">
+                                                            {valueType === 'absolute' ? absoluteProgress : progress}
+                                                        </span>
+                                                        {valueType === 'percentage' && (
+                                                            <span className="postfix">%</span>
+                                                        )}
                                                     </span>
-                                                    <span className="postfix">
-                                                        %
-                                                    </span>
+                                                    {valueType === 'absolute' && (
+                                                        <>
+                                                            <span className="value-divider">{valueDivider}</span>
+                                                            <span className="eb-progress-total-range-wrap">
+                                                                <span className="eb-progressbar-count">
+                                                                    {totalRange}
+                                                                </span>
+                                                            </span>
+                                                        </>
+                                                    )}
                                                 </span>
                                             )}
                                         </div>

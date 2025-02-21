@@ -88,7 +88,7 @@ function Inspector(props) {
         heightRange
     } = attributes;
 
-    const [ urlError, setUrlError ] = useState("");
+    const [urlError, setUrlError] = useState("");
 
     const changImgSource = (selected) => {
         switch (selected) {
@@ -307,6 +307,7 @@ function Inspector(props) {
                         ? oldImageData.media_details.sizes?.[imageSize]?.height
                         : oldImageData.height;
                 }
+
                 setAttributes({
                     image,
                     widthRange: newWidth ? newWidth : "",
@@ -314,7 +315,7 @@ function Inspector(props) {
                     widthUnit: attributes["widthUnit"]
                         ? attributes["widthUnit"]
                         : "px",
-                    heightRange: newHeight ? newHeight : "",
+                    heightRange: (!autoHeight && heightRange > 0) ? heightRange : newHeight ? newHeight : "",
                     // heightUnit: "px",
                     heightUnit: attributes["heightUnit"]
                         ? attributes["heightUnit"]
@@ -501,7 +502,7 @@ function Inspector(props) {
                                 onBlur={(link) => onUrlBlur(link)}
                                 help={__("Use http:// or https:// for links", "essential-blocks")}
                             />
-                             {urlError && <span className="eb-alert-error">{urlError}</span>}
+                            {urlError && <span className="eb-alert-error">{urlError}</span>}
                         </>
                     )}
                     {enableLink && (

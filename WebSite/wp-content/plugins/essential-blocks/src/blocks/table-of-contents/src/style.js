@@ -83,6 +83,8 @@ export default function Style(props) {
         wrpP_Right,
         wrpP_Left,
         wrpP_Unit,
+        alignment,
+        stickyPosition
     } = attributes;
 
     const [visible, setVisible] = useState(true);
@@ -326,7 +328,7 @@ export default function Style(props) {
 
         ${showListSeparator
             ? `
-                .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list li:first-child {
+                .${blockId}.eb-toc-container .eb-toc-wrapper .eb-toc__list > li:not(li:last-child) {
                     border-bottom: ${listSeperatorWidth}px ${listSeperatorStyle} ${listSeperatorColor};
                 }
         `
@@ -422,37 +424,53 @@ export default function Style(props) {
 		  ${mobileAllStylesCommon}
 	  `;
 
+    const getAlignmentStyle = () => {
+        switch (alignment) {
+            case 'align-top':
+                return 'top: 0; bottom: auto;';
+            case 'align-middle':
+                return 'top: 0; bottom: 0;';
+            case 'align-bottom':
+                return 'top: auto; bottom: 0;';
+            case 'align-left':
+                return 'left: 0; right: auto;';
+            case 'align-center':
+                return 'left: 0; right: 0;';
+            case 'align-right':
+                return 'left: auto; right: 0;';
+            default:
+                return '';
+        }
+    };
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		  ${desktopAllStylesCommon}
 		  ${isSticky
             ? `
-					.${blockId}.eb-toc-container.eb-toc-sticky-right.eb-toc-is-sticky {
+					.${blockId}.eb-toc-container.eb-toc-is-sticky {
 						position:fixed;
-						top: ${topSpace === 0 || topSpace ? topSpace : 25}%;
 						z-index:999;
+					}
+					.${blockId}.eb-toc-container.eb-toc-sticky-right.eb-toc-is-sticky {
 						left: auto;
 						right: 0;
+                        ${alignment === 'align-custom' ? `top: ${topSpace === 0 || topSpace ? topSpace : 25}%;` : getAlignmentStyle()}
 					}
 
 					.${blockId}.eb-toc-container.eb-toc-sticky-left.eb-toc-is-sticky {
-						position:fixed;
-						top: ${topSpace === 0 || topSpace ? topSpace : 25}%;
-						z-index:999;
 						left: 0;
+                        right: auto;
+                        ${alignment === 'align-custom' ? `top: ${topSpace === 0 || topSpace ? topSpace : 25}%;` : getAlignmentStyle()}
 					}
 
                     .${blockId}.eb-toc-container.eb-toc-sticky-top.eb-toc-is-sticky {
-						position:fixed;
-						left: ${topSpace === 0 || topSpace ? topSpace : 25}%;
-						z-index:999;
-						top: 0;
+                        top: 0;
+                        ${alignment === 'align-custom' ? `left: ${topSpace === 0 || topSpace ? topSpace : 25}%;` : getAlignmentStyle()}
 					}
                     .${blockId}.eb-toc-container.eb-toc-sticky-bottom.eb-toc-is-sticky {
-						position:fixed;
-						left: ${topSpace === 0 || topSpace ? topSpace : 25}%;
-						z-index:999;
 						bottom: 0;
+                        ${alignment === 'align-custom' ? `left: ${topSpace === 0 || topSpace ? topSpace : 25}%;` : getAlignmentStyle()}
 					}
 
 				  .${blockId}.eb-toc-container.eb-toc-is-sticky .eb-toc-wrapper{

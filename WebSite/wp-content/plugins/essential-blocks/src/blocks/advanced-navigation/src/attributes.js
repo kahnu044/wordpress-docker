@@ -314,6 +314,10 @@ const attributes = {
         default: "close-icon-right",
     },
 
+    version: {
+        type: 'string',
+    },
+
     //
     // typography Control attributes
     ...generateTypographyAttributes(typoPrefixNav, {

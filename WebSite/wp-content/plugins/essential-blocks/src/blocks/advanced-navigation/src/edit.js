@@ -3,7 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { InnerBlocks } from "@wordpress/block-editor";
-import { Fragment, memo } from "@wordpress/element";
+import { Fragment, memo, useEffect } from "@wordpress/element";
 import { select } from "@wordpress/data";
 import { createHigherOrderComponent } from "@wordpress/compose";
 
@@ -163,6 +163,14 @@ const Edit = (props) => {
         navVerticalAlign,
         hamburgerCloseIconAlign,
         classHook,
+        version,
+        wrpBds_inset,
+        wrpBds_shadowType,
+        wrpBds_shadowColor,
+        wrpBds_hOffset,
+        wrpBds_vOffset,
+        wrpBds_blur,
+        wrpBds_shadowTransition
     } = attributes;
 
     const enhancedProps = {
@@ -172,6 +180,29 @@ const Edit = (props) => {
     };
 
     editUseEffect(props) //editUseEffect Hook
+
+    // handle deprecation
+    useEffect(() => {
+        if (version === undefined) {
+            setAttributes({
+                version: 'v2'
+            });
+        }
+    }, [])
+    useEffect(() => {
+        if (version === 'v2' && wrpBds_shadowColor === undefined) {
+
+            setAttributes({
+                wrpBds_inset: false,
+                wrpBds_shadowType: "normal",
+                wrpBds_shadowColor: "rgba(98,103,145,0.15)",
+                wrpBds_hOffset: 0,
+                wrpBds_vOffset: 22,
+                wrpBds_blur: 35,
+                wrpBds_shadowTransition: 0.5
+            });
+        }
+    }, [version])
 
     const layoutPreset = layout === "is-horizontal" ? preset : verticalPreset;
 
@@ -189,7 +220,7 @@ const Edit = (props) => {
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
                     <div
-                        className={`${blockId} eb-advanced-navigation-wrapper ${layout} ${layoutPreset} ${layout == "is-horizontal"
+                        className={`${blockId} eb-advanced-navigation-wrapper ${layout} ${version} ${layoutPreset} ${layout == "is-horizontal"
                             ? navAlign
                             : navVerticalAlign
                             } ${showDropdownIcon ? "" : "remove-dropdown-icon"} ${navBtnType === true

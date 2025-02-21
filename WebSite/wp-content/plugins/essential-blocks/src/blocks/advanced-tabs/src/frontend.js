@@ -21,19 +21,6 @@ window.addEventListener("DOMContentLoaded", () => {
             ".eb-advanced-tabs-wrapper"
         ).children[1].children;
 
-        // Ensure display of all tab contents is initially set properly
-        for (const tabContentWrap of tabContentWrappers) {
-            // Adding a transitionend event to handle display
-            tabContentWrap.addEventListener('transitionend', function () {
-                if (tabContentWrap.classList.contains("inactive")) {
-                    tabContentWrap.style.display = 'none';  // Hide content after transition ends
-                }
-            }, { once: true });
-
-            // Initial display setup: hide all tab contents initially
-            tabContentWrap.style.display = 'none';
-        }
-
         // Get the initially active tab element if available
         const activeTabElement = titleListsWrap.querySelector("li.active");
         if (activeTabElement) {
@@ -43,11 +30,9 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (tabContentWrap.dataset.tabId === dataTitleTabId) {
                     tabContentWrap.classList.add("active");
                     tabContentWrap.classList.remove("inactive");
-                    tabContentWrap.style.display = 'block';  // Ensure active tab's content is displayed
                 } else {
                     tabContentWrap.classList.add("inactive");
                     tabContentWrap.classList.remove("active");
-                    tabContentWrap.style.display = 'none';
                 }
             }
         }
@@ -83,13 +68,11 @@ window.addEventListener("DOMContentLoaded", () => {
                     // Toggle tab content visibility
                     for (const tabContentWrap of tabContentWrappers) {
                         if (tabContentWrap.dataset.tabId === titleLiTag.dataset.titleTabId) {
-                            tabContentWrap.style.display = 'block';
                             tabContentWrap.classList.add("active");
                             tabContentWrap.classList.remove("inactive");
                         } else {
                             tabContentWrap.classList.add("inactive");
                             tabContentWrap.classList.remove("active");
-                            tabContentWrap.style.display = 'none';
                         }
                     }
                 }
@@ -112,7 +95,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 // Toggle tab content visibility on click
                 for (const tabContentWrap of tabContentWrappers) {
                     if (tabContentWrap.dataset.tabId === thisLiTag.dataset.titleTabId) {
-                        tabContentWrap.style.display = 'block';  // Ensure the new active tab content is visible
                         tabContentWrap.classList.add("active");
                         tabContentWrap.classList.remove("inactive");
                         /* For MultiColumn Block */
@@ -144,7 +126,6 @@ window.addEventListener("DOMContentLoaded", () => {
                     } else {
                         tabContentWrap.classList.add("inactive");
                         tabContentWrap.classList.remove("active");
-                        tabContentWrap.style.display = 'none';
                     }
                 }
             });
@@ -172,16 +153,13 @@ window.addEventListener("DOMContentLoaded", () => {
                     if (closeAllTabs === 'true') {
                         item.classList.add("inactive");
                         item.classList.remove("active");
-                        item.style.display = 'none';
                     } else {
                         item.classList.add("active");
                         item.classList.remove("inactive");
-                        item.style.display = 'block';
                     }
                 } else {
                     item.classList.add("inactive");
                     item.classList.remove("active");
-                    item.style.display = 'none';
                 }
             });
         }
