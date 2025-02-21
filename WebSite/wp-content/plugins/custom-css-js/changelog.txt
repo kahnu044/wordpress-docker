@@ -1,5 +1,10 @@
 == Changelog ==
 
+= 3.50 =
+* 02/17/2025
+* Fix: the editor doesn't show up under certain conditions 
+* Fix: don't show the code excerpts in the list table, if the "Extended View" option is enabled for posts or pages
+
 = 3.49 =
 * 11/13/2024
 * Fix: add nuance for the "in Block editor" option for websites with WP before v6.6 and after

@@ -5,7 +5,7 @@ Email: diana@burduja.eu
 Tags: custom CSS, custom JS, site css, add style, customize theme 
 Requires at least: 3.0.1
 Tested up to: 6.7 
-Stable tag: 3.49
+Stable tag: 3.50
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -101,6 +101,11 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 4. Add/Edit HTML 
 
 == Changelog ==
+
+= 3.50 =
+* 02/17/2025
+* Fix: the editor doesn't show up under certain conditions 
+* Fix: don't show the code excerpts in the list table, if the "Extended View" option is enabled for posts or pages
 
 = 3.49 =
 * 11/13/2024

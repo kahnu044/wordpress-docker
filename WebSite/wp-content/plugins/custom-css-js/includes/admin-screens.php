@@ -75,6 +75,7 @@ class CustomCSSandJS_Admin {
 
 		// Add some custom actions/filters
 		add_action( 'manage_custom-css-js_posts_custom_column', array( $this, 'manage_posts_columns' ), 10, 2 );
+		add_filter( 'list_table_primary_column', array( $this, 'list_table_primary_column' ), 10, 2 );
 		add_filter( 'manage_edit-custom-css-js_sortable_columns', array( $this, 'manage_edit_posts_sortable_columns' ) );
 		add_action( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
 		add_action( 'posts_join_paged', array( $this, 'posts_join_paged' ), 10, 2 );
@@ -342,7 +343,7 @@ class CustomCSSandJS_Admin {
 			'cb'        => '<input type="checkbox" />',
 			'active'    => '<span class="ccj-dashicons dashicons dashicons-star-empty" title="' . __( 'Active', 'custom-css-js' ) . '"></span>',
 			'type'      => __( 'Type', 'custom-css-js' ),
-			'title'     => __( 'Title' ),
+			'name'      => __( 'Title' ),
 			'author'    => __( 'Author' ),
 			'published' => __( 'Published' ),
 			'modified'  => __( 'Modified', 'custom-css-js' ),
@@ -351,9 +352,26 @@ class CustomCSSandJS_Admin {
 
 
 	/**
+	 * Set list table primary column.
+	 */
+	function list_table_primary_column() {
+		return 'name';
+	}
+
+
+	/**
 	 * Fill the data for the new added columns in the `edit` screen
 	 */
 	function manage_posts_columns( $column, $post_id ) {
+
+		if ( 'name' === $column ) {
+			$post      = get_post( $post_id );
+			$edit_link = get_edit_post_link( $post_id );
+			$title     = _draft_or_post_title( $post_id );
+			echo '<strong><a class="row-title" href="' . esc_url( $edit_link ) . '">' . esc_html( $title ) . '</a>';
+				_post_states( $post );
+			echo '</strong>';
+		}
 
 		if ( 'type' === $column ) {
 			$options = $this->get_options( $post_id );
@@ -760,8 +778,8 @@ End of comment */ ',
 					) . PHP_EOL . PHP_EOL;
 				}
 				$code_mirror_mode   = 'text/javascript';
-				$code_mirror_before = '<script type="text/javascript">';
-				$code_mirror_after  = '</script>';
+				$code_mirror_before = 'script type="text/javascript"';
+				$code_mirror_after  = '/script';
 				break;
 			case 'html':
 				if ( $new_post ) {
@@ -772,7 +790,7 @@ For example, you can use the following code for loading the jQuery library from 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 or the following one for loading the Bootstrap library from jsDelivr:
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 -- End of the comment --> ',
 						'custom-css-js'
@@ -810,8 +828,8 @@ End of comment */ ',
 
 				}
 				$code_mirror_mode   = 'text/css';
-				$code_mirror_before = '<style type="text/css">';
-				$code_mirror_after  = '</style>';
+				$code_mirror_before = 'style type="text/css"';
+				$code_mirror_after  = '/style';
 
 		}
 
@@ -826,9 +844,9 @@ End of comment */ ',
 
 				</div>
 
-				<div class="code-mirror-before"><div><?php echo htmlentities( $code_mirror_before ); ?></div></div>
+				<div class="code-mirror-before"><div class="code-mirror-before-<?php echo esc_attr($language); ?>"><?php echo htmlentities( $code_mirror_before ); ?></div></div>
 				<textarea class="wp-editor-area" id="ccj_content" mode="<?php echo htmlentities( $code_mirror_mode ); ?>" name="content" autofocus><?php echo $post->post_content; ?></textarea>
-				<div class="code-mirror-after"><div><?php echo htmlentities( $code_mirror_after ); ?></div></div>
+				<div class="code-mirror-after"><div class="code-mirror-after-<?php echo esc_attr($language); ?>"><?php echo htmlentities( $code_mirror_after ); ?></div></div>
 
 				<table id="post-status-info"><tbody><tr>
 					<td class="autosave-info">
