@@ -1,69 +1,103 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace GraphQL\Executor;
 
-use ArrayAccess;
-use Closure;
+use GraphQL\Error\InvariantViolation;
 use GraphQL\Executor\Promise\Adapter\SyncPromiseAdapter;
 use GraphQL\Executor\Promise\Promise;
 use GraphQL\Executor\Promise\PromiseAdapter;
 use GraphQL\Language\AST\DocumentNode;
+use GraphQL\Language\AST\FieldNode;
+use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Schema;
-use function is_array;
-use function is_object;
+use GraphQL\Utils\Utils;
 
 /**
  * Implements the "Evaluating requests" section of the GraphQL specification.
+ *
+ * @phpstan-type ArgsMapper callable(array<string, mixed>, FieldDefinition, FieldNode, mixed): mixed
+ * @phpstan-type FieldResolver callable(mixed, array<string, mixed>, mixed, ResolveInfo): mixed
+ * @phpstan-type ImplementationFactory callable(PromiseAdapter, Schema, DocumentNode, mixed, mixed, array<mixed>, ?string, callable, callable): ExecutorImplementation
+ *
+ * @see \GraphQL\Tests\Executor\ExecutorTest
  */
 class Executor
 {
-    /** @var callable */
+    /**
+     * @var callable
+     *
+     * @phpstan-var FieldResolver
+     */
     private static $defaultFieldResolver = [self::class, 'defaultFieldResolver'];
 
-    /** @var PromiseAdapter */
-    private static $defaultPromiseAdapter;
+    /**
+     * @var callable
+     *
+     * @phpstan-var ArgsMapper
+     */
+    private static $defaultArgsMapper = [self::class, 'defaultArgsMapper'];
 
-    /** @var callable */
+    private static ?PromiseAdapter $defaultPromiseAdapter;
+
+    /**
+     * @var callable
+     *
+     * @phpstan-var ImplementationFactory
+     */
     private static $implementationFactory = [ReferenceExecutor::class, 'create'];
 
-    public static function getDefaultFieldResolver() : callable
+    /** @phpstan-return FieldResolver */
+    public static function getDefaultFieldResolver(): callable
     {
         return self::$defaultFieldResolver;
     }
 
     /**
      * Set a custom default resolve function.
+     *
+     * @phpstan-param FieldResolver $fieldResolver
      */
-    public static function setDefaultFieldResolver(callable $fieldResolver)
+    public static function setDefaultFieldResolver(callable $fieldResolver): void
     {
         self::$defaultFieldResolver = $fieldResolver;
     }
 
-    public static function getPromiseAdapter() : PromiseAdapter
+    /** @phpstan-return ArgsMapper */
+    public static function getDefaultArgsMapper(): callable
     {
-        return self::$defaultPromiseAdapter ?? (self::$defaultPromiseAdapter = new SyncPromiseAdapter());
+        return self::$defaultArgsMapper;
     }
 
-    /**
-     * Set a custom default promise adapter.
-     */
-    public static function setPromiseAdapter(?PromiseAdapter $defaultPromiseAdapter = null)
+    /** @phpstan-param ArgsMapper $argsMapper */
+    public static function setDefaultArgsMapper(callable $argsMapper): void
+    {
+        self::$defaultArgsMapper = $argsMapper;
+    }
+
+    public static function getDefaultPromiseAdapter(): PromiseAdapter
+    {
+        return self::$defaultPromiseAdapter ??= new SyncPromiseAdapter();
+    }
+
+    /** Set a custom default promise adapter. */
+    public static function setDefaultPromiseAdapter(?PromiseAdapter $defaultPromiseAdapter = null): void
     {
         self::$defaultPromiseAdapter = $defaultPromiseAdapter;
     }
 
-    public static function getImplementationFactory() : callable
+    /** @phpstan-return ImplementationFactory */
+    public static function getImplementationFactory(): callable
     {
         return self::$implementationFactory;
     }
 
     /**
      * Set a custom executor implementation factory.
+     *
+     * @phpstan-param ImplementationFactory $implementationFactory
      */
-    public static function setImplementationFactory(callable $implementationFactory)
+    public static function setImplementationFactory(callable $implementationFactory): void
     {
         self::$implementationFactory = $implementationFactory;
     }
@@ -74,27 +108,26 @@ class Executor
      * Always returns ExecutionResult and never throws.
      * All errors which occur during operation execution are collected in `$result->errors`.
      *
-     * @param mixed|null                    $rootValue
-     * @param mixed|null                    $contextValue
-     * @param array<mixed>|ArrayAccess|null $variableValues
-     * @param string|null                   $operationName
+     * @param mixed $rootValue
+     * @param mixed $contextValue
+     * @param array<string, mixed>|null $variableValues
      *
-     * @return ExecutionResult|Promise
+     * @phpstan-param FieldResolver|null $fieldResolver
      *
      * @api
+     *
+     * @throws InvariantViolation
      */
     public static function execute(
         Schema $schema,
         DocumentNode $documentNode,
         $rootValue = null,
         $contextValue = null,
-        $variableValues = null,
-        $operationName = null,
+        ?array $variableValues = null,
+        ?string $operationName = null,
         ?callable $fieldResolver = null
-    ) {
-        // TODO: deprecate (just always use SyncAdapter here) and have `promiseToExecute()` for other cases
-
-        $promiseAdapter = static::getPromiseAdapter();
+    ): ExecutionResult {
+        $promiseAdapter = new SyncPromiseAdapter();
 
         $result = static::promiseToExecute(
             $promiseAdapter,
@@ -107,11 +140,7 @@ class Executor
             $fieldResolver
         );
 
-        if ($promiseAdapter instanceof SyncPromiseAdapter) {
-            $result = $promiseAdapter->wait($result);
-        }
-
-        return $result;
+        return $promiseAdapter->wait($result);
     }
 
     /**
@@ -120,12 +149,12 @@ class Executor
      *
      * Useful for async PHP platforms.
      *
-     * @param mixed|null        $rootValue
-     * @param mixed|null        $contextValue
-     * @param array<mixed>|null $variableValues
-     * @param string|null       $operationName
+     * @param mixed $rootValue
+     * @param mixed $contextValue
+     * @param array<string, mixed>|null $variableValues
      *
-     * @return Promise
+     * @phpstan-param FieldResolver|null $fieldResolver
+     * @phpstan-param ArgsMapper|null $argsMapper
      *
      * @api
      */
@@ -135,22 +164,21 @@ class Executor
         DocumentNode $documentNode,
         $rootValue = null,
         $contextValue = null,
-        $variableValues = null,
-        $operationName = null,
-        ?callable $fieldResolver = null
-    ) {
-        $factory = self::$implementationFactory;
-
-        /** @var ExecutorImplementation $executor */
-        $executor = $factory(
+        ?array $variableValues = null,
+        ?string $operationName = null,
+        ?callable $fieldResolver = null,
+        ?callable $argsMapper = null
+    ): Promise {
+        $executor = (self::$implementationFactory)(
             $promiseAdapter,
             $schema,
             $documentNode,
             $rootValue,
             $contextValue,
-            $variableValues,
+            $variableValues ?? [],
             $operationName,
-            $fieldResolver ?? self::$defaultFieldResolver
+            $fieldResolver ?? self::$defaultFieldResolver,
+            $argsMapper ?? self::$defaultArgsMapper,
         );
 
         return $executor->doExecute();
@@ -162,29 +190,30 @@ class Executor
      * and returns it as the result, or if it's a function, returns the result
      * of calling that function while passing along args and context.
      *
-     * @param mixed                $objectValue
+     * @param mixed $objectLikeValue
      * @param array<string, mixed> $args
-     * @param mixed|null           $contextValue
+     * @param mixed $contextValue
      *
-     * @return mixed|null
+     * @return mixed
      */
-    public static function defaultFieldResolver($objectValue, $args, $contextValue, ResolveInfo $info)
+    public static function defaultFieldResolver($objectLikeValue, array $args, $contextValue, ResolveInfo $info)
     {
-        $fieldName = $info->fieldName;
-        $property  = null;
+        $property = Utils::extractKey($objectLikeValue, $info->fieldName);
 
-        if (is_array($objectValue) || $objectValue instanceof ArrayAccess) {
-            if (isset($objectValue[$fieldName])) {
-                $property = $objectValue[$fieldName];
-            }
-        } elseif (is_object($objectValue)) {
-            if (isset($objectValue->{$fieldName})) {
-                $property = $objectValue->{$fieldName};
-            }
-        }
-
-        return $property instanceof Closure
-            ? $property($objectValue, $args, $contextValue, $info)
+        return $property instanceof \Closure
+            ? $property($objectLikeValue, $args, $contextValue, $info)
             : $property;
+    }
+
+    /**
+     * @template T of array<string, mixed>
+     *
+     * @param T $args
+     *
+     * @return T
+     */
+    public static function defaultArgsMapper(array $args): array
+    {
+        return $args;
     }
 }

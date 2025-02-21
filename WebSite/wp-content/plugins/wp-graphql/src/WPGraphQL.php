@@ -157,7 +157,7 @@ final class WPGraphQL {
 	 *
 	 * @param bool $is_introspection_query
 	 *
-	 * @since todo
+	 * @since 1.28.0
 	 */
 	public static function set_is_introspection_query( bool $is_introspection_query = false ): void {
 		self::$is_introspection_query = $is_introspection_query;
@@ -166,7 +166,7 @@ final class WPGraphQL {
 	/**
 	 * Whether the request is an introspection query or not (query for __type or __schema)
 	 *
-	 * @since todo
+	 * @since 1.28.0
 	 */
 	public static function is_introspection_query(): bool {
 		return self::$is_introspection_query;
@@ -272,8 +272,8 @@ final class WPGraphQL {
 		\GraphQL\Language\Visitor::visit(
 			$ast,
 			[
-				'Field' => static function ( \GraphQL\Language\AST\FieldNode $node ) use ( &$is_introspection ) {
-					if ( '__schema' === $node->name->value || '__type' === $node->name->value ) {
+				'Field' => static function ( \GraphQL\Language\AST\Node $node ) use ( &$is_introspection ) {
+					if ( $node instanceof \GraphQL\Language\AST\FieldNode && ( '__schema' === $node->name->value || '__type' === $node->name->value ) ) {
 						$is_introspection = true;
 						return \GraphQL\Language\Visitor::stop();
 					}

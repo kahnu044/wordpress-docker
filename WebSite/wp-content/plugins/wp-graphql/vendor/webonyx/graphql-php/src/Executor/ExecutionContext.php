@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace GraphQL\Executor;
 
@@ -16,15 +14,15 @@ use GraphQL\Type\Schema;
  * Namely, schema of the type system that is currently executing,
  * and the fragments defined in the query document.
  *
- * @internal
+ * @phpstan-import-type FieldResolver from Executor
+ * @phpstan-import-type ArgsMapper from Executor
  */
 class ExecutionContext
 {
-    /** @var Schema */
-    public $schema;
+    public Schema $schema;
 
-    /** @var FragmentDefinitionNode[] */
-    public $fragments;
+    /** @var array<string, FragmentDefinitionNode> */
+    public array $fragments;
 
     /** @var mixed */
     public $rootValue;
@@ -32,47 +30,65 @@ class ExecutionContext
     /** @var mixed */
     public $contextValue;
 
-    /** @var OperationDefinitionNode */
-    public $operation;
+    public OperationDefinitionNode $operation;
 
-    /** @var mixed[] */
-    public $variableValues;
+    /** @var array<string, mixed> */
+    public array $variableValues;
 
-    /** @var callable */
+    /**
+     * @var callable
+     *
+     * @phpstan-var FieldResolver
+     */
     public $fieldResolver;
 
-    /** @var Error[] */
-    public $errors;
+    /**
+     * @var callable
+     *
+     * @phpstan-var ArgsMapper
+     */
+    public $argsMapper;
 
-    /** @var PromiseAdapter */
-    public $promiseAdapter;
+    /** @var array<int, Error> */
+    public array $errors;
 
+    public PromiseAdapter $promiseAdapter;
+
+    /**
+     * @param array<string, FragmentDefinitionNode> $fragments
+     * @param mixed $rootValue
+     * @param mixed $contextValue
+     * @param array<string, mixed> $variableValues
+     * @param array<int, Error> $errors
+     *
+     * @phpstan-param FieldResolver $fieldResolver
+     */
     public function __construct(
-        $schema,
-        $fragments,
+        Schema $schema,
+        array $fragments,
         $rootValue,
         $contextValue,
-        $operation,
-        $variableValues,
-        $errors,
-        $fieldResolver,
-        $promiseAdapter
+        OperationDefinitionNode $operation,
+        array $variableValues,
+        array $errors,
+        callable $fieldResolver,
+        callable $argsMapper,
+        PromiseAdapter $promiseAdapter
     ) {
-        $this->schema         = $schema;
-        $this->fragments      = $fragments;
-        $this->rootValue      = $rootValue;
-        $this->contextValue   = $contextValue;
-        $this->operation      = $operation;
+        $this->schema = $schema;
+        $this->fragments = $fragments;
+        $this->rootValue = $rootValue;
+        $this->contextValue = $contextValue;
+        $this->operation = $operation;
         $this->variableValues = $variableValues;
-        $this->errors         = $errors ?? [];
-        $this->fieldResolver  = $fieldResolver;
+        $this->errors = $errors;
+        $this->fieldResolver = $fieldResolver;
+        $this->argsMapper = $argsMapper;
         $this->promiseAdapter = $promiseAdapter;
     }
 
-    public function addError(Error $error)
+    public function addError(Error $error): void
     {
         $this->errors[] = $error;
-
-        return $this;
     }
 }

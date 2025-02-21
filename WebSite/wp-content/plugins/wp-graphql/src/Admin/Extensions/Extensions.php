@@ -182,6 +182,7 @@ final class Extensions {
 	 */
 	private function get_installed_plugins() {
 		if ( ! function_exists( 'get_plugins' ) ) {
+			// @phpstan-ignore requireOnce.fileNotFound
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
@@ -341,7 +342,7 @@ final class Extensions {
 	public function get_extensions(): array {
 		if ( ! isset( $this->extensions ) ) {
 			// @todo Replace with a call to the WPGraphQL server.
-			$extensions = Registry::get_extenions();
+			$extensions = Registry::get_extensions();
 
 			/**
 			 * Filter the list of extensions, allowing other plugins to add or remove extensions.
