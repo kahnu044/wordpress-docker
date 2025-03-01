@@ -6,6 +6,7 @@ export const DEFAULT_STATE = {
     globalTypography: {},
     blockDefaults: {},
     isSaving: false,
+    isChanged: false,
     blockData: {}
 };
 

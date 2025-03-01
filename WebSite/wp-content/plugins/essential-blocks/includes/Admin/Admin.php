@@ -68,6 +68,7 @@
             // Redirect after Plugin is updated
             add_action( 'admin_init', [ $this, 'maybe_redirect' ] );
             add_action( 'admin_init', [ $this, 'enable_notices' ], 11 );
+            // add_action( 'admin_footer', [ $this, 'eb_whats_new_notice' ] );
         }
 
         public function enable_notices()
@@ -756,12 +757,49 @@
         <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
             <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
             <?php
-                printf(
-                            __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" ),
+                $message = __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" );
+                        $message = apply_filters( 'eb_promotion_message_on_admin_screen', $message );
+                        printf(
+                            $message,
                             esc_url( 'https://essential-blocks.com/changelog/' )
                         );
                     ?>
     </div>
     <?php
         }
-    }
+
+            public function eb_whats_new_notice()
+            {
+                if ( wp_doing_ajax() ) {
+                    return;
+                }
+
+                if ( get_transient( 'essential_block_whats_new_notice' ) == true ) {
+                    delete_transient( 'essential_block_whats_new_notice' );
+
+                ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function ($) {
+                    var promoHtml = '<div class="eb-whats-new">';
+                    promoHtml += '<div class="eb-hn-title">';
+                    promoHtml += '<span class="dashicons dashicons-flag"></span></span><span>What\'s new in Essential Blocks 5.3.0?</span>';
+                    promoHtml +=  '</div>';
+                    promoHtml +=  '<div class="eb-hn-content">';
+                    promoHtml +=  '<p> Introducing Essential Blocks v5.3.0 with Lottie Animation to make your website interactive.</p>';
+                    promoHtml +=  '<button class="button button-primary">Learn More</button>';
+                    promoHtml +=  '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
+                    promoHtml +=  '</div>';
+                    promoHtml +=  '</div>';
+
+                    // Append after the last menu item
+                    jQuery('#toplevel_page_essential-blocks').append(promoHtml);
+
+                    jQuery(document).on('click', '.eb-whats-new .button-dismiss', function () {
+                        jQuery('.eb-whats-new').remove();
+                    });
+                });
+            </script>
+            <?php
+                }
+                    }
+            }

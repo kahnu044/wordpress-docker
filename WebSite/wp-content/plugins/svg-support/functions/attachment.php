@@ -120,7 +120,7 @@ function bodhi_svgs_generate_svg_attachment_metadata( $metadata, $attachment_id 
 		$svg_path = get_attached_file( $attachment_id );
 		$upload_dir = wp_upload_dir();
 		// Get the path relative to /uploads/
-		$relative_path = str_replace($upload_dir['basedir'], '', $svg_path);
+		$relative_path = $svg_path ? str_replace($upload_dir['basedir'], '', $svg_path) : '';
 		$filename = basename( $svg_path );
 
 		$dimensions = bodhi_svgs_get_dimensions( $svg_path );
@@ -286,13 +286,15 @@ function bodhi_svgs_minify() {
  * @return bool True if the contents are gzipped, false otherwise.
  */
 function bodhi_svgs_is_gzipped( $contents ) {
+	if ($contents === null) {
+		return false;
+	}
 
 	if ( function_exists( 'mb_strpos' ) ) {
 		return 0 === mb_strpos( $contents, "\x1f" . "\x8b" . "\x08" );
 	} else {
 		return 0 === strpos( $contents, "\x1f" . "\x8b" . "\x08" );
 	}
-
 }
 
 /**
@@ -316,26 +318,31 @@ function bodhi_svgs_sanitize_svg($file) {
 	}
 
 	// Multiple validation checks for SVG
-	if ($file_path && file_exists($file_path)) {
+	if ( $file_path && file_exists( $file_path ) ) {
 		// 1. Check MIME type using fileinfo
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$real_mime = finfo_file($finfo, $file_path);
-		finfo_close($finfo);
+		$finfo = finfo_open( FILEINFO_MIME_TYPE );
+		$real_mime = finfo_file( $finfo, $file_path );
+		finfo_close( $finfo );
 
 		// 2. Read first bytes of the file to check for SVG header
-		$file_content = file_get_contents($file_path);
-		$is_svg_content = false;
-		if ($file_content) {
-			// Check for XML declaration and SVG tag
-			$is_svg_content = (
-				preg_match('/^\s*(?:<\?xml[^>]*>\s*)?(?:<!DOCTYPE[^>]*>\s*)?<svg[^>]*>/i', $file_content) &&
-				strpos($file_content, '</svg>') !== false
-			);
-		}
+		$file_content = file_get_contents( $file_path );
+		
+		// Check for XML declaration and SVG tag
+		$pattern1 = '/^[\s\n]*(?:<\?xml[^>]*>[\s\n]*)?(?:<!--.*?-->[\s\n]*)*(?:<!DOCTYPE[^>]*>[\s\n]*)?(?:<!--.*?-->[\s\n]*)*<svg[^>]*>/is';
+		$pattern2 = '/^[\s\n]*(?:<!--.*?-->[\s\n]*)*<svg[^>]*>/is';
 
-		// If neither MIME type nor content validation passes
-		if ($real_mime !== 'image/svg+xml' || !$is_svg_content) {
-			$file['error'] = __('File is not a valid SVG.', 'svg-support');
+		$match1 = preg_match( $pattern1, $file_content );
+		$match2 = preg_match( $pattern2, $file_content );
+		$has_closing = strpos( $file_content, '</svg>' ) !== false;
+
+		$is_svg_content = ( $match1 || $match2 ) && $has_closing;
+
+		// If content validation fails OR (mime type isn't SVG AND isn't a plain text file containing SVG)
+		if ( !$is_svg_content || 
+			( $real_mime !== 'image/svg+xml' && 
+			  $real_mime !== 'image/svg' && 
+			  !( $real_mime === 'text/plain' && $is_svg_content ) ) ) {
+			$file['error'] = __( 'File is not a valid SVG.', 'svg-support' );
 			return $file;
 		}
 	}
@@ -507,53 +514,6 @@ function bodhi_svgs_rest_pre_upload($file, $request) {
     return $file;
 }
 add_filter('rest_pre_upload_file', 'bodhi_svgs_rest_pre_upload', 10, 2);
-
-/**
- * Clean up duplicate inline_featured_image meta entries
- * 
- * This is a one-time migration function that runs only when upgrading to version 2.5.9
- * to fix duplicate meta entries caused by older plugin versions. The slow meta query
- * is intentional and necessary for this cleanup operation.
- *
- * @since 2.5.9
- * @see svg-support.php Version upgrade handling
- * @return void
- */
-function bodhi_svgs_cleanup_duplicate_meta() {
-    // Use WP_Query with optimized parameters and batching
-    $batch_size = 100;
-    $offset = 0;
-    
-    do {
-        $query = new WP_Query(array(
-            'post_type'      => 'any',
-            'posts_per_page' => $batch_size,
-            'offset'         => $offset,
-            'meta_query'     => array(
-                array(
-                    'key'     => 'inline_featured_image',
-                    'compare' => 'EXISTS'
-                )
-            ),
-            'no_found_rows'  => true,
-            'fields'         => 'ids'
-        ));
-
-        if ($query->have_posts()) {
-            foreach ($query->posts as $post_id) {
-                $meta_values = get_post_meta($post_id, 'inline_featured_image');
-                
-                if (count($meta_values) > 1) {
-                    $keep_value = end($meta_values);
-                    delete_post_meta($post_id, 'inline_featured_image');
-                    add_post_meta($post_id, 'inline_featured_image', $keep_value);
-                }
-            }
-        }
-
-        $offset += $batch_size;
-    } while (count($query->posts) === $batch_size);
-}
 
 function bodhi_svgs_handle_upload_check($fileinfo) {
     if ($fileinfo['type'] === 'image/svg+xml') {

@@ -91,7 +91,7 @@ const UnitRangeControl = ({ label, unitTypes, itemKey, data, step, setTypo, devi
     )
 }
 
-const TypographyOptions = ({ element, typography, setTypography, hideFontFamily = false }) => {
+const TypographyOptions = ({ element, typography, setTypography, setIsChanged, hideFontFamily = false }) => {
     const deviceType = useDeviceType()
 
     //Function to seet Typography by key
@@ -104,6 +104,7 @@ const TypographyOptions = ({ element, typography, setTypography, hideFontFamily 
         if (!value) {
             delete typo[element][key]
         }
+        setIsChanged(true)
         setTypography({ ...typo })
     }
 
@@ -191,7 +192,12 @@ const TypographyOptions = ({ element, typography, setTypography, hideFontFamily 
 
 const TypographySettings = (props) => {
     const {
-        getGlobalTypography
+        getGlobalTypography,
+        globalSettingsSave,
+        globalSettingsReset,
+        isChanged,
+        setIsChanged,
+        isResetable
     } = props
 
     const [typography, setTypography] = useState({});
@@ -237,6 +243,7 @@ const TypographySettings = (props) => {
         const typography = { ...customTypography }
         delete typography[item]
         setCustomTypography({ ...typography })
+        setIsChanged(true)
     };
 
     const generateFontObj = (font, size = false) => {
@@ -352,6 +359,7 @@ const TypographySettings = (props) => {
                                                                     typography={typography}
                                                                     hideFontFamily={heading === 'allHeadings' ? true : false}
                                                                     setTypography={setTypography}
+                                                                    setIsChanged={setIsChanged}
                                                                 />
                                                             </div>
                                                         ))}
@@ -368,6 +376,7 @@ const TypographySettings = (props) => {
                                                             element={item}
                                                             typography={typography}
                                                             setTypography={setTypography}
+                                                            setIsChanged={setIsChanged}
                                                         />
                                                     </>
                                                 )}
@@ -412,12 +421,15 @@ const TypographySettings = (props) => {
                                             <div className="eb-add-btn add-custom-typography">
                                                 <Button
                                                     className="eb-add-btn__button add-custom-typography-btn"
-                                                    onClick={() => setCustomTypography({
-                                                        ...customTypography,
-                                                        [`ebcustomtypo_${Math.random().toString(36).substring(2, 7)}`]: {
-                                                            name: `Custom Typography`,
-                                                        }
-                                                    })}
+                                                    onClick={() => {
+                                                        setIsChanged(true)
+                                                        setCustomTypography({
+                                                            ...customTypography,
+                                                            [`ebcustomtypo_${Math.random().toString(36).substring(2, 7)}`]: {
+                                                                name: `Custom Typography`,
+                                                            }
+                                                        })
+                                                    }}
                                                 >Add Custom Typography <Dashicon icon={"plus"} /></Button>
                                             </div>
                                         </NavigatorScreen>
@@ -447,6 +459,7 @@ const TypographySettings = (props) => {
                                                         element={item}
                                                         typography={customTypography}
                                                         setTypography={setCustomTypography}
+                                                        setIsChanged={setIsChanged}
                                                     />
                                                 </NavigatorScreen>
                                             </div>
@@ -459,12 +472,33 @@ const TypographySettings = (props) => {
                 )
                 }
             </TabPanel >
+            <div className='global-controls-save'>
+                <Button
+                    variant="secondary"
+                    className={`global-controls-reset`}
+                    onClick={() => globalSettingsReset('typography')}
+                    label="Reset All Global Typography"
+                    showTooltip={true}
+                    disabled={!isResetable('typography')}
+                >
+                    <Dashicon icon={"image-rotate"} /> Reset
+                </Button>
+                <Button
+                    variant="primary"
+                    className={`global-controls-save-btn`}
+                    disabled={!isChanged}
+                    onClick={() => globalSettingsSave()}
+                >
+                    <Dashicon icon={"database-export"} /> Save Settings
+                </Button>
+            </div>
         </div >
     )
 }
 
-export default withSelect((select) => {
+export default withSelect((select, ownProps) => {
     return {
-        getGlobalTypography: select("essential-blocks").getGlobalTypography()
+        getGlobalTypography: select("essential-blocks").getGlobalTypography(),
+        ...ownProps
     };
 })(TypographySettings);

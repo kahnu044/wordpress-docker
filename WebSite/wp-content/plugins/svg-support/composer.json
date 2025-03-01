@@ -18,8 +18,8 @@
     ],
     "require": {
         "php": ">=7.4",
-        "enshrined/svg-sanitize": "^0.21.0",
-        "cure53/dompurify": "2.5.8"
+        "cure53/dompurify": "2.5.8",
+        "enshrined/svg-sanitize": "^0.21.0"
     },
     "scripts": {
         "post-install-cmd": [
@@ -36,4 +36,4 @@
         "preferred-install": "dist",
         "sort-packages": true
     }
-} 
+}

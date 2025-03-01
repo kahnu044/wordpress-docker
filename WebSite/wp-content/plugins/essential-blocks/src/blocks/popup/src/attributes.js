@@ -159,6 +159,11 @@ const attributes = {
         type: "string",
         default: "",
     },
+    disablePageScroll: {
+        type: "boolean",
+        default: true,
+    },
+
     ...generateResponsiveRangeAttributes(POPUP_HEIGHT),
     ...generateResponsiveRangeAttributes(POPUP_WIDTH, { defaultRange: 650 }),
     ...generateResponsiveRangeAttributes(CLOSE_BTN_LEFT, {

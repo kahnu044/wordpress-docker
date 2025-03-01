@@ -88,6 +88,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         overlayColor,
         useCookies,
         cookieExpireTime,
+        disablePageScroll
     } = attributes;
 
     return (
@@ -514,6 +515,23 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 }
                             />
                         )}
+
+                        <ToggleControl
+                            label={__(
+                                "Enable Page Scroll",
+                                "essential-blocks"
+                            )}
+                            checked={disablePageScroll}
+                            onChange={() =>
+                                setAttributes({
+                                    disablePageScroll: !disablePageScroll,
+                                })
+                            }
+                            help={__(
+                                "Page scroll when popup open",
+                                "essential-blocks"
+                            )}
+                        />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__(

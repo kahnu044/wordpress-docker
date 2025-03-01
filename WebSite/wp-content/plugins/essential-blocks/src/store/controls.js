@@ -3,7 +3,7 @@
 */
 import {
     ebJsonStringCheck
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 /**
  * Import Constants

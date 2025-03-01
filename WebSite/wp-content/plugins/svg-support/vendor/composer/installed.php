@@ -3,7 +3,7 @@
         'name' => 'benbodhi/svg-support',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'b46345c87ad0b956fac8c98165e63c99eeed1838',
+        'reference' => 'c8c61134935cfdadc2860ee4224523ae8ca156a5',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'benbodhi/svg-support' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b46345c87ad0b956fac8c98165e63c99eeed1838',
+            'reference' => 'c8c61134935cfdadc2860ee4224523ae8ca156a5',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

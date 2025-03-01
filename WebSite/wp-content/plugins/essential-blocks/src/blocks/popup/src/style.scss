@@ -43,7 +43,10 @@
 }
 
 .eb-popup-overlay {
-	display: none;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+	/* display: none; */
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -53,13 +56,26 @@
 	z-index: 999;
 }
 
+.eb-popup-overlay.active {
+	visibility: visible;
+	opacity: 1;
+}
+
+.eb-popup-overlay.inactive {
+	visibility: hidden;
+	opacity: 0;
+}
+
 .modal-main-wrap,
 .modal-main-wrap * {
 	box-sizing: border-box;
 }
 
 .modal-main-wrap {
-	display: none;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+	/* display: none; */
 	height: 100vh;
 	width: 100vw;
 	position: fixed;
@@ -67,6 +83,16 @@
 	left: 0;
 	z-index: 999;
 	overflow: auto;
+}
+
+.modal-main-wrap.active {
+	visibility: visible;
+	opacity: 1;
+}
+
+.modal-main-wrap.inactive {
+	visibility: hidden;
+	opacity: 0;
 }
 
 .eb-modal-container {
@@ -163,4 +189,8 @@
 
 .eb-popup-before-content {
 	text-align: center;
+}
+
+.eb-popup-block-overflow {
+	overflow: hidden;
 }

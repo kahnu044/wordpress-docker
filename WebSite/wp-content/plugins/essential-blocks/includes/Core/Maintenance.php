@@ -27,6 +27,8 @@ class Maintenance
             // Update Related Works
             if ( ESSENTIAL_BLOCKS_WHATSNEW_REDIRECT != 'none' ) {
                 set_transient( 'essential_block_maybe_whatsnew_redirect', true, MINUTE_IN_SECONDS * 10 );
+            } else if ( get_option( 'eb_show_whats_new_notice' ) < EB_SHOW_WHATS_NEW_NOTICE ) {
+                set_transient( 'essential_block_whats_new_notice', true, MINUTE_IN_SECONDS * 10 );
             }
 
             // Version Updated in DB.

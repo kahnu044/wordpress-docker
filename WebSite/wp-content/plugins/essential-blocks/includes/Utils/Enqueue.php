@@ -64,9 +64,17 @@ class Enqueue
         call_user_func( $action . '_' . $config[ 'type' ], $handle, $config[ 'url' ], $config[ 'dependencies' ], $config[ 'version' ], $config[ 'args' ] );
 
         $this->assets_dir = 'assets/';
-
+       
         if ( 'script' === $config[ 'type' ] && in_array( 'wp-i18n', $config[ 'dependencies' ], true ) ) {
-            wp_set_script_translations( $handle, 'essential-blocks' );
+            $url = isset( $config['url'] ) ? $config['url'] : '';
+            preg_match('~/plugins/([^/]+)~', $url, $matches);
+            $url_portion = isset( $matches[1] ) ? $matches[1] : '';
+            
+            if ( $url_portion == 'essential-blocks-pro' ) {
+                wp_set_script_translations( $handle, 'essential-blocks-pro' );
+            } else if ( $url_portion == 'essential-blocks' ) {
+                wp_set_script_translations( $handle, 'essential-blocks' );
+            }
         }
     }
 

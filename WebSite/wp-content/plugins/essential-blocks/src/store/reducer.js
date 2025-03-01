@@ -83,7 +83,6 @@ export default function reducer(state = DEFAULT_STATE, action) {
             };
         case FETCH_GLOBAL_TYPOGRAPHY:
             return state
-
         case SET_IS_SAVING:
             return {
                 ...state,

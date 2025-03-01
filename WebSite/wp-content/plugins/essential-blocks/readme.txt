@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 5.3.0
+Stable tag: 5.3.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -20,44 +20,47 @@ https://youtu.be/PnZx4ZOMyzI
 
 [See It In Action: Check out all the interactive block demos in one place.](https://essential-blocks.com/demo/)
 
-###✨ BLOCK PLUGIN WITH FULL CUSTOMIZATION
+##✨ BLOCK PLUGIN WITH FULL CUSTOMIZATION
 
 Each Gutenberg block comes with a bunch of options to control every possible aspect of your website design on the block editor. You can design your page with endless customization options using this amazing Gutenberg blocks plugin.
 
-###🌐 GUTENBERG BLOCKS GLOBAL CONTROL, COLORS & TYPOGRAPHY
+##🌐 GUTENBERG BLOCKS GLOBAL CONTROL, COLORS & TYPOGRAPHY
 
 Now, any block can be saved with customized styling. You can also personalize the colors and typography throughout your entire website. This boosts efficiency, so you do not have to recreate the same styling repeatedly on all pages or posts.
 
-###⚡ LIGHT WEIGHT & INSTANT LOADING
+##⚡ LIGHT WEIGHT & INSTANT LOADING
 
 No extra resources or messy codes to slow down your website. Optimized for super fast loading and instant live editing.
 
-###🈸 WPML CERTIFIED GUTENBERG PLUGIN
+##🈸 WPML CERTIFIED GUTENBERG PLUGIN
 
 Translate Gutenberg blocks with WPML in your chosen language & offer a multilingual experience to your visitors.
 
-###⚙️ GUTENBERG BLOCKS MODULAR CONTROL
+##⚙️ GUTENBERG BLOCKS MODULAR CONTROL
 Enable and disable individual blocks to make your page load faster and smoother. You can deactivate unnecessary blocks to keep the site lightweight.
 
-###🚀 ASSET REGENERATION FOR FASTER GUTENBERG PAGES
+##🚀 ASSET REGENERATION FOR FASTER GUTENBERG PAGES
 Keep your website's loading speed fast and secure against heavy scripts and CSS files with the Asset Regeneration feature.
 
-###🖊️ COMPATIBILITY WITH GOOGLE FONTS
+##🖊️ COMPATIBILITY WITH GOOGLE FONTS
 Choose any Google Font you prefer from a collection of 1,000+ font families available using Essential Blocks. Now, you can give your websites a customized look with stunning typographies.
 
-###💻 RESPONSIVE ON ALL DEVICES
+##💻 RESPONSIVE ON ALL DEVICES
 Directly from your Gutenberg block editor, you can control each block’s responsiveness individually. With flexible, responsive customization options, make your website user-friendly for all devices.
 
-###💫 ADVANCED ANIMATION FOR PAGE BUILDER
+##💫 ADVANCED ANIMATION FOR PAGE BUILDER
 With our latest exclusive feature, animation, you can design every block with a stunning animated appearance. Grab users’ attention instantly with eye-catching animations, transitions, and many more.
 
 ##⚡ DYNAMIC TAGS & ACF SUPPORT (PRO)
 Enhance the flexibility and customization options of your Gutenberg-built website and easily add custom fields to posts, pages, or custom post types with dynamic placeholders or variables generated from various parameters or data sources.
 
+##💡 INTERACTIVE ANIMATION FOR ENGAGING WEBSITES (PRO)
+Bring your content to life effortlessly with our Interactive Animation feature. Add smooth transitions, scroll effects and vibrant animations to captivate visitors and enhance user experience.
+
 ##🖼️ READY GUTENBERG PATTERNS BUILT WITH BLOCKS
 Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
 
-###🎯 STUNNING GUTENBERG TEMPLATES FOR WORDPRESS
+##🎯 STUNNING GUTENBERG TEMPLATES FOR WORDPRESS
 Explore and get access to 2,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
 
 You will find a wide variety of stunning Gutenberg website or web page templates in any niche:
@@ -77,7 +80,7 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 - Technology
 - Travel… and many more.
 
-###👨‍💻 EXPERT SUPPORT
+##👨‍💻 EXPERT SUPPORT
 We have a very friendly support team ready to help you out. Ask your questions in the support forum, we will get back to you immediately.
 
 ## 60+ FREE & ADVANCED BLOCKS AND COUNTING
@@ -145,6 +148,8 @@ Design without limits in WordPress block editor, using 60+ of the most useful Es
 - **[Woo Add to Cart](https://essential-blocks.com/demo/woo-add-to-cart/)** - Display the 'add to cart' option for all your WooCommerce products to ensure easy navigation for customers.
 - **[Post Meta](https://essential-blocks.com/demo/post-meta/)** - Attractively showcase your current post metadata like author, date, excerpt & more.
 - **[Text](https://essential-blocks.com/demo/text-block/)** - Add and customize text content on your website that catches the attention of the visitors.
+- **[Lottie Animation](https://essential-blocks.com/demo/lottie-animation/)** - Add LottiFiles Animations to your Gutenberg site seamlessly and customize how you want it to appear.
+
 
 More Gutenberg blocks and demos coming soon for the block visual editor (weekly update)
 
@@ -240,6 +245,13 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
+= 5.3.1 - 26/02/2025 =
+- Added: Global Styles | Separate ‘Save’ and ‘Reset’ options
+- Fixed: Global Styles | Automatically resetting issue
+- Fixed: Filterable Gallery | Stacking issue with popup
+- Added: Popup | Option to prevent background page scroll when popup is open
+- Few minor bug fixes & improvements
+
 = 5.3.0 - 18/02/2025 =
 - Added: New Block | Lottie Animation
 - Fixed: Table of Contents | Design issue fixes
@@ -252,54 +264,6 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 - Fixed: Reset control for Box Shadow
 - Improved: Security Enhancement
 - Few minor bug fixes & improvements
-
-= 5.2.3 - 15/01/2025 =
-- Fixed: Filterable Gallery | Editor not working if filterable gallery is used
-
-= 5.2.2 - 12/01/2025 =
-- Added: Heading tag selection option for all blocks utilizing heading tags
-- Added: TOC | Additional position styles for sticky TOC
-- Added: Slider | Lazy load support for slider images
-- Fixed: Filterable Gallery | Old images disappearing when new images are added
-- Fixed: Advanced Heading | Heading URL not working on the first attempt
-- Fixed: Advanced Image | Link URL not functioning correctly
-- Fixed: Slider | Fade effect not displaying properly on the frontend
-- Fixed: Infobox | Icon color resetting after editor reload
-- Improved: Security enhancement
-- Minor bug fixes and overall improvements
-
-= 5.2.1 - 24/12/2024 =
-- Few bug fixes and improvements
-
-= 5.2.0 - 24/12/2024 =
-- Revamped: Filterable Gallery | Added new Presets & Styling controls
-- Added: Advanced Heading | Multiple heading support with new styles
-- Added: Gradient border color support for Border control
-- Fixed: Accordion | Horizontal Accordion broken in nested Accordion block
-- Fixed: Accordion | Animation conflict with other blocks
-- Fixed: Post Carousel | PHP notice fixed
-- Fixed: Infobox | Alignment reset to center on reload in editor
-- Improved: Pricing Table | Enable/disable icons for each feature item
-- Improved: Pricing Table | Added title tag change control
-- Few bug fixes and improvements
-
-= 5.1.1 - 19/12/2024 =
-- Fixed: Site templates Header/Footer predefined CSS not loading on the frontend
-- Fixed: Global Styles not loading in Full Site Editor
-- Improved: Security enhancement
-- Minor bug fixes and improvements
-
-= 5.1.0 - 04/12/2024 =
-- Improved: Accordion Block | Added New Presets
-- Improved: Accordion Block | More Styling controls & options
-- Added: Woo Product Grid | Featured image size option
-- Fixed: Widget CSS not loading on the frontend
-- Fixed: FSE templates CSS not loading on the frontend
-- Fixed: Form Block | Custom fields data not being sent in emails
-- Fixed: Woo Product Grid | Showing PHP notice for an undefined variable
-- Fixed: Advanced Navigation | Overlapping issue with Post Grid
-- Fixed: Advanced Tabs | Global typography not applying to title font size
-- Minor bug fixes and improvements
 
 [See changelog for all versions](https://essential-blocks.com/changelog).
 

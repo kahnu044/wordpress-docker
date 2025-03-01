@@ -96,9 +96,13 @@ class GlobalStyles extends ThirdPartyIntegration
 
             if ( is_array( $settings ) > 0 ) {
                 $output = update_option( self::$global_style_options_key, $settings );
-                wp_send_json_success( $output );
+                if ( $output ) {
+                    wp_send_json_success( "Data has been saved successfully." );
+                } else {
+                    wp_send_json_error( "Data could not be saved." );
+                }
             } else {
-                wp_send_json_error( "Couldn't save data" );
+                wp_send_json_error( "Data could not be saved." );
             }
         } else {
             wp_send_json_error( 'Invalid data' );

@@ -27,10 +27,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
             external_identifiers.forEach((item) => {
                 item.addEventListener("click", () => {
-                    eb_popups[x].querySelector(".eb-popup-overlay").style.display =
-                        "block";
-                    eb_popups[x].querySelector(".modal-main-wrap").style.display =
-                        "block";
+                    eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                    eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                    eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                    eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
                     auto_exit(eb_popups[x]);
                 });
             });
@@ -51,14 +51,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
             );
 
             if ("yes" == cookiesValue) {
-                eb_popups[x].querySelector(".eb-popup-overlay").style.display = "none";
-                eb_popups[x].querySelector(".modal-main-wrap").style.display = "none";
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("active");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.remove("active");
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.add("inactive");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.add("inactive");
+                document.body.classList.remove('eb-popup-block-overflow');
             } else {
                 setTimeout(() => {
-                    eb_popups[x].querySelector(".eb-popup-overlay").style.display =
-                        "block";
-                    eb_popups[x].querySelector(".modal-main-wrap").style.display =
-                        "block";
+                    eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                    eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                    eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                    eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
                     eb_set_popup_cookie(
                         eb_popups[x].getAttribute("data-use-cookie"),
                         eb_popups[x].getAttribute("data-block-id"),
@@ -74,8 +77,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
             eb_popups[x].querySelector(
                 ".eb-popup-button-anchor"
             ).onclick = function () {
-                eb_popups[x].querySelector(".eb-popup-overlay").style.display = "block";
-                eb_popups[x].querySelector(".modal-main-wrap").style.display = "block";
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+
+                eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
                 auto_exit(eb_popups[x]);
             };
         }
@@ -96,15 +103,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
             );
 
             if ("yes" == cookiesValue) {
-                eb_popups[x].querySelector(".eb-popup-overlay").style.display = "none";
-                eb_popups[x].querySelector(".modal-main-wrap").style.display = "none";
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("active");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.remove("active");
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.add("inactive");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.add("inactive");
+                document.body.classList.remove('eb-popup-block-overflow')
             }
             else {
                 document.addEventListener('mouseleave', function (e) {
                     if (e.clientY < 0) {
                         if (!displayedCookie) {
-                            eb_popups[x].querySelector(".eb-popup-overlay").style.display = "block";
-                            eb_popups[x].querySelector(".modal-main-wrap").style.display = "block";
+                            eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                            eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                            eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                            eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+                            eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
                             auto_exit(eb_popups[x]);
 
                             //Set Cookies
@@ -126,8 +139,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
             eb_popups[x].querySelector(".eb-popup-close-icon")
         ) {
             eb_popups[x].querySelector(".eb-popup-close-icon").onclick = function () {
-                eb_popups[x].querySelector(".eb-popup-overlay").style.display = "none";
-                eb_popups[x].querySelector(".modal-main-wrap").style.display = "none";
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("active");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.remove("active");
+                eb_popups[x].querySelector(".eb-popup-overlay").classList.add("inactive");
+                eb_popups[x].querySelector(".modal-main-wrap").classList.add("inactive");
+                document.body.classList.remove('eb-popup-block-overflow');
 
                 stopVideo(eb_popups[x].querySelector(".modal-main-wrap"));
             };
@@ -142,12 +158,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 ) {
                     [...eb_popups[x].querySelectorAll(".eb-popup-overlay")].map(
                         (item) => {
-                            item.style.display = "none";
+                            item.classList.remove("active");
+                            item.classList.add("inactive");
                         }
                     );
 
                     [...eb_popups[x].querySelectorAll(".modal-main-wrap")].map((item) => {
-                        item.style.display = "none";
+                        item.classList.remove("active");
+                        item.classList.add("inactive");
 
                         stopVideo(item);
                     });
@@ -165,11 +183,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                     if (!popup_content.contains(event.target)) {
                         [...document.querySelectorAll(".eb-popup-overlay")].map((item) => {
-                            item.style.display = "none";
+                            item.classList.remove("active");
+                            item.classList.add("inactive");
                         });
 
                         [...document.querySelectorAll(".modal-main-wrap")].map((item) => {
-                            item.style.display = "none";
+                            item.classList.remove("active");
+                            item.classList.add("inactive");
 
                             stopVideo(item);
                         });
@@ -182,8 +202,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     function auto_exit(element) {
         if ("true" == element.getAttribute("data-auto-exit")) {
             setTimeout(() => {
-                element.querySelector(".eb-popup-overlay").style.display = "none";
-                element.querySelector(".modal-main-wrap").style.display = "none";
+                element.querySelector(".eb-popup-overlay").classList.remove("active");
+                element.querySelector(".modal-main-wrap").classList.remove("active");
+                element.querySelector(".eb-popup-overlay").classList.add("inactive");
+                element.querySelector(".modal-main-wrap").classList.add("inactive");
+                document.body.classList.remove('eb-popup-block-overflow');
             }, parseInt(element.getAttribute("data-auto-exit-time")) * 1000);
         }
     }

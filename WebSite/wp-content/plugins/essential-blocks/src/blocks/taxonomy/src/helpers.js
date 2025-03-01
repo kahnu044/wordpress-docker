@@ -5,4 +5,4 @@ export function ebLoader() {
 }
 
 export const renderCategoryName = (name) =>
-    !name ? __('(Untitled)') : decodeEntities(name).trim();
+    !name ? __('Untitled','essential-blocks') : decodeEntities(name).trim();

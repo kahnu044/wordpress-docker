@@ -1,5 +1,6 @@
 const { EBGetIconClass, EBGetIconType } = window.eb_frontend;
 document.addEventListener("DOMContentLoaded", function (event) {
+
     let accordions = document.querySelectorAll(
         ".eb-accordion-container > .eb-accordion-inner",
     );
@@ -224,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         contentNodes[i].style.visibility = 'visible';
                         contentNodes[i].style.transform = 'translateY(0)';
                     }, transitionDuration);
-                    
+
                     if (titleContent && contentWrapper) {
                         const existingTitleContent =
                             contentWrapper.querySelector(
@@ -415,10 +416,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 windowWidth > tabletBreakpoint
             ) {
                 clickedTab.classList.add("eb-transition-add");
-                setTimeout(()=> {
+                setTimeout(() => {
                     clickedTab.style.display = "none";
                     clickedTab.classList.remove("eb-transition-add");
-                },transitionDuration)
+                }, transitionDuration)
                 collapseOtherAccordions(clickedTab, transitionDuration);
                 setTimeout(() => {
                     contentNode.style.display = 'block';
@@ -512,10 +513,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     }
                 });
                 allAccordionsContent.forEach((item) => {
-                        item.style.display = "none";
-                        item.style.opacity = 0;
-                        item.style.visibility = 'hidden';
-                        item.style.transform = 'translateY(-100%)';
+                    item.style.display = "none";
+                    item.style.opacity = 0;
+                    item.style.visibility = 'hidden';
+                    item.style.transform = 'translateY(-100%)';
                 });
             }
 

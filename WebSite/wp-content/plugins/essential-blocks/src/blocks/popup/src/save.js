@@ -3,7 +3,7 @@
  */
 import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
 import {
-EBDisplayIcon, BlockProps
+    EBDisplayIcon, BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -28,6 +28,7 @@ const Save = ({ attributes }) => {
         autoExitTime,
         useCookies,
         cookieExpireTime,
+        disablePageScroll
     } = attributes;
     const alignmentClass =
         "left" === btnAlignment
@@ -54,6 +55,7 @@ const Save = ({ attributes }) => {
                     data-auto-exit-time={autoExitTime}
                     data-use-cookie={useCookies}
                     data-cookie-expire-time={cookieExpireTime}
+                    data-page-scroll={disablePageScroll}
                 >
                     <div
                         className={`eb-popup-btn-wrapper eb-parent-${blockId} ${classHook}`}

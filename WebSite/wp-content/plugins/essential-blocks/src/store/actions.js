@@ -238,7 +238,7 @@ export function fetchCustomGradientColor() {
 }
 
 /**
- * Action: Fetch Is Saving
+ * Action: Set Is Saving
  * @returns
  */
 export function setIsSaving(value) {

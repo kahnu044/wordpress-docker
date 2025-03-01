@@ -45,27 +45,37 @@ function bodhi_svg_support_settings_page() {
 }
 
 /**
- * Sanitize class before saving
+ * Sanitize and save settings
  */
-function bodhi_sanitize_fields( $value ) {
-
-	if (isset($value['css_target'])) {
-		$value['css_target'] = esc_attr( sanitize_text_field( $value['css_target'] ) );
+function bodhi_svgs_settings_sanitize($input) {
+	// Process all settings
+	$output = $input;
+	
+	// Sanitize css_target
+	if (isset($output['css_target'])) {
+		$output['css_target'] = esc_attr( sanitize_text_field( $output['css_target'] ) );
 	}
 
-	if( !isset($value['sanitize_svg_front_end']) || $value['sanitize_svg_front_end'] !== 'on' ) {
-		$value['sanitize_svg_front_end'] = false;
+	// Handle sanitize_svg_front_end setting
+	if (!isset($output['sanitize_svg_front_end']) || $output['sanitize_svg_front_end'] !== 'on') {
+		$output['sanitize_svg_front_end'] = false;
 	}
 
-	if( !isset($value['sanitize_on_upload_roles']) ) {
-		$value['sanitize_on_upload_roles'] = array("none");
+	// Handle sanitize_on_upload_roles setting
+	if (!isset($output['sanitize_on_upload_roles'])) {
+		$output['sanitize_on_upload_roles'] = array("none");
+	} else {
+		$output['sanitize_on_upload_roles'] = (array)$output['sanitize_on_upload_roles'];
 	}
 
-	if( !isset($value['restrict']) ) {
-		$value['restrict'] = array("none");
+	// Handle restrict setting
+	if (!isset($output['restrict'])) {
+		$output['restrict'] = array("none");
+	} else {
+		$output['restrict'] = (array)$output['restrict'];
 	}
-
-	return $value;
+	
+	return $output;
 }
 
 /**
@@ -74,7 +84,7 @@ function bodhi_sanitize_fields( $value ) {
 function bodhi_svgs_register_settings() {
 
 	$args = array(
-		'sanitize_callback' => 'bodhi_sanitize_fields'
+		'sanitize_callback' => 'bodhi_svgs_settings_sanitize'
 	);
 
 	register_setting( 'bodhi_svgs_settings_group', 'bodhi_svgs_settings', $args );

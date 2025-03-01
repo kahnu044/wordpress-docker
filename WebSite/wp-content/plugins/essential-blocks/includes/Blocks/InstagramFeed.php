@@ -135,8 +135,6 @@ class InstagramFeed extends Block
      */
     public function register_scripts()
     {
-        $this->assets_manager->register( 'isotope', 'js/isotope.pkgd.min.js' );
-        $this->assets_manager->register( 'image-loaded', 'js/images-loaded.min.js' );
         $this->assets_manager->register(
             'instagram-feed-block-script',
             $this->path() . '/frontend.js',

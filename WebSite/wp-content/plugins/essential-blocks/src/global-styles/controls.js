@@ -1,15 +1,16 @@
 import { __ } from "@wordpress/i18n";
 import { applyFilters } from "@wordpress/hooks";
-import { useState, useEffect, useCallback } from "@wordpress/element";
+import { useState, useEffect, useRef, useCallback } from "@wordpress/element";
 import { PanelBody, Button, Popover, Dashicon, TabPanel } from "@wordpress/components";
 import { store as editorStore, PluginSidebar as PluginSidebarEditor } from '@wordpress/editor';
-import { dispatch, useSelect, withSelect } from "@wordpress/data";
+import { select, dispatch, useDispatch, useSelect, withSelect } from "@wordpress/data";
 import { PluginSidebar as PluginSidebarEditPost } from "@wordpress/edit-post"
 import {
     BlockPreview,
     PanelColorSettings
 } from "@wordpress/block-editor";
 import { createBlock } from "@wordpress/blocks";
+import { store as noticesStore } from '@wordpress/notices';
 
 import { useDeviceType } from "@essential-blocks/controls"
 
@@ -23,318 +24,23 @@ import {
     applyTypographyCSS,
     loadGoogleFonts
 } from "../helpers/helpers"
+import { updateGlobalStyle } from "../helpers/fetch"
+
+//Import Constants
+import {
+    globalColorKey,
+    customColorKey,
+    gradientColorKey,
+    customGradientColorKey,
+    globalTypoKey
+} from "../store/constant"
+
+import { blockComponentObject } from './blockObject'
 
 import "./style.scss";
 
-import Accordion from "./block-defaults/accordion";
-import AdvancedHeading from "./block-defaults/advanced-heading";
-import AdvancedImage from "./block-defaults/advanced-image";
-import AdvancedTabs from "./block-defaults/advanced-tabs";
-import AdvancedVideo from "./block-defaults/advanced-video";
-import AdvancedNavigation from "./block-defaults/advanced-navigation";
-import EBButton from "./block-defaults/button";
-import CallToAction from "./block-defaults/call-to-action";
-import Countdown from "./block-defaults/countdown";
-import DualButton from "./block-defaults/dual-button";
-import FeatureList from "./block-defaults/feature-list";
-import Flipbox from "./block-defaults/flipbox";
-import FluentForms from "./block-defaults/fluent-forms";
-import ImageComparison from "./block-defaults/image-comparison";
-import ImageGallery from "./block-defaults/image-gallery";
-import Infobox from "./block-defaults/infobox";
-import InstagramFeed from "./block-defaults/instagram-feed";
-import InteractivePromo from "./block-defaults/interactive-promo";
-import NftGallery from "./block-defaults/nft-gallery";
-import Notice from "./block-defaults/notice";
-import NumberCounter from "./block-defaults/number-counter";
-import Openverse from "./block-defaults/openverse";
-import ParallaxSlider from "./block-defaults/parallax-slider";
-import Popup from "./block-defaults/popup";
-import PostCarousel from "./block-defaults/post-carousel";
-import PostGrid from "./block-defaults/post-grid";
-import PricingTable from "./block-defaults/pricing-table";
-import ProgressBar from "./block-defaults/progress-bar";
-import Row from "./block-defaults/row";
-import Slider from "./block-defaults/slider";
-import Social from "./block-defaults/social";
-import SocialShare from "./block-defaults/social-share";
-import TableOfContents from "./block-defaults/table-of-contents";
-import TeamMember from "./block-defaults/team-member";
-import Testimonial from "./block-defaults/testimonial";
-import ToggleContent from "./block-defaults/toggle-content";
-import TypingText from "./block-defaults/typing-text";
-import WooProductGrid from "./block-defaults/woo-product-grid";
-import Wpforms from "./block-defaults/wpforms";
-import Wrapper from "./block-defaults/wrapper";
-import GoogleMap from "./block-defaults/google-map";
-import Form from "./block-defaults/form";
-
 const PluginSidebar = PluginSidebarEditor || PluginSidebarEditPost;
 
-const blockComponentObject = {
-    advanced_heading: {
-        component: AdvancedHeading,
-        preview: true,
-    },
-    accordion: {
-        component: Accordion,
-        preview: true,
-    },
-    advanced_image: {
-        component: AdvancedImage,
-        preview: true,
-        previewData: {
-            image: {
-                url: EssentialBlocksLocalize?.image_url + "/gallery-images/hongkong.jpg",
-            },
-            imageCaption: "Style images in Gutenberg with advanced options.",
-        },
-    },
-    advanced_tabs: {
-        component: AdvancedTabs,
-        preview: true,
-    },
-    advanced_video: {
-        component: AdvancedVideo,
-        preview: true,
-    },
-    advanced_navigation: {
-        component: AdvancedNavigation,
-        preview: false,
-    },
-    button: {
-        component: EBButton,
-        preview: true,
-    },
-    call_to_action: {
-        component: CallToAction,
-        preview: true,
-    },
-    countdown: {
-        component: Countdown,
-        preview: true,
-    },
-    dual_button: {
-        component: DualButton,
-        preview: true,
-    },
-    feature_list: {
-        component: FeatureList,
-        preview: true,
-    },
-    flipbox: {
-        component: Flipbox,
-        preview: true,
-    },
-    fluent_forms: {
-        component: FluentForms,
-        preview: false,
-    },
-    image_comparison: {
-        component: ImageComparison,
-        preview: true,
-        previewData: {
-            leftImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/white-balloon-bnw.jpeg",
-            rightImageURL: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/white-balloon.jpeg",
-        },
-    },
-    image_gallery: {
-        component: ImageGallery,
-        preview: true,
-        previewData: {
-            images: [
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
-                },
-            ],
-
-            sources: [
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
-                    caption: "",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
-                    caption: "",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
-                    caption: "",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
-                    caption: "",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/china.jpg",
-                    caption: "",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/CA.jpg",
-                    caption: "",
-                },
-            ],
-        },
-    },
-    infobox: {
-        component: Infobox,
-        preview: true,
-    },
-    instagram_feed: {
-        component: InstagramFeed,
-        preview: false,
-    },
-    interactive_promo: {
-        component: InteractivePromo,
-        preview: true,
-        previewData: {
-            imageURL: EssentialBlocksLocalize?.image_url + "/gallery-images/china.jpg",
-        },
-    },
-    nft_gallery: {
-        component: NftGallery,
-        preview: false,
-    },
-    notice: {
-        component: Notice,
-        preview: true,
-    },
-    number_counter: {
-        component: NumberCounter,
-        preview: true,
-    },
-    openverse: {
-        component: Openverse,
-        preview: false,
-    },
-    parallax_slider: {
-        component: ParallaxSlider,
-        preview: true,
-        previewData: {
-            sliderData: [
-                {
-                    src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
-                },
-                {
-                    src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
-                },
-                {
-                    src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
-                },
-                {
-                    src: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
-                },
-            ],
-        },
-    },
-    popup: {
-        component: Popup,
-        preview: true,
-    },
-    post_carousel: {
-        component: PostCarousel,
-        preview: false,
-    },
-    post_grid: {
-        component: PostGrid,
-        preview: false,
-    },
-    pricing_table: {
-        component: PricingTable,
-        preview: true,
-    },
-    progress_bar: {
-        component: ProgressBar,
-        preview: true,
-    },
-    row: {
-        component: Row,
-        preview: false,
-    },
-    slider: {
-        component: Slider,
-        preview: true,
-        previewData: {
-            images: [
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Maldive.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/Australia.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/hongkong.jpg",
-                },
-                {
-                    url: EssentialBlocksLocalize?.eb_plugins_url + "assets/images/gallery-images/iceland.jpg",
-                },
-            ],
-        },
-    },
-    social: {
-        component: Social,
-        preview: true,
-    },
-    social_share: {
-        component: SocialShare,
-        preview: true,
-    },
-    table_of_contents: {
-        component: TableOfContents,
-        preview: true,
-    },
-    team_member: {
-        component: TeamMember,
-        preview: true,
-    },
-    testimonial: {
-        component: Testimonial,
-        preview: true,
-    },
-    toggle_content: {
-        component: ToggleContent,
-        preview: true,
-    },
-    typing_text: {
-        component: TypingText,
-        preview: true,
-    },
-    woo_product_grid: {
-        component: WooProductGrid,
-        preview: false,
-    },
-    wpforms: {
-        component: Wpforms,
-        preview: false,
-    },
-    wrapper: {
-        component: Wrapper,
-        preview: true,
-    },
-    google_map: {
-        component: GoogleMap,
-        preview: false,
-    },
-    form: {
-        component: Form,
-        preview: false,
-    },
-};
 
 /**
  * Global Controls Component
@@ -367,6 +73,7 @@ function EBGlobalControls(props) {
     const [popoverAnchor, setPopoverAnchor] = useState();
     const [clickedBlock, setClickedBlock] = useState("");
     const [isVisible, setIsVisible] = useState(false);
+    const [isChanged, setIsChanged] = useState(false);
 
     //Get Device type from context
     const deviceType = useDeviceType()
@@ -441,13 +148,17 @@ function EBGlobalControls(props) {
         if (typeof customColors === 'object') {
             dispatch("essential-blocks").setCustomColors(customColors);
             dispatch('essential-blocks').setIsSaving(true);
-        }
-        const root = document.documentElement;
-        (customColors.length > 0) && customColors.map((item) => {
-            if (item.var && item.color) {
-                root.style.setProperty(item.var, item.color);
+
+            //Set color css to root
+            const root = document.documentElement;
+            if (customColors.length > 0) {
+                customColors.map((item) => {
+                    if (item.var && item.color) {
+                        root.style.setProperty(item.var, item.color);
+                    }
+                })
             }
-        })
+        }
     }, [customColors]);
 
     //Update Store when "gradientColors" is changed
@@ -483,21 +194,25 @@ function EBGlobalControls(props) {
         const colors = [...globalColors];
         colors[index].color = color;
         setGlobalColors([...colors]);
+        setIsChanged(true)
     };
     const setGradientColor = (index, color) => {
         const colors = [...gradientColors];
         colors[index].color = color;
         setGradientColors([...colors]);
+        setIsChanged(true)
     };
     const setCustomGradientColor = (index, color) => {
         const colors = [...customGradientColors];
         colors[index].color = color;
         setCustomGradientColors([...colors]);
+        setIsChanged(true)
     };
     const deleteCustomGradientColor = (index) => {
         const colors = [...customGradientColors];
         colors.splice(index, 1)
         setCustomGradientColors([...colors]);
+        setIsChanged(true)
     };
 
     /**
@@ -662,6 +377,132 @@ function EBGlobalControls(props) {
         return colorArr
     }
 
+    const { createSuccessNotice, createErrorNotice } = useDispatch(noticesStore);
+
+    const successNotice = (message = 'Successfully saved Global settings!') => {
+        createSuccessNotice(__(message), {
+            type: 'snackbar',
+            icon: <Dashicon icon={"saved"} />,
+        })
+    }
+    const errorNotice = (message = 'Global settings could not be saved.') => {
+        createErrorNotice(__(message), {
+            type: 'snackbar',
+            icon: <Dashicon icon={"info-outline"} />,
+        })
+    }
+
+    const globalSettingsSave = () => {
+        const globals = getGlobalSettings(select)
+        const allData = {
+            [globalColorKey]: globals?.getGlobalColors,
+            [customColorKey]: globals?.getCustomColors,
+            [gradientColorKey]: globals?.getGradientColors,
+            [customGradientColorKey]: globals?.getCustomGradientColors,
+            [globalTypoKey]: globals?.getGlobalTypography
+        }
+        let response = updateGlobalStyle(allData);
+        response
+            .then((result) => {
+                if (result) {
+                    successNotice()
+                    setIsChanged(false)
+                }
+                else {
+                    errorNotice()
+                }
+                // Handle the resolved value of the promise
+            })
+            .catch((error) => {
+                // Handle errors
+                errorNotice()
+            });
+    }
+
+    const isResetable = (type = 'color') => {
+        const globals = getGlobalSettings(select);
+        if (!globals) return false;
+
+        const {
+            getGlobalColors,
+            getCustomColors,
+            getGradientColors,
+            getCustomGradientColors,
+            getGlobalTypography
+        } = globals;
+
+        if (type === 'color') {
+            return [getGlobalColors, getCustomColors, getGradientColors, getCustomGradientColors]
+                .some(data => Array.isArray(data) ? data.length > 0 : Object.keys(data || {}).length > 0);
+        }
+
+        if (type === 'typography') {
+            return getGlobalTypography && Object.keys(getGlobalTypography).length > 0;
+        }
+
+        return false; // Default fallback
+    };
+
+    const globalSettingsReset = (type = 'all') => {
+        if (!window.confirm('Are you sure you want to reset all the changes?')) { //Window alert for confirm reset
+            return;
+        }
+        const globals = getGlobalSettings(select)
+
+        const {
+            globalColors = [],
+            gradientColors = []
+        } = window?.EssentialBlocksLocalize
+
+        let colorsData;
+        if (type === 'all' || type === 'color') {
+            dispatch("essential-blocks").setGlobalColors(globalColors);
+            dispatch("essential-blocks").setCustomColors([]);
+            dispatch("essential-blocks").setGradientColors(gradientColors);
+            dispatch("essential-blocks").setCustomGradientColors([]);
+            colorsData = {
+                [globalColorKey]: [],
+                [customColorKey]: [],
+                [gradientColorKey]: [],
+                [customGradientColorKey]: []
+            };
+        } else {
+            colorsData = {
+                [globalColorKey]: globals?.getGlobalColors,
+                [customColorKey]: globals?.getCustomColors,
+                [gradientColorKey]: globals?.getGradientColors,
+                [customGradientColorKey]: globals?.getCustomGradientColors
+            };
+        }
+
+        let typoData;
+        if (type === 'all' || type === 'typography') {
+            dispatch("essential-blocks").setGlobalTypography({});
+            typoData = { [globalTypoKey]: {} }
+        }
+        else {
+            typoData = { [globalTypoKey]: globals?.getGlobalTypography }
+        }
+
+        const allData = { ...colorsData, ...typoData }
+        let response = updateGlobalStyle(allData);
+        response
+            .then((result) => {
+                if (result) {
+                    successNotice('Successfully reset global settings!')
+                    setIsChanged(false)
+                }
+                else {
+                    errorNotice('Unable to reset global settings.')
+                }
+                // Handle the resolved value of the promise
+            })
+            .catch((error) => {
+                // Handle errors
+                errorNotice('Unable to reset global settings.')
+            });
+    }
+
     return (
         <>
             <PluginSidebar
@@ -711,20 +552,24 @@ function EBGlobalControls(props) {
                                                 <ColorPalletWrapper
                                                     customColors={customColors}
                                                     setCustomColors={setCustomColors}
+                                                    setIsChanged={setIsChanged}
                                                 />
                                             )}
                                             <div className="eb-add-btn add-custom-color">
                                                 <Button
                                                     className="eb-add-btn__button add-custom-color-btn"
-                                                    onClick={() => setCustomColors([
-                                                        ...customColors,
-                                                        {
-                                                            color: '#000000',
-                                                            name: `Custom Color ${customColors.length + 1}`,
-                                                            slug: `custom-color-${customColors.length + 1}`,
-                                                            var: `--eb-custom-color-${customColors.length + 1}`
-                                                        }
-                                                    ])}
+                                                    onClick={() => {
+                                                        setIsChanged(true) //global settings is changed
+                                                        setCustomColors([
+                                                            ...customColors,
+                                                            {
+                                                                color: '#000000',
+                                                                name: `Custom Color ${customColors.length + 1}`,
+                                                                slug: `custom-color-${customColors.length + 1}`,
+                                                                var: `--eb-custom-color-${customColors.length + 1}`
+                                                            }
+                                                        ])
+                                                    }}
                                                 >Add Custom Color <Dashicon icon={"plus"} /></Button>
                                             </div>
                                         </>
@@ -773,6 +618,27 @@ function EBGlobalControls(props) {
                                 </div>
                             )}
                         </TabPanel>
+
+                        <div className='global-controls-save'>
+                            <Button
+                                variant="secondary"
+                                className={`global-controls-reset`}
+                                onClick={() => globalSettingsReset('color')}
+                                label="Reset All Global Color"
+                                showTooltip={true}
+                                disabled={!isResetable('color')}
+                            >
+                                <Dashicon icon={"image-rotate"} /> Reset
+                            </Button>
+                            <Button
+                                variant="primary"
+                                className={`global-controls-save-btn`}
+                                disabled={!isChanged}
+                                onClick={() => globalSettingsSave()}
+                            >
+                                <Dashicon icon={"database-export"} /> Save Settings
+                            </Button>
+                        </div>
                     </PanelBody>
 
 
@@ -780,7 +646,13 @@ function EBGlobalControls(props) {
                         title={__("Global Typography", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <TypographySettings />
+                        <TypographySettings
+                            isChanged={isChanged}
+                            setIsChanged={setIsChanged}
+                            globalSettingsSave={globalSettingsSave}
+                            globalSettingsReset={globalSettingsReset}
+                            isResetable={isResetable}
+                        />
                     </PanelBody>
 
                     <PanelBody
@@ -830,7 +702,7 @@ function EBGlobalControls(props) {
                         className="btn-block-default btn-block-default-close"
                         onClick={() => handleCloseWithoutSave(clickedBlock)}
                     >
-                        {__(<Dashicon icon={"no"} />)}
+                        <Dashicon icon={"no"} />
                     </Button>
                     {allBlocksKeys.includes(clickedBlock) && (
                         <>
@@ -850,32 +722,26 @@ function EBGlobalControls(props) {
                                     </span>
                                 </div>
 
-                                {components[clickedBlock].preview &&
-                                    activedBlocks[clickedBlock].visibility ===
-                                    "true" && (
-                                        <BlockPreview
-                                            blocks={createBlock(
-                                                `essential-blocks/${registeredBlocks[clickedBlock]?.is_pro ? 'pro-' : ''}${clickedBlock.replace(
-                                                    /_/g,
-                                                    "-"
-                                                )}`,
-                                                {
-                                                    ...previewData(
-                                                        clickedBlock
-                                                    ),
-                                                }
-                                            )}
-                                            viewportWidth={1100}
-                                        />
-                                    )}
+                                {components[clickedBlock].preview && activedBlocks[clickedBlock].visibility === "true" && (
+                                    <BlockPreview
+                                        blocks={createBlock(
+                                            `essential-blocks/${registeredBlocks[clickedBlock]?.is_pro ? 'pro-' : ''}${clickedBlock.replace(/_/g, "-")}`,
+                                            {
+                                                ...previewData(
+                                                    clickedBlock
+                                                ),
+                                            }
+                                        )}
+                                        viewportWidth={1100}
+                                    />
+                                )}
 
-                                {activedBlocks[clickedBlock].visibility ===
-                                    "false" && (
-                                        <p className="preview-not-available">
-                                            {registeredBlocks[clickedBlock].label}{" "}
-                                            Block isn't Enabled!
-                                        </p>
-                                    )}
+                                {activedBlocks[clickedBlock].visibility === "false" && (
+                                    <p className="preview-not-available">
+                                        {registeredBlocks[clickedBlock].label}{" "}
+                                        Block isn't Enabled!
+                                    </p>
+                                )}
 
                                 {!components[clickedBlock].preview && (
                                     <p className="preview-not-available">

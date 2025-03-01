@@ -11,12 +11,13 @@ import {
 } from "@wordpress/components";
 
 const ColorPalletWrapper = (props) => {
-    const { colorPanelArray, customColors, setCustomColors } = props
+    const { colorPanelArray, customColors, setCustomColors, setIsChanged } = props
 
     const deleteItem = (index) => {
         const colors = [...customColors]
         colors.splice(index, 1);
         setCustomColors([...colors])
+        setIsChanged(true)
     }
 
     const editColorName = (index, value) => {
@@ -26,6 +27,7 @@ const ColorPalletWrapper = (props) => {
             name: value
         }
         setCustomColors([...colors])
+        setIsChanged(true)
     }
 
     const changeColor = (index, value) => {
@@ -35,6 +37,7 @@ const ColorPalletWrapper = (props) => {
             color: value
         }
         setCustomColors([...colors])
+        setIsChanged(true)
     }
 
     useEffect(() => {

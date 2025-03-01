@@ -13,6 +13,7 @@ const nonce = EssentialBlocksLocalize.admin_nonce;
  * @returns {object}
  */
 export const updateGlobalStyle = (value, key = 'all') => {
+    // console.log('updateGlobalStyle', value)
     let data = new FormData();
     data.append("action", updateGlobalStyleAction);
     data.append("admin_nonce", nonce);

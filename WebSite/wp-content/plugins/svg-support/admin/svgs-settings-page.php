@@ -111,18 +111,6 @@
 
 									<tr valign="top">
 										<th scope="row">
-											<strong><?php esc_html_e( 'Load frontend CSS?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[frontend_css]">
-												<input id="bodhi_svgs_settings[frontend_css]" name="bodhi_svgs_settings[frontend_css]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['frontend_css'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('A very small piece of code that helps with displaying SVGs on the frontend in some cases.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
 											<strong><?php esc_html_e( 'Do not sanitize for these roles', 'svg-support' ); ?></strong>
 										</th>
 										<td>
@@ -149,6 +137,18 @@
 
 									<tr valign="top">
 										<th scope="row">
+											<strong><?php esc_html_e( 'Sanitize SVG on Front-end', 'svg-support' ); ?></strong>
+										</th>
+										<td>
+											<label for="bodhi_svgs_settings[sanitize_svg_front_end]">
+												<input id="bodhi_svgs_settings[sanitize_svg_front_end]" name="bodhi_svgs_settings[sanitize_svg_front_end]" type="checkbox" <?php checked( $bodhi_svgs_options['sanitize_svg_front_end'], 'on' ); ?> />
+												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Enhance security by sanitizing svg images on Front-end. This will help to prevent XSS and Injection attacks.', 'svg-support' ); ?></small>
+											</label>
+										</td>
+									</tr>
+
+									<tr valign="top">
+										<th scope="row">
 											<label for="bodhi_svgs_settings[minify_svg]"><strong><?php esc_html_e( 'Minify SVG', 'svg-support' ); ?></strong>
 										</th>
 										<td>
@@ -161,22 +161,22 @@
 
 									<tr valign="top">
 										<th scope="row">
-											<label for="bodhi_svgs_settings[del_plugin_data]"><strong><?php esc_html_e( 'Delete Plugin\'s Data', 'svg-support' ); ?></strong>
+											<strong><?php esc_html_e( 'Load frontend CSS?', 'svg-support' ); ?></strong>
 										</th>
 										<td>
-											<label for="bodhi_svgs_settings[del_plugin_data]">
-												<input id="bodhi_svgs_settings[del_plugin_data]" name="bodhi_svgs_settings[del_plugin_data]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['del_plugin_data'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Delete all plugin\'s data during uninstallation process.', 'svg-support' ); ?></small>
-												</label>
+											<label for="bodhi_svgs_settings[frontend_css]">
+												<input id="bodhi_svgs_settings[frontend_css]" name="bodhi_svgs_settings[frontend_css]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['frontend_css'] ), true ); ?> />
+												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('A very small piece of code that helps with displaying SVGs on the frontend in some cases.', 'svg-support' ); ?></small>
+											</label>
 										</td>
 									</tr>
 
-									<tr valign="top" class="svgs-simple">
+									<tr valign="top">
 										<th scope="row">
 											<strong><?php esc_html_e( 'Enable Advanced Mode?', 'svg-support' ); ?></strong>
 										</th>
 										<td>
-												<label for="bodhi_svgs_settings[advanced_mode]">
+											<label for="bodhi_svgs_settings[advanced_mode]">
 												<input id="bodhi_svgs_settings[advanced_mode]" name="bodhi_svgs_settings[advanced_mode]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['advanced_mode'] ), true ); ?> />
 												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('You don\'t need to enable this to simply use SVG files as images. Enabling this will trigger advanced options and SVG functionality such as inline rendering.', 'svg-support' ); ?></small>
 											</label>
@@ -194,12 +194,33 @@
 
 									<tr valign="top" class="svgs-advanced">
 										<th scope="row">
-											<strong><?php esc_html_e( 'Sanitize SVG on Front-end', 'svg-support' ); ?></strong>
+											<strong><?php esc_html_e( 'CSS Class to target', 'svg-support' ); ?></strong>
 										</th>
 										<td>
-											<label for="bodhi_svgs_settings[sanitize_svg_front_end]">
-												<input id="bodhi_svgs_settings[sanitize_svg_front_end]" name="bodhi_svgs_settings[sanitize_svg_front_end]" type="checkbox" <?php checked( $bodhi_svgs_options['sanitize_svg_front_end'], 'on' ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Enhance security by sanitizing svg images on Front-end. This will help to prevent XSS and Injection attacks.', 'svg-support' ); ?></small>
+											<label for="bodhi_svgs_settings[css_target]">
+												<input id="bodhi_svgs_settings[css_target]" class="all-options code" name="bodhi_svgs_settings[css_target]" type="text" value="<?php echo isset( $bodhi_svgs_options['css_target'] ) ? esc_attr($bodhi_svgs_options['css_target']) : ''; ?>"><br />
+												<small class="description">
+													<?php esc_html_e( 'The default target class is', 'svg-support' ); ?>
+													<code><?php echo esc_html( 'style-svg' ); ?></code>.
+													<?php esc_html_e( 'You can change it to your own class such as', 'svg-support' ); ?>
+													<code><?php echo esc_html( 'my-class' ); ?></code>
+													<?php esc_html_e( 'by typing it here. Leave blank to use the default class.', 'svg-support' ); ?>
+													<br>
+													<em><?php esc_html_e( 'Plugin can now go any level down to find your SVG! It will keep looking as long as the element with the target class has children. If it finds any IMG tags with .svg in the src URL, it will replace the IMG tag with your SVG code.', 'svg-support' ); ?></em>
+												</small>
+											</label>
+										</td>
+									</tr>
+
+									<tr valign="top" class="svgs-advanced">
+										<th scope="row">
+											<strong><?php esc_html_e( 'Skip Nested SVGs', 'svg-support' ); ?></strong>
+										</th>
+										<td>
+											<label for="bodhi_svgs_settings[skip_nested_svg]">
+												<input id="bodhi_svgs_settings[skip_nested_svg]" name="bodhi_svgs_settings[skip_nested_svg]" type="checkbox" value="1" <?php checked( isset( $bodhi_svgs_options['skip_nested_svg'] ) && $bodhi_svgs_options['skip_nested_svg'] == 1 ); ?> />
+												<?php esc_html_e( 'Yes', 'svg-support' ); ?>
+												<br><small class="description"><?php esc_html_e( 'When enabled, only the first SVG in a .style-svg container will be inlined. Useful for Gutenberg Cover blocks with nested SVG images.', 'svg-support' ); ?></small>
 											</label>
 										</td>
 									</tr>
@@ -242,34 +263,10 @@
 
 									<tr valign="top" class="svgs-advanced">
 										<th scope="row">
-											<strong><?php esc_html_e( 'CSS Class to target', 'svg-support' ); ?></strong>
+											<h3 class="inner-title"><?php esc_html_e( 'Legacy Settings', 'svg-support' ); ?></h3>
 										</th>
 										<td>
-											<label for="bodhi_svgs_settings[css_target]">
-												<input id="bodhi_svgs_settings[css_target]" class="all-options code" name="bodhi_svgs_settings[css_target]" type="text" value="<?php echo isset( $bodhi_svgs_options['css_target'] ) ? esc_attr($bodhi_svgs_options['css_target']) : ''; ?>"><br />
-												<small class="description">
-													<?php esc_html_e( 'The default target class is', 'svg-support' ); ?>
-													<code><?php echo esc_html( 'style-svg' ); ?></code>.
-													<?php esc_html_e( 'You can change it to your own class such as', 'svg-support' ); ?>
-													<code><?php echo esc_html( 'my-class' ); ?></code>
-													<?php esc_html_e( 'by typing it here. Leave blank to use the default class.', 'svg-support' ); ?>
-													<br>
-													<em><?php esc_html_e( 'Plugin can now go any level down to find your SVG! It will keep looking as long as the element with the target class has children. If it finds any IMG tags with .svg in the src URL, it will replace the IMG tag with your SVG code.', 'svg-support' ); ?></em>
-												</small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Skip Nested SVGs', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[skip_nested_svg]">
-												<input id="bodhi_svgs_settings[skip_nested_svg]" name="bodhi_svgs_settings[skip_nested_svg]" type="checkbox" value="1" <?php checked( isset( $bodhi_svgs_options['skip_nested_svg'] ) && $bodhi_svgs_options['skip_nested_svg'] == 1 ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?>
-												<br><small class="description"><?php esc_html_e( 'When enabled, only the first SVG in a .style-svg container will be inlined. Useful for Gutenberg Cover blocks with nested SVG images.', 'svg-support' ); ?></small>
-											</label>
+											<hr>
 										</td>
 									</tr>
 
@@ -293,15 +290,6 @@
 
 									<tr valign="top" class="svgs-advanced">
 										<th scope="row">
-											<h3 class="inner-title"><?php esc_html_e( 'Settings for Classic Editor', 'svg-support' ); ?></h3>
-										</th>
-										<td>
-											<hr>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
 											<strong><?php esc_html_e( 'Automatically insert class?', 'svg-support' ); ?></strong></label>
 										</th>
 										<td>
@@ -316,6 +304,25 @@
 									</tr>
 
 								</table>
+
+								<div class="postbox">
+									<h3><span><?php esc_html_e( 'Danger Zone', 'svg-support' ); ?></span></h3>
+									<div class="inside">
+										<table class="form-table">
+											<tr valign="top">
+												<th scope="row">
+													<label for="bodhi_svgs_settings[del_plugin_data]"><strong><?php esc_html_e( 'Delete Plugin Data', 'svg-support' ); ?></strong></label>
+												</th>
+												<td>
+													<label for="bodhi_svgs_settings[del_plugin_data]">
+														<input id="bodhi_svgs_settings[del_plugin_data]" name="bodhi_svgs_settings[del_plugin_data]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['del_plugin_data'] ), true ); ?> />
+														<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Delete all plugin\'s data during uninstallation process.', 'svg-support' ); ?></small>
+													</label>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
 
 								<p>
 									<input class="button-primary" type="submit" name="bodhi_svgs_settings_submit" value="<?php esc_html_e( 'Save Changes', 'svg-support' ); ?>" />

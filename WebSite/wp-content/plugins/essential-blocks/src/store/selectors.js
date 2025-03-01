@@ -90,7 +90,6 @@ export function getIsSaving(state) {
     return isSaving
 }
 
-
 /**
  * Selector: Get Block Data
  * @param {object} state

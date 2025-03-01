@@ -49,7 +49,7 @@ class Scripts
     public function print_global_styles()
     {
         $global_styles = $this->global_styles();
-        echo '<style id="essential-blocks-global-styles">' .  esc_html($global_styles) . '</style>';
+        echo '<style id="essential-blocks-global-styles">' . esc_html( $global_styles ) . '</style>';
     }
 
     public function block_editor_assets()
@@ -94,7 +94,8 @@ class Scripts
             'essential-blocks-tweenMaxjs',
             'essential-blocks-patterns',
             'essential-blocks-store',
-            'essential-blocks-editor-breakpoint',
+            'essential-blocks-gsap-scrolltrigger',
+            'essential-blocks-editor-breakpoint'
          ];
 
         if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) {

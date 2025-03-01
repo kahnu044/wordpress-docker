@@ -186,6 +186,32 @@
 			padding-top: 10px;
 		}
 	}
+
+	.global-controls-save {
+		margin-top: 10px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		justify-content: center;
+
+		button {
+			background-color: #2271b1;
+			color: #fff;
+			gap: 8px;
+			box-shadow: unset !important;
+
+			&.is-secondary {
+				background-color: #ebebeb;
+				color: #6b6a6a;
+
+				&:hover {
+					background-color: #ddd5d5;
+					box-shadow: unset !important;
+					color: #222;
+				}
+			}
+		}
+	}
 }
 
 .eb-block-default {

@@ -16,8 +16,9 @@ function bodhi_svgs_featured_image_meta( $content ) {
 
 	global $post;
 
+	$thumbnail = get_the_post_thumbnail();
 	// Check if featured image is set and has extension of .svg or .svgz.
-	if ( strpos( get_the_post_thumbnail(), '.svg' ) ) {
+	if ( $thumbnail && strpos( $thumbnail, '.svg' ) !== false ) {
 
 		$text 	= __( 'Render this SVG inline (advanced)', 'svg-support' );
 		$id 	= 'inline_featured_image';
@@ -63,13 +64,12 @@ function bodhi_svgs_save_featured_image_meta( $post_id, $post, $update ) {
 		return $post_id;
 	}
 
-	// Check if the new value is different from the existing value
-	$existing_value = get_post_meta( $post_id, 'inline_featured_image', true );
-	$new_value = isset( $_POST['inline_featured_image'] ) ? 1 : 0;
-
-	if ( $new_value != $existing_value ) {
-		// Update the meta value only if it has changed
-		update_post_meta( $post_id, 'inline_featured_image', $new_value );
+	// If checkbox is checked, add/update meta
+	if ( isset( $_POST['inline_featured_image'] ) ) {
+		update_post_meta( $post_id, 'inline_featured_image', 1 );
+	} else {
+		// If unchecked, delete the meta entirely
+		delete_post_meta( $post_id, 'inline_featured_image' );
 	}
 }
 add_action( 'save_post', 'bodhi_svgs_save_featured_image_meta', 10, 3 );
