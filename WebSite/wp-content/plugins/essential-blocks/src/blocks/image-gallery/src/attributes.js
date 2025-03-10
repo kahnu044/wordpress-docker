@@ -195,6 +195,10 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    disableIsotope: {
+        type: "boolean",
+        default: false,
+    },
     enableLoadMore: {
         type: "boolean",
         default: false,

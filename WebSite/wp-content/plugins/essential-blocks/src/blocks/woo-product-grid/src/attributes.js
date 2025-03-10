@@ -6,8 +6,7 @@ import {
     typoPrefix_btn,
     typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
-    SOLD_COUNT_TEXT,
-    FILTER_ITEM_TYPOGRAPHY
+    typoPrefix_cat
 } from "./constants/typographyConstants";
 
 import {
@@ -43,6 +42,7 @@ import {
     FILTER_ITEM_PADDING,
     FILTER_ITEM_BORDER_SHADOW,
     PROGRESSBAR_HEIGHT,
+    CAT_SPACE
 } from "./constants";
 
 import {
@@ -106,6 +106,10 @@ const attributes = {
     showSaleBadge: {
         type: "boolean",
         default: true,
+    },
+    showCategory: {
+        type: "boolean",
+        default: false,
     },
     listPreset: {
         type: "string",
@@ -320,7 +324,7 @@ const attributes = {
     },
     contentLists: {
         type: "array",
-        default: ["rating", "title", "price", "sold_count"],
+        default: [ "rating", "category", "title", "price", "sold_count"],
     },
     enableContents: {
         type: "array",
@@ -362,6 +366,12 @@ const attributes = {
         type: "string",
         default: "h3",
     },
+    catColor: {
+		type: "string",
+	},
+	catHoverColor: {
+		type: "string",
+	},
 
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_price),
@@ -372,6 +382,7 @@ const attributes = {
     ...generateTypographyAttributes(EBWG_LOAD_MORE_TYPOGRAPHY, {
         fontSize: 14,
     }),
+    ...generateTypographyAttributes(typoPrefix_cat),
     ...generateResponsiveRangeAttributes(RATING_ICON_SIZE),
     ...generateResponsiveRangeAttributes(IMG_GAP, { defaultRange: 10 }),
     ...generateResponsiveRangeAttributes(IMG_WIDTH),
@@ -414,6 +425,7 @@ const attributes = {
     ...generateDimensionsAttributes(BUTTON_MARGIN),
     ...generateDimensionsAttributes(VIEW_BUTTON_MARGIN),
     ...generateDimensionsAttributes(DESC_MARGIN),
+    ...generateDimensionsAttributes(CAT_SPACE),
     TABcolumnsRange: {
         type: "number",
         default: 3,

@@ -262,6 +262,8 @@
 .eb-woo-products-gallery .eb-woo-product .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-price {
 	color: #3f05e9;
 	font-weight: 500;
+	padding: 0;
+	margin: 0;
 }
 
 /* preset 2 */
@@ -485,6 +487,21 @@
 	align-items: center;
 	text-align: center;
 }
+.eb-woo-products-wrapper {
+	.eb-woo-product-content {
+		.eb-woo-product-category-list {
+			list-style: none;
+			margin-bottom: 5px;
+		}
+		
+		.eb-woo-product-category-list a {
+			text-decoration: none;
+			color: #1d2939;
+			font-size: 15px;
+		}
+	}
+}
+
 
 .eb-woo-products-wrapper {
 

@@ -35,7 +35,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -66,6 +66,7 @@ export default function Style(props) {
         textAlign,
         verticalAlign,
         classHook,
+        isRTLEnable
     } = attributes;
 
     // Title Typography
@@ -392,9 +393,6 @@ export default function Style(props) {
 	`;
 
     const sliderRtlStyles = `
-        [dir="rtl"] .eb-slider-wrapper.${blockId} .slick-prev {
-            left: auto;
-        }
         [dir="rtl"] .eb-slider-wrapper.${blockId} .slick-slide {
             pointer-events: auto;
         }
@@ -543,11 +541,19 @@ export default function Style(props) {
 		}
 	`;
     const sliderControlsStylesDesktop = `
+        [dir="rtl"] .eb-slider-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionDesktop}
+            left: auto;
+		}
+		[dir="rtl"] .eb-slider-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionDesktop}
+            right: auto;
+		}
 		.eb-slider-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionDesktop}
+			${!isRTLEnable ? leftArrowPositionDesktop : rightArrowPositionDesktop}
 		}
 		.eb-slider-wrapper.${blockId} .slick-next {
-			${rightArrowPositionDesktop}
+			${!isRTLEnable ? rightArrowPositionDesktop : leftArrowPositionDesktop}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
 		.eb-slider-wrapper.${blockId} .slick-next i {
@@ -573,11 +579,19 @@ export default function Style(props) {
 		}
 	`;
     const sliderControlsStylesTab = `
+        [dir="rtl"] .eb-slider-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionTab}
+            left: auto;
+		}
+		[dir="rtl"] .eb-slider-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionTab}
+            right: auto;
+		}
 		.eb-slider-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionTab}
+			${!isRTLEnable ? leftArrowPositionTab : rightArrowPositionTab}
 		}
 		.eb-slider-wrapper.${blockId} .slick-next {
-			${rightArrowPositionTab}
+            ${!isRTLEnable ? rightArrowPositionTab : leftArrowPositionTab}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
 		.eb-slider-wrapper.${blockId} .slick-next i {
@@ -594,11 +608,19 @@ export default function Style(props) {
 		}
 	`;
     const sliderControlsStylesMobile = `
+        [dir="rtl"] .eb-slider-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionMobile}
+            left: auto;
+		}
+		[dir="rtl"] .eb-slider-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionMobile}
+            right: auto;
+		}
 		.eb-slider-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionMobile}
+			${!isRTLEnable ? leftArrowPositionMobile : rightArrowPositionMobile}
 		}
 		.eb-slider-wrapper.${blockId} .slick-next {
-			${rightArrowPositionMobile}
+            ${!isRTLEnable ? rightArrowPositionMobile : leftArrowPositionMobile}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
 		.eb-slider-wrapper.${blockId} .slick-next i {

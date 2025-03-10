@@ -6,6 +6,7 @@ import {
     typoPrefix_btn,
     typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
+    typoPrefix_cat,
 } from "./constants/typographyConstants";
 import {
     RATING_ICON_SIZE,
@@ -34,6 +35,7 @@ import {
     LOADMORE_PADDING,
     LOADMORE_MARGIN,
     LOADMORE_BORDER_SHADOW,
+    CAT_SPACE,
 } from "./constants";
 
 import {
@@ -87,11 +89,17 @@ export default function Style(props) {
         loadMoreActiveBgColor,
         enableContents,
         autoFit,
-        fitStyles
+        fitStyles,
+        catColor,
+        catHoverColor,
     } = attributes;
 
     const contentAlignmentClass =
-        contentAlignment === "left" ? "flex-start" : contentAlignment === "right" ? "flex-end" : "center";
+        contentAlignment === "left"
+            ? "flex-start"
+            : contentAlignment === "right"
+            ? "flex-end"
+            : "center";
 
     // title typography
     const {
@@ -466,6 +474,27 @@ export default function Style(props) {
         attributes,
         noShadow: true,
     });
+    //  Category Margin
+    const {
+        dimensionStylesDesktop: catMarginDesktop,
+        dimensionStylesTab: catMarginTab,
+        dimensionStylesMobile: catMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: CAT_SPACE,
+        styleFor: "margin",
+        attributes,
+    });
+
+    // section title typography
+    const {
+        typoStylesDesktop: catTypoStylesDesktop,
+        typoStylesTab: catTypoStylesTab,
+        typoStylesMobile: catTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_cat,
+    });
+
     const desktopStyles = `
 		.eb-woo-products-wrapper.${blockId} {
 			${wrapperMarginDesktop}
@@ -504,10 +533,11 @@ export default function Style(props) {
 		}
 
         .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-title {
-            ${isContentEnabled("title")
-            ? `order: ${enableContents.indexOf("title") + 1};`
-            : ""
-        }
+            ${
+                isContentEnabled("title")
+                    ? `order: ${enableContents.indexOf("title") + 1};`
+                    : ""
+            }
         }
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-title,
@@ -523,10 +553,11 @@ export default function Style(props) {
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-price {
-            ${isContentEnabled("price")
-            ? `order: ${enableContents.indexOf("price") + 1};`
-            : ""
-        }
+            ${
+                isContentEnabled("price")
+                    ? `order: ${enableContents.indexOf("price") + 1};`
+                    : ""
+            }
 			${priceTypoStylesDesktop}
 			${priceMarginDesktop}
 			${priceColor ? `color: ${priceColor};` : ""}
@@ -537,10 +568,11 @@ export default function Style(props) {
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-rating-wrapper {
-            ${isContentEnabled("rating")
-            ? `order: ${enableContents.indexOf("rating") + 1};`
-            : ""
-        }
+            ${
+                isContentEnabled("rating")
+                    ? `order: ${enableContents.indexOf("rating") + 1};`
+                    : ""
+            }
 			${ratingMarginDesktop}
 		}
 
@@ -550,10 +582,11 @@ export default function Style(props) {
 		}
 
         .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-button-list {
-            ${isContentEnabled("button")
-            ? `order: ${enableContents.indexOf("button") + 1};`
-            : ""
-        }
+            ${
+                isContentEnabled("button")
+                    ? `order: ${enableContents.indexOf("button") + 1};`
+                    : ""
+            }
         }
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button,
@@ -567,13 +600,14 @@ export default function Style(props) {
 			${btnBackgroundColor ? `background: ${btnBackgroundColor};` : ""}
 			transition: all 0.3s, ${btnShadowTransitionStyle};
 		}
-		${gridPreset !== "grid-preset-3"
-            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
+		${
+            gridPreset !== "grid-preset-3"
+                ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.added_to_cart:hover, .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button:hover,.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.added_to_cart:hover {
 			${btnShadowStylesHoverDesktop}
 			${btnHoverColor ? `color: ${btnHoverColor};` : ""}
 			${btnBackgroundHoverColor ? `background: ${btnBackgroundHoverColor};` : ""}
 		}`
-            : ""
+                : ""
         }
 
 
@@ -595,12 +629,13 @@ export default function Style(props) {
 			${contentBackgroundColor ? `background: ${contentBackgroundColor};` : ""}
 		}
 
-		${backgroundOverlayColor
-            ? `
+		${
+            backgroundOverlayColor
+                ? `
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-content-wrapper {
 			background: ${backgroundOverlayColor};
 		}`
-            : ""
+                : ""
         }
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
@@ -615,9 +650,10 @@ export default function Style(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverDesktop : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowDesktop}
 			transition: ${imgBDShadowTransition};
 			overflow: hidden;
@@ -639,10 +675,11 @@ export default function Style(props) {
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-image-wrapper .eb-woo-product-image {
 			${imageWidthDesktop}
-			${autoHeight || imageHeightDesktop === ""
-            ? `height: 100%;`
-            : imageHeightDesktop
-        }
+			${
+                autoHeight || imageHeightDesktop === ""
+                    ? `height: 100%;`
+                    : imageHeightDesktop
+            }
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product {
@@ -673,10 +710,11 @@ export default function Style(props) {
 		}
 
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.list-preset-1 .eb-woo-product .eb-woo-product-content-wrapper .eb-woo-product-content .eb-woo-product-details {
-            ${isContentEnabled("description")
-            ? `order: ${enableContents.indexOf("description") + 1};`
-            : ""
-        }
+            ${
+                isContentEnabled("description")
+                    ? `order: ${enableContents.indexOf("description") + 1};`
+                    : ""
+            }
 			${descTypoStylesDesktop}
 			${descMarginDesktop}
 			${descColor ? `color: ${descColor};` : ""}
@@ -720,20 +758,29 @@ export default function Style(props) {
 			transition: all 0.3s, ${viewbtnShadowTransitionStyle};
 		}
 
-        ${gridPreset !== "grid-preset-3"
-            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+        ${
+            gridPreset !== "grid-preset-3"
+                ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
             .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
 			${viewbtnShadowStylesHoverDesktop}
 			${viewbtnHoverColor ? `color: ${viewbtnHoverColor};` : ""}
-			${viewbtnBackgroundHoverColor ? `background: ${viewbtnBackgroundHoverColor};` : ""}
+			${
+                viewbtnBackgroundHoverColor
+                    ? `background: ${viewbtnBackgroundHoverColor};`
+                    : ""
+            }
 		}`
-            : ""
+                : ""
         }
 
         .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
 			${viewbtnShadowStylesHoverDesktop}
 			${viewbtnHoverColor ? `color: ${viewbtnHoverColor};` : ""}
-			${viewbtnBackgroundHoverColor ? `background: ${viewbtnBackgroundHoverColor};` : ""}
+			${
+                viewbtnBackgroundHoverColor
+                    ? `background: ${viewbtnBackgroundHoverColor};`
+                    : ""
+            }
 		}
 
     `;
@@ -745,12 +792,13 @@ export default function Style(props) {
 			${viewbtnTypoStylesTab}
 		}
 
-        ${gridPreset !== "grid-preset-3"
-            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+        ${
+            gridPreset !== "grid-preset-3"
+                ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
             .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
 			${viewbtnShadowStylesHoverTab}
 		}`
-            : ""
+                : ""
         }
 
         .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
@@ -766,12 +814,13 @@ export default function Style(props) {
 			${viewbtnTypoStylesMobile}
 		}
 
-        ${gridPreset !== "grid-preset-3"
-            ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
+        ${
+            gridPreset !== "grid-preset-3"
+                ? `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover,
             .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product  .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
 			${viewbtnShadowStylesHoverMobile}
 		}`
-            : ""
+                : ""
         }
 
         .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product .eb-woo-product-overlay .eb-woo-product-button-list a.button.eb-woo-product-detail:hover {
@@ -880,9 +929,10 @@ export default function Style(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverTab : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowTab}
 		}
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product:hover {
@@ -1022,9 +1072,10 @@ export default function Style(props) {
 			${"grid-preset-3" !== gridPreset ? imgBDShadowHoverMobile : ""}
 		}
 
-		${"grid" === layout &&
-        "grid-preset-3" === gridPreset &&
-        `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
+		${
+            "grid" === layout &&
+            "grid-preset-3" === gridPreset &&
+            `.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product {
 			${imgBDShadowMobile}
 		}
 		.eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery.grid-preset-3 .eb-woo-product:hover {
@@ -1057,14 +1108,67 @@ export default function Style(props) {
 		}
 	`;
 
+    const categoryStylesDesktop = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category {
+            ${
+                isContentEnabled("category")
+                    ? `order: ${enableContents.indexOf("category") + 1};`
+                    : ""
+            }
+            ${catMarginDesktop}
+        }
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li a {
+            ${catTypoStylesDesktop}
+            color: ${catColor};
+
+        }
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li:hover,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li:hover a {
+            color: ${catHoverColor};
+        }
+    `;
+
+    const categoryStylesTab = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category {
+            ${catMarginTab}
+        }
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li a {
+            ${catTypoStylesTab}
+        }
+    `;
+
+    const categoryStylesMobile = `
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category {
+            ${catMarginMobile}
+        }
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li,
+        .eb-woo-products-wrapper.${blockId} .eb-woo-products-gallery .eb-woo-product-content .eb-woo-product-category .eb-woo-product-category-list li a {
+            ${catTypoStylesMobile}
+        }
+    `;
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
-    const desktopAllStyles = softMinifyCssStrings(`${desktopStyles} ${viewBtnStylesDesktop}`);
+    const desktopAllStyles = softMinifyCssStrings(`
+        ${desktopStyles}
+        ${viewBtnStylesDesktop}
+        ${categoryStylesDesktop}
+    `);
 
     // all css styles for Tab in strings ⬇
-    const tabAllStyles = softMinifyCssStrings(`${tabStyles} ${viewBtnStylesTab}`);
+    const tabAllStyles = softMinifyCssStrings(`
+        ${tabStyles}
+        ${viewBtnStylesTab}
+        ${categoryStylesTab}
+    `);
 
     // all css styles for Mobile in strings ⬇
-    const mobileAllStyles = softMinifyCssStrings(`${mobileStyles} ${viewBtnStylesMobile}`);
+    const mobileAllStyles = softMinifyCssStrings(`
+        ${mobileStyles}
+        ${viewBtnStylesMobile}
+        ${categoryStylesMobile}
+    `);
 
     return (
         <>

@@ -146,7 +146,8 @@ function Inspector(props) {
         notFoundColor,
         notFoundText,
         version,
-        columnsRange
+        columnsRange,
+        disableIsotope
     } = attributes;
 
     const [defaultFilterOptions, setDefaultFilterOptions] = useState("");
@@ -252,6 +253,7 @@ function Inspector(props) {
         switch (selected) {
             case "default":
                 setAttributes({
+                    disableIsotope: false,
                     displayCaption: false,
                     displayDescription: false,
                     disableLightBox: false,
@@ -332,6 +334,7 @@ function Inspector(props) {
                 break;
             case "preset-2":
                 setAttributes({
+                    disableIsotope: false,
                     displayCaption: true,
                     displayDescription: true,
                     disableLightBox: false,
@@ -465,6 +468,7 @@ function Inspector(props) {
                 break;
             case "preset-3":
                 setAttributes({
+                    disableIsotope: false,
                     displayCaption: true,
                     displayDescription: true,
                     disableLightBox: false,
@@ -600,6 +604,7 @@ function Inspector(props) {
                 break;
             case "preset-4":
                 setAttributes({
+                    disableIsotope: false,
                     displayCaption: true,
                     displayDescription: true,
                     disableLightBox: false,
@@ -1042,7 +1047,10 @@ function Inspector(props) {
                                     value={layouts}
                                     options={LAYOUTS}
                                     onChange={(layouts) =>
-                                        setAttributes({ layouts })
+                                        setAttributes({
+                                            layouts,
+                                            disableIsotope: layouts === 'masonry' ? false : disableIsotope,
+                                        })
                                     }
                                 />
                                 {layouts == 'masonry' && (
@@ -1217,6 +1225,22 @@ function Inspector(props) {
                                     />
                                 )}
                             </>
+                        )}
+
+                        {presets === 'default' && layouts === 'grid' && (
+                            <ToggleControl
+                                label={__(
+                                    "Disable Isotope",
+                                    "essential-blocks"
+                                )}
+                                checked={disableIsotope}
+                                onChange={() =>
+                                    setAttributes({
+                                        disableIsotope: !disableIsotope,
+                                    })
+                                }
+                                help={__("Some of the functions will not work if you disable Isotope, such as load more, filter, and search.", "essential-blocks")}
+                            />
                         )}
 
                         {applyFilters(
@@ -1540,7 +1564,7 @@ function Inspector(props) {
                                                 IMAGE_UNIT_TYPES
                                             }
                                             min={0}
-                                            max={500}
+                                            max={1000}
                                             step={1}
                                         />
                                         <ResponsiveRangeController
@@ -1576,7 +1600,7 @@ function Inspector(props) {
                                                     IMAGE_UNIT_TYPES
                                                 }
                                                 min={0}
-                                                max={500}
+                                                max={1000}
                                                 step={1}
                                             />
                                             <ResponsiveRangeController

@@ -27,6 +27,7 @@ import {
     typoPrefix_btn,
     typoPrefix_viewbtn,
     EBWG_LOAD_MORE_TYPOGRAPHY,
+    typoPrefix_cat,
 } from "./constants/typographyConstants";
 import {
     LAYOUT,
@@ -62,7 +63,8 @@ import {
     LOADMORE_BORDER_SHADOW,
     RATING_STYLE,
     FIT_STYLES,
-    TITLE_TAGS
+    TITLE_TAGS,
+    CAT_SPACE,
 } from "./constants";
 
 import {
@@ -74,7 +76,7 @@ import {
     WoocommerceQuery,
     MorePosts,
     InspectorPanel,
-    SortControl
+    SortControl,
 } from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
@@ -87,6 +89,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         showRating,
         showPrice,
         showSaleBadge,
+        showCategory,
         listPreset,
         titleColor,
         titleHoverColor,
@@ -133,7 +136,9 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         detailBtnText,
         autoFit,
         fitStyles,
-        titleTag
+        titleTag,
+        catColor,
+        catHoverColor,
     } = attributes;
 
     const changeLayout = (preset) => {
@@ -162,7 +167,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
         } else {
             if (newEnableContents.includes(itemName)) {
                 newEnableContents = newEnableContents.filter(
-                    (item) => item !== itemName
+                    (item) => item !== itemName,
                 );
             }
         }
@@ -204,9 +209,13 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                     paddingPrefix: WRAPPER_PADDING,
                     borderPrefix: WRAPPER_BORDER_SHADOW,
                     backgroundPrefix: WRAPPER_BG,
-                }}>
+                }}
+            >
                 <InspectorPanel.General>
-                    <InspectorPanel.PanelBody initialOpen={true} title={__("Layout", "essential-blocks")}>
+                    <InspectorPanel.PanelBody
+                        initialOpen={true}
+                        title={__("Layout", "essential-blocks")}
+                    >
                         <BaseControl label={__("Layouts", "essential-blocks")}>
                             <ButtonGroup id="eb-woo-products-layout">
                                 {LAYOUT.map((item, key) => (
@@ -214,7 +223,11 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                         key={key}
                                         isPrimary={layout === item.value}
                                         isSecondary={layout !== item.value}
-                                        onClick={() => setAttributes(changeLayout(item.value))}
+                                        onClick={() =>
+                                            setAttributes(
+                                                changeLayout(item.value),
+                                            )
+                                        }
                                     >
                                         {item.label}
                                     </Button>
@@ -243,7 +256,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     onChange={(newGridPreset) => changeGridPreset(newGridPreset)}
                                 /> */}
                                 <ResponsiveRangeController
-                                    baseLabel={__("Columns", "essential-blocks")}
+                                    baseLabel={__(
+                                        "Columns",
+                                        "essential-blocks",
+                                    )}
                                     controlName={COLUMNS}
                                     min={0}
                                     max={6}
@@ -270,32 +286,34 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             </>
                         )}
                         <ToggleControl
+                            label={__("Show Category", "essential-blocks")}
+                            checked={showCategory}
+                            onChange={() => {
+                                setAttributes({
+                                    showCategory: !showCategory,
+                                });
+                                makeEnableContent(!showCategory, "category");
+                            }}
+                        />
+                        <ToggleControl
                             label={__("Show Rating", "essential-blocks")}
                             checked={showRating}
                             onChange={() => {
                                 setAttributes({
                                     showRating: !showRating,
                                 });
-                                makeEnableContent(
-                                    !showRating,
-                                    "rating"
-                                );
+                                makeEnableContent(!showRating, "rating");
                             }}
                         />
                         {showRating && (
                             <SelectControl
-                                label={__(
-                                    "Rating Style",
-                                    "essential-blocks"
-                                )}
+                                label={__("Rating Style", "essential-blocks")}
                                 value={ratingStyle}
                                 options={applyFilters(
                                     "eb_woo_product_grid_rating_style",
-                                    RATING_STYLE
+                                    RATING_STYLE,
                                 )}
-                                onChange={(
-                                    newRatingStyle
-                                ) =>
+                                onChange={(newRatingStyle) =>
                                     setAttributes({
                                         ratingStyle: newRatingStyle,
                                     })
@@ -309,10 +327,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 setAttributes({
                                     showPrice: !showPrice,
                                 });
-                                makeEnableContent(
-                                    !showPrice,
-                                    "price"
-                                );
+                                makeEnableContent(!showPrice, "price");
                             }}
                         />
                         <ToggleControl
@@ -329,7 +344,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             "",
                             attributes,
                             setAttributes,
-                            makeEnableContent
+                            makeEnableContent,
                         )}
 
                         <ToggleControl
@@ -345,7 +360,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         {showDetailBtn && (
                             <>
                                 <TextControl
-                                    label={__("Button Text", "essential-blocks")}
+                                    label={__(
+                                        "Button Text",
+                                        "essential-blocks",
+                                    )}
                                     value={detailBtnText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -356,7 +374,9 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             </>
                         )}
 
-                        <BaseControl label={__("Title Tag", "essential-blocks")}>
+                        <BaseControl
+                            label={__("Title Tag", "essential-blocks")}
+                        >
                             <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                 {TITLE_TAGS.map((item, key) => (
                                     <Button
@@ -365,7 +385,9 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                         isPrimary={titleTag === item.value}
                                         isSecondary={titleTag !== item.value}
                                         onClick={() =>
-                                            setAttributes({ titleTag: item.value })
+                                            setAttributes({
+                                                titleTag: item.value,
+                                            })
                                         }
                                     >
                                         {item.label}
@@ -382,9 +404,15 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         setAttributes={setAttributes}
                         setQueryResults={setQueryResults}
                     />
-                    <InspectorPanel.PanelBody title={__("Cart Text", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Cart Text", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <ToggleControl
-                            label={__("Use Custom Cart Button Text", "essential-blocks")}
+                            label={__(
+                                "Use Custom Cart Button Text",
+                                "essential-blocks",
+                            )}
                             checked={isCustomCartBtn}
                             onChange={() =>
                                 setAttributes({
@@ -395,7 +423,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         {isCustomCartBtn && (
                             <>
                                 <TextControl
-                                    label={__("Simple Product", "essential-blocks")}
+                                    label={__(
+                                        "Simple Product",
+                                        "essential-blocks",
+                                    )}
                                     value={simpleCartText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -404,7 +435,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     }
                                 />
                                 <TextControl
-                                    label={__("Variable Product", "essential-blocks")}
+                                    label={__(
+                                        "Variable Product",
+                                        "essential-blocks",
+                                    )}
                                     value={variableCartText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -413,7 +447,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     }
                                 />
                                 <TextControl
-                                    label={__("Grouped Product", "essential-blocks")}
+                                    label={__(
+                                        "Grouped Product",
+                                        "essential-blocks",
+                                    )}
                                     value={groupedCartText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -422,7 +459,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     }
                                 />
                                 <TextControl
-                                    label={__("External Product", "essential-blocks")}
+                                    label={__(
+                                        "External Product",
+                                        "essential-blocks",
+                                    )}
                                     value={externalCartText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -431,7 +471,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     }
                                 />
                                 <TextControl
-                                    label={__("Default Product", "essential-blocks")}
+                                    label={__(
+                                        "Default Product",
+                                        "essential-blocks",
+                                    )}
                                     value={defaultCartText}
                                     onChange={(text) =>
                                         setAttributes({
@@ -442,7 +485,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody title={__("Sale Badge", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Sale Badge", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <BaseControl
                             label={__("Alignment", "essential-blocks")}
                             id="eb-woo-products-alignment"
@@ -451,8 +497,12 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 {SALE_BADGE_ALIGN.map((item, key) => (
                                     <Button
                                         key={key}
-                                        isPrimary={saleBadgeAlign === item.value}
-                                        isSecondary={saleBadgeAlign !== item.value}
+                                        isPrimary={
+                                            saleBadgeAlign === item.value
+                                        }
+                                        isSecondary={
+                                            saleBadgeAlign !== item.value
+                                        }
                                         onClick={() =>
                                             setAttributes({
                                                 saleBadgeAlign: item.value,
@@ -481,16 +531,15 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         initialOpen={false}
                     />
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Sorting Content",
-                            "essential-blocks-pro"
-                        )}
+                        title={__("Sorting Content", "essential-blocks-pro")}
                         initialOpen={false}
                     >
                         <SortControl
                             items={enableContents}
                             labelKey=""
-                            onSortEnd={enableContents => setAttributes({ enableContents })}
+                            onSortEnd={(enableContents) =>
+                                setAttributes({ enableContents })
+                            }
                             hasSettings={false}
                             hasAddButton={false}
                             hasDelete={false}
@@ -504,21 +553,32 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                     )}
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
-                    <InspectorPanel.PanelBody title={__("Products", "essential-blocks")} initialOpen={true}>
+                    <InspectorPanel.PanelBody
+                        title={__("Products", "essential-blocks")}
+                        initialOpen={true}
+                    >
                         <>
                             <BaseControl
-                                label={__("Content Alignment", "essential-blocks")}
+                                label={__(
+                                    "Content Alignment",
+                                    "essential-blocks",
+                                )}
                                 id="eb-woo-products-content-alignment"
                             >
                                 <ButtonGroup>
                                     {CONTENT_ALIGNMENT.map((item, key) => (
                                         <Button
                                             key={key}
-                                            isPrimary={contentAlignment === item.value}
-                                            isSecondary={contentAlignment !== item.value}
+                                            isPrimary={
+                                                contentAlignment === item.value
+                                            }
+                                            isSecondary={
+                                                contentAlignment !== item.value
+                                            }
                                             onClick={() =>
                                                 setAttributes({
-                                                    contentAlignment: item.value,
+                                                    contentAlignment:
+                                                        item.value,
                                                 })
                                             }
                                         >
@@ -528,17 +588,24 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 </ButtonGroup>
                             </BaseControl>
                             <ColorControl
-                                label={__("Content Background Color", "essential-blocks")}
+                                label={__(
+                                    "Content Background Color",
+                                    "essential-blocks",
+                                )}
                                 color={contentBackgroundColor}
-                                attributeName={'contentBackgroundColor'}
+                                attributeName={"contentBackgroundColor"}
                             />
-                            {"grid" === layout && gridPreset === "grid-preset-3" && (
-                                <ColorControl
-                                    label={__("Background Overlay Color", "essential-blocks")}
-                                    color={backgroundOverlayColor}
-                                    attributeName={'backgroundOverlayColor'}
-                                />
-                            )}
+                            {"grid" === layout &&
+                                gridPreset === "grid-preset-3" && (
+                                    <ColorControl
+                                        label={__(
+                                            "Background Overlay Color",
+                                            "essential-blocks",
+                                        )}
+                                        color={backgroundOverlayColor}
+                                        attributeName={"backgroundOverlayColor"}
+                                    />
+                                )}
                             <ResponsiveDimensionsControl
                                 controlName={CONTENT_PADDING}
                                 baseLabel={__("Padding", "essential-blocks")}
@@ -551,16 +618,22 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 step={1}
                                 noUnits={true}
                             />
-                            <InspectorPanel.PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                            <InspectorPanel.PanelBody
+                                title={__("Border & Shadow")}
+                                initialOpen={false}
+                            >
                                 <BorderShadowControl
                                     controlName={PRODUCTS_BORDER_SHADOW}
-                                // noShadow
-                                // noBorder
+                                    // noShadow
+                                    // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </>
                     </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody title={__("Image", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Image", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <>
                             <ResponsiveRangeController
                                 baseLabel={__("Width", "essential-blocks")}
@@ -586,34 +659,53 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 }
                             />
                             <ToggleControl
-                                label={__("Auto Fit Image?", "essential-blocks")}
+                                label={__(
+                                    "Auto Fit Image?",
+                                    "essential-blocks",
+                                )}
                                 checked={autoFit}
-                                onChange={(autoFit) => setAttributes({ autoFit })}
+                                onChange={(autoFit) =>
+                                    setAttributes({ autoFit })
+                                }
                             />
 
                             {autoFit && (
                                 <SelectControl
-                                    label={__("Image Fit Options", "essential-blocks")}
+                                    label={__(
+                                        "Image Fit Options",
+                                        "essential-blocks",
+                                    )}
                                     value={fitStyles}
                                     options={FIT_STYLES}
-                                    onChange={(fitStyles) => setAttributes({ fitStyles })}
+                                    onChange={(fitStyles) =>
+                                        setAttributes({ fitStyles })
+                                    }
                                 />
                             )}
                             <Divider />
                             <ColorControl
-                                label={__("Image Wrapper Background", "essential-blocks")}
+                                label={__(
+                                    "Image Wrapper Background",
+                                    "essential-blocks",
+                                )}
                                 color={imageBackgroundColor}
-                                attributeName={'imageBackgroundColor'}
+                                attributeName={"imageBackgroundColor"}
                             />
                             {layout === "list" && (
                                 <>
                                     <ColorControl
-                                        label={__("Image Overlay Color", "essential-blocks")}
+                                        label={__(
+                                            "Image Overlay Color",
+                                            "essential-blocks",
+                                        )}
                                         color={imageOverlayColor}
-                                        attributeName={'imageOverlayColor'}
+                                        attributeName={"imageOverlayColor"}
                                     />
                                     <ResponsiveRangeController
-                                        baseLabel={__("Image Space", "essential-blocks")}
+                                        baseLabel={__(
+                                            "Image Space",
+                                            "essential-blocks",
+                                        )}
                                         controlName={IMG_GAP}
                                         min={0}
                                         max={500}
@@ -631,7 +723,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             />
                         </>
                     </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody title={__("Product Title", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Product Title", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -640,12 +735,12 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             <ColorControl
                                 label={__("Color", "essential-blocks")}
                                 color={titleColor}
-                                attributeName={'titleColor'}
+                                attributeName={"titleColor"}
                             />
                             <ColorControl
                                 label={__("Hover Color", "essential-blocks")}
                                 color={titleHoverColor}
-                                attributeName={'titleHoverColor'}
+                                attributeName={"titleHoverColor"}
                             />
                             <ResponsiveDimensionsControl
                                 controlName={TITLE_MARGIN}
@@ -655,21 +750,30 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                     </InspectorPanel.PanelBody>
                     {layout === "list" && (
                         <InspectorPanel.PanelBody
-                            title={__("Product Description", "essential-blocks")}
+                            title={__(
+                                "Product Description",
+                                "essential-blocks",
+                            )}
                             initialOpen={false}
                         >
                             <>
                                 <TypographyDropdown
-                                    baseLabel={__("Typography", "essential-blocks")}
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks",
+                                    )}
                                     typographyPrefixConstant={typoPrefix_desc}
                                 />
                                 <ColorControl
                                     label={__("Color", "essential-blocks")}
                                     color={descColor}
-                                    attributeName={'descColor'}
+                                    attributeName={"descColor"}
                                 />
                                 <TextControl
-                                    label={__("Description length", "essential-blocks")}
+                                    label={__(
+                                        "Description length",
+                                        "essential-blocks",
+                                    )}
                                     value={productDescLength}
                                     type="number"
                                     onChange={(value) => textToNumber(value)}
@@ -681,7 +785,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             </>
                         </InspectorPanel.PanelBody>
                     )}
-                    <InspectorPanel.PanelBody title={__("Product Price", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Product Price", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -690,12 +797,15 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             <ColorControl
                                 label={__("Price Color", "essential-blocks")}
                                 color={priceColor}
-                                attributeName={'priceColor'}
+                                attributeName={"priceColor"}
                             />
                             <ColorControl
-                                label={__("Sale Price Color", "essential-blocks")}
+                                label={__(
+                                    "Sale Price Color",
+                                    "essential-blocks",
+                                )}
                                 color={salePriceColor}
-                                attributeName={'salePriceColor'}
+                                attributeName={"salePriceColor"}
                             />
                             <ResponsiveDimensionsControl
                                 controlName={PRICE_MARGIN}
@@ -704,15 +814,24 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         </>
                     </InspectorPanel.PanelBody>
                     {showRating && (
-                        <InspectorPanel.PanelBody title={__("Product Rating", "essential-blocks")} initialOpen={false}>
+                        <InspectorPanel.PanelBody
+                            title={__("Product Rating", "essential-blocks")}
+                            initialOpen={false}
+                        >
                             <>
                                 <ColorControl
-                                    label={__("Rating Color", "essential-blocks")}
+                                    label={__(
+                                        "Rating Color",
+                                        "essential-blocks",
+                                    )}
                                     color={ratingColor}
-                                    attributeName={'ratingColor'}
+                                    attributeName={"ratingColor"}
                                 />
                                 <ResponsiveRangeController
-                                    baseLabel={__("Icon Size", "essential-blocks")}
+                                    baseLabel={__(
+                                        "Icon Size",
+                                        "essential-blocks",
+                                    )}
                                     controlName={RATING_ICON_SIZE}
                                     min={0}
                                     max={50}
@@ -725,7 +844,44 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             </>
                         </InspectorPanel.PanelBody>
                     )}
-                    <InspectorPanel.PanelBody title={__("Button", "essential-blocks")} initialOpen={false}>
+                    {showCategory && (
+                        <InspectorPanel.PanelBody
+                            title={__("Category", "essential-blocks-pro")}
+                            initialOpen={false}
+                        >
+                            <TypographyDropdown
+                                baseLabel={__(
+                                    "Typography",
+                                    "essential-blocks-pro",
+                                )}
+                                typographyPrefixConstant={typoPrefix_cat}
+                            />
+                            <ColorControl
+                                label={__("Color", "essential-blocks-pro")}
+                                color={catColor}
+                                attributeName={"catColor"}
+                            />
+                            <ColorControl
+                                label={__(
+                                    "Hover Color",
+                                    "essential-blocks-pro",
+                                )}
+                                color={catHoverColor}
+                                attributeName={"catHoverColor"}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={CAT_SPACE}
+                                baseLabel={__(
+                                    "Margin",
+                                    "essential-blocks-pro",
+                                )}
+                            />
+                        </InspectorPanel.PanelBody>
+                    )}
+                    <InspectorPanel.PanelBody
+                        title={__("Button", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
@@ -734,67 +890,113 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             <ColorControl
                                 label={__("Text Color", "essential-blocks")}
                                 color={btnColor}
-                                attributeName={'btnColor'}
+                                attributeName={"btnColor"}
                             />
                             <ColorControl
-                                label={__("Text Hover Color", "essential-blocks")}
+                                label={__(
+                                    "Text Hover Color",
+                                    "essential-blocks",
+                                )}
                                 color={btnHoverColor}
-                                attributeName={'btnHoverColor'}
+                                attributeName={"btnHoverColor"}
                             />
                             <ColorControl
-                                label={__("Background Color", "essential-blocks")}
+                                label={__(
+                                    "Background Color",
+                                    "essential-blocks",
+                                )}
                                 color={btnBackgroundColor}
-                                attributeName={'btnBackgroundColor'}
+                                attributeName={"btnBackgroundColor"}
                             />
                             <ColorControl
-                                label={__("Background Hover Color", "essential-blocks")}
+                                label={__(
+                                    "Background Hover Color",
+                                    "essential-blocks",
+                                )}
                                 color={btnBackgroundHoverColor}
-                                attributeName={'btnBackgroundHoverColor'}
+                                attributeName={"btnBackgroundHoverColor"}
                             />
                             <ResponsiveDimensionsControl
                                 controlName={BUTTON_MARGIN}
                                 baseLabel={__("Space", "essential-blocks")}
                             />
                             <BaseControl>
-                                <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
+                                <h3 className="eb-control-title">
+                                    {__("Border", "essential-blocks")}
+                                </h3>
                             </BaseControl>
                             <BorderShadowControl
                                 controlName={BTN_BORDER_SHADOW}
                             />
 
                             {showDetailBtn && (
-                                <InspectorPanel.PanelBody title={__("View Button", "essential-blocks")} initialOpen={false}>
+                                <InspectorPanel.PanelBody
+                                    title={__(
+                                        "View Button",
+                                        "essential-blocks",
+                                    )}
+                                    initialOpen={false}
+                                >
                                     <>
                                         <TypographyDropdown
-                                            baseLabel={__("Typography", "essential-blocks")}
-                                            typographyPrefixConstant={typoPrefix_viewbtn}
+                                            baseLabel={__(
+                                                "Typography",
+                                                "essential-blocks",
+                                            )}
+                                            typographyPrefixConstant={
+                                                typoPrefix_viewbtn
+                                            }
                                         />
                                         <ColorControl
-                                            label={__("Text Color", "essential-blocks")}
+                                            label={__(
+                                                "Text Color",
+                                                "essential-blocks",
+                                            )}
                                             color={viewbtnColor}
-                                            attributeName={'viewbtnColor'}
+                                            attributeName={"viewbtnColor"}
                                         />
                                         <ColorControl
-                                            label={__("Text Hover Color", "essential-blocks")}
+                                            label={__(
+                                                "Text Hover Color",
+                                                "essential-blocks",
+                                            )}
                                             color={viewbtnHoverColor}
-                                            attributeName={'viewbtnHoverColor'}
+                                            attributeName={"viewbtnHoverColor"}
                                         />
                                         <ColorControl
-                                            label={__("Background Color", "essential-blocks")}
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks",
+                                            )}
                                             color={viewbtnBackgroundColor}
-                                            attributeName={'viewbtnBackgroundColor'}
+                                            attributeName={
+                                                "viewbtnBackgroundColor"
+                                            }
                                         />
                                         <ColorControl
-                                            label={__("Background Hover Color", "essential-blocks")}
+                                            label={__(
+                                                "Background Hover Color",
+                                                "essential-blocks",
+                                            )}
                                             color={viewbtnBackgroundHoverColor}
-                                            attributeName={'viewbtnBackgroundHoverColor'}
+                                            attributeName={
+                                                "viewbtnBackgroundHoverColor"
+                                            }
                                         />
                                         <ResponsiveDimensionsControl
                                             controlName={VIEW_BUTTON_MARGIN}
-                                            baseLabel={__("Space", "essential-blocks")}
+                                            baseLabel={__(
+                                                "Space",
+                                                "essential-blocks",
+                                            )}
                                         />
                                         <BaseControl>
-                                            <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
+                                            <h3 className="eb-control-title">
+                                                {__(
+                                                    "Border",
+                                                    "essential-blocks",
+                                                )}
+                                            </h3>
                                         </BaseControl>
                                         <BorderShadowControl
                                             controlName={VIEW_BTN_BORDER_SHADOW}
@@ -804,7 +1006,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             )}
                         </>
                     </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody title={__("Sale Badge Style", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody
+                        title={__("Sale Badge Style", "essential-blocks")}
+                        initialOpen={false}
+                    >
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={typoPrefix_sale}
@@ -812,15 +1017,20 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         <ColorControl
                             label={__("Sale Text Color", "essential-blocks")}
                             color={saleTextColor}
-                            attributeName={'saleTextColor'}
+                            attributeName={"saleTextColor"}
                         />
                         <ColorControl
-                            label={__("Sale Text Background Color", "essential-blocks")}
+                            label={__(
+                                "Sale Text Background Color",
+                                "essential-blocks",
+                            )}
                             color={saleTextBackgroundColor}
-                            attributeName={'saleTextBackgroundColor'}
+                            attributeName={"saleTextBackgroundColor"}
                         />
                         <BaseControl>
-                            <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
+                            <h3 className="eb-control-title">
+                                {__("Border", "essential-blocks")}
+                            </h3>
                         </BaseControl>
                         <BorderShadowControl
                             controlName={SALE_BADGE_BORDER}
@@ -829,7 +1039,10 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         />
                     </InspectorPanel.PanelBody>
                     {loadMoreOptions?.enableMorePosts && (
-                        <InspectorPanel.PanelBody title={__("Load More Styles")} initialOpen={false}>
+                        <InspectorPanel.PanelBody
+                            title={__("Load More Styles")}
+                            initialOpen={false}
+                        >
                             {/* If load More type "Load More Button" */}
                             {loadMoreOptions?.loadMoreType === "1" && (
                                 <ButtonGroup
@@ -839,11 +1052,16 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     {NORMAL_HOVER.map((item, index) => (
                                         <Button
                                             key={index}
-                                            isPrimary={loadMoreColorType === item.value}
-                                            isSecondary={loadMoreColorType !== item.value}
+                                            isPrimary={
+                                                loadMoreColorType === item.value
+                                            }
+                                            isSecondary={
+                                                loadMoreColorType !== item.value
+                                            }
                                             onClick={() =>
                                                 setAttributes({
-                                                    loadMoreColorType: item.value,
+                                                    loadMoreColorType:
+                                                        item.value,
                                                 })
                                             }
                                         >
@@ -860,20 +1078,29 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     id="eb-advance-heading-alignment"
                                 >
                                     <ButtonGroup id="eb-advance-heading-alignment">
-                                        {NORMAL_HOVER_ACTIVE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={loadMoreColorType === item.value}
-                                                isSecondary={loadMoreColorType !== item.value}
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        loadMoreColorType: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
+                                        {NORMAL_HOVER_ACTIVE.map(
+                                            (item, index) => (
+                                                <Button
+                                                    key={index}
+                                                    isPrimary={
+                                                        loadMoreColorType ===
+                                                        item.value
+                                                    }
+                                                    isSecondary={
+                                                        loadMoreColorType !==
+                                                        item.value
+                                                    }
+                                                    onClick={() =>
+                                                        setAttributes({
+                                                            loadMoreColorType:
+                                                                item.value,
+                                                        })
+                                                    }
+                                                >
+                                                    {item.label}
+                                                </Button>
+                                            ),
+                                        )}
                                     </ButtonGroup>
                                 </BaseControl>
                             )}
@@ -883,12 +1110,15 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     <ColorControl
                                         label={__("Color", "essential-blocks")}
                                         color={loadMoreColor}
-                                        attributeName={'loadMoreColor'}
+                                        attributeName={"loadMoreColor"}
                                     />
                                     <ColorControl
-                                        label={__("Background Color", "essential-blocks")}
+                                        label={__(
+                                            "Background Color",
+                                            "essential-blocks",
+                                        )}
                                         color={loadMoreBgColor}
-                                        attributeName={'loadMoreBgColor'}
+                                        attributeName={"loadMoreBgColor"}
                                     />
                                 </>
                             )}
@@ -897,12 +1127,15 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     <ColorControl
                                         label={__("Color", "essential-blocks")}
                                         color={loadMoreHoverColor}
-                                        attributeName={'loadMoreHoverColor'}
+                                        attributeName={"loadMoreHoverColor"}
                                     />
                                     <ColorControl
-                                        label={__("Background Color", "essential-blocks")}
+                                        label={__(
+                                            "Background Color",
+                                            "essential-blocks",
+                                        )}
                                         color={loadMoreHoverColor}
-                                        attributeName={'loadMoreHoverColor'}
+                                        attributeName={"loadMoreHoverColor"}
                                     />
                                 </>
                             )}
@@ -911,19 +1144,24 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     <ColorControl
                                         label={__("Color", "essential-blocks")}
                                         color={loadMoreActiveColor}
-                                        attributeName={'loadMoreActiveColor'}
+                                        attributeName={"loadMoreActiveColor"}
                                     />
                                     <ColorControl
-                                        label={__("Background Color", "essential-blocks")}
+                                        label={__(
+                                            "Background Color",
+                                            "essential-blocks",
+                                        )}
                                         color={loadMoreActiveBgColor}
-                                        attributeName={'loadMoreActiveBgColor'}
+                                        attributeName={"loadMoreActiveBgColor"}
                                     />
                                 </>
                             )}
 
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
-                                typographyPrefixConstant={EBWG_LOAD_MORE_TYPOGRAPHY}
+                                typographyPrefixConstant={
+                                    EBWG_LOAD_MORE_TYPOGRAPHY
+                                }
                             />
 
                             <InspectorPanel.PanelBody>
@@ -936,11 +1174,14 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                     baseLabel="Padding"
                                 />
                             </InspectorPanel.PanelBody>
-                            <InspectorPanel.PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                            <InspectorPanel.PanelBody
+                                title={__("Border & Shadow")}
+                                initialOpen={false}
+                            >
                                 <BorderShadowControl
                                     controlName={LOADMORE_BORDER_SHADOW}
                                     noShadow
-                                // noBorder
+                                    // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>

@@ -35,6 +35,15 @@ const Slide = ({ slide, position, handleSlideClick, attributes }) => {
     const imageLoaded = (event) => (event.target.style.opacity = 1);
 
     const handleButtonClick = (link, openNewTab) => {
+
+        link = link?.trim().toLowerCase();
+
+        // Secure URL sanitization: Allow only http(s) or mailto
+        if (!/^https?:\/\//.test(link)) {
+            // console.warn("Blocked unsafe URL:", link);
+            return; // Exit if the link is unsafe
+        }
+
         // Redirect to button link
         if (link) {
             if (openNewTab) {

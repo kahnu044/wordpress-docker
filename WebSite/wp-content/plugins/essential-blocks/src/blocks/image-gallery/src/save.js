@@ -41,7 +41,8 @@ const Save = ({ attributes }) => {
         columnsRange,
         notFoundText,
         version,
-        showBlockContent
+        showBlockContent,
+        disableIsotope
     } = attributes;
 
     if (!showBlockContent) {
@@ -115,7 +116,7 @@ const Save = ({ attributes }) => {
                     )
                 )}
                 <div
-                    className={`eb-gallery-img-wrapper ${blockId} ${presets} ${version} ${layouts} ${layouts === 'masonry' & unevenWidth === true ? 'masonry-uneven' : null} enable-isotope ${enableFilter ? "eb-filterable-img-gallery" : ""} ${enableLoadMore ? 'show-loadmore' : ''} ${presets === "default" ? `${overlayStyle} caption-style-${styleNumber} ${captionOnHover ? "caption-on-hover" : ""}` : ""} `}
+                    className={`eb-gallery-img-wrapper ${blockId} ${presets} ${version} ${layouts} ${layouts === 'masonry' & unevenWidth === true ? 'masonry-uneven' : null} ${disableIsotope ? 'no-isotope' : 'enable-isotope'} ${enableFilter ? "eb-filterable-img-gallery" : ""} ${enableLoadMore ? 'show-loadmore' : ''} ${presets === "default" ? `${overlayStyle} caption-style-${styleNumber} ${captionOnHover ? "caption-on-hover" : ""}` : ""} `}
                     data-id={blockId}
                     data-default-filter={defaultFilter}
                     data-searchFilter={enableFilter && enableSearch ? true : false}

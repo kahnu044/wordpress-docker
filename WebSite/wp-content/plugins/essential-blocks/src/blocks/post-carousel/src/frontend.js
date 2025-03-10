@@ -33,6 +33,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let TABslideToShowRange = settings.TABslideToShowRange;
         let autoplaySpeed = settings.autoplaySpeed;
         let speed = settings.speed;
+        let rtl = settings.isRTLEnable;
+
+        const isRTL = document.documentElement.dir === "rtl";
 
         (function ($) {
             $(".init-" + slider).slick({
@@ -44,6 +47,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 slidesToShow: slideToShowRange,
                 autoplaySpeed,
                 speed,
+                rtl: isRTL,
                 prevArrow: `<div class='slick-arrow slick-prev'><i class='${attributes.leftArrowIcon}'></i></div>`,
                 nextArrow: `<div class='slick-arrow slick-next'><i class='${attributes.rightArrowIcon}'></i></div>`,
                 responsive: [

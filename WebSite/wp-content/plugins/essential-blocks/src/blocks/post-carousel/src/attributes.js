@@ -360,6 +360,11 @@ const attributes = {
         type: "string",
     },
 
+    isRTLEnable: {
+        type: "boolean",
+        default: false,
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(EBPG_TITLE_TYPOGRAPHY, {
         fontSize: 18

@@ -285,6 +285,11 @@
 	}
 }
 
+[dir="rtl"] .eb-post-carousel-wrapper .slick-prev .fa-chevron-circle-left,
+[dir="rtl"] .eb-post-carousel-wrapper .slick-next .fa-chevron-circle-right {
+	transform: rotate(180deg)
+}
+
 .wp-admin {
 	.eb-post-carousel-wrapper.equal-height {
 		.slick-slide {

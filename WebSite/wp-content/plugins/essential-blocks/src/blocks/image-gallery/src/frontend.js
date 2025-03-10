@@ -1,6 +1,6 @@
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    const imageGalleries = document.querySelectorAll(`.eb-gallery-img-wrapper`);
+    const imageGalleries = document.querySelectorAll(`.eb-gallery-img-wrapper.enable-isotope`);
 
     for (let imageGallery of imageGalleries) {
         let wrapperid = imageGallery.getAttribute("data-id");

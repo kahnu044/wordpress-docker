@@ -14,6 +14,11 @@
                 );
             }
         },
+        'category' => function () use ( $helper, $product ) {
+            $helper::views( 'woocommerce/category', [
+                'product' => $product
+            ] );
+        },
         'title'  => function () use ( $helper, $titleTag ) {
             $helper::views( 'woocommerce/title',[
                 'titleTag' => $titleTag
@@ -34,6 +39,11 @@
     $_grid_sequence = apply_filters( 'eb_woo_product_grid_grid_sequence', $grid_sequence, $helper, $product, $otherArgs );
 
     $list_sequence = [
+        'category' => function () use ( $helper, $product ) {
+            $helper::views( 'woocommerce/category', [
+                'product' => $product
+            ] );
+        },
         'title'       => function () use ( $helper,$titleTag ) {
             $helper::views( 'woocommerce/title',[
                 'titleTag' => $titleTag

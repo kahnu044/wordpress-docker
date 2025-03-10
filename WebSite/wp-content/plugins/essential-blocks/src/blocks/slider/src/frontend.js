@@ -238,6 +238,7 @@ domReady(function () {
             let autoplaySpeed = settings.autoplaySpeed;
             let speed = settings.speed;
             let vertical = settings.vertical;
+            let rtl = settings.rtl;
             let fade = vertical ? false : settings.fade;
 
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
@@ -245,6 +246,8 @@ domReady(function () {
             let showLightbox = wrapper.getAttribute("data-lightbox");
 
             let slickType = wrapper.querySelector('.eb-slider-init');
+
+            const isRTL = document.documentElement.dir === "rtl";
 
             jQuery(slickType).slick({
                 lazyLoad: 'ondemand',
@@ -259,6 +262,7 @@ domReady(function () {
                 slidesToShow: slideToShowRange,
                 speed,
                 vertical,
+                rtl: isRTL,
                 prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
                 nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
                 responsive: [...responsive],

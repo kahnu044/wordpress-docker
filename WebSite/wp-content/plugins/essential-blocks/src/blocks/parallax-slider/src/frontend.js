@@ -18,16 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
          */
         function onButtonClick(event) {
             event.preventDefault();
-            let link = this.getAttribute("data-link");
-            link = link.toLowerCase().replace('javascript:', '');
+            let link = this.getAttribute("data-link")?.trim().toLowerCase();
+
+            // Secure URL sanitization: Allow only http(s) or mailto
+            if (!/^https?:\/\//.test(link)) {
+                // console.warn("Blocked unsafe URL:", link);
+                return; // Exit if the link is unsafe
+            }
+
             let openNewTab = this.getAttribute("data-new-tab");
-            if (link) {
-                if (openNewTab === "true") {
-                    window.open(link, "_blank");
-                }
-                else {
-                    window.open(link, "_self");
-                }
+
+            if (openNewTab === "true") {
+                window.open(link, "_blank", "noopener,noreferrer"); // Security: Prevents tab hijacking
+            } else {
+                window.open(link, "_self");
             }
         }
 

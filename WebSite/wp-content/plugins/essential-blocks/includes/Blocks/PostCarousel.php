@@ -32,7 +32,8 @@ class PostCarousel extends PostBlock
         'rightArrowIcon'   => 'fas fa-chevron-circle-right',
         'addIcon'          => false,
         'showFallbackImg'  => false,
-        'fallbackImgUrl'   => ''
+        'fallbackImgUrl'   => '',
+        'isRTLEnable'  => false
      ];
 
     public function get_default_attributes()
@@ -100,6 +101,7 @@ class PostCarousel extends PostBlock
         );
 
         $_essential_attrs[ 'showFallbackImg' ] = isset( $_essential_attrs[ 'showFallbackImg' ] ) ? $_essential_attrs[ 'showFallbackImg' ] : false;
+        $_essential_attrs[ 'isRTLEnable' ] = isset( $_essential_attrs[ 'isRTLEnable' ] ) ? $_essential_attrs[ 'isRTLEnable' ] : false;
 
         if ( isset( $_essential_attrs[ 'showBlockContent' ] ) && $_essential_attrs[ 'showBlockContent' ] === false ) {
             return;

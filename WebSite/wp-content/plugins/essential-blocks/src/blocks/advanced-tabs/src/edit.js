@@ -43,7 +43,6 @@ const Edit = (props) => {
     const [contentMinHeight, setContentMinHeight] = useState("auto");
     const renderId = useId();
 
-
     const TEMPLATE = [
         [
             "essential-blocks/tab",
@@ -68,13 +67,43 @@ const Edit = (props) => {
         ],
     ];
 
+    const { innerBlocks } = useSelect(
+        (select) =>
+            select("core/block-editor").getBlocksByClientId(clientId)[0],
+    );
+    const innerBlocksRef = useRef(innerBlocks);
+    //
+    useEffect(() => {
+        if (innerBlocks.length > innerBlocksRef.current.length) {
+            innerBlocksRef.current = innerBlocks;
+        }
+        if (innerBlocks.length < innerBlocksRef.current.length) {
+            const difference = innerBlocksRef.current.filter(
+                (item1) =>
+                    !innerBlocks.some(
+                        (item2) => item2.clientId === item1.clientId,
+                    ),
+            );
+            if (difference.length === 1) {
+                const removedTabId = difference[0]?.attributes?.tabId;
+                const updatedTitles = tabTitles.filter(
+                    (item) => item.id !== removedTabId,
+                );
+                setAttributes({
+                    tabTitles: updatedTitles,
+                    tabChildCount: updatedTitles.length,
+                });
+            }
+            innerBlocksRef.current = innerBlocks;
+        }
+    }, [innerBlocks]);
+
     useEffect(() => {
         const tabsParentEl = (tabWrapRef || { current: false }).current;
-
         if (!tabsParentEl) return;
 
         const allTabChildWraps = tabsParentEl.querySelectorAll(
-            `.eb-tab-wrapper`
+            `.eb-tab-wrapper[data-tab-parent-id="${blockId}"]`
         );
 
         if (allTabChildWraps.length === 0) return;
@@ -89,7 +118,7 @@ const Edit = (props) => {
                 tabWrapDiv.classList.remove("active");
             }
         }
-    },[[tabWrapRef, activeTabId]]);
+    },[activeTabId, innerBlocks]);
 
     const handleTabTitleClick = (id) => {
         setIsClickTab(true);
@@ -123,36 +152,6 @@ const Edit = (props) => {
         }
     }, [attributes]);
 
-    const { innerBlocks } = useSelect(
-        (select) =>
-            select("core/block-editor").getBlocksByClientId(clientId)[0],
-    );
-    const innerBlocksRef = useRef(innerBlocks);
-    //
-    useEffect(() => {
-        if (innerBlocks.length > innerBlocksRef.current.length) {
-            innerBlocksRef.current = innerBlocks;
-        }
-        if (innerBlocks.length < innerBlocksRef.current.length) {
-            const difference = innerBlocksRef.current.filter(
-                (item1) =>
-                    !innerBlocks.some(
-                        (item2) => item2.clientId === item1.clientId,
-                    ),
-            );
-            if (difference.length === 1) {
-                const removedTabId = difference[0]?.attributes?.tabId;
-                const updatedTitles = tabTitles.filter(
-                    (item) => item.id !== removedTabId,
-                );
-                setAttributes({
-                    tabTitles: updatedTitles,
-                    tabChildCount: updatedTitles.length,
-                });
-            }
-            innerBlocksRef.current = innerBlocks;
-        }
-    }, [innerBlocks]);
 
     const enhancedProps = {
         ...props,

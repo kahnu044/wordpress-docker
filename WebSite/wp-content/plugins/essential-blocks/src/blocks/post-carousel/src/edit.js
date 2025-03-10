@@ -6,7 +6,7 @@ import { useEffect, useState, createRef, useRef, memo } from "@wordpress/element
 import { safeHTML } from "@wordpress/dom";
 import { applyFilters } from "@wordpress/hooks";
 import { dateI18n, format, getSettings } from "@wordpress/date";
-
+import { select } from "@wordpress/data";
 /**
  * External depencencies
  */
@@ -78,6 +78,7 @@ const Edit = (props) => {
         showFallbackImg,
         fallbackImgUrl,
         fallbackImgAlt,
+        isRTLEnable
     } = attributes;
 
     const [queryResults, setQueryResults] = useState(false);
@@ -92,6 +93,16 @@ const Edit = (props) => {
         blockPrefix: 'eb-post-carousel',
         style: <Style {...props} />
     };
+
+    useEffect(() => {
+        if (eb_conditional_localize && eb_conditional_localize.editor_type == 'edit-site') {
+            const { isRTL } = select('core/edit-site').getSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        } else {
+            const { isRTL } = select("core/editor").getEditorSettings();
+            setAttributes({ isRTLEnable: isRTL });
+        }
+    }, []);
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
@@ -128,6 +139,7 @@ const Edit = (props) => {
         pauseOnHover,
         slidesToShow: slideToShowCount(slideToShowRange, queryResults),
         speed,
+        rtl: isRTLEnable,
         prevArrow: <SlickArrow faClass={leftArrowIcon} />,
         nextArrow: <SlickArrow faClass={rightArrowIcon} />,
         responsive: [

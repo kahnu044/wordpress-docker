@@ -8,7 +8,8 @@ import { EditIcon } from "../icons/icon-edit";
 import EBLoader from "./Loader";
 
 import {
-    fetchEBSettingsData, saveEBSettingsData
+    fetchEBSettingsData,
+    saveEBSettingsData,
 } from "@essential-blocks/controls";
 import GoogleMaps from "./modal/googleMaps";
 import Instagram from "./modal/instagram";
@@ -39,7 +40,6 @@ export default function TabOptions() {
         fetchEBSettingsData("eb_settings").then((data) => {
             setSettingsData(data ?? {});
         });
-
     }, []);
 
     const optimizations = {
@@ -48,29 +48,32 @@ export default function TabOptions() {
             title: "Google Fonts",
             description: __(
                 "Enable Google Fonts to get access to 1400+ exclusive fonts for all the fully customizable blocks of Essential Blocks.",
-                "essential-blocks"
+                "essential-blocks",
             ),
             doc: "https://essential-blocks.com/docs/configure-google-fonts/",
-            default: true
+            default: true,
         },
         enableFontawesome: {
             logo: `${EssentialBlocksLocalize.image_url}/admin/logo-fontawesome.png`,
             title: "Font Awesome",
-            description: __("Enable Font Awesome to get access to 2,000+ exclusive icon library and toolkit for all the fully customizable blocks of Essential Blocks.", "essential-blocks"),
-            default: true
-        }
+            description: __(
+                "Enable Font Awesome to get access to 2,000+ exclusive icon library and toolkit for all the fully customizable blocks of Essential Blocks.",
+                "essential-blocks",
+            ),
+            default: true,
+        },
     };
 
-    const apiIntegrations = applyFilters('eb_admin_option_integrations', {
+    const apiIntegrations = applyFilters("eb_admin_option_integrations", {
         googleMapApi: {
             logo: `${EssentialBlocksLocalize.image_url}/admin/logo-google-map.png`,
             title: __("Google Maps", "essential-blocks"),
             description: __(
                 __(
                     "You have to retrieve API key to use Google Maps from Essential Blocks.",
-                    "essential-blocks"
+                    "essential-blocks",
                 ),
-                "essential-blocks"
+                "essential-blocks",
             ),
             doc: "https://essential-blocks.com/docs/retrieve-google-maps-api/",
             component: GoogleMaps,
@@ -80,10 +83,9 @@ export default function TabOptions() {
             title: __("Instagram", "essential-blocks"),
             description: __(
                 "To showcase your Instagram feed on your website, collect Instagram access tokens.",
-                "essential-blocks"
+                "essential-blocks",
             ),
-            doc:
-                "https://essential-blocks.com/docs/retrieve-instagram-access-token/",
+            doc: "https://essential-blocks.com/docs/retrieve-instagram-access-token/",
             component: Instagram,
         },
         openseaApi: {
@@ -91,7 +93,7 @@ export default function TabOptions() {
             title: "Opensea NFT",
             description: __(
                 "To display your OpenSea NFT items, collections, wallets, etc. connect the API key here.",
-                "essential-blocks"
+                "essential-blocks",
             ),
             doc: "https://essential-blocks.com/docs/retrieve-opensea-nft-api/",
             component: OpenseaNft,
@@ -101,10 +103,23 @@ export default function TabOptions() {
             title: "Openverse",
             description: __(
                 "To get unlimited access to Openverse images, provide your email & project name to generate API keys.",
-                "essential-blocks"
+                "essential-blocks",
             ),
             doc: "https://essential-blocks.com/docs/generate-openverse-api/",
             component: Openverse,
+        },
+    });
+
+    const extensions = applyFilters("eb_admin_option_extensions", {
+        quickToolbar: {
+            logo: `${EssentialBlocksLocalize.image_url}/admin/quick-toolbar-icon.svg`,
+            title: __("Quick Action Toolbar", "essential-blocks"),
+            description: __(
+                "Easily access your most-used Essential Blocks for Gutenberg blocks by pinning them for quick selection.",
+                "essential-blocks",
+            ),
+            doc: "https://essential-blocks.com/docs/quick-action-toolbar/",
+            default: true,
         },
     });
 
@@ -175,7 +190,10 @@ export default function TabOptions() {
         const formData = new window.FormData();
         formData.append("action", "eb_regenerate_assets");
         formData.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
-        formData.append("security", EssentialBlocksLocalize.regenerate_assets_nonce);
+        formData.append(
+            "security",
+            EssentialBlocksLocalize.regenerate_assets_nonce,
+        );
         formData.append("value", true);
 
         fetch(EssentialBlocksLocalize.ajax_url, {
@@ -189,10 +207,7 @@ export default function TabOptions() {
                     setLoaderData({
                         loading: true,
                         response: true,
-                        message: __(
-                            "Assets Regenerated!",
-                            "essential-blocks"
-                        ),
+                        message: __("Assets Regenerated!", "essential-blocks"),
                     });
                 }
                 setTimeout(() => {
@@ -281,8 +296,21 @@ export default function TabOptions() {
                                     <div className="block-content">
                                         <label className="eb-admin-checkbox-label">
                                             <Switch
-                                                checked={!settingsData[item] ? (optimizations[item]?.default) : (settingsData[item] === "false" ? false : true)}
-                                                onChange={(checked) => handleOptimizationSwitch(item, checked)}
+                                                checked={
+                                                    !settingsData[item]
+                                                        ? optimizations[item]
+                                                            ?.default
+                                                        : settingsData[item] ===
+                                                            "false"
+                                                            ? false
+                                                            : true
+                                                }
+                                                onChange={(checked) =>
+                                                    handleOptimizationSwitch(
+                                                        item,
+                                                        checked,
+                                                    )
+                                                }
                                                 defaultChecked={true}
                                                 disabled={false}
                                                 checkedChildren="ON"
@@ -306,7 +334,71 @@ export default function TabOptions() {
                                     >
                                         {__(
                                             "API Documentation",
-                                            "essential-blocks"
+                                            "essential-blocks",
+                                        )}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <h2 className="eb-admin-block-title">
+                    {__("Extensions", "essential-blocks")}
+                </h2>
+                <div className="eb-admin-grid">
+                    {Object.keys(extensions).map((item, index) => (
+                        <div className="eb-col-4" key={index}>
+                            <div className="eb-admin-block eb-option-block ">
+                                <div className="option-block-header">
+                                    <img
+                                        src={extensions[item].logo}
+                                        className="block-icon"
+                                    />
+                                    <div className="block-content">
+                                        <label className="eb-admin-checkbox-label">
+                                            <Switch
+                                                checked={
+                                                    !settingsData[item]
+                                                        ? extensions[item]
+                                                            ?.default
+                                                        : settingsData[item] ===
+                                                            "false"
+                                                            ? false
+                                                            : true
+                                                }
+                                                onChange={(checked) =>
+                                                    handleOptimizationSwitch(
+                                                        item,
+                                                        checked,
+                                                    )
+                                                }
+                                                defaultChecked={true}
+                                                disabled={false}
+                                                checkedChildren="ON"
+                                                unCheckedChildren="OFF"
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <h4 className="eb-admin-block__title">
+                                    {extensions[item].title}
+                                </h4>
+                                <p className="eb-admin-block__text mp0">
+                                    {extensions[item].description}
+                                </p>
+                                {extensions[item]?.doc && (
+                                    <a
+                                        target="_blank"
+                                        href={extensions[item].doc}
+                                        className="eb-admin-block__link"
+                                    >
+                                        {__(
+                                            "Documentation",
+                                            "essential-blocks",
                                         )}
                                     </a>
                                 )}
@@ -329,7 +421,7 @@ export default function TabOptions() {
                             <p>
                                 {__(
                                     "Essential Blocks styles & scripts are saved in Uploads folder. This option will clear all those generated files.",
-                                    "essential-blocks"
+                                    "essential-blocks",
                                 )}
                             </p>
                         </div>
@@ -352,12 +444,15 @@ export default function TabOptions() {
                     <div className="eb-admin-block regenerate-asset-block eb-block-xs">
                         <div className="content">
                             <h5 className="eb-admin-block__title">
-                                {__("Responsive Breakpoints", "essential-blocks")}
+                                {__(
+                                    "Responsive Breakpoints",
+                                    "essential-blocks",
+                                )}
                             </h5>
                             <p>
                                 {__(
                                     "Adjust the “Responsive Breakpoint” settings to define the screen widths at which your site will adapt for optimal viewing on tablets and mobile devices.",
-                                    "essential-blocks"
+                                    "essential-blocks",
                                 )}
                             </p>
                         </div>

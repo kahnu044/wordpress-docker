@@ -56,6 +56,7 @@
 
             add_action( 'wp_ajax_save_eb_admin_options', [ $this, 'save' ] );
             add_action( 'wp_ajax_get_eb_admin_options', [ $this, 'get' ] );
+            add_action( 'wp_ajax_eb_save_quick_toolbar_blocks', [ $this, 'eb_save_quick_toolbar_blocks' ] );
             add_action( 'wp_ajax_hide_pattern_library', [ $this, 'hide_pattern_library' ] );
             add_action( 'wp_ajax_reset_eb_admin_options', [ $this, 'reset' ] );
             add_action( 'wp_ajax_get_eb_admin_templates', [ $this, 'templates' ] );
@@ -68,7 +69,7 @@
             // Redirect after Plugin is updated
             add_action( 'admin_init', [ $this, 'maybe_redirect' ] );
             add_action( 'admin_init', [ $this, 'enable_notices' ], 11 );
-            // add_action( 'admin_footer', [ $this, 'eb_whats_new_notice' ] );
+            add_action( 'admin_footer', [ $this, 'eb_whats_new_notice' ] );
         }
 
         public function enable_notices()
@@ -414,6 +415,7 @@
 
         public function enqueue_scripts( $hook )
         {
+            wp_enqueue_script( 'jquery' );
             if ( $hook !== 'toplevel_page_essential-blocks' ) {
                 return;
             }
@@ -731,7 +733,7 @@
         {
             $get_option = get_option( 'eb_admin_menu_notice' );
             if ( get_option( 'eb_admin_menu_notice' ) < EB_ADMIN_MENU_FLAG ) {
-                update_option( 'eb_admin_menu_notice', EB_ADMIN_MENU_FLAG, 'no' );
+                update_option( 'eb_admin_menu_notice', EB_ADMIN_MENU_FLAG, false );
             }
         }
 
@@ -743,6 +745,26 @@
                 if ( get_option( 'eb_admin_promotion' ) < EB_PROMOTION_FLAG ) {
                     add_action( 'admin_notices', [ $this, 'promotion_message_on_admin_screen' ], 1 );
                 }
+            }
+        }
+
+        public function eb_save_quick_toolbar_blocks()
+        {
+            if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+                wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
+            }
+            if ( ! current_user_can( 'activate_plugins' ) ) {
+                wp_send_json_error( __( 'You are not authorized to save this!', 'essential-blocks' ) );
+            }
+
+            if ( isset( $_POST[ 'value' ] ) ) {
+                $value = isset( $_POST[ 'value' ] ) ? json_decode( stripslashes( $_POST[ 'value' ] ), true ) : '';
+
+                $settings = Settings::get_instance();
+                $updated  = $settings->save( 'eb_quick_toolbar_allowed_blocks', $value );
+                wp_send_json_success( $updated );
+            } else {
+                wp_send_json_error( __( 'Something went wrong regarding saving options data.', 'essential-blocks' ) );
             }
         }
 
@@ -764,42 +786,42 @@
                             esc_url( 'https://essential-blocks.com/changelog/' )
                         );
                     ?>
-    </div>
-    <?php
-        }
+        </div>
+        <?php
+            }
 
-            public function eb_whats_new_notice()
-            {
-                if ( wp_doing_ajax() ) {
-                    return;
-                }
+                public function eb_whats_new_notice()
+                {
+                    if ( wp_doing_ajax() ) {
+                        return;
+                    }
 
-                if ( get_transient( 'essential_block_whats_new_notice' ) == true ) {
-                    delete_transient( 'essential_block_whats_new_notice' );
-
-                ?>
+                    if ( get_transient( 'essential_block_whats_new_notice' ) == true ) {
+                        delete_transient( 'essential_block_whats_new_notice' );
+                        error_log( 'menu notice' );
+                    ?>
             <script type="text/javascript">
-                jQuery(document).ready(function ($) {
+                jQuery(document).ready(function($) {
                     var promoHtml = '<div class="eb-whats-new">';
                     promoHtml += '<div class="eb-hn-title">';
-                    promoHtml += '<span class="dashicons dashicons-flag"></span></span><span>What\'s new in Essential Blocks 5.3.0?</span>';
-                    promoHtml +=  '</div>';
-                    promoHtml +=  '<div class="eb-hn-content">';
-                    promoHtml +=  '<p> Introducing Essential Blocks v5.3.0 with Lottie Animation to make your website interactive.</p>';
-                    promoHtml +=  '<button class="button button-primary">Learn More</button>';
-                    promoHtml +=  '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
-                    promoHtml +=  '</div>';
-                    promoHtml +=  '</div>';
+                    promoHtml += '<span class="dashicons dashicons-megaphone"></span><span>Introducing EB Lottie Animation</span>';
+                    promoHtml += '</div>';
+                    promoHtml += '<div class="eb-hn-content">';
+                    promoHtml += '<p>Add eye-catching animations to your WordPress website & make it stand out with Essential Blocks Lottie Animation.</p>';
+                    promoHtml += '<button class="button button-primary"><a href="https://essential-blocks.com/demo/lottie-animation/" target="_blank">Learn More</a></button>';
+                    promoHtml += '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
+                    promoHtml += '</div>';
+                    promoHtml += '</div>';
 
                     // Append after the last menu item
                     jQuery('#toplevel_page_essential-blocks').append(promoHtml);
 
-                    jQuery(document).on('click', '.eb-whats-new .button-dismiss', function () {
+                    jQuery(document).on('click', '.eb-whats-new .button-dismiss', function() {
                         jQuery('.eb-whats-new').remove();
                     });
                 });
             </script>
-            <?php
-                }
-                    }
-            }
+<?php
+    }
+        }
+}

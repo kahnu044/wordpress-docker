@@ -114,6 +114,7 @@ export default function Style(props) {
         dotsPositionRange,
         TABdotsPositionRange,
         MOBdotsPositionRange,
+        isRTLEnable
     } = attributes;
 
     //
@@ -1262,11 +1263,19 @@ export default function Style(props) {
 	`;
 
     const sliderControlsStylesDesktop = `
+		[dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionDesktop}
+            left: auto;
+		}
+		[dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionDesktop}
+            right: auto;
+		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionDesktop}
+			${!isRTLEnable ? leftArrowPositionDesktop : rightArrowPositionDesktop}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-next {
-			${rightArrowPositionDesktop}
+            ${!isRTLEnable ? rightArrowPositionDesktop : leftArrowPositionDesktop}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
 		.eb-post-carousel-wrapper.${blockId} .slick-next i {
@@ -1344,11 +1353,17 @@ export default function Style(props) {
 		}
 	`;
     const sliderControlsStylesTab = `
+        [dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionTab}
+		}
+		[dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionTab}
+		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionTab}
+			${!isRTLEnable ? leftArrowPositionTab : rightArrowPositionTab}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-next {
-			${rightArrowPositionTab}
+            ${!isRTLEnable ? rightArrowPositionTab : leftArrowPositionTab}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
 		.eb-post-carousel-wrapper.${blockId} .slick-next i {
@@ -1385,11 +1400,17 @@ export default function Style(props) {
 		}
 	`;
     const sliderControlsStylesMobile = `
+        [dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-prev {
+			${rightArrowPositionMobile}
+		}
+		[dir="rtl"] .eb-post-carousel-wrapper.${blockId} .slick-next {
+            ${leftArrowPositionMobile}
+		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev {
-			${leftArrowPositionMobile}
+			${!isRTLEnable ? leftArrowPositionMobile : rightArrowPositionMobile}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-next {
-			${rightArrowPositionMobile}
+            ${!isRTLEnable ? rightArrowPositionMobile : leftArrowPositionMobile}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
 		.eb-post-carousel-wrapper.${blockId} .slick-next i {

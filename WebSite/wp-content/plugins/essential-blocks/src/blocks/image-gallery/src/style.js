@@ -470,6 +470,9 @@ export default function Style(props) {
 			${wrapperBackgroundStylesDesktop}
 			transition:${wrapperBgTransitionStyle}, ${wrapperBDShadowTransitionStyle};
 		}
+        .eb-gallery-img-wrapper.${blockId}.no-isotope{
+            ${imageGapStyleDesktop}
+        }
 		.eb-gallery-img-wrapper.${blockId}:hover {
 			${wrapperBDShadowHoverDesktop}
 			${wrapperHoverBackgroundStylesDesktop}
@@ -496,6 +499,9 @@ export default function Style(props) {
 			${wrapperBDShadowTab}
 			${wrapperBackgroundStylesTab}
 		}
+        .eb-gallery-img-wrapper.${blockId}.no-isotope{
+            ${imageGapStyleTab}
+        }
 		.eb-gallery-img-wrapper.${blockId}:hover {
 			${wrapperBDShadowHoverTab}
 			${wrapperHoverBackgroundStylesTab}
@@ -514,6 +520,9 @@ export default function Style(props) {
 			${wrapperBDShadowMobile}
 			${wrapperBackgroundStylesMobile}
 		}
+        .eb-gallery-img-wrapper.${blockId}.no-isotope{
+            ${imageGapStyleMobile}
+        }
 		.eb-gallery-img-wrapper.${blockId}:hover {
 			${wrapperBDShadowHoverMobile}
 			${wrapperHoverBackgroundStylesMobile}

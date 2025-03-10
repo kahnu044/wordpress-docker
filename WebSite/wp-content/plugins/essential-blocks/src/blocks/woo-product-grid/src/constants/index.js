@@ -54,6 +54,7 @@ export const DESC_MARGIN = "descMargin";
 export const LOADMORE_PADDING = "loadMorePadding";
 export const LOADMORE_MARGIN = "loadMoreMargin";
 export const LOADMORE_BORDER_SHADOW = "loadMoreBorderShadow";
+export const CAT_SPACE = "catSpace";
 // border shadow
 export const WRAPPER_BORDER_SHADOW = "wrpBorderShadow";
 export const PRODUCTS_BORDER_SHADOW = "productBorderShadow";

@@ -198,6 +198,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     value={slide.link}
                                     onChange={(link) => handleTextChange("link", link, index)}
                                     onBlur={(val) => validUrl('link', val.target.value, index)}
+                                    help={__("Use http:// or https://", "essential-blocks")}
                                 />
 
                                 <ToggleControl

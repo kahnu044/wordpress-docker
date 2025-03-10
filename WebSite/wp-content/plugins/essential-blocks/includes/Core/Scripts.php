@@ -14,6 +14,7 @@ class Scripts
     private $is_gutenberg_editor = false;
     private $isEnableFontAwesome = true;
     private $isEnableGoogleFont  = true;
+    private $isEnableQuickToolbar = false;
 
     public $plugin = null;
 
@@ -22,6 +23,7 @@ class Scripts
         $eb_settings               = get_option( 'eb_settings', [  ] );
         $this->isEnableFontAwesome = ! empty( $eb_settings[ 'enableFontawesome' ] ) ? $eb_settings[ 'enableFontawesome' ] : 'true';
         $this->isEnableGoogleFont  = ! empty( $eb_settings[ 'googleFont' ] ) ? $eb_settings[ 'googleFont' ] : 'true';
+        $this->isEnableQuickToolbar  = ! empty( $eb_settings[ 'quickToolbar' ] ) ? $eb_settings[ 'quickToolbar' ] : 'true';
         add_action(
             'init',
             function () {
@@ -523,17 +525,19 @@ class Scripts
          ];
         if ( is_admin() ) {
             $admin_localize_array = [
-                'admin_nonce'         => wp_create_nonce( 'admin-nonce' ),
-                'fluent_form_lists'   => wp_json_encode( FluentForms::form_list() ),
-                'wpforms_lists'       => wp_json_encode( WPForms::form_list() ),
-                'all_blocks'          => $plugin::$blocks->all(),
-                'all_blocks_default'  => $plugin::$blocks->defaults( true, false ),
-                'get_plugins'         => Helper::get_plugin_list_for_localize(),
-                'googleFont'          => $this->isEnableGoogleFont,
-                'fontAwesome'         => $this->isEnableFontAwesome,
-                'globalColors'        => Helper::global_colors(),
-                'gradientColors'      => Helper::gradient_colors(),
-                'unfilter_capability' => current_user_can( 'unfiltered_html' ) ? 'true' : 'false'
+                'admin_nonce'           => wp_create_nonce( 'admin-nonce' ),
+                'fluent_form_lists'     => wp_json_encode( FluentForms::form_list() ),
+                'wpforms_lists'         => wp_json_encode( WPForms::form_list() ),
+                'all_blocks'            => $plugin::$blocks->all(),
+                'all_blocks_default'    => $plugin::$blocks->defaults( true, false ),
+                'quick_toolbar_blocks'  => $plugin::$blocks->quick_toolbar_blocks(),
+                'get_plugins'           => Helper::get_plugin_list_for_localize(),
+                'googleFont'            => $this->isEnableGoogleFont,
+                'fontAwesome'           => $this->isEnableFontAwesome,
+                'quickToolbar'          => $this->isEnableQuickToolbar,
+                'globalColors'          => Helper::global_colors(),
+                'gradientColors'        => Helper::gradient_colors(),
+                'unfilter_capability'   => current_user_can( 'unfiltered_html' ) ? 'true' : 'false'
              ];
 
             $localize_array = array_merge( $localize_array, $admin_localize_array );

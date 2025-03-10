@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 5.3.1
+Stable tag: 5.3.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -244,6 +244,16 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.3.2 - 05/03/2025 =
+- Added: Quick Action Toolbar | Easily access most-used blocks
+- Added: Woo Product Grid | Display product category option
+- Fixed: Slider | RTL issues fixed
+- Fixed: Advanced Tab | Active tab not displaying properly in editor
+- Fixed: Filterable Gallery | Conflict with Autoptimize Lazyload
+- Fixed: Toggle Content | Multiple blocks not supported inside toggle content
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
 
 = 5.3.1 - 26/02/2025 =
 - Added: Global Styles | Separate ‘Save’ and ‘Reset’ options

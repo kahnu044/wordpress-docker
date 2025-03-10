@@ -96,7 +96,8 @@ function Edit(props) {
         showBlockContent,
         enableEmptyGrid,
         imageSizeType,
-        cover
+        cover,
+        disableIsotope
     } = attributes;
 
     // you must declare this variable
@@ -274,6 +275,9 @@ function Edit(props) {
         if (displayDescription === undefined) {
             setAttributes({ displayDescription: false });
         }
+        if (disableIsotope === undefined) {
+            setAttributes({ disableIsotope: false });
+        }
         if (enableEmptyGrid === undefined) {
             setAttributes({ enableEmptyGrid: true });
         }
@@ -297,7 +301,7 @@ function Edit(props) {
         }
 
         const initializeIsotope = () => {
-            const imageGallery = document.querySelector(`.${blockId}`);
+            const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
             if (!imageGallery) return;
 
             imagesLoaded(imageGallery, () => {
@@ -323,9 +327,17 @@ function Edit(props) {
         };
 
         // Reinitialize Isotope on layout change
-        setTimeout(() => {
-            initializeIsotope();
-        }, 500)
+        if (!disableIsotope) {
+            setTimeout(() => {
+                initializeIsotope();
+            }, 500)
+        } else {
+            if (isotopeEA.current?.destroy) {
+                isotopeEA.current.destroy();
+                isotopeEA.current = null;
+            }
+        }
+
 
         // Cleanup on unmount
         return () => {
@@ -363,6 +375,7 @@ function Edit(props) {
         imgBorderShadowRds_Left,
         imgBorderShadowRds_Right,
         imgBorderShadowRds_Top,
+        disableIsotope
     ]);
 
     // handling filter key change
@@ -376,7 +389,7 @@ function Edit(props) {
         }
 
         if (enableFilter && isotopeEA.current) {
-            const imageGallery = document.querySelector(`.${blockId}`);
+            const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
             const notFoundDiv = imageGallery?.closest(".eb-parent-wrapper").querySelector('#eb-img-gallery-not-found');
             if (imageGallery) {
                 imagesLoaded(imageGallery, function () {
@@ -539,7 +552,7 @@ function Edit(props) {
 
                                     <div
                                         data-id={blockId}
-                                        className={`eb-gallery-img-wrapper ${blockId} ${presets} ${version} ${layouts} enable-isotope ${enableFilter ? "eb-filterable-img-gallery" : ""} ${enableLoadMore ? "show-loadmore" : ""} ${presets === "default" ? `${overlayStyle} caption-style-${styleNumber} ${captionOnHover ? "caption-on-hover" : ""}` : ""}`}
+                                        className={`eb-gallery-img-wrapper ${blockId} ${presets} ${version} ${layouts} ${disableIsotope ? 'no-isotope' : 'enable-isotope'} ${enableFilter ? "eb-filterable-img-gallery" : ""} ${enableLoadMore ? "show-loadmore" : ""} ${presets === "default" ? `${overlayStyle} caption-style-${styleNumber} ${captionOnHover ? "caption-on-hover" : ""}` : ""}`}
                                     >
                                         {layouts == 'masonry' && (
                                             <div class="grid-sizer"></div>
