@@ -286,11 +286,12 @@ class Connect {
 				$options = Options::init();
 				$all_opt = $options->get_all_raw();
 
-				$all_opt['license']['key']         = $key;
-				$all_opt['license']['type']        = 'pro';
-				$all_opt['license']['is_expired']  = false;
-				$all_opt['license']['is_disabled'] = false;
-				$all_opt['license']['is_invalid']  = false;
+				$all_opt['license']['key']              = $key;
+				$all_opt['license']['type']             = 'pro';
+				$all_opt['license']['is_expired']       = false;
+				$all_opt['license']['is_disabled']      = false;
+				$all_opt['license']['is_invalid']       = false;
+				$all_opt['license']['is_limit_reached'] = false;
 
 				$options->set( $all_opt, false, true );
 
