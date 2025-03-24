@@ -1,3 +1,8 @@
+.wp-block-essential-blocks-post-carousel {
+	width: 100%;
+	min-width: 0;
+}
+
 .eb-post-carousel-wrapper {
 	z-index: 1;
 	margin-bottom: 30px;
@@ -283,11 +288,6 @@
 			height: 100%;
 		}
 	}
-}
-
-[dir="rtl"] .eb-post-carousel-wrapper .slick-prev .fa-chevron-circle-left,
-[dir="rtl"] .eb-post-carousel-wrapper .slick-next .fa-chevron-circle-right {
-	transform: rotate(180deg)
 }
 
 .wp-admin {

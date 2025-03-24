@@ -30,7 +30,7 @@ use EssentialBlocks\Integrations\PluginInstaller;
 final class Plugin
 {
     use HasSingletone;
-    public $version = '5.3.2';
+    public $version = '5.3.3';
 
     public $admin;
     /**
@@ -214,7 +214,7 @@ final class Plugin
         //Those flags needs to update if notice
         $this->define( 'EB_PROMOTION_FLAG', 8 );
         $this->define( 'EB_ADMIN_MENU_FLAG', 8 );
-        $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', true );
+        $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', 'none' );
 
         //Table Name constants
         global $wpdb;

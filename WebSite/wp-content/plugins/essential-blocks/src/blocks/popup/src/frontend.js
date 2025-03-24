@@ -169,6 +169,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                         stopVideo(item);
                     });
+
+                    document.body.classList.remove('eb-popup-block-overflow');
                 }
             };
         }
@@ -193,6 +195,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                             stopVideo(item);
                         });
+
+                        document.body.classList.remove('eb-popup-block-overflow');
                     }
                 };
             }

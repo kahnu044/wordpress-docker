@@ -22,6 +22,7 @@ import {
     FIELD_TEXT_VALIDATION,
     FIELD_TEXT
 } from "./constants/typographyPrefixConstants";
+import { min } from "lodash";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -130,7 +131,30 @@ const attributes = {
     iconColor: {
         type: "string",
     },
-
+    numberValidationType: {
+        type: "string",
+        default: "",
+    },
+    maxNumber: {
+        type: "number",
+        default: "",
+    },
+    minNumber: {
+        type: "number",
+        default: "",
+    },
+    numberLength: {
+        type: "number", 
+    },
+    maxNumberValidationMessage: {
+        type: "string",
+    },
+    minNumberValidationMessage: {
+        type: "string",
+    },
+    numberLengthValidationMessage: {
+        type: "string",
+    },
     // typography attributes ⬇
     ...generateTypographyAttributes(LABEL_TYPOGRAPHY),
     ...generateTypographyAttributes(FIELD_TEXT_VALIDATION),

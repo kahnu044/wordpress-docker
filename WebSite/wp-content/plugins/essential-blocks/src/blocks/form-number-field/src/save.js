@@ -2,9 +2,7 @@
  * WordPress Dependencies
  *
  */
-import {
-EBDisplayIcon, BlockProps
-} from "@essential-blocks/controls";
+import { EBDisplayIcon, BlockProps } from "@essential-blocks/controls";
 const save = ({ attributes }) => {
     const {
         blockId,
@@ -19,6 +17,8 @@ const save = ({ attributes }) => {
         isIcon,
         icon,
         formStyle,
+        minNumber,
+        maxNumber,
     } = attributes;
 
     return (
@@ -41,7 +41,12 @@ const save = ({ attributes }) => {
                     )}
 
                     <div className="eb-field-input-wrap">
-                        {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
+                        {isIcon && icon && (
+                            <EBDisplayIcon
+                                icon={icon}
+                                className={"eb-input-icon"}
+                            />
+                        )}
                         <input
                             type="number"
                             id={fieldName}
@@ -50,6 +55,8 @@ const save = ({ attributes }) => {
                             value={defaultValue}
                             placeholder={placeholderText}
                             required={isRequired}
+                            min={minNumber}
+                            max={maxNumber}
                         />
                         {formStyle == "form-style-modern" && (
                             <>

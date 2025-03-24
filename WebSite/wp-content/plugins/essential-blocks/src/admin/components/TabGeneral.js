@@ -277,51 +277,33 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.3.2", "essential-blocks")}
+                                    {__("Version: 5.3.3", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("05/03/2025", "essential-blocks")}
+                                        {__("24/03/2025", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Added: Quick Action Toolbar | Easily access most-used blocks",
+                                            "Added: Form | Min-Max value support for number field",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Added: Woo Product Grid | Display product category option",
+                                            "Fixed: Popup | Page not scrolling properly after closing popup",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Slider | RTL issues fixed",
+                                            "Fixed: Woo Product Grid | Added option to show/hide product category",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Advanced Tab | Active tab not displaying properly in editor",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Filterable Gallery | Conflict with Autoptimize Lazyload",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Toggle Content | Multiple blocks not supported inside toggle content",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Security enhancements",
+                                            "Fixed: Filterable Gallery | Extra border appearing on focused image",
                                             "essential-blocks"
                                         )}
                                     </li>

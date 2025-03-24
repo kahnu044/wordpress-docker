@@ -2,9 +2,7 @@
  * WordPress dependencies
  */
 import { useBlockProps } from "@wordpress/block-editor";
-import {
-EBDisplayIcon
-} from "@essential-blocks/controls";
+import { EBDisplayIcon } from "@essential-blocks/controls";
 import attributes from "./attributes";
 
 const deprecated = [
@@ -45,14 +43,21 @@ const deprecated = [
                                     <label htmlFor={fieldName}>
                                         {labelText}{" "}
                                         {isRequired && (
-                                            <span className="eb-required">*</span>
+                                            <span className="eb-required">
+                                                *
+                                            </span>
                                         )}
                                     </label>
                                 </>
                             )}
 
                             <div className="eb-field-input-wrap">
-                                {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
+                                {isIcon && icon && (
+                                    <EBDisplayIcon
+                                        icon={icon}
+                                        className={"eb-input-icon"}
+                                    />
+                                )}
                                 <input
                                     type="number"
                                     id={fieldName}
@@ -67,7 +72,9 @@ const deprecated = [
                                         <label htmlFor={fieldName}>
                                             {labelText}{" "}
                                             {isRequired && (
-                                                <span className="eb-required">*</span>
+                                                <span className="eb-required">
+                                                    *
+                                                </span>
                                             )}
                                         </label>
                                     </>
@@ -114,18 +121,29 @@ const deprecated = [
 
             return (
                 <div {...blockProps}>
-                    <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                        <div className={`${blockId} eb-number-field-wrapper eb-field-wrapper`}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
+                        <div
+                            className={`${blockId} eb-number-field-wrapper eb-field-wrapper`}
+                        >
                             {showLabel && formStyle != "form-style-modern" && (
                                 <>
                                     <label htmlFor={fieldName}>
-                                        {labelText} {isRequired && <span className="eb-required">*</span>}
+                                        {labelText}{" "}
+                                        {isRequired && (
+                                            <span className="eb-required">
+                                                *
+                                            </span>
+                                        )}
                                     </label>
                                 </>
                             )}
 
                             <div className="eb-field-input-wrap">
-                                {isIcon && icon && <i className={`${icon} eb-input-icon`}></i>}
+                                {isIcon && icon && (
+                                    <i className={`${icon} eb-input-icon`}></i>
+                                )}
                                 <input
                                     type="number"
                                     id={fieldName}
@@ -138,14 +156,21 @@ const deprecated = [
                                 {formStyle == "form-style-modern" && (
                                     <>
                                         <label htmlFor={fieldName}>
-                                            {labelText} {isRequired && <span className="eb-required">*</span>}
+                                            {labelText}{" "}
+                                            {isRequired && (
+                                                <span className="eb-required">
+                                                    *
+                                                </span>
+                                            )}
                                         </label>
                                     </>
                                 )}
                             </div>
                             {isRequired && (
                                 <>
-                                    <div className={`eb-form-validation eb-validate-${fieldName}`}>
+                                    <div
+                                        className={`eb-form-validation eb-validate-${fieldName}`}
+                                    >
                                         {validationMessage}
                                     </div>
                                 </>

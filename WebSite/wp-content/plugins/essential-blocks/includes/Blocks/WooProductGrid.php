@@ -80,6 +80,7 @@ class WooProductGrid extends Block
             "selectedTaxonomyItems" => '[{"value":"all","label":"All"}]',
             'showPrice'             => true,
             'showSaleBadge'         => true,
+            'showCategory'          => false,
             'productDescLength'     => 5,
             'isCustomCartBtn'       => false,
             'simpleCartText'        => __( "Buy Now", "essential-blocks" ),

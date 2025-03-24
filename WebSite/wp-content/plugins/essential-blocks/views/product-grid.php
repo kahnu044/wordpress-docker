@@ -38,6 +38,7 @@
                                     'soldCountSuffix'   => $soldCountSuffix,
                                     'stockPercent'      => $stockPercent,
                                     'showPrice'         => $showPrice,
+                                    'showCategory'      => $showCategory,
                                     'layout'            => $layout,
                                     'showSaleBadge'     => $showSaleBadge,
                                     'gridPreset'        => $gridPreset,

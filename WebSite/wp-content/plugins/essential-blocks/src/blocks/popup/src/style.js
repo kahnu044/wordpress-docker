@@ -6,7 +6,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     typoPrefix_text,
@@ -300,7 +300,7 @@ export default function Style(props) {
 			${popupMarginDesktop}
 			${popupBackgroundStylesDesktop}
 			${popupBdShdStyesDesktop}
-			transition: ${popupBdShdTransitionStyle};
+			// transition: ${popupBdShdTransitionStyle};
 		}
 
 		.${blockId}.eb-popup-container .eb-popup-content-editor:hover,

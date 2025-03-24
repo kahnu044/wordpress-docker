@@ -360,6 +360,7 @@ class Form extends ThirdPartyIntegration
      */
     public function form_validation( $formdata, $rules )
     {
+        error_log(print_r($formdata,1));
         $validation = [ 'success' => true ];
         if ( is_array( $formdata ) && count( $formdata ) > 0 ) {
             foreach ( $formdata as $index => $data ) {
@@ -368,6 +369,9 @@ class Form extends ThirdPartyIntegration
                     if ( count( $datarules ) === 0 ) {
                         return $validation;
                     }
+
+                    error_log('form');
+                    error_log(print_r($datarules,1));
                     foreach ( $datarules as $rulesType => $rulesData ) {
                         switch ( $rulesType ) {
                             case 'isRequired':
@@ -405,6 +409,39 @@ class Form extends ThirdPartyIntegration
                                     break 2;
                                 }
                                 break;
+                            case 'isMinNumber':
+                                $message = sprintf(__('Number must be greater than %s!', 'essential-blocks'), $rulesData->value);
+                                if ( isset( $rulesData->message ) && is_string( $rulesData->message ) && !empty($rulesData->message) ) {
+                                    $message = $rulesData->message;
+                                }
+                                if ( is_numeric( $data ) && $data < $rulesData->value ) {
+                                    $validation[ 'success' ]        = false;
+                                    $validation[ 'data' ][ $index ] = $message;
+                                    break 2;
+                                }
+                                break;
+                                case 'isMaxNumber':
+                                    $message = sprintf(__('Number must be less than %s!', 'essential-blocks'), $rulesData->value);
+                                    if ( isset( $rulesData->message ) && is_string( $rulesData->message ) && !empty($rulesData->message) ) {
+                                        $message = $rulesData->message;
+                                    }
+                                    if ( is_numeric( $data ) && $data > $rulesData->value ) {
+                                        $validation[ 'success' ]        = false;
+                                        $validation[ 'data' ][ $index ] = $message;
+                                        break 2;
+                                    }
+                                    break;
+                                case 'isNumberLength':
+                                    $message = sprintf(__('Number length must be equal to %s!', 'essential-blocks'), $rulesData->value);
+                                    if ( isset( $rulesData->message ) && is_string( $rulesData->message ) && !empty($rulesData->message) ) {
+                                        $message = $rulesData->message;
+                                    }
+                                    if ( is_numeric( $data ) && strlen($data) !== $rulesData->value ) {
+                                        $validation[ 'success' ]        = false;
+                                        $validation[ 'data' ][ $index ] = $message;
+                                        break 2;
+                                    }
+                                    break;
                             case 'isDate':
                                 $message = "Invalid Date Format";
                                 if ( isset( $rulesData->message ) && is_string( $rulesData->message ) ) {

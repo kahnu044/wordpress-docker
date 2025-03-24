@@ -13,20 +13,14 @@ import {
     BlockProps,
     withBlockContext,
     filterBlocksByName,
-    getBlockParentClientId
+    getBlockParentClientId,
 } from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
-import defaultAttributes from './attributes'
+import defaultAttributes from "./attributes";
 
 const Edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        isSelected,
-        clientId,
-        name
-    } = props;
+    const { attributes, setAttributes, isSelected, clientId, name } = props;
     const {
         blockId,
         classHook,
@@ -42,25 +36,31 @@ const Edit = (props) => {
         isIcon,
         icon,
         formStyle,
+        minNumber,
+        maxNumber,
+        minNumberValidationMessage,
+        maxNumberValidationMessage,
+        numberLengthValidationMessage,
+        numberValidationType,
+        numberLength,
     } = attributes;
 
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-number-field',
+        blockPrefix: "eb-number-field",
         rootClass: "eb-guten-block-main-parent-wrapper eb-form-field",
-        style: <Style {...props} />
+        style: <Style {...props} />,
     };
 
     useEffect(() => {
         const parentClientId = getBlockParentClientId(
             clientId,
-            "essential-blocks/form"
+            "essential-blocks/form",
         );
 
-        const getParentBlock = select("core/block-editor").getBlock(
-            parentClientId
-        );
+        const getParentBlock =
+            select("core/block-editor").getBlock(parentClientId);
         const getParentBlockId = getParentBlock?.attributes?.blockId;
         const parentIconColor = getParentBlock?.attributes?.inputIconColor;
         const parentBlockIconSize =
@@ -82,9 +82,8 @@ const Edit = (props) => {
         if (getFormStyle) setAttributes({ formStyle: getFormStyle });
 
         //Handle as per parent settings
-        const isBlockJustInserted = select(
-            "core/block-editor"
-        ).wasBlockJustInserted(clientId);
+        const isBlockJustInserted =
+            select("core/block-editor").wasBlockJustInserted(clientId);
         const getFormLabel = getParentBlock?.attributes?.showLabel;
         const getFormIcon = getParentBlock?.attributes?.showInputIcon;
         if (
@@ -101,8 +100,14 @@ const Edit = (props) => {
         //Hanlde Field Name
         if (!fieldName) {
             if (parentClientId) {
-                const parentAllChildBlocks = select("core/block-editor").getBlocksByClientId(parentClientId);
-                const filteredBlocks = filterBlocksByName(parentAllChildBlocks, name);
+                const parentAllChildBlocks =
+                    select("core/block-editor").getBlocksByClientId(
+                        parentClientId,
+                    );
+                const filteredBlocks = filterBlocksByName(
+                    parentAllChildBlocks,
+                    name,
+                );
                 const currentBlockIndex = filteredBlocks.indexOf(clientId);
                 if (currentBlockIndex !== -1) {
                     if (filteredBlocks.length === 1) {
@@ -128,10 +133,37 @@ const Edit = (props) => {
                 isNumber: {
                     message: numberValidationMessage,
                 },
+                ...(numberValidationType === "minmax" && {
+                    isMinNumber: {
+                        value: minNumber,
+                        message: minNumberValidationMessage,
+                    },
+                }),
+                ...(numberValidationType === "minmax" && {
+                    isMaxNumber: {
+                        value: maxNumber,
+                        message: maxNumberValidationMessage,
+                    },
+                }),
+                ...(numberValidationType === "length" && numberLength && {
+                    isNumberLength: {
+                        value: numberLength,
+                        message: numberLengthValidationMessage,
+                    },
+                }),
             },
         };
         setAttributes({ validationRules: rules });
-    }, [isRequired, fieldName, validationMessage]);
+    }, [
+        isRequired,
+        fieldName,
+        validationMessage,
+        numberValidationType,
+        minNumberValidationMessage,
+        maxNumberValidationMessage,
+        numberLengthValidationMessage,
+        numberLength,
+    ]);
 
     return (
         <>
@@ -167,7 +199,12 @@ const Edit = (props) => {
                         )}
 
                         <div className="eb-field-input-wrap">
-                            {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
+                            {isIcon && icon && (
+                                <EBDisplayIcon
+                                    icon={icon}
+                                    className={"eb-input-icon"}
+                                />
+                            )}
                             <input
                                 type="number"
                                 id={fieldName}
@@ -176,6 +213,12 @@ const Edit = (props) => {
                                 value={defaultValue}
                                 placeholder={placeholderText}
                                 required={isRequired}
+                                {...(typeof minNumber !== "undefined"
+                                    ? { min: minNumber }
+                                    : {})}
+                                {...(typeof maxNumber !== "undefined"
+                                    ? { max: maxNumber }
+                                    : {})}
                             />
                             {formStyle == "form-style-modern" && (
                                 <>
@@ -205,6 +248,6 @@ const Edit = (props) => {
             </BlockProps.Edit>
         </>
     );
-}
+};
 
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

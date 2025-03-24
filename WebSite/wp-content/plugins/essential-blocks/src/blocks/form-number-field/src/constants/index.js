@@ -234,3 +234,9 @@ export const HOVER_EFFECT = [
         value: "hvr-curl-bottom-left",
     },
 ];
+
+export const VALIDATION_TYPE = [
+    { label: __("Select Value"), value: "" },
+    { label: __("Min/max"), value: "minmax" },
+    { label: __("Length"), value: "length" },
+];
