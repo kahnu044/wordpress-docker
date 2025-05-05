@@ -3,80 +3,75 @@
  * Plugin Name: Carousel Slider Block
  * Plugin URI: https://wordpress.org/plugins/carousel-block
  * Description: A responsive carousel slider block for Gutenberg. Add any blocks to slides.
+ * Author: Virgiliu Diaconu
  * Author URI: http://virgiliudiaconu.com/
- * Version: 1.0.16
+ * Version: 2.0.1
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  *
  * @package carousel-block
  */
 
+namespace CarouselSliderBlock;
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
 
 /**
- * Directory path of this plugin
+ * Plugin version
+ *
+ * @var string
+ */
+define( 'CB_VERSION', '2.0.1' );
+
+/**
+ * Directory path of this plugin without trailing slash.
  *
  * @var string
  */
 define( 'CB_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 
-class Carousel_Slider_Block {
-    const VERSION = '1.0.16'; // Plugin version
+// Load blocks.
+require_once CB_PLUGIN_DIR . '/blocks/class-carousel-legacy.php';
+require_once CB_PLUGIN_DIR . '/blocks/class-carousel.php';
 
+// Load admin settings.
+require_once CB_PLUGIN_DIR . '/admin/class-settings-page.php';
+
+// Block filters.
+require_once CB_PLUGIN_DIR . '/admin/class-block-filters.php';
+
+// Load settings utils.
+require_once CB_PLUGIN_DIR . '/admin/class-settings-utils.php';
+
+use CarouselSliderBlock\Blocks\Carousel_Legacy;
+use CarouselSliderBlock\Blocks\Carousel;
+use CarouselSliderBlock\Admin\Settings_Page;
+use CarouselSliderBlock\Admin\Block_Filters;
+use CarouselSliderBlock\Admin\Settings_Utils;
+
+/**
+ * Main plugin initializer class.
+ */
+class Main {
     /**
-     * Actions and filters.
+     * Initialize the plugin.
      */
-    public static function register() {
-        add_action( 'init', ['Carousel_Slider_Block', 'register_blocks'] );
+    public static function init() {
+        add_action( 'init', [ self::class, 'register_blocks' ] );
+        Settings_Page::init();
+        Block_Filters::init();  
     }
 
     /**
-     * Registers the blocks and their assets.
+     * Register blocks.
      */
     public static function register_blocks() {
-        register_block_type( CB_PLUGIN_DIR . '/build/carousel', [
-            'render_callback' => ['Carousel_Slider_Block', 'render_carousel']
-        ]);
-        register_block_type( CB_PLUGIN_DIR . '/build/slide' );
-    }
-
-    /**
-     * The render callback to handle the block output.
-     *
-     * @param array $attributes Block attributes.
-     * @param string $content Block save content.
-     * @return string Rendered block content.
-     */
-    public static function render_carousel( $attributes, $content ) {
-        if ( ! is_admin() ) {
-			wp_enqueue_style(
-                'carousel-block-slick-style',
-                plugins_url( '/vendor/slick/slick.min.css', __FILE__ ),
-                [],
-                self::VERSION,
-                false
-            );
-             wp_enqueue_script(
-                'carousel-block-slick-script',
-                plugins_url( '/vendor/slick/slick.min.js', __FILE__ ),
-                ['jquery'],
-                self::VERSION,
-                true
-            );
-            wp_enqueue_script(
-                'carousel-block-view-init',
-                plugins_url( '/vendor/slick/init.js', __FILE__ ),
-                [ 'jquery', 'carousel-block-slick-script' ],
-                self::VERSION,
-                true
-            );
-        }
-        return $content;
+        ( new Carousel_Legacy() )->register();
+        ( new Carousel() )->register();
     }
 }
 
-// Register the plugin
-Carousel_Slider_Block::register();
-
+// Initialize the plugin.
+Main::init();

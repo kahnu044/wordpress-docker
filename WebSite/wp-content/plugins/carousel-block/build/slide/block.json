@@ -1,11 +1,11 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "cb/slide",
+  "name": "cb/slide-v2",
   "version": "1.0.0",
   "title": "Slide",
   "parent": [
-    "cb/carousel"
+    "cb/carousel-v2"
   ],
   "category": "design",
   "description": "A single slide within the carousel.",

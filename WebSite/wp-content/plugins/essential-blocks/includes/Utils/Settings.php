@@ -29,6 +29,18 @@ class Settings
     {
         $settings   = get_option( 'eb_settings', [  ] );
         $prev_value = null;
+
+         // If 'all' is passed as the key, replace the entire settings array
+        if ( $key === 'all' && !empty( $value ) && is_string($value) ) {
+            $prev_value = $settings;
+            $settings   = json_decode( wp_unslash( $value ), true );
+
+            // Fires after saving all settings
+            do_action( "eb_after_save_all_settings", $settings, $prev_value );
+
+            return update_option( 'eb_settings', $settings );
+        }
+
         if ( isset( $settings[ $key ] ) ) {
             $prev_value = $settings[ $key ];
         }

@@ -6,7 +6,7 @@ use EssentialBlocks\Utils\Helper;
 use EssentialBlocks\Blocks\WPForms;
 use EssentialBlocks\Blocks\FluentForms;
 use EssentialBlocks\Traits\HasSingletone;
-
+use EssentialBlocks\Dependencies\Insights;
 class Scripts
 {
     use HasSingletone;
@@ -537,7 +537,9 @@ class Scripts
                 'quickToolbar'          => $this->isEnableQuickToolbar,
                 'globalColors'          => Helper::global_colors(),
                 'gradientColors'        => Helper::gradient_colors(),
-                'unfilter_capability'   => current_user_can( 'unfiltered_html' ) ? 'true' : 'false'
+                'unfilter_capability'   => current_user_can( 'unfiltered_html' ) ? 'true' : 'false',
+                'is_tracking'           => Insights::get_is_tracking_allowed(),
+                'eb_user_type'          => get_option( 'essential_blocks_user_type' ),
              ];
 
             $localize_array = array_merge( $localize_array, $admin_localize_array );

@@ -1,4 +1,4 @@
-<?php global $post;?>
+<?php global $post; ?>
 <div
 <?php
 echo wp_kses_post( $wrapper_attributes ); ?>>
@@ -9,11 +9,15 @@ echo wp_kses_post( $wrapper_attributes ); ?>>
                 <?php
                     foreach ( $profilesOnly as $profile ) {
                         preg_match( '/fa-([\w\-]+)/', $profile[ 'icon' ], $matches );
-                        $iconClass = is_array( $matches ) && ! empty( $matches[ 1 ] ) ? $matches[ 1 ] . '-original' : '';
+                        $iconClass  = is_array( $matches ) && ! empty( $matches[ 1 ] ) ? $matches[ 1 ] . '-original' : '';
+                        $social_url = $block_object::eb_social_share_name_link( $post->ID, $profile[ 'icon' ] );
+                        if ( empty( $social_url ) ) {
+                            break;
+                        }
                     ?>
                 <li>
                     <a class="<?php echo esc_attr( $iconClass ); ?><?php echo ' ' . esc_attr( $icnEffect ); ?>"
-                        href=<?php echo esc_url_raw( $block_object::eb_social_share_name_link( $post->ID, $profile[ 'icon' ] ) ); ?>
+                        href=<?php echo esc_url_raw( $social_url ); ?>
                         target="_blank" rel="nofollow noopener noreferrer">
                         <i class="<?php echo esc_attr( $profile[ 'icon' ] ); ?> hvr-icon eb-social-share-icon"></i>
                         <?php

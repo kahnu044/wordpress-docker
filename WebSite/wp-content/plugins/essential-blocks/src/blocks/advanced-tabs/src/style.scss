@@ -37,14 +37,17 @@
 		visibility: hidden;
 		transform: translateY(10px);
 		transition: all 0.4s ease-in-out;
+
 		.eb-tab-inner {
 			margin-top: 10px;
 		}
+
 		&.active {
 			opacity: 1;
 			visibility: visible;
-			transform: translateY(0);
+			transform: none;
 		}
+
 		&.inactive {
 			height: 0;
 			width: 100%;

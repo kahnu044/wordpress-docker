@@ -33,12 +33,6 @@
 
             self::$cache_bank = CacheBank::get_instance();
 
-            // try {
-            //     $this->notices();
-            // } catch ( \Exception $e ) {
-            //     unset( $e );
-            // }
-
             // Remove OLD notice from 1.0.0 (if other WPDeveloper plugin has notice)
             NoticeRemover::get_instance( '1.0.0' );
 
@@ -101,6 +95,8 @@
 
         public function admin_menu()
         {
+            $eb_version = get_option( 'essential_blocks_version' );
+
             $menu_notice = ( $this->menu_notice_should_show() ) ? '<span class="eb-menu-notice">1</span>' : '';
             add_menu_page(
                 __( 'Essential Blocks', 'essential-blocks' ),
@@ -146,6 +142,7 @@
                     '<a href="%1$s">Settings</a>',
                     admin_url( 'admin.php?page=essential-blocks' )
                 );
+
                 array_unshift( $links, $settings_links );
 
                 if ( ! class_exists( 'EssentialBlocks\Pro\Plugin' ) ) {
@@ -416,9 +413,6 @@
         public function enqueue_scripts( $hook )
         {
             wp_enqueue_script( 'jquery' );
-            if ( $hook !== 'toplevel_page_essential-blocks' ) {
-                return;
-            }
 
             wpdev_essential_blocks()->assets->register( 'admin-controls-util', 'admin/controls/controls.js', [
                 'essential-blocks-blocks-localize'
@@ -429,6 +423,10 @@
             wpdev_essential_blocks()->assets->register( 'flv', 'js/react-player/flv.min.js' );
             wpdev_essential_blocks()->assets->register( 'dash', 'js/react-player/dash.all.min.js' );
             wpdev_essential_blocks()->assets->register( 'hls', 'js/react-player/hls.min.js' );
+
+            if ( $hook !== 'toplevel_page_essential-blocks' ) {
+                return;
+            }
             wpdev_essential_blocks()->assets->enqueue(
                 'admin',
                 'admin/dashboard/admin.js',
@@ -776,52 +774,56 @@
         public function promotion_message_on_admin_screen()
         {
         ?>
-        <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
-            <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button" aria-label="Dismiss" tabindex="0"></span>
-            <?php
-                $message = __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" );
-                        $message = apply_filters( 'eb_promotion_message_on_admin_screen', $message );
-                        printf(
-                            $message,
-                            esc_url( 'https://essential-blocks.com/changelog/' )
-                        );
-                    ?>
-        </div>
-        <?php
-            }
-
-                public function eb_whats_new_notice()
-                {
-                    if ( wp_doing_ajax() ) {
-                        return;
-                    }
-
-                    if ( get_transient( 'essential_block_whats_new_notice' ) == true ) {
-                        delete_transient( 'essential_block_whats_new_notice' );
-                        error_log( 'menu notice' );
-                    ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function($) {
-                    var promoHtml = '<div class="eb-whats-new">';
-                    promoHtml += '<div class="eb-hn-title">';
-                    promoHtml += '<span class="dashicons dashicons-megaphone"></span><span>Introducing EB Lottie Animation</span>';
-                    promoHtml += '</div>';
-                    promoHtml += '<div class="eb-hn-content">';
-                    promoHtml += '<p>Add eye-catching animations to your WordPress website & make it stand out with Essential Blocks Lottie Animation.</p>';
-                    promoHtml += '<button class="button button-primary"><a href="https://essential-blocks.com/demo/lottie-animation/" target="_blank">Learn More</a></button>';
-                    promoHtml += '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
-                    promoHtml += '</div>';
-                    promoHtml += '</div>';
-
-                    // Append after the last menu item
-                    jQuery('#toplevel_page_essential-blocks').append(promoHtml);
-
-                    jQuery(document).on('click', '.eb-whats-new .button-dismiss', function() {
-                        jQuery('.eb-whats-new').remove();
-                    });
-                });
-            </script>
+<div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
+    <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button"
+        aria-label="Dismiss" tabindex="0"></span>
+    <?php
+        $message = __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" );
+                $message = apply_filters( 'eb_promotion_message_on_admin_screen', $message );
+                printf(
+                    $message,
+                    esc_url( 'https://essential-blocks.com/changelog/' )
+                );
+            ?>
+</div>
 <?php
     }
-        }
+
+        public function eb_whats_new_notice()
+        {
+            if ( wp_doing_ajax() ) {
+                return;
+            }
+
+            if ( get_transient( 'essential_block_whats_new_notice' ) == true ) {
+                delete_transient( 'essential_block_whats_new_notice' );
+            ?>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    var promoHtml = '<div class="eb-whats-new">';
+    promoHtml += '<div class="eb-hn-title">';
+    promoHtml +=
+        '<span class="dashicons dashicons-megaphone"></span><span>Introducing EB Lottie Animation</span>';
+    promoHtml += '</div>';
+    promoHtml += '<div class="eb-hn-content">';
+    promoHtml +=
+        '<p>Add eye-catching animations to your WordPress website & make it stand out with Essential Blocks Lottie Animation.</p>';
+    promoHtml +=
+        '<button class="button button-primary"><a href="https://essential-blocks.com/demo/lottie-animation/" target="_blank">Learn More</a></button>';
+    promoHtml +=
+        '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
+    promoHtml += '</div>';
+    promoHtml += '</div>';
+
+    // Append after the last menu item
+    jQuery('#toplevel_page_essential-blocks').append(promoHtml);
+
+    jQuery(document).on('click', '.eb-whats-new .button-dismiss', function() {
+        jQuery('.eb-whats-new').remove();
+    });
+});
+</script>
+<?php
+    }
+    }
 }

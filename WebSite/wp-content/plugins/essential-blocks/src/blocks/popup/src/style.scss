@@ -83,16 +83,31 @@
 	left: 0;
 	z-index: 999;
 	overflow: auto;
+
+	* {
+		visibility: hidden !important;
+		transition: none !important;
+	}
 }
 
 .modal-main-wrap.active {
 	visibility: visible;
 	opacity: 1;
+
+	* {
+		visibility: visible !important;
+		transition: all 0.3s ease !important;
+	}
 }
 
 .modal-main-wrap.inactive {
 	visibility: hidden;
 	opacity: 0;
+
+	* {
+		visibility: hidden;
+		transition: none !important;
+	}
 }
 
 .eb-modal-container {

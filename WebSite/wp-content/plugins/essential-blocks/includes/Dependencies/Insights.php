@@ -241,7 +241,7 @@ use Error;
          *
          * @since 1.0.0
          */
-        private function is_tracking_allowed() {
+        public function is_tracking_allowed() {
             // First, check if the user has changed their mind and opted out of tracking
             if ( $this->has_user_opted_out() ) {
                 $this->set_is_tracking_allowed( false, $this->plugin_name );
@@ -262,7 +262,7 @@ use Error;
          * @since 3.0.0
          * @param $is_allowed   Boolean  true if is allowed.
          */
-        protected function set_is_tracking_allowed( $is_allowed, $plugin = null ) {
+        public function set_is_tracking_allowed( $is_allowed, $plugin = null ) {
             if ( empty( $plugin ) ) {
                 $plugin = $this->plugin_name;
             }
@@ -292,6 +292,18 @@ use Error;
                 }
             }
             update_option( 'wpins_allow_tracking', $allow_tracking, 'no' );
+        }
+
+        public static function get_is_tracking_allowed($plugin = ESSENTIAL_BLOCKS_NAME){
+
+            /**
+             * Get All Tracked Plugin List using this Tracker.
+             */
+            $allow_tracking = get_option( 'wpins_allow_tracking' );
+            /**
+             * Check user is opted out for tracking or not.
+             */
+            return intval( isset( $allow_tracking[$plugin] ) );
         }
 
         /**
@@ -1075,7 +1087,8 @@ jQuery(document).ready(function($) {
         $(".wpinsights-goodbye-form-wrapper-<?php echo esc_attr( $this->plugin_name ); ?> #wpinsights-goodbye-form")
             .html('<?php echo wp_kses( $html, $allowed_html ); ?>' +
                 '<div class="wpinsights-goodbye-form-footer"><div class="wpinsights-goodbye-form-buttons"><a id="wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>" class="wpinsights-submit-btn" href="#"><?php esc_html_e( 'Submit and Deactivate', 'essential-blocks' );?></a>&nbsp;<a class="wpsp-put-deactivate-btn" href="' +
-                url + '"><?php esc_html_e( 'Skip & Deactivate', 'essential-blocks' );?></a></div></div>');
+                url + '"><?php esc_html_e( 'Skip & Deactivate', 'essential-blocks' );?></a></div></div>'
+            );
         $('#wpinsights-submit-form-<?php echo esc_attr( $this->plugin_name ); ?>').on('click', function(
             e) {
             // As soon as we click, the body of the form should disappear

@@ -12,6 +12,10 @@ class PluginInstaller extends ThirdPartyIntegration {
 					'callback' => 'plugin_install',
 					'public'   => false,
 				),
+				'plugin_deactivater' => array(
+					'callback' => 'plugin_deactivate',
+					'public'   => false,
+				),
 			)
 		);
 	}
@@ -40,4 +44,34 @@ class PluginInstaller extends ThirdPartyIntegration {
 		}
 		wp_die();
 	}
+	public function plugin_deactivate() {
+		if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
+			wp_send_json_error( __( 'Could not deactivate the plugin.', 'essential-blocks' ) );
+			die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
+		}
+		if ( ! current_user_can( 'deactivate_plugins' ) ) {
+			wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
+		}
+
+		if ( isset( $_POST['plugin_file'] ) ) {
+            $plugin_file = sanitize_text_field( $_POST['plugin_file'] );
+
+            if ( is_plugin_active( $plugin_file ) ) {
+                deactivate_plugins( $plugin_file);
+
+                if ( is_plugin_active( $plugin_file ) ) {
+                    wp_send_json_error( __( 'Plugin deactivation failed.', 'essential-blocks' ) );
+                } else {
+                    wp_send_json_success( __( 'Plugin deactivated successfully.', 'essential-blocks' ) );
+                }
+            } else {
+                wp_send_json_error( __( 'Plugin is already inactive.', 'essential-blocks' ) );
+            }
+        } else {
+            wp_send_json_error( __( 'Plugin file not specified.', 'essential-blocks' ) );
+        }
+
+        wp_die();
+	}
+
 }

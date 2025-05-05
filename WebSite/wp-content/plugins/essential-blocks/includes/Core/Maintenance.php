@@ -23,17 +23,33 @@ class Maintenance
         $_code_version   = ESSENTIAL_BLOCKS_VERSION;
         $requires_update = version_compare( $_version, $_code_version, '<' );
 
+        if ( ! $_version ) {
+            update_option( 'essential_blocks_user_type', 'new' );
+        }
         if ( $requires_update ) {
+            // Version Updated in DB.
+            $this->update_version();
+            BlocksPatterns::get_instance()->update_cache();
+
+            if ( get_option( 'essential_blocks_user_type' ) !== 'new' ) {
+                update_option( 'essential_blocks_user_type', 'old' );
+            }
+
+            $checkPro = class_exists( 'EssentialBlocks\Pro\Plugin' ) ? 1 : 0;
+
+            //Redirect to quick setup page
+            $is_quick_setup_shown = get_option( 'essential_blocks_quick_setup_shown' );
+            if ( ! $is_quick_setup_shown && $checkPro === 0 ) {
+                wp_safe_redirect( admin_url( 'admin.php?page=eb-quick-setup' ) );
+                exit;
+            }
+
             // Update Related Works
             if ( ESSENTIAL_BLOCKS_WHATSNEW_REDIRECT !== 'none' ) {
                 set_transient( 'essential_block_maybe_whatsnew_redirect', true, MINUTE_IN_SECONDS * 10 );
             } else if ( EB_SHOW_WHATS_NEW_NOTICE !== 'none' ) {
                 set_transient( 'essential_block_whats_new_notice', true, MINUTE_IN_SECONDS * 10 );
             }
-
-            // Version Updated in DB.
-            $this->update_version();
-            BlocksPatterns::get_instance()->update_cache();
 
             //Create Table on Plugin Update
             self::db_create_tables();

@@ -536,8 +536,8 @@ class UAGB_Init_Blocks {
 		}
 
 		check_ajax_referer( 'uagb_ajax_nonce', 'nonce' );
-
-		$value = isset( $_POST['value'] ) ? json_decode( stripslashes( $_POST['value'] ), true ) : array(); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// security validation done in later stage.
+		$value = isset( $_POST['value'] ) ? json_decode( wp_unslash( $_POST['value'] ), true ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		\UAGB_Admin_Helper::update_admin_settings_option( 'uag_recaptcha_secret_key_v2', sanitize_text_field( $value['reCaptchaSecretKeyV2'] ) );
 		\UAGB_Admin_Helper::update_admin_settings_option( 'uag_recaptcha_secret_key_v3', sanitize_text_field( $value['reCaptchaSecretKeyV3'] ) );
@@ -1146,6 +1146,8 @@ class UAGB_Init_Blocks {
 			'status_of_sureforms'                     => $status_of_sureforms,
 			'status_of_surecart'                      => $status_of_surecart,
 			'docsUrl'                                 => \UAGB_Admin_Helper::get_spectra_pro_url( '/docs/', 'free-plugin', 'uagb-editor-page', 'uagb-plugin' ),
+			'upsellModalEditor'                       => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-editor', 'upsell-popup-view-plan' ),
+			'contry_code'                             => \UAGB_Admin_Helper::get_user_country_code(),
 		);
 
 		wp_localize_script(
@@ -1155,50 +1157,11 @@ class UAGB_Init_Blocks {
 		);
 
 		// Enqueue the assets for editor upsells.
-		$editor_upsell_script         = 'editor.js';
-		$editor_upsell_style          = 'style-editor.css';
-		$editor_upsell_tailwind_style = 'editor.css';
-
-		$editor_upsell_script_dep_path = UAGB_DIR . 'admin-core/assets/build/editor.asset.php';
-		$editor_upsell_script_info     = file_exists( $editor_upsell_script_dep_path )
-			? include $editor_upsell_script_dep_path
-			: array(
-				'dependencies' => array(),
-				'version'      => UAGB_VER,
-			);
-
-		$editor_upsell_script_dep = array_merge( $script_info['dependencies'], array( 'wp-edit-post', 'wp-i18n', 'wp-element', 'wp-components', 'wp-data' ) );
-
-		wp_enqueue_script(
-			'spectra-upsell-banner',
-			UAGB_URL . 'admin-core/assets/build/' . $editor_upsell_script,
-			$editor_upsell_script_dep,
-			$editor_upsell_script_info['version'], 
-			true
-		);
-	
 		wp_enqueue_style(
 			'spectra-upsell-banner-tailwind-style',
-			UAGB_URL . 'admin-core/assets/build/' . $editor_upsell_tailwind_style,
+			UAGB_URL . 'dist/blocks.css',
 			array(),
 			UAGB_VER
-		);
-
-		wp_enqueue_style(
-			'spectra-upsell-banner-style',
-			UAGB_URL . 'admin-core/assets/build/' . $editor_upsell_style,
-			array(),
-			UAGB_VER
-		);
-	
-		// Pass any necessary data to the script.
-		wp_localize_script(
-			'spectra-upsell-banner',
-			'spectraBannerData',
-			array(
-				'pro_url' => 'https://spectra.com/pro',
-				'message' => __( 'Upgrade to Spectra Pro to unlock amazing features!', 'ultimate-addons-for-gutenberg' ),
-			) 
 		);
 
 		// To match the editor with frontend.
@@ -1401,7 +1364,7 @@ class UAGB_Init_Blocks {
 		}
 
 		if ( ! empty( $_POST['defaultAllowedQuickSidebarBlocks'] ) ) {
-			$spectra_default_allowed_quick_sidebar_blocks = json_decode( stripslashes( $_POST['defaultAllowedQuickSidebarBlocks'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$spectra_default_allowed_quick_sidebar_blocks = json_decode( wp_unslash( sanitize_text_field( $_POST['defaultAllowedQuickSidebarBlocks'] ) ), true );
 			\UAGB_Admin_Helper::update_admin_settings_option( 'uagb_quick_sidebar_allowed_blocks', $spectra_default_allowed_quick_sidebar_blocks );
 			wp_send_json_success();
 		}
@@ -1435,7 +1398,7 @@ class UAGB_Init_Blocks {
 			wp_send_json_error( $response_data );
 		}
 
-		$global_block_styles = json_decode( stripslashes( $_POST['spectraGlobalStyles'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$global_block_styles = json_decode( wp_unslash( sanitize_text_field( $_POST['spectraGlobalStyles'] ) ), true );
 
 		if ( ! empty( $_POST['bulkUpdateStyles'] ) && 'no' !== $_POST['bulkUpdateStyles'] ) {
 			update_option( 'spectra_global_block_styles', $global_block_styles );
@@ -1533,7 +1496,7 @@ class UAGB_Init_Blocks {
 		update_option( 'spectra_gbs_google_fonts', $spectra_gbs_google_fonts );
 
 		if ( ! empty( $_POST['globalBlockStylesFontFamilies'] ) ) {
-			$spectra_gbs_google_fonts_editor = json_decode( stripslashes( $_POST['globalBlockStylesFontFamilies'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$spectra_gbs_google_fonts_editor = json_decode( wp_unslash( sanitize_text_field( $_POST['globalBlockStylesFontFamilies'] ) ), true );
 			update_option( 'spectra_gbs_google_fonts_editor', $spectra_gbs_google_fonts_editor );
 		}
 

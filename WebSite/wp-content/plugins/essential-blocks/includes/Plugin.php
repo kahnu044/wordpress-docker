@@ -26,11 +26,12 @@ use EssentialBlocks\Integrations\Pagination;
 use EssentialBlocks\Integrations\GlobalStyles;
 use EssentialBlocks\Integrations\AssetGeneration;
 use EssentialBlocks\Integrations\PluginInstaller;
+use EssentialBlocks\Admin\QuickSetup;
 
 final class Plugin
 {
     use HasSingletone;
-    public $version = '5.3.3';
+    public $version = '5.3.5';
 
     public $admin;
     /**
@@ -64,6 +65,8 @@ final class Plugin
         $this->load_admin_dependencies();
 
         Maintenance::get_instance();
+
+        QuickSetup::get_instance();
 
         $this->assets   = Enqueue::get_instance( ESSENTIAL_BLOCKS_URL, ESSENTIAL_BLOCKS_DIR_PATH, $this->version );
         self::$settings = Settings::get_instance();

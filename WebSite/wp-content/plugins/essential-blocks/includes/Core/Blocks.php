@@ -39,11 +39,7 @@ class Blocks
             return $_defaults;
         }
 
-        if (count($_defaults) > count($all_blocks)) {
-            return array_merge($_defaults, $all_blocks);
-        }
-
-        return $all_blocks;
+        return array_replace_recursive($_defaults, $all_blocks);
     }
 
     public function enabled()

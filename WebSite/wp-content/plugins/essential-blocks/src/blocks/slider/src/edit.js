@@ -22,9 +22,7 @@ import { select } from "@wordpress/data";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from "./attributes";
-import {
-    SLIDE_TO_SHOW,
-} from "./constants/constants";
+
 import {
     handleTitle,
     handleSubtitle,
@@ -32,8 +30,8 @@ import {
     handleSecondButtonText,
     sanitizeHtml
 } from "./helpers";
+
 import {
-    generateResponsiveRangeStyles,
     EBDisplayIcon,
     sanitizeURL,
     BlockProps,
@@ -43,7 +41,6 @@ import {
  * External dependencies
  */
 import Slider from "react-slick";
-
 
 const Edit = (props) => {
     const {
@@ -79,7 +76,10 @@ const Edit = (props) => {
         isRTLEnable,
         titleTag,
         contentTag,
-        version
+        version,
+        slideToShowRange,
+        MOBslideToShowRange,
+        TABslideToShowRange,
     } = attributes;
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
@@ -103,7 +103,9 @@ const Edit = (props) => {
             setAttributes({ version: 'v4' });
         }
 
-        if (parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")) == 1) {
+        const isBlockJustInserted = select("core/block-editor").wasBlockJustInserted(clientId);
+
+        if (isBlockJustInserted && slideToShowRange == 1) {
             setAttributes({ adaptiveHeight: true });
         }
     }, []);
@@ -118,18 +120,6 @@ const Edit = (props) => {
         blockPrefix: 'eb-slider',
         style: <Style {...props} />
     };
-
-    // range controller Slides to Show
-    const {
-        rangeStylesDesktop: slideToShowDesktop,
-        rangeStylesTab: slideToShowTab,
-        rangeStylesMobile: slideToShowMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: SLIDE_TO_SHOW,
-        property: "",
-        attributes,
-    });
-
 
     function SampleNextArrow(props) {
         const { className, style, onClick, arrowNextIcon } = props;
@@ -169,7 +159,7 @@ const Edit = (props) => {
         pauseOnHover,
         nextArrow: <SampleNextArrow arrowNextIcon={arrowNextIcon} />,
         prevArrow: <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />,
-        slidesToShow: parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")),
+        slidesToShow: slideToShowRange,
         speed,
         initialSlide,
         vertical,
@@ -179,17 +169,17 @@ const Edit = (props) => {
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: slideToShowTab
-                        ? parseInt(slideToShowTab.replace(/[^0-9]/g, ""))
-                        : parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")),
+                    slidesToShow: TABslideToShowRange
+                        ? TABslideToShowRange
+                        : slideToShowRange,
                 },
             },
             {
                 breakpoint: 767,
                 settings: {
-                    slidesToShow: slideToShowMobile
-                        ? parseInt(slideToShowMobile.replace(/[^0-9]/g, ""))
-                        : parseInt(slideToShowDesktop.replace(/[^0-9]/g, "")),
+                    slidesToShow: MOBslideToShowRange
+                        ? MOBslideToShowRange
+                        : slideToShowRange,
                 },
             },
         ],

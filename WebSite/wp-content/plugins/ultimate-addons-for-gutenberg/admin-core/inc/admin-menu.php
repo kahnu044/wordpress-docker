@@ -323,7 +323,7 @@ class Admin_Menu {
 	public function settings_admin_scripts() {
 
 		// Enqueue admin scripts.
-		if ( ! empty( $_GET['page'] ) && ( $this->menu_slug === $_GET['page'] || false !== strpos( sanitize_text_field( $_GET['page'] ), $this->menu_slug . '_' ) ) || ( array_key_exists( 'post_type', $_GET ) && 'spectra-popup' === $_GET['post_type'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_GET['page'] ) && ( $this->menu_slug === $_GET['page'] || false !== strpos( sanitize_text_field( $_GET['page'] ), $this->menu_slug . '_' ) ) || ( array_key_exists( 'post_type', $_GET ) && 'spectra-popup' === $_GET['post_type'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['page'] does not provide nonce.
 			add_action( 'admin_enqueue_scripts', array( $this, 'styles_scripts' ) );
 		}
 
@@ -421,11 +421,11 @@ class Admin_Menu {
 	 */
 	public function render() {
 
-		$menu_page_slug = ( ! empty( $_GET['page'] ) ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : $this->menu_slug; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$menu_page_slug = ( ! empty( $_GET['page'] ) ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : $this->menu_slug; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['page'] does not provide nonce.
 		$page_action    = '';
 
-		if ( isset( $_GET['action'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$page_action = sanitize_text_field( wp_unslash( $_GET['action'] ) ); //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['action'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['page'] does not provide nonce.
+			$page_action = sanitize_text_field( wp_unslash( $_GET['action'] ) ); //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['page'] does not provide nonce.
 			$page_action = str_replace( '_', '-', $page_action );
 		}
 
@@ -513,16 +513,17 @@ class Admin_Menu {
 				'uagb_site_url'            => UAGB_URI,
 				'spectra_website'          => array(
 					'baseUrl'                => UAGB_URI,
-					'docsUrl'                => \UAGB_Admin_Helper::get_spectra_pro_url( '/docs/', 'free-plugin', 'dashboard', 'documentation' ),
-					'docsCategoryDynamicUrl' => \UAGB_Admin_Helper::get_spectra_pro_url( '/docs-category/{{category}}', 'free-plugin', 'dashboard', 'documentation' ),
-					'vipPrioritySupportUrl'  => \UAGB_Admin_Helper::get_spectra_pro_url( '/vip-priority-support/', 'free-plugin', 'dashboard', 'vip-priority-support' ),
-					'templatesUrl'           => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'starter-templates' ),
-					'banner'                 => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'banner' ),
-					'topBar'                 => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'top-bar' ),
-					'freeVsPro'              => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'free-vs-pro' ),
-					'setting'                => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'setting' ),
-					'uagDashboard'           => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'dashboard', 'uag-dashboard' ),
+					'docsUrl'                => \UAGB_Admin_Helper::get_spectra_pro_url( '/docs/', 'free-plugin', 'spectra-dashboard', 'documentation' ),
+					'docsCategoryDynamicUrl' => \UAGB_Admin_Helper::get_spectra_pro_url( '/docs-category/{{category}}', 'free-plugin', 'spectra-dashboard', 'documentation' ),
+					'vipPrioritySupportUrl'  => \UAGB_Admin_Helper::get_spectra_pro_url( '/vip-priority-support/', 'free-plugin', 'spectra-dashboard', 'vip-priority-support' ),
+					'templatesUrl'           => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'starter-templates' ),
+					'banner'                 => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'banner' ),
+					'topBar'                 => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'top-bar' ),
+					'freeVsPro'              => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'free-vs-pro' ),
+					'setting'                => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'setting' ),
+					'uagDashboard'           => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'uag-dashboard' ),
 					'whatsNewFeedUrl'        => esc_url( UAGB_URI . '/whats-new/feed/' ),
+					'upsellModalAdmin'       => \UAGB_Admin_Helper::get_spectra_pro_url( '/pricing/', 'free-plugin', 'spectra-dashboard', 'upsell-popup-view-plan' ),
 				),
 				'plugin_installing_text'   => esc_html__( 'Installing', 'ultimate-addons-for-gutenberg' ),
 				'plugin_installed_text'    => esc_html__( 'Installed', 'ultimate-addons-for-gutenberg' ),
@@ -533,6 +534,7 @@ class Admin_Menu {
 				'installer_nonce'          => wp_create_nonce( 'updates' ),
 				'pro_installed_status'     => 'inactive' === self::get_plugin_status( 'spectra-pro/spectra-pro.php' ) ? true : false,
 				'pro_plugin_status'        => self::get_plugin_status( 'spectra-pro/spectra-pro.php' ),
+				'contry_code'              => \UAGB_Admin_Helper::get_user_country_code(),
 			)
 		);
 
@@ -658,6 +660,8 @@ class Admin_Menu {
 					'loop-reset',
 					'loop-pagination',
 					'loop-category',
+					'modal-pro',
+					'countdown-pro',
 				);
 
 				if ( ( 'cf7-styler' === $addon && 'active' !== $cf7_status ) || ( 'gf-styler' === $addon && 'active' !== $gf_status ) ) {
@@ -745,7 +749,7 @@ class Admin_Menu {
 
 		wp_set_script_translations( $handle, 'ultimate-addons-for-gutenberg' );
 		wp_enqueue_style( 'uag-admin-google-fonts' );
-		if ( ! empty( $_GET['page'] ) && ( array_key_exists( 'page', $_GET ) && 'spectra' === $_GET['page'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['page'] ) && 'spectra' === $_GET['page'] ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['page'] does not provide nonce.
 			wp_enqueue_style( $handle );
 		}
 		wp_style_add_data( $handle, 'rtl', 'replace' );

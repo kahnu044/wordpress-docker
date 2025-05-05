@@ -360,7 +360,6 @@ class Form extends ThirdPartyIntegration
      */
     public function form_validation( $formdata, $rules )
     {
-        error_log(print_r($formdata,1));
         $validation = [ 'success' => true ];
         if ( is_array( $formdata ) && count( $formdata ) > 0 ) {
             foreach ( $formdata as $index => $data ) {
@@ -370,8 +369,6 @@ class Form extends ThirdPartyIntegration
                         return $validation;
                     }
 
-                    error_log('form');
-                    error_log(print_r($datarules,1));
                     foreach ( $datarules as $rulesType => $rulesData ) {
                         switch ( $rulesType ) {
                             case 'isRequired':
