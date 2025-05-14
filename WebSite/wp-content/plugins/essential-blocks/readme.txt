@@ -4,21 +4,25 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 5.3.5
+Stable tag: 5.4.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Gutenberg blocks library to create WordPress sites in the Gutenberg Block Editor with 60+ essential blocks, patterns, templates for WooCommerce & more
+Gutenberg blocks library to create WordPress sites in the Gutenberg Block Editor – now with Write With AI – plus 60+ essential blocks, patterns, templates for WooCommerce, post grids & more!
 
 == Description ==
 Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate Gutenberg blocks library for WordPress default editor!
-Enhance your Gutenberg experience with 60+ unique blocks (more coming soon). Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before.
+Enhance your Gutenberg experience with 60+ unique blocks (more coming soon) and the brand‑new Write With AI feature. Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before. Plus, AI helps you generate rich, high‑quality content instantly with just a few keywords.
 
 https://youtu.be/PnZx4ZOMyzI
 
 ##DESIGN OUTSTANDING WEB PAGES WITH ADVANCED & ESSENTIAL GUTENBERG BLOCKS LIBRARY!
 
 [See It In Action: Check out all the interactive block demos in one place.](https://essential-blocks.com/demo/)
+
+##🤖 WRITE WITH AI - POST/PAGE CONTENT INSTANTLY
+
+Generate engaging content for pages and posts in seconds with the Write With AI feature of Essential Blocks. Simply enter a few keywords and submit your prompt. Our built‑in AI engine will create rich, high-quality content instantly.
 
 ##✨ BLOCK PLUGIN WITH FULL CUSTOMIZATION
 
@@ -43,19 +47,16 @@ Enable and disable individual blocks to make your page load faster and smoother.
 Keep your website's loading speed fast and secure against heavy scripts and CSS files with the Asset Regeneration feature.
 
 ##🖊️ COMPATIBILITY WITH GOOGLE FONTS
-Choose any Google Font you prefer from a collection of 1,000+ font families available using Essential Blocks. Now, you can give your websites a customized look with stunning typographies.
+Choose any Google Font you prefer from a collection of 1,000+ font families available using Essential Blocks. Now, you can give your websites a customized look with stunning typography.
 
 ##💻 RESPONSIVE ON ALL DEVICES
 Directly from your Gutenberg block editor, you can control each block’s responsiveness individually. With flexible, responsive customization options, make your website user-friendly for all devices.
 
-##💫 ADVANCED ANIMATION FOR PAGE BUILDER
-With our latest exclusive feature, animation, you can design every block with a stunning animated appearance. Grab users’ attention instantly with eye-catching animations, transitions, and many more.
+##💫 ADVANCED ANIMATION WITH GSAP FOR PAGE BUILDER (PRO)
+With our latest exclusive feature, animation, you can design every block with a stunning animated appearance. Add smooth transitions, scroll effects and vibrant animations. Grab users’ attention instantly with eye-catching animations, transitions, and many more.
 
 ##⚡ DYNAMIC TAGS & ACF SUPPORT (PRO)
 Enhance the flexibility and customization options of your Gutenberg-built website and easily add custom fields to posts, pages, or custom post types with dynamic placeholders or variables generated from various parameters or data sources.
-
-##💡 INTERACTIVE ANIMATION FOR ENGAGING WEBSITES (PRO)
-Bring your content to life effortlessly with our Interactive Animation feature. Add smooth transitions, scroll effects and vibrant animations to captivate visitors and enhance user experience.
 
 ##🖼️ READY GUTENBERG PATTERNS BUILT WITH BLOCKS
 Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
@@ -83,7 +84,7 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 ##👨‍💻 EXPERT SUPPORT
 We have a very friendly support team ready to help you out. Ask your questions in the support forum, we will get back to you immediately.
 
-## 60+ FREE & ADVANCED BLOCKS AND COUNTING
+##60+ FREE GUTENBERG BLOCKS AND COUNTING
 Design without limits in WordPress block editor, using 60+ of the most useful Essential Blocks for Gutenberg.
 
 - **[Accordion](https://essential-blocks.com/demo/accordion/)** - Add beautiful accordions in your pages, posts, anywhere & reduce scrolling
@@ -244,6 +245,18 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.4.0 - 08/05/2025 =
+- Added: Write with AI feature
+- Added: Form Block | “Reply-To” option in form settings
+- Added: Product Image | Controls to enable/disable zoom effect
+- Improved: Global Settings | Custom color opacity option and reset issue
+- Improved: Slider Block | Sliding items sorting option and image preview added
+- Improved: Accordion Block | Title edit panel opens on click in editor
+- Fixed: Image Comparison Block | Not working in editor since 5.3.5
+- Fixed: Advanced Video Block | Responsive issue on iPhone
+- Fixed: Slider Block | Slideshow block displays truncated images on initial load
+- Few minor bug fixes & improvements
 
 = 5.3.5 - 23/04/2025 =
 - Added: Quick Setup Wizard

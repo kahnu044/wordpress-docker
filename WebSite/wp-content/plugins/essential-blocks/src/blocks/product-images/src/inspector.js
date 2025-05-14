@@ -42,7 +42,7 @@ import {
     ResponsiveDimensionsControl,
     ButtonGroupControl,
     BorderShadowControl
-}  from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Inspector(props) {
     const { attributes, setAttributes } = props;
@@ -56,7 +56,8 @@ export default function Inspector(props) {
         galleryArrowBackgroundColor,
         galleryArrowBackgroundHoverColor,
         featureImgAlignment,
-        disableNavArrow
+        disableNavArrow,
+        enableZoom
     } = attributes;
 
     return (
@@ -111,10 +112,22 @@ export default function Inspector(props) {
                             })
                         }
                     />
+                    <ToggleControl
+                        label={__(
+                            "Enable Zoom on Hover",
+                            "essential-blocks"
+                        )}
+                        checked={enableZoom}
+                        onChange={() =>
+                            setAttributes({
+                                enableZoom: !enableZoom,
+                            })
+                        }
+                    />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
-                <InspectorPanel.PanelBody title={__("Featured Image","essential-blocks")} initialOpen={true}>
+                <InspectorPanel.PanelBody title={__("Featured Image", "essential-blocks")} initialOpen={true}>
                     <ToggleControl
                         label={__(
                             "Enable Adaptive Height",
@@ -140,18 +153,18 @@ export default function Inspector(props) {
                                 step={1}
                             />
                             <SelectControl
-                                label={ __( 'Display Size','essential-blocks' ) }
-                                value={ largeImgScale }
-                                onChange={ (value) => {
-                                    setAttributes({largeImgScale: value})
+                                label={__('Display Size', 'essential-blocks')}
+                                value={largeImgScale}
+                                onChange={(value) => {
+                                    setAttributes({ largeImgScale: value })
                                 }}
-                                options={ [
+                                options={[
                                     { value: 'none', label: 'None' },
                                     { value: 'cover', label: 'Cover' },
                                     { value: 'contain', label: 'Contain' },
                                     { value: 'fill', label: 'Fill' },
                                     { value: 'scale-down', label: 'Scale Down' },
-                                ] }
+                                ]}
                                 __nextHasNoMarginBottom
                             />
                         </>
@@ -182,20 +195,20 @@ export default function Inspector(props) {
                         </h3>
                     </BaseControl>
                     <BorderShadowControl
-                        label={__("Border","essential-blocks")}
+                        label={__("Border", "essential-blocks")}
                         controlName={
                             LARGE_IMAGE_BORDER
                         }
                     />
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Thumbnails","essential-blocks")}>
+                <InspectorPanel.PanelBody title={__("Thumbnails", "essential-blocks")}>
                     <BaseControl>
                         <h3 className="eb-control-title">
                             {__("Thumbnails Border", "essential-blocks")}
                         </h3>
                     </BaseControl>
                     <BorderShadowControl
-                        label={__("Thumbnails Border","essential-blocks")}
+                        label={__("Thumbnails Border", "essential-blocks")}
                         controlName={
                             THUMBNAILS_IMAGE_BORDER
                         }
@@ -206,13 +219,13 @@ export default function Inspector(props) {
                         </h3>
                     </BaseControl>
                     <BorderShadowControl
-                        label={__("Active Thumbnails Border","essential-blocks")}
+                        label={__("Active Thumbnails Border", "essential-blocks")}
                         controlName={
                             ACTIVE_THUMBNAILS_IMAGE_BORDER
                         }
                     />
                 </InspectorPanel.PanelBody>
-                <InspectorPanel.PanelBody title={__("Navigations","essential-blocks")}>
+                <InspectorPanel.PanelBody title={__("Navigations", "essential-blocks")}>
                     <ResponsiveRangeController
                         baseLabel={__("Icon Size", "essential-blocks")}
                         controlName={GALLERY_ICON_SIZE}

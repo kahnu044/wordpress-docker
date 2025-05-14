@@ -182,6 +182,11 @@ const attributes = {
         type: "string",
         default: "bottom-top",
     },
+    activeAccordionIndex: {
+        type: "number",
+        default: null
+    },
+
     ...generateResponsiveRangeAttributes(titlePrefixIconSize, {
         defaultRange: 20,
     }),

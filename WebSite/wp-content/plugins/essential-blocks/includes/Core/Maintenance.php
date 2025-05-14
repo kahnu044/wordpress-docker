@@ -40,8 +40,13 @@ class Maintenance
             //Redirect to quick setup page
             $is_quick_setup_shown = get_option( 'essential_blocks_quick_setup_shown' );
             if ( ! $is_quick_setup_shown && $checkPro === 0 ) {
-                wp_safe_redirect( admin_url( 'admin.php?page=eb-quick-setup' ) );
-                exit;
+                // Do not redirect AJAX requests
+                if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+                    //Nothing to do
+                } else {
+                    wp_safe_redirect( admin_url( 'admin.php?page=eb-quick-setup' ) );
+                    exit;
+                }
             }
 
             // Update Related Works

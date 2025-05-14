@@ -249,8 +249,10 @@ domReady(function () {
 
             const isRTL = document.documentElement.dir === "rtl";
 
-            jQuery(slickType).slick({
-                lazyLoad: 'ondemand',
+            const $slick = jQuery(slickType);
+
+            $slick.slick({
+                lazyLoad: 'progressive',
                 arrows,
                 adaptiveHeight,
                 autoplay,
@@ -266,10 +268,23 @@ domReady(function () {
                 prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
                 nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
                 responsive: [...responsive],
+                cssEase: 'linear'
             });
 
+            // ✅ Recalculate layout when image is lazy-loaded
+            $slick.on('lazyLoaded', function (event, slick, image, imageSource) {
+                slick.$slider.slick('setPosition');
+                // console.log('lazyLoaded');
+            });
+
+            // $slick.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+            //     console.log('beforeChange');
+            //     // slick.reInit();
+            //     slick.$slider.slick('setPosition');
+            // });
+
             if (showLightbox == 'true') {
-                jQuery(slickType).slickLightbox({
+                $slick.slickLightbox({
                     src: 'data-src',
                     itemSelector: '.eb-slider-item',
                     navigateByKeyboard: true,

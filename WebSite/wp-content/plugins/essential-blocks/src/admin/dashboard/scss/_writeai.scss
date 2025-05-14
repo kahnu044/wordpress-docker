@@ -1,0 +1,93 @@
+.eb-write-with-ai {
+	.eb-admin-grid {
+		margin-bottom: 0;
+
+		// .eb-admin-input-wrapper {
+		// 	h4 {
+		// 		&.enabled {
+		// 			color: #23cd4d;
+		// 		}
+
+		// 		&.disabled {
+		// 			color: #D0D5DD;
+		// 		}
+		// 	}
+		// }
+
+		.eb-admin-inner-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+
+			&>* {
+				grid-column: initial;
+			}
+
+			input,
+			select {
+				border: 1px solid #fff;
+				width: 100%;
+				max-width: 100%;
+				padding: 18px 15px;
+			}
+
+			h2 {
+				margin: 0 0 10px;
+				padding: 0;
+				font-weight: 600;
+				font-size: 22px;
+				line-height: 120%;
+				color: #211C70;
+			}
+
+			p {
+				color: #6A72A5;
+				font-size: 14px;
+				line-height: 150%;
+			}
+
+			.eb-post-types-select {
+				width: 100%;
+
+				.eb-select__control {
+					border: 0px;
+					min-height: 55px;
+				}
+			}
+
+			.eb-openai-api-key {
+				flex-flow: column;
+
+				/* API Key Error Styling */
+				.eb-input-error {
+					border-color: #e74c3c !important;
+				}
+
+				.eb-api-key-error {
+					color: #e74c3c;
+					font-size: 12px;
+					margin-top: 5px;
+					padding: 5px;
+					background-color: rgba(231, 76, 60, 0.1);
+					border-radius: 3px;
+					word-break: break-all;
+					width: 95%;
+					margin-bottom: 5px;
+				}
+			}
+
+
+		}
+
+		.eb-admin-action-grid {
+			.eb-save-message {
+				&.success {
+					color: #008000;
+				}
+
+				&.error {
+					color: #ff0000;
+				}
+			}
+		}
+	}
+}

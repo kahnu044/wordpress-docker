@@ -30,8 +30,8 @@ class Settings
         $settings   = get_option( 'eb_settings', [  ] );
         $prev_value = null;
 
-         // If 'all' is passed as the key, replace the entire settings array
-        if ( $key === 'all' && !empty( $value ) && is_string($value) ) {
+        // If 'all' is passed as the key, replace the entire settings array
+        if ( $key === 'all' && ! empty( $value ) && is_string( $value ) ) {
             $prev_value = $settings;
             $settings   = json_decode( wp_unslash( $value ), true );
 
@@ -58,6 +58,11 @@ class Settings
          */
         do_action( "eb_after_save_{$key}_settings", $value, $prev_value );
         return update_option( 'eb_settings', $settings );
+    }
+
+    public static function save_eb_write_with_ai( $value )
+    {
+        return update_option( 'eb_write_with_ai', $value );
     }
 
     public static function reset_eb_settings( $key )

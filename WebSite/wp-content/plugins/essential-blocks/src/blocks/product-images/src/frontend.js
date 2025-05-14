@@ -1,22 +1,24 @@
 import domReady from '@wordpress/dom-ready';
 
-domReady( function () {
+domReady(function () {
     const wrappers = document.querySelectorAll(`.eb-product-images-wrapper`);
 
-    if( ! wrappers) {
+    if (!wrappers) {
         return;
     }
 
     for (let wrapper of wrappers) {
         // get images
-        const wrapperId             = wrapper.getAttribute("data-id");
-        const gallery               = wrapper.querySelector(".eb-product-image_slider");
-        const galleryImages         = gallery.querySelectorAll('.eb-product-image_slider-body-item');
-        const sliderBody            = gallery.querySelector(".eb-product-image_slider-body");
-        const sliderFooter          = gallery.querySelector(".eb-product-image_slider-footer");
-        const largeImageSettings    = JSON.parse(wrapper.getAttribute('data-settings'));
-        const navSettings           = JSON.parse(wrapper.getAttribute('data-nav-settings'));
-        
+        const wrapperId = wrapper.getAttribute("data-id");
+        const gallery = wrapper.querySelector(".eb-product-image_slider");
+        const galleryImages = gallery.querySelectorAll('.eb-product-image_slider-body-item');
+        const sliderBody = gallery.querySelector(".eb-product-image_slider-body");
+        const sliderFooter = gallery.querySelector(".eb-product-image_slider-footer");
+        const largeImageSettings = JSON.parse(wrapper.getAttribute('data-settings'));
+        const navSettings = JSON.parse(wrapper.getAttribute('data-nav-settings'));
+        const enableZoom = wrapper.getAttribute('data-enable-zoom') === 'true';
+
+
         (function ($) {
             $(sliderBody).slick({
                 slidesToShow: 1,
@@ -44,38 +46,37 @@ domReady( function () {
             });
         })(jQuery);
 
-        
 
-        if(galleryImages.length > 0) {
-            initImageGallery(gallery, galleryImages);
+
+        if (galleryImages.length > 0) {
+            initImageGallery(gallery, galleryImages, enableZoom);
             let images = getImages(galleryImages);
-            sliderBody.insertAdjacentHTML('afterBegin','<a href="#" class="eb-product-gallery__trigger" id="'+wrapperId+'-trigger">🔍</a>');
-            const lightboxTrigger = document.getElementById(wrapperId+"-trigger");
-            lightboxTrigger.addEventListener('click', function() {
+            sliderBody.insertAdjacentHTML('afterBegin', '<a href="#" class="eb-product-gallery__trigger" id="' + wrapperId + '-trigger">🔍</a>');
+            const lightboxTrigger = document.getElementById(wrapperId + "-trigger");
+            lightboxTrigger.addEventListener('click', function () {
                 openLightbox(images);
             });
         }
-    }   
-} );
+    }
+});
 
-const initImageGallery = (target, zoomTargets) => {
+const initImageGallery = (target, zoomTargets, enableZoom) => {
     var galleryWidth = target.clientWidth;
 
-    zoomTargets.forEach((zoomTarget,index) => {
-    
-        const image = zoomTarget.querySelector( 'img' );
+    zoomTargets.forEach((zoomTarget, index) => {
+        const image = zoomTarget.querySelector('img');
 
-			if ( image.getAttribute( 'data-large_image_width' ) > galleryWidth ) {
-				(function ($) {
-                    $(zoomTarget).zoom();
-                })(jQuery);
-			}
+        if (enableZoom && image.getAttribute('data-large_image_width') > galleryWidth) {
+            (function ($) {
+                $(zoomTarget).zoom();
+            })(jQuery);
+        }
     });
 }
 
 const getImages = (galleryImages) => {
     const images = [];
-    galleryImages.forEach(function(element) {
+    galleryImages.forEach(function (element) {
         var image = element.querySelector('img');
         if (image) {
             images.push(image.src);

@@ -1,13 +1,14 @@
 import { applyFilters } from "@wordpress/hooks";
 import { __ } from "@wordpress/i18n";
 
-import { HomeIcon, BlocksIcon, TemplatesIcon, OptionsIcon, IntegrationsIcon } from "./icons";
+import { HomeIcon, BlocksIcon, TemplatesIcon, OptionsIcon, IntegrationsIcon, WriteWithAiIcon } from "./icons";
 import {
     TabGeneral,
     Blocks,
     TabTemplates,
     TabOptions,
-    TabIntegrations
+    TabIntegrations,
+    TabWriteAi
 } from "./components";
 
 const tabMenus = applyFilters('essential_blocks_settings_menu_list', [
@@ -29,6 +30,12 @@ const tabMenus = applyFilters('essential_blocks_settings_menu_list', [
         icon: <TemplatesIcon />,
         label: __("Templates", "essential-blocks"),
         comp: <TabTemplates />
+    },
+    {
+        id: 'writewithai',
+        icon: <WriteWithAiIcon />,
+        label: __("Write With AI", "essential-blocks"),
+        comp: <TabWriteAi />
     },
     {
         id: 'options',

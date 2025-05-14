@@ -82,7 +82,7 @@ const ColorPalletWrapper = (props) => {
                                     aria-expanded={isOpen}
                                     colorValue={color?.color} />
                             )}
-                            renderContent={() => <ColorPicker onChange={(color) => changeColor(index, color)} />}
+                            renderContent={() => <ColorPicker enableAlpha defaultValue={color?.color} onChange={(color) => changeColor(index, color)} />}
                         />
 
                         <TextControl

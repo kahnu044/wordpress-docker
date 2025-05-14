@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useCallback, useEffect } from "@wordpress/element";
+import { useCallback, useEffect, useState } from "@wordpress/element";
 import { select, dispatch, useSelect } from "@wordpress/data";
 import { MediaUpload } from "@wordpress/block-editor";
 const { times } = lodash;
@@ -132,7 +132,18 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
         accordionLists,
         imageContainerWidth,
         titleOrientation,
+        activeAccordionIndex,
     } = attributes;
+
+    // Add this state at the top with other states
+    const [activeSettingsId, setActiveSettingsId] = useState(null);
+
+    // Add this useEffect to listen for changes
+    useEffect(() => {
+        if (activeAccordionIndex) {
+            setActiveSettingsId(activeAccordionIndex);
+        }
+    }, [activeAccordionIndex]);
 
     const addNewTab = () => {
         addAccordion();
@@ -257,35 +268,35 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                             {(each.titlePrefixType === "text" ||
                                 each.titlePrefixType === "icon") && (
-                                <>
-                                    <ColorControl
-                                        label={__("Prefix Color", "essential-blocks")}
-                                        color={each.titlePrefixColor}
-                                        onChange={(value) =>
-                                            onAccordionChange(
-                                                "titlePrefixColor",
-                                                value,
-                                                i,
-                                            )
-                                        }
-                                    />
-                                    <ColorControl
-                                        label={__(
-                                            "Prefix Background Color",
-                                            "essential-blocks",
-                                        )}
-                                        color={each.titlePrefixBGColor}
-                                        onChange={(value) =>
-                                            onAccordionChange(
-                                                "titlePrefixBGColor",
-                                                value,
-                                                i,
-                                            )
-                                        }
-                                        isGradient={true}
-                                    />
-                                </>
-                            )}
+                                    <>
+                                        <ColorControl
+                                            label={__("Prefix Color", "essential-blocks")}
+                                            color={each.titlePrefixColor}
+                                            onChange={(value) =>
+                                                onAccordionChange(
+                                                    "titlePrefixColor",
+                                                    value,
+                                                    i,
+                                                )
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Prefix Background Color",
+                                                "essential-blocks",
+                                            )}
+                                            color={each.titlePrefixBGColor}
+                                            onChange={(value) =>
+                                                onAccordionChange(
+                                                    "titlePrefixBGColor",
+                                                    value,
+                                                    i,
+                                                )
+                                            }
+                                            isGradient={true}
+                                        />
+                                    </>
+                                )}
 
                             {each.titlePrefixType === "image" &&
                                 !each.titlePrefixImgUrl && (
@@ -403,35 +414,35 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                             {(each.titleSuffixType === "text" ||
                                 each.titleSuffixType === "icon") && (
-                                <>
-                                    <ColorControl
-                                        label={__("Suffix Color", "essential-blocks")}
-                                        color={each.titleSuffixIconColor}
-                                        onChange={(value) =>
-                                            onAccordionChange(
-                                                "titleSuffixIconColor",
-                                                value,
-                                                i,
-                                            )
-                                        }
-                                    />
-                                    <ColorControl
-                                        label={__(
-                                            "Suffix Background Color",
-                                            "essential-blocks",
-                                        )}
-                                        color={each.titleSuffixBGColor}
-                                        onChange={(value) =>
-                                            onAccordionChange(
-                                                "titleSuffixBGColor",
-                                                value,
-                                                i,
-                                            )
-                                        }
-                                        isGradient={true}
-                                    />
-                                </>
-                            )}
+                                    <>
+                                        <ColorControl
+                                            label={__("Suffix Color", "essential-blocks")}
+                                            color={each.titleSuffixIconColor}
+                                            onChange={(value) =>
+                                                onAccordionChange(
+                                                    "titleSuffixIconColor",
+                                                    value,
+                                                    i,
+                                                )
+                                            }
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Suffix Background Color",
+                                                "essential-blocks",
+                                            )}
+                                            color={each.titleSuffixBGColor}
+                                            onChange={(value) =>
+                                                onAccordionChange(
+                                                    "titleSuffixBGColor",
+                                                    value,
+                                                    i,
+                                                )
+                                            }
+                                            isGradient={true}
+                                        />
+                                    </>
+                                )}
 
                             {each.titleSuffixType === "image" &&
                                 !each.titleSuffixImgUrl && (
@@ -725,6 +736,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             settingsComponents={getAccordionsComponents()}
                             hasAddButton={true}
                             onAddItem={addNewTab}
+                            defaultShowItemId={activeSettingsId} // Add this line
                             addButtonText={__(
                                 "Add a New Accordion Item",
                                 "essential-blocks",
@@ -839,7 +851,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                                 <InspectorPanel.PanelBody
                                     title={__("Margin & Padding")}
-                                    // initialOpen={true}
+                                // initialOpen={true}
                                 >
                                     <ResponsiveDimensionsControl
                                         controlName={iconMarginConst}
@@ -856,7 +868,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                         "Background ",
                                         "essential-blocks",
                                     )}
-                                    // initialOpen={false}
+                                // initialOpen={false}
                                 >
                                     <BackgroundControl
                                         controlName={iconBgConst}
@@ -867,14 +879,14 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                                 <InspectorPanel.PanelBody
                                     title={__("Border & Shadow")}
-                                    // initialOpen={false}
+                                // initialOpen={false}
                                 >
                                     <BorderShadowControl
                                         controlName={iconBdShadowConst}
                                         defaultBdrColor={"#aaaaaa"}
                                         defaultBdrStyle={"solid"}
-                                        // noShadow
-                                        // noBorder
+                                    // noShadow
+                                    // noBorder
                                     />
                                 </InspectorPanel.PanelBody>
                             </>
@@ -1017,8 +1029,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             >
                                 <BorderShadowControl
                                     controlName={titlePrefixBorder}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>
@@ -1097,8 +1109,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             >
                                 <BorderShadowControl
                                     controlName={titleSuffixBorder}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>
@@ -1119,7 +1131,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                         <InspectorPanel.PanelBody
                             title={__("Background ", "essential-blocks")}
-                            // initialOpen={false}
+                        // initialOpen={false}
                         >
                             <BackgroundControl
                                 controlName={tabBgConst}
@@ -1223,7 +1235,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                         <InspectorPanel.PanelBody
                             title={__("Background ", "essential-blocks")}
-                            // initialOpen={false}
+                        // initialOpen={false}
                         >
                             <BackgroundControl
                                 controlName={conBgConst}
@@ -1234,12 +1246,12 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
                         <InspectorPanel.PanelBody
                             title={__("Border & Shadow", "essential-blocks")}
-                            // initialOpen={false}
+                        // initialOpen={false}
                         >
                             <BorderShadowControl
                                 controlName={conBdShadowConst}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>
@@ -1314,8 +1326,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         >
                             <BorderShadowControl
                                 controlName={accordionBorder}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </InspectorPanel.PanelBody>
                         <PanelRow>
@@ -1337,8 +1349,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         >
                             <BorderShadowControl
                                 controlName={accordionExpandedBorder}
-                                // noShadow
-                                // noBorder
+                            // noShadow
+                            // noBorder
                             />
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>

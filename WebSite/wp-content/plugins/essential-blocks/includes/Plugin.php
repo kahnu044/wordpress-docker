@@ -31,7 +31,7 @@ use EssentialBlocks\Admin\QuickSetup;
 final class Plugin
 {
     use HasSingletone;
-    public $version = '5.3.5';
+    public $version = '5.4.0';
 
     public $admin;
     /**
@@ -215,9 +215,9 @@ final class Plugin
         $this->define( 'EB_PATTERN', true );
 
         //Those flags needs to update if notice
-        $this->define( 'EB_PROMOTION_FLAG', 8 );
-        $this->define( 'EB_ADMIN_MENU_FLAG', 8 );
-        $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', 'none' );
+        $this->define( 'EB_PROMOTION_FLAG', 9 );
+        $this->define( 'EB_ADMIN_MENU_FLAG', 9 );
+        $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', 1 );
 
         //Table Name constants
         global $wpdb;

@@ -6,16 +6,16 @@ import {
     InnerBlocks,
     store as blockEditorStore,
 } from "@wordpress/block-editor";
-import { useEffect, useState, useRef, useCallback, memo } from "@wordpress/element";
 import {
-    select,
-    dispatch,
-    useDispatch,
-    subscribe,
-} from "@wordpress/data";
+    useEffect,
+    useState,
+    useRef,
+    useCallback,
+    memo,
+} from "@wordpress/element";
+import { select, dispatch, useDispatch, subscribe } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { createBlocksFromInnerBlocksTemplate } from "@wordpress/blocks";
-
 
 /**
  * Internal dependencies
@@ -28,9 +28,8 @@ import {
     getAllBlockClientIds,
     EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
 } from "@essential-blocks/controls";
-
 
 import {
     CONTACT_FORM_TEMPLATE_1,
@@ -50,16 +49,11 @@ import ContactFormIcon from "./icons/contact.svg";
 import SubscriptionFormIcon from "./icons/subscription.svg";
 import RSVPFormIcon from "./icons/rsvp.svg";
 import BlankIcon from "./icons/blank.svg";
-import defaultAttributes from './attributes'
+import defaultAttributes from "./attributes";
 import Style from "./style";
 
 const Edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        clientId,
-        isSelected,
-    } = props;
+    const { attributes, setAttributes, clientId, isSelected } = props;
     const {
         resOption,
         cover,
@@ -85,6 +79,7 @@ const Edit = (props) => {
     } = attributes;
 
     const [formSettings, setFormSettings] = useState({});
+    const [allFields, setAllFields] = useState({});
     const { replaceInnerBlocks } = useDispatch(blockEditorStore);
 
     const showLabelRef = useRef(showLabel);
@@ -116,9 +111,20 @@ const Edit = (props) => {
     const enhancedProps = {
         ...props,
         blockPrefix: BLOCK_PREFIX,
-        style: <Style {...props} />
+        style: <Style {...props} />,
     };
-    const formInnerItem = select("core/block-editor").getBlock(clientId)?.innerBlocks;
+    const formInnerItem =
+        select("core/block-editor").getBlock(clientId)?.innerBlocks;
+
+    // Set all fields when changes inner blocks
+    useEffect(() => {
+        const allBlocks = getAllBlockClientIds();
+        if (allBlocks.includes(clientId)) {
+            const blockObj = select("core/block-editor").getBlock(clientId);
+            const fields = getFormFields(blockObj);
+            setAllFields(fields);
+        }
+    }, [formInnerItem]);
 
     useEffect(() => {
         //Generate Custom Form ID
@@ -138,9 +144,14 @@ const Edit = (props) => {
 
         fetchData().then((res) => {
             const response = res?.form_options;
-            if (!response || (typeof response === "object" && Object.keys(response).length === 0)) {
+            if (
+                !response ||
+                (typeof response === "object" &&
+                    Object.keys(response).length === 0)
+            ) {
                 setFormSettings({
                     mailTo: "",
+                    replyTo: "",
                     mailCc: "",
                     mailBcc: "",
                     mailSubject: "",
@@ -148,7 +159,7 @@ const Edit = (props) => {
             } else {
                 setFormSettings(response);
                 if (response.notification) {
-                    setAttributes({ notificationType: response.notification })
+                    setAttributes({ notificationType: response.notification });
                 }
             }
         });
@@ -186,9 +197,8 @@ const Edit = (props) => {
             showIconRef.current = showInputIcon;
             formStyleRef.current = formStyle;
 
-            const formInnerBlocks = select("core/block-editor").getBlock(
-                clientId
-            ).innerBlocks;
+            const formInnerBlocks =
+                select("core/block-editor").getBlock(clientId).innerBlocks;
             updateRecursiveAttributes(formInnerBlocks, {
                 showLabel: showLabel,
                 isIcon: showInputIcon,
@@ -208,7 +218,8 @@ const Edit = (props) => {
         if (formStyle === "form-style-modern") {
             const formWrapper = document.querySelector(`.${blockId}`);
             if (formWrapper) {
-                const inputs = formWrapper.getElementsByClassName("eb-field-input");
+                const inputs =
+                    formWrapper.getElementsByClassName("eb-field-input");
 
                 for (let input of inputs) {
                     if (input.value) {
@@ -250,7 +261,9 @@ const Edit = (props) => {
             if (template === "contact_form_1") {
                 replaceInnerBlocks(
                     clientId,
-                    createBlocksFromInnerBlocksTemplate(CONTACT_FORM_TEMPLATE_1)
+                    createBlocksFromInnerBlocksTemplate(
+                        CONTACT_FORM_TEMPLATE_1,
+                    ),
                 );
 
                 setAttributes({
@@ -259,10 +272,10 @@ const Edit = (props) => {
             } else if (template === "contact_form_2") {
                 replaceInnerBlocks(
                     clientId,
-                    createBlocksFromInnerBlocksTemplate(CONTACT_FORM_TEMPLATE_2)
+                    createBlocksFromInnerBlocksTemplate(
+                        CONTACT_FORM_TEMPLATE_2,
+                    ),
                 );
-
-
             }
         } else if (formType === "subscription_form") {
             if (!formTitle) {
@@ -272,8 +285,8 @@ const Edit = (props) => {
                 replaceInnerBlocks(
                     clientId,
                     createBlocksFromInnerBlocksTemplate(
-                        SUBSCRIPTION_FORM_TEMPLATE_1
-                    )
+                        SUBSCRIPTION_FORM_TEMPLATE_1,
+                    ),
                 );
 
                 setAttributes({
@@ -283,11 +296,9 @@ const Edit = (props) => {
                 replaceInnerBlocks(
                     clientId,
                     createBlocksFromInnerBlocksTemplate(
-                        SUBSCRIPTION_FORM_TEMPLATE_2
-                    )
+                        SUBSCRIPTION_FORM_TEMPLATE_2,
+                    ),
                 );
-
-
             }
         } else if (formType === "rsvp_form") {
             if (!formTitle) {
@@ -295,7 +306,7 @@ const Edit = (props) => {
             }
             replaceInnerBlocks(
                 clientId,
-                createBlocksFromInnerBlocksTemplate(RSVP_FORM_TEMPLATE)
+                createBlocksFromInnerBlocksTemplate(RSVP_FORM_TEMPLATE),
             );
 
             setAttributes({
@@ -306,10 +317,7 @@ const Edit = (props) => {
                 setAttributes({ formTitle: "New Form" });
             }
 
-            replaceInnerBlocks(
-                clientId,
-                []
-            );
+            replaceInnerBlocks(clientId, []);
 
             setAttributes({
                 showInputIcon: false,
@@ -319,9 +327,8 @@ const Edit = (props) => {
 
     //set "isEditedPostPublishable" true when formSettings is changed
     useEffect(() => {
-        const isEditedPostPublishable = select(
-            "core/editor"
-        ).isEditedPostPublishable();
+        const isEditedPostPublishable =
+            select("core/editor").isEditedPostPublishable();
 
         if (
             typeof isEditedPostPublishable !== "undefined" &&
@@ -337,15 +344,20 @@ const Edit = (props) => {
     const formSettingsSave = useCallback(() => {
         const isSavingPost = select("core/editor").isSavingPost();
         const isAutosavingPost = select("core/editor").isAutosavingPost();
-        const isSavingTemplate = select("core/editor").isSavingNonPostEntityChanges();
+        const isSavingTemplate =
+            select("core/editor").isSavingNonPostEntityChanges();
 
         /**
          * Action
-        */
+         */
         if ((isSavingPost && !isAutosavingPost) || isSavingTemplate) {
-            const allBlocks = getAllBlockClientIds()
-            if (allBlocks.includes(clientId) && typeof formSettings === "object" && Object.keys(formSettings).length > 0) {
-                const blockObj = select("core/block-editor").getBlock(clientId)
+            const allBlocks = getAllBlockClientIds();
+            if (
+                allBlocks.includes(clientId) &&
+                typeof formSettings === "object" &&
+                Object.keys(formSettings).length > 0
+            ) {
+                const blockObj = select("core/block-editor").getBlock(clientId);
                 const rules = getValidationRules(blockObj);
                 const fields = getFormFields(blockObj);
 
@@ -355,7 +367,7 @@ const Edit = (props) => {
                         success: successMessage,
                         error: errorMessage,
                         validationError: validationErrorMessage,
-                    }
+                    },
                 };
                 if (Object.keys(integrations).length > 0) {
                     otherSettings.integrations = integrations;
@@ -367,10 +379,10 @@ const Edit = (props) => {
 
                 const save = saveFormBlockData(
                     blockId,
-                    formTitle || 'Form ID: ' + blockId,
+                    formTitle || "Form ID: " + blockId,
                     fields,
                     updatedFormSettings,
-                    otherSettings
+                    otherSettings,
                 );
                 //Display snackbar disable for now, will add later after fix multi render
                 // save.then((res) => {
@@ -396,8 +408,8 @@ const Edit = (props) => {
         successMessage,
         errorMessage,
         validationErrorMessage,
-        integrations
-    ])
+        integrations,
+    ]);
 
     // subscribe
     let unsubscribe = subscribe(formSettingsSave);
@@ -415,14 +427,23 @@ const Edit = (props) => {
                     setAttributes={setAttributes}
                     formSettings={formSettings}
                     setFormSettings={setFormSettings}
+                    allFormFields={allFields}
                 />
             )}
             <BlockProps.Edit {...enhancedProps}>
-                {EssentialBlocksLocalize?.unfilter_capability && EssentialBlocksLocalize.unfilter_capability === 'false' && (
-                    <div style={{ marginLeft: '0', marginRight: '0' }} className="notice notice-error">
-                        <p>You don't have permission to add/edit the Form Block. Any changes you make won't work in the frontend properly.</p>
-                    </div>
-                )}
+                {EssentialBlocksLocalize?.unfilter_capability &&
+                    EssentialBlocksLocalize.unfilter_capability === "false" && (
+                        <div
+                            style={{ marginLeft: "0", marginRight: "0" }}
+                            className="notice notice-error"
+                        >
+                            <p>
+                                You don't have permission to add/edit the Form
+                                Block. Any changes you make won't work in the
+                                frontend properly.
+                            </p>
+                        </div>
+                    )}
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
@@ -498,13 +519,14 @@ const Edit = (props) => {
                         )}
                         {formType && formType.length > 0 && (
                             <>
-                                {formInnerItem && formInnerItem.length === 0 && (
-                                    <div className="eb-popup-before-content">
-                                        <p>
-                                            <strong>Add Form Field</strong>
-                                        </p>
-                                    </div>
-                                )}
+                                {formInnerItem &&
+                                    formInnerItem.length === 0 && (
+                                        <div className="eb-popup-before-content">
+                                            <p>
+                                                <strong>Add Form Field</strong>
+                                            </p>
+                                        </div>
+                                    )}
                                 <form
                                     id={formId}
                                     className={`eb-form form-layout-${formLayout} ${formStyle}`}
@@ -514,9 +536,10 @@ const Edit = (props) => {
                                         <InnerBlocks
                                             template={[]}
                                             renderAppender={
-                                                select("core/block-editor").getBlockOrder(
-                                                    clientId
-                                                ).length > 0
+                                                select(
+                                                    "core/block-editor",
+                                                ).getBlockOrder(clientId)
+                                                    .length > 0
                                                     ? undefined
                                                     : InnerBlocks.ButtonBlockAppender
                                             }
@@ -531,36 +554,47 @@ const Edit = (props) => {
                                                 type="button"
                                                 className="btn btn-primary eb-form-submit-button"
                                             >
-                                                {btnAddIcon && iconPosition === "left" ? (
-                                                    <EBDisplayIcon className={"eb-button-icon"} icon={icon} />
+                                                {btnAddIcon &&
+                                                iconPosition === "left" ? (
+                                                    <EBDisplayIcon
+                                                        className={
+                                                            "eb-button-icon"
+                                                        }
+                                                        icon={icon}
+                                                    />
                                                 ) : (
                                                     ""
                                                 )}
                                                 <DynamicInputValueHandler
                                                     value={buttonText}
                                                     onChange={(buttonText) =>
-                                                        setAttributes({ buttonText })
+                                                        setAttributes({
+                                                            buttonText,
+                                                        })
                                                     }
                                                     readOnly={true}
                                                 />
-                                                {btnAddIcon && iconPosition === "right" ? (
-                                                    <EBDisplayIcon className={"eb-button-icon"} icon={icon} />
+                                                {btnAddIcon &&
+                                                iconPosition === "right" ? (
+                                                    <EBDisplayIcon
+                                                        className={
+                                                            "eb-button-icon"
+                                                        }
+                                                        icon={icon}
+                                                    />
                                                 ) : (
                                                     ""
                                                 )}
                                             </button>
                                         </div>
                                     )}
-
-
                                 </form>
                             </>
-                        )
-                        }
-                    </div >
-                </div >
-            </BlockProps.Edit >
+                        )}
+                    </div>
+                </div>
+            </BlockProps.Edit>
         </>
     );
-}
-export default memo(withBlockContext(defaultAttributes)(Edit))
+};
+export default memo(withBlockContext(defaultAttributes)(Edit));

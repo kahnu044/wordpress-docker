@@ -12,7 +12,7 @@
 	);
 
     $post_thumbnail_id = $product->get_image_id();
-    $attachment_ids = $product->get_gallery_image_ids();  
+    $attachment_ids = $product->get_gallery_image_ids();
 
     $wrapper_classes = [
         $blockId,
@@ -24,17 +24,16 @@
 
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
     <div class="eb-parent-wrapper eb-parent-<?php echo esc_attr( $blockId ); ?> <?php echo esc_attr( $classHook ); ?>">
-        <div
-            class="<?php echo esc_attr( implode(" ",$wrapper_classes )); ?> eb-product-images-wrapper"
+        <div class="<?php echo esc_attr( implode(" ",$wrapper_classes )); ?> eb-product-images-wrapper"
             data-id="<?php echo esc_attr( $blockId ); ?>"
             data-settings="<?php echo esc_attr(wp_json_encode($settings)); ?>"
             data-nav-settings="<?php echo esc_attr(wp_json_encode($nav_settings)); ?>"
-        >
+            data-enable-zoom="<?php echo esc_attr($enableZoom ? 'true' : 'false'); ?>">
 
-            <?php 
+            <?php
                 if( $post_thumbnail_id && is_array($attachment_ids) && ! empty($attachment_ids)) {
                     $helper::views(
-                        'woocommerce/gallery', 
+                        'woocommerce/gallery',
                         [
                             'thumbnail_id'     => $post_thumbnail_id,
                             'attachment_ids'   => $attachment_ids,
@@ -49,12 +48,12 @@
                         ]
                     );
                 } else { ?>
-                    <div class="woocommerce-product-gallery__image--placeholder">
-                        <?php 
+            <div class="woocommerce-product-gallery__image--placeholder">
+                <?php
                             echo sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src( 'woocommerce_single' ) ), esc_html__( 'Awaiting product image', 'essential-blocks' ) );
                         ?>
-                    </div>
-                <?php }
+            </div>
+            <?php }
             ?>
         </div>
     </div>

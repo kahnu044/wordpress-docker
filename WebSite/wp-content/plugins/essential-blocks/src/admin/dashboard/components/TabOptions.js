@@ -27,6 +27,7 @@ export default function TabOptions() {
     const [clickedItem, setClickedItem] = useState("");
     const [settingsData, setSettingsData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [ClickedObject, setClickedObject] = useState({});
     const [loaderData, setLoaderData] = useState({
         loading: false,
         response: false,
@@ -120,16 +121,17 @@ export default function TabOptions() {
             ),
             doc: "https://essential-blocks.com/docs/quick-action-toolbar/",
             default: true,
-        },
+        }
     });
 
     /**
      * handleEditBtnClick
      * @param {*} item
      */
-    const handleEditBtnClick = (item) => {
+    const handleEditBtnClick = (item, clickedObj = { ...apiIntegrations }) => {
         setOptionModal(true);
         setClickedItem(item);
+        setClickedObject(clickedObj);
     };
 
     const handelResponsiveBreakPoints = () => {
@@ -179,7 +181,7 @@ export default function TabOptions() {
         });
     };
 
-    const ClickedComponent = apiIntegrations[clickedItem]?.component;
+    const ClickedComponent = ClickedObject[clickedItem]?.component;
 
     const regenerateAssets = () => {
         setLoaderData({
@@ -247,18 +249,6 @@ export default function TabOptions() {
                                             Edit
                                         </span>
                                     </a>
-
-                                    {/* <label
-											className="eb-admin-checkbox-label"
-										>
-											<Switch
-												checked={true}
-												defaultChecked={true}
-												disabled={false}
-												checkedChildren="ON"
-												unCheckedChildren="OFF"
-											/>
-										</label> */}
                                 </div>
                             </div>
                             <h6 className="eb-admin-block__title">
@@ -358,6 +348,19 @@ export default function TabOptions() {
                                         className="block-icon"
                                     />
                                     <div className="block-content">
+                                        {extensions[item]?.component && (
+                                            <a
+                                                target="_blank"
+                                                className="element__icon"
+                                                onClick={() => handleEditBtnClick(item, extensions)}
+                                            >
+                                                <EditIcon></EditIcon>
+
+                                                <span className="tooltip-text">
+                                                    Edit
+                                                </span>
+                                            </a>
+                                        )}
                                         <label className="eb-admin-checkbox-label">
                                             <Switch
                                                 checked={

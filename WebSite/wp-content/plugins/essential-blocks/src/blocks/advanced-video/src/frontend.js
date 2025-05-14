@@ -34,6 +34,34 @@ const AdvancedVideo = (props) => {
         videoPlayIcon = null;
     }
 
+    // Check if video is in lightbox mode
+    const isLightbox = wrapper.closest('.lightbox') !== null;
+
+    // Player configuration for different video providers
+    const playerConfig = {
+        file: {
+            attributes: {
+                controlsList: download === "false" ? "nodownload" : "",
+                playsInline: !isLightbox,
+                webkitPlaysinline: !isLightbox ? "true" : undefined,
+                playsinline: !isLightbox ? "true" : undefined,
+            },
+        },
+        youtube: {
+            playerVars: {
+                playsinline: !isLightbox ? 1 : 0,
+                modestbranding: 1,
+                origin: window.location.origin,
+            },
+        },
+        vimeo: {
+            playerOptions: {
+                playsinline: !isLightbox,
+                dnt: true,
+            },
+        },
+    };
+
     return (
         <>
             <ReactPlayer
@@ -48,13 +76,8 @@ const AdvancedVideo = (props) => {
                 light={preview}
                 playIcon={videoPlayIcon}
                 volume={0.5}
-                config={{
-                    file: {
-                        attributes: {
-                            controlsList: download === "false" ? "nodownload" : "",
-                        },
-                    },
-                }}
+                config={playerConfig}
+                playsinline={!isLightbox}
             />
         </>
     );

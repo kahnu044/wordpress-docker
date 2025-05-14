@@ -43,7 +43,8 @@ class ProductImages extends Block
         $this->default_attributes = [
             'useAdaptiveHeight' => true,
             'galleryPosition'   => 'bottom',
-            'disableNavArrow'   => false
+            'disableNavArrow'   => false,
+            'enableZoom'   => true
          ];
     }
 

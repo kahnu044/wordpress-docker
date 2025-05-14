@@ -81,12 +81,16 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    enableZoom: {
+        type: "boolean",
+        default: true
+    },
     ...generateResponsiveRangeAttributes(GALLERY_COLUMNS, {
         defaultRange: 4,
         noUnits: true,
         defaultUnit: ""
     }),
-    ...generateResponsiveRangeAttributes(GALLERY_COLUMN_GAP, {defaultRange: 10}),
+    ...generateResponsiveRangeAttributes(GALLERY_COLUMN_GAP, { defaultRange: 10 }),
     ...generateResponsiveRangeAttributes(GALLERY_COLUMN_SPACE),
     ...generateResponsiveRangeAttributes(GALLERY_ICON_SIZE),
     // typography attributes ⬇

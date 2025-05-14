@@ -56,6 +56,7 @@
             add_action( 'wp_ajax_get_eb_admin_templates', [ $this, 'templates' ] );
             add_action( 'wp_ajax_get_eb_admin_template_count', [ $this, 'template_count' ] );
             add_action( 'wp_ajax_eb_admin_promotion', [ $this, 'eb_admin_promotion' ] );
+            add_action( 'wp_ajax_write_with_ai', [ $this, 'eb_write_with_ai' ] );
             add_action( 'plugin_action_links', [ $this, 'eb_menu_action_links' ], 10, 2 );
             add_action( 'eb_admin_page_setting', [ $this, 'eb_show_admin_menu_notice' ] );
             add_action( 'in_admin_header', [ $this, 'remove_admin_notice' ], 99 );
@@ -80,7 +81,8 @@
 
         public function maybe_redirect()
         {
-            if ( wp_doing_ajax() ) {
+            // Do not redirect AJAX requests
+            if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
                 return;
             }
 
@@ -480,6 +482,35 @@
                         $updated = $settings->save_blocks_option( $value );
                         wp_send_json_success( $updated );
                         break;
+                    case 'write_with_ai':
+                        /**
+                         * Save blocks write_with_ai options
+                         */
+                        $value = json_decode( wp_unslash( $value ) );
+
+                        // Validate API key if provided
+                        if ( isset( $value->apiKey ) && ! empty( $value->apiKey ) ) {
+                            // Include the OpenAI class
+                            require_once ESSENTIAL_BLOCKS_DIR_PATH . 'includes/Admin/OpenAI.php';
+
+                            // Initialize the OpenAI class
+                            $openai = new OpenAI();
+
+                            // Validate the API key
+                            $validation = $openai->validate_api_key( $value->apiKey );
+
+                            if ( ! $validation[ 'success' ] ) {
+                                wp_send_json_error( [
+                                    'message' => $validation[ 'message' ],
+                                    'type'    => 'api_key_error'
+                                 ] );
+                                return;
+                            }
+                        }
+
+                        $updated = $settings->save_eb_write_with_ai( $value );
+                        wp_send_json_success( $updated );
+                        break;
                     default:
                         wp_send_json_error( __( 'Something went wrong regarding saving options data.', 'essential-blocks' ) );
                 }
@@ -724,6 +755,99 @@
             }
         }
 
+        //eb_write_with_ai
+        public function eb_write_with_ai()
+        {
+            if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+                wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
+            }
+            if ( ! current_user_can( 'edit_posts' ) ) {
+                wp_send_json_error( __( 'You are not authorized to save this!', 'essential-blocks' ) );
+            }
+
+            if ( isset( $_POST[ 'prompt' ] ) ) {
+                $prompt = sanitize_textarea_field( $_POST[ 'prompt' ] );
+
+                $overwrite = false;
+                if ( isset( $_POST[ 'overwrite' ] ) ) {
+                    $overwrite = rest_sanitize_boolean( $_POST[ 'overwrite' ] );
+                }
+
+                // Include the OpenAI class
+                require_once ESSENTIAL_BLOCKS_DIR_PATH . 'includes/Admin/OpenAI.php';
+
+                // Initialize the OpenAI class
+                $openai = new OpenAI();
+
+                // Generate content using OpenAI with the complete prompt
+                $response = $openai->generate_content( $prompt );
+                //                 $response = [
+                //                     'success' => true,
+                //                     'usage'   => null,
+                //                     'content' => '
+                //                     Programming Best Practices for WordPress Developers
+
+                // As a WordPress developer, adhering to best programming practices is essential to ensure the functionality, security, and maintainability of your WordPress websites. By following these tips, you can enhance the quality of your code and improve the overall performance of your WordPress projects.
+
+                // 1. **Use Child Themes**: When customizing a WordPress theme, always create a child theme instead of modifying the parent theme directly. This practice ensures that your modifications are not lost when the parent theme is updated.
+
+                // 2. **Keep Your Code Clean and Consistent**:
+                //    - Follow WordPress coding standards to maintain consistency and readability in your code.
+                //    - Use proper indentation, naming conventions, and commenting to make your code more understandable.
+                //    - Remove unnecessary code and comments to improve the performance of your website.
+
+                // 3. **Update WordPress Core, Themes, and Plugins Regularly**:
+                //    - Keeping your WordPress core, themes, and plugins up to date is crucial for security and functionality.
+                //    - Regular updates ensure that you have the latest features, bug fixes, and security patches.
+
+                // 4. **Optimize Images and Assets**:
+                //    - Compress images to reduce load times and improve website performance.
+                //    - Minify CSS and JavaScript files to reduce file sizes and optimize loading speed.
+
+                // 5. **Implement Security Measures**:
+                //    - Use secure coding practices to prevent vulnerabilities and protect your website from attacks.
+                //    - Install security plugins and configure security settings to enhance the security of your WordPress site.
+
+                // 6. **Backup Your Website Regularly**:
+                //    - Create regular backups of your WordPress website to prevent data loss in case of emergencies.
+                //    - Store backups off-site or in a secure location for added security.
+
+                // 7. **Use Custom Post Types and Taxonomies**:
+                //    - Organize content efficiently by creating custom post types and taxonomies for different content types.
+                //    - This practice helps maintain a structured and organized website architecture.
+
+                // 8. **Optimize Your Database**:
+                //    - Regularly clean up your database by removing unnecessary data, revisions, and spam comments.
+                //    - Optimize your database tables to improve website performance and speed.
+
+                // 9. **Utilize Caching**:
+                //    - Implement caching plugins to improve website speed and reduce server load.
+                //    - Utilize browser caching and server-side caching to enhance user experience and SEO performance.
+
+                // 10. **Test Your Code**:
+                //     - Perform regular testing to ensure that your code works correctly across different devices and browsers.
+                //     - Use debugging tools and error logging to identify and fix issues in your code.
+
+                // By incorporating these best programming practices into your WordPress development workflow, you can create high-quality, secure, and efficient websites that provide an excellent user experience. Stay updated with the latest trends and technologies in WordPress development to continuously improve your skills and deliver outstanding results.
+                //                 '  ];
+
+                if ( $response[ 'success' ] ) {
+                    wp_send_json_success( [
+                        'content'   => $response[ 'content' ],
+                        'usage'     => $response[ 'usage' ],
+                        'overwrite' => $overwrite
+                     ] );
+                } else {
+                    wp_send_json_error( [
+                        'message'  => $response[ 'message' ],
+                        'response' => isset( $response[ 'response' ] ) ? $response[ 'response' ] : null
+                     ] );
+                }
+            } else {
+                wp_send_json_error( __( 'Prompt is required', 'essential-blocks' ) );
+            }
+        }
+
         /**
          * update menu notice flag
          */
@@ -773,13 +897,31 @@
          */
         public function promotion_message_on_admin_screen()
         {
+            // Define the minimum required Pro version to override free message
+            $min_pro_version = '2.0.5';
+            $use_pro_message = false;
+
+            // Check if Pro is active and meets version requirement
+            if ( defined( 'ESSENTIAL_BLOCKS_IS_PRO_ACTIVE' ) && ESSENTIAL_BLOCKS_IS_PRO_ACTIVE ) {
+                if ( defined( 'ESSENTIAL_BLOCKS_PRO_VERSION' ) ) {
+                    // Compare versions and decide if we should use Pro message
+                    if ( version_compare( ESSENTIAL_BLOCKS_PRO_VERSION, $min_pro_version, '>=' ) ) {
+                        $use_pro_message = true;
+                    }
+                }
+            }
         ?>
 <div id="eb-admin-promotion-message" class="eb-admin-promotion-message">
     <span class="e-notice__dismiss eb-admin-promotion-close dashicons dashicons-no-alt" role="button"
         aria-label="Dismiss" tabindex="0"></span>
     <?php
-        $message = __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.3.0</strong> with <strong>Lottie Animation</strong> to make your website interactive. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" );
-                $message = apply_filters( 'eb_promotion_message_on_admin_screen', $message );
+        $message = __( "<p> <i>📣</i> Introducing Essential Blocks <strong>v5.4.0</strong> with <strong>Write with AI</strong> feature to effortlessly create engaging content for posts, pages, or custom post types. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>", "essential-blocks" );
+
+                // Only apply the filter if Pro version meets requirements
+                if ( $use_pro_message ) {
+                    $message = apply_filters( 'eb_promotion_message_on_admin_screen', $message );
+                }
+                error_log( $message );
                 printf(
                     $message,
                     esc_url( 'https://essential-blocks.com/changelog/' )
@@ -803,13 +945,13 @@ jQuery(document).ready(function($) {
     var promoHtml = '<div class="eb-whats-new">';
     promoHtml += '<div class="eb-hn-title">';
     promoHtml +=
-        '<span class="dashicons dashicons-megaphone"></span><span>Introducing EB Lottie Animation</span>';
+        '<span class="dashicons dashicons-megaphone"></span><span>Introducing EB Write with AI</span>';
     promoHtml += '</div>';
     promoHtml += '<div class="eb-hn-content">';
     promoHtml +=
-        '<p>Add eye-catching animations to your WordPress website & make it stand out with Essential Blocks Lottie Animation.</p>';
+        '<p>Effortlessly create engaging content for posts, pages, or custom post types using the smart <strong>Write with AI</strong> feature.</p>';
     promoHtml +=
-        '<button class="button button-primary"><a href="https://essential-blocks.com/demo/lottie-animation/" target="_blank">Learn More</a></button>';
+        '<button class="button button-primary"><a href="https://essential-blocks.com/docs/write-with-ai/" target="_blank">Learn More</a></button>';
     promoHtml +=
         '<button class="button button-dismiss"><span class="dashicons dashicons-dismiss"></span> Dismiss</button>';
     promoHtml += '</div>';
@@ -825,5 +967,5 @@ jQuery(document).ready(function($) {
 </script>
 <?php
     }
-    }
+        }
 }

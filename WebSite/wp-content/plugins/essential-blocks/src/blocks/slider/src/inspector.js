@@ -13,6 +13,7 @@ import {
     TextareaControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
+import { MediaUpload } from "@wordpress/block-editor";
 
 /*
  * Internal depencencies
@@ -65,6 +66,8 @@ import {
     handleSecondButtonText,
     handleSecondButtonURL,
     handleSecondButtonOpenNewTab,
+    handleImageData,
+    handleImage
 } from "./helpers";
 
 import {
@@ -77,7 +80,9 @@ import {
     faArrowIcons,
     EBIconPicker,
     InspectorPanel,
-    isValidHtml
+    isValidHtml,
+    SortControl,
+    ImageAvatar,
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -125,6 +130,292 @@ function Inspector(props) {
         showLightbox,
         version
     } = attributes;
+
+    // Add this function to get the settings components for each slide
+    const getSliderItemsComponents = () => {
+        return images.map((each, i) => (
+            <div key={i}>
+                <PanelRow>
+                    {__("Image", "essential-blocks")}
+                </PanelRow>
+                {!each.url && (
+                    <MediaUpload
+                        onSelect={(value) =>
+                            handleImage(
+                                value,
+                                i,
+                                images,
+                                setAttributes
+                            )
+                        }
+                        type="image"
+                        value={each.id}
+                        render={({
+                            open,
+                        }) => {
+                            return (
+                                <Button
+                                    className="eb-background-control-inspector-panel-img-btn components-button"
+                                    label={__(
+                                        "Upload Image",
+                                        "essential-blocks"
+                                    )}
+                                    icon="format-image"
+                                    onClick={
+                                        open
+                                    }
+                                />
+                            );
+                        }}
+                    />
+                )}
+
+                {each.url && (
+                    <ImageAvatar
+                        imageUrl={each.url}
+                        onDeleteImage={() =>
+                            handleImageData(
+                                'url',
+                                null,
+                                each.id,
+                                images,
+                                setAttributes
+                            )
+                        }
+                    />
+                )}
+
+                {sliderType === "content" && (
+                    <>
+                        <TextControl
+                            label={__("Title", "essential-blocks")}
+                            value={each.title}
+                            onChange={(value) =>
+                                handleImageData(
+                                    'title',
+                                    value,
+                                    each.id,
+                                    images,
+                                    setAttributes
+                                )
+                            }
+                        />
+
+                        {!isValidHtml(each.title) && (
+                            <PanelRow className="eb-instruction-row">
+                                <div className="eb-instruction">
+                                    <strong>Note:</strong> Invalid HTML Tag.
+                                </div>
+                            </PanelRow>
+                        )}
+
+                        <TextControl
+                            label={__("Subtitle", "essential-blocks")}
+                            value={each.subtitle}
+                            onChange={(value) =>
+                                handleImageData(
+                                    'subtitle',
+                                    value,
+                                    each.id,
+                                    images,
+                                    setAttributes
+                                )
+                            }
+                        />
+
+                        {!isValidHtml(each.subtitle) && (
+                            <PanelRow className="eb-instruction-row">
+                                <div className="eb-instruction">
+                                    <strong>Note:</strong> Invalid HTML Tag.
+                                </div>
+                            </PanelRow>
+                        )}
+
+                        <ToggleControl
+                            label={__("Show Button", "essential-blocks")}
+                            checked={each.showButton}
+                            onChange={() =>
+                                handleImageData(
+                                    'showButton',
+                                    !each.showButton,
+                                    each.id,
+                                    images,
+                                    setAttributes
+                                )
+                            }
+                        />
+
+                        {each.showButton && (
+                            <>
+                                <TextControl
+                                    label={__("Button Text", "essential-blocks")}
+                                    value={each.buttonText}
+                                    onChange={(value) =>
+                                        handleImageData(
+                                            'buttonText',
+                                            value,
+                                            each.id,
+                                            images,
+                                            setAttributes
+                                        )
+                                    }
+                                />
+
+                                {!isValidHtml(each.buttonText) && (
+                                    <PanelRow className="eb-instruction-row">
+                                        <div className="eb-instruction">
+                                            <strong>Note:</strong> Invalid HTML Tag.
+                                        </div>
+                                    </PanelRow>
+                                )}
+
+                                <TextControl
+                                    label={__("Button URL", "essential-blocks")}
+                                    value={each.buttonUrl}
+                                    onChange={(value) =>
+                                        handleImageData(
+                                            'buttonUrl',
+                                            value,
+                                            each.id,
+                                            images,
+                                            setAttributes
+                                        )
+                                    }
+                                />
+
+                                {each.buttonUrl && each.buttonUrl.length > 0 && !each.isValidUrl && (
+                                    <span className="error">{__("URL is not valid", "essential-blocks")}</span>
+                                )}
+
+                                <ToggleControl
+                                    label={__("Open in New Tab", "essential-blocks")}
+                                    checked={each.openNewTab}
+                                    onChange={() =>
+                                        handleImageData(
+                                            'openNewTab',
+                                            !each.openNewTab,
+                                            each.id,
+                                            images,
+                                            setAttributes
+                                        )
+                                    }
+                                />
+
+                                <ToggleControl
+                                    label={__("Add Second Button", "essential-blocks")}
+                                    checked={each.showSecondButton}
+                                    onChange={(value) =>
+                                        handleImageData(
+                                            'showSecondButton',
+                                            value,
+                                            each.id,
+                                            images,
+                                            setAttributes
+                                        )
+                                    }
+                                />
+
+                                {each.showSecondButton && (
+                                    <>
+                                        <TextControl
+                                            label={__("Second Button Text", "essential-blocks")}
+                                            value={each.secondButtonText}
+                                            onChange={(value) =>
+                                                handleImageData(
+                                                    'secondButtonText',
+                                                    value,
+                                                    each.id,
+                                                    images,
+                                                    setAttributes
+                                                )
+                                            }
+                                        />
+
+                                        {!isValidHtml(each.secondButtonText) && (
+                                            <PanelRow className="eb-instruction-row">
+                                                <div className="eb-instruction">
+                                                    <strong>Note:</strong> Invalid HTML Tag.
+                                                </div>
+                                            </PanelRow>
+                                        )}
+
+                                        <TextControl
+                                            label={__("Second Button URL", "essential-blocks")}
+                                            value={each.secondButtonUrl}
+                                            onChange={(value) =>
+                                                handleImageData(
+                                                    'secondButtonUrl',
+                                                    value,
+                                                    each.id,
+                                                    images,
+                                                    setAttributes
+                                                )
+                                            }
+                                        />
+
+                                        {each.secondButtonUrl && each.secondButtonUrl.length > 0 && !each.isValidUrl && (
+                                            <span className="error">{__("URL is not valid", "essential-blocks")}</span>
+                                        )}
+
+                                        <ToggleControl
+                                            label={__("Open in New Tab", "essential-blocks")}
+                                            checked={each.secondButtonOpenNewTab}
+                                            onChange={() =>
+                                                handleImageData(
+                                                    'secondButtonOpenNewTab',
+                                                    !each.secondButtonOpenNewTab,
+                                                    each.id,
+                                                    images,
+                                                    setAttributes
+                                                )
+                                            }
+                                        />
+
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
+
+                {sliderType === "image" && (
+                    <>
+                        <TextControl
+                            label={__("URL", "essential-blocks")}
+                            value={each.buttonUrl}
+                            onChange={(value) =>
+                                handleImageData(
+                                    'buttonUrl',
+                                    value,
+                                    each.id,
+                                    images,
+                                    setAttributes
+                                )
+                            }
+                        />
+
+                        {each.buttonUrl && each.buttonUrl.length > 0 && !each.isValidUrl && (
+                            <span className="error">{__("URL is not valid", "essential-blocks")}</span>
+                        )}
+
+                        <ToggleControl
+                            label={__("Open in New Tab", "essential-blocks")}
+                            checked={each.openNewTab}
+                            onChange={() =>
+                                handleImageData(
+                                    'openNewTab',
+                                    !each.openNewTab,
+                                    each.id,
+                                    images,
+                                    setAttributes
+                                )
+                            }
+                        />
+                    </>
+                )}
+            </div>
+        ))
+    };
 
     return (
         <>
@@ -325,7 +616,7 @@ function Inspector(props) {
 
                     </InspectorPanel.PanelBody>
 
-                    <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")} initialOpen={false}>
+                    <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")} initialOpen={true}>
                         {sliderType === "content" && (
                             <>
                                 <SelectControl
@@ -363,254 +654,20 @@ function Inspector(props) {
                                 <Divider />
                             </>
                         )}
-                        {images.map((item, index) => {
-                            return (
-                                <InspectorPanel.PanelBody
-                                    title={
-                                        item.title && item.title.length > 0
-                                            ? stripHtmlTags(item.title)
-                                            : "Slider " + (index + 1)
-                                    }
-                                    initialOpen={false}
-                                    onToggle={() =>
-                                        setAttributes({
-                                            initialSlide: index,
-                                        })
-                                    }
-                                    className="eb-slider-item-single-panel"
-                                    key={index}
-                                >
-                                    {sliderType === "content" && (
-                                        <>
-                                            <TextControl
-                                                label={__("Title Text", "essential-blocks")}
-                                                value={item.title}
-                                                type="text"
-                                                onChange={(text) =>
-                                                    handleTitle(text, index, images, setAttributes)
-                                                }
-                                            />
-                                            {!isValidHtml(item.title) && (
-                                                <PanelRow className="eb-instruction-row">
-                                                    <div className="eb-instruction">
-                                                        <strong>Note:</strong> Invalid HTML Tag.
-                                                    </div>
-                                                </PanelRow>
-                                            )}
-                                            <TextareaControl
-                                                label={__("Subtitle", "essential-blocks")}
-                                                value={item.subtitle}
-                                                onChange={(text) =>
-                                                    handleSubtitle(text, index, images, setAttributes)
-                                                }
-                                            />
-                                            {!isValidHtml(item.subtitle) && (
-                                                <PanelRow className="eb-instruction-row">
-                                                    <div className="eb-instruction">
-                                                        <strong>Note:</strong> Invalid HTML Tag.
-                                                    </div>
-                                                </PanelRow>
-                                            )}
-                                            <ToggleControl
-                                                label={__("Show Button", "essential-blocks")}
-                                                checked={item.showButton}
-                                                onChange={() =>
-                                                    handleShowButton(
-                                                        !item.showButton,
-                                                        index,
-                                                        images,
-                                                        setAttributes
-                                                    )
-                                                }
-                                            />
-                                            {item.showButton && (
-                                                <>
-                                                    <TextControl
-                                                        label={__("Button Text", "essential-blocks")}
-                                                        value={item.buttonText}
-                                                        onChange={(text) =>
-                                                            handleButtonText(
-                                                                text,
-                                                                index,
-                                                                images,
-                                                                setAttributes
-                                                            )
-                                                        }
-                                                    />
-                                                    {!isValidHtml(item.buttonText) && (
-                                                        <PanelRow className="eb-instruction-row">
-                                                            <div className="eb-instruction">
-                                                                <strong>Note:</strong> Invalid HTML Tag.
-                                                            </div>
-                                                        </PanelRow>
-                                                    )}
-                                                    <TextControl
-                                                        label={__("Button URL", "essential-blocks")}
-                                                        value={item.buttonUrl}
-                                                        onChange={(text) =>
-                                                            handleButtonURL(
-                                                                text,
-                                                                index,
-                                                                images,
-                                                                setAttributes
-                                                            )
-                                                        }
-                                                    />
-                                                    {item.buttonUrl &&
-                                                        item.buttonUrl.length > 0 &&
-                                                        !item.isValidUrl && (
-                                                            <span className="error">
-                                                                URL is not valid
-                                                            </span>
-                                                        )}
-                                                    <ToggleControl
-                                                        label={__(
-                                                            "Open in New Tab",
-                                                            "essential-blocks"
-                                                        )}
-                                                        checked={item.openNewTab}
-                                                        onChange={() =>
-                                                            handleOpenNewTab(
-                                                                !item.openNewTab,
-                                                                index,
-                                                                images,
-                                                                setAttributes
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <ToggleControl
-                                                        label={__(
-                                                            "Add Second Button",
-                                                            "essential-blocks"
-                                                        )}
-                                                        checked={
-                                                            item.showSecondButton
-                                                        }
-                                                        onChange={() =>
-                                                            handleShowSecondButton(
-                                                                !item.showSecondButton,
-                                                                index,
-                                                                images,
-                                                                setAttributes
-                                                            )
-                                                        }
-                                                    />
-
-                                                    {item.showSecondButton && (
-                                                        <>
-                                                            <TextControl
-                                                                label={__(
-                                                                    "Second Button Text",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                value={
-                                                                    item.secondButtonText
-                                                                }
-                                                                onChange={(
-                                                                    text
-                                                                ) =>
-                                                                    handleSecondButtonText(
-                                                                        text,
-                                                                        index,
-                                                                        images,
-                                                                        setAttributes
-                                                                    )
-                                                                }
-                                                            />
-                                                            {!isValidHtml(item.secondButtonText) && (
-                                                                <PanelRow className="eb-instruction-row">
-                                                                    <div className="eb-instruction">
-                                                                        <strong>Note:</strong> Invalid HTML Tag.
-                                                                    </div>
-                                                                </PanelRow>
-                                                            )}
-                                                            <TextControl
-                                                                label={__(
-                                                                    "Second Button URL",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                value={
-                                                                    item.secondButtonUrl
-                                                                }
-                                                                onChange={(
-                                                                    text
-                                                                ) =>
-                                                                    handleSecondButtonURL(
-                                                                        text,
-                                                                        index,
-                                                                        images,
-                                                                        setAttributes
-                                                                    )
-                                                                }
-                                                            />
-                                                            {item.secondButtonUrl &&
-                                                                item
-                                                                    .secondButtonUrl
-                                                                    .length >
-                                                                0 &&
-                                                                !item.isValidUrl && (
-                                                                    <span className="error">
-                                                                        URL
-                                                                        is
-                                                                        not
-                                                                        valid
-                                                                    </span>
-                                                                )}
-                                                            <ToggleControl
-                                                                label={__(
-                                                                    "Open in New Tab",
-                                                                    "essential-blocks"
-                                                                )}
-                                                                checked={
-                                                                    item.secondButtonOpenNewTab
-                                                                }
-                                                                onChange={() =>
-                                                                    handleSecondButtonOpenNewTab(
-                                                                        !item.secondButtonOpenNewTab,
-                                                                        index,
-                                                                        images,
-                                                                        setAttributes
-                                                                    )
-                                                                }
-                                                            />
-                                                        </>
-                                                    )}
-                                                </>
-                                            )}
-                                        </>
-                                    )}
-                                    {sliderType === "image" && (
-                                        <>
-                                            <TextControl
-                                                label={__("URL", "essential-blocks")}
-                                                value={item.buttonUrl}
-                                                onChange={(text) =>
-                                                    handleButtonURL(text, index, images, setAttributes)
-                                                }
-                                            />
-                                            {item.buttonUrl &&
-                                                item.buttonUrl.length > 0 &&
-                                                !item.isValidUrl && (
-                                                    <span className="error">URL is not valid</span>
-                                                )}
-                                            <ToggleControl
-                                                label={__("Open in New Tab", "essential-blocks")}
-                                                checked={item.openNewTab}
-                                                onChange={() =>
-                                                    handleOpenNewTab(
-                                                        !item.openNewTab,
-                                                        index,
-                                                        images,
-                                                        setAttributes
-                                                    )
-                                                }
-                                            />
-                                        </>
-                                    )}
-                                </InspectorPanel.PanelBody>
-                            );
-                        })}
+                        <SortControl
+                            items={attributes.images}
+                            onSortEnd={(newImages) => setAttributes({ images: newImages })}
+                            onDeleteItem={(index) => {
+                                setAttributes({
+                                    images: images.filter((_, i) => i !== index),
+                                });
+                            }}
+                            hasSettings={true}
+                            settingsComponents={getSliderItemsComponents()}
+                            labelKey={'title'}
+                            preserveLabels={true}
+                            hasAddButton={false}
+                        />
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>

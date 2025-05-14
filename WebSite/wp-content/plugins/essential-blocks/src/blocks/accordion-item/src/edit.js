@@ -14,6 +14,7 @@ import {
     BlockProps,
     withBlockContext,
 } from "@essential-blocks/controls";
+import { select, dispatch } from "@wordpress/data";
 
 const Edit = (props) => {
     const { attributes, setAttributes, context } = props;
@@ -39,10 +40,25 @@ const Edit = (props) => {
 
     const accordionTitle = useRef(null);
 
+    const { selectBlock } = dispatch("core/block-editor");
+    // Get all blocks
+    const blocks = select('core/block-editor').getBlocks();
+
     const handleSlidingOfAccordion = () => {
+        // Find the block with matching blockId
+        const parentBlock = blocks.find(block => block.attributes.blockId === parentBlockId);
+
         let title = accordionTitle.current.querySelector(".eb-accordion-title");
-        if( title ) {
+        let prefixText = accordionTitle.current.querySelector(".eb-accordion-title-prefix-text");
+        let suffixText = accordionTitle.current.querySelector(".eb-accordion-title-suffix-text");
+        if (title) {
             title.setAttribute("contenteditable", false)
+        }
+        if (prefixText) {
+            prefixText.setAttribute("contenteditable", false);
+        }
+        if (suffixText) {
+            suffixText.setAttribute("contenteditable", false);
         }
         let contentWrapper = accordionTitle.current.nextElementSibling;
         let tabIcon = accordionTitle.current.getAttribute("data-tab-icon");
@@ -51,8 +67,8 @@ const Edit = (props) => {
         let iconWrapper = accordionTitle.current.children[0].children[0];
         let accordionItem = accordionTitle.current.closest(".eb-accordion-wrapper");
         let allAccordionItems = accordionTitle.current
-                .closest(".eb-accordion-inner")
-                .querySelectorAll(".eb-accordion-wrapper");
+            .closest(".eb-accordion-inner")
+            .querySelectorAll(".eb-accordion-wrapper");
         accordionItem.classList.toggle("eb-accordion-hidden");
 
         if (accordionType === "horizontal") {
@@ -61,11 +77,11 @@ const Edit = (props) => {
             });
             accordionItem.classList.toggle("editor-expanded");
         }
-        
+
         if (contentWrapper.style.display === "block") {
             contentWrapper.style.display = "none";
             contentWrapper.style.opacity = "0";
-            if (iconWrapper.tagName === "I" ||  iconWrapper.tagName === "SPAN") {
+            if (iconWrapper.tagName === "I" || iconWrapper.tagName === "SPAN") {
                 iconWrapper.removeAttribute("class");
                 tabIcon = getIconClass(tabIcon).split(" ");
                 for (let i = 0; i < tabIcon.length; i++) {
@@ -76,7 +92,7 @@ const Edit = (props) => {
         } else {
             contentWrapper.style.display = "block";
             contentWrapper.style.opacity = "1";
-            if (iconWrapper.tagName === "I" ||  iconWrapper.tagName === "SPAN") {
+            if (iconWrapper.tagName === "I" || iconWrapper.tagName === "SPAN") {
                 iconWrapper.removeAttribute("class");
                 expandedIcon = getIconClass(expandedIcon).split(" ");
                 for (let i = 0; i < expandedIcon.length; i++) {
@@ -84,6 +100,20 @@ const Edit = (props) => {
                 }
                 iconWrapper.classList.add("eb-accordion-icon");
             }
+        }
+
+        if (parentBlock) {
+            // Set the active accordion index in the parent block
+            dispatch('essential-blocks').setBlockData(parentBlockId, {
+                tabName: 'general',
+                panelName: "general-individual accordion item",
+            });
+
+            dispatch('core/block-editor').updateBlockAttributes(parentBlock.clientId, {
+                activeAccordionIndex: itemId
+            });
+
+            selectBlock(parentBlock.clientId);
         }
     };
 

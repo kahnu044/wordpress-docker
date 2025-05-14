@@ -222,3 +222,29 @@ export const handleSecondButtonOpenNewTab = (
 
     setAttributes({ images: updatedImageArray });
 };
+
+
+export const handleImageData = (key, value, id, images, setAttributes) => {
+    let updatedImageArray = images.map((item) => {
+        if (item.id == id) {
+            return { ...item, [key]: value };
+        }
+        return item;
+    });
+
+    setAttributes({ images: updatedImageArray });
+};
+
+
+export const handleImage = (value, position, images, setAttributes) => {
+    const newImage = { ...images[position] };
+    const newImages = [...images];
+    newImages[position] = newImage;
+
+    newImages[position].id = value.id;
+    newImages[position].url = value.url;
+    newImages[position].alt = value.alt;
+    newImages[position].caption = value.caption;
+
+    setAttributes({ images: newImages });
+};

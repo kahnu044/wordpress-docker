@@ -27,8 +27,8 @@ export const getValidationRules = (obj) => {
     }
 
     //Remove recaptcha field
-    if (result['g-recaptcha-response']) {
-        delete result['g-recaptcha-response']
+    if (result["g-recaptcha-response"]) {
+        delete result["g-recaptcha-response"];
     }
 
     return result;
@@ -46,14 +46,19 @@ export const getFormFields = (obj) => {
         result[obj.attributes.fieldName] = {
             type: getType(obj.name), //type of the filed
             label: obj?.attributes?.labelText || obj?.attributes?.fieldName, //label of the field
-            ...(obj?.attributes?.options && { options: obj.attributes.options }) //label of the field
+            ...(obj?.attributes?.options && {
+                options: obj.attributes.options,
+            }), //label of the field
         };
     }
 
     if (obj?.innerBlocks && obj?.innerBlocks.length > 0) {
         for (const innerBlock of obj.innerBlocks) {
             const innerBlockRules = getFormFields(innerBlock);
-            if (typeof innerBlockRules === "object" && Object.keys(innerBlockRules).length > 0) {
+            if (
+                typeof innerBlockRules === "object" &&
+                Object.keys(innerBlockRules).length > 0
+            ) {
                 result = {
                     ...result,
                     ...innerBlockRules,
@@ -63,8 +68,8 @@ export const getFormFields = (obj) => {
     }
 
     //Remove recaptcha field
-    if (result['g-recaptcha-response']) {
-        delete result['g-recaptcha-response']
+    if (result["g-recaptcha-response"]) {
+        delete result["g-recaptcha-response"];
     }
 
     return result;
@@ -72,38 +77,45 @@ export const getFormFields = (obj) => {
 
 const getType = (blockName) => {
     switch (blockName) {
-        case 'essential-blocks/form-text-field':
-            return 'text'
+        case "essential-blocks/form-text-field":
+            return "text";
             break;
-        case 'essential-blocks/form-textarea-field':
-            return 'textarea'
+        case "essential-blocks/form-textarea-field":
+            return "textarea";
             break;
-        case 'essential-blocks/form-email-field':
-            return 'email'
+        case "essential-blocks/form-email-field":
+            return "email";
             break;
-        case 'essential-blocks/form-number-field':
-            return 'number'
+        case "essential-blocks/form-number-field":
+            return "number";
             break;
-        case 'essential-blocks/form-select-field':
-            return 'select'
+        case "essential-blocks/form-select-field":
+            return "select";
             break;
-        case 'essential-blocks/form-checkbox-field':
-            return 'checkbox'
+        case "essential-blocks/form-checkbox-field":
+            return "checkbox";
             break;
-        case 'essential-blocks/form-radio-field':
-            return 'radio'
+        case "essential-blocks/form-radio-field":
+            return "radio";
             break;
-        case 'essential-blocks/pro-form-datetime-picker':
-            return 'datetime'
+        case "essential-blocks/pro-form-datetime-picker":
+            return "datetime";
             break;
-        case 'essential-blocks/pro-form-recaptcha':
-            return 'recaptcha'
+        case "essential-blocks/pro-form-recaptcha":
+            return "recaptcha";
             break;
         default:
-            return 'input'
+            return "input";
     }
-}
+};
 
+export const emailFields = (formFields, fieldType) =>
+    Object.entries(formFields)
+        .filter(([key, value]) => value.type === fieldType)
+        .map(([key, value]) => ({
+            label: value.label,
+            value: key,
+        }));
 
 export const contactForm1 = {
     formStyle: "form-style-classic",
@@ -190,7 +202,6 @@ export const contactForm1 = {
 
     wrprBgbackgroundColor: "#FFFFFF",
     wrprBgbackgroundType: "classic",
-
 };
 
 export const contactForm2 = {
