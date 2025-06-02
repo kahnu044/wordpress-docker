@@ -6,25 +6,40 @@ use ScssPhp\ScssPhp\Compiler;
 
 class Wp_Scss {
 
+  /** @var string - path to source directory for scss files */
+  private $scss_dir;
+
+  /** @var string - path to output directory for css files */
+  private $css_dir;
+
+  /** @var string - path to cache directory for css files */
+  private $cache;
+
+  /** @var array - catches errors from compile */
+  private $compile_errors;
+
+  /** @var object - instantiate the compiling object. */
+  private $scssc;
+
+  /** @var string - type of sourcemaps to generate */
+  private $sourcemaps;
+  
   /**
    * Set values for Wp_Scss::properties
    *
    * @param string scss_dir - path to source directory for scss files
    * @param string css_dir - path to output directory for css files
+   * @param string cache_dir - path to cache directory for css files
    * @param string compile_method - type of compile (compressed or expanded)
-   *
-   * @var object scssc - instantiate the compiling object.
-   *
-   * @var array compile_errors - catches errors from compile
+   * @param string sourcemaps - type of sourcemaps to generate
    */
-  public function __construct ($scss_dir, $css_dir, $compile_method, $sourcemaps) {
+  public function __construct ($scss_dir, $css_dir, $cache_dir, $compile_method, $sourcemaps) {
 
     $this->scss_dir         = $scss_dir;
     $this->css_dir          = $css_dir;
+    $this->cache            = $cache_dir;
     $this->compile_errors   = array();
     $this->scssc            = new Compiler();
-
-    $this->cache = WPSCSS_PLUGIN_DIR . '/cache/';
 
     $this->scssc->setOutputStyle( $compile_method );
     $this->scssc->setImportPaths( $this->scss_dir );
@@ -102,10 +117,10 @@ class Wp_Scss {
 
     if (count($this->compile_errors) < 1) {
       if  ( is_writable($this->css_dir) ) {
-        foreach (new DirectoryIterator($this->cache) as $this->cache_file) {
-          if ( pathinfo($this->cache_file->getFilename(), PATHINFO_EXTENSION) == 'css') {
-            file_put_contents($this->css_dir . $this->cache_file, file_get_contents($this->cache . $this->cache_file));
-            unlink($this->cache . $this->cache_file->getFilename()); // Delete file on successful write
+        foreach (new DirectoryIterator($this->cache) as $cache_file) {
+          if (pathinfo($cache_file->getFilename(), PATHINFO_EXTENSION) == 'css') {
+            file_put_contents($this->css_dir . $cache_file, file_get_contents($this->cache . $cache_file));
+            unlink($this->cache . $cache_file->getFilename()); // Delete file on successful write
           }
         }
       } else {
