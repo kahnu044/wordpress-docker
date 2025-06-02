@@ -22,7 +22,8 @@ import {
     DynamicInputValueHandler,
     EBDisplayIcon,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    sanitizeIconValue,
 } from "@essential-blocks/controls";
 import { parseTocSlug } from "./helper";
 import Inspector from "./inspector";
@@ -207,7 +208,7 @@ const Edit = (props) => {
         }
 
         const goTop = document.createElement("span");
-        goTop.innerHTML = renderToString(<EBDisplayIcon icon={scrollToTopIcon} />);
+        goTop.innerHTML = renderToString(<EBDisplayIcon icon={sanitizeIconValue(scrollToTopIcon)} />);
 
         goTop.setAttribute("class", "eb-toc-go-top ");
         goTop.style.right = "300px";

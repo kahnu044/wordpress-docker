@@ -28,14 +28,15 @@ import {
     handleSubtitle,
     handleButtonText,
     handleSecondButtonText,
-    sanitizeHtml
+    sanitizeHtml,
 } from "./helpers";
 
 import {
     EBDisplayIcon,
     sanitizeURL,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    sanitizeIconValue
 } from "@essential-blocks/controls";
 /**
  * External dependencies
@@ -129,7 +130,7 @@ const Edit = (props) => {
                 style={{ ...style, display: "block" }}
                 onClick={onClick}
             >
-                <EBDisplayIcon icon={arrowNextIcon} />
+                <EBDisplayIcon icon={sanitizeIconValue(arrowNextIcon)} />
             </div>
         );
     }
@@ -142,7 +143,7 @@ const Edit = (props) => {
                 style={{ ...style, display: "block" }}
                 onClick={onClick}
             >
-                <EBDisplayIcon icon={arrowPrevIcon} />
+                <EBDisplayIcon icon={sanitizeIconValue(arrowPrevIcon)} />
             </div>
         );
     }

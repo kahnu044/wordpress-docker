@@ -2,7 +2,7 @@ import { useEffect, useState } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
 import Switch from "rc-switch";
 import "../scss/switch.css";
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 
 import { EditIcon } from "../icons/icon-edit";
 import EBLoader from "./Loader";
@@ -121,7 +121,23 @@ export default function TabOptions() {
             ),
             doc: "https://essential-blocks.com/docs/quick-action-toolbar/",
             default: true,
-        }
+        },
+    });
+
+    const settings = applyFilters("eb_admin_option_settings", {
+        unfilteredFile: {
+            logo: `${EssentialBlocksLocalize.image_url}/admin/unfiltered-file-icon.svg`,
+            title: __("Unfiltered File Uploads", "essential-blocks"),
+            description: sprintf(
+                __(
+                    "%s Uploading unfiltered files (SVG & JSON) can pose security risks. Essential Blocks will attempt to sanitize these files to remove potentially harmful code. Enable this option only if you understand the associated risks.",
+                    "essential-blocks",
+                ),
+                "<strong>Note:</strong>",
+            ),
+            doc: "https://essential-blocks.com/docs/unfiltered-file-uploads-in-wordpress/",
+            default: false,
+        },
     });
 
     /**
@@ -352,7 +368,12 @@ export default function TabOptions() {
                                             <a
                                                 target="_blank"
                                                 className="element__icon"
-                                                onClick={() => handleEditBtnClick(item, extensions)}
+                                                onClick={() =>
+                                                    handleEditBtnClick(
+                                                        item,
+                                                        extensions,
+                                                    )
+                                                }
                                             >
                                                 <EditIcon></EditIcon>
 
@@ -397,6 +418,73 @@ export default function TabOptions() {
                                     <a
                                         target="_blank"
                                         href={extensions[item].doc}
+                                        className="eb-admin-block__link"
+                                    >
+                                        {__(
+                                            "Documentation",
+                                            "essential-blocks",
+                                        )}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <h2 className="eb-admin-block-title">
+                    {__("Settings", "essential-blocks")}
+                </h2>
+                <div className="eb-admin-grid">
+                    {Object.keys(settings).map((item, index) => (
+                        <div className="eb-col-4" key={index}>
+                            <div className="eb-admin-block eb-option-block">
+                                <div className="option-block-header">
+                                    <img
+                                        src={settings[item].logo}
+                                        className="block-icon"
+                                    />
+                                    <div className="block-content">
+                                        <label className="eb-admin-checkbox-label">
+                                            <Switch
+                                                checked={
+                                                    !settingsData[item]
+                                                        ? settings[item]
+                                                            ?.default
+                                                        : settingsData[item] ===
+                                                            "false"
+                                                            ? false
+                                                            : true
+                                                }
+                                                onChange={(checked) =>
+                                                    handleOptimizationSwitch(
+                                                        item,
+                                                        checked,
+                                                    )
+                                                }
+                                                defaultChecked={true}
+                                                disabled={false}
+                                                checkedChildren="ON"
+                                                unCheckedChildren="OFF"
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <h4 className="eb-admin-block__title">
+                                    {settings[item].title}
+                                </h4>
+                                <p
+                                    dangerouslySetInnerHTML={{
+                                        __html: settings[item].description
+                                    }}
+                                    className="eb-admin-block__text mp0"
+                                />
+                                {settings[item]?.doc && (
+                                    <a
+                                        target="_blank"
+                                        href={settings[item].doc}
                                         className="eb-admin-block__link"
                                     >
                                         {__(

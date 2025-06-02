@@ -1,28 +1,30 @@
 import { createRoot, createRef } from "@wordpress/element";
-import domReady from '@wordpress/dom-ready';
+import domReady from "@wordpress/dom-ready";
+const { sanitizeIconValue} = window.eb_frontend;
 /**
  * External dependencies
  */
-
 import Slider from "react-slick";
 
 domReady(function () {
     //Execute after DOM loads.
-    const wrappers = document.getElementsByClassName('eb-slider-wrapper');
+    const wrappers = document.getElementsByClassName("eb-slider-wrapper");
 
     for (let wrapper of wrappers) {
         let version = wrapper.getAttribute("data-version");
 
-        if (version == null || version === 'v1') {
+        if (version == null || version === "v1") {
             let settings = JSON.parse(wrapper.getAttribute("data-settings"));
             let images = JSON.parse(wrapper.getAttribute("data-images"));
-            let sliderContentType = wrapper.getAttribute("data-sliderContentType");
+            let sliderContentType = wrapper.getAttribute(
+                "data-sliderContentType",
+            );
             let sliderType = wrapper.getAttribute("data-sliderType");
             let textAlign = wrapper.getAttribute("data-textAlign");
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
-            let TitleTag = wrapper.getAttribute("data-titleTag") || 'h2';
-            let ContentTag = wrapper.getAttribute("data-contentTag") || 'p';
+            let TitleTag = wrapper.getAttribute("data-titleTag") || "h2";
+            let ContentTag = wrapper.getAttribute("data-contentTag") || "p";
 
             const slider = createRef();
 
@@ -34,10 +36,13 @@ domReady(function () {
                         style={{ ...style, display: "block" }}
                         onClick={onClick}
                     >
-                        <i aria-hidden="true" className={arrowNextIcon}></i>
+                        <i
+                            aria-hidden="true"
+                            className={sanitizeIconValue(arrowNextIcon)}
+                        ></i>
                     </div>
                 );
-            }
+            };
 
             const SamplePrevArrow = (props) => {
                 const { className, style, onClick, arrowPrevIcon } = props;
@@ -47,15 +52,25 @@ domReady(function () {
                         style={{ ...style, display: "block" }}
                         onClick={onClick}
                     >
-                        <i aria-hidden="true" className={arrowPrevIcon}></i>
+                        <i
+                            aria-hidden="true"
+                            className={sanitizeIconValue(arrowPrevIcon)}
+                        ></i>
                     </div>
                 );
-            }
+            };
 
-            settings.nextArrow = <SampleNextArrow arrowNextIcon={arrowNextIcon} />;
-            settings.prevArrow = <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />;
+            settings.nextArrow = (
+                <SampleNextArrow arrowNextIcon={arrowNextIcon} />
+            );
+            settings.prevArrow = (
+                <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />
+            );
 
-            const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
+            const sliderTypeClass =
+                sliderType === "content"
+                    ? "eb-slider-type-content"
+                    : "eb-slider-type-image";
 
             const SliderComponent = () => (
                 <Slider
@@ -72,7 +87,8 @@ domReady(function () {
                                     <>
                                         <a
                                             href={
-                                                image.buttonUrl && image.isValidUrl
+                                                image.buttonUrl &&
+                                                image.isValidUrl
                                                     ? image.buttonUrl
                                                     : "#"
                                             }
@@ -101,7 +117,9 @@ domReady(function () {
                                     <img
                                         className="eb-slider-image"
                                         src={image.url}
-                                        alt={image.alt ? image.alt : image.title}
+                                        alt={
+                                            image.alt ? image.alt : image.title
+                                        }
                                     />
                                 )}
                             {sliderType === "content" && (
@@ -109,22 +127,24 @@ domReady(function () {
                                     <img
                                         className="eb-slider-image"
                                         src={image.url}
-                                        alt={image.alt ? image.alt : image.title}
+                                        alt={
+                                            image.alt ? image.alt : image.title
+                                        }
                                     />
                                     <div
                                         className={`eb-slider-content align-${textAlign}`}
                                     >
-                                        {image.title && image.title.length > 0 && (
-                                            <>
-                                                <TitleTag
-                                                    className="eb-slider-title"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: image.title,
-                                                    }}
-                                                ></TitleTag>
-                                            </>
-
-                                        )}
+                                        {image.title &&
+                                            image.title.length > 0 && (
+                                                <>
+                                                    <TitleTag
+                                                        className="eb-slider-title"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: image.title,
+                                                        }}
+                                                    ></TitleTag>
+                                                </>
+                                            )}
                                         {image.subtitle &&
                                             image.subtitle.length > 0 && (
                                                 <ContentTag
@@ -141,7 +161,7 @@ domReady(function () {
                                                     <a
                                                         href={
                                                             image.buttonUrl &&
-                                                                image.isValidUrl
+                                                            image.isValidUrl
                                                                 ? image.buttonUrl
                                                                 : "#"
                                                         }
@@ -153,8 +173,7 @@ domReady(function () {
                                                         }
                                                         rel="noopener"
                                                         dangerouslySetInnerHTML={{
-                                                            __html:
-                                                                image.buttonText,
+                                                            __html: image.buttonText,
                                                         }}
                                                     ></a>
                                                 )}
@@ -162,11 +181,11 @@ domReady(function () {
                                             {image.showSecondButton &&
                                                 image.secondButtonText &&
                                                 image.secondButtonText.length >
-                                                0 && (
+                                                    0 && (
                                                     <a
                                                         href={
                                                             image.secondButtonUrl &&
-                                                                image.isValidUrl
+                                                            image.isValidUrl
                                                                 ? image.secondButtonUrl
                                                                 : "#"
                                                         }
@@ -178,8 +197,7 @@ domReady(function () {
                                                         }
                                                         rel="noopener"
                                                         dangerouslySetInnerHTML={{
-                                                            __html:
-                                                                image.secondButtonText,
+                                                            __html: image.secondButtonText,
                                                         }}
                                                     ></a>
                                                 )}
@@ -192,38 +210,44 @@ domReady(function () {
                 </Slider>
             );
 
-            const rootElement = document.getElementsByClassName('eb-slider-wrapper')[0];
+            const rootElement =
+                document.getElementsByClassName("eb-slider-wrapper")[0];
             if (rootElement) {
                 const root = createRoot(rootElement);
                 root.render(<SliderComponent />);
             }
         }
 
-        if (version === 'v2') {
-            let blockId = wrapper.getAttribute("data-blockid").replaceAll("-", "_");
+        if (version === "v2") {
+            let blockId = wrapper
+                .getAttribute("data-blockid")
+                .replaceAll("-", "_");
             let settings = window[`${blockId}`];
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
             let showLightbox = wrapper.getAttribute("data-lightbox");
 
-            settings.prevArrow = `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`;
-            settings.nextArrow = `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`;
+            settings.prevArrow = `<div class="slick-prev"><i aria-hidden="true" class="${sanitizeIconValue(
+                arrowPrevIcon,
+            )}"></i></div>`;
+            settings.nextArrow = `<div class="slick-next"><i aria-hidden="true" class="${sanitizeIconValue(
+                arrowNextIcon,
+            )}"></i></div>`;
 
-            let slickType = wrapper.querySelector('.eb-slider-init');
-
+            let slickType = wrapper.querySelector(".eb-slider-init");
 
             jQuery(slickType).slick(settings);
 
-            if (showLightbox == 'true') {
+            if (showLightbox == "true") {
                 jQuery(slickType).slickLightbox({
-                    src: 'data-src',
-                    itemSelector: '.eb-slider-item',
+                    src: "data-src",
+                    itemSelector: ".eb-slider-item",
                     navigateByKeyboard: true,
                     imageMaxHeight: 0.7,
                 });
             }
         }
-        if (version === 'v3' || version === 'v4') {
+        if (version === "v3" || version === "v4") {
             let settingsData = atob(wrapper.getAttribute("data-settings"));
             let settings = JSON.parse(settingsData);
 
@@ -234,7 +258,7 @@ domReady(function () {
             let infinite = settings.infinite;
             let pauseOnHover = settings.pauseOnHover;
             let slideToShowRange = settings.slidesToShow;
-            let responsive = settings.responsive
+            let responsive = settings.responsive;
             let autoplaySpeed = settings.autoplaySpeed;
             let speed = settings.speed;
             let vertical = settings.vertical;
@@ -245,14 +269,14 @@ domReady(function () {
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
             let showLightbox = wrapper.getAttribute("data-lightbox");
 
-            let slickType = wrapper.querySelector('.eb-slider-init');
+            let slickType = wrapper.querySelector(".eb-slider-init");
 
             const isRTL = document.documentElement.dir === "rtl";
 
             const $slick = jQuery(slickType);
 
             $slick.slick({
-                lazyLoad: 'progressive',
+                lazyLoad: "progressive",
                 arrows,
                 adaptiveHeight,
                 autoplay,
@@ -265,17 +289,24 @@ domReady(function () {
                 speed,
                 vertical,
                 rtl: isRTL,
-                prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${arrowPrevIcon}"></i></div>`,
-                nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${arrowNextIcon}"></i></div>`,
+                prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${sanitizeIconValue(
+                    arrowPrevIcon,
+                )}"></i></div>`,
+                nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${sanitizeIconValue(
+                    arrowNextIcon,
+                )}"></i></div>`,
                 responsive: [...responsive],
-                cssEase: 'linear'
+                cssEase: "linear",
             });
 
             // ✅ Recalculate layout when image is lazy-loaded
-            $slick.on('lazyLoaded', function (event, slick, image, imageSource) {
-                slick.$slider.slick('setPosition');
-                // console.log('lazyLoaded');
-            });
+            $slick.on(
+                "lazyLoaded",
+                function (event, slick, image, imageSource) {
+                    slick.$slider.slick("setPosition");
+                    // console.log('lazyLoaded');
+                },
+            );
 
             // $slick.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
             //     console.log('beforeChange');
@@ -283,16 +314,14 @@ domReady(function () {
             //     slick.$slider.slick('setPosition');
             // });
 
-            if (showLightbox == 'true') {
+            if (showLightbox == "true") {
                 $slick.slickLightbox({
-                    src: 'data-src',
-                    itemSelector: '.eb-slider-item',
+                    src: "data-src",
+                    itemSelector: ".eb-slider-item",
                     navigateByKeyboard: true,
                     imageMaxHeight: 0.7,
                 });
             }
-
-
         }
     }
 });

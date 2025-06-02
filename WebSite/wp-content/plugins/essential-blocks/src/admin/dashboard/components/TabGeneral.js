@@ -277,69 +277,33 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.4.0", "essential-blocks")}
+                                    {__("Version: 5.4.2", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("08/05/2025", "essential-blocks")}
+                                        {__("01/06/2025", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Added: Write with AI feature",
+                                            "Added: Infobox | Link option added for the title",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Added: Form Block | “Reply-To” option in form settings",
+                                            "Fixed: Dual Button | Button gap issue on Preset 4",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Added: Product Image | Controls to enable/disable zoom effect",
+                                            "Improved: Security enhancement",
                                             "essential-blocks"
                                         )}
                                     </li>
                                     <li>
                                         {__(
-                                            "Improved: Global Settings | Custom color opacity option and reset issue",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Slider Block | Sliding items sorting option and image preview added",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Accordion Block | Title edit panel opens on click in editor",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Image Comparison Block | Not working in editor since 5.3.5",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Advanced Video Block | Responsive issue on iPhone",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Slider Block | Slideshow block displays truncated images on initial load",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Few minor bug fixes & improvements",
+                                            "Updated: Minor bug fixes & performance improvements",
                                             "essential-blocks"
                                         )}
                                     </li>

@@ -1,10 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps, RichText, InnerBlocks } from "@wordpress/block-editor";
-import {
-    EBDisplayIcon, BlockProps
-} from "@essential-blocks/controls";
+import { RichText, InnerBlocks } from "@wordpress/block-editor";
+import { EBDisplayIcon, BlockProps } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -28,14 +26,19 @@ const Save = ({ attributes }) => {
         autoExitTime,
         useCookies,
         cookieExpireTime,
-        disablePageScroll
+        disablePageScroll,
+        scrollType,
+        scrollPercentage,
+        scrollElement,
+        scrollDistance,
+        scrollOffset,
     } = attributes;
     const alignmentClass =
         "left" === btnAlignment
             ? " alignment-left"
             : "right" === btnAlignment
-                ? " alignment-right"
-                : " alignment-center";
+            ? " alignment-right"
+            : " alignment-center";
     return (
         <BlockProps.Save attributes={attributes}>
             <div className="eb-parent-wrapper">
@@ -44,7 +47,9 @@ const Save = ({ attributes }) => {
                     className={`eb-popup-container ${blockId}`}
                     data-block-id={blockId}
                     data-popup-type={trigger}
-                    data-popup-delay={"page_load" == trigger ? pageLoadDelay : undefined}
+                    data-popup-delay={
+                        "page_load" == trigger ? pageLoadDelay : undefined
+                    }
                     data-external-identifier={
                         "external" == trigger ? eleIdentifier : undefined
                     }
@@ -56,38 +61,57 @@ const Save = ({ attributes }) => {
                     data-use-cookie={useCookies}
                     data-cookie-expire-time={cookieExpireTime}
                     data-page-scroll={disablePageScroll}
+                    data-scroll-type={scrollType}
+                    data-scroll-percentage={scrollPercentage}
+                    data-scroll-element={scrollElement}
+                    data-scroll-distance={scrollDistance}
+                    data-scroll-offset={scrollOffset}
                 >
                     <div
                         className={`eb-popup-btn-wrapper eb-parent-${blockId} ${classHook}`}
                     >
                         {"btn_click" === trigger && (
                             <>
-                                <div className={`eb-popup-button${alignmentClass}`}>
-                                    <a className="eb-popup-button-anchor" role="button">
+                                <div
+                                    className={`eb-popup-button${alignmentClass}`}
+                                >
+                                    <a
+                                        className="eb-popup-button-anchor"
+                                        role="button"
+                                    >
                                         {"button" === btnType && (
                                             <>
-                                                {btnIcon && "left" === iconPosition && (
-                                                    <>
-                                                        <EBDisplayIcon
-                                                            classNam={`eb-popup-button-icon eb-popup-button-icon-left`}
-                                                            icon={btnIcon}
-                                                        />
-                                                    </>
-                                                )}
-                                                <RichText.Content value={btnText} tagName="p" />
-                                                {btnIcon && "right" === iconPosition && (
-                                                    <>
-                                                        <EBDisplayIcon
-                                                            classNam={`eb-popup-button-icon eb-popup-button-icon-right`}
-                                                            icon={btnIcon}
-                                                        />
-                                                    </>
-                                                )}
+                                                {btnIcon &&
+                                                    "left" === iconPosition && (
+                                                        <>
+                                                            <EBDisplayIcon
+                                                                classNam={`eb-popup-button-icon eb-popup-button-icon-left`}
+                                                                icon={btnIcon}
+                                                            />
+                                                        </>
+                                                    )}
+                                                <RichText.Content
+                                                    value={btnText}
+                                                    tagName="p"
+                                                />
+                                                {btnIcon &&
+                                                    "right" ===
+                                                        iconPosition && (
+                                                        <>
+                                                            <EBDisplayIcon
+                                                                classNam={`eb-popup-button-icon eb-popup-button-icon-right`}
+                                                                icon={btnIcon}
+                                                            />
+                                                        </>
+                                                    )}
                                             </>
                                         )}
                                         {"icon" === btnType && (
                                             <>
-                                                <EBDisplayIcon classNam={`eb-popup-icon`} icon={triggerIcon} />
+                                                <EBDisplayIcon
+                                                    classNam={`eb-popup-icon`}
+                                                    icon={triggerIcon}
+                                                />
                                             </>
                                         )}
                                     </a>
@@ -97,7 +121,9 @@ const Save = ({ attributes }) => {
                     </div>
                     <div className="eb-popup-overlay"></div>
                     <div className="modal-main-wrap">
-                        <div className={`eb-modal-container eb_popup_${position}`}>
+                        <div
+                            className={`eb-modal-container eb_popup_${position}`}
+                        >
                             <div className="eb-popup-content">
                                 {displayCloseIcon && (
                                     <>

@@ -23,6 +23,7 @@ class Server {
 		return array(
 			'product'     => Product::get_instance(),
 			'post-blocks' => PostBlock::get_instance(),
+			'common'      => Common::get_instance(),
 		);
 	}
 }

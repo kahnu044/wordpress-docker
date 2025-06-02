@@ -1,14 +1,14 @@
-=== Essential Blocks – Page Builder Gutenberg Blocks, Patterns & Templates ===
+=== Essential Blocks – AI-Powered Page Builder Gutenberg Blocks, Patterns & Templates ===
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gutenberg Plugin
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 5.4.0
+Stable tag: 5.4.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Gutenberg blocks library to create WordPress sites in the Gutenberg Block Editor – now with Write With AI – plus 60+ essential blocks, patterns, templates for WooCommerce, post grids & more!
+Power up the Gutenberg block editor with AI, 60+ essential blocks, patterns, templates, Woo blocks, post grids, with a robust WordPress block library.
 
 == Description ==
 Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate Gutenberg blocks library for WordPress default editor!
@@ -48,6 +48,12 @@ Keep your website's loading speed fast and secure against heavy scripts and CSS 
 
 ##🖊️ COMPATIBILITY WITH GOOGLE FONTS
 Choose any Google Font you prefer from a collection of 1,000+ font families available using Essential Blocks. Now, you can give your websites a customized look with stunning typography.
+
+##👁️ CONTROL BLOCKS VISIBILITY WITH CONDITIONS, LOGICS (PRO)
+Apply display conditions to the blocks you've selected based on a variety of factors, including date and time, query strings, user roles, and browsers. Easily create visibility restrictions for content using the Gutenberg editor.
+
+##🛡 UNFILTERED MEDIA FILE UPLOADS
+Easily upload SVG and JSON files directly to your WordPress Media Library without hitting file type restrictions. This unlocks advanced customization possibilities, empowering you to seamlessly integrate custom animations, illustrations, and data-driven visuals into your Gutenberg experience.
 
 ##💻 RESPONSIVE ON ALL DEVICES
 Directly from your Gutenberg block editor, you can control each block’s responsiveness individually. With flexible, responsive customization options, make your website user-friendly for all devices.
@@ -245,6 +251,18 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.4.2 - 01/06/2025 =
+- Added: Infobox | Link option added for the title
+- Fixed: Dual Button | Button gap issue on Preset 4
+- Improved: Security enhancement
+- Few minor bug fixes & improvements
+
+= 5.4.1 - 19/05/2025 =
+- Added: SVG image support
+- Added: Popup Block | Open popup on scroll trigger
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
 
 = 5.4.0 - 08/05/2025 =
 - Added: Write with AI feature

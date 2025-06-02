@@ -1,6 +1,6 @@
 import {
     typoPrefix_text,
-    typoPrefix_close
+    typoPrefix_close,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -163,7 +163,26 @@ const attributes = {
         type: "boolean",
         default: true,
     },
-
+    scrollType: {
+        type: "string",
+        default: "percentage",
+    },
+    scrollPercentage: {
+        type: "number",
+        default: 50,
+    },
+    scrollElement: {
+        type: "string",
+        default: "",
+    },
+    scrollDistance: {
+        type: "string",
+        default: "100px",
+    },
+    scrollOffset: {
+        type: "number",
+        default: 0,
+    },
     ...generateResponsiveRangeAttributes(POPUP_HEIGHT),
     ...generateResponsiveRangeAttributes(POPUP_WIDTH, { defaultRange: 650 }),
     ...generateResponsiveRangeAttributes(CLOSE_BTN_LEFT, {

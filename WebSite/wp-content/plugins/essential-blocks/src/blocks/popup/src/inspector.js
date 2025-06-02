@@ -11,6 +11,7 @@ import {
     SelectControl,
     ToggleControl,
     TabPanel,
+    __experimentalUnitControl as UnitControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
@@ -37,7 +38,7 @@ import {
     CONTAINER_PADDING,
     wrapMarginConst,
     wrapPaddingConst,
-    HEIGHT_UNITS
+    HEIGHT_UNITS,
 } from "./constants";
 
 import {
@@ -49,7 +50,7 @@ import {
     BackgroundControl,
     DynamicInputControl,
     EBIconPicker,
-    InspectorPanel
+    InspectorPanel,
 } from "@essential-blocks/controls";
 
 import {
@@ -88,61 +89,62 @@ const Inspector = ({ attributes, setAttributes }) => {
         overlayColor,
         useCookies,
         cookieExpireTime,
-        disablePageScroll
+        disablePageScroll,
+        scrollType,
+        scrollPercentage,
+        scrollDistance,
+        scrollElement,
     } = attributes;
 
     return (
         <>
-            <InspectorPanel advancedControlProps={{
-                marginPrefix: wrapMarginConst,
-                paddingPrefix: wrapPaddingConst,
-                hasBackground: false,
-                hasBorder: false,
-                hasMargin: true
-            }}>
+            <InspectorPanel
+                advancedControlProps={{
+                    marginPrefix: wrapMarginConst,
+                    paddingPrefix: wrapPaddingConst,
+                    hasBackground: false,
+                    hasBorder: false,
+                    hasMargin: true,
+                }}
+            >
                 <InspectorPanel.General>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Settings",
-                            "essential-blocks"
-                        )}
+                        title={__("Settings", "essential-blocks")}
                         initialOpen={true}
                     >
                         <SelectControl
-                            label={__(
-                                "Trigger",
-                                "essential-blocks"
-                            )}
+                            label={__("Trigger", "essential-blocks")}
                             value={trigger}
                             options={[
                                 {
                                     label: __(
                                         "Button Click",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "btn_click",
                                 },
                                 {
-                                    label: __(
-                                        "Page Load",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Page Load", "essential-blocks"),
                                     value: "page_load",
                                 },
                                 {
                                     label: __(
                                         "External Element",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "external",
                                 },
                                 {
                                     label: __(
                                         "Exit Intent",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "exit_intent",
-                                }
+                                },
+                                {
+                                    label: __("Scroll", "essential-blocks"),
+                                    value: "scroll",
+                                },
                             ]}
                             onChange={(newTrigger) =>
                                 setAttributes({
@@ -155,34 +157,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 <BaseControl
                                     label={__(
                                         "Button Settings",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                 >
                                     <SelectControl
-                                        label={__(
-                                            "Type",
-                                            "essential-blocks"
-                                        )}
+                                        label={__("Type", "essential-blocks")}
                                         value={btnType}
                                         options={[
                                             {
                                                 label: __(
                                                     "Button",
-                                                    "essential-blocks"
+                                                    "essential-blocks",
                                                 ),
                                                 value: "button",
                                             },
                                             {
                                                 label: __(
                                                     "Icon",
-                                                    "essential-blocks"
+                                                    "essential-blocks",
                                                 ),
                                                 value: "icon",
                                             },
                                         ]}
-                                        onChange={(
-                                            newBtnType
-                                        ) =>
+                                        onChange={(newBtnType) =>
                                             setAttributes({
                                                 btnType: newBtnType,
                                             })
@@ -194,16 +191,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         <DynamicInputControl
                                             label={__(
                                                 "Button Text",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             )}
                                             attrName="btnText"
                                             inputValue={btnText}
-                                            setAttributes={
-                                                setAttributes
-                                            }
-                                            onChange={(
-                                                newBtnText
-                                            ) =>
+                                            setAttributes={setAttributes}
+                                            onChange={(newBtnText) =>
                                                 setAttributes({
                                                     btnText: newBtnText,
                                                 })
@@ -216,25 +209,23 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     btnIcon: icon,
                                                 })
                                             }
-                                            title={__("Button Icon", "essential-blocks")}
+                                            title={__(
+                                                "Button Icon",
+                                                "essential-blocks",
+                                            )}
                                         />
                                         <BaseControl
                                             label={__(
                                                 "Icon Position",
-                                                "essential-blocks"
+                                                "essential-blocks",
                                             )}
                                             id="eb-button-icon-position"
                                         >
                                             <ButtonGroup id="eb-icon-position-btgrp">
                                                 {ICON_POSITIONS.map(
-                                                    (
-                                                        item,
-                                                        key
-                                                    ) => (
+                                                    (item, key) => (
                                                         <Button
-                                                            key={
-                                                                key
-                                                            }
+                                                            key={key}
                                                             isSecondary={
                                                                 iconPosition !==
                                                                 item.value
@@ -244,19 +235,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                                 item.value
                                                             }
                                                             onClick={() =>
-                                                                setAttributes(
-                                                                    {
-                                                                        iconPosition:
-                                                                            item.value,
-                                                                    }
-                                                                )
+                                                                setAttributes({
+                                                                    iconPosition:
+                                                                        item.value,
+                                                                })
                                                             }
                                                         >
-                                                            {
-                                                                item.label
-                                                            }
+                                                            {item.label}
                                                         </Button>
-                                                    )
+                                                    ),
                                                 )}
                                             </ButtonGroup>
                                         </BaseControl>
@@ -271,43 +258,37 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     triggerIcon: icon,
                                                 })
                                             }
-                                            title={__("Trigger Icon", "essential-blocks")}
+                                            title={__(
+                                                "Trigger Icon",
+                                                "essential-blocks",
+                                            )}
                                         />
                                     </>
                                 )}
                                 <BaseControl
-                                    label={__(
-                                        "Alignment ",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Alignment ", "essential-blocks")}
                                     id="eb-popup-button-alignment"
                                 >
                                     <ButtonGroup>
-                                        {BUTTON_ALIGNMENT.map(
-                                            (item, key) => (
-                                                <Button
-                                                    key={key}
-                                                    isSecondary={
-                                                        btnAlignment !==
-                                                        item.value
-                                                    }
-                                                    isPrimary={
-                                                        btnAlignment ===
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                btnAlignment:
-                                                                    item.value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
+                                        {BUTTON_ALIGNMENT.map((item, key) => (
+                                            <Button
+                                                key={key}
+                                                isSecondary={
+                                                    btnAlignment !== item.value
+                                                }
+                                                isPrimary={
+                                                    btnAlignment === item.value
+                                                }
+                                                onClick={() =>
+                                                    setAttributes({
+                                                        btnAlignment:
+                                                            item.value,
+                                                    })
+                                                }
+                                            >
+                                                {item.label}
+                                            </Button>
+                                        ))}
                                     </ButtonGroup>
                                 </BaseControl>
                             </>
@@ -318,19 +299,17 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     <h3>
                                         {__(
                                             "Page Load Settings",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                     </h3>
                                 </BaseControl>
                                 <TextControl
                                     label={__(
                                         "Delay(Seconds)",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     value={pageLoadDelay}
-                                    onChange={(
-                                        newPageLoadDelay
-                                    ) =>
+                                    onChange={(newPageLoadDelay) =>
                                         setAttributes({
                                             pageLoadDelay: newPageLoadDelay,
                                         })
@@ -339,7 +318,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 <ToggleControl
                                     label={__(
                                         "Use Cookies",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     checked={useCookies}
                                     onChange={() =>
@@ -352,19 +331,18 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     <TextControl
                                         label={__(
                                             "Cookie Expire(In days)",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                         value={cookieExpireTime}
-                                        onChange={(
-                                            newCookieExpireTime
-                                        ) =>
+                                        onChange={(newCookieExpireTime) =>
                                             setAttributes({
-                                                cookieExpireTime: newCookieExpireTime,
+                                                cookieExpireTime:
+                                                    newCookieExpireTime,
                                             })
                                         }
                                         help={__(
                                             "Leave blank if you want to delete cookie after browser closed.",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                     />
                                 )}
@@ -373,21 +351,16 @@ const Inspector = ({ attributes, setAttributes }) => {
                         {"external" === trigger && (
                             <>
                                 <TextControl
-                                    label={__(
-                                        "Identifier",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Identifier", "essential-blocks")}
                                     value={eleIdentifier}
-                                    onChange={(
-                                        newEleIdentifier
-                                    ) =>
+                                    onChange={(newEleIdentifier) =>
                                         setAttributes({
                                             eleIdentifier: newEleIdentifier,
                                         })
                                     }
                                     help={__(
                                         "You can also use class identifier such as .open-popup",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                 />
                             </>
@@ -398,14 +371,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     <h3>
                                         {__(
                                             "Exit Intent Settings",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                     </h3>
                                 </BaseControl>
                                 <ToggleControl
                                     label={__(
                                         "Use Cookies",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     checked={useCookies}
                                     onChange={() =>
@@ -418,38 +391,153 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     <TextControl
                                         label={__(
                                             "Cookie Expire(In days)",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                         value={cookieExpireTime}
-                                        onChange={(
-                                            newCookieExpireTime
-                                        ) =>
+                                        onChange={(newCookieExpireTime) =>
                                             setAttributes({
-                                                cookieExpireTime: newCookieExpireTime,
+                                                cookieExpireTime:
+                                                    newCookieExpireTime,
                                             })
                                         }
                                         help={__(
                                             "Leave blank if you want to delete cookie after browser closed.",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                     />
                                 )}
                             </>
                         )}
+                        {/* Add scroll settings */}
+                        {"scroll" === trigger && (
+                            <>
+                                <SelectControl
+                                    label={__(
+                                        "Scroll Type",
+                                        "essential-blocks",
+                                    )}
+                                    value={scrollType}
+                                    options={[
+                                        {
+                                            label: __(
+                                                "Percentage",
+                                                "essential-blocks",
+                                            ),
+                                            value: "percentage",
+                                        },
+                                        {
+                                            label: __(
+                                                "Element in Viewport",
+                                                "essential-blocks",
+                                            ),
+                                            value: "element",
+                                        },
+                                        {
+                                            label: __(
+                                                "Fixed Distance",
+                                                "essential-blocks",
+                                            ),
+                                            value: "fixed",
+                                        },
+                                    ]}
+                                    onChange={(newScrollType) =>
+                                        setAttributes({
+                                            scrollType: newScrollType,
+                                        })
+                                    }
+                                />
+
+                                {"percentage" === scrollType && (
+                                    <TextControl
+                                        label={__(
+                                            "Scroll Percentage (%)",
+                                            "essential-blocks",
+                                        )}
+                                        type="number"
+                                        min={1}
+                                        max={100}
+                                        value={scrollPercentage}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                scrollPercentage:
+                                                    parseInt(value) || 50,
+                                            })
+                                        }
+                                    />
+                                )}
+
+                                {"fixed" === scrollType && (
+                                    <UnitControl
+                                        label={__(
+                                            "Scroll Distance",
+                                            "essential-blocks",
+                                        )}
+                                        value={scrollDistance}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                scrollDistance: value,
+                                            })
+                                        }
+                                        units={[
+                                            {
+                                                value: "px",
+                                                label: "px",
+                                                default: 100,
+                                            },
+                                            {
+                                                value: "em",
+                                                label: "em",
+                                                default: 10,
+                                            },
+                                        ]}
+                                    />
+                                )}
+
+                                {"element" === scrollType && (
+                                    <>
+                                        <TextControl
+                                            label={__(
+                                                "CSS Selector",
+                                                "essential-blocks",
+                                            )}
+                                            value={scrollElement}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    scrollElement: value,
+                                                })
+                                            }
+                                            help={__(
+                                                "Enter CSS selector (e.g., #section-id or .section-class)",
+                                                "essential-blocks",
+                                            )}
+                                        />
+                                        <TextControl
+                                            label={__(
+                                                "Offset (px)",
+                                                "essential-blocks",
+                                            )}
+                                            type="number"
+                                            value={attributes.scrollOffset}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    scrollOffset: parseInt(value) || 0,
+                                                })
+                                            }
+                                            help={__(
+                                                "Additional offset in pixels when element is in viewport",
+                                                "essential-blocks",
+                                            )}
+                                        />
+                                    </>
+                                )}
+                            </>
+                        )}
                         <Divider />
                         <BaseControl>
-                            <h3>
-                                {__(
-                                    "Exit Settings",
-                                    "essential-blocks"
-                                )}
-                            </h3>
+                            <h3>{__("Exit Settings", "essential-blocks")}</h3>
                         </BaseControl>
                         <ToggleControl
-                            label={__(
-                                "Show Close Button",
-                                "essential-blocks"
-                            )}
+                            label={__("Show Close Button", "essential-blocks")}
                             checked={displayCloseIcon}
                             onChange={() =>
                                 setAttributes({
@@ -458,10 +546,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                         />
                         <ToggleControl
-                            label={__(
-                                "Esc to Exit",
-                                "essential-blocks"
-                            )}
+                            label={__("Esc to Exit", "essential-blocks")}
                             checked={escToExit}
                             onChange={() =>
                                 setAttributes({
@@ -470,14 +555,11 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                             help={__(
                                 "Close the modal box by pressing the Esc key",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                         />
                         <ToggleControl
-                            label={__(
-                                "Click to Exit",
-                                "essential-blocks"
-                            )}
+                            label={__("Click to Exit", "essential-blocks")}
                             checked={clickToExit}
                             onChange={() =>
                                 setAttributes({
@@ -486,14 +568,11 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                             help={__(
                                 "Close the modal box by clicking anywhere outside the modal window",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                         />
                         <ToggleControl
-                            label={__(
-                                "Auto Exit",
-                                "essential-blocks"
-                            )}
+                            label={__("Auto Exit", "essential-blocks")}
                             checked={autoExit}
                             onChange={() =>
                                 setAttributes({
@@ -505,7 +584,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             <TextControl
                                 label={__(
                                     "Auto Exit Delay (Seconds)",
-                                    "essential-blocks"
+                                    "essential-blocks",
                                 )}
                                 value={autoExitTime}
                                 onChange={(newAutoExitTime) =>
@@ -517,10 +596,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         )}
 
                         <ToggleControl
-                            label={__(
-                                "Enable Page Scroll",
-                                "essential-blocks"
-                            )}
+                            label={__("Enable Page Scroll", "essential-blocks")}
                             checked={disablePageScroll}
                             onChange={() =>
                                 setAttributes({
@@ -529,22 +605,16 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                             help={__(
                                 "Page scroll when popup open",
-                                "essential-blocks"
+                                "essential-blocks",
                             )}
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Size & Position",
-                            "essential-blocks"
-                        )}
+                        title={__("Size & Position", "essential-blocks")}
                         initialOpen={false}
                     >
                         <ToggleControl
-                            label={__(
-                                "Full Width",
-                                "essential-blocks"
-                            )}
+                            label={__("Full Width", "essential-blocks")}
                             checked={popupFullWidth}
                             onChange={() =>
                                 setAttributes({
@@ -555,10 +625,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         {!popupFullWidth && (
                             <>
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Width",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Width", "essential-blocks")}
                                     controlName={POPUP_WIDTH}
                                     min={0}
                                     max={1920}
@@ -568,10 +635,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         )}
 
                         <ToggleControl
-                            label={__(
-                                "Auto Height",
-                                "essential-blocks"
-                            )}
+                            label={__("Auto Height", "essential-blocks")}
                             checked={autoHeight}
                             onChange={() =>
                                 setAttributes({
@@ -582,10 +646,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         {!autoHeight && (
                             <>
                                 <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Height",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Height", "essential-blocks")}
                                     controlName={POPUP_HEIGHT}
                                     min={0}
                                     max={1000}
@@ -595,72 +656,60 @@ const Inspector = ({ attributes, setAttributes }) => {
                             </>
                         )}
                         <SelectControl
-                            label={__(
-                                "Position",
-                                "essential-blocks"
-                            )}
+                            label={__("Position", "essential-blocks")}
                             value={position}
                             options={[
                                 {
-                                    label: __(
-                                        "Top Left",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Top Left", "essential-blocks"),
                                     value: "top_left",
                                 },
                                 {
-                                    label: __(
-                                        "Top Center",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Top Center", "essential-blocks"),
                                     value: "top_center",
                                 },
                                 {
-                                    label: __(
-                                        "Top Right",
-                                        "essential-blocks"
-                                    ),
+                                    label: __("Top Right", "essential-blocks"),
                                     value: "top_right",
                                 },
                                 {
                                     label: __(
                                         "Middle Left",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "middle_left",
                                 },
                                 {
                                     label: __(
                                         "Middle Center",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "middle_center",
                                 },
                                 {
                                     label: __(
                                         "Middle Right",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "middle_right",
                                 },
                                 {
                                     label: __(
                                         "Bottom Left",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "bottom_left",
                                 },
                                 {
                                     label: __(
                                         "Bottom Center",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "bottom_center",
                                 },
                                 {
                                     label: __(
                                         "Bottom Right",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     ),
                                     value: "bottom_right",
                                 },
@@ -673,18 +722,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Close Button",
-                            "essential-blocks"
-                        )}
+                        title={__("Close Button", "essential-blocks")}
                         initialOpen={false}
                     >
                         <>
                             <ToggleControl
-                                label={__(
-                                    "Use close Icon",
-                                    "essential-blocks"
-                                )}
+                                label={__("Use close Icon", "essential-blocks")}
                                 checked={useCloseIcon}
                                 onChange={() =>
                                     setAttributes({
@@ -694,14 +737,9 @@ const Inspector = ({ attributes, setAttributes }) => {
                             />
                             {!useCloseIcon && (
                                 <TextControl
-                                    label={__(
-                                        "Text",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Text", "essential-blocks")}
                                     value={closeBtnText}
-                                    onChange={(
-                                        newCloseBtnText
-                                    ) =>
+                                    onChange={(newCloseBtnText) =>
                                         setAttributes({
                                             closeBtnText: newCloseBtnText,
                                         })
@@ -711,37 +749,25 @@ const Inspector = ({ attributes, setAttributes }) => {
                             <Divider />
                             <BaseControl>
                                 <h3>
-                                    {__(
-                                        "Icon Position",
-                                        "essential-blocks"
-                                    )}
+                                    {__("Icon Position", "essential-blocks")}
                                 </h3>
                             </BaseControl>
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Top",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Top", "essential-blocks")}
                                 controlName={CLOSE_BTN_TOP}
                                 min={-500}
                                 max={500}
                                 step={1}
                             />
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Right",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Right", "essential-blocks")}
                                 controlName={CLOSE_BTN_RIGHT}
                                 min={-500}
                                 max={500}
                                 step={1}
                             />
                             <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Left",
-                                    "essential-blocks"
-                                )}
+                                baseLabel={__("Left", "essential-blocks")}
                                 controlName={CLOSE_BTN_LEFT}
                                 min={-500}
                                 max={500}
@@ -753,97 +779,70 @@ const Inspector = ({ attributes, setAttributes }) => {
                 <InspectorPanel.Style>
                     {"btn_click" == trigger && (
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Button/Icon Styles",
-                                "essential-blocks"
-                            )}
+                            title={__("Button/Icon Styles", "essential-blocks")}
                             initialOpen={true}
                         >
                             <>
                                 <TypographyDropdown
                                     baseLabel={__(
                                         "Typography",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    typographyPrefixConstant={
-                                        typoPrefix_text
-                                    }
+                                    typographyPrefixConstant={typoPrefix_text}
                                 />
                                 <ColorControl
-                                    label={__(
-                                        "Color",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Color", "essential-blocks")}
                                     color={btnTextColor}
-                                    attributeName={'btnTextColor'}
+                                    attributeName={"btnTextColor"}
                                 />
                                 <ColorControl
                                     label={__(
                                         "Hover Color",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     color={btnHoverTextColor}
-                                    attributeName={'btnHoverTextColor'}
+                                    attributeName={"btnHoverTextColor"}
                                 />
                                 <Divider />
                                 <ResponsiveDimensionsControl
                                     controlName={BUTTON_PADDING}
                                     baseLabel={__(
                                         "Padding",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                 />
                                 <InspectorPanel.PanelBody
-                                    title={__(
-                                        "Background",
-                                        "essential-blocks"
-                                    )}
+                                    title={__("Background", "essential-blocks")}
                                     initialOpen={false}
                                 >
                                     <BackgroundControl
-                                        controlName={
-                                            BUTTON_BACKGROUND
-                                        }
+                                        controlName={BUTTON_BACKGROUND}
                                         noOverlay={true}
                                         noMainBgi={true}
                                     />
                                 </InspectorPanel.PanelBody>
                                 <InspectorPanel.PanelBody
-                                    title={__(
-                                        "Border",
-                                        "essential-blocks"
-                                    )}
+                                    title={__("Border", "essential-blocks")}
                                     initialOpen={false}
                                 >
                                     <BorderShadowControl
-                                        controlName={
-                                            BUTTON_BORDER
-                                        }
+                                        controlName={BUTTON_BORDER}
                                     />
                                 </InspectorPanel.PanelBody>
                             </>
                         </InspectorPanel.PanelBody>
                     )}
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Popup Design",
-                            "essential-blocks"
-                        )}
+                        title={__("Popup Design", "essential-blocks")}
                         initialOpen={false}
                     >
                         <ColorControl
-                            label={__(
-                                "Overlay Color",
-                                "essential-blocks"
-                            )}
+                            label={__("Overlay Color", "essential-blocks")}
                             color={overlayColor}
-                            attributeName={'overlayColor'}
+                            attributeName={"overlayColor"}
                         />
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Margin & Padding",
-                                "essential-blocks"
-                            )}
+                            title={__("Margin & Padding", "essential-blocks")}
                             initialOpen={false}
                         >
                             <ResponsiveDimensionsControl
@@ -856,32 +855,19 @@ const Inspector = ({ attributes, setAttributes }) => {
                             />
                         </InspectorPanel.PanelBody>
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Background ",
-                                "essential-blocks"
-                            )}
+                            title={__("Background ", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <BackgroundControl
-                                controlName={POPUP_BACKGROUND}
-                            />
+                            <BackgroundControl controlName={POPUP_BACKGROUND} />
                         </InspectorPanel.PanelBody>
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Border & Shadow",
-                                "essential-blocks"
-                            )}
+                            title={__("Border & Shadow", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <BorderShadowControl
-                                controlName={POPUP_BORDER}
-                            />
+                            <BorderShadowControl controlName={POPUP_BORDER} />
                         </InspectorPanel.PanelBody>
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Container Padding",
-                                "essential-blocks"
-                            )}
+                            title={__("Container Padding", "essential-blocks")}
                             initialOpen={false}
                         >
                             <ResponsiveDimensionsControl
@@ -892,10 +878,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                     </InspectorPanel.PanelBody>
                     {displayCloseIcon && (
                         <InspectorPanel.PanelBody
-                            title={__(
-                                "Close Button",
-                                "essential-blocks"
-                            )}
+                            title={__("Close Button", "essential-blocks")}
                             initialOpen={false}
                         >
                             <>
@@ -903,7 +886,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     <TypographyDropdown
                                         baseLabel={__(
                                             "Typography",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                         typographyPrefixConstant={
                                             typoPrefix_close
@@ -911,57 +894,47 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     />
                                 )}
                                 <ColorControl
-                                    label={__(
-                                        "Color",
-                                        "essential-blocks"
-                                    )}
+                                    label={__("Color", "essential-blocks")}
                                     color={closeBtnColor}
-                                    attributeName={'closeBtnColor'}
+                                    attributeName={"closeBtnColor"}
                                 />
                                 <ColorControl
                                     label={__(
                                         "Hover Color",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     color={closeBtnHoverColor}
-                                    attributeName={'closeBtnHoverColor'}
+                                    attributeName={"closeBtnHoverColor"}
                                 />
                                 <ColorControl
                                     label={__(
                                         "Background Color",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                     color={closeBtnBackColor}
-                                    attributeName={'closeBtnBackColor'}
+                                    attributeName={"closeBtnBackColor"}
                                 />
                                 <ColorControl
                                     label={__(
                                         "Background Hover Color",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    color={
-                                        closeBtnBackHoverColor
-                                    }
-                                    attributeName={'closeBtnBackHoverColor'}
+                                    color={closeBtnBackHoverColor}
+                                    attributeName={"closeBtnBackHoverColor"}
                                 />
                                 <ResponsiveDimensionsControl
                                     controlName={CLOSE_PADDING}
                                     baseLabel={__(
                                         "Padding",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
                                 />
                                 <InspectorPanel.PanelBody
-                                    title={__(
-                                        "Border",
-                                        "essential-blocks"
-                                    )}
+                                    title={__("Border", "essential-blocks")}
                                     initialOpen={false}
                                 >
                                     <BorderShadowControl
-                                        controlName={
-                                            CLOSE_BORDER
-                                        }
+                                        controlName={CLOSE_BORDER}
                                         noShadow={true}
                                     />
                                 </InspectorPanel.PanelBody>

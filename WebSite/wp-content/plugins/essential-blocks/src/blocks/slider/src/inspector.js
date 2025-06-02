@@ -56,18 +56,8 @@ import objAttributes from "./attributes";
 import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY, BUTTON_TYPOGRAPHY, BUTTON2_TYPOGRAPHY } from "./constants/typography-constant";
 
 import {
-    handleTitle,
-    handleSubtitle,
-    handleShowButton,
-    handleButtonText,
-    handleButtonURL,
-    handleOpenNewTab,
-    handleShowSecondButton,
-    handleSecondButtonText,
-    handleSecondButtonURL,
-    handleSecondButtonOpenNewTab,
     handleImageData,
-    handleImage
+    handleImage,
 } from "./helpers";
 
 import {
@@ -83,6 +73,7 @@ import {
     isValidHtml,
     SortControl,
     ImageAvatar,
+    sanitizeIconValue
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -575,9 +566,9 @@ function Inspector(props) {
                             <>
                                 <EBIconPicker
                                     value={arrowPrevIcon}
-                                    onChange={(arrowPrevIcon) =>
+                                    onChange={(iconValue) =>
                                         setAttributes({
-                                            arrowPrevIcon,
+                                            arrowPrevIcon: sanitizeIconValue(iconValue),
                                         })
                                     }
                                     title={__("Arrow Prev Icon", "essential-blocks")}
@@ -586,9 +577,9 @@ function Inspector(props) {
                                 />
                                 <EBIconPicker
                                     value={arrowNextIcon}
-                                    onChange={(arrowNextIcon) =>
+                                    onChange={(iconValue) =>
                                         setAttributes({
-                                            arrowNextIcon,
+                                            arrowNextIcon: sanitizeIconValue(iconValue),
                                         })
                                     }
                                     title={__("Arrow Next Icon", "essential-blocks")}

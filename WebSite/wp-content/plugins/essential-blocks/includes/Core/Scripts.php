@@ -11,23 +11,24 @@ class Scripts
 {
     use HasSingletone;
 
-    private $is_gutenberg_editor  = false;
-    private $isEnableFontAwesome  = true;
-    private $isEnableGoogleFont   = true;
-    private $isEnableQuickToolbar = false;
-    private $isEnableWriteAI      = false;
-    private $hasOpenAiApiKey      = false;
-    private $writeAiPostTypes     = [ 'all' ];
+    private $is_gutenberg_editor     = false;
+    private $isEnableFontAwesome     = true;
+    private $isEnableGoogleFont      = true;
+    private $isEnableQuickToolbar    = false;
+    private $isEnableWriteAI         = false;
+    private $hasOpenAiApiKey         = false;
+    private $writeAiPostTypes        = [ 'all' ];
+    private $isEnableUnfilteredFiles = false;
 
     public $plugin = null;
 
     public function __construct()
     {
-        $eb_settings                = get_option( 'eb_settings', [  ] );
-        $this->isEnableFontAwesome  = ! empty( $eb_settings[ 'enableFontawesome' ] ) ? $eb_settings[ 'enableFontawesome' ] : 'true';
-        $this->isEnableGoogleFont   = ! empty( $eb_settings[ 'googleFont' ] ) ? $eb_settings[ 'googleFont' ] : 'true';
-        $this->isEnableQuickToolbar = ! empty( $eb_settings[ 'quickToolbar' ] ) ? $eb_settings[ 'quickToolbar' ] : 'true';
-
+        $eb_settings                   = get_option( 'eb_settings', [  ] );
+        $this->isEnableFontAwesome     = ! empty( $eb_settings[ 'enableFontawesome' ] ) ? $eb_settings[ 'enableFontawesome' ] : 'true';
+        $this->isEnableGoogleFont      = ! empty( $eb_settings[ 'googleFont' ] ) ? $eb_settings[ 'googleFont' ] : 'true';
+        $this->isEnableQuickToolbar    = ! empty( $eb_settings[ 'quickToolbar' ] ) ? $eb_settings[ 'quickToolbar' ] : 'true';
+        $this->isEnableUnfilteredFiles = ! empty( $eb_settings[ 'unfilteredFile' ] ) ? $eb_settings[ 'unfilteredFile' ] : 'false';
         add_action(
             'init',
             function () {
@@ -622,7 +623,8 @@ class Scripts
                 'gradientColors'       => Helper::gradient_colors(),
                 'unfilter_capability'  => current_user_can( 'unfiltered_html' ) ? 'true' : 'false',
                 'is_tracking'          => Insights::get_is_tracking_allowed(),
-                'eb_user_type'         => get_option( 'essential_blocks_user_type' )
+                'eb_user_type'         => get_option( 'essential_blocks_user_type' ),
+                'unfilteredFile'       => $this->isEnableUnfilteredFiles
              ];
 
             $localize_array = array_merge( $localize_array, $admin_localize_array );

@@ -133,6 +133,115 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
+        // Add scroll trigger handling with simplified units
+        if ("scroll" == eb_popups[x].getAttribute("data-popup-type")) {
+            const scrollType = eb_popups[x].getAttribute("data-scroll-type");
+            let popupTriggered = false;
+            
+            if ("percentage" === scrollType) {
+                const scrollPercentage = parseInt(eb_popups[x].getAttribute("data-scroll-percentage") || 50);
+                
+                window.addEventListener("scroll", function() {
+                    if (popupTriggered) return;
+                    
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrollPercent = (scrollTop / docHeight) * 100;
+                    
+                    if (scrollPercent >= scrollPercentage) {
+                        popupTriggered = true;
+                        eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                        eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                        eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                        eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+                        eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
+                        auto_exit(eb_popups[x]);
+                    }
+                });
+            } else if ("fixed" === scrollType) {
+                const scrollDistance = eb_popups[x].getAttribute("data-scroll-distance") || "100px";
+                const value = parseFloat(scrollDistance);
+                const unit = scrollDistance.replace(value, "");
+                
+                window.addEventListener("scroll", function() {
+                    if (popupTriggered) return;
+                    
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    let threshold;
+                    
+                    if (unit === "px") {
+                        threshold = value;
+                    } else if (unit === "em") {
+                        // Convert em to px using the base font size
+                        const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                        threshold = value * baseFontSize;
+                    }
+                    
+                    if (scrollTop >= threshold) {
+                        popupTriggered = true;
+                        eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                        eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                        eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                        eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+                        eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
+                        auto_exit(eb_popups[x]);
+                    }
+                });
+            } else if ("element" === scrollType) {
+                const scrollElement = eb_popups[x].getAttribute("data-scroll-element");
+                
+                if (scrollElement && document.querySelector(scrollElement)) {
+                    const targetElement = document.querySelector(scrollElement);
+                    const scrollOffset = parseInt(eb_popups[x].getAttribute("data-scroll-offset") || 0);
+                    
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && !popupTriggered) {
+                                popupTriggered = true;
+                                
+                                if (scrollOffset > 0) {
+                                    // Get current scroll position when element is in viewport
+                                    const currentScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+                                    
+                                    // Add event listener to check for additional scroll
+                                    const scrollHandler = function() {
+                                        const newScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+                                        const scrolledDistance = newScrollPos - currentScrollPos;
+                                        
+                                        // If scrolled the required additional distance, show popup
+                                        if (scrolledDistance >= scrollOffset) {
+                                            window.removeEventListener('scroll', scrollHandler);
+                                            
+                                            eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                                            eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                                            eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                                            eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+                                            eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
+                                            auto_exit(eb_popups[x]);
+                                        }
+                                    };
+                                    
+                                    window.addEventListener('scroll', scrollHandler);
+                                } else {
+                                    // No additional scroll needed, show popup immediately
+                                    eb_popups[x].querySelector(".eb-popup-overlay").classList.remove("inactive");
+                                    eb_popups[x].querySelector(".modal-main-wrap").classList.remove("inactive");
+                                    eb_popups[x].querySelector(".eb-popup-overlay").classList.add("active");
+                                    eb_popups[x].querySelector(".modal-main-wrap").classList.add("active");
+                                    eb_popups[x].getAttribute("data-page-scroll") === 'true' ? null : document.body.classList.add('eb-popup-block-overflow');
+                                    auto_exit(eb_popups[x]);
+                                }
+                                
+                                observer.disconnect();
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    observer.observe(targetElement);
+                }
+            }
+        }
+
         // click on close icon
         if (
             "true" === close_btn &&

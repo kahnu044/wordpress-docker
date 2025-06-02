@@ -1,6 +1,8 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-    sanitizeURL, BlockProps
+    sanitizeURL,
+    BlockProps,
+    sanitizeIconValue,
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -28,7 +30,7 @@ const Save = ({ attributes }) => {
         titleTag,
         contentTag,
         version,
-        showLightbox
+        showLightbox,
     } = attributes;
 
     //Slider Settings
@@ -66,7 +68,10 @@ const Save = ({ attributes }) => {
         ],
     };
 
-    const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
+    const sliderTypeClass =
+        sliderType === "content"
+            ? "eb-slider-type-content"
+            : "eb-slider-type-image";
 
     return (
         <BlockProps.Save attributes={attributes}>
@@ -78,9 +83,9 @@ const Save = ({ attributes }) => {
                     data-blockid={blockId}
                     data-version={version}
                     data-settings={btoa(JSON.stringify(settings))}
-                    data-arrowNextIcon={arrowNextIcon}
-                    data-arrowPrevIcon={arrowPrevIcon}
-                    data-lightbox={version === 'v2' ? showLightbox : false}
+                    data-arrowNextIcon={sanitizeIconValue(arrowNextIcon)}
+                    data-arrowPrevIcon={sanitizeIconValue(arrowPrevIcon)}
+                    data-lightbox={version === "v2" ? showLightbox : false}
                 >
                     <div className={`eb-slider-init ${sliderTypeClass}`}>
                         {images.map((image, index) => (
@@ -89,25 +94,31 @@ const Save = ({ attributes }) => {
                                 key={index}
                                 data-src={image.url}
                             >
-                                {image.buttonUrl && image.isValidUrl ?
-                                    <div><a
-                                        href={sanitizeURL(image.buttonUrl)}
-                                        target={
-                                            image.openNewTab
-                                                ? "_blank"
-                                                : "_self"
-                                        }
-                                        rel="noopener">
+                                {image.buttonUrl && image.isValidUrl ? (
+                                    <div>
+                                        <a
+                                            href={sanitizeURL(image.buttonUrl)}
+                                            target={
+                                                image.openNewTab
+                                                    ? "_blank"
+                                                    : "_self"
+                                            }
+                                            rel="noopener"
+                                        >
+                                            <img
+                                                className="eb-slider-image"
+                                                data-lazy={image.url}
+                                            />
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div>
                                         <img
                                             className="eb-slider-image"
                                             data-lazy={image.url}
                                         />
-                                    </a></div>
-                                    : <div><img
-                                        className="eb-slider-image"
-                                        data-lazy={image.url}
-                                    /></div>
-                                }
+                                    </div>
+                                )}
                                 {sliderType === "content" && (
                                     <div
                                         className={`eb-slider-content align-${textAlign}`}
@@ -136,8 +147,10 @@ const Save = ({ attributes }) => {
                                                     <a
                                                         href={
                                                             image.buttonUrl &&
-                                                                image.isValidUrl
-                                                                ? sanitizeURL(image.buttonUrl)
+                                                            image.isValidUrl
+                                                                ? sanitizeURL(
+                                                                      image.buttonUrl,
+                                                                  )
                                                                 : ""
                                                         }
                                                         className="eb-slider-button"
@@ -159,12 +172,14 @@ const Save = ({ attributes }) => {
                                             {image.showSecondButton &&
                                                 image.secondButtonText &&
                                                 image.secondButtonText.length >
-                                                0 && (
+                                                    0 && (
                                                     <a
                                                         href={
                                                             image.secondButtonUrl &&
-                                                                image.isValidUrl
-                                                                ? sanitizeURL(image.secondButtonUrl)
+                                                            image.isValidUrl
+                                                                ? sanitizeURL(
+                                                                      image.secondButtonUrl,
+                                                                  )
                                                                 : ""
                                                         }
                                                         className="eb-slider-second-button"
@@ -190,7 +205,7 @@ const Save = ({ attributes }) => {
                     </div>
                 </div>
             </div>
-        </BlockProps.Save >
+        </BlockProps.Save>
     );
 };
 

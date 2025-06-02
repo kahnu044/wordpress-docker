@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import apiFetch from "@wordpress/api-fetch";
+const { sanitizeIconValue} = window.eb_frontend;
 const rootURL = EssentialBlocksLocalize
     ? EssentialBlocksLocalize.rest_rootURL
     : false;
@@ -14,7 +15,7 @@ apiFetch.use(apiFetch.createRootURLMiddleware(rootURL));
 
 window.addEventListener("DOMContentLoaded", (event) => {
     const wrappers = document.getElementsByClassName(
-        `eb-post-carousel-wrapper`
+        `eb-post-carousel-wrapper`,
     );
 
     for (let wrapper of wrappers) {
@@ -48,8 +49,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 autoplaySpeed,
                 speed,
                 rtl: isRTL,
-                prevArrow: `<div class='slick-arrow slick-prev'><i class='${attributes.leftArrowIcon}'></i></div>`,
-                nextArrow: `<div class='slick-arrow slick-next'><i class='${attributes.rightArrowIcon}'></i></div>`,
+                prevArrow: `<div class='slick-arrow slick-prev'><i class='${sanitizeIconValue(
+                    attributes.leftArrowIcon,
+                )}'></i></div>`,
+                nextArrow: `<div class='slick-arrow slick-next'><i class='${sanitizeIconValue(
+                    attributes.rightArrowIcon,
+                )}'></i></div>`,
                 responsive: [
                     {
                         breakpoint: 1024,

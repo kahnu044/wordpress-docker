@@ -35,9 +35,9 @@ import {
     UNIT_TYPES
 } from "./constants/constants";
 
-import { 
-    BUTTONS_TYPOGRAPHY, 
-    BUTTONS_CONNECTOR_TYPOGRAPHY 
+import {
+    BUTTONS_TYPOGRAPHY,
+    BUTTONS_CONNECTOR_TYPOGRAPHY
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -80,6 +80,15 @@ function Inspector(props) {
                     buttonTwoBorderShadowRds_Left: "0",
                     buttonTwoBorderShadowRds_Right: "20",
                     buttonsGapRange: 0,
+
+                    buttonOneBorderShadowHRds_Bottom: "0",
+                    buttonOneBorderShadowHRds_Left: "20",
+                    buttonOneBorderShadowHRds_Right: "0",
+                    buttonOneBorderShadowHRds_Top: "20",
+                    buttonTwoBorderShadowHRds_Bottom: "20",
+                    buttonTwoBorderShadowHRds_Left: "0",
+                    buttonTwoBorderShadowHRds_Right: "20",
+                    buttonTwoBorderShadowHRds_Top: "0",
                 });
                 break;
             case "preset-2":
@@ -95,6 +104,15 @@ function Inspector(props) {
                     buttonTwoBorderShadowRds_Left: "30",
                     buttonTwoBorderShadowRds_Right: "30",
                     buttonsGapRange: 20,
+
+                    buttonOneBorderShadowHRds_Bottom: "30",
+                    buttonOneBorderShadowHRds_Left: "30",
+                    buttonOneBorderShadowHRds_Right: "30",
+                    buttonOneBorderShadowHRds_Top: "30",
+                    buttonTwoBorderShadowHRds_Bottom: "30",
+                    buttonTwoBorderShadowHRds_Left: "30",
+                    buttonTwoBorderShadowHRds_Right: "30",
+                    buttonTwoBorderShadowHRds_Top: "30",
                 });
                 break;
             case "preset-3":
@@ -110,6 +128,15 @@ function Inspector(props) {
                     buttonTwoBorderShadowRds_Left: "0",
                     buttonTwoBorderShadowRds_Right: "0",
                     buttonsGapRange: 20,
+
+                    buttonOneBorderShadowHRds_Bottom: "0",
+                    buttonOneBorderShadowHRds_Left: "15",
+                    buttonOneBorderShadowHRds_Right: "15",
+                    buttonOneBorderShadowHRds_Top: "0",
+                    buttonTwoBorderShadowHRds_Bottom: "15",
+                    buttonTwoBorderShadowHRds_Left: "0",
+                    buttonTwoBorderShadowHRds_Right: "0",
+                    buttonTwoBorderShadowHRds_Top: "15",
                 });
                 break;
             case "preset-4":
@@ -125,6 +152,15 @@ function Inspector(props) {
                     buttonTwoBorderShadowRds_Left: "30",
                     buttonTwoBorderShadowRds_Right: "30",
                     buttonsGapRange: 10,
+
+                    buttonOneBorderShadowHRds_Bottom: "30",
+                    buttonOneBorderShadowHRds_Left: "30",
+                    buttonOneBorderShadowHRds_Right: "30",
+                    buttonOneBorderShadowHRds_Top: "30",
+                    buttonTwoBorderShadowHRds_Bottom: "30",
+                    buttonTwoBorderShadowHRds_Left: "30",
+                    buttonTwoBorderShadowHRds_Right: "30",
+                    buttonTwoBorderShadowHRds_Top: "30",
                 });
                 break;
             default:
@@ -226,7 +262,7 @@ function Inspector(props) {
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Connector", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
-                            label={__("Show Connector?","essential-blocks")}
+                            label={__("Show Connector?", "essential-blocks")}
                             checked={showConnector}
                             onChange={() => {
                                 setAttributes({ showConnector: !showConnector });
@@ -293,16 +329,16 @@ function Inspector(props) {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
-                    <EBButton.GeneralTab 
-                        label={__("Button One","essential-blocks")}
+                    <EBButton.GeneralTab
+                        label={__("Button One", "essential-blocks")}
                         buttonAttrProps={BUTTON_ONE_KEYS}
                         attrPrefix="btn1"
                         hasIcon={false}
                         hasAlignment={false}
                         hasWidth={false}
                     />
-                    <EBButton.GeneralTab 
-                        label={__("Button Two","essential-blocks")}
+                    <EBButton.GeneralTab
+                        label={__("Button Two", "essential-blocks")}
                         buttonAttrProps={BUTTON_TWO_KEYS}
                         attrPrefix="btn2"
                         hasIcon={false}
@@ -318,8 +354,8 @@ function Inspector(props) {
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={BUTTONS_TYPOGRAPHY}
                         />
-                        <EBButton.StyleTab 
-                            label={__("Button One","essential-blocks")}
+                        <EBButton.StyleTab
+                            label={__("Button One", "essential-blocks")}
                             buttonAttrProps={BUTTON_ONE_KEYS}
                             attrPrefix="btn1"
                             hasTypography={false}
@@ -328,8 +364,8 @@ function Inspector(props) {
                             hasPadding={false}
                             hasHoverEffect={false}
                         />
-                        <EBButton.StyleTab 
-                            label={__("Button Two","essential-blocks")}
+                        <EBButton.StyleTab
+                            label={__("Button Two", "essential-blocks")}
                             buttonAttrProps={BUTTON_TWO_KEYS}
                             attrPrefix="btn2"
                             hasTypography={false}
@@ -342,7 +378,7 @@ function Inspector(props) {
                         />
                         <ResponsiveDimensionsControl
                             controlName={BUTTONS_PADDING}
-                            baseLabel={__("Padding","essential-blocks")}
+                            baseLabel={__("Padding", "essential-blocks")}
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Connector", "essential-blocks")} initialOpen={false}>
@@ -358,7 +394,7 @@ function Inspector(props) {
                         />
 
                         <ColorControl
-                            label={__("Text/ Icon Color","essential-blocks")}
+                            label={__("Text/ Icon Color", "essential-blocks")}
                             color={innerButtonTextColor}
                             attributeName={'innerButtonTextColor'}
                         />

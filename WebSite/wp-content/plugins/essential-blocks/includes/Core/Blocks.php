@@ -61,7 +61,6 @@ class Blocks
     {
         $_blocks = require ESSENTIAL_BLOCKS_DIR_PATH . 'includes/blocks.php';
         $_blocks = apply_filters('essential_blocks_block_lists', $_blocks);
-
         $_blocks = array_map(
             function ($block) use ($no_object, $no_static_data) {
                 if ($no_object) {
@@ -85,7 +84,6 @@ class Blocks
     public function register_blocks($assets_manager)
     {
         $blocks = $this->enabled();
-
         if (empty($blocks)) {
             return;
         }
@@ -116,6 +114,24 @@ class Blocks
                 }
 
                 $block_object->register($assets_manager);
+            }
+        }
+
+        // Only apply special handling for pro blocks when pro plugin is not active
+        if (!defined('ESSENTIAL_BLOCKS_IS_PRO_ACTIVE') || !ESSENTIAL_BLOCKS_IS_PRO_ACTIVE) {
+            // These blocks will be filtered out in the frontend by the render_block filter
+            foreach($_defaults as $block) {
+                if (isset($block['is_pro']) && $block['is_pro'] && isset($block['name'])) {
+                    register_block_type("essential-blocks/" . $block['name'], [
+                        'render_callback' => function($attributes, $content) {
+                            // Return empty content in frontend when pro plugin is not active
+                            if (!is_admin() && !(defined('REST_REQUEST') && REST_REQUEST)) {
+                                return '';
+                            }
+                            return $content;
+                        }
+                    ]);
+                }
             }
         }
     }

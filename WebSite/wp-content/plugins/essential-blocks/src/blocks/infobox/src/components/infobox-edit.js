@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { MediaUpload, RichText } from "@wordpress/block-editor";
+import { MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
 
 /**
@@ -117,12 +117,6 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                     tagName={titleTag}
                                     className="title"
                                     value={title}
-                                    allowedFormats={[
-                                        "core/bold",
-                                        "core/italic",
-                                        "core/strikethrough",
-                                        "core/underline",
-                                    ]}
                                     onChange={(text) =>
                                         setAttributes({ title: text })
                                     }
@@ -133,12 +127,6 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                         tagName={subTitleTag}
                                         className="subtitle"
                                         value={subTitle}
-                                        allowedFormats={[
-                                            "core/bold",
-                                            "core/italic",
-                                            "core/strikethrough",
-                                            "core/underline",
-                                        ]}
                                         onChange={(text) =>
                                             setAttributes({ subTitle: text })
                                         }
@@ -153,12 +141,6 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                                 tagName="p"
                                 className="description"
                                 value={description}
-                                allowedFormats={[
-                                    "core/bold",
-                                    "core/italic",
-                                    "core/strikethrough",
-                                    "core/underline",
-                                ]}
                                 onChange={(text) =>
                                     setAttributes({ description: text })
                                 }
