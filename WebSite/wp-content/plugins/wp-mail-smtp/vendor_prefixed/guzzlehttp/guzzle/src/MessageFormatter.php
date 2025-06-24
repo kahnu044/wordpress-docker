@@ -64,7 +64,7 @@ class MessageFormatter implements \WPMailSMTP\Vendor\GuzzleHttp\MessageFormatter
      * @param ResponseInterface|null $response Response that was received
      * @param \Throwable|null        $error    Exception that was received
      */
-    public function format(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null, \Throwable $error = null) : string
+    public function format(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, ?\WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null, ?\Throwable $error = null) : string
     {
         $cache = [];
         /** @var string */

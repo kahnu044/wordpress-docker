@@ -23,7 +23,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\UriInterface;
  */
 final class HttpFactory implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestFactoryInterface, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseFactoryInterface, \WPMailSMTP\Vendor\Psr\Http\Message\ServerRequestFactoryInterface, \WPMailSMTP\Vendor\Psr\Http\Message\StreamFactoryInterface, \WPMailSMTP\Vendor\Psr\Http\Message\UploadedFileFactoryInterface, \WPMailSMTP\Vendor\Psr\Http\Message\UriFactoryInterface
 {
-    public function createUploadedFile(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, int $size = null, int $error = \UPLOAD_ERR_OK, string $clientFilename = null, string $clientMediaType = null) : \WPMailSMTP\Vendor\Psr\Http\Message\UploadedFileInterface
+    public function createUploadedFile(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, ?int $size = null, int $error = \UPLOAD_ERR_OK, ?string $clientFilename = null, ?string $clientMediaType = null) : \WPMailSMTP\Vendor\Psr\Http\Message\UploadedFileInterface
     {
         if ($size === null) {
             $size = $stream->getSize();

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
+class ComposerStaticInit1d446bf640190c13285be4eb5a9d17ce
 {
     public static $files = array (
         '2bb094e40611cb5eccea789f32aff634' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-mbstring/bootstrap.php',
@@ -237,6 +237,9 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Pro\\Alerts\\Providers\\TeamsWebhook\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/TeamsWebhook/Options.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\TwilioSMS\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/TwilioSMS/Handler.php',
         'WPMailSMTP\\Pro\\Alerts\\Providers\\TwilioSMS\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/TwilioSMS/Options.php',
+        'WPMailSMTP\\Pro\\Alerts\\Providers\\WhatsApp\\Handler' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/WhatsApp/Handler.php',
+        'WPMailSMTP\\Pro\\Alerts\\Providers\\WhatsApp\\Options' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/WhatsApp/Options.php',
+        'WPMailSMTP\\Pro\\Alerts\\Providers\\WhatsApp\\Provider' => __DIR__ . '/../..' . '/src/Pro/Alerts/Providers/WhatsApp/Provider.php',
         'WPMailSMTP\\Pro\\BackupConnections\\Admin\\SettingsTab' => __DIR__ . '/../..' . '/src/Pro/BackupConnections/Admin/SettingsTab.php',
         'WPMailSMTP\\Pro\\BackupConnections\\BackupConnections' => __DIR__ . '/../..' . '/src/Pro/BackupConnections/BackupConnections.php',
         'WPMailSMTP\\Pro\\ConditionalLogic\\CanProcessConditionalLogicTrait' => __DIR__ . '/../..' . '/src/Pro/ConditionalLogic/CanProcessConditionalLogicTrait.php',
@@ -262,6 +265,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\DeliveryStatus' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/DeliveryStatus.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\DeliveryVerification' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/DeliveryVerification.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\ElasticEmail\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/ElasticEmail/DeliveryVerifier.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\MailerSend\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/MailerSend/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Mailgun\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Mailgun/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Mailjet\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Mailjet/DeliveryVerifier.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\DeliveryVerification\\Postmark\\DeliveryVerifier' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/DeliveryVerification/Postmark/DeliveryVerifier.php',
@@ -317,6 +321,10 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Events\\Failed' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Events/Failed.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\ProcessorInterface' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/ProcessorInterface.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\ProviderInterface' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/ProviderInterface.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\MailerSend\\Events\\Failed' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/MailerSend/Events/Failed.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\MailerSend\\Processor' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/MailerSend/Processor.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\MailerSend\\Provider' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/MailerSend/Provider.php',
+        'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\MailerSend\\Subscriber' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/MailerSend/Subscriber.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Events\\Failed' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Events/Failed.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Processor' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Processor.php',
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Providers\\Mailgun\\Provider' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Providers/Mailgun/Provider.php',
@@ -405,6 +413,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Pro\\Tasks\\Logs\\BulkVerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/BulkVerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\ElasticEmail\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/ElasticEmail/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\ExportCleanupTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/ExportCleanupTask.php',
+        'WPMailSMTP\\Pro\\Tasks\\Logs\\MailerSend\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/MailerSend/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\Mailgun\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Mailgun/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\Mailjet\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Mailjet/VerifySentStatusTask.php',
         'WPMailSMTP\\Pro\\Tasks\\Logs\\Postmark\\VerifySentStatusTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/Logs/Postmark/VerifySentStatusTask.php',
@@ -435,6 +444,8 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Providers\\Mail\\Options' => __DIR__ . '/../..' . '/src/Providers/Mail/Options.php',
         'WPMailSMTP\\Providers\\MailerAbstract' => __DIR__ . '/../..' . '/src/Providers/MailerAbstract.php',
         'WPMailSMTP\\Providers\\MailerInterface' => __DIR__ . '/../..' . '/src/Providers/MailerInterface.php',
+        'WPMailSMTP\\Providers\\MailerSend\\Mailer' => __DIR__ . '/../..' . '/src/Providers/MailerSend/Mailer.php',
+        'WPMailSMTP\\Providers\\MailerSend\\Options' => __DIR__ . '/../..' . '/src/Providers/MailerSend/Options.php',
         'WPMailSMTP\\Providers\\Mailgun\\Mailer' => __DIR__ . '/../..' . '/src/Providers/Mailgun/Mailer.php',
         'WPMailSMTP\\Providers\\Mailgun\\Options' => __DIR__ . '/../..' . '/src/Providers/Mailgun/Options.php',
         'WPMailSMTP\\Providers\\Mailjet\\Mailer' => __DIR__ . '/../..' . '/src/Providers/Mailjet/Mailer.php',
@@ -488,7 +499,6 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\AccessToken\\Revoke' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AccessToken/Revoke.php',
         'WPMailSMTP\\Vendor\\Google\\AccessToken\\Verify' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AccessToken/Verify.php',
         'WPMailSMTP\\Vendor\\Google\\AuthHandler\\AuthHandlerFactory' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AuthHandler/AuthHandlerFactory.php',
-        'WPMailSMTP\\Vendor\\Google\\AuthHandler\\Guzzle5AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AuthHandler/Guzzle5AuthHandler.php',
         'WPMailSMTP\\Vendor\\Google\\AuthHandler\\Guzzle6AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AuthHandler/Guzzle6AuthHandler.php',
         'WPMailSMTP\\Vendor\\Google\\AuthHandler\\Guzzle7AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/AuthHandler/Guzzle7AuthHandler.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\AccessToken' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/AccessToken.php',
@@ -499,8 +509,12 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Auth\\Cache\\MemoryCacheItemPool' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Cache/MemoryCacheItemPool.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Cache\\SysVCacheItemPool' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Cache/SysVCacheItemPool.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Cache\\TypedItem' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Cache/TypedItem.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\CredentialSource\\AwsNativeSource' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/CredentialSource/AwsNativeSource.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\CredentialSource\\FileSource' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/CredentialSource/FileSource.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\CredentialSource\\UrlSource' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/CredentialSource/UrlSource.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\CredentialsLoader' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/CredentialsLoader.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\AppIdentityCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/AppIdentityCredentials.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\ExternalAccountCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/ExternalAccountCredentials.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\GCECredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/GCECredentials.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\IAMCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/IAMCredentials.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\ImpersonatedServiceAccountCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/ImpersonatedServiceAccountCredentials.php',
@@ -508,11 +522,12 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\ServiceAccountCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/ServiceAccountCredentials.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\ServiceAccountJwtAccessCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/ServiceAccountJwtAccessCredentials.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\Credentials\\UserRefreshCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/Credentials/UserRefreshCredentials.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\ExternalAccountCredentialSourceInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/ExternalAccountCredentialSourceInterface.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\FetchAuthTokenCache' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/FetchAuthTokenCache.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\FetchAuthTokenInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/FetchAuthTokenInterface.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\GCECache' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/GCECache.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\GetQuotaProjectInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/GetQuotaProjectInterface.php',
-        'WPMailSMTP\\Vendor\\Google\\Auth\\HttpHandler\\Guzzle5HttpHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/HttpHandler/Guzzle5HttpHandler.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\GetUniverseDomainInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/GetUniverseDomainInterface.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\HttpHandler\\Guzzle6HttpHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/HttpHandler/Guzzle6HttpHandler.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\HttpHandler\\Guzzle7HttpHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/HttpHandler/Guzzle7HttpHandler.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\HttpHandler\\HttpClientCache' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/HttpHandler/HttpClientCache.php',
@@ -528,6 +543,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Auth\\ServiceAccountSignerTrait' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/ServiceAccountSignerTrait.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\SignBlobInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/SignBlobInterface.php',
         'WPMailSMTP\\Vendor\\Google\\Auth\\UpdateMetadataInterface' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/UpdateMetadataInterface.php',
+        'WPMailSMTP\\Vendor\\Google\\Auth\\UpdateMetadataTrait' => __DIR__ . '/../..' . '/vendor_prefixed/google/auth/src/UpdateMetadataTrait.php',
         'WPMailSMTP\\Vendor\\Google\\Client' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/Client.php',
         'WPMailSMTP\\Vendor\\Google\\Collection' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/Collection.php',
         'WPMailSMTP\\Vendor\\Google\\Exception' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/Exception.php',
@@ -552,6 +568,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\FilterAction' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/FilterAction.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\FilterCriteria' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/FilterCriteria.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\ForwardingAddress' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/ForwardingAddress.php',
+        'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\HardwareKeyMetadata' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/HardwareKeyMetadata.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\History' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/History.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\HistoryLabelAdded' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/HistoryLabelAdded.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\HistoryLabelRemoved' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/HistoryLabelRemoved.php',
@@ -581,6 +598,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\ModifyMessageRequest' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/ModifyMessageRequest.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\ModifyThreadRequest' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/ModifyThreadRequest.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\ObliterateCseKeyPairRequest' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/ObliterateCseKeyPairRequest.php',
+        'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\PivKeyMetadata' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/PivKeyMetadata.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\PopSettings' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/PopSettings.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\Profile' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/Profile.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\Resource\\Users' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/Resource/Users.php',
@@ -600,6 +618,7 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\Resource\\UsersSettingsSendAsSmimeInfo' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/Resource/UsersSettingsSendAsSmimeInfo.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\Resource\\UsersThreads' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/Resource/UsersThreads.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\SendAs' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/SendAs.php',
+        'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\SignAndEncryptKeyPairs' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/SignAndEncryptKeyPairs.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\SmimeInfo' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/SmimeInfo.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\SmtpMsa' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/SmtpMsa.php',
         'WPMailSMTP\\Vendor\\Google\\Service\\Gmail\\Thread' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient-services/src/Gmail/Thread.php',
@@ -615,7 +634,6 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
         'WPMailSMTP\\Vendor\\Google_AccessToken_Revoke' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
         'WPMailSMTP\\Vendor\\Google_AccessToken_Verify' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
         'WPMailSMTP\\Vendor\\Google_AuthHandler_AuthHandlerFactory' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
-        'WPMailSMTP\\Vendor\\Google_AuthHandler_Guzzle5AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
         'WPMailSMTP\\Vendor\\Google_AuthHandler_Guzzle6AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
         'WPMailSMTP\\Vendor\\Google_AuthHandler_Guzzle7AuthHandler' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
         'WPMailSMTP\\Vendor\\Google_Client' => __DIR__ . '/../..' . '/vendor_prefixed/google/apiclient/src/aliases.php',
@@ -890,9 +908,9 @@ class ComposerStaticInit64c5864e234999e61d47e3bb28138d69
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit64c5864e234999e61d47e3bb28138d69::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1d446bf640190c13285be4eb5a9d17ce::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1d446bf640190c13285be4eb5a9d17ce::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1d446bf640190c13285be4eb5a9d17ce::$classMap;
 
         }, null, ClassLoader::class);
     }

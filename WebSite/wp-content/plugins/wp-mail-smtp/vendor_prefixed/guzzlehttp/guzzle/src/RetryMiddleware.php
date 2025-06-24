@@ -36,7 +36,7 @@ class RetryMiddleware
      *                                                                         and returns the number of
      *                                                                         milliseconds to delay.
      */
-    public function __construct(callable $decider, callable $nextHandler, callable $delay = null)
+    public function __construct(callable $decider, callable $nextHandler, ?callable $delay = null)
     {
         $this->decider = $decider;
         $this->nextHandler = $nextHandler;
@@ -83,7 +83,7 @@ class RetryMiddleware
             return $this->doRetry($req, $options);
         };
     }
-    private function doRetry(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    private function doRetry(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options, ?\WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);

@@ -9,7 +9,7 @@ final class BodySummarizer implements \WPMailSMTP\Vendor\GuzzleHttp\BodySummariz
      * @var int|null
      */
     private $truncateAt;
-    public function __construct(int $truncateAt = null)
+    public function __construct(?int $truncateAt = null)
     {
         $this->truncateAt = $truncateAt;
     }

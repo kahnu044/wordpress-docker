@@ -35,7 +35,7 @@ class HttpClientCache
      * @param ClientInterface|null $client
      * @return void
      */
-    public static function setHttpClient(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $client = null)
+    public static function setHttpClient(?\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $client = null)
     {
         self::$httpClient = $client;
     }

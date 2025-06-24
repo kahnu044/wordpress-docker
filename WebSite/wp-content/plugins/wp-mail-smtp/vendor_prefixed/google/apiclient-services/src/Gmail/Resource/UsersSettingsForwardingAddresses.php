@@ -42,6 +42,7 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
      * @param ForwardingAddress $postBody
      * @param array $optParams Optional parameters.
      * @return ForwardingAddress
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress $postBody, $optParams = [])
     {
@@ -59,6 +60,7 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
      * used to indicate the authenticated user.
      * @param string $forwardingEmail The forwarding address to be deleted.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $forwardingEmail, $optParams = [])
     {
@@ -74,6 +76,7 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
      * @param string $forwardingEmail The forwarding address to be retrieved.
      * @param array $optParams Optional parameters.
      * @return ForwardingAddress
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $forwardingEmail, $optParams = [])
     {
@@ -89,6 +92,7 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListForwardingAddressesResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsForwardingAddresses($userId, $optParams = [])
     {

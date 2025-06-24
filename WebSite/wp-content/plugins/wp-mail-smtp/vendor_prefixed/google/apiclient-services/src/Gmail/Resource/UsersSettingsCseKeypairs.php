@@ -41,6 +41,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param CseKeyPair $postBody
      * @param array $optParams Optional parameters.
      * @return CseKeyPair
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair $postBody, $optParams = [])
     {
@@ -61,6 +62,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param DisableCseKeyPairRequest $postBody
      * @param array $optParams Optional parameters.
      * @return CseKeyPair
+     * @throws \Google\Service\Exception
      */
     public function disable($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\DisableCseKeyPairRequest $postBody, $optParams = [])
     {
@@ -79,6 +81,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param EnableCseKeyPairRequest $postBody
      * @param array $optParams Optional parameters.
      * @return CseKeyPair
+     * @throws \Google\Service\Exception
      */
     public function enable($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\EnableCseKeyPairRequest $postBody, $optParams = [])
     {
@@ -94,6 +97,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param string $keyPairId The identifier of the key pair to retrieve.
      * @param array $optParams Optional parameters.
      * @return CseKeyPair
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $keyPairId, $optParams = [])
     {
@@ -115,6 +119,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * pairs to return. If the token is not supplied, then the API will return the
      * first page of results.
      * @return ListCseKeyPairsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsCseKeypairs($userId, $optParams = [])
     {
@@ -135,6 +140,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param string $keyPairId The identifier of the key pair to obliterate.
      * @param ObliterateCseKeyPairRequest $postBody
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function obliterate($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\ObliterateCseKeyPairRequest $postBody, $optParams = [])
     {

@@ -22,6 +22,7 @@ use DomainException;
 use Exception;
 use WPMailSMTP\Vendor\ExpiredException;
 use WPMailSMTP\Vendor\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use WPMailSMTP\Vendor\Firebase\JWT\JWT;
 use WPMailSMTP\Vendor\Firebase\JWT\Key;
 use WPMailSMTP\Vendor\Firebase\JWT\SignatureInvalidException;
 use WPMailSMTP\Vendor\Google\Auth\Cache\MemoryCacheItemPool;
@@ -30,9 +31,9 @@ use WPMailSMTP\Vendor\GuzzleHttp\Client;
 use WPMailSMTP\Vendor\GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use LogicException;
+use WPMailSMTP\Vendor\phpseclib3\Crypt\AES;
 use WPMailSMTP\Vendor\phpseclib3\Crypt\PublicKeyLoader;
-use WPMailSMTP\Vendor\phpseclib3\Crypt\RSA\PublicKey;
-// Firebase v2
+use WPMailSMTP\Vendor\phpseclib3\Math\BigInteger;
 use WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
@@ -59,7 +60,7 @@ class Verify
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $http = null, \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
+    public function __construct(?\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $http = null, ?\WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
     {
         if (null === $http) {
             $http = new \WPMailSMTP\Vendor\GuzzleHttp\Client();
@@ -178,66 +179,21 @@ class Verify
     }
     private function getJwtService()
     {
-        $jwtClass = 'JWT';
-        if (\class_exists('WPMailSMTP\\Vendor\\Firebase\\JWT\\JWT')) {
-            $jwtClass = 'WPMailSMTP\\Vendor\\Firebase\\JWT\\JWT';
-        }
-        if (\property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
+        $jwt = new \WPMailSMTP\Vendor\Firebase\JWT\JWT();
+        if ($jwt::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
-            $jwtClass::$leeway = 1;
+            $jwt::$leeway = 1;
         }
-        // @phpstan-ignore-next-line
-        return new $jwtClass();
+        return $jwt;
     }
     private function getPublicKey($cert)
     {
-        $bigIntClass = $this->getBigIntClass();
-        $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
-        $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
+        $modulus = new \WPMailSMTP\Vendor\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
+        $exponent = new \WPMailSMTP\Vendor\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib3\\Crypt\\RSA\\PublicKey')) {
-            /** @var PublicKey $loader */
-            $loader = \WPMailSMTP\Vendor\phpseclib3\Crypt\PublicKeyLoader::load($component);
-            return $loader->toString('PKCS8');
-        }
-        $rsaClass = $this->getRsaClass();
-        $rsa = new $rsaClass();
-        $rsa->loadKey($component);
-        return $rsa->getPublicKey();
-    }
-    private function getRsaClass()
-    {
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib3\\Crypt\\RSA')) {
-            return 'WPMailSMTP\\Vendor\\phpseclib3\\Crypt\\RSA';
-        }
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib\\Crypt\\RSA')) {
-            return 'WPMailSMTP\\Vendor\\phpseclib\\Crypt\\RSA';
-        }
-        return 'Crypt_RSA';
-    }
-    private function getBigIntClass()
-    {
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib3\\Math\\BigInteger')) {
-            return 'WPMailSMTP\\Vendor\\phpseclib3\\Math\\BigInteger';
-        }
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib\\Math\\BigInteger')) {
-            return 'WPMailSMTP\\Vendor\\phpseclib\\Math\\BigInteger';
-        }
-        return 'Math_BigInteger';
-    }
-    private function getOpenSslConstant()
-    {
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib3\\Crypt\\AES')) {
-            return 'phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
-        }
-        if (\class_exists('WPMailSMTP\\Vendor\\phpseclib\\Crypt\\RSA')) {
-            return 'phpseclib\\Crypt\\RSA::MODE_OPENSSL';
-        }
-        if (\class_exists('WPMailSMTP\\Vendor\\Crypt_RSA')) {
-            return 'CRYPT_RSA_MODE_OPENSSL';
-        }
-        throw new \Exception('Cannot find RSA class');
+        $loader = \WPMailSMTP\Vendor\phpseclib3\Crypt\PublicKeyLoader::load($component);
+        return $loader->toString('PKCS8');
     }
     /**
      * phpseclib calls "phpinfo" by default, which requires special
@@ -254,7 +210,7 @@ class Verify
                 \define('WPMailSMTP\\Vendor\\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
             if (!\defined('WPMailSMTP\\Vendor\\CRYPT_RSA_MODE')) {
-                \define('WPMailSMTP\\Vendor\\CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
+                \define('WPMailSMTP\\Vendor\\CRYPT_RSA_MODE', \WPMailSMTP\Vendor\phpseclib3\Crypt\AES::ENGINE_OPENSSL);
             }
         }
     }

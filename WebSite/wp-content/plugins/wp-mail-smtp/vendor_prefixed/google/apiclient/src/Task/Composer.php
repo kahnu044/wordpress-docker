@@ -27,7 +27,7 @@ class Composer
      * @param Event $event Composer event passed in for any script method
      * @param Filesystem $filesystem Optional. Used for testing.
      */
-    public static function cleanup(\WPMailSMTP\Vendor\Composer\Script\Event $event, \WPMailSMTP\Vendor\Symfony\Component\Filesystem\Filesystem $filesystem = null)
+    public static function cleanup(\WPMailSMTP\Vendor\Composer\Script\Event $event, ?\WPMailSMTP\Vendor\Symfony\Component\Filesystem\Filesystem $filesystem = null)
     {
         $composer = $event->getComposer();
         $extra = $composer->getPackage()->getExtra();

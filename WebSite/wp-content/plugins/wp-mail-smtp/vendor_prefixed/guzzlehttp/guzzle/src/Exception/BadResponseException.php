@@ -9,7 +9,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface;
  */
 class BadResponseException extends \WPMailSMTP\Vendor\GuzzleHttp\Exception\RequestException
 {
-    public function __construct(string $message, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response, \Throwable $previous = null, array $handlerContext = [])
+    public function __construct(string $message, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response, ?\Throwable $previous = null, array $handlerContext = [])
     {
         parent::__construct($message, $request, $response, $previous, $handlerContext);
     }

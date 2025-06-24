@@ -216,7 +216,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.4
      */
-    public static function isSameDocumentReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $base = null) : bool
+    public static function isSameDocumentReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, ?\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $base = null) : bool
     {
         if ($base !== null) {
             $uri = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\UriResolver::resolve($base, $uri);

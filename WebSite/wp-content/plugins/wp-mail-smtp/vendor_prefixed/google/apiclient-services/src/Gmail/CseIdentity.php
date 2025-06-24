@@ -27,6 +27,8 @@ class CseIdentity extends \WPMailSMTP\Vendor\Google\Model
      * @var string
      */
     public $primaryKeyPairId;
+    protected $signAndEncryptKeyPairsType = \WPMailSMTP\Vendor\Google\Service\Gmail\SignAndEncryptKeyPairs::class;
+    protected $signAndEncryptKeyPairsDataType = '';
     /**
      * @param string
      */
@@ -54,6 +56,20 @@ class CseIdentity extends \WPMailSMTP\Vendor\Google\Model
     public function getPrimaryKeyPairId()
     {
         return $this->primaryKeyPairId;
+    }
+    /**
+     * @param SignAndEncryptKeyPairs
+     */
+    public function setSignAndEncryptKeyPairs(\WPMailSMTP\Vendor\Google\Service\Gmail\SignAndEncryptKeyPairs $signAndEncryptKeyPairs)
+    {
+        $this->signAndEncryptKeyPairs = $signAndEncryptKeyPairs;
+    }
+    /**
+     * @return SignAndEncryptKeyPairs
+     */
+    public function getSignAndEncryptKeyPairs()
+    {
+        return $this->signAndEncryptKeyPairs;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

@@ -91,7 +91,7 @@ class UserRefreshCredentials extends \WPMailSMTP\Vendor\Google\Auth\CredentialsL
      *     @type string $id_token
      * }
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         return $this->auth->fetchAuthToken($httpHandler);
     }

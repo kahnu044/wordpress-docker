@@ -19,7 +19,7 @@ class ConnectException extends \WPMailSMTP\Vendor\GuzzleHttp\Exception\TransferE
      * @var array
      */
     private $handlerContext;
-    public function __construct(string $message, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, \Throwable $previous = null, array $handlerContext = [])
+    public function __construct(string $message, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, ?\Throwable $previous = null, array $handlerContext = [])
     {
         parent::__construct($message, 0, $previous);
         $this->request = $request;

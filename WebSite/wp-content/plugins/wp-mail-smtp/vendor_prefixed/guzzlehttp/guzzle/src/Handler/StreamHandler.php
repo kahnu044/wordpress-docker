@@ -37,6 +37,10 @@ class StreamHandler
         if (isset($options['delay'])) {
             \usleep($options['delay'] * 1000);
         }
+        $protocolVersion = $request->getProtocolVersion();
+        if ('1.0' !== $protocolVersion && '1.1' !== $protocolVersion) {
+            throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\ConnectException(\sprintf('HTTP/%s is not supported by the stream handler.', $protocolVersion), $request);
+        }
         $startTime = isset($options['on_stats']) ? \WPMailSMTP\Vendor\GuzzleHttp\Utils::currentTime() : null;
         try {
             // Does not support the expect header.
@@ -62,7 +66,7 @@ class StreamHandler
             return \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::rejectionFor($e);
         }
     }
-    private function invokeStats(array $options, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, ?float $startTime, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null, \Throwable $error = null) : void
+    private function invokeStats(array $options, \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, ?float $startTime, ?\WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null, ?\Throwable $error = null) : void
     {
         if (isset($options['on_stats'])) {
             $stats = new \WPMailSMTP\Vendor\GuzzleHttp\TransferStats($request, $response, \WPMailSMTP\Vendor\GuzzleHttp\Utils::currentTime() - $startTime, $error, []);
@@ -210,7 +214,7 @@ class StreamHandler
         }
         // HTTP/1.1 streams using the PHP stream wrapper require a
         // Connection: close header
-        if ($request->getProtocolVersion() == '1.1' && !$request->hasHeader('Connection')) {
+        if ($request->getProtocolVersion() === '1.1' && !$request->hasHeader('Connection')) {
             $request = $request->withHeader('Connection', 'close');
         }
         // Ensure SSL is verified by default

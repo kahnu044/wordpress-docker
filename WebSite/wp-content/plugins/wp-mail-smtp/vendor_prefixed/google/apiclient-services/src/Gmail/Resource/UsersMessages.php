@@ -40,6 +40,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param BatchDeleteMessagesRequest $postBody
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function batchDelete($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\BatchDeleteMessagesRequest $postBody, $optParams = [])
     {
@@ -54,6 +55,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param BatchModifyMessagesRequest $postBody
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function batchModify($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\BatchModifyMessagesRequest $postBody, $optParams = [])
     {
@@ -69,6 +71,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $id The ID of the message to delete.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $id, $optParams = [])
     {
@@ -89,7 +92,9 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @opt_param string format The format to return the message in.
      * @opt_param string metadataHeaders When given and format is `METADATA`, only
      * include headers specified.
+     * @opt_param bool temporaryEeccBypass
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $id, $optParams = [])
     {
@@ -119,6 +124,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @opt_param bool processForCalendar Process calendar invites in the email and
      * add any extracted meetings to the Google Calendar for this user.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function import($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
     {
@@ -142,6 +148,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @opt_param string internalDateSource Source for Gmail's internal date of the
      * message.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function insert($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
     {
@@ -171,7 +178,9 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * Supports the same query format as the Gmail search box. For example,
      * `"from:someuser@example.com rfc822msgid: is:unread"`. Parameter cannot be
      * used when accessing the api using the gmail.metadata scope.
+     * @opt_param bool temporaryEeccBypass
      * @return ListMessagesResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersMessages($userId, $optParams = [])
     {
@@ -188,6 +197,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param ModifyMessageRequest $postBody
      * @param array $optParams Optional parameters.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function modify($userId, $id, \WPMailSMTP\Vendor\Google\Service\Gmail\ModifyMessageRequest $postBody, $optParams = [])
     {
@@ -206,6 +216,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param Message $postBody
      * @param array $optParams Optional parameters.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function send($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
     {
@@ -221,6 +232,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param string $id The ID of the message to Trash.
      * @param array $optParams Optional parameters.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function trash($userId, $id, $optParams = [])
     {
@@ -236,6 +248,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param string $id The ID of the message to remove from Trash.
      * @param array $optParams Optional parameters.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function untrash($userId, $id, $optParams = [])
     {

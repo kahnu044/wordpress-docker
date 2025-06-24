@@ -38,6 +38,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param Draft $postBody
      * @param array $optParams Optional parameters.
      * @return Draft
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
     {
@@ -53,6 +54,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $id The ID of the draft to delete.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $id, $optParams = [])
     {
@@ -70,6 +72,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      *
      * @opt_param string format The format to return the draft in.
      * @return Draft
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $id, $optParams = [])
     {
@@ -94,6 +97,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * Supports the same query format as the Gmail search box. For example,
      * `"from:someuser@example.com rfc822msgid: is:unread"`.
      * @return ListDraftsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersDrafts($userId, $optParams = [])
     {
@@ -110,6 +114,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param Draft $postBody
      * @param array $optParams Optional parameters.
      * @return Message
+     * @throws \Google\Service\Exception
      */
     public function send($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
     {
@@ -126,6 +131,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param Draft $postBody
      * @param array $optParams Optional parameters.
      * @return Draft
+     * @throws \Google\Service\Exception
      */
     public function update($userId, $id, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
     {

@@ -24,7 +24,7 @@ class FulfilledPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseI
         }
         $this->value = $value;
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {

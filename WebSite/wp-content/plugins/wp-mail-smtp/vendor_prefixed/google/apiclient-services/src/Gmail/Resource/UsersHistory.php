@@ -55,6 +55,7 @@ class UsersHistory extends \WPMailSMTP\Vendor\Google\Service\Resource
      * response, there are no updates to retrieve and you can store the returned
      * `historyId` for a future request.
      * @return ListHistoryResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersHistory($userId, $optParams = [])
     {

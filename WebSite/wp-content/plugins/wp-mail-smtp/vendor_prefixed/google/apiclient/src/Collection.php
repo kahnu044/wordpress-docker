@@ -67,6 +67,7 @@ class Collection extends \WPMailSMTP\Vendor\Google\Model implements \Iterator, \
         return isset($this->{$this->collection_key}[$offset]);
     }
     /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!\is_numeric($offset)) {

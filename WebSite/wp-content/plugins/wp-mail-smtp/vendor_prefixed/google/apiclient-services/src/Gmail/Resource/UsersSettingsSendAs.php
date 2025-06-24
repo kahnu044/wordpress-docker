@@ -45,6 +45,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
@@ -61,6 +62,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $sendAsEmail The send-as alias to be deleted.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $sendAsEmail, $optParams = [])
     {
@@ -77,6 +79,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param string $sendAsEmail The send-as alias to be retrieved.
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $sendAsEmail, $optParams = [])
     {
@@ -93,6 +96,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListSendAsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsSendAs($userId, $optParams = [])
     {
@@ -109,6 +113,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
     public function patch($userId, $sendAsEmail, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
@@ -128,6 +133,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
     public function update($userId, $sendAsEmail, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
@@ -145,6 +151,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $sendAsEmail The send-as alias to be verified.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function verify($userId, $sendAsEmail, $optParams = [])
     {

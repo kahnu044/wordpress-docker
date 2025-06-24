@@ -40,6 +40,7 @@ class UsersSettingsCseIdentities extends \WPMailSMTP\Vendor\Google\Service\Resou
      * @param CseIdentity $postBody
      * @param array $optParams Optional parameters.
      * @return CseIdentity
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\CseIdentity $postBody, $optParams = [])
     {
@@ -58,6 +59,7 @@ class UsersSettingsCseIdentities extends \WPMailSMTP\Vendor\Google\Service\Resou
      * @param string $cseEmailAddress The primary email address associated with the
      * client-side encryption identity configuration that's removed.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $cseEmailAddress, $optParams = [])
     {
@@ -74,6 +76,7 @@ class UsersSettingsCseIdentities extends \WPMailSMTP\Vendor\Google\Service\Resou
      * client-side encryption identity configuration that's retrieved.
      * @param array $optParams Optional parameters.
      * @return CseIdentity
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $cseEmailAddress, $optParams = [])
     {
@@ -95,6 +98,7 @@ class UsersSettingsCseIdentities extends \WPMailSMTP\Vendor\Google\Service\Resou
      * identities to return. If the token is not supplied, then the API will return
      * the first page of results.
      * @return ListCseIdentitiesResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsCseIdentities($userId, $optParams = [])
     {
@@ -115,6 +119,7 @@ class UsersSettingsCseIdentities extends \WPMailSMTP\Vendor\Google\Service\Resou
      * @param CseIdentity $postBody
      * @param array $optParams Optional parameters.
      * @return CseIdentity
+     * @throws \Google\Service\Exception
      */
     public function patch($userId, $emailAddress, \WPMailSMTP\Vendor\Google\Service\Gmail\CseIdentity $postBody, $optParams = [])
     {

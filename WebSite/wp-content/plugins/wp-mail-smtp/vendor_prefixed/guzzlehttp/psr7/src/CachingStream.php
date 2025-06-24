@@ -25,7 +25,7 @@ final class CachingStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamI
      * @param StreamInterface $stream Stream to cache. The cursor is assumed to be at the beginning of the stream.
      * @param StreamInterface $target Optionally specify where data is cached
      */
-    public function __construct(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $target = null)
+    public function __construct(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, ?\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $target = null)
     {
         $this->remoteStream = $stream;
         $this->stream = $target ?: new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Stream(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::tryFopen('php://temp', 'r+'));

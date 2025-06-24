@@ -39,5 +39,5 @@ interface SignBlobInterface extends \WPMailSMTP\Vendor\Google\Auth\FetchAuthToke
      *     one is required to obtain a client name.
      * @return string
      */
-    public function getClientName(callable $httpHandler = null);
+    public function getClientName(?callable $httpHandler = null);
 }

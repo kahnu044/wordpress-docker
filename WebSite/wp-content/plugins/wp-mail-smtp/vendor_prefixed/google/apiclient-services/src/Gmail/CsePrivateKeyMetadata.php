@@ -19,12 +19,28 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 
 class CsePrivateKeyMetadata extends \WPMailSMTP\Vendor\Google\Model
 {
+    protected $hardwareKeyMetadataType = \WPMailSMTP\Vendor\Google\Service\Gmail\HardwareKeyMetadata::class;
+    protected $hardwareKeyMetadataDataType = '';
     protected $kaclsKeyMetadataType = \WPMailSMTP\Vendor\Google\Service\Gmail\KaclsKeyMetadata::class;
     protected $kaclsKeyMetadataDataType = '';
     /**
      * @var string
      */
     public $privateKeyMetadataId;
+    /**
+     * @param HardwareKeyMetadata
+     */
+    public function setHardwareKeyMetadata(\WPMailSMTP\Vendor\Google\Service\Gmail\HardwareKeyMetadata $hardwareKeyMetadata)
+    {
+        $this->hardwareKeyMetadata = $hardwareKeyMetadata;
+    }
+    /**
+     * @return HardwareKeyMetadata
+     */
+    public function getHardwareKeyMetadata()
+    {
+        return $this->hardwareKeyMetadata;
+    }
     /**
      * @param KaclsKeyMetadata
      */

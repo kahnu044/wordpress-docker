@@ -47,6 +47,7 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param Delegate $postBody
      * @param array $optParams Optional parameters.
      * @return Delegate
+     * @throws \Google\Service\Exception
      */
     public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Delegate $postBody, $optParams = [])
     {
@@ -66,6 +67,7 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param string $delegateEmail The email address of the user to be removed as a
      * delegate.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $delegateEmail, $optParams = [])
     {
@@ -85,6 +87,7 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
      * relationship is to be retrieved.
      * @param array $optParams Optional parameters.
      * @return Delegate
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $delegateEmail, $optParams = [])
     {
@@ -101,6 +104,7 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListDelegatesResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsDelegates($userId, $optParams = [])
     {
