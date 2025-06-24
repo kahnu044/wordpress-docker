@@ -446,6 +446,7 @@ function Inspector(props) {
                                         description: text,
                                     })
                                 }
+                                isTextarea={true}
                             />
                         )}
                         <ToggleControl

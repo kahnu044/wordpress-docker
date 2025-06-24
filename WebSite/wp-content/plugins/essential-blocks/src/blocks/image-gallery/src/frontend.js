@@ -90,6 +90,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         let iso;
         let qsRegex = null;
         let filterValue = "*";
+        let visibleItems = []; // Track visible items for lightbox
 
         imagesLoaded(imageGallery, function () {
             const layoutMode = imageGallery.classList.contains("grid") ? "fitRows" : "masonry";
@@ -117,11 +118,34 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 }
             });
 
+            // Update lightbox sources when filter changes
+            const updateLightboxSources = () => {
+                // Get all visible items after filtering
+                visibleItems = iso.filteredItems.map(item => item.element);
+
+                // Update data-fslightbox attribute to create a new gallery group
+                visibleItems.forEach((item, index) => {
+                    const lightboxLink = item.tagName === 'A' ? item : item.querySelector('a[data-fslightbox]');
+                    if (lightboxLink && lightboxLink.hasAttribute('data-fslightbox')) {
+                        // Create a unique gallery ID for the current filter state
+                        lightboxLink.setAttribute('data-fslightbox', `gallery-${wrapperid}-${filterValue.replace(/[^a-zA-Z0-9]/g, '')}`);
+                    }
+                });
+
+                // Refresh FsLightbox instances if it exists
+                if (typeof refreshFsLightbox === 'function') {
+                    refreshFsLightbox();
+                }
+            };
+
+            // Call on initial load
             if (defaultFilter) {
                 iso.arrange({ filter: defaultFilter === '*' ? '*' : `.eb-filter-img-${defaultFilter}` });
+                updateLightboxSources();
             }
             else {
                 iso.arrange();
+                updateLightboxSources();
             }
 
             // Set up the search functionality
@@ -158,6 +182,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     } else {
                         loadMoreBtn.style.display = "none";
                     }
+
+                    // Update lightbox sources after search filtering
+                    qsRegex = new RegExp(quicksearch.value, 'gi');
+                    iso.arrange();
+                    updateLightboxSources();
                 });
 
                 // clear search
@@ -169,6 +198,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
                     // Arrange Isotope to show all items (reset filter and search)
                     iso.arrange();
+                    updateLightboxSources();
                 });
             }
 
@@ -202,6 +232,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
                     if (iso) {
                         iso.arrange({ filter: filterValue });
+                        updateLightboxSources(); // Update lightbox after filtering
                     }
 
                     // iso.destroy();

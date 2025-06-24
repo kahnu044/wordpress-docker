@@ -151,17 +151,29 @@ class OpenAI
      * @param string $prompt The complete prompt for content generation
      * @return array Response with status and content
      */
-    public function generate_content( $prompt )
+    public function generate_content( $prompt, $writePageContent = 'writePageContent' )
     {
         // Get AI settings
         $eb_write_with_ai = (array) get_option( 'eb_write_with_ai', [  ] );
 
         // Check if AI is enabled
-        $is_ai_enabled = isset( $eb_write_with_ai[ 'enableAi' ] ) ? $eb_write_with_ai[ 'enableAi' ] : true;
-        if ( ! $is_ai_enabled ) {
+        $is_ai_enabled_for_page_content = isset( $eb_write_with_ai[ 'writePageContent' ] ) ? $eb_write_with_ai[ 'writePageContent' ] : true;
+        $is_ai_enabled_for_richtext     = isset( $eb_write_with_ai[ 'writeRichtext' ] ) ? $eb_write_with_ai[ 'writeRichtext' ] : true;
+        $is_ai_enabled_for_input_fields = isset( $eb_write_with_ai[ 'writeInputFields' ] ) ? $eb_write_with_ai[ 'writeInputFields' ] : true;
+        if ( $writePageContent === 'writePageContent' && ! $is_ai_enabled_for_page_content ) {
             return [
                 'success' => false,
-                'message' => __( 'AI content generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+                'message' => __( 'AI page content generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+             ];
+        } elseif ( $writePageContent === 'writeRichtext' && ! $is_ai_enabled_for_richtext ) {
+            return [
+                'success' => false,
+                'message' => __( 'AI richtext content generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+             ];
+        } elseif ( $writePageContent === 'writeInputFields' && ! $is_ai_enabled_for_input_fields ) {
+            return [
+                'success' => false,
+                'message' => __( 'AI input fieldcontent generation is disabled. Please enable it in the settings.', 'essential-blocks' )
              ];
         }
 

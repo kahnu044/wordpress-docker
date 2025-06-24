@@ -141,13 +141,18 @@ export default function Style(props) {
 			${wrapperHoverOverlayStylesDesktop}
 		}
 		.${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation{
-			${lottieWidthDesktop ? lottieWidthDesktop : `width: 100%;`}
+            ${lottieWidthDesktop ? lottieWidthDesktop : `width: 100%;`}
+			${lottieHeightDesktop ? lottieHeightDesktop : `height: 100%;`}
+		}
+        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation canvas {
+            ${lottieWidthDesktop ? lottieWidthDesktop : `width: 100%;`}
 			${lottieHeightDesktop ? lottieHeightDesktop : `height: 100%;`}
 		}
 		.${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation-title{
 			${titleTypographyDesktop}
 			color: ${titleColor};
 			background: ${titleBGColor};
+            text-align: ${alignment};
 		}
 	`;
 
@@ -170,10 +175,16 @@ export default function Style(props) {
 		.${blockId}.eb-lottie-animation-wrapper:hover:before{
 			${wrapperHoverOverlayStylesTab}
 		}
-        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation{
-            ${lottieWidthTab ? lottieWidthTab : `width: 100%;`}
+
+        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation {
 			${lottieHeightTab ? lottieHeightTab : `height: 100%;`}
+            ${lottieWidthTab ? lottieWidthTab : `width: 100%;`}
 		}
+        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation canvas {
+            ${lottieWidthTab ? lottieWidthTab : `width: 100%;`}
+            ${lottieHeightTab ? lottieHeightTab : `height: 100%;`}
+		}
+
         .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation-title{
 			${titleTypographyTab}
 		}
@@ -189,19 +200,21 @@ export default function Style(props) {
 			${wrapperBDShadowMobile}
 			${wrapperBackgroundStylesMobile}
 		}
-
 		.${blockId}.eb-icon-wrapper:hover {
 			${wrapperHoverBackgroundStylesMobile}
 			${wrapperBDShadowHoverMobile}
 		}
-
         .${blockId}.eb-lottie-animation-wrapper:before{
 			${wrapperOverlayStylesMobile}
 		}
 		.${blockId}.eb-lottie-animation-wrapper:hover:before{
 			${wrapperHoverOverlayStylesMobile}
 		}
-        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation{
+        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation {
+            ${lottieWidthMobile ? lottieWidthMobile : `width: 100%;`}
+			${lottieHeightMobile ? lottieHeightMobile : `height: 100%;`}
+		}
+        .${blockId}.eb-lottie-animation-wrapper .eb-lottie-animation canvas{
             ${lottieWidthMobile ? lottieWidthMobile : `width: 100%;`}
 			${lottieHeightMobile ? lottieHeightMobile : `height: 100%;`}
 		}

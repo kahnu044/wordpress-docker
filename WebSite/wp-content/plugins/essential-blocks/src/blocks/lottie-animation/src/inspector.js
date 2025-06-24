@@ -424,6 +424,7 @@ function Inspector(props) {
                         min={0}
                         max={1000}
                         step={1}
+                        allowAuto={true} // Enable auto option
                     />
 
                     {enableTitle && lottieTitle?.length > 0 && (

@@ -1,0 +1,92 @@
+<wpml-config>
+	<gutenberg-blocks>
+	  <gutenberg-block type="essential-blocks/accordion-item" translate="1">
+		<key name="title" />
+		<xpath label="Accordion Title">//*[@class="eb-accordion-title"]</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/advanced-heading" translate="1">
+		<key name="titleText" />
+		<key name="subtitleText" />
+		<xpath>//*[@class='eb-ah-title']</xpath>
+		<xpath>//*[@class='eb-ah-subtitle']</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/advanced-tabs" translate="1">
+		<key name="tabTitles">
+		  <key name="text" search-method="wildcards" />
+		</key>
+		<xpath label="Tab Title">//*[@class="tab-title-text"]</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/table-of-contents" translate="1">
+		<key name="headers">
+		  <key name="*">
+			<key name="content" />
+			<key name="text" />
+			<key name="link" />
+		  </key>
+		</key>
+		<key name="title" />
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/toggle-content" translate="1">
+		<key name="primaryLabelText" />
+		<key name="secondaryLabelText" />
+		<xpath label="eb-toggle-primary-label-text">//span[@class="eb-toggle-primary-label-text"]</xpath>
+		<xpath label="eb-toggle-secondary-label-text">//span[@class="eb-toggle-secondary-label-text"]</xpath>
+		<xpath label="eb-toggle-primary-label">//span[@class="eb-toggle-primary-label"]</xpath>
+		<xpath label="eb-toggle-secondary-label">//span[@class="eb-toggle-secondary-label"]</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/form" translate="1">
+		<key name="buttonText" />
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/post-grid" translate="1">
+		<key name="readmoreText" />
+		<key name="authorPrefix" />
+		<key name="datePrefix" />
+		<key name="loadMoreOptions">
+		  <key name="*">
+			<key name="loadMoreButtonTxt" />
+		  </key>
+		</key>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/image-gallery" translate="1">
+		<key name="loadmoreBtnText" />
+		<xpath label="eb-img-gallery-loadmore">//button[@class="eb-img-gallery-loadmore"]</xpath>
+		<key name="filterAllTitle" />
+		<key name="filterItems">
+		  <key name="*">
+			<key name="label" />
+		  </key>
+		</key>
+		<xpath label="eb-img-gallery-filter-wrapper">//ul[contains(@class, 'eb-img-gallery-filter-wrapper')]//li</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/woo-product-grid" translate="1">
+		<key name="simpleCartText" />
+		<key name="variableCartText" />
+		<key name="groupedCartText" />
+		<key name="externalCartText" />
+		<key name="defaultCartText" />
+		<key name="saleText" />
+		<key name="loadMoreOptions">
+		  <key name="*">
+			<key name="loadMoreButtonTxt" />
+		  </key>
+		</key>
+		<key name="selectedTaxonomyItems"></key>
+		<xpath label="ebwpg-category-filter-list">//ul[contains(@class, 'ebwpg-category-filter-list')]//li</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/post-carousel" translate="1">
+		<key name="readmoreText" />
+		<xpath label="ebpg-readmore-btn">//a[@class="ebpg-readmore-btn"]</xpath>
+		<key name="authorPrefix" />
+		<xpath label="ebpg-posted-by">//span[@class="ebpg-posted-by"]</xpath>
+		<key name="datePrefix" />
+		<xpath label="ebpg-posted-on">//span[@class="ebpg-posted-on"]</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/popup" translate="1">
+		<key name="btnText" />
+		<xpath label="eb-popup-button-anchor">//a[@class="eb-popup-button-anchor"]//p</xpath>
+	  </gutenberg-block>
+	  <gutenberg-block type="essential-blocks/row" translate="0" />
+	  <gutenberg-block type="essential-blocks/column" translate="0" />
+	  <gutenberg-block type="essential-blocks/wrapper" translate="0" />
+	</gutenberg-blocks>
+  </wpml-config>

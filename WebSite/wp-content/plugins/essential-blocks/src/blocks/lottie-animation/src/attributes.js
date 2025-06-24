@@ -129,7 +129,9 @@ const attributes = {
         type: 'string',
     },
 
-
+    version: {
+        type: 'string',
+    },
 
     ...generateTypographyAttributes(TITLE_TYPOGRAPHY),
 
@@ -162,6 +164,7 @@ const attributes = {
         defaultRange: 600,
         defaultRangeTAB: 600,
         defaultRangeMOB: 300,
+        defaultIsAuto: false,
     }),
 };
 

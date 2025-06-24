@@ -15,7 +15,9 @@ class Scripts
     private $isEnableFontAwesome     = true;
     private $isEnableGoogleFont      = true;
     private $isEnableQuickToolbar    = false;
-    private $isEnableWriteAI         = false;
+    private $writeAIPageContent      = false;
+    private $writeAIRichtextContent  = false;
+    private $writeAIInputField       = false;
     private $hasOpenAiApiKey         = false;
     private $writeAiPostTypes        = [ 'all' ];
     private $isEnableUnfilteredFiles = false;
@@ -27,7 +29,7 @@ class Scripts
         $eb_settings                   = get_option( 'eb_settings', [  ] );
         $this->isEnableFontAwesome     = ! empty( $eb_settings[ 'enableFontawesome' ] ) ? $eb_settings[ 'enableFontawesome' ] : 'true';
         $this->isEnableGoogleFont      = ! empty( $eb_settings[ 'googleFont' ] ) ? $eb_settings[ 'googleFont' ] : 'true';
-        $this->isEnableQuickToolbar    = ! empty( $eb_settings[ 'quickToolbar' ] ) ? $eb_settings[ 'quickToolbar' ] : 'true';
+        $this->isEnableQuickToolbar    = ! empty( $eb_settings[ 'quickToolbar' ] ) ? $eb_settings[ 'quickToolbar' ] : 'false';
         $this->isEnableUnfilteredFiles = ! empty( $eb_settings[ 'unfilteredFile' ] ) ? $eb_settings[ 'unfilteredFile' ] : 'false';
         add_action(
             'init',
@@ -38,9 +40,11 @@ class Scripts
         );
 
         //Write with AI
-        $eb_write_with_ai      = (array) get_option( 'eb_write_with_ai', [  ] );
-        $this->isEnableWriteAI = isset( $eb_write_with_ai[ 'enableAi' ] ) ? $eb_write_with_ai[ 'enableAi' ] : true;
-        $this->hasOpenAiApiKey = isset( $eb_write_with_ai[ 'apiKey' ] ) && ! empty( $eb_write_with_ai[ 'apiKey' ] ) ? true : false;
+        $eb_write_with_ai             = (array) get_option( 'eb_write_with_ai', [  ] );
+        $this->writeAIPageContent     = isset( $eb_write_with_ai[ 'writePageContent' ] ) ? $eb_write_with_ai[ 'writePageContent' ] : true;
+        $this->writeAIRichtextContent = isset( $eb_write_with_ai[ 'writeRichtext' ] ) ? $eb_write_with_ai[ 'writeRichtext' ] : true;
+        $this->writeAIInputField      = isset( $eb_write_with_ai[ 'writeInputFields' ] ) ? $eb_write_with_ai[ 'writeInputFields' ] : true;
+        $this->hasOpenAiApiKey        = isset( $eb_write_with_ai[ 'apiKey' ] ) && ! empty( $eb_write_with_ai[ 'apiKey' ] ) ? true : false;
 
         // Get post types for Write with AI
         if ( isset( $eb_write_with_ai[ 'postTypes' ] ) ) {
@@ -178,14 +182,15 @@ class Scripts
 
             //templately-installer
 
-            $show_pattern_library = get_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY );
-            if ( ! $show_pattern_library ) {
-                wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.js' );
-                $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
-            }
+            //TODO: Hide for now on v5.5.2. Will make a plan later
+            // $show_pattern_library = get_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY );
+            // if ( ! $show_pattern_library ) {
+            //     wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.js' );
+            //     $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
+            // }
 
             //Write with AI
-            if ( $this->isEnableWriteAI === true && $this->is_allowed_post_type_for_ai() ) {
+            if ( $this->writeAIPageContent === true && $this->is_allowed_post_type_for_ai() ) {
                 wpdev_essential_blocks()->assets->register( 'write-with-ai', 'admin/write-with-ai/index.js' );
                 $editor_scripts_deps[  ] = 'essential-blocks-write-with-ai';
             }
@@ -223,7 +228,7 @@ class Scripts
             $editor_styles_deps[  ] = 'essential-blocks-templately-installer';
 
             //write-with-ai
-            if ( $this->isEnableWriteAI === true && $this->is_allowed_post_type_for_ai() ) {
+            if ( $this->writeAIPageContent === true && $this->is_allowed_post_type_for_ai() ) {
                 wpdev_essential_blocks()->assets->register( 'write-with-ai', 'admin/write-with-ai/index.css' );
                 $editor_styles_deps[  ] = 'essential-blocks-write-with-ai';
             }
@@ -606,25 +611,27 @@ class Scripts
          ];
         if ( is_admin() ) {
             $admin_localize_array = [
-                'admin_nonce'          => wp_create_nonce( 'admin-nonce' ),
-                'fluent_form_lists'    => wp_json_encode( FluentForms::form_list() ),
-                'wpforms_lists'        => wp_json_encode( WPForms::form_list() ),
-                'all_blocks'           => $plugin::$blocks->all(),
-                'all_blocks_default'   => $plugin::$blocks->defaults( true, false ),
-                'quick_toolbar_blocks' => $plugin::$blocks->quick_toolbar_blocks(),
-                'get_plugins'          => Helper::get_plugin_list_for_localize(),
-                'googleFont'           => $this->isEnableGoogleFont,
-                'fontAwesome'          => $this->isEnableFontAwesome,
-                'quickToolbar'         => $this->isEnableQuickToolbar,
-                'enableWriteAI'        => $this->isEnableWriteAI && $this->is_allowed_post_type_for_ai(),
-                'hasOpenAiApiKey'      => $this->hasOpenAiApiKey,
-                'writeAiPostTypes'     => $this->writeAiPostTypes,
-                'globalColors'         => Helper::global_colors(),
-                'gradientColors'       => Helper::gradient_colors(),
-                'unfilter_capability'  => current_user_can( 'unfiltered_html' ) ? 'true' : 'false',
-                'is_tracking'          => Insights::get_is_tracking_allowed(),
-                'eb_user_type'         => get_option( 'essential_blocks_user_type' ),
-                'unfilteredFile'       => $this->isEnableUnfilteredFiles
+                'admin_nonce'              => wp_create_nonce( 'admin-nonce' ),
+                'fluent_form_lists'        => wp_json_encode( FluentForms::form_list() ),
+                'wpforms_lists'            => wp_json_encode( WPForms::form_list() ),
+                'all_blocks'               => $plugin::$blocks->all(),
+                'all_blocks_default'       => $plugin::$blocks->defaults( true, false ),
+                'quick_toolbar_blocks'     => $plugin::$blocks->quick_toolbar_blocks(),
+                'get_plugins'              => Helper::get_plugin_list_for_localize(),
+                'googleFont'               => $this->isEnableGoogleFont,
+                'fontAwesome'              => $this->isEnableFontAwesome,
+                'quickToolbar'             => $this->isEnableQuickToolbar,
+                'enableWriteAIPageContent' => $this->writeAIPageContent && $this->is_allowed_post_type_for_ai(),
+                'enableWriteAIRichtext'    => $this->writeAIRichtextContent,
+                'enableWriteAIInputField'  => $this->writeAIInputField,
+                'hasOpenAiApiKey'          => $this->hasOpenAiApiKey,
+                'writeAiPostTypes'         => $this->writeAiPostTypes,
+                'globalColors'             => Helper::global_colors(),
+                'gradientColors'           => Helper::gradient_colors(),
+                'unfilter_capability'      => current_user_can( 'unfiltered_html' ) ? 'true' : 'false',
+                'is_tracking'              => Insights::get_is_tracking_allowed(),
+                'eb_user_type'             => get_option( 'essential_blocks_user_type' ),
+                'unfilteredFile'           => $this->isEnableUnfilteredFiles
              ];
 
             $localize_array = array_merge( $localize_array, $admin_localize_array );

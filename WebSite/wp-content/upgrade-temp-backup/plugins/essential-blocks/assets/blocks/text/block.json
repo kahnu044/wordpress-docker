@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Text",
+  "name": "essential-blocks/text",
+  "category": "essential-blocks",
+  "description": "Add and customize text content on your website that catches the attention of the visitors.",
+  "apiVersion": 2,
+  "textdomain": "essential-blocks",
+  "supports": {
+    "anchor": true
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

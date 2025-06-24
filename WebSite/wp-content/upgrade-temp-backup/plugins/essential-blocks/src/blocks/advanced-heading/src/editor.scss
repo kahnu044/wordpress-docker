@@ -1,0 +1,14 @@
+.eb-advance-heading-wrapper {
+	.eb-ah-title {
+
+		&>div,
+		&>span {
+			display: inline;
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			letter-spacing: inherit;
+			line-height: inherit;
+		}
+	}
+}

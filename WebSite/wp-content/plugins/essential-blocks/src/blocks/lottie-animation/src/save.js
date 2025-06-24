@@ -25,13 +25,14 @@ const Save = ({ attributes }) => {
         endSegment,
         scrollBottomPoint,
         scrollTopPoint,
+        version,
     } = attributes;
 
     if (!lottieURl) {
-        return
+        return null;
     }
 
-    //Settings
+    // Settings object for the AnimationController
     const settings = {
         lottieURl,
         speed,
@@ -46,16 +47,14 @@ const Save = ({ attributes }) => {
         scrollTopPoint,
     }
 
-
-
     return (
         <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`} >
-                <div className={`eb-lottie-animation-wrapper ${blockId}`}
+                <div className={`eb-lottie-animation-wrapper ${blockId} ${version}`}
                     data-id={blockId}
                     data-settings={JSON.stringify(settings)}
                 >
-                    <canvas className="eb-lottie-animation"></canvas>
+                    <div className="eb-lottie-animation"></div>
 
                     {enableTitle && (
                         <>

@@ -14,7 +14,6 @@ export const editUseEffect = ({ clientId, attributes }) => {
         navVerticalAlign,
         hamburgerMenu
     } = attributes;
-
     const innerBlocks = useMemo(() => {
         const parentBlocks = select("core/block-editor").getBlocksByClientId(clientId)[0]
         return parentBlocks?.innerBlocks
@@ -36,7 +35,26 @@ export const editUseEffect = ({ clientId, attributes }) => {
     useEffect(() => {
         if (!isEqual(refAttributes.current, changedAttributes)) {
             refAttributes.current = changedAttributes
-            if (innerBlocks) {
+            if (!innerBlocks || innerBlocks.length === 0) {
+                // If innerBlocks aren't available yet, set up a timeout to try again
+                setTimeout(() => {
+                    const parentBlocks = select("core/block-editor").getBlocksByClientId(clientId)[0];
+                    const newInnerBlocks = parentBlocks?.innerBlocks;
+
+                    if (newInnerBlocks && newInnerBlocks.length > 0) {
+                        times(newInnerBlocks.length, (n) => {
+                            updateBlockAttributes(newInnerBlocks[n].clientId, {
+                                className: `${layout} ${layout == "is-horizontal" ? navAlign : navVerticalAlign
+                                    } ${flexWrap === true ? "no-wrap" : ""}`,
+                                openSubmenusOnClick: dropdownOpenOnClick,
+                                showSubmenuIcon: showDropdownIcon,
+                                hasIcon: navBtnType,
+                                overlayMenu: hamburgerMenu,
+                            });
+                        });
+                    }
+                }, 500); // Give some time for innerBlocks to be created
+            } else {
                 times(innerBlocks.length, (n) => {
                     updateBlockAttributes(innerBlocks[n].clientId, {
                         className: `${layout} ${layout == "is-horizontal" ? navAlign : navVerticalAlign

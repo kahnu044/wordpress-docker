@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Taxonomy",
+  "name": "essential-blocks/taxonomy",
+  "category": "essential-blocks",
+  "description": "Display and organize content by categories, tags, product SKUs, etc. to make it easy for users to navigate",
+  "apiVersion": 2,
+  "textdomain": "essential-blocks",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

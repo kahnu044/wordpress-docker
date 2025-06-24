@@ -4,6 +4,7 @@ import Switch from "rc-switch";
 import AsyncSelect from "react-select/async";
 import apiFetch from "@wordpress/api-fetch";
 import { select, useSelect, withSelect } from "@wordpress/data";
+import { Dashicon } from '@wordpress/components';
 
 import {
     fetchEBSettingsData,
@@ -12,7 +13,9 @@ import {
 
 export default function TabWriteAi() {
     const [aiSettings, setAiSettings] = useState({
-        enableAi: true,
+        writePageContent: true,
+        writeRichtext: true,
+        writeInputFields: true,
         postTypes: ['all'],
         apiKey: "",
         maxTokens: 1500,
@@ -24,6 +27,7 @@ export default function TabWriteAi() {
     const [isSaving, setIsSaving] = useState(false);
     const [saveMessage, setSaveMessage] = useState({});
     const [apiKeyError, setApiKeyError] = useState('');
+    const [showFeatureOptions, setShowFeatureOptions] = useState(false);
     const [postTypeOptions, setPostTypeOptions] = useState([
         { value: 'all', label: __('All Post Types', 'essential-blocks') }
     ]);
@@ -66,7 +70,25 @@ export default function TabWriteAi() {
                     data.postTypes = ['all'];
                 }
 
-                setAiSettings(data);
+                if ('enableAi' in data) {
+                    if (data.enableAi === true) {
+                        data.writePageContent = true;
+                        data.writeRichtext = true;
+                        data.writeInputFields = true;
+                    }
+                    else {
+                        data.writePageContent = false;
+                        data.writeRichtext = false;
+                        data.writeInputFields = false;
+                    }
+
+                    delete data.enableAi
+                }
+
+
+                setAiSettings({
+                    ...data
+                });
             }
 
             setSettingsLoaded(true);
@@ -84,10 +106,39 @@ export default function TabWriteAi() {
         }
     }, [filterablePostTypes]);
 
-    const onChangeSwitch = (value) => {
+    const allEnabled = aiSettings.writePageContent || aiSettings.writeRichtext || aiSettings.writeInputFields;
+
+    const onChangeAllSwitch = (value) => {
         setAiSettings({
             ...aiSettings,
-            enableAi: value,
+            writePageContent: value,
+            writeRichtext: value,
+            writeInputFields: value,
+        });
+    };
+
+    const toggleFeatureOptions = () => {
+        setShowFeatureOptions(!showFeatureOptions);
+    };
+
+    const onChangewritePageContent = (value) => {
+        setAiSettings({
+            ...aiSettings,
+            writePageContent: value,
+        });
+    };
+
+    const onChangewriteRichtext = (value) => {
+        setAiSettings({
+            ...aiSettings,
+            writeRichtext: value,
+        });
+    };
+
+    const onChangewriteInputFields = (value) => {
+        setAiSettings({
+            ...aiSettings,
+            writeInputFields: value,
         });
     };
 
@@ -164,25 +215,100 @@ export default function TabWriteAi() {
                                     <h2>{__("Enable Write with AI", "essential-blocks")}</h2>
                                     <p>{__("Toggle to enable or disable the AI writing functionality inside the Gutenberg Editor.", "essential-blocks")}</p>
                                 </div>
-                                <div className="eb-col-6">
-                                    <div className="eb-admin-input-wrapper eb-admin-checkbox eb-block-box">
-                                        <h4 className={aiSettings?.enableAi ? "enabled" : "disabled"}>{aiSettings?.enableAi ? "Enabled" : "Disabled"}</h4>
-                                        <label className="eb-toggle-switch">
-                                            <label
-                                                htmlFor="switch"
-                                                className="eb-admin-checkbox-label"
-                                            >
-                                                <Switch
-                                                    checked={aiSettings?.enableAi}
-                                                    onChange={onChangeSwitch}
-                                                    defaultChecked={true}
-                                                    disabled={false}
-                                                    checkedChildren="ON"
-                                                    unCheckedChildren="OFF"
-                                                />
+                                <div className="eb-col-6 eb-admin-checkbox-wrapper">
+                                    <div className="eb-admin-input-wrapper eb-admin-checkbox-all eb-admin-checkbox eb-block-box">
+                                        <h4 className={allEnabled ? "enabled" : "disabled"}>
+                                            Enable or disable all
+                                        </h4>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <label className="eb-toggle-switch">
+                                                <label htmlFor="switch-all" className="eb-admin-checkbox-label">
+                                                    <Switch
+                                                        checked={allEnabled}
+                                                        onChange={onChangeAllSwitch}
+                                                        defaultChecked={true}
+                                                        disabled={false}
+                                                        checkedChildren="ON"
+                                                        unCheckedChildren="OFF"
+                                                    />
+                                                </label>
                                             </label>
-                                        </label>
+
+                                            <button
+                                                type="button"
+                                                onClick={toggleFeatureOptions}
+                                                style={{
+                                                    background: 'none',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '4px',
+                                                    padding: '4px 8px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px',
+                                                    color: '#666'
+                                                }}
+                                            >
+                                                <Dashicon icon={showFeatureOptions ? "arrow-up-alt2" : "arrow-down-alt2"} />
+                                            </button>
+                                        </div>
                                     </div>
+
+                                    {showFeatureOptions && (
+                                        <div className="eb-admin-checkbox-items-wrapper">
+                                            <div className="eb-admin-input-wrapper eb-admin-checkbox eb-block-box">
+                                                <h4 className={aiSettings?.writePageContent ? "enabled" : "disabled"}>
+                                                    Generate Page Content
+                                                </h4>
+                                                <label className="eb-toggle-switch">
+                                                    <label htmlFor="switch-feature-one" className="eb-admin-checkbox-label">
+                                                        <Switch
+                                                            checked={aiSettings?.writePageContent}
+                                                            onChange={onChangewritePageContent}
+                                                            defaultChecked={true}
+                                                            disabled={false}
+                                                            checkedChildren="ON"
+                                                            unCheckedChildren="OFF"
+                                                        />
+                                                    </label>
+                                                </label>
+                                            </div>
+
+                                            <div className="eb-admin-input-wrapper eb-admin-checkbox eb-block-box">
+                                                <h4 className={aiSettings?.writeRichtext ? "enabled" : "disabled"}>
+                                                    Generate RichText Content
+                                                </h4>
+                                                <label className="eb-toggle-switch">
+                                                    <label htmlFor="switch-feature-two" className="eb-admin-checkbox-label">
+                                                        <Switch
+                                                            checked={aiSettings?.writeRichtext}
+                                                            onChange={onChangewriteRichtext}
+                                                            defaultChecked={true}
+                                                            disabled={false}
+                                                            checkedChildren="ON"
+                                                            unCheckedChildren="OFF"
+                                                        />
+                                                    </label>
+                                                </label>
+                                            </div>
+
+                                            <div className="eb-admin-input-wrapper eb-admin-checkbox eb-block-box">
+                                                <h4 className={aiSettings?.writeInputFields ? "enabled" : "disabled"}>
+                                                    Generate Block Input Content
+                                                </h4>
+                                                <label className="eb-toggle-switch">
+                                                    <label htmlFor="switch-feature-three" className="eb-admin-checkbox-label">
+                                                        <Switch
+                                                            checked={aiSettings?.writeInputFields}
+                                                            onChange={onChangewriteInputFields}
+                                                            defaultChecked={true}
+                                                            disabled={false}
+                                                            checkedChildren="ON"
+                                                            unCheckedChildren="OFF"
+                                                        />
+                                                    </label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -281,7 +407,6 @@ export default function TabWriteAi() {
                                     }
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>

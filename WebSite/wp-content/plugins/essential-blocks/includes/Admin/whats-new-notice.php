@@ -3,11 +3,11 @@
         exit;
     }
 
-    $title       = esc_html__( 'Introducing EB Conditional Logic', 'essential-blocks' );
-    $description = esc_html__( 'Add visibility logics to your certain Gutenberg blocks based on variety of factors, including date and time, query strings, user roles, & many more.', 'essential-blocks' );
+    $title       = esc_html__( 'Introducing EB AI Content Generation', 'essential-blocks' );
+    $description = esc_html__( 'Generate smart, contextual content for RichText and Input fields in Gutenberg using advanced AI integration.', 'essential-blocks' );
     $learn_more  = esc_html__( 'Learn More', 'essential-blocks' );
     $dismiss     = esc_html__( 'Dismiss', 'essential-blocks' );
-    $doc_url     = esc_url( 'https://essential-blocks.com/docs/essential-blocks-conditional-display/' );
+    $doc_url     = esc_url( 'https://essential-blocks.com/doc/create-ai-content-rich-text-input/' );
 ?>
 
 <script type="text/javascript">
@@ -25,7 +25,7 @@ jQuery(document).ready(function ($) {
                         <a href="<?php echo $doc_url; ?>" target="_blank" rel="noopener noreferrer"><?php echo $learn_more; ?></a>
                     </button>
                     <button class="button button-dismiss">
-                        <span class="dashicons dashicons-dismiss"></span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      					                                                 					                                                 					                                                 					                                                 					                                                 					                                                  <?php echo $dismiss; ?>
+                        <span class="dashicons dashicons-dismiss"></span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       					                                                 					                                                 					                                                 					                                                 					                                                 					                                                  <?php echo $dismiss; ?>
                     </button>
                 </div>
 			</div>

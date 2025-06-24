@@ -120,7 +120,7 @@ export default function TabOptions() {
                 "essential-blocks",
             ),
             doc: "https://essential-blocks.com/docs/quick-action-toolbar/",
-            default: true,
+            default: false,
         },
     });
 

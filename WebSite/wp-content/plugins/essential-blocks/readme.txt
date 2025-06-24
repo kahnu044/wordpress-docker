@@ -1,14 +1,14 @@
-=== Essential Blocks – AI-Powered Page Builder Gutenberg Blocks, Patterns & Templates ===
+=== Gutenberg Essential Blocks – Page Builder for Gutenberg Blocks & Patterns ===
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gutenberg Plugin
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 5.4.2
+Stable tag: 5.5.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Power up the Gutenberg block editor with AI, 60+ essential blocks, patterns, templates, Woo blocks, post grids, with a robust WordPress block library.
+Gutenberg block editor with AI. 60+ Gutenberg blocks, patterns, WooCommerce blocks, post grid, gallery, menu with Gutenberg block library.
 
 == Description ==
 Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate Gutenberg blocks library for WordPress default editor!
@@ -24,7 +24,11 @@ https://youtu.be/PnZx4ZOMyzI
 
 Generate engaging content for pages and posts in seconds with the Write With AI feature of Essential Blocks. Simply enter a few keywords and submit your prompt. Our built‑in AI engine will create rich, high-quality content instantly.
 
-##✨ BLOCK PLUGIN WITH FULL CUSTOMIZATION
+##✨ READY AI CONTENT FOR RICH TEXT INPUT
+
+Get AI-generated content in one click for all your rich text input blocks. With this global AI feature, you can automatically create, modify, or personalize your text content fields for any Gutenberg block.
+
+##🧱 BLOCK PLUGIN WITH FULL CUSTOMIZATION
 
 Each Gutenberg block comes with a bunch of options to control every possible aspect of your website design on the block editor. You can design your page with endless customization options using this amazing Gutenberg blocks plugin.
 
@@ -251,6 +255,21 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.5.2 - 20/06/2025 =
+- Few minor bug fixes & improvements
+
+= 5.5.1 - 19/06/2025 =
+- Fixed: AI Content Generation | Popup was closing upon clicking the generate button in Firefox
+- Few minor bug fixes & improvements
+
+= 5.5.0 - 17/06/2025 =
+- Added: New Feature: AI Content Generation | RichText and Input field support
+- Fixed: EB Filterable Gallery | Lightbox displays all images instead of filtered items only
+- Fixed: Lottie Animation | Height and width set to auto control
+- Fixed: Lottie Animation | Incorrect animation behavior
+- Fixed: Advanced Navigation | Alignment issue
+- Few minor bug fixes & improvements
 
 = 5.4.2 - 01/06/2025 =
 - Added: Infobox | Link option added for the title

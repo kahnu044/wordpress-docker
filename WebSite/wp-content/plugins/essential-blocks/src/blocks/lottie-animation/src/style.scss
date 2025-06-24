@@ -1,8 +1,23 @@
 .eb-lottie-animation-wrapper {
 	display: flex;
 	flex-direction: column;
+
+	.eb-lottie-animation {
+		width: 100%;
+		height: 100%;
+
+		// svg {
+		// 	height: auto !important;
+		// }
+	}
 }
 
+.eb-lottie-animation-wrapper:not(.v2) .eb-lottie-animation {
+	canvas {
+		width: 100%;
+		height: 100%;
+	}
+}
 
 .wp-block-essential-blocks-lottie-animation {
 	.components-placeholder__label {

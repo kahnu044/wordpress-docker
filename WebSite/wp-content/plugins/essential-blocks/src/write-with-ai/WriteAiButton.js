@@ -309,6 +309,7 @@ const WriteAIButton = () => {
         data.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
         data.append("prompt", modifiedPrompt); // Use the modified prompt with additional instructions
         data.append("overwrite", overwriteContent);
+        data.append("content_for", "writePageContent");
 
 
         fetch(EssentialBlocksLocalize?.ajax_url, {
@@ -362,7 +363,11 @@ const WriteAIButton = () => {
 
     const isBlank = select('core/block-editor').getBlocks().length === 0 ? true : false;
 
-    return EssentialBlocksLocalize?.enableWriteAI !== "1" ? "" : (
+    if (!EssentialBlocksLocalize?.hasOpenAiApiKey) {
+        return "";
+    }
+
+    return EssentialBlocksLocalize?.enableWriteAIPageContent !== "1" ? "" : (
         <>
             <Button
                 onClick={() => handleClick()}

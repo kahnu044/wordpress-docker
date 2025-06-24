@@ -1,0 +1,13 @@
+.eb-product-rating-wrapper {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	.eb-woo-product-rating-wrapper {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+}

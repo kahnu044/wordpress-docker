@@ -190,8 +190,9 @@ const Edit = (props) => {
         }
     }, [])
     useEffect(() => {
-        if (version === 'v2' && wrpBds_shadowColor === undefined) {
+        const isBlockJustInserted = select("core/block-editor").wasBlockJustInserted(clientId);
 
+        if (isBlockJustInserted && version === 'v2' && wrpBds_shadowColor === undefined) {
             setAttributes({
                 wrpBds_inset: false,
                 wrpBds_shadowType: "normal",

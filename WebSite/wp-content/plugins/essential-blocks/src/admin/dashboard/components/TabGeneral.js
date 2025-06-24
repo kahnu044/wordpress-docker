@@ -277,33 +277,15 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.4.2", "essential-blocks")}
+                                    {__("Version: 5.5.2", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("01/06/2025", "essential-blocks")}
+                                        {__("20/06/2025", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Added: Infobox | Link option added for the title",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Dual Button | Button gap issue on Preset 4",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Improved: Security enhancement",
-                                            "essential-blocks"
-                                        )}
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Updated: Minor bug fixes & performance improvements",
+                                            "Few minor bug fixes & improvements",
                                             "essential-blocks"
                                         )}
                                     </li>

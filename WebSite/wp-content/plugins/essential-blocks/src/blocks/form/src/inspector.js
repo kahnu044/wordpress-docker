@@ -29,7 +29,7 @@ import {
     DynamicInputControl,
     EBIconPicker,
     InspectorPanel,
-    EBTextControl,
+    EBTextControlWithDropdown,
 } from "@essential-blocks/controls";
 
 import {
@@ -392,15 +392,15 @@ function Inspector(props) {
                     {["contact_form", "subscription_form"].includes(
                         formType,
                     ) && (
-                        <ProSelectControl
-                            label={__("Template", "essential-blocks")}
-                            value={template}
-                            options={formTemplates}
-                            onChange={(selected) =>
-                                changeFormTemplate(selected)
-                            }
-                        />
-                    )}
+                            <ProSelectControl
+                                label={__("Template", "essential-blocks")}
+                                value={template}
+                                options={formTemplates}
+                                onChange={(selected) =>
+                                    changeFormTemplate(selected)
+                                }
+                            />
+                        )}
                     {"Desktop" === resOption && (
                         <>
                             <ProSelectControl
@@ -463,7 +463,7 @@ function Inspector(props) {
                             })
                         }
                     />
-                    <EBTextControl
+                    <EBTextControlWithDropdown
                         label={__("Email To", "essential-blocks")}
                         value={formSettings.mailTo}
                         placeholder={
@@ -484,7 +484,7 @@ function Inspector(props) {
                         insertMode={"append"}
                         updateValueOnSelect={true}
                     />
-                    <EBTextControl
+                    <EBTextControlWithDropdown
                         label={__("Reply To", "essential-blocks")}
                         value={formSettings.replyTo}
                         placeholder={
@@ -505,7 +505,7 @@ function Inspector(props) {
                             "essential-blocks",
                         )}
                     />
-                    <EBTextControl
+                    <EBTextControlWithDropdown
                         label={__("Email Cc (Optional)", "essential-blocks")}
                         placeholder={__(
                             "Recipient Email Address",
@@ -526,7 +526,7 @@ function Inspector(props) {
                         insertMode={"append"}
                         updateValueOnSelect={true}
                     />
-                    <EBTextControl
+                    <EBTextControlWithDropdown
                         label={__("Email Bcc (Optional)", "essential-blocks")}
                         value={formSettings.mailBcc}
                         placeholder={__(

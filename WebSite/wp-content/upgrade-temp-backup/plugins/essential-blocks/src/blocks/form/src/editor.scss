@@ -1,0 +1,79 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.eb-form-wrapper {
+	.eb-form .block-editor-inner-blocks .wp-block {
+		margin: 0;
+	}
+
+	.eb-form-editor-formtype-select {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 40px;
+		flex-wrap: wrap;
+		padding: 20px 0 30px;
+		border: 1px solid #d5d5db;
+
+		h2 {
+			width: 100%;
+			text-align: center;
+			font-size: 16px;
+			color: #4b4b4b;
+			font-weight: 600;
+		}
+
+		.eb-form-editor-formtype-item {
+			display: flex;
+			flex-flow: column;
+			align-items: center;
+
+			.eb-form-editor-formtype-icon {
+				padding: 5px;
+				background-color: #fff;
+				height: 110px;
+				display: flex;
+				align-items: center;
+				border: 1px solid #eaeaee;
+				border-radius: 6px;
+				box-sizing: border-box;
+			}
+
+			span {
+				font-size: 12px;
+				color: #aaa;
+				line-height: 1.4;
+				margin-top: 10px;
+			}
+
+			&:hover {
+				cursor: pointer;
+
+				.eb-form-editor-formtype-icon {
+					border-color: #bebebe;
+				}
+
+				span {
+					color: #888;
+				}
+			}
+		}
+	}
+
+	.block-editor-default-block-appender .block-editor-inserter {
+		top: calc(100% + 10px);
+	}
+}
+
+.wp-admin .eb-form-wrapper .block-editor-block-list__layout {
+	display: flex;
+	flex-direction: column;
+}
+
+.is-selected.wp-block-essential-blocks-form {
+	.eb-form-editor-formtype-select {
+		border: 1px solid transparent;
+	}
+}
