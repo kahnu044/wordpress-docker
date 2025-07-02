@@ -18,8 +18,9 @@ import {
     TypographyDropdown,
     EBIconPicker,
     DynamicInputControl,
-    InspectorPanel
- } from "@essential-blocks/controls";
+    InspectorPanel,
+    FormConditionalLogics
+} from "@essential-blocks/controls";
 
 import {
     WRAPPER_BG,
@@ -39,8 +40,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
-
+    const { attributes, setAttributes, clientId } = props;
     const {
         resOption,
         showLabel,
@@ -61,6 +61,7 @@ function Inspector(props) {
         isIcon,
         icon,
         iconColor,
+        parentBlockId
     } = attributes;
 
     return (
@@ -223,6 +224,7 @@ function Inspector(props) {
                             }
                         />
                     </InspectorPanel.PanelBody>
+                    <FormConditionalLogics clientId={clientId} parentBlockId={parentBlockId} />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody

@@ -878,7 +878,7 @@ class Admin
         $changelog_url = esc_url( 'https://essential-blocks.com/changelog/' );
 
         $message_template = __(
-            "<p><i>📣</i> Introducing Essential Blocks <strong>v5.5.0</strong> with <strong>AI Content Generation</strong> support! Effortlessly generate smart content for your <strong>RichText</strong> and <strong>Input fields</strong> directly within Gutenberg. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
+            "<p><i>📣</i> Introducing Essential Blocks Pro <strong>v2.2.0</strong> with <strong>“Multi Step Form”</strong> and <strong>Conditional Logic</strong> support! Create smarter, more interactive forms in Gutenberg with step-by-step progression and dynamic field visibility. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
             "essential-blocks"
         );
 

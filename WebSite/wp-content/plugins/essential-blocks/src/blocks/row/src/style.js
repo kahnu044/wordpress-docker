@@ -265,7 +265,7 @@ export default function Style(props) {
                 : ""
         }
 			${rowAli ? `align-items:${rowAli};` : ""}
-			${clGp_Range ? `gap:${clGp_Range}px;` : ""}
+			${clGp_Range || clGp_Range === 0 ? `gap:${clGp_Range}px;` : ""}
 			${desktopColOrder === "row-reverse"
             ? `flex-flow: row-reverse;`
             : "flex-flow: row;"
@@ -305,7 +305,7 @@ export default function Style(props) {
                 ? `min-height:100vh`
                 : ""
         }
-			${`gap:${TABclGp_Range}px;`}
+			${TABclGp_Range || TABclGp_Range === 0 ? `gap:${TABclGp_Range}px;` : ""}
 			${tabColOrder === "row-reverse"
             ? `flex-flow: row-reverse; flex-wrap: wrap-reverse !important;`
             : `flex-flow: row; flex-wrap: wrap !important;`
@@ -313,7 +313,7 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .block-editor-inner-blocks > .block-editor-block-list__layout > .eb-column-editor-wrap{
-			${`gap:${TABclGp_Range}px;`}
+			box-sizing:border-box;
 			${rowHeightName === "minH" ? wrapHeightTab || wrapHeightDesktop : ""}
 		}
 	`;
@@ -332,7 +332,7 @@ export default function Style(props) {
                 ? `min-height:100vh`
                 : ""
         }
-			${`gap:${MOBclGp_Range}px;`}
+			${MOBclGp_Range || MOBclGp_Range === 0 ? `gap:${MOBclGp_Range}px;` : ""}
 			${mobileColOrder === "row-reverse"
             ? `flex-flow: row-reverse; flex-wrap: wrap-reverse !important;`
             : `flex-flow: row; flex-wrap: wrap !important;`
@@ -340,7 +340,7 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .block-editor-inner-blocks > .block-editor-block-list__layout > .eb-column-editor-wrap{
-			${`gap:${MOBclGp_Range}px;`}
+			box-sizing:border-box;
 			${rowHeightName === "minH" ? wrapHeightMobile || wrapHeightDesktop : ""}
 		}
 
@@ -364,7 +364,7 @@ export default function Style(props) {
         }
 
 			${rowAli ? `align-items:${rowAli};` : ""}
-			${`gap:${clGp_Range}px;`}
+			${clGp_Range || clGp_Range === 0 ? `gap:${clGp_Range}px;` : ""}
 			${desktopColOrder === "row-reverse"
             ? `flex-flow: row-reverse;`
             : "flex-flow: row;"
@@ -404,7 +404,7 @@ export default function Style(props) {
                 ? `min-height:100vh`
                 : ""
         }
-			${`gap: ${TABclGp_Range}px;`}
+			${TABclGp_Range || TABclGp_Range === 0 ? `gap: ${TABclGp_Range}px;` : ""}
 			${tabColOrder === "row-reverse"
             ? `flex-flow: row-reverse; flex-wrap: wrap-reverse !important;`
             : `flex-flow: row; flex-wrap: wrap !important;`
@@ -412,7 +412,6 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column{
-			${`gap: ${TABclGp_Range}px;`}
 			${rowHeightName === "minH" ? wrapHeightTab || wrapHeightDesktop : ""}
 		}
 
@@ -433,7 +432,7 @@ export default function Style(props) {
                 ? `min-height:100vh`
                 : ""
         }
-			${`gap: ${MOBclGp_Range}px;`}
+			${MOBclGp_Range || MOBclGp_Range === 0 ? `gap: ${MOBclGp_Range}px;` : ""}
 
 			${mobileColOrder === "row-reverse"
             ? `flex-flow: row-reverse; flex-wrap: wrap-reverse !important;`
@@ -442,7 +441,6 @@ export default function Style(props) {
 		}
 
 		.${blockId}.eb-row-root-container > .eb-row-wrapper > .eb-row-inner > .wp-block-essential-blocks-column{
-			${`gap: ${MOBclGp_Range}px;`}
 			${rowHeightName === "minH" ? wrapHeightMobile || wrapHeightDesktop : ""}
 		}
 

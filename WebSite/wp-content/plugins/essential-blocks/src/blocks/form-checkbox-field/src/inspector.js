@@ -22,7 +22,8 @@ import {
     DynamicInputControl,
     DynamicFormFieldControl,
     InspectorPanel,
- } from "@essential-blocks/controls";
+    FormConditionalLogics
+} from "@essential-blocks/controls";
 import objAttributes from "./attributes";
 import {
     WRAPPER_BG,
@@ -40,8 +41,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
-
+    const { attributes, setAttributes, clientId } = props;
     const {
         resOption,
         showLabel,
@@ -61,7 +61,8 @@ function Inspector(props) {
         checkboxBorder,
         dynamicValue,
         dynamicOptionType,
-        dynamicValueLoader
+        dynamicValueLoader,
+        parentBlockId
     } = attributes;
 
     return (
@@ -178,6 +179,7 @@ function Inspector(props) {
                             />
                         )}
                     </InspectorPanel.PanelBody>
+                    <FormConditionalLogics clientId={clientId} parentBlockId={parentBlockId} />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody

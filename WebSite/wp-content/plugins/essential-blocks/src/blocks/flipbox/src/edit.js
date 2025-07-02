@@ -2,10 +2,7 @@
  * WordPress dependencits
  */
 import { __ } from "@wordpress/i18n";
-import {
-    BlockControls,
-    AlignmentToolbar
-} from "@wordpress/block-editor";
+import { BlockControls, AlignmentToolbar } from "@wordpress/block-editor";
 import { ToolbarGroup, ToolbarButton } from "@wordpress/components";
 import { memo } from "@wordpress/element";
 /*
@@ -13,23 +10,20 @@ import { memo } from "@wordpress/element";
  */
 import Inspector from "./inspector";
 import Style from "./style";
-import defaultAttributes from './attributes'
+import defaultAttributes from "./attributes";
+import { BACK_IMG_ATTR, FRONT_IMG_ATTR } from "./constants";
 import {
     isValidHtml,
     DynamicInputValueHandler,
     EBDisplayIcon,
     sanitizeURL,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 function Edit(props) {
-    const {
-        isSelected,
-        attributes,
-        setAttributes,
-        className
-    } = props;
+    const { isSelected, attributes, setAttributes, className } = props;
     const {
         blockId,
         blockMeta,
@@ -68,18 +62,18 @@ function Edit(props) {
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-flipbox',
-        style: <Style {...props} />
+        blockPrefix: "eb-flipbox",
+        style: <Style {...props} />,
     };
 
     const alignmentClass =
         contentPosition === "center"
             ? " eb-flipbox-align-center"
             : contentPosition === "right"
-                ? " eb-flipbox-align-right"
-                : "";
+            ? " eb-flipbox-align-right"
+            : "";
 
-    const sanitizeLink = sanitizeURL(link)
+    const sanitizeLink = sanitizeURL(link);
 
     return (
         <>
@@ -121,10 +115,11 @@ function Edit(props) {
                         onMouseLeave={() => setAttributes({ isHover: false })}
                     >
                         <div
-                            className={`eb-flipper${isHover || selectedSide === "back"
-                                ? " back-is-selected"
-                                : ""
-                                }`}
+                            className={`eb-flipper${
+                                isHover || selectedSide === "back"
+                                    ? " back-is-selected"
+                                    : ""
+                            }`}
                         >
                             <div className="eb-flipbox-front">
                                 <div className="eb-flipbox-items-container">
@@ -133,9 +128,11 @@ function Edit(props) {
                                             {frontIconOrImage === "image" &&
                                                 frontImageUrl && (
                                                     <div className="eb-flipbox-front-image-container">
-                                                        <img
-                                                            src={frontImageUrl}
-                                                            alt={frontImageAlt}
+                                                        <ImageComponent
+                                                            isSelected={isSelected}
+                                                            imageAttrProps={FRONT_IMG_ATTR}
+                                                            className="eb-flipbox-front-image"
+                                                            attrPrefix="front"
                                                         />
                                                     </div>
                                                 )}
@@ -145,7 +142,9 @@ function Edit(props) {
                                                         className="eb-flipbox-icon-front"
                                                         data-icon={frontIcon}
                                                     >
-                                                        <EBDisplayIcon icon={frontIcon} />
+                                                        <EBDisplayIcon
+                                                            icon={frontIcon}
+                                                        />
                                                     </div>
                                                 )}
                                         </div>
@@ -154,19 +153,23 @@ function Edit(props) {
                                         <div className="eb-flipbox-front-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeLink : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeLink
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     <DynamicInputValueHandler
                                                         value={
                                                             isValidHtml(
-                                                                frontTitle
+                                                                frontTitle,
                                                             )
                                                                 ? frontTitle
                                                                 : __(
-                                                                    "Invalid HTML Tag",
-                                                                    "essential-blocks"
-                                                                )
+                                                                      "Invalid HTML Tag",
+                                                                      "essential-blocks",
+                                                                  )
                                                         }
                                                         tagName={frontTitleTag}
                                                         className="eb-flipbox-front-title"
@@ -179,7 +182,7 @@ function Edit(props) {
                                                             "core/text-color",
                                                         ]}
                                                         onChange={(
-                                                            frontTitle
+                                                            frontTitle,
                                                         ) =>
                                                             setAttributes({
                                                                 frontTitle,
@@ -194,9 +197,9 @@ function Edit(props) {
                                                         isValidHtml(frontTitle)
                                                             ? frontTitle
                                                             : __(
-                                                                "Invalid HTML Tag",
-                                                                "essential-blocks"
-                                                            )
+                                                                  "Invalid HTML Tag",
+                                                                  "essential-blocks",
+                                                              )
                                                     }
                                                     tagName={frontTitleTag}
                                                     className="eb-flipbox-front-title"
@@ -223,14 +226,16 @@ function Edit(props) {
                                             <DynamicInputValueHandler
                                                 tagName="p"
                                                 className="eb-flipbox-front-content"
-                                                placeholder={__("Add subtitle...")}
+                                                placeholder={__(
+                                                    "Add subtitle...",
+                                                )}
                                                 value={
                                                     isValidHtml(frontContent)
                                                         ? frontContent
                                                         : __(
-                                                            "Invalid HTML Tag",
-                                                            "essential-blocks"
-                                                        )
+                                                              "Invalid HTML Tag",
+                                                              "essential-blocks",
+                                                          )
                                                 }
                                                 onChange={(frontContent) =>
                                                     setAttributes({
@@ -249,12 +254,20 @@ function Edit(props) {
                                         <div className="eb-flipbox-icon-wrapper">
                                             {backIconOrImage === "image" &&
                                                 backImageUrl && (
-                                                    <div className="eb-flipbox-back-image-container">
-                                                        <img
-                                                            src={backImageUrl}
-                                                            alt={backImageAlt}
-                                                        />
-                                                    </div>
+                                                    <>
+                                                        <div className="eb-flipbox-back-image-container">
+                                                            <ImageComponent
+                                                                isSelected={
+                                                                    isSelected
+                                                                }
+                                                                imageAttrProps={
+                                                                    BACK_IMG_ATTR
+                                                                }
+                                                                className="eb-flipbox-back-image"
+                                                                attrPrefix="back"
+                                                            />
+                                                        </div>
+                                                    </>
                                                 )}
                                             {backIconOrImage === "icon" &&
                                                 backIcon && (
@@ -262,7 +275,9 @@ function Edit(props) {
                                                         className="eb-flipbox-icon-back"
                                                         data-icon={backIcon}
                                                     >
-                                                        <EBDisplayIcon icon={backIcon} />
+                                                        <EBDisplayIcon
+                                                            icon={backIcon}
+                                                        />
                                                     </div>
                                                 )}
                                         </div>
@@ -271,7 +286,11 @@ function Edit(props) {
                                         <div className="eb-flipbox-back-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeLink : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeLink
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     {/* <RichText
@@ -304,13 +323,13 @@ function Edit(props) {
                                                     <DynamicInputValueHandler
                                                         value={
                                                             isValidHtml(
-                                                                backTitle
+                                                                backTitle,
                                                             )
                                                                 ? backTitle
                                                                 : __(
-                                                                    "Invalid HTML Tag",
-                                                                    "essential-blocks"
-                                                                )
+                                                                      "Invalid HTML Tag",
+                                                                      "essential-blocks",
+                                                                  )
                                                         }
                                                         tagName={backTitleTag}
                                                         className="eb-flipbox-back-title"
@@ -336,9 +355,9 @@ function Edit(props) {
                                                         isValidHtml(backTitle)
                                                             ? backTitle
                                                             : __(
-                                                                "Invalid HTML Tag",
-                                                                "essential-blocks"
-                                                            )
+                                                                  "Invalid HTML Tag",
+                                                                  "essential-blocks",
+                                                              )
                                                     }
                                                     tagName={backTitleTag}
                                                     className="eb-flipbox-back-title"
@@ -369,9 +388,9 @@ function Edit(props) {
                                                     isValidHtml(backContent)
                                                         ? backContent
                                                         : __(
-                                                            "Invalid HTML Tag",
-                                                            "essential-blocks"
-                                                        )
+                                                              "Invalid HTML Tag",
+                                                              "essential-blocks",
+                                                          )
                                                 }
                                                 onChange={(backContent) =>
                                                     setAttributes({
@@ -391,7 +410,10 @@ function Edit(props) {
                                                 <div className="eb-flipbox-button-content">
                                                     <span>{buttonText}</span>
                                                     {buttonIcon && (
-                                                        <EBDisplayIcon icon={buttonIcon} className="eb-flipbox-button-icon" />
+                                                        <EBDisplayIcon
+                                                            icon={buttonIcon}
+                                                            className="eb-flipbox-button-icon"
+                                                        />
                                                     )}
                                                 </div>
                                             </a>
@@ -407,4 +429,4 @@ function Edit(props) {
     );
 }
 
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

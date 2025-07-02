@@ -12,6 +12,8 @@ import {
     backContentPadding,
     frontImgPadding,
     backImgPadding,
+    frontImgMargin,
+    backImgMargin,
     frontItemPadding,
     backItemPadding,
 } from "./constants/dimensionsNames";
@@ -32,6 +34,7 @@ import {
     boxWidthAttr,
     buttonIconSizeAttr,
     frontImgSizeAttr,
+    frontImgHeightAttr,
     backImgSizeAttr,
     frontImgRadiusAttr,
     backImgRadiusAttr,
@@ -41,7 +44,11 @@ import {
     borderShadowBtn,
     borderShadowFrontIcon,
     borderShadowBackIcon,
+    frontImageBorder,
+    backImageBorder,
 } from "./constants/borderShadowConstants";
+
+import { FRONT_IMG_ATTR, BACK_IMG_ATTR } from "./constants";
 
 import {
     getFlipTransform,
@@ -51,8 +58,9 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     generateBorderShadowStyles,
-    StyleComponent
- } from "@essential-blocks/controls";
+    StyleComponent,
+    ImageComponent,
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const getFlexAlign = (align) => {
@@ -252,37 +260,6 @@ export default function Style(props) {
         noShadow: true,
     });
 
-    // front image
-    const {
-        rangeStylesDesktop: frontImgHeightDesktop,
-        rangeStylesTab: frontImgHeightTab,
-        rangeStylesMobile: frontImgHeightMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: frontImgSizeAttr,
-        property: "height",
-        attributes,
-    });
-
-    const {
-        rangeStylesDesktop: frontImgWidthDesktop,
-        rangeStylesTab: frontImgWidthTab,
-        rangeStylesMobile: frontImgWidthMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: frontImgSizeAttr,
-        property: "width",
-        attributes,
-    });
-
-    const {
-        rangeStylesDesktop: frontImgRadiusDesktop,
-        rangeStylesTab: frontImgRadiusTab,
-        rangeStylesMobile: frontImgRadiusMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: frontImgRadiusAttr,
-        property: "border-radius",
-        attributes,
-    });
-
     // back background controller
     const {
         backgroundStylesDesktop: backBackgroundStylesDesktop,
@@ -379,16 +356,6 @@ export default function Style(props) {
         attributes,
     });
 
-    const {
-        rangeStylesDesktop: backImgRadiusDesktop,
-        rangeStylesTab: backImgRadiusTab,
-        rangeStylesMobile: backImgRadiusMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: backImgRadiusAttr,
-        property: "border-radius",
-        attributes,
-    });
-
     // front title
     const {
         dimensionStylesDesktop: frontTitlePaddingStylesDesktop,
@@ -475,6 +442,42 @@ export default function Style(props) {
         controlName: backItemPadding,
         styleFor: "padding",
         attributes,
+    });
+
+    const wrapperClass = "eb-flipbox-container";
+    const {
+        imgDesktopStyle: frontImgDesktopStyle,
+        imgTabStyle: frontImgTabStyle,
+        imgMobileStyle: frontImgMobileStyle,
+    } = ImageComponent.Style({
+        blockId: blockId, // blockId
+        wrapperClass: wrapperClass, // block's wrapper class
+        attrObject: FRONT_IMG_ATTR, //  image attributes
+        attrPrefix: "front", // attrPrefix
+        className: "eb-flipbox-front-image", // className
+        useImageSize: true, // filter
+        imageSize: frontImgSizeAttr, // imageSize
+        radius: frontImgRadiusAttr,
+        border: frontImageBorder,
+        padding: frontImgPadding,
+        margin: frontImgMargin,
+    });
+    const {
+        imgDesktopStyle: backImgDesktopStyle,
+        imgTabStyle: backImgTabStyle,
+        imgMobileStyle: backImgMobileStyle,
+    } = ImageComponent.Style({
+        blockId: blockId, // blockId
+        wrapperClass: wrapperClass, // block's wrapper class
+        attrObject: BACK_IMG_ATTR, //  image attributes
+        attrPrefix: "back", // attrPrefix
+        className: "eb-flipbox-back-image", // className
+        useImageSize: true, // filter
+        imageSize: backImgSizeAttr,
+        radius: backImgRadiusAttr, // radius
+        border: backImageBorder, // border
+        padding: backImgPadding, // padding
+        margin: backImgMargin, // margin
     });
 
     const flipContainerStyleDesktop = `
@@ -675,8 +678,9 @@ export default function Style(props) {
 			height: auto;
 			width: 100%;
 			z-index: 1;
-			transition: ${flipType === "fade" ? "opacity 0.6s, " : ""
-        }${frontBgTransitionStyle}, ${bdShadowTransitionStyle};
+			transition: ${
+                flipType === "fade" ? "opacity 0.6s, " : ""
+            }${frontBgTransitionStyle}, ${bdShadowTransitionStyle};
 		}
 
 		.eb-flipbox-container.${blockId} .eb-flipper .eb-flipbox-front:hover {
@@ -694,13 +698,14 @@ export default function Style(props) {
 			${frontHoverOverlayStylesDesktop}
 		}
 
-		${(isHover || selectedSide === "front") && flipType === "fade"
-            ? `
+		${
+            (isHover || selectedSide === "front") && flipType === "fade"
+                ? `
 			.eb-flipbox-container.${blockId} .eb-flipper.back-is-selected .eb-flipbox-front {
 				opacity: 0;
 			}
 			`
-            : ""
+                : ""
         }
 
 	 `;
@@ -757,35 +762,17 @@ export default function Style(props) {
 		 display: ${frontIconOrImage === "image" && frontImageUrl ? "flex" : "none"};
 		 justify-content: center;
 	 }
-
-	 .eb-flipbox-container.${blockId} .eb-flipbox-front .eb-flipbox-front-image-container img {
-		 ${frontImgHeightDesktop}
-		 ${frontImgWidthDesktop}
-		 ${frontImgRadiusDesktop}
-	 }
 	 `;
 
     const frontImageStyleTab = `
 	.eb-flipbox-container.${blockId} .eb-flipbox-front .eb-flipbox-front-image-container {
 		${frontImgPaddingStylesTab}
 	}
-
-	.eb-flipbox-container.${blockId} .eb-flipbox-front .eb-flipbox-front-image-container img {
-		${frontImgHeightTab}
-		 ${frontImgWidthTab}
-		 ${frontImgRadiusTab}
-	}
 	`;
 
     const frontImageStyleMobile = `
 	.eb-flipbox-container.${blockId} .eb-flipbox-front .eb-flipbox-front-image-container {
 		${frontImgPaddingStylesMobile}
-	}
-
-	.eb-flipbox-container.${blockId} .eb-flipbox-front .eb-flipbox-front-image-container img {
-		${frontImgHeightMobile}
-		 ${frontImgWidthMobile}
-		 ${frontImgRadiusMobile}
 	}
 	`;
 
@@ -796,10 +783,11 @@ export default function Style(props) {
 			 ${frontIconPaddingStylesDesktop}
 			 ${frontIconBorderDesktop}
 			 color: ${frontIconColor ? frontIconColor : "#ffffff"};
-			 background: ${frontIconBackground
-            ? frontIconBackground
-            : defaultFrontIconBackground
-        };
+			 background: ${
+                 frontIconBackground
+                     ? frontIconBackground
+                     : defaultFrontIconBackground
+             };
 			 width: 100%;
 			 text-align:${align};
 			 display: ${frontIconOrImage === "icon" && frontIcon ? "block" : "none"};
@@ -859,20 +847,23 @@ export default function Style(props) {
 		 align-items: center;
 		 height: auto;
 		 width: 100%;
-		 transform:  ${(flipType === "flip-up" && "rotateX(-180deg)") ||
-        (flipType === "flip-bottom" && "rotateX(180deg)") ||
-        ((flipType === "zoom-in" ||
-            flipType === "zoom-out" ||
-            flipType === "fade") &&
-            "none")
-        };
-		transition: ${flipType === "fade" ? "opacity 0.6s, " : ""
+		 transform:  ${
+             (flipType === "flip-up" && "rotateX(-180deg)") ||
+             (flipType === "flip-bottom" && "rotateX(180deg)") ||
+             ((flipType === "zoom-in" ||
+                 flipType === "zoom-out" ||
+                 flipType === "fade") &&
+                 "none")
+         };
+		transition: ${
+            flipType === "fade" ? "opacity 0.6s, " : ""
         }${backBgTransitionStyle}, ${bdShadowTransitionStyle};
 		 cursor: ${linkType === "box" && link ? "pointer" : "default"};
-		 ${isHover && (flipType === "zoom-in" || flipType === "zoom-out")
-            ? "z-index: 5;"
-            : ""
-        }
+		 ${
+             isHover && (flipType === "zoom-in" || flipType === "zoom-out")
+                 ? "z-index: 5;"
+                 : ""
+         }
 	 }
 
 	 .eb-flipbox-container.${blockId} .eb-flipper .eb-flipbox-back:hover {
@@ -890,12 +881,13 @@ export default function Style(props) {
 		${backHoverOverlayStylesDesktop}
 	}
 
-	${(isHover || selectedSide === "back") && flipType === "fade"
+	${
+        (isHover || selectedSide === "back") && flipType === "fade"
             ? `.eb-flipbox-container.${blockId} .eb-flipper.back-is-selected .eb-flipbox-back {
 		opacity: 1;
 	 }`
             : ""
-        }
+    }
 
 	.eb-flipbox-container.${blockId} .eb-flipper .eb-flipbox-front,
 	.eb-flipbox-container.${blockId} .eb-flipper .eb-flipbox-back{
@@ -956,36 +948,18 @@ export default function Style(props) {
 		display: ${backIconOrImage === "image" && backImageUrl ? "flex" : "none"};
 		justify-content: center;
 	 }
-
-	 .eb-flipbox-container.${blockId} .eb-flipbox-back .eb-flipbox-back-image-container img {
-		${backImgHeightDesktop}
-		${backImgWidthDesktop}
-		${backImgRadiusDesktop}
-	 }
 	 `;
 
     const backImageStyleTab = `
 	.eb-flipbox-container.${blockId} .eb-flipbox-back .eb-flipbox-back-image-container {
 		${backImgPaddingStylesTab}
 	}
-
-	 .eb-flipbox-container.${blockId} .eb-flipbox-back .eb-flipbox-back-image-container img {
-		${backImgHeightTab}
-		${backImgWidthTab}
-		${backImgRadiusTab}
-	 }
 	 `;
 
     const backImageStyleMobile = `
 	.eb-flipbox-container.${blockId} .eb-flipbox-back .eb-flipbox-back-image-container {
 		${backImgPaddingStylesMobile}
 	}
-
-	 .eb-flipbox-container.${blockId} .eb-flipbox-back .eb-flipbox-back-image-container img {
-		${backImgHeightMobile}
-		${backImgWidthMobile}
-		${backImgRadiusMobile}
-	 }
 	 `;
 
     const backIconStyleDesktop = `
@@ -995,7 +969,8 @@ export default function Style(props) {
 		${backIconPaddingStylesDesktop}
 		${backIconBorderDesktop}
 		color: ${backIconColor ? backIconColor : "#ffffff"};
-		background: ${backIconBackground ? backIconBackground : defaultBackIconBackground
+		background: ${
+            backIconBackground ? backIconBackground : defaultBackIconBackground
         };
 		width: 100%;
 		text-align: ${align};
@@ -1144,6 +1119,8 @@ export default function Style(props) {
 		 ${backStyleDesktop}
 		 ${backImageStyleDesktop}
 		 ${backButtonStyleDesktop}
+         ${frontImgDesktopStyle}
+         ${backImgDesktopStyle}
 	 `);
 
     // all css styles for Tab in strings ⬇
@@ -1160,6 +1137,8 @@ export default function Style(props) {
 		 ${backIconStyleTab}
 		 ${frontImageStyleTab}
 		 ${backImageStyleTab}
+         ${frontImgTabStyle}
+         ${backImgTabStyle}
 	 `);
 
     // all css styles for Mobile in strings ⬇
@@ -1176,6 +1155,8 @@ export default function Style(props) {
 		 ${backIconStyleMobile}
 		 ${frontImageStyleMobile}
 		 ${backImageStyleMobile}
+         ${frontImgMobileStyle}
+         ${backImgMobileStyle}
 	 `);
 
     return (

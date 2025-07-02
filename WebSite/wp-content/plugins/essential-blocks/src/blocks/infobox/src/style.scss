@@ -5,6 +5,8 @@
  * Replace them with your own styles or remove the file completely.
  */
 
+ @import '../../../controls/src/components/Image/imageComponent.scss';
+
 a.info-click-link.info-wrap-link,
 a.info-click-link.info-wrap-link:hover,
 a.info-click-link.info-wrap-link:focus {
@@ -12,6 +14,18 @@ a.info-click-link.info-wrap-link:focus {
 	display: block;
 	text-decoration: none;
 	cursor: pointer;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+}
+
+.wp-block-essential-blocks-infobox {
+	.eb-parent-wrapper {
+		position: relative;
+	}
 }
 
 div.eb-infobox-wrapper {
@@ -60,6 +74,10 @@ div.eb-infobox-wrapper {
 		.infobox-btn {
 			display: inline-block;
 		}
+	}
+	.eb-image-caption-wrap {
+		line-height: 1;
+		padding: 15px;
 	}
 }
 

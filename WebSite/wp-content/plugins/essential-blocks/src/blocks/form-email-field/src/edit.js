@@ -100,7 +100,7 @@ const Edit = (props) => {
         if (getFormStyle) setAttributes({ formStyle: getFormStyle });
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"
@@ -187,13 +187,7 @@ const Edit = (props) => {
                             {formStyle == "form-style-modern" && (
                                 <>
                                     <label htmlFor={fieldName}>
-                                        <DynamicInputValueHandler
-                                            value={labelText}
-                                            onChange={(labelText) =>
-                                                setAttributes({ labelText })
-                                            }
-                                            readOnly={true}
-                                        />{" "}
+                                        {labelText}{" "}
                                         {isRequired && (
                                             <span className="eb-required">
                                                 *

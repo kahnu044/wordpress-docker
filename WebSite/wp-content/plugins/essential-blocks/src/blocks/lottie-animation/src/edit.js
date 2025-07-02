@@ -16,7 +16,8 @@ import defaultAttributes from './attributes'
 import {
     BlockProps,
     withBlockContext,
-    DynamicInputValueHandler
+    DynamicInputValueHandler,
+    EBMediaPlaceholder
 } from "@essential-blocks/controls";
 import { ReactComponent as Icon } from "./icon.svg";
 
@@ -374,7 +375,7 @@ function Edit(props) {
 
             <BlockProps.Edit {...enhancedProps}>
                 {!lottieURl && (
-                    <MediaPlaceholder
+                    <EBMediaPlaceholder
                         icon={Icon}
                         labels={{
                             title: __("Lottie Animation", "essential-blocks"),

@@ -3,8 +3,12 @@
  */
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIcon,
+    sanitizeURL,
+    BlockProps,
+    ImageComponent
 } from "@essential-blocks/controls";
+import { BACK_IMG_ATTR, FRONT_IMG_ATTR } from "./constants";
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -39,14 +43,14 @@ const Save = ({ attributes }) => {
         backTitleTag,
     } = attributes;
 
-    const sanitizeLink = sanitizeURL(link)
+    const sanitizeLink = sanitizeURL(link);
 
     const alignmentClass =
         contentPosition === "center"
             ? " eb-flipbox-align-center"
             : contentPosition === "right"
-                ? " eb-flipbox-align-right"
-                : "";
+            ? " eb-flipbox-align-right"
+            : "";
     const flipModeClass =
         flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
@@ -65,8 +69,9 @@ const Save = ({ attributes }) => {
                         : {})}
                 >
                     <div
-                        className={`eb-flipper${"hover" === flipMode ? " " + flipType : ""
-                            }`}
+                        className={`eb-flipper${
+                            "hover" === flipMode ? " " + flipType : ""
+                        }`}
                     >
                         <div className="eb-flipbox-front">
                             <div className="eb-flipbox-items-container">
@@ -75,9 +80,11 @@ const Save = ({ attributes }) => {
                                         {frontIconOrImage === "image" &&
                                             frontImageUrl && (
                                                 <div className="eb-flipbox-front-image-container">
-                                                    <img
-                                                        src={frontImageUrl}
-                                                        alt={frontImageAlt}
+                                                    <ImageComponent.Content
+                                                        attributes={attributes}
+                                                        className="eb-flipbox-front-image"
+                                                        imageAttrProps={FRONT_IMG_ATTR}
+                                                        attrPrefix="front"
                                                     />
                                                 </div>
                                             )}
@@ -87,7 +94,9 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-front"
                                                     data-icon={frontIcon}
                                                 >
-                                                    <EBDisplayIcon icon={frontIcon} />
+                                                    <EBDisplayIcon
+                                                        icon={frontIcon}
+                                                    />
                                                 </div>
                                             )}
                                     </div>
@@ -132,8 +141,8 @@ const Save = ({ attributes }) => {
                                 linkType === "box" && link && linkOpenNewTab
                                     ? `window.open('${sanitizeLink}', '_blank');`
                                     : linkType === "box" && link
-                                        ? `window.location='${sanitizeLink}'`
-                                        : undefined
+                                    ? `window.location='${sanitizeLink}'`
+                                    : undefined
                             }
                         >
                             <div className="eb-flipbox-items-container">
@@ -142,9 +151,11 @@ const Save = ({ attributes }) => {
                                         {backIconOrImage === "image" &&
                                             backImageUrl && (
                                                 <div className="eb-flipbox-back-image-container">
-                                                    <img
-                                                        src={backImageUrl}
-                                                        alt={backImageAlt}
+                                                    <ImageComponent.Content
+                                                        attributes={attributes}
+                                                        className="eb-flipbox-back-image"
+                                                        imageAttrProps={BACK_IMG_ATTR}
+                                                        attrPrefix="back"
                                                     />
                                                 </div>
                                             )}
@@ -154,7 +165,9 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-back"
                                                     data-icon={backIcon}
                                                 >
-                                                    <EBDisplayIcon icon={backIcon} />
+                                                    <EBDisplayIcon
+                                                        icon={backIcon}
+                                                    />
                                                 </div>
                                             )}
                                     </div>
@@ -211,7 +224,10 @@ const Save = ({ attributes }) => {
                                             <div className="eb-flipbox-button-content">
                                                 <span>{buttonText}</span>
                                                 {buttonIcon && (
-                                                    <EBDisplayIcon icon={buttonIcon} className="eb-flipbox-button-icon" />
+                                                    <EBDisplayIcon
+                                                        icon={buttonIcon}
+                                                        className="eb-flipbox-button-icon"
+                                                    />
                                                 )}
                                             </div>
                                         </a>

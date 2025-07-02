@@ -1,4 +1,3 @@
-import { useBlockProps } from "@wordpress/block-editor";
 import {
     sanitizeURL
 } from "@essential-blocks/controls";
@@ -67,18 +66,7 @@ export default function save({ attributes }) {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            {isInfoClick ? (
-                <a
-                    href={infoboxLink == undefined ? '' : sanitizeURL(infoboxLink)}
-                    target={linkNewTab ? "_blank" : "_self"}
-                    rel="noopener noreferrer"
-                    className="info-click-link info-wrap-link"
-                >
-                    <InfoboxContainer requiredProps={requiredProps} />
-                </a>
-            ) : (
-                <InfoboxContainer requiredProps={requiredProps} attributes={attributes} />
-            )}
+            <InfoboxContainer requiredProps={requiredProps} attributes={attributes}/>
         </BlockProps.Save>
     );
 }

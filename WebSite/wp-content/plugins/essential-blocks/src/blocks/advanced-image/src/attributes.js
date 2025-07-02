@@ -21,6 +21,7 @@ import {
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
     generateResponsiveAlignAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -47,9 +48,6 @@ const attributes = {
             url: "",
             alt: "",
         },
-    },
-    imageSize: {
-        type: "string",
     },
     imageCaption: {
         type: "string",
@@ -136,11 +134,11 @@ const attributes = {
     rel: {
         type: "string",
         attribute: "rel",
-        default: ""
+        default: "",
     },
     imagePostId: {
         type: "number",
-        default: 0
+        default: 0,
     },
 
     // typography attributes ⬇
@@ -194,20 +192,10 @@ const attributes = {
         // noShadow: true,
         // noBorder: true,
     }),
-
     // background attributes ⬇
     ...generateBackgroundAttributes(WRAPPER_BG, {
         defaultBgGradient: "linear-gradient(45deg,#ffffff,#ffffff)",
         noOverlay: true,
-    }),
-
-    // range controller Separator Line Grid Column
-    ...generateResponsiveRangeAttributes(IMAGE_WIDTH, {
-        // defaultRange: 300,
-    }),
-    // range controller Separator Image Gap
-    ...generateResponsiveRangeAttributes(IMAGE_HEIGHT, {
-        // defaultRange: 300,
     }),
     // range controller Separator Caption Width
     ...generateResponsiveRangeAttributes(CAPTION_WIDTH),
@@ -216,10 +204,40 @@ const attributes = {
         defaultTabAlign: "center",
         defaultMobileAlign: "center",
     }),
-    ...generateResponsiveAlignAttributes(IMAGE_ALIGNMENT, {
-        defaultAlign: "0 auto",
-        defaultTabAlign: "0 auto",
-        defaultMobileAlign: "0 auto",
+    // ...generateResponsiveRangeAttributes(IMAGE_WIDTH, {
+    //     // defaultRange: 300,
+    // }),
+    ...ImageComponent?.addAttributes({
+        border: {
+            key: IMAGE_BORDER_SHADOW,
+            default: {
+                defaultBdrColor: "#AE62D1",
+                bdrDefaults: {
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                },
+            },
+        },
+        hasWidth: true,
+        width: {
+            key: IMAGE_WIDTH,
+        },
+        hasHeight: true,
+        height: {
+            key: IMAGE_HEIGHT,
+        },
+        useImageAlign: true,
+        imageAlign: {
+            key: IMAGE_ALIGNMENT,
+            default: {
+                defaultAlign: "0 auto",
+                defaultTabAlign: "0 auto",
+                defaultMobileAlign: "0 auto",
+            },
+        },
+        hasRadius: true,
     }),
 };
 

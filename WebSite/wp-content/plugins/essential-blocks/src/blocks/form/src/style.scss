@@ -108,6 +108,41 @@
 				}
 			}
 
+			.eb-select-field-wrapper .eb-field-input-wrap div {
+				select {
+					outline: none;
+
+					&::placeholder {
+						color: transparent !important;
+						opacity: 0 !important;
+					}
+
+				}
+
+				&~label {
+					position: absolute;
+					top: 50%;
+					// left: 0;
+					padding: 0;
+					margin: 0;
+					pointer-events: none;
+					transform: translateY(-50%);
+					transition: 0.5s;
+
+					&.active {
+						top: 15px;
+						// left: 0;
+						font-size: 12px;
+					}
+				}
+
+				&:focus~label,
+				&~label.active {
+					top: 15px;
+					// left: 0;
+				}
+			}
+
 			select {
 				outline: none;
 
@@ -448,4 +483,680 @@
 	padding: 8px 15px;
 	margin-top: 25px;
 	border-radius: 4px;
+}
+
+// editor style
+.wp-admin .eb-form-wrapper .eb-multistep-form .eb-form-fields>.block-editor-inner-blocks>.block-editor-block-list__layout {
+	gap: 0px !important;
+}
+
+.eb-multistep-form {
+	.step-bar-wrapper {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		margin-bottom: 20px;
+
+		.step-item {
+			padding: 10px;
+			display: flex;
+			justify-content: flex-start;
+			gap: 10px;
+			align-items: center;
+			position: relative;
+			width: 100%;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-bottom: 2px solid #eee;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.05);
+			}
+
+			&:focus {
+				outline: 2px solid #007cba;
+				outline-offset: 2px;
+			}
+
+			&.active {
+				color: #673AB7;
+				border-bottom-color: #673AB7;
+				font-weight: bold;
+			}
+
+			.step-item-icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+
+		// Different styles for step navigation
+		&.step-style-numbered {
+			.step-item {
+				counter-increment: step-counter;
+
+				&::before {
+					content: counter(step-counter);
+					width: 24px;
+					height: 24px;
+					border-radius: 50%;
+					background: #eee;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-right: 8px;
+				}
+
+				&.active::before {
+					background: #673AB7;
+					color: white;
+				}
+			}
+		}
+
+		&.step-style-dots {
+			.step-item {
+				&::before {
+					content: '';
+					width: 12px;
+					height: 12px;
+					border-radius: 50%;
+					background: #eee;
+					display: block;
+					margin-right: 8px;
+				}
+
+				&.active::before {
+					background: #673AB7;
+				}
+			}
+		}
+	}
+
+	.block-editor-block-list__layout {
+		// .wp-block-essential-blocks-pro-form-multistep-wrapper:not(:first-child) {
+		// 	display: none;
+		// }
+
+		.wp-block-essential-blocks-pro-form-multistep-wrapper {
+			border: 2px dashed #eee;
+		}
+	}
+
+
+	// step Navigation styles
+	.step-navigation-wrapper {
+		margin: 0 10px 30px;
+
+		.step-content {
+			display: inline-flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 7px;
+		}
+	}
+
+	// Progress Bar style
+	.step-navigation-progress-bar {
+		.step-progress-bar {
+			position: relative;
+			width: 100%;
+			height: 8px;
+			background-color: #EFF0F6;
+			border-radius: 4px;
+			overflow: visible;
+			margin-bottom: 15px;
+
+			.step-progress-bar-inner {
+				height: 100%;
+				background-color: #3C3C3C;
+				transition: width 0.3s ease;
+				border-radius: 4px;
+			}
+
+			.step-progress-markers {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.step-marker {
+			position: absolute;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: 6px;
+			height: 6px;
+			background-color: #CCCCCC;
+			// border: 2px solid #ccc;
+			border-radius: 50%;
+			z-index: 2;
+
+			&.active {
+				background-color: #3C3C3C !important;
+			}
+
+			&:first-child {
+				left: 0 !important;
+				transform: translate(0%, -50%);
+			}
+
+			&:last-child {
+				left: 100% !important;
+				transform: translate(-100%, -50%);
+			}
+		}
+
+		.step-progress-bottom {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			margin-top: 10px;
+		}
+	}
+
+	// Breadcrumb style
+	.step-navigation-breadcrumb {
+
+		.step-breadcrumb {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 98%;
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+
+		.step-nav-item {
+			position: relative;
+			background-color: #f5f5f5;
+			color: #333;
+			padding: 10px 15px;
+			font-weight: 500;
+			clip-path: polygon(90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%, 0% 0%);
+			margin-right: -20px;
+			flex: 1;
+			text-align: center;
+			min-width: 120px;
+
+			&:first-child {
+				clip-path: polygon(90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 0%);
+			}
+
+			// &:last-child {
+			// 	clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 15% 50%, 0% 0%);
+			// }
+
+			&.active {
+				background-color: #333;
+				color: white;
+				z-index: 2;
+			}
+		}
+	}
+
+	// Step Titles style
+	.step-navigation-step-titles {
+
+		.step-step-titles {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: flex-start;
+			flex-wrap: wrap;
+		}
+
+		.step-nav-item {
+			padding: 8px 16px;
+			color: #777;
+			flex: 1;
+
+			&.active {
+				color: #673AB7;
+				// font-weight: bold;
+				border-bottom: 2px solid #673AB7;
+			}
+
+			.step-count {
+				background: #EBEEF2;
+				color: #333;
+				border-radius: 50%;
+				width: 32px;
+				height: 32px;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				margin-right: 15px;
+			}
+		}
+	}
+
+	// Dots style
+	.step-navigation-dots {
+		padding: 0 10px;
+
+		.step-dots {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+		}
+
+		.step-nav-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+
+			text-align: center;
+			position: relative;
+			flex: 1;
+
+			&:not(:last-child)::after {
+				content: '';
+				position: absolute;
+				top: 10px;
+				right: -50%;
+				width: 100%;
+				height: 2px;
+				background-color: #ddd;
+				z-index: 1;
+			}
+
+			&:not(:first-child)::before {
+				content: '';
+				position: absolute;
+				top: 10px;
+				left: -50%;
+				width: 100%;
+				height: 2px;
+				background-color: #ddd;
+				z-index: 0;
+			}
+
+			&.active:not(:first-child)::before {
+				background-color: #333;
+			}
+
+			.step-dot {
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background-color: #E7E7E7;
+				border: 2px solid #fff;
+				margin-bottom: 10px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 2;
+				position: relative;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					transition: transform 0.3s ease;
+					width: 6px;
+					height: 6px;
+					border-radius: 50%;
+					background-color: #A2A2A2;
+					z-index: 3;
+				}
+			}
+
+			.step-title {
+				font-size: 14px;
+				color: #777;
+				margin-top: 5px;
+				font-weight: normal;
+			}
+
+			.step-subtitle {
+				font-size: 16px;
+				color: #333;
+				font-weight: 500;
+				margin-top: 2px;
+			}
+
+			&.active {
+				.step-dot {
+					background-color: #333;
+					border-color: #fff;
+
+					&::after {
+						content: none;
+					}
+
+					&::before {
+						content: "\f00c";
+						font-weight: 700;
+						font-family: "Font Awesome 5 Free";
+						color: #fff;
+						font-size: 12px;
+					}
+				}
+
+				.step-title {
+					color: #333;
+					font-weight: 500;
+				}
+			}
+
+			&.completed {
+				.step-dot {
+					background-color: #333;
+
+					&::after {
+						content: '✓';
+						color: #fff;
+						font-size: 12px;
+					}
+				}
+			}
+		}
+	}
+
+
+	// step title count
+	.step-navigation-step-title-2 {
+		.step-step-title-2 {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
+
+		.step-nav-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			flex: 1;
+			gap: 10px;
+
+			.label {
+				font-size: 14px;
+				color: #7a7a7a;
+				margin-bottom: 8px;
+				text-align: center;
+				font-weight: 600;
+			}
+
+			.step-count {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				background-color: #fff;
+				border: 2px solid #c3c7cf;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 14px;
+				// font-weight: bold;
+				color: #7a7a7a;
+				position: relative;
+				z-index: 1;
+			}
+
+			.step-line {
+				position: absolute;
+				top: auto;
+				bottom: 14px;
+				left: 50%;
+				width: 100%;
+				height: 2px;
+				background-color: #c3c7cf;
+				z-index: 0;
+			}
+
+			&.completed {
+				.circle {
+					background-color: #333;
+					color: #fff;
+					border-color: #333;
+				}
+
+				.line {
+					background-color: #333;
+				}
+
+				.label {
+					color: #000;
+				}
+			}
+
+			&.active {
+				.step-count {
+					border: 2px solid #333;
+					background-color: #fff;
+					color: #333;
+
+					&::before {
+						transform: translate(-50%, -50%) scale(1);
+						border-color: #333;
+					}
+				}
+
+				.label {
+					color: #333;
+				}
+
+				.step-line {
+					background-color: #c3c7cf;
+				}
+			}
+
+			&:last-child .step-line {
+				display: none;
+			}
+		}
+	}
+
+	// step title 3
+	.step-navigation-step-title-3 {
+		.step-step-title-3 {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
+
+		.step-nav-item {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			// padding: 0 12px;
+			flex: 1;
+			border-right: 1px solid #eee;
+
+			&:last-child {
+				border-right: none;
+			}
+
+			.step-icon {
+				width: 48px;
+				height: 48px;
+				background-color: #f7f7f7;
+				border-radius: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+					width: 24px;
+					height: 24px;
+					opacity: 0.3;
+				}
+			}
+
+			.text {
+				display: none;
+				margin-left: 10px;
+				// display: flex;
+				flex-direction: column;
+
+				.step-label {
+					font-size: 12px;
+					color: #9ca3af;
+				}
+
+				.step-subtitle {
+					font-weight: 600;
+					font-size: 14px;
+					color: #111827;
+				}
+			}
+
+			&.active {
+				flex-direction: row;
+
+				.step-icon {
+					background-color: #e5e7eb;
+
+					img {
+						opacity: 1;
+					}
+				}
+
+				.text {
+					display: flex;
+				}
+			}
+
+			.divider {
+				height: 48px;
+				width: 1px;
+				background-color: #eee;
+			}
+
+		}
+	}
+
+
+	// Step Buttons style
+
+	.eb-form-submit {
+		// button:not(#ebFormNextBtn) {
+		// 	display: none;
+		// }
+	}
+
+	.eb-form-submit {
+		display: flex;
+		justify-content: flex-end !important;
+		align-items: center;
+
+		#ebFormPrevBtn {
+			margin-right: auto;
+		}
+
+		#ebFormNextBtn {
+			.eb-form-next-loader {
+				display: none;
+				height: 1em;
+				width: auto;
+				margin-left: 10px;
+			}
+
+			&.loading {
+				.eb-form-next-loader {
+					display: inline-block;
+				}
+			}
+		}
+
+		#ebFormNextBtn,
+		.eb-form-submit-button {
+			margin-left: 10px;
+		}
+
+		button {
+			// display: none;
+
+			font-size: 1em;
+			padding: 15px 30px;
+			transition: ease-in-out 0.3s;
+			cursor: pointer;
+
+			// for Shapely theme
+			line-height: normal;
+
+			box-shadow: none;
+			border: 1px solid rgb(195 195 195);
+			background: #cccccc47;
+			border-radius: 5px;
+			width: auto !important;
+
+			&:hover {
+				color: #000;
+			}
+		}
+	}
+}
+
+.eb-form-add-step-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: 20px;
+	padding: 25px !important;
+	font-size: 16px;
+	background-color: #f7f7f7;
+	border: 1px dashed #ccc;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background-color: #e9e9e9;
+		border-color: #999;
+	}
+
+	.eb-form-add-step-button-label {
+		margin-left: 8px;
+	}
+}
+
+// Add this CSS for the loading indicator
+.eb-form-template-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	width: 100%;
+	background-color: #f8f9fa;
+	border-radius: 4px;
+
+	img {
+		width: 45px;
+		margin: 0 0 10px;
+	}
+
+	p {
+		margin: 0;
+		color: #757575;
+		font-size: 16px;
+		font-weight: 500;
+	}
 }

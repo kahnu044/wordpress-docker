@@ -3,7 +3,7 @@ import {
     typoPrefix_title,
     typoPrefix_subTitle,
     typoPrefix_content,
-    typoPrefix_buttonText
+    typoPrefix_buttonText,
 } from "./constants/typographyPrefixConstants";
 import {
     mediaBackground,
@@ -20,7 +20,11 @@ import {
 
 import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
 
-import { wrpBdShadow, btnBdShd, mediaBdShd } from "./constants/borderShadowConstants";
+import {
+    wrpBdShadow,
+    btnBdShd,
+    mediaBdShd,
+} from "./constants/borderShadowConstants";
 import { BUTTON_KEYS } from "./constants";
 
 import {
@@ -36,7 +40,8 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
-    EBButton
+    EBButton,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -110,21 +115,21 @@ const attributes = {
     },
 
     //
-    imageUrl: {
-        source: "attribute",
-        selector: ".eb-infobox-image",
-        attribute: "src",
-        // default: "https://source.unsplash.com/user/cristofer",
-    },
+    // imageUrl: {
+    //     source: "attribute",
+    //     selector: ".eb-infobox-image",
+    //     attribute: "src",
+    //     // default: "https://source.unsplash.com/user/cristofer",
+    // },
 
     //
-    imageId: {
-        type: "string",
-    },
+    // imageId: {
+    //     type: "string",
+    // },
 
-    imageAlt: {
-        type: "string",
-    },
+    // imageAlt: {
+    //     type: "string",
+    // },
 
     //
     mediaImgWidthUnit: {
@@ -206,14 +211,13 @@ const attributes = {
 
     //
 
-
     // //
     // buttonBgColor: {
     // 	type: "string",
     // },
 
     //
-    
+
     //
     title: {
         type: "text",
@@ -326,10 +330,6 @@ const attributes = {
     ...generateResponsiveRangeAttributes(mediaIconSize, {
         defaultRange: 50,
     }),
-    ...generateResponsiveRangeAttributes(mediaImageWidth, {
-        defaultRange: 300,
-    }),
-    ...generateResponsiveRangeAttributes(mediaImageHeight),
     ...generateResponsiveRangeAttributes(mediaContentGap, {
         defaultRange: 20,
         noUnits: true,
@@ -338,19 +338,19 @@ const attributes = {
     // typography attributes
     // ...generateTypographyAttributes(Object.values(typoPrefixs)),
     ...generateTypographyAttributes(typoPrefix_number, {
-        fontSize: 28
+        fontSize: 28,
     }),
     ...generateTypographyAttributes(typoPrefix_title, {
-        fontSize: 26
+        fontSize: 26,
     }),
     ...generateTypographyAttributes(typoPrefix_subTitle, {
-        fontSize: 22
+        fontSize: 22,
     }),
     ...generateTypographyAttributes(typoPrefix_content, {
-        fontSize: 20
+        fontSize: 20,
     }),
     ...generateTypographyAttributes(typoPrefix_buttonText, {
-        fontSize: 20
+        fontSize: 20,
     }),
 
     // dimensions Control related Attributes
@@ -363,10 +363,6 @@ const attributes = {
     ...generateDimensionsAttributes(mediaBgRadius, {
         top: 20,
         bottom: 20,
-        isLinked: false,
-    }),
-    ...generateDimensionsAttributes(mediaBgMargin, {
-        top: 15,
         isLinked: false,
     }),
     ...generateDimensionsAttributes(titlePadding, {
@@ -423,33 +419,20 @@ const attributes = {
         // defaultBdrStyle: "solid",
     }),
 
-    ...generateBorderShadowAttributes(mediaBdShd, {
-        // rdsDefaults: {
-        // 	top: 0,
-        // 	bottom: 50,
-        // 	right: 500,
-        // 	left: 1000,
-        // 	isLinked: false,
-        // },
-        // noShadow: true,
-        // noBorder: true,
-
-    }),
-
     // background attributes ⬇
     ...generateBackgroundAttributes(infoWrapBg, {
         isBgDefaultGradient: true,
-        defaultBgGradient: "linear-gradient(90deg, rgba(249,250,251,1) 0% , rgba(250,250,250,1) 100%)",
+        defaultBgGradient:
+            "linear-gradient(90deg, rgba(249,250,251,1) 0% , rgba(250,250,250,1) 100%)",
         // noOverlay: true,
         // noMainBgi: true,
         // noOverlayBgi: true, // if 'noOverlay : true' is given then there's no need to give 'noOverlayBgi : true'
     }),
-
     ...EBButton?.addAttributes(
         BUTTON_KEYS,
-        '',
+        "",
         false,
-        '',
+        "",
         true,
         {
             key: infoBtnBg,
@@ -458,11 +441,12 @@ const attributes = {
                 noMainBgi: true,
                 defaultFillColor: "var(--eb-global-button-background-color)",
                 defaultBgGradient: "var(--eb-gradient-background-color)",
-            }
+            },
         },
         true,
         {
-            key: btnBdShd, default: {
+            key: btnBdShd,
+            default: {
                 bdrDefaults: {
                     top: 2,
                     bottom: 2,
@@ -477,7 +461,7 @@ const attributes = {
                 },
                 // noShadow: true,
                 // noBorder: true,
-            }
+            },
         },
         true,
         {
@@ -488,9 +472,30 @@ const attributes = {
                 right: 30,
                 left: 30,
                 isLinked: false,
-            }
-        }
+            },
+        },
     ),
+    ...ImageComponent?.addAttributes({
+        border: {
+            key: mediaBdShd,
+        },
+        margin: {
+            key: mediaBgMargin,
+            default: {
+                top: 15,
+                isLinked: false,
+            },
+        },
+        width: {
+            key: mediaImageWidth,
+            default: {
+                defaultRange: 300,
+            },
+        },
+        height: {
+            key: mediaImageHeight,
+        }
+    }),
 };
 
 export default attributes;

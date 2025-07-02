@@ -97,7 +97,7 @@ const Edit = (props) => {
         if (getFormStyle) setAttributes({ formStyle: getFormStyle });
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"
@@ -207,7 +207,7 @@ const Edit = (props) => {
                             />
                             {formStyle == "form-style-modern" && (
                                 <>
-                                    <label htmlFor={fieldName}>
+                                    <label htmlFor={fieldName} className="active">
                                         {labelText}{" "}
                                         {isRequired && (
                                             <span className="eb-required">

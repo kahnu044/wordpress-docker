@@ -1,39 +1,32 @@
-import { __ } from "@wordpress/i18n";
-import { MediaUpload } from "@wordpress/block-editor";
-import { Button } from "@wordpress/components";
-
-/**
- * Internal dependencies
- */
+import { RichText } from "@wordpress/block-editor";
 import {
-    DynamicInputValueHandler,
-    EBDisplayIcon,
-    EBButton,
-    ImageComponent,
+    EBDisplayIcon, sanitizeURL, EBButton
 } from "@essential-blocks/controls";
-import { BUTTON_KEYS } from "../constants";
-
-export default function InfoboxContainer({ attributes, setAttributes }) {
+import {
+    BUTTON_KEYS
+} from "../constants";
+export default function InfoboxContainer({ requiredProps, attributes }) {
     const {
         blockId,
-        media,
         infoboxIcon,
+        media,
         number,
         imageUrl,
-        titleTag,
-        title,
+        imageAlt,
         enableSubTitle,
-        subTitleTag,
-        subTitle,
         enableDescription,
-        description,
         enableButton,
         isInfoClick,
+        title,
+        subTitle,
+        description,
+        titleTag,
+        subTitleTag,
         btnEffect,
         classHook,
         showMedia,
         enableTitle,
-    } = attributes;
+    } = requiredProps;
 
     return (
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
@@ -43,11 +36,8 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                         <>
                             {media === "icon" ? (
                                 <div className="icon-img-wrapper">
-                                    <div className={`eb-icon number-or-icon`}>
-                                        <EBDisplayIcon
-                                            icon={infoboxIcon}
-                                            className={`eb-infobox-icon-data-selector`}
-                                        />
+                                    <div className="eb-icon number-or-icon">
+                                        <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
                                     </div>
                                 </div>
                             ) : null}
@@ -65,55 +55,51 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                             {media === "image" ? (
                                 <div className="icon-img-wrapper">
                                     <div className="eb-infobox-image-wrapper">
-                                        {imageUrl && <ImageComponent hasStyle={false} />}
+                                        <img
+                                            className="eb-infobox-image"
+                                            src={imageUrl}
+                                            alt={imageAlt}
+                                        />
                                     </div>
                                 </div>
                             ) : null}
+
                         </>
                     )}
 
                     <div className="contents-wrapper">
                         {enableTitle && (
                             <>
-                                <DynamicInputValueHandler
+                                <RichText.Content
                                     tagName={titleTag}
                                     className="title"
                                     value={title}
-                                    onChange={(text) =>
-                                        setAttributes({ title: text })
-                                    }
                                 />
 
                                 {enableSubTitle ? (
-                                    <DynamicInputValueHandler
+                                    <RichText.Content
                                         tagName={subTitleTag}
                                         className="subtitle"
                                         value={subTitle}
-                                        onChange={(text) =>
-                                            setAttributes({ subTitle: text })
-                                        }
                                     />
                                 ) : null}
                             </>
                         )}
 
                         {enableDescription ? (
-                            <DynamicInputValueHandler
+                            <RichText.Content
                                 tagName="p"
                                 className="description"
                                 value={description}
-                                onChange={(text) =>
-                                    setAttributes({ description: text })
-                                }
                             />
                         ) : null}
 
                         {enableButton && !isInfoClick ? (
-                            <EBButton
-                                className={`infobox-btn ${btnEffect || " "}`}
+                            <EBButton.Content
+                                attributes={attributes}
+                                className={`infobox-btn  ${btnEffect || " "}`}
                                 buttonAttrProps={BUTTON_KEYS}
-                                urlInput={false}
-                                btnWrapperClassName="eb-infobox-btn-wrapper"
+                                btnWrapperClassName='eb-infobox-btn-wrapper'
                             />
                         ) : null}
                     </div>

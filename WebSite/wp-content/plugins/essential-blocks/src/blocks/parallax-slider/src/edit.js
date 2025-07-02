@@ -25,8 +25,10 @@ import Style from "./style";
 import defaultAttributes from './attributes'
 import {
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBMediaPlaceholder
  } from "@essential-blocks/controls";
+import { ParallaxSlider } from "./icon";
 
 function getPreviousImgData(previousData, image) {
     let prevTitle, prevBtnText, prevLink;
@@ -104,9 +106,10 @@ const Edit = (props) => {
     if (!sliderData.length) {
         // Show placeholder at the beginning
         return (
-            <MediaPlaceholder
+            <EBMediaPlaceholder
+                icon={ParallaxSlider}
                 labels={{
-                    title: __("Images", "essential-blocks"),
+                    title: __("Parallax Slider", "essential-blocks"),
                     instructions: __(
                         "Drag images, upload new ones or select files from your library. Upload minimum 3 images for better design."
                     ),

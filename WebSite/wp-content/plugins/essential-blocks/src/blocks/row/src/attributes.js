@@ -93,8 +93,8 @@ const attributes = {
 
 	//
 	...generateResponsiveRangeAttributes(rColsGapConst, {
-		// defaultRange: 18,
-		// defaultUnit: "%", // if 'noUnits: true' is also passed here then 'defaultUnit' won't work, also it doesn't make sense to pass a defaultUnit when No units given
+		defaultRange: 20,
+		noUnits: true,
 	}),
 
 	//

@@ -4,7 +4,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     WRAPPER_MARGIN,
@@ -342,6 +342,37 @@ const attributes = {
         type: "string",
         default: "var(--eb-global-primary-color)",
     },
+
+    // steps
+    enableMultistepForm: {
+        type: "boolean",
+        default: false,
+    },
+    stepIndecator: {
+        type: "boolean",
+        default: true,
+    },
+    stepNavigationStyle: {
+        type: "string",
+        default: "progress-bar",
+    },
+    multistepdata: {
+        type: "array",
+        default: [],
+    },
+    enableStepCount: {
+        type: "boolean",
+        default: false,
+    },
+    enableStepIcon: {
+        type: "boolean",
+        default: false,
+    },
+    enableStepSubtitle: {
+        type: "boolean",
+        default: false,
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(FIELDS_TEXT, {
         fontSize: 14,
@@ -352,7 +383,7 @@ const attributes = {
     ...generateTypographyAttributes(BTN_TEXT, {
         fontSize: 16,
     }),
-    ...generateTypographyAttributes(SUCCESS_TYPO,{
+    ...generateTypographyAttributes(SUCCESS_TYPO, {
         fontSize: 20,
     }),
     ...generateTypographyAttributes(ERROR_TYPO, {
@@ -361,7 +392,7 @@ const attributes = {
     ...generateTypographyAttributes(RADIO_TEXT, {
         fontSize: 14,
     }),
-    ...generateTypographyAttributes(CHECKBOX_TEXT,{
+    ...generateTypographyAttributes(CHECKBOX_TEXT, {
         fontSize: 14,
     }),
     ...generateTypographyAttributes(FIELDS_TEXT_VALIDATION, {

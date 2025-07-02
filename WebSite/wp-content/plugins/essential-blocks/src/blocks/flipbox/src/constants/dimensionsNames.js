@@ -12,5 +12,7 @@ export const frontContentPadding = "frontContentPadding";
 export const backContentPadding = "backContentPadding";
 export const frontImgPadding = "frontImgPadding";
 export const backImgPadding = "backImgPadding";
+export const frontImgMargin = "frontImgMargin";
+export const backImgMargin = "backImgMargin";
 export const frontItemPadding = "frontItemPadding";
 export const backItemPadding = "backItemPadding";

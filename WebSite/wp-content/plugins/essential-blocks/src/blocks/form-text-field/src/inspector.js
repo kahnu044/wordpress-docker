@@ -19,6 +19,7 @@ import {
     EBIconPicker,
     DynamicInputControl,
     InspectorPanel,
+    FormConditionalLogics,
     EBTextControl
 } from "@essential-blocks/controls";
 
@@ -44,7 +45,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, clientId } = props;
 
     const {
         resOption,
@@ -66,6 +67,7 @@ function Inspector(props) {
         isIcon,
         icon,
         iconColor,
+        parentBlockId
     } = attributes;
 
     const handleHiddenField = () => {
@@ -236,6 +238,7 @@ function Inspector(props) {
                             />
                         )}
                     </InspectorPanel.PanelBody>
+                    <FormConditionalLogics clientId={clientId} parentBlockId={parentBlockId} />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody

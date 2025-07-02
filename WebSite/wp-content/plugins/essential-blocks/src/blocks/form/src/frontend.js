@@ -1,3 +1,35 @@
+// Add the same helper functions at the top of the file
+// Function to check if an element is fully visible in the viewport
+function isElementInViewport(el, offset = 0) {
+    if (!el) return false;
+
+    const rect = el.getBoundingClientRect();
+
+    // Check if the element is fully visible in the viewport
+    // Adding offset to top to account for fixed headers
+    return (
+        rect.top >= 0 - offset &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+// Function to scroll to element only if not in viewport
+function scrollToElementIfNeeded(element, offset = 50) {
+    if (!element) return;
+
+    // Only scroll if element is not fully visible
+    if (!isElementInViewport(element, offset)) {
+        const elementTop = element.getBoundingClientRect().top + window.pageYOffset - offset;
+
+        window.scrollTo({
+            top: elementTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     const formButtons = document.querySelectorAll(".eb-form-submit-button");
     for (let button of formButtons) {
@@ -77,6 +109,9 @@ window.addEventListener("DOMContentLoaded", () => {
                     sendAjax = false;
                 }
 
+                // console.log('formDataObj', formDataObj);
+
+
                 if (sendAjax) {
                     button.classList.add("loading");
                     ajaxData.append("form_data", JSON.stringify(formDataObj));
@@ -108,6 +143,69 @@ window.addEventListener("DOMContentLoaded", () => {
                                 }
                                 form.reset();
                                 button.classList.add("success");
+
+                                // Scroll to the response message
+                                setTimeout(() => {
+                                    scrollToElementIfNeeded(formWrapper, 50);
+                                }, 100);
+
+                                // Automatically remove success class from button after 5 seconds
+                                setTimeout(() => {
+                                    responseWrapper.classList.remove("show", "success");
+                                    responseWrapper.innerHTML = "";
+
+                                    button.classList.remove("success");
+                                }, 5000);
+
+                                // Check if this is a multi-step form
+                                const multistepForm = formWrapper.querySelector('.eb-multistep-form');
+                                if (multistepForm) {
+                                    // Find the steps
+                                    const steps = multistepForm.querySelectorAll('.wp-block-essential-blocks-pro-form-multistep-wrapper:not(.wp-block-essential-blocks-pro-form-multistep-wrapper .wp-block-essential-blocks-pro-form-multistep-wrapper)');
+                                    if (steps.length > 0) {
+                                        // Reset to first step
+                                        let currentStep = 0;
+
+                                        // Hide all steps
+                                        steps.forEach(step => {
+                                            step.style.display = "none";
+                                        });
+
+                                        // Show first step
+                                        steps[0].style.display = "block";
+
+                                        // Get UI elements
+                                        const prevButton = multistepForm.querySelector("#ebFormPrevBtn");
+                                        const nextButton = multistepForm.querySelector("#ebFormNextBtn");
+                                        const submitButton = multistepForm.querySelector(".eb-form-submit-button");
+                                        const stepIndicators = multistepForm.querySelectorAll(".step-nav-item");
+
+                                        // Update step indicators
+                                        stepIndicators.forEach((indicator, index) => {
+                                            if (index === 0) {
+                                                indicator.classList.add("active");
+                                            } else {
+                                                indicator.classList.remove("active");
+                                            }
+                                        });
+
+                                        // Update button visibility
+                                        if (prevButton) prevButton.style.display = "none";
+                                        if (nextButton) nextButton.style.display = "inline-flex";
+                                        if (submitButton) submitButton.style.display = "none";
+
+                                        // Trigger a custom event that the pro plugin can listen for
+                                        const resetEvent = new CustomEvent('eb-multistep-form-reset', {
+                                            detail: { formWrapper: formWrapper }
+                                        });
+                                        document.dispatchEvent(resetEvent);
+
+                                        // Scroll to the first step after reset
+                                        setTimeout(() => {
+                                            scrollToElementIfNeeded(formWrapper, 50);
+                                        }, 100);
+                                    }
+                                }
                             }
                             if (!res.success && res.data) {
                                 button.classList.remove("success");
@@ -119,6 +217,11 @@ window.addEventListener("DOMContentLoaded", () => {
                                         false,
                                         false
                                     );
+
+                                    // Scroll to the error message
+                                    setTimeout(() => {
+                                        scrollToElementIfNeeded(formWrapper, 50);
+                                    }, 100);
                                 } else if (typeof res.data === "object") {
                                     if (
                                         res.data.message &&
@@ -130,6 +233,11 @@ window.addEventListener("DOMContentLoaded", () => {
                                             false,
                                             false
                                         );
+
+                                        // Scroll to the error message
+                                        setTimeout(() => {
+                                            scrollToElementIfNeeded(formWrapper, 50);
+                                        }, 100);
                                     }
                                     if (
                                         res.data.validation &&

@@ -2,57 +2,47 @@
  * WordPress dependencies
  */
 import { __, sprintf } from "@wordpress/i18n";
-import {
-    MediaUpload,
-    MediaPlaceholder,
-    RichText,
-    BlockControls,
-} from "@wordpress/block-editor";
-import {
-    ToolbarGroup,
-    ToolbarItem,
-    ToolbarButton,
-    Placeholder,
-    Button
-} from "@wordpress/components";
-import { edit } from "@wordpress/icons";
+import { MediaPlaceholder, BlockControls } from "@wordpress/block-editor";
+import { Placeholder, Button } from "@wordpress/components";
 import { memo, useEffect, useRef } from "@wordpress/element";
-import { select, useSelect, useDispatch } from "@wordpress/data";
-import { useEntityProp, store as coreStore } from '@wordpress/core-data';
-import { upload } from '@wordpress/icons';
-import { store as noticesStore } from '@wordpress/notices';
+import { useSelect, useDispatch } from "@wordpress/data";
+import { useEntityProp, store as coreStore } from "@wordpress/core-data";
+import { upload } from "@wordpress/icons";
+import { store as noticesStore } from "@wordpress/notices";
 import classnames from "classnames";
 
 /**
  * Internal depencencies
  */
 import Inspector from "./inspector";
-import defaultAttributes from './attributes';
+import defaultAttributes from "./attributes";
 import Style from "./style";
 
 import {
     BlockProps,
     NoticeComponent,
-    withBlockContext
-} from '@essential-blocks/controls';
+    withBlockContext,
+    ImageComponent,
+    EBMediaPlaceholder,
+} from "@essential-blocks/controls";
 
 import {
     SiteLogo,
     SiteLogoReplaceFlow,
     getMediaSourceUrlBySizeSlug,
     disabledClickProps,
-    ebLoader
+    ebLoader,
 } from "./helpers";
 
-import { CustomIcon, SiteLogoIcon, FeaturedImgIcon, AdvancedImageIcon } from './helper/icons';
+import {
+    CustomIcon,
+    SiteLogoIcon,
+    FeaturedImgIcon,
+    AdvancedImageIcon,
+} from "./helper/icons";
 
 const Edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        isSelected,
-        context
-    } = props;
+    const { attributes, setAttributes, isSelected, context } = props;
     const {
         resOption,
         blockId,
@@ -68,19 +58,16 @@ const Edit = (props) => {
         hoverEffect,
         classHook,
         imageSize,
-        widthRange,
-        heightRange,
-        autoHeight,
         imgSource,
         shouldSyncIcon,
-        imagePostId,
         enableLink,
+        imageUrl,
     } = attributes;
 
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-advanced-image',
-        style: <Style {...props} />
+        blockPrefix: "eb-advanced-image",
+        style: <Style {...props} />,
     };
 
     let urls = image.url;
@@ -89,7 +76,7 @@ const Edit = (props) => {
     useEffect(() => {
         // for old version support
         if (imgSource === undefined && image.url.length > 0) {
-            setAttributes({ imgSource: 'custom' });
+            setAttributes({ imgSource: "custom" });
         }
     }, []);
 
@@ -110,11 +97,11 @@ const Edit = (props) => {
     } = useSelect((select) => {
         const { canUser, getEntityRecord, getEditedEntityRecord } =
             select(coreStore);
-        const _canUserEdit = canUser('update', 'settings');
+        const _canUserEdit = canUser("update", "settings");
         const siteSettings = _canUserEdit
-            ? getEditedEntityRecord('root', 'site')
+            ? getEditedEntityRecord("root", "site")
             : undefined;
-        const siteData = getEntityRecord('root', '__unstableBase');
+        const siteData = getEntityRecord("root", "__unstableBase");
         const _siteLogoId = _canUserEdit
             ? siteSettings?.site_logo
             : siteData?.site_logo;
@@ -122,13 +109,13 @@ const Edit = (props) => {
         const mediaItem =
             _siteLogoId &&
             select(coreStore).getMedia(_siteLogoId, {
-                context: 'view',
+                context: "view",
             });
         const _isRequestingMediaItem =
             _siteLogoId &&
-            !select(coreStore).hasFinishedResolution('getMedia', [
+            !select(coreStore).hasFinishedResolution("getMedia", [
                 _siteLogoId,
-                { context: 'view' },
+                { context: "view" },
             ]);
 
         return {
@@ -150,14 +137,14 @@ const Edit = (props) => {
             setIcon(newValue);
         }
 
-        editEntityRecord('root', 'site', undefined, {
+        editEntityRecord("root", "site", undefined, {
             site_logo: newValue,
         });
     };
 
     const setIcon = (newValue) =>
         // The new value needs to be `null` to reset the Site Icon.
-        editEntityRecord('root', 'site', undefined, {
+        editEntityRecord("root", "site", undefined, {
             site_icon: newValue ?? null,
         });
 
@@ -200,7 +187,7 @@ const Edit = (props) => {
 
     const { createErrorNotice } = useDispatch(noticesStore);
     const onUploadError = (message) => {
-        createErrorNotice(message, { type: 'snackbar' });
+        createErrorNotice(message, { type: "snackbar" });
     };
 
     const mediaReplaceFlowProps = {
@@ -242,14 +229,14 @@ const Edit = (props) => {
         );
     }
 
-    const postId = context['postID'],
-        postTypeSlug = context['postType']
+    const postId = context["postID"],
+        postTypeSlug = context["postType"];
 
     const [storedFeaturedImage, setFeaturedImage] = useEntityProp(
-        'postType',
+        "postType",
         postTypeSlug,
-        'featured_media',
-        postId
+        "featured_media",
+        postId,
     );
 
     let featuredImage = storedFeaturedImage;
@@ -263,17 +250,17 @@ const Edit = (props) => {
                 media:
                     featuredImage &&
                     getMedia(featuredImage, {
-                        context: 'view',
+                        context: "view",
                     }),
                 postType: postTypeSlug && getPostType(postTypeSlug),
                 postPermalink: getEditedEntityRecord(
-                    'postType',
+                    "postType",
                     postTypeSlug,
-                    postId
+                    postId,
                 )?.link,
             };
         },
-        [featuredImage, postTypeSlug, postId]
+        [featuredImage, postTypeSlug, postId],
     );
 
     const mediaUrl = getMediaSourceUrlBySizeSlug(media, imageSize);
@@ -282,16 +269,16 @@ const Edit = (props) => {
         return (
             <Placeholder
                 className={classnames(
-                    'block-editor-media-placeholder',
+                    "block-editor-media-placeholder",
                     // borderProps.className
                 )}
                 withIllustration
-            // style={{
-            //     height: !!aspectRatio && '100%',
-            //     width: !!aspectRatio && '100%',
-            //     // ...borderProps.style,
-            //     // ...shadowProps.style,
-            // }}
+                // style={{
+                //     height: !!aspectRatio && '100%',
+                //     width: !!aspectRatio && '100%',
+                //     // ...borderProps.style,
+                //     // ...shadowProps.style,
+                // }}
             >
                 {content}
             </Placeholder>
@@ -305,36 +292,57 @@ const Edit = (props) => {
                 alt={
                     media?.alt_text
                         ? sprintf(
-                            // translators: %s: The image's alt text.
-                            __('Featured image: %s'),
-                            media?.alt_text
-                        )
-                        : __('Featured image')
+                              // translators: %s: The image's alt text.
+                              __("Featured image: %s"),
+                              media?.alt_text,
+                          )
+                        : __("Featured image")
                 }
-            // style={imageStyles}
+                // style={imageStyles}
             />
         );
     };
 
     let postFeaturedImage;
 
-    if ( !featuredImage) {
-        postFeaturedImage = __('Seems like you haven\'t added a Featured Image for this post. Please make sure to add a Featured Image and try again.', "essential-blocks");
+    if (!featuredImage) {
+        postFeaturedImage = __(
+            "Seems like you haven't added a Featured Image for this post. Please make sure to add a Featured Image and try again.",
+            "essential-blocks",
+        );
     } else {
         // We have a Featured image so show a Placeholder if is loading.
-        postFeaturedImage = !media ? (
-            featuredPlaceholder()
-        ) : (featuredImageHtml(mediaUrl, media)
+        postFeaturedImage = !media
+            ? featuredPlaceholder()
+            : featuredImageHtml(mediaUrl, media);
+    }
+
+    if (
+        imgSource === "featured-img" &&
+        !media &&
+        postFeaturedImage.length == 0
+    ) {
+        return (
+            <div className="eb-loading">
+                <img
+                    src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`}
+                    alt="Loading..."
+                />
+            </div>
         );
     }
 
-    if (imgSource === 'featured-img' && !media && postFeaturedImage.length == 0) {
-        return (
-            <div className="eb-loading">
-                <img src={`${EssentialBlocksLocalize?.image_url}/ajax-loader.gif`} alt="Loading..." />
-            </div>
-        )
-    }
+    const classes = `
+    img-style-${stylePreset}
+    ${captionStyle}
+    caption-horizontal-${horizontalAlign}
+    caption-vertical-${verticalAlign}
+    ${verticalAlignCap2}
+    ${hoverEffect}
+`
+        .replace(/\s+/g, " ")
+        .trim();
+
     return (
         <>
             {isSelected && imgSource && (
@@ -379,7 +387,7 @@ const Edit = (props) => {
                                         imgBorderShadowRds_Left: "0",
                                         imgBorderShadowRds_Right: "0",
                                         imgBorderShadowRds_Top: "0",
-                                        hoverEffect: 'no-effect',
+                                        hoverEffect: "no-effect",
                                     })
                                 }
                             >
@@ -395,7 +403,7 @@ const Edit = (props) => {
                                         imgSource: "featured-img",
                                         displayCaption: false,
                                         enableLink: true,
-                                        hoverEffect: 'no-effect',
+                                        hoverEffect: "no-effect",
                                     })
                                 }
                             >
@@ -411,51 +419,27 @@ const Edit = (props) => {
                 {imgSource && (
                     <>
                         <>
-                            {imgSource === 'custom' && urls.length == 0 && (
-                                <>
-                                    {image.url === "" && (
-                                        <MediaPlaceholder
-                                            onSelect={(image) => {
-                                                setAttributes({
-                                                    image,
-                                                    imageCaption: image.caption,
-                                                });
-                                            }}
-                                            accept="image/*"
-                                            allowedTypes={["image"]}
-                                            mediaLibraryButton={({ open }) => {
-                                                return (
-                                                    <Button
-                                                        icon={upload}
-                                                        variant="primary"
-                                                        label={__('Add image from media')}
-                                                        showTooltip
-                                                        tooltipPosition="top center"
-                                                        onClick={() => {
-                                                            open();
-                                                        }}
-                                                    />
-                                                );
-                                            }}
-
-                                            // multiple
+                            {imgSource === "custom" &&
+                                (!imageUrl || imageUrl === "") && (
+                                    <>
+                                        <ImageComponent.Upload 
                                             labels={{
-                                                title: "Upload Image",
-                                                instructions:
+                                                title: __("Advanced Image", "essential-blocks"),
+                                                instructions: __(
                                                     "Drag media file, upload or select image from your library.",
+                                                    "essential-blocks"
+                                                ),
                                             }}
+                                            icon={AdvancedImageIcon}
                                         />
-                                    )}
-                                </>
-                            )}
+                                    </>
+                                )}
 
-                            {imgSource === 'site-logo' && (
+                            {imgSource === "site-logo" && (
                                 <>
                                     {controls}
 
-                                    {!!logoUrl && (
-                                        logoImage
-                                    )}
+                                    {!!logoUrl && logoImage}
 
                                     {!logoUrl && !!isLoading && (
                                         <Placeholder className="eb-adv-img-site-logo-placeholder">
@@ -464,186 +448,120 @@ const Edit = (props) => {
                                     )}
 
                                     {!logoUrl && !isLoading && (
-                                        <MediaPlaceholder
-                                            onSelect={onInitialSelectLogo}
-                                            accept="image/*"
-                                            allowedTypes={["image"]}
-                                            // onError={onUploadError}
-                                            // placeholder={placeholder}
-                                            mediaLibraryButton={({ open }) => {
-                                                return (
-                                                    <Button
-                                                        icon={upload}
-                                                        variant="primary"
-                                                        label={__('Add a site logo')}
-                                                        showTooltip
-                                                        tooltipPosition="top center"
-                                                        onClick={() => {
-                                                            open();
-                                                        }}
-                                                    />
-                                                );
-                                            }}
-
-                                            labels={{
-                                                title: "Site Logo Upload",
-                                                instructions:
-                                                    "Drag media file, upload or select image from your library.",
-                                            }}
-                                        />
+                                        <>
+                                            <MediaPlaceholder
+                                                onSelect={onInitialSelectLogo}
+                                                accept="image/*"
+                                                allowedTypes={["image"]}
+                                                // onError={onUploadError}
+                                                // placeholder={placeholder}
+                                                mediaLibraryButton={({
+                                                    open,
+                                                }) => {
+                                                    return (
+                                                        <Button
+                                                            icon={upload}
+                                                            variant="primary"
+                                                            label={__(
+                                                                "Add a site logo",
+                                                            )}
+                                                            showTooltip
+                                                            tooltipPosition="top center"
+                                                            onClick={() => {
+                                                                open();
+                                                            }}
+                                                        />
+                                                    );
+                                                }}
+                                                labels={{
+                                                    title: "Site Logo",
+                                                    instructions:
+                                                        "Drag media file, upload or select image from your library.",
+                                                }}
+                                            />
+                                        </>
                                     )}
                                 </>
                             )}
                         </>
 
-                        {((imgSource === 'custom' && urls.length > 0) || (imgSource === 'featured-img' && featuredImage != 0)) && (
+                        {((imgSource === "custom" &&
+                            imageUrl &&
+                            typeof imageUrl !== "undefined" &&
+                            imageUrl !== "") ||
+                            (imgSource === "featured-img" &&
+                                featuredImage != 0)) && (
                             <>
-                                <BlockControls>
-                                    <ToolbarGroup>
-                                        <ToolbarItem>
-                                            {() => (
-                                                <MediaUpload
-                                                    value={image.id}
-                                                    onSelect={(media) => {
-                                                        setAttributes({
-                                                            image: {
-                                                                id: media.id,
-                                                                url: media.url,
-                                                                alt: media.alt,
-                                                            },
-                                                        });
-                                                    }}
-                                                    accept="image/*"
-                                                    allowedTypes={["image"]}
-                                                    render={({ open }) => (
-                                                        <ToolbarButton
-                                                            className="components-toolbar__control"
-                                                            label={__(
-                                                                "Replace Image",
-                                                                "essential-blocks"
-                                                            )}
-                                                            icon={edit}
-                                                            onClick={open}
-                                                        />
-                                                    )}
-                                                />
-                                            )}
-                                        </ToolbarItem>
-                                    </ToolbarGroup>
-                                </BlockControls>
-
                                 <div
                                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                                 >
                                     <figure
-                                        className={`eb-advanced-image-wrapper ${blockId} img-style-${stylePreset} ${captionStyle} caption-horizontal-${horizontalAlign} caption-vertical-${verticalAlign} ${verticalAlignCap2} ${hoverEffect}`}
+                                        className={`eb-advanced-image-wrapper ${blockId}${
+                                            imgSource !== "custom"
+                                                ? " " + classes
+                                                : ""
+                                        } ${imgSource === "custom" ? hoverEffect : ''}`}
                                         data-id={blockId}
                                     >
-                                        <div className="image-wrapper">
-                                            {imgSource === 'custom' && (
+                                        {imgSource === "custom" && (
+                                            <ImageComponent />
+                                        )}
+                                        {imgSource === "featured-img" &&
+                                            eb_conditional_localize.editor_type !==
+                                                "edit-site" && (
                                                 <>
-                                                    <img src={urls} alt={image.alt} />
-
-                                                    {(!RichText.isEmpty(imageCaption) ||
-                                                        isSelected) &&
-                                                        displayCaption &&
-                                                        captionStyle != "caption-style-2" && (
-                                                            <RichText
-                                                                // ref={captionRef}
-                                                                tagName="figcaption"
-                                                                aria-label={__(
-                                                                    "Image Caption Text"
-                                                                )}
-                                                                placeholder={__("Add Caption")}
-                                                                value={imageCaption}
-                                                                onChange={(value) =>
-                                                                    setAttributes({
-                                                                        imageCaption: value,
-                                                                    })
-                                                                }
-                                                                inlineToolbar
-                                                                __unstableOnSplitAtEnd={() =>
-                                                                    insertBlocksAfter(
-                                                                        createBlock(
-                                                                            "core/paragraph"
-                                                                        )
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
-                                                </>)}
-
-
-                                            {imgSource === 'featured-img' && eb_conditional_localize.editor_type !== 'edit-site' && (
-                                                <>
-                                                    {!!enableLink ? (
-                                                        <a
-                                                            href={postPermalink}
-                                                            {...disabledClickProps}
-                                                        >
-                                                            {postFeaturedImage}
-                                                        </a>
-
-                                                    ) : (
-                                                        postFeaturedImage
-                                                    )}
+                                                    <div className="image-wrapper">
+                                                        <>
+                                                            {!!enableLink ? (
+                                                                <a
+                                                                    href={
+                                                                        postPermalink
+                                                                    }
+                                                                    {...disabledClickProps}
+                                                                >
+                                                                    {
+                                                                        postFeaturedImage
+                                                                    }
+                                                                </a>
+                                                            ) : (
+                                                                postFeaturedImage
+                                                            )}
+                                                        </>
+                                                    </div>
                                                 </>
                                             )}
-
-                                        </div>
-
-                                        {imgSource === 'custom' && (
-                                            <>
-                                                {(!RichText.isEmpty(imageCaption) ||
-                                                    isSelected) &&
-                                                    displayCaption &&
-                                                    captionStyle == "caption-style-2" && (
-                                                        <RichText
-                                                            // ref={captionRef}
-                                                            tagName="figcaption"
-                                                            aria-label={__(
-                                                                "Image Caption Text"
-                                                            )}
-                                                            placeholder={__("Add Caption")}
-                                                            value={imageCaption}
-                                                            onChange={(value) =>
-                                                                setAttributes({
-                                                                    imageCaption: value,
-                                                                })
-                                                            }
-                                                            inlineToolbar
-                                                            __unstableOnSplitAtEnd={() =>
-                                                                insertBlocksAfter(
-                                                                    createBlock(
-                                                                        "core/paragraph"
-                                                                    )
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                            </>
-                                        )}
                                     </figure>
                                 </div>
                             </>
                         )}
 
-                        {imgSource === 'featured-img' && eb_conditional_localize.editor_type === 'edit-post' && !featuredImage && (
-                            <NoticeComponent
-                                Icon={AdvancedImageIcon}
-                                title={"Advanced Image"}
-                                description={postFeaturedImage}
-                            />
-                        )}
-                        {imgSource === 'featured-img' && eb_conditional_localize.editor_type === 'edit-site' && (
-                            <div className="feature-image-placeholder">
-                                <img src={EssentialBlocksLocalize?.eb_plugins_url + "assets/images/user.jpg"} alt='featured image' />
-                            </div>
-                        )}
+                        {imgSource === "featured-img" &&
+                            eb_conditional_localize.editor_type ===
+                                "edit-post" &&
+                            !featuredImage && (
+                                <NoticeComponent
+                                    Icon={AdvancedImageIcon}
+                                    title={"Advanced Image"}
+                                    description={postFeaturedImage}
+                                />
+                            )}
+                        {imgSource === "featured-img" &&
+                            eb_conditional_localize.editor_type ===
+                                "edit-site" && (
+                                <div className="feature-image-placeholder">
+                                    <img
+                                        src={
+                                            EssentialBlocksLocalize?.eb_plugins_url +
+                                            "assets/images/user.jpg"
+                                        }
+                                        alt="featured image"
+                                    />
+                                </div>
+                            )}
                     </>
                 )}
             </BlockProps.Edit>
         </>
     );
-}
+};
 export default memo(withBlockContext(defaultAttributes)(Edit));

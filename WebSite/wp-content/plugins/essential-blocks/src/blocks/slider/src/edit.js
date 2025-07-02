@@ -36,22 +36,18 @@ import {
     sanitizeURL,
     BlockProps,
     withBlockContext,
+    EBMediaPlaceholder,
     sanitizeIconValue
 } from "@essential-blocks/controls";
 /**
  * External dependencies
  */
 import Slider from "react-slick";
+import { SliderIcon } from "./icon";
 
 const Edit = (props) => {
-    const {
-        attributes,
-        setAttributes,
-        className,
-        clientId,
-        isSelected,
-        name
-    } = props;
+    const { attributes, setAttributes, className, clientId, isSelected, name } =
+        props;
     const {
         resOption,
         blockId,
@@ -85,8 +81,11 @@ const Edit = (props) => {
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
-        if (eb_conditional_localize && eb_conditional_localize.editor_type == 'edit-site') {
-            const { isRTL } = select('core/edit-site').getSettings();
+        if (
+            eb_conditional_localize &&
+            eb_conditional_localize.editor_type == "edit-site"
+        ) {
+            const { isRTL } = select("core/edit-site").getSettings();
             setAttributes({ isRTLEnable: isRTL });
         } else {
             const { isRTL } = select("core/editor").getEditorSettings();
@@ -94,17 +93,22 @@ const Edit = (props) => {
         }
 
         // Default value for old version
-        if (titleTag == undefined) { setAttributes({ titleTag: 'h2' }) }
-        if (contentTag == undefined) { setAttributes({ contentTag: 'p' }) }
-
-        if (!version || version == 'v2') {
-            setAttributes({ version: 'v3' });
+        if (titleTag == undefined) {
+            setAttributes({ titleTag: "h2" });
         }
-        if (version === 'v3') {
-            setAttributes({ version: 'v4' });
+        if (contentTag == undefined) {
+            setAttributes({ contentTag: "p" });
         }
 
-        const isBlockJustInserted = select("core/block-editor").wasBlockJustInserted(clientId);
+        if (!version || version == "v2") {
+            setAttributes({ version: "v3" });
+        }
+        if (version === "v3") {
+            setAttributes({ version: "v4" });
+        }
+
+        const isBlockJustInserted =
+            select("core/block-editor").wasBlockJustInserted(clientId);
 
         if (isBlockJustInserted && slideToShowRange == 1) {
             setAttributes({ adaptiveHeight: true });
@@ -113,13 +117,13 @@ const Edit = (props) => {
 
     useEffect(() => {
         vertical ? setAttributes({ fade: false }) : null;
-    }, [vertical])
+    }, [vertical]);
 
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-slider',
-        style: <Style {...props} />
+        blockPrefix: "eb-slider",
+        style: <Style {...props} />,
     };
 
     function SampleNextArrow(props) {
@@ -208,7 +212,7 @@ const Edit = (props) => {
 
             if (images.length > 0) {
                 const thisImage = images.filter(
-                    (data, index) => data.imageId === selectedImage.id
+                    (data, index) => data.imageId === selectedImage.id,
                 );
 
                 if (thisImage.length > 0) {
@@ -226,12 +230,14 @@ const Edit = (props) => {
                     item.openNewTab = thisImage[0].openNewTab ?? false;
                     item.isValidUrl = thisImage[0].isValidUrl;
 
-                    item.showSecondButton = thisImage[0].showSecondButton ?? false;
+                    item.showSecondButton =
+                        thisImage[0].showSecondButton ?? false;
                     item.secondButtonText = thisImage[0].secondButtonText
                         ? thisImage[0].secondButtonText
                         : "See More";
                     item.secondButtonUrl = thisImage[0].secondButtonUrl;
-                    item.secondButtonOpenNewTab = thisImage[0].secondButtonOpenNewTab ?? false;
+                    item.secondButtonOpenNewTab =
+                        thisImage[0].secondButtonOpenNewTab ?? false;
                 } else {
                     item.title = selectedImage.caption
                         ? selectedImage.caption
@@ -272,17 +278,15 @@ const Edit = (props) => {
     // Show image placeholder if there is no image
     if (!hasImages) {
         return (
-            <MediaPlaceholder
+            <EBMediaPlaceholder
                 addToGallery={hasImages}
                 isAppender={hasImages}
                 dropZoneUIOnly={hasImages && !isSelected}
                 labels={{
-                    title: !hasImages && __("Images", "essential-blocks"),
-                    instructions:
-                        !hasImages &&
-                        __(
-                            "Drag images, upload new ones or select files from your library."
-                        ),
+                    title: __("Slider", "essential-blocks"),
+                    instructions: __(
+                        "Drag images, upload new ones or select files from your library.",
+                    ),
                 }}
                 onSelect={(selectedImages) =>
                     onImageSelect(selectedImages, images)
@@ -291,6 +295,7 @@ const Edit = (props) => {
                 allowedTypes={["image"]}
                 multiple
                 value={hasImages ? images : undefined}
+                icon={SliderIcon}
             />
         );
     }
@@ -307,7 +312,10 @@ const Edit = (props) => {
         });
     }
 
-    const sliderTypeClass = sliderType === 'content' ? 'eb-slider-type-content' : 'eb-slider-type-image';
+    const sliderTypeClass =
+        sliderType === "content"
+            ? "eb-slider-type-content"
+            : "eb-slider-type-image";
 
     return (
         <>
@@ -335,7 +343,7 @@ const Edit = (props) => {
                                         className="components-toolbar__control"
                                         label={__(
                                             "Edit gallery",
-                                            "essential-blocks"
+                                            "essential-blocks",
                                         )}
                                         icon="edit"
                                         onClick={open}
@@ -376,7 +384,9 @@ const Edit = (props) => {
                                                         <RichText
                                                             tagName={titleTag}
                                                             className="eb-slider-title"
-                                                            value={sanitizeHtml(image.title)}
+                                                            value={sanitizeHtml(
+                                                                image.title,
+                                                            )}
                                                             // value={image.title}
                                                             allowedFormats={[
                                                                 "core/bold",
@@ -390,7 +400,7 @@ const Edit = (props) => {
                                                                     text,
                                                                     index,
                                                                     images,
-                                                                    setAttributes
+                                                                    setAttributes,
                                                                 )
                                                             }
                                                         />
@@ -402,7 +412,9 @@ const Edit = (props) => {
                                                         <RichText
                                                             tagName={contentTag}
                                                             className="eb-slider-subtitle"
-                                                            value={sanitizeHtml(image.subtitle)}
+                                                            value={sanitizeHtml(
+                                                                image.subtitle,
+                                                            )}
                                                             allowedFormats={[
                                                                 "core/bold",
                                                                 "core/italic",
@@ -415,7 +427,7 @@ const Edit = (props) => {
                                                                     text,
                                                                     index,
                                                                     images,
-                                                                    setAttributes
+                                                                    setAttributes,
                                                                 )
                                                             }
                                                         />
@@ -426,13 +438,15 @@ const Edit = (props) => {
                                                 {image.showButton &&
                                                     image.buttonText &&
                                                     image.buttonText.length >
-                                                    0 && (
+                                                        0 && (
                                                         <>
                                                             <a
                                                                 href={
                                                                     image.buttonUrl &&
-                                                                        image.isValidUrl
-                                                                        ? sanitizeURL(image.buttonUrl)
+                                                                    image.isValidUrl
+                                                                        ? sanitizeURL(
+                                                                              image.buttonUrl,
+                                                                          )
                                                                         : "#"
                                                                 }
                                                                 className="eb-slider-button"
@@ -444,7 +458,9 @@ const Edit = (props) => {
                                                                 rel="noopener"
                                                             >
                                                                 <RichText
-                                                                    value={sanitizeHtml(image.buttonText)}
+                                                                    value={sanitizeHtml(
+                                                                        image.buttonText,
+                                                                    )}
                                                                     allowedFormats={[
                                                                         "core/bold",
                                                                         "core/italic",
@@ -452,13 +468,13 @@ const Edit = (props) => {
                                                                         "core/underline",
                                                                     ]}
                                                                     onChange={(
-                                                                        text
+                                                                        text,
                                                                     ) =>
                                                                         handleButtonText(
                                                                             text,
                                                                             index,
                                                                             images,
-                                                                            setAttributes
+                                                                            setAttributes,
                                                                         )
                                                                     }
                                                                 />
@@ -473,8 +489,10 @@ const Edit = (props) => {
                                                             <a
                                                                 href={
                                                                     image.secondButtonUrl &&
-                                                                        image.isValidUrl
-                                                                        ? sanitizeURL(image.secondButtonUrl)
+                                                                    image.isValidUrl
+                                                                        ? sanitizeURL(
+                                                                              image.secondButtonUrl,
+                                                                          )
                                                                         : "#"
                                                                 }
                                                                 className="eb-slider-second-button"
@@ -486,7 +504,9 @@ const Edit = (props) => {
                                                                 rel="noopener"
                                                             >
                                                                 <RichText
-                                                                    value={sanitizeHtml(image.secondButtonText)}
+                                                                    value={sanitizeHtml(
+                                                                        image.secondButtonText,
+                                                                    )}
                                                                     allowedFormats={[
                                                                         "core/bold",
                                                                         "core/italic",
@@ -494,13 +514,13 @@ const Edit = (props) => {
                                                                         "core/underline",
                                                                     ]}
                                                                     onChange={(
-                                                                        text
+                                                                        text,
                                                                     ) =>
                                                                         handleSecondButtonText(
                                                                             text,
                                                                             index,
                                                                             images,
-                                                                            setAttributes
+                                                                            setAttributes,
                                                                         )
                                                                     }
                                                                 />
@@ -518,6 +538,6 @@ const Edit = (props) => {
             </BlockProps.Edit>
         </>
     );
-}
+};
 
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

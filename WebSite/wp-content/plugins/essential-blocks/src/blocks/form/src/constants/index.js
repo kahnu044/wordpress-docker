@@ -37,6 +37,7 @@ export const FORM_TYPE = [
     { label: __("Subscription Form"), value: "subscription_form" },
     { label: __("RSVP Form"), value: "rsvp_form" },
     { label: __("Blank"), value: "blank" },
+    { label: __("Multi Step Form"), value: "multistep_form", isPro: true },
     // { label: __("Event Booking Form (Pro)"), value: "event", isPro: true },
     // { label: __("Survey Form (Pro)"), value: "survey", isPro: true },
 ];

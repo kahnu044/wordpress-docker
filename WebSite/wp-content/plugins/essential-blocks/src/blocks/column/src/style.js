@@ -49,12 +49,16 @@ export default function Style(props) {
         colAli,
     } = attributes;
 
+    console.log('columnGap',columnGap, columnNumber);
+
     //Calculate Gap for Responsiveness
     const calculateGap = (gap = columnGap.desktop || 0, columnNumber) => {
 
         let columnGap = columnNumber;
         if (columnGap > 1) {
             columnGap = columnNumber - 1;
+        } else {
+            columnGap = 0;
         }
         return (gap * columnGap) / columnNumber;
     }
@@ -344,6 +348,8 @@ export default function Style(props) {
                 editorTabStyles={tabAllStylesEditor}
                 editorMobileStyles={mobileAllStylesEditor}
                 blockName={name}
+                columnGap={columnGap}
+                columnNumber={columnNumber}
             />
         </>
     );

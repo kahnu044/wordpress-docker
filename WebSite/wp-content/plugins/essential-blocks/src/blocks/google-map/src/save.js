@@ -32,7 +32,7 @@ const Save = ({ attributes }) => {
                         data-latitude={latitude}
                         data-longitude={longitude}
                         data-search-address={searchAddress}
-                        data-marker={btoa(JSON.stringify(marker))}
+                        data-marker={btoa(unescape(encodeURIComponent(JSON.stringify(marker))))}
                         data-image-size={imageSize || 32}
                         data-theme-source={themeSource}
                         data-google-style={googleMapStyle}

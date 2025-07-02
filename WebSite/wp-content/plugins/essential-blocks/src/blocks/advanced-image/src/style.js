@@ -7,43 +7,33 @@ import {
     IMAGE_WIDTH,
     IMAGE_HEIGHT,
     IMAGE_BORDER_SHADOW,
-    CAPTION_MARGIN,
-    CAPTION_PADDING,
-    CAPTION_WIDTH,
-    TEXT_ALIGNMENT,
     IMAGE_ALIGNMENT,
 } from "./constants";
-
-import { CAPTION_TYPOGRAPHY } from "./constants/typoConstants";
 
 /**
  * External depencencies
  */
 import {
     softMinifyCssStrings,
-    generateTypographyStyles,
     generateDimensionsControlStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     generateResponsiveAlignStyles,
-    StyleComponent
+    StyleComponent,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
     const {
-        resOption,
         blockId,
-        blockMeta,
         image,
-        displayCaption,
-        captionColor,
-        captionBGColor,
         complexStyle,
         autoFit,
         fitStyles,
         autoHeight,
+        imgSource
     } = attributes;
 
     // Get only urls for Lightbox
@@ -64,16 +54,6 @@ export default function Style(props) {
      * CSS/styling Codes Starts from Here
      */
 
-    // Caption Typography
-    const {
-        typoStylesDesktop: captionTypographyDesktop,
-        typoStylesTab: captionTypographyTab,
-        typoStylesMobile: captionTypographyMobile,
-    } = generateTypographyStyles({
-        attributes,
-        prefixConstant: CAPTION_TYPOGRAPHY,
-    });
-
     /* Wrapper Margin */
     const {
         dimensionStylesDesktop: wrapperMarginDesktop,
@@ -92,28 +72,6 @@ export default function Style(props) {
         dimensionStylesMobile: wrapperPaddingMobile,
     } = generateDimensionsControlStyles({
         controlName: WRAPPER_PADDING,
-        styleFor: "padding",
-        attributes,
-    });
-
-    /* Caption Margin */
-    const {
-        dimensionStylesDesktop: captionMarginDesktop,
-        dimensionStylesTab: captionMarginTab,
-        dimensionStylesMobile: captionMarginMobile,
-    } = generateDimensionsControlStyles({
-        controlName: CAPTION_MARGIN,
-        styleFor: "margin",
-        attributes,
-    });
-
-    /* Caption Padding */
-    const {
-        dimensionStylesDesktop: captionPaddingDesktop,
-        dimensionStylesTab: captionPaddingTab,
-        dimensionStylesMobile: captionPaddingMobile,
-    } = generateDimensionsControlStyles({
-        controlName: CAPTION_PADDING,
         styleFor: "padding",
         attributes,
     });
@@ -139,16 +97,6 @@ export default function Style(props) {
         attributes,
     });
 
-    const {
-        alignStylesDesktop: textAlignDesktop,
-        alignStylesTab: textAlignTab,
-        alignStylesMobile: textAlignMobile,
-    } = generateResponsiveAlignStyles({
-        controlName: TEXT_ALIGNMENT,
-        property: "text-align",
-        attributes,
-    });
-
     // range controller Separator Line Width
     const {
         rangeStylesDesktop: imageHeightDesktop,
@@ -157,17 +105,6 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: IMAGE_HEIGHT,
         property: "",
-        attributes,
-    });
-
-    // range controller Separator Line Grid Column Margin Bottom
-    const {
-        rangeStylesDesktop: captionWidthDesktop,
-        rangeStylesTab: captionWidthTab,
-        rangeStylesMobile: captionWidthMobile,
-    } = generateResponsiveRangeStyles({
-        controlName: CAPTION_WIDTH,
-        property: "width",
         attributes,
     });
 
@@ -258,100 +195,113 @@ export default function Style(props) {
 	`;
 
     const imageStylesDesktop = `
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper{
+		.eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
+			${imageAlignDesktop}
+		}
+            ${
+                imgSource !== "custom"
+                    ? `
+                .eb-advanced-image-wrapper.${blockId} .image-wrapper {
 			width${imageWidthDesktop};
 			${autoHeight ? `height: auto;` : `height${imageHeightDesktop}`};
-			${!complexStyle ? imageBDShadowDesktop : ""}
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignDesktop}
 		}
-
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
+                ${!complexStyle ? imageBDShadowDesktop : ""}
+            }
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthDesktop ? 'width: 100%' : ''}
+            ${imageWidthDesktop ? "width: 100%" : ""}
 		}
-
-		.eb-advanced-image-wrapper.${blockId} figcaption{
-			color: ${captionColor};
-			${textAlignDesktop}
-			${captionMarginDesktop}
-			${captionPaddingDesktop}
-			${captionTypographyDesktop}
-			${captionWidthDesktop}
-		}
-		.eb-advanced-image-wrapper.${blockId}.caption-style-1 figcaption {
-			background: ${captionBGColor};
-		}
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper:hover {
-			${!complexStyle ? imageBDShadowHoverDesktop : ""}
-		}
-		${!displayCaption
-            ? ` .eb-advanced-image-wrapper.${blockId} figcaption {display:none;} `
-            : ""
-        }
+                `
+                    : ``
+            }
 	`;
 
     const imageStylesTab = `
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper{
-			width${imageWidthTab || imageWidthDesktop};
-			height${imageHeightTab || imageHeightDesktop};
-            ${imageAlignTab}
+		.eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
+			${imageAlignTab}
 		}
+            ${
+                imgSource !== "custom"
+                    ? `
+                .eb-advanced-image-wrapper.${blockId} .image-wrapper {
+			width${imageWidthTab};
+			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
+			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+			${imageAlignTab}		}
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
+                ${!complexStyle ? imageBDShadowTab : ""}
+            }
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
-			${!complexStyle ? imageBDShadowTab : ""}
-            ${imageWidthTab ? 'width: 100%' : ''}
+			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+			${autoFit ? `object-fit: ${fitStyles};` : ""}
+            ${imageWidthTab ? "width: 100%" : ""}
 		}
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper:hover {
-			${!complexStyle ? imageBDShadowHoverTab : ""}
-		}
-		.eb-advanced-image-wrapper.${blockId} figcaption {
-            ${textAlignTab}
-			${captionMarginTab}
-			${captionPaddingTab}
-			${captionTypographyTab}
-			${captionWidthTab}
-		}
+                `
+                    : ``
+            }
 	`;
 
     const imageStylesMobile = `
-        .eb-advanced-image-wrapper.${blockId} .image-wrapper{
-			width${imageWidthMobile || imageWidthDesktop};
-			height${imageHeightMobile || imageHeightDesktop};
-            ${imageAlignMobile}
+        .eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
+			${imageAlignMobile}
 		}
+            ${
+                imgSource !== "custom"
+                    ? `
+                .eb-advanced-image-wrapper.${blockId} .image-wrapper {
+			width${imageWidthMobile};
+			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
+			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+			${imageAlignMobile}		}
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
+                ${!complexStyle ? imageBDShadowMobile : ""}
+            }
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
-			${!complexStyle ? imageBDShadowMobile : ""}
-            ${imageWidthMobile ? 'width: 100%' : ''}
+			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+			${autoFit ? `object-fit: ${fitStyles};` : ""}
+            ${imageWidthMobile? "width: 100%" : ""}
 		}
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper:hover {
-			${!complexStyle ? imageBDShadowHoverMobile : ""}
-		}
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper figcaption {
-			${textAlignMobile}
-            ${captionMarginMobile}
-			${captionPaddingMobile}
-			${captionTypographyMobile}
-			${captionWidthMobile}
-		}
+                `
+                    : ``
+            }
 	`;
+    const wrapperClass = "eb-advanced-image-wrapper";
+    const {
+        imgDesktopStyle: imgDesktopStyle,
+        imgTabStyle: imgTabStyle,
+        imgMobileStyle: imgMobileStyle,
+    } = ImageComponent.Style({
+        blockId: blockId, // blockId
+        wrapperClass: wrapperClass, // block's wrapper class
+        width: IMAGE_WIDTH, // width
+        height: IMAGE_HEIGHT, // height
+        border: IMAGE_BORDER_SHADOW, // border
+        hasFilter: false,
+    });
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
 		${imageStylesDesktop}
+        ${imgDesktopStyle}
 	`);
 
     // all css styles for Tab in strings ⬇
     const tabAllStyles = softMinifyCssStrings(`
 		${wrapperStylesTab}
 		${imageStylesTab}
+        ${imgTabStyle}
 	`);
 
     // all css styles for Mobile in strings ⬇
     const mobileAllStyles = softMinifyCssStrings(`
 		${wrapperStylesMobile}
 		${imageStylesMobile}
+        ${imgMobileStyle}
 	`);
 
     return (

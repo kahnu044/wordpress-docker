@@ -25,7 +25,15 @@ class Form extends Block
             'buttonText'   => __( 'Submit', 'essential-blocks' ),
             'icon'         => 'fas fa-chevron-right',
             'formLayout'   => 'block',
-            'formStyle'    => 'form-style-classic'
+            'formStyle'    => 'form-style-classic',
+            'enableMultistepForm' => false,
+            'stepIndecator' => true,
+            'stepNavigationStyle' => 'progress-bar',
+            'enableStepCount' => false,
+            'enableStepIcon' => true,
+            'enableStepSubtitle' => false,
+            'nextBtnText' => 'Next',
+            'prevBtnText' => 'Previous',
          ];
     }
 
@@ -91,6 +99,7 @@ class Form extends Block
                 $_essential_attributes[ $key ] = $value;
             }
         }
+
 
         $attributes = wp_parse_args( $attributes, $this->default_attributes );
 

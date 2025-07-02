@@ -1,10 +1,11 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon, sanitizeURL, EBButton
+    EBDisplayIcon,
+    sanitizeURL,
+    EBButton,
+    ImageComponent,
 } from "@essential-blocks/controls";
-import {
-    BUTTON_KEYS
-} from "../constants";
+import { BUTTON_KEYS } from "../constants";
 export default function InfoboxContainer({ requiredProps, attributes }) {
     const {
         blockId,
@@ -31,11 +32,21 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
         enableTitle,
         addBtnIcon,
         btnIconPosition,
-        btnIcon
+        btnIcon,
     } = requiredProps;
 
     return (
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            {isInfoClick && (
+                <a
+                    href={
+                        infoboxLink == undefined ? "" : sanitizeURL(infoboxLink)
+                    }
+                    target={linkNewTab ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    className="info-click-link info-wrap-link"
+                ></a>
+            )}
             <div className={`${blockId} eb-infobox-wrapper`}>
                 <div className="infobox-wrapper-inner">
                     {showMedia && (
@@ -43,7 +54,10 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
                             {media === "icon" ? (
                                 <div className="icon-img-wrapper">
                                     <div className="eb-icon number-or-icon">
-                                        <EBDisplayIcon icon={infoboxIcon} className={`eb-infobox-icon-data-selector`} />
+                                        <EBDisplayIcon
+                                            icon={infoboxIcon}
+                                            className={`eb-infobox-icon-data-selector`}
+                                        />
                                     </div>
                                 </div>
                             ) : null}
@@ -58,21 +72,19 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
                                 </div>
                             ) : null}
 
-                            {media === "image" ? (
+                            {media === "image" && imageUrl ? (
                                 <div className="icon-img-wrapper">
                                     <div className="eb-infobox-image-wrapper">
-                                        <img
+                                        <ImageComponent.Content
+                                            attributes={attributes}
                                             className="eb-infobox-image"
-                                            src={imageUrl}
-                                            alt={imageAlt}
+                                            hasStyle={false}
                                         />
                                     </div>
                                 </div>
                             ) : null}
-
                         </>
                     )}
-
                     <div className="contents-wrapper">
                         {enableTitle && (
                             <>
@@ -105,7 +117,7 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
                                 attributes={attributes}
                                 className={`infobox-btn  ${btnEffect || " "}`}
                                 buttonAttrProps={BUTTON_KEYS}
-                                btnWrapperClassName='eb-infobox-btn-wrapper'
+                                btnWrapperClassName="eb-infobox-btn-wrapper"
                             />
                         ) : null}
                     </div>

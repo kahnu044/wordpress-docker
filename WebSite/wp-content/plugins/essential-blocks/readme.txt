@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Guten
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 5.5.2
+Stable tag: 5.5.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -139,7 +139,7 @@ Design without limits in WordPress block editor, using 60+ of the most useful Es
 - **[Openverse](https://essential-blocks.com/demo/openverse)** -  Easily search & use royalty free images, stock photos, etc CC-licensed images from Openverse for your website
 - **[Google Maps](https://essential-blocks.com/demo/google-maps)** -  Present a fully responsive map on your website with your preferred configurations, styles, etc.
 - **[Shape Divider](https://essential-blocks.com/demo/shape-divider/)** - Make your website designs stand out by showcasing different sections with stunning shape dividers
-- **[Form](https://essential-blocks.com/demo/form-block/)** - Create responsive forms of any type - contact forms, RSVP forms, or subscription forms - in Gutenberg and manage easily them from your WordPress dashboard
+- **[Form](https://essential-blocks.com/demo/form-block/)** - Create responsive forms of any type - contact forms, RSVP forms, multi-step forms or subscription forms - in Gutenberg and manage easily them from your WordPress dashboard.
 - **[Timeline Slider (PRO)](https://essential-blocks.com/demo/timeline-slider)** - Showcase your posts & pages in an attractive timeline slider and design with stunning presets & styling options
 - **[Advanced Search (PRO)](https://essential-blocks.com/demo/advanced-search)** - Let visitors find any content on your website easily with a customizable, dynamic search bar
 - **[Data Table (PRO)](https://essential-blocks.com/demo/data-table/)** - Insert an advanced data table on your website without any code and display information in an eye-catching way
@@ -255,6 +255,11 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+
+= 5.5.3 - 29/06/2025 =
+- Fixed: Google Map | Map Becomes Unresponsive When Entering Diacritic Characters
+- Fixed: Row Column | Column gap issues with responsive device
+- Few minor bug fixes & improvements
 
 = 5.5.2 - 20/06/2025 =
 - Few minor bug fixes & improvements

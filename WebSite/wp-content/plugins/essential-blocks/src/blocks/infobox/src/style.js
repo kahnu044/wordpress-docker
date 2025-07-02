@@ -19,7 +19,11 @@ import {
 } from "./constants/dimensionsConstants";
 
 import { infoWrapBg, infoBtnBg } from "./constants/backgroundsConstants";
-import { wrpBdShadow, btnBdShd, mediaBdShd } from "./constants/borderShadowConstants";
+import {
+    wrpBdShadow,
+    btnBdShd,
+    mediaBdShd,
+} from "./constants/borderShadowConstants";
 import { BUTTON_KEYS } from "./constants";
 
 import {
@@ -37,7 +41,8 @@ import {
     generateResponsiveRangeStyles,
     StyleComponent,
     EBButton,
-    useBlockAttributes
+    useBlockAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -99,7 +104,7 @@ export default function Style(props) {
         typoStylesMobile: titleTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefix_title
+        prefixConstant: typoPrefix_title,
     });
 
     const {
@@ -108,7 +113,7 @@ export default function Style(props) {
         typoStylesMobile: subTitleTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefix_subTitle
+        prefixConstant: typoPrefix_subTitle,
     });
 
     const {
@@ -117,7 +122,7 @@ export default function Style(props) {
         typoStylesMobile: contentTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefix_content
+        prefixConstant: typoPrefix_content,
     });
 
     const {
@@ -126,7 +131,7 @@ export default function Style(props) {
         typoStylesMobile: numTypoStylesMobile,
     } = generateTypographyStyles({
         attributes,
-        prefixConstant: typoPrefix_number
+        prefixConstant: typoPrefix_number,
     });
 
     const {
@@ -332,52 +337,33 @@ export default function Style(props) {
 			${media !== "none" ? `${contentMediaGapDesktop}` : ""}
 		}
 
-		${media !== "none"
-            ? `
-				.eb-infobox-wrapper.${blockId} .icon-img-wrapper {
-					${mediaAlignment
-                ? `align-self: ${mediaAlignment};`
-                : `align-self: ${mediaAlignSelf || "center"};`
+        ${
+            media === "image"
+                ? `
+            .eb-infobox-wrapper.${blockId} .eb-infobox-image-wrapper img {
+                ${mediaRadiusStylesDesktop}
             }
+            `
+                : " "
+        }
+
+		${
+            media !== "none"
+                ? `
+				.eb-infobox-wrapper.${blockId} .icon-img-wrapper {
+					${
+                        mediaAlignment
+                            ? `align-self: ${mediaAlignment};`
+                            : `align-self: ${mediaAlignSelf || "center"};`
+                    }
 
 					${mediaBgMarginStylesDesktop}
 
 				}
 
-
-				${media === "image"
-                ? `
-
-						.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner .icon-img-wrapper{
-							${mediaImgWidthUnit === "%" ? mediaImgWidthDesktop : " "}
-						}
-
-						.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner img {
-
-							${imageUrl ? mediaRadiusStylesDesktop : " "}
-
-							${mediaImgWidthUnit === "%" ? `width: 100%;` : mediaImgWidthDesktop}
-							${isMediaImgHeightAuto ? `height:auto;` : mediaImgHeightDesktop}
-
-                            ${mediaBdShadowStyesDesktop}
-                            transition: ${mediaBdShadowTransitionStyle};
-						}
-
-                        .eb-infobox-wrapper.${blockId} .infobox-wrapper-inner img:hover {
-                        ${mediaBdShadowStylesHoverDesktop}
-                        }
-
-						.eb-infobox-wrapper.${blockId} .eb-infobox-image-wrapper{
-							${imageUrl ? " " : mediaRadiusStylesDesktop}
-						}
-						`
-                : " "
-            }
-
-
-
-				${media === "number" || media === "icon"
-                ? `
+				${
+                    media === "number" || media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .number-or-icon {
 							${mediaBgPaddingDesktop}
@@ -386,15 +372,17 @@ export default function Style(props) {
                             ${mediaBdShadowStyesDesktop}
                             transition: ${mediaBdShadowTransitionStyle};
 
-							${useNumIconBg
-                    ? `${numIconBgType === "fill"
-                        ? `background-color: ${numIconBgColor};`
-                        : numIconBgType === "gradient"
-                            ? `background-image: ${numIconBgGradient};`
-                            : " "
-                    }`
-                    : " "
-                }
+							${
+                                useNumIconBg
+                                    ? `${
+                                          numIconBgType === "fill"
+                                              ? `background-color: ${numIconBgColor};`
+                                              : numIconBgType === "gradient"
+                                              ? `background-image: ${numIconBgGradient};`
+                                              : " "
+                                      }`
+                                    : " "
+                            }
 
 						}
 
@@ -407,13 +395,12 @@ export default function Style(props) {
 						}
 
 						`
-                : " "
-            }
+                        : " "
+                }
 
-
-
-				${media === "number"
-                ? `
+				${
+                    media === "number"
+                        ? `
 
 					.eb-infobox-wrapper.${blockId} span.eb-infobox-number{
 						${numTypoStylesDesktop}
@@ -425,11 +412,12 @@ export default function Style(props) {
 					}
 
 					`
-                : " "
-            }
+                        : " "
+                }
 
-				${media === "icon"
-                ? `
+				${
+                    media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .icon-img-wrapper .eb-infobox-icon-data-selector {
 							${iconSizeDesktop}
@@ -441,22 +429,22 @@ export default function Style(props) {
 						}
 
 						`
-                : " "
-            }
-
+                        : " "
+                }
 
 			`
-            : " "
+                : " "
         }
 
 		.eb-infobox-wrapper.${blockId} .contents-wrapper {
 			flex: 1;
 			${contentAlignment ? `text-align: ${contentAlignment};` : " "}
 
-			${contentsAlignment
-            ? `text-align: ${contentsAlignment};`
-            : `text-align: ${contentAlignment};`
-        }
+			${
+                contentsAlignment
+                    ? `text-align: ${contentsAlignment};`
+                    : `text-align: ${contentAlignment};`
+            }
 		}
 
 		.eb-infobox-wrapper.${blockId} .title {
@@ -465,19 +453,21 @@ export default function Style(props) {
 			${titleColor ? `color: ${titleColor};` : " "}
 		}
 
-		${enableSubTitle
-            ? `
+		${
+            enableSubTitle
+                ? `
 				.eb-infobox-wrapper.${blockId} .subtitle {
 					${subTitleTypoStylesDesktop}
 					${subTitlePaddingStylesDesktop}
 					${subTitleColor ? `color: ${subTitleColor};` : " "}
 				}
 				`
-            : " "
+                : " "
         }
 
-		${enableDescription
-            ? `
+		${
+            enableDescription
+                ? `
 
 				.eb-infobox-wrapper.${blockId} .description {
 
@@ -488,7 +478,7 @@ export default function Style(props) {
 				}
 
 				`
-            : " "
+                : " "
         }
 
 		`;
@@ -519,16 +509,18 @@ export default function Style(props) {
 			${media !== "none" ? `${contentMediaGapTab}` : ""}
 		}
 
-		${media !== "none"
-            ? `
+		${
+            media !== "none"
+                ? `
 
 				.eb-infobox-wrapper.${blockId} .icon-img-wrapper {
 
 					${mediaBgMarginStylesTab}
 				}
 
-				${media === "number" || media === "icon"
-                ? `
+				${
+                    media === "number" || media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .number-or-icon {
 							${mediaRadiusStylesTab}
@@ -541,12 +533,13 @@ export default function Style(props) {
                         }
 
 						`
-                : " "
-            }
+                        : " "
+                }
 
 
-				${media === "number"
-                ? `
+				${
+                    media === "number"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} span.eb-infobox-number{
 							${numTypoStylesTab}
@@ -555,12 +548,13 @@ export default function Style(props) {
 						}
 
 					`
-                : " "
-            }
+                        : " "
+                }
 
 
-				${media === "icon"
-                ? `
+				${
+                    media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .icon-img-wrapper .eb-infobox-icon-data-selector {
 							${iconSizeTab}
@@ -569,55 +563,10 @@ export default function Style(props) {
 						}
 
 					`
-                : " "
-            }
-
-
-				${media === "image"
-                ? `
-
-					.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner .icon-img-wrapper{
-						${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthTab
-                    : mediaImgWidthUnit === "%"
-                        ? `width: auto;`
                         : " "
                 }
-					}
-
-					.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner img {
-
-                    ${mediaBdShadowStyesTab}
-
-						${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthTab
-                }
-
-						${isMediaImgHeightAuto ? "" : mediaImgHeightTab}
-
-					}
-
-                    .eb-infobox-wrapper.${blockId} .infobox-wrapper-inner img:hover {
-                        ${mediaBdShadowStylesHoverTab}
-                        }
-
-					.eb-infobox-wrapper.${blockId} .eb-infobox-image-wrapper{
-						${mediaRadiusStylesTab}
-
-					}
-
-					`
-                : " "
-            }
-
-
-
-
 			`
-            : " "
+                : " "
         }
 
 
@@ -627,26 +576,28 @@ export default function Style(props) {
 
 		}
 
-		${enableSubTitle
-            ? `
+		${
+            enableSubTitle
+                ? `
 				.eb-infobox-wrapper.${blockId} .subtitle {
 					${subTitleTypoStylesTab}
 					${subTitlePaddingStylesTab}
 
 				}
 				`
-            : " "
+                : " "
         }
 
-		${enableDescription
-            ? `
+		${
+            enableDescription
+                ? `
 				.eb-infobox-wrapper.${blockId} .description {
 					${contentTypoStylesTab}
 					${contentPaddingStylesTab}
 
 				}
 				`
-            : " "
+                : " "
         }
 
 	`;
@@ -677,16 +628,18 @@ export default function Style(props) {
 			${media !== "none" ? `${contentMediaGapMobile}` : ""}
 		}
 
-		${media !== "none"
-            ? `
+		${
+            media !== "none"
+                ? `
 
 				.eb-infobox-wrapper.${blockId} .icon-img-wrapper {
 
 					${mediaBgMarginStylesMobile}
 				}
 
-				${media === "number" || media === "icon"
-                ? `
+				${
+                    media === "number" || media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .number-or-icon {
 							${mediaRadiusStylesMobile}
@@ -699,11 +652,12 @@ export default function Style(props) {
                         }
 
 						`
-                : " "
-            }
+                        : " "
+                }
 
-				${media === "number"
-                ? `
+				${
+                    media === "number"
+                        ? `
 
 					.eb-infobox-wrapper.${blockId} span.eb-infobox-number{
 						${numTypoStylesMobile}
@@ -712,11 +666,12 @@ export default function Style(props) {
 					}
 
 					`
-                : " "
-            }
+                        : " "
+                }
 
-				${media === "icon"
-                ? `
+				${
+                    media === "icon"
+                        ? `
 
 						.eb-infobox-wrapper.${blockId} .icon-img-wrapper .eb-infobox-icon-data-selector {
 							${iconSizeMobile}
@@ -725,32 +680,35 @@ export default function Style(props) {
 						}
 
 					`
-                : " "
-            }
+                        : " "
+                }
 
-				${media === "image"
-                ? `
+				${
+                    media === "image"
+                        ? `
 
 
 					.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner .icon-img-wrapper{
-						${MOBmediaImgWidthUnit === "%"
-                    ? mediaImgWidthMobile
-                    : TABmediaImgWidthUnit === "%"
-                        ? `width: auto;`
-                        : " "
-                }
+						${
+                            MOBmediaImgWidthUnit === "%"
+                                ? mediaImgWidthMobile
+                                : TABmediaImgWidthUnit === "%"
+                                ? `width: auto;`
+                                : " "
+                        }
 					}
 
 
 					.eb-infobox-wrapper.${blockId} .infobox-wrapper-inner img {
                     ${mediaBdShadowStyesMobile}
 
-						${MOBmediaImgWidthUnit === "%"
-                    ? TABmediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthMobile
-                }
+						${
+                            MOBmediaImgWidthUnit === "%"
+                                ? TABmediaImgWidthUnit === "%"
+                                    ? " "
+                                    : `width: 100%;`
+                                : mediaImgWidthMobile
+                        }
 
 						${isMediaImgHeightAuto ? "" : mediaImgHeightMobile}
 
@@ -765,13 +723,13 @@ export default function Style(props) {
 					}
 
 					`
-                : " "
-            }
+                        : " "
+                }
 
 
 
 			`
-            : " "
+                : " "
         }
 
 		.eb-infobox-wrapper.${blockId} .title {
@@ -780,19 +738,21 @@ export default function Style(props) {
 
 		}
 
-		${enableSubTitle
-            ? `
+		${
+            enableSubTitle
+                ? `
 				.eb-infobox-wrapper.${blockId} .subtitle {
 					${subTitleTypoStylesMobile}
 					${subTitlePaddingStylesMobile}
 
 				}
 				`
-            : " "
+                : " "
         }
 
-		${enableDescription
-            ? `
+		${
+            enableDescription
+                ? `
 				.eb-infobox-wrapper.${blockId} .description {
 					${contentTypoStylesMobile}
 					${contentPaddingStylesMobile}
@@ -800,39 +760,59 @@ export default function Style(props) {
 				}
 
 				`
-            : " "
+                : " "
         }
 
 	`;
 
-    const wrapperClass = 'eb-infobox-wrapper';
-    const { btnDesktopStyle: btnDesktopStyle, btnTabStyle: btnTabStyle, btnMobileStyle: btnMobileStyle } = EBButton.Style(
+    const wrapperClass = "eb-infobox-wrapper";
+    const {
+        btnDesktopStyle: btnDesktopStyle,
+        btnTabStyle: btnTabStyle,
+        btnMobileStyle: btnMobileStyle,
+    } = EBButton.Style(
         blockId,
         wrapperClass,
         BUTTON_KEYS,
-        '',
-        'infobox-btn',
+        "",
+        "infobox-btn",
         typoPrefix_buttonText,
         infoBtnBg,
         btnBdShd,
         buttonPadding,
-        true
+        true,
     );
+
+    const {
+        imgDesktopStyle: frontImgDesktopStyle,
+        imgTabStyle: frontImgTabStyle,
+        imgMobileStyle: frontImgMobileStyle,
+    } = ImageComponent.Style({
+        blockId: blockId, // blockId
+        wrapperClass: wrapperClass, // block's wrapper class
+        width: mediaImageWidth, // width
+        height: mediaImageHeight, // height
+        border: mediaBdShd, // border
+        margin: mediaBgMargin, // margin
+    });
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
 		${btnDesktopStyle}
+        ${frontImgDesktopStyle}
 	`);
 
     // all css styles for Tab in strings ⬇
     const tabAllStyles = softMinifyCssStrings(`
 		${wrapperStylesTab}
+        ${frontImgTabStyle}
 	`);
 
     // all css styles for Mobile in strings ⬇
     const mobileAllStyles = softMinifyCssStrings(`
 		${wrapperStylesMobile}
+        ${frontImgMobileStyle}
 	`);
 
     return (

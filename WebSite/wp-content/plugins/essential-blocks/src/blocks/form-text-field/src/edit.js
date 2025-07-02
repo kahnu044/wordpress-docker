@@ -100,7 +100,7 @@ const Edit = (props) => {
         }
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"

@@ -7,9 +7,13 @@ import {
     MediaPlaceholder,
     MediaUpload,
 } from "@wordpress/block-editor";
-import { ToolbarGroup, ToolbarItem, ToolbarButton } from "@wordpress/components";
+import {
+    ToolbarGroup,
+    ToolbarItem,
+    ToolbarButton,
+} from "@wordpress/components";
 import { memo } from "@wordpress/element";
-import defaultAttributes from './attributes';
+import defaultAttributes from "./attributes";
 
 /**
  * Internal dependencies
@@ -20,9 +24,10 @@ import Style from "./style";
 import {
     sanitizeURL,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    EBMediaPlaceholder
 } from "@essential-blocks/controls";
-
+import { ImageComparison } from "./icon";
 function Edit(props) {
     const { isSelected, attributes, setAttributes } = props;
     const {
@@ -38,39 +43,45 @@ function Edit(props) {
         newWindow,
         link,
         classHook,
-        titleTag: TitleTag
+        titleTag: TitleTag,
     } = attributes;
 
     if (!imageURL) {
         return (
-            <MediaPlaceholder
-                onSelect={(media) =>
-                    setAttributes({
-                        imageURL: media.url,
-                        imageID: media.id,
-                    })
-                }
-                allowTypes={["image"]}
-                labels={{
-                    title: "Images",
-                    instructions:
-                        "Drag media file, upload or select files from your library.",
-                }}
-            />
+            <>
+                <EBMediaPlaceholder
+                    onSelect={(media) =>
+                        setAttributes({
+                            imageURL: media.url,
+                            imageID: media.id,
+                        })
+                    }
+                    allowTypes={["image"]}
+                    labels={{
+                        title: __("Interactive Promo", "essential-blocks"),
+                        instructions:
+                            "Drag media file, upload or select files from your library.",
+                    }}
+                    icon={ImageComparison}
+                />
+            </>
         );
     }
 
     // you must declare this variable
     const enhancedProps = {
         ...props,
-        blockPrefix: 'eb-interactive-promo',
-        style: <Style {...props} />
+        blockPrefix: "eb-interactive-promo",
+        style: <Style {...props} />,
     };
 
     return (
         <>
             {isSelected && (
-                <Inspector attributes={attributes} setAttributes={setAttributes} />
+                <Inspector
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
             )}
             <BlockControls>
                 <ToolbarGroup>
@@ -88,7 +99,10 @@ function Edit(props) {
                                 render={({ open }) => (
                                     <ToolbarButton
                                         className="components-toolbar__control"
-                                        label={__("Edit Image", "essential-blocks")}
+                                        label={__(
+                                            "Edit Image",
+                                            "essential-blocks",
+                                        )}
                                         icon="edit"
                                         onClick={open}
                                     />
@@ -99,7 +113,9 @@ function Edit(props) {
                 </ToolbarGroup>
             </BlockControls>
             <BlockProps.Edit {...enhancedProps}>
-                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                <div
+                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                >
                     <div className={`eb-interactive-promo-wrapper ${blockId}`}>
                         <div
                             className="eb-interactive-promo-container"
@@ -109,12 +125,20 @@ function Edit(props) {
                                 <figure className={`effect-${effectName}`}>
                                     <img src={imageURL} alt={imageAltTag} />
                                     <figcaption>
-                                        <TitleTag className="eb-interactive-promo-header">{header}</TitleTag>
-                                        <p className="eb-interactive-promo-content">{content}</p>
+                                        <TitleTag className="eb-interactive-promo-header">
+                                            {header}
+                                        </TitleTag>
+                                        <p className="eb-interactive-promo-content">
+                                            {content}
+                                        </p>
                                         {link && (
                                             <a
                                                 href={sanitizeURL(link)}
-                                                target={newWindow ? "_blank" : "_self"}
+                                                target={
+                                                    newWindow
+                                                        ? "_blank"
+                                                        : "_self"
+                                                }
                                                 rel="noopener noreferrer"
                                             />
                                         )}
@@ -128,4 +152,4 @@ function Edit(props) {
         </>
     );
 }
-export default memo(withBlockContext(defaultAttributes)(Edit))
+export default memo(withBlockContext(defaultAttributes)(Edit));

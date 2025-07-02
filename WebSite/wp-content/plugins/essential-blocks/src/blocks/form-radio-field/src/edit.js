@@ -83,7 +83,7 @@ const Edit = (props) => {
         }
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"
@@ -97,8 +97,14 @@ const Edit = (props) => {
                     if (filteredBlocks.length === 1) {
                         setAttributes({ fieldName: `radio-field` });
                     } else {
+                        const blockIndex = currentBlockIndex + 1;
                         setAttributes({
-                            fieldName: `radio-field-${currentBlockIndex + 1}`,
+                            fieldName: `radio-field-${blockIndex}`,
+                            options: [
+                                { name: `Option 1`, value: `radio_${blockIndex}_1` },
+                                { name: `Option 2`, value: `radio_${blockIndex}_2` },
+                                { name: `Option 3`, value: `radio_${blockIndex}_3` },
+                            ]
                         });
                     }
                 }

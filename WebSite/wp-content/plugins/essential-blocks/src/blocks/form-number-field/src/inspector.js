@@ -20,6 +20,7 @@ import {
     EBIconPicker,
     DynamicInputControl,
     InspectorPanel,
+    FormConditionalLogics
 } from "@essential-blocks/controls";
 
 import {
@@ -41,8 +42,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 function Inspector(props) {
-    const { attributes, setAttributes } = props;
-
+    const { attributes, setAttributes, clientId } = props;
     const {
         showLabel,
         labelText,
@@ -69,6 +69,7 @@ function Inspector(props) {
         minNumberValidationMessage,
         maxNumberValidationMessage,
         numberLengthValidationMessage,
+        parentBlockId
     } = attributes;
 
     return (
@@ -307,6 +308,7 @@ function Inspector(props) {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
+                    <FormConditionalLogics clientId={clientId} parentBlockId={parentBlockId} />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody

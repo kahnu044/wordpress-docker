@@ -1,20 +1,21 @@
 /* entire container, keeps perspective */
+
+@import '../../../controls/src/components/Image/imageComponent.scss';
+
 .eb-flipbox-container * {
 	box-sizing: border-box;
+	.eb-image-wrapper {
+		img {
+			object-fit: cover;
+		}
+	}
 }
 
 .eb-flipbox-container {
 	perspective: 1000px;
-
-	// .eb-flipbox-front-content,
-	// .eb-flipbox-back-content {
-
-	// }
-
-	// .eb-flipbox-front-title,
-	// .eb-flipbox-back-title {
-
-	// }
+	.eb-flipbox-container {
+		padding: 5px;
+	}
 }
 
 /* flip speed goes here */

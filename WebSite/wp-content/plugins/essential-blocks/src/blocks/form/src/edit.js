@@ -6,6 +6,8 @@ import {
     InnerBlocks,
     store as blockEditorStore,
 } from "@wordpress/block-editor";
+import { Button } from "@wordpress/components";
+import isEqual from "lodash/isEqual";
 import {
     useEffect,
     useState,
@@ -13,9 +15,9 @@ import {
     useCallback,
     memo,
 } from "@wordpress/element";
-import { select, dispatch, useDispatch, subscribe } from "@wordpress/data";
+import { select, dispatch, useDispatch, subscribe, useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
-import { createBlocksFromInnerBlocksTemplate } from "@wordpress/blocks";
+import { createBlocksFromInnerBlocksTemplate, createBlock } from "@wordpress/blocks";
 
 /**
  * Internal dependencies
@@ -52,6 +54,8 @@ import BlankIcon from "./icons/blank.svg";
 import defaultAttributes from "./attributes";
 import Style from "./style";
 
+import loader from "../../../assets/images/loading.gif";
+
 const Edit = (props) => {
     const { attributes, setAttributes, clientId, isSelected } = props;
     const {
@@ -76,10 +80,19 @@ const Edit = (props) => {
         errorMessage,
         validationErrorMessage,
         formStyle,
+        multistepdata,
+        stepIndecator,
+        enableMultistepForm,
+        enableStepCount,
+        enableStepIcon,
+        enableStepSubtitle,
+        nextBtnText,
+        prevBtnText,
     } = attributes;
 
     const [formSettings, setFormSettings] = useState({});
     const [allFields, setAllFields] = useState({});
+    const [isTemplateLoading, setIsTemplateLoading] = useState(false);
     const { replaceInnerBlocks } = useDispatch(blockEditorStore);
 
     const showLabelRef = useRef(showLabel);
@@ -115,6 +128,7 @@ const Edit = (props) => {
     };
     const formInnerItem =
         select("core/block-editor").getBlock(clientId)?.innerBlocks;
+    const innerBlocksRef = useRef(formInnerItem);
 
     // Set all fields when changes inner blocks
     useEffect(() => {
@@ -135,6 +149,18 @@ const Edit = (props) => {
 
         if (!formId || formId.length === 0) {
             setAttributes({ formId: `ebf-${uniqueId}` });
+        }
+
+        if (multistepdata.length === 0) {
+            const multistepDataInit =
+                innerBlocksRef.current.length > 0
+                    ? innerBlocksRef.current.filter(
+                        (item) =>
+                            item.name ===
+                            "essential-blocks/pro-form-multistep-wrapper",
+                    )
+                    : [];
+            setAttributes({ multistepdata: multistepDataInit });
         }
 
         //Get formdata from Database
@@ -164,6 +190,69 @@ const Edit = (props) => {
             }
         });
     }, []);
+
+    useEffect(() => {
+        // if (innerBlocksRef.current.length === formInnerItem.length) {
+        //     return
+        // }
+
+        if (innerBlocksRef.current.length === formInnerItem.length) {
+            if (!isEqual(innerBlocksRef.current, formInnerItem)) {
+                innerBlocksRef.current = formInnerItem;
+                const newMultistepData = innerBlocksRef.current.filter(
+                    (item) =>
+                        item.name ===
+                        "essential-blocks/pro-form-multistep-wrapper",
+                );
+                setAttributes({ multistepdata: newMultistepData });
+            } else {
+                return;
+            }
+        }
+
+        // add
+        if (
+            innerBlocksRef.current == undefined ||
+            formInnerItem.length > innerBlocksRef.current.length
+        ) {
+            innerBlocksRef.current = formInnerItem;
+            const newMultistepData = innerBlocksRef.current.filter(
+                (item) =>
+                    item.name === "essential-blocks/pro-form-multistep-wrapper",
+            );
+            setAttributes({ multistepdata: newMultistepData });
+        }
+
+        // remove
+        if (formInnerItem.length < innerBlocksRef.current.length) {
+            const difference = innerBlocksRef.current.filter(
+                (item1) =>
+                    !formInnerItem.some(
+                        (item2) =>
+                            item2.attributes.blockId ===
+                            item1.attributes.blockId,
+                    ),
+            );
+
+            // Filtering only "essential-blocks/pro-form-multistep-wrapper" items
+            const filteredDifference = difference.filter(
+                (item) =>
+                    item.name === "essential-blocks/pro-form-multistep-wrapper",
+            );
+
+            if (filteredDifference.length === 1) {
+                const removeditemId = difference[0]?.attributes?.blockId;
+                const updateditem = multistepdata.filter(
+                    (item) => item.attributes?.blockId !== removeditemId,
+                );
+
+                setAttributes({
+                    multistepdata: updateditem,
+                });
+            }
+            innerBlocksRef.current = formInnerItem;
+        }
+    }, [formInnerItem]);
 
     const updateRecursiveAttributes = (blocks, attributes) => {
         if (typeof blocks !== "object" || typeof attributes !== "object") {
@@ -251,78 +340,90 @@ const Edit = (props) => {
         ) {
             return;
         }
+
+        // Set loading state to true when template change starts
+        setIsTemplateLoading(true);
+
         formTypeRef.current = formType;
         templateRef.current = template;
 
-        if (formType === "contact_form") {
-            if (!formTitle) {
-                setAttributes({ formTitle: "Contact Form" });
-            }
-            if (template === "contact_form_1") {
-                replaceInnerBlocks(
-                    clientId,
-                    createBlocksFromInnerBlocksTemplate(
-                        CONTACT_FORM_TEMPLATE_1,
-                    ),
-                );
+        // Set loading state to false after a short delay to ensure template is rendered
+        setTimeout(() => {
+            // Apply filter for form type selection
+            applyFilters("eb_form_type_selected", null, attributes, setAttributes);
 
-                setAttributes({
-                    showInputIcon: true,
-                });
-            } else if (template === "contact_form_2") {
+            if (formType === "contact_form") {
+                if (!formTitle) {
+                    setAttributes({ formTitle: "Contact Form" });
+                }
+                if (template === "contact_form_1") {
+                    replaceInnerBlocks(
+                        clientId,
+                        createBlocksFromInnerBlocksTemplate(
+                            CONTACT_FORM_TEMPLATE_1,
+                        ),
+                    );
+
+                    setAttributes({
+                        showInputIcon: true,
+                    });
+                } else if (template === "contact_form_2") {
+                    replaceInnerBlocks(
+                        clientId,
+                        createBlocksFromInnerBlocksTemplate(
+                            CONTACT_FORM_TEMPLATE_2,
+                        ),
+                    );
+                }
+            } else if (formType === "subscription_form") {
+                if (!formTitle) {
+                    setAttributes({ formTitle: "Subscription Form" });
+                }
+                if (template === "subscription_form_1") {
+                    replaceInnerBlocks(
+                        clientId,
+                        createBlocksFromInnerBlocksTemplate(
+                            SUBSCRIPTION_FORM_TEMPLATE_1,
+                        ),
+                    );
+
+                    setAttributes({
+                        showInputIcon: false,
+                    });
+                } else if (template === "subscription_form_2") {
+                    replaceInnerBlocks(
+                        clientId,
+                        createBlocksFromInnerBlocksTemplate(
+                            SUBSCRIPTION_FORM_TEMPLATE_2,
+                        ),
+                    );
+                }
+            } else if (formType === "rsvp_form") {
+                if (!formTitle) {
+                    setAttributes({ formTitle: "RSVP Form" });
+                }
                 replaceInnerBlocks(
                     clientId,
-                    createBlocksFromInnerBlocksTemplate(
-                        CONTACT_FORM_TEMPLATE_2,
-                    ),
-                );
-            }
-        } else if (formType === "subscription_form") {
-            if (!formTitle) {
-                setAttributes({ formTitle: "Subscription Form" });
-            }
-            if (template === "subscription_form_1") {
-                replaceInnerBlocks(
-                    clientId,
-                    createBlocksFromInnerBlocksTemplate(
-                        SUBSCRIPTION_FORM_TEMPLATE_1,
-                    ),
+                    createBlocksFromInnerBlocksTemplate(RSVP_FORM_TEMPLATE),
                 );
 
                 setAttributes({
                     showInputIcon: false,
                 });
-            } else if (template === "subscription_form_2") {
-                replaceInnerBlocks(
-                    clientId,
-                    createBlocksFromInnerBlocksTemplate(
-                        SUBSCRIPTION_FORM_TEMPLATE_2,
-                    ),
-                );
-            }
-        } else if (formType === "rsvp_form") {
-            if (!formTitle) {
-                setAttributes({ formTitle: "RSVP Form" });
-            }
-            replaceInnerBlocks(
-                clientId,
-                createBlocksFromInnerBlocksTemplate(RSVP_FORM_TEMPLATE),
-            );
+            } else if (formType === "blank") {
+                if (!formTitle) {
+                    setAttributes({ formTitle: "New Form" });
+                }
 
-            setAttributes({
-                showInputIcon: false,
-            });
-        } else if (formType === "blank") {
-            if (!formTitle) {
-                setAttributes({ formTitle: "New Form" });
+                replaceInnerBlocks(clientId, []);
+
+                setAttributes({
+                    showInputIcon: false,
+                });
             }
 
-            replaceInnerBlocks(clientId, []);
-
-            setAttributes({
-                showInputIcon: false,
-            });
-        }
+            setIsTemplateLoading(false);
+        }, 50);
     }, [formType, template]);
 
     //set "isEditedPostPublishable" true when formSettings is changed
@@ -344,8 +445,7 @@ const Edit = (props) => {
     const formSettingsSave = useCallback(() => {
         const isSavingPost = select("core/editor").isSavingPost();
         const isAutosavingPost = select("core/editor").isAutosavingPost();
-        const isSavingTemplate =
-            select("core/editor").isSavingNonPostEntityChanges();
+        const isSavingTemplate = select("core/editor").isSavingNonPostEntityChanges();
 
         /**
          * Action
@@ -360,18 +460,34 @@ const Edit = (props) => {
                 const blockObj = select("core/block-editor").getBlock(clientId);
                 const rules = getValidationRules(blockObj);
                 const fields = getFormFields(blockObj);
+                // const conditionalLogics = getConditionalLogics(blockObj);
 
-                const otherSettings = {
+                let otherSettings = {
                     validationRules: { ...rules },
                     messages: {
                         success: successMessage,
                         error: errorMessage,
                         validationError: validationErrorMessage,
                     },
+                    // conditionalLogics: conditionalLogics,
                 };
+
                 if (Object.keys(integrations).length > 0) {
                     otherSettings.integrations = integrations;
                 }
+
+                // Apply filter to otherSettings
+                otherSettings = applyFilters(
+                    'eb_form_other_settings',
+                    otherSettings,
+                    {
+                        blockId,
+                        formTitle,
+                        blockObj,
+                        fields
+                    }
+                );
+
                 const updatedFormSettings = {
                     ...formSettings,
                     notification: notificationType,
@@ -384,6 +500,8 @@ const Edit = (props) => {
                     updatedFormSettings,
                     otherSettings,
                 );
+                // console.log('Free save called with:', save, otherSettings);
+
                 //Display snackbar disable for now, will add later after fix multi render
                 // save.then((res) => {
                 //     //Show notice
@@ -397,7 +515,6 @@ const Edit = (props) => {
                 //     );
                 // })
 
-                unsubscribe();
             }
         }
     }, [
@@ -412,7 +529,133 @@ const Edit = (props) => {
     ]);
 
     // subscribe
-    let unsubscribe = subscribe(formSettingsSave);
+    // let unsubscribe = subscribe(formSettingsSave);
+
+    const useFormSettingsSave = (deps) => {
+        const wasSavingRef = useRef(false);
+
+        useEffect(() => {
+            const unsubscribe = subscribe(() => {
+                const isSavingPost = select("core/editor").isSavingPost();
+                const isAutosavingPost =
+                    select("core/editor").isAutosavingPost();
+                const isSavingTemplate =
+                    select("core/editor").isSavingNonPostEntityChanges();
+
+                const isRealSaving =
+                    (isSavingPost && !isAutosavingPost) || isSavingTemplate;
+
+                // Detect the transition: not saving -> saving
+                if (isRealSaving && !wasSavingRef.current) {
+                    wasSavingRef.current = true;
+
+                    // Call your save logic
+                    formSettingsSave();
+                } else if (!isRealSaving) {
+                    // Reset the ref when not saving anymore
+                    wasSavingRef.current = false;
+                }
+            });
+
+            return () => {
+                unsubscribe();
+            };
+        }, [formSettingsSave]);
+    };
+
+    useFormSettingsSave();
+
+    // Add new multistep wrapper
+    const addMultistepWrapper = (event) => {
+        // Stop event propagation to prevent selection issues
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        // Always get the latest blocks before adding a new one
+        const currentBlocks = select("core/block-editor").getBlocks(clientId);
+
+        // Create a new multistep wrapper block
+        const newBlock = createBlock("essential-blocks/pro-form-multistep-wrapper", {
+            stepName: `Step ${currentBlocks.filter(block =>
+                block.name === "essential-blocks/pro-form-multistep-wrapper"
+            ).length + 1}`,
+            enableStepIcon: enableStepIcon,
+            enableSubtitle: enableStepSubtitle,
+            stepIcon: "fas fa-check"
+        });
+
+        // Store the clientId of the new block
+        const newBlockClientId = newBlock.clientId;
+
+        // Create a new array with all current blocks plus the new one
+        const updatedBlocks = [...currentBlocks, newBlock];
+
+        // Replace the inner blocks with the updated array
+        dispatch("core/block-editor").replaceInnerBlocks(clientId, updatedBlocks);
+
+        // Force focus back to the parent form block to ensure the button remains clickable
+        dispatch("core/block-editor").selectBlock(clientId);
+
+        // Then select the new block with a slight delay
+        setTimeout(() => {
+            dispatch("core/block-editor").selectBlock(newBlockClientId);
+
+            // Update the multistepdata attribute
+            const updatedMultistepData = updatedBlocks.filter(
+                block => block.name === "essential-blocks/pro-form-multistep-wrapper"
+            );
+            setAttributes({ multistepdata: updatedMultistepData });
+
+            // Force focus back to the parent form block after a short delay
+            // This ensures the "Add a New Step" button remains clickable for subsequent clicks
+            setTimeout(() => {
+                dispatch("core/block-editor").selectBlock(clientId);
+            }, 100);
+        }, 50);
+    };
+
+    // Subscribe to block removals to update multistepdata in real-time
+    useEffect(() => {
+        // Skip if no multistep wrappers exist
+        if (!multistepdata || multistepdata.length === 0) return;
+
+        // Store the current multistep wrapper clientIds for comparison
+        const multistepClientIds = multistepdata.map(step => step.clientId);
+
+        // Create subscription to detect block removals
+        const unsubscribe = subscribe(() => {
+            // Skip if the form block itself is removed
+            if (!select("core/block-editor").getBlock(clientId)) return;
+
+            // Get current inner blocks
+            const currentInnerBlocks = select("core/block-editor").getBlocks(clientId);
+
+            // Get current multistep wrapper blocks
+            const currentMultistepBlocks = currentInnerBlocks.filter(
+                block => block.name === "essential-blocks/pro-form-multistep-wrapper"
+            );
+
+            // Get current multistep wrapper clientIds
+            const currentMultistepClientIds = currentMultistepBlocks.map(block => block.clientId);
+
+            // Check if any multistep wrapper has been removed
+            const hasRemovedStep = multistepClientIds.some(
+                id => !currentMultistepClientIds.includes(id)
+            );
+
+            // If a step was removed, select the parent form block
+            if (hasRemovedStep && currentMultistepBlocks.length < multistepdata.length) {
+                // Select the parent form block to trigger the useEffect that updates multistepdata
+                dispatch("core/block-editor").selectBlock(clientId);
+            }
+        });
+
+        // Clean up subscription on unmount
+        return () => unsubscribe();
+    }, [multistepdata]);
+
 
     return cover.length ? (
         <div>
@@ -454,11 +697,12 @@ const Edit = (props) => {
                                     <h2>Please Select a Form Type</h2>
                                     <div
                                         className="eb-form-editor-formtype-item"
-                                        onClick={() =>
+                                        onClick={() => {
+                                            setIsTemplateLoading(true)
                                             setAttributes({
                                                 formType: "contact_form",
                                             })
-                                        }
+                                        }}
                                     >
                                         <div className="eb-form-editor-formtype-icon">
                                             <img
@@ -470,11 +714,13 @@ const Edit = (props) => {
                                     </div>
                                     <div
                                         className="eb-form-editor-formtype-item"
-                                        onClick={() =>
+                                        onClick={() => {
+                                            setIsTemplateLoading(true)
                                             setAttributes({
                                                 formType: "subscription_form",
                                             })
-                                        }
+                                        }}
+
                                     >
                                         <div className="eb-form-editor-formtype-icon">
                                             <img
@@ -486,11 +732,12 @@ const Edit = (props) => {
                                     </div>
                                     <div
                                         className="eb-form-editor-formtype-item"
-                                        onClick={() =>
+                                        onClick={() => {
+                                            setIsTemplateLoading(true)
                                             setAttributes({
                                                 formType: "rsvp_form",
                                             })
-                                        }
+                                        }}
                                     >
                                         <div className="eb-form-editor-formtype-icon">
                                             <img
@@ -500,6 +747,15 @@ const Edit = (props) => {
                                         </div>
                                         <span>RSVP Form</span>
                                     </div>
+
+                                    {applyFilters(
+                                        "eb_pro_form_type_selector",
+                                        "",
+                                        attributes,
+                                        setAttributes,
+                                        setIsTemplateLoading
+                                    )}
+
                                     <div
                                         className="eb-form-editor-formtype-item"
                                         onClick={() =>
@@ -519,76 +775,120 @@ const Edit = (props) => {
                         )}
                         {formType && formType.length > 0 && (
                             <>
-                                {formInnerItem &&
-                                    formInnerItem.length === 0 && (
-                                        <div className="eb-popup-before-content">
-                                            <p>
-                                                <strong>Add Form Field</strong>
-                                            </p>
-                                        </div>
-                                    )}
-                                <form
-                                    id={formId}
-                                    className={`eb-form form-layout-${formLayout} ${formStyle}`}
-                                    action=""
-                                >
-                                    <div className={"eb-form-fields"}>
-                                        <InnerBlocks
-                                            template={[]}
-                                            renderAppender={
-                                                select(
-                                                    "core/block-editor",
-                                                ).getBlockOrder(clientId)
-                                                    .length > 0
-                                                    ? undefined
-                                                    : InnerBlocks.ButtonBlockAppender
-                                            }
-                                            allowedBlocks={allowedBlocks}
-                                        />
+                                {isTemplateLoading ? (
+                                    <div className="eb-form-template-loading">
+                                        <img src={loader} />
+                                        <p>Loading template...</p>
                                     </div>
-
-                                    {formInnerItem?.length > 0 && (
-                                        <div className={"eb-form-submit"}>
-                                            <button
-                                                data-id={blockId}
-                                                type="button"
-                                                className="btn btn-primary eb-form-submit-button"
-                                            >
-                                                {btnAddIcon &&
-                                                iconPosition === "left" ? (
-                                                    <EBDisplayIcon
-                                                        className={
-                                                            "eb-button-icon"
-                                                        }
-                                                        icon={icon}
-                                                    />
-                                                ) : (
-                                                    ""
+                                ) : (
+                                    <>
+                                        {formInnerItem &&
+                                            formInnerItem.length === 0 && (
+                                                <div className="eb-popup-before-content">
+                                                    <p>
+                                                        <strong>Add Form {formType === "multistep_form" ? 'Step' : 'Field'}</strong>
+                                                    </p>
+                                                </div>
+                                            )}
+                                        <form
+                                            id={formId}
+                                            className={`eb-form form-layout-${formLayout} ${formStyle} ${enableMultistepForm
+                                                ? "eb-multistep-form"
+                                                : ""
+                                                }`}
+                                            action=""
+                                        >
+                                            {formType === "multistep_form" &&
+                                                enableMultistepForm &&
+                                                stepIndecator &&
+                                                multistepdata.length > 0 && (
+                                                    <>
+                                                        {applyFilters(
+                                                            "eb_form_step_indicator_html",
+                                                            "",
+                                                            attributes,
+                                                        )}
+                                                    </>
                                                 )}
-                                                <DynamicInputValueHandler
-                                                    value={buttonText}
-                                                    onChange={(buttonText) =>
-                                                        setAttributes({
-                                                            buttonText,
-                                                        })
+                                            <div className={"eb-form-fields"}>
+                                                <InnerBlocks
+                                                    template={[]}
+                                                    renderAppender={
+                                                        select(
+                                                            "core/block-editor",
+                                                        ).getBlockOrder(clientId)
+                                                            .length > 0
+                                                            ? undefined
+                                                            : formType === "multistep_form" ? undefined : InnerBlocks.ButtonBlockAppender
                                                     }
-                                                    readOnly={true}
+                                                    allowedBlocks={formType === "multistep_form" ? ["essential-blocks/pro-form-multistep-wrapper"] : allowedBlocks}
                                                 />
-                                                {btnAddIcon &&
-                                                iconPosition === "right" ? (
-                                                    <EBDisplayIcon
-                                                        className={
-                                                            "eb-button-icon"
-                                                        }
-                                                        icon={icon}
-                                                    />
-                                                ) : (
-                                                    ""
+
+                                                {/* Add Multistep Button - Only show if multistep form is enabled */}
+                                                {formType === "multistep_form" && enableMultistepForm && (
+                                                    <Button
+                                                        className="is-default eb-form-add-step-button"
+                                                        label={__("Add a New Step", "essential-blocks")}
+                                                        icon="plus-alt2"
+                                                        onClick={(event) => addMultistepWrapper(event)}
+                                                    >
+                                                        <span className="eb-form-add-step-button-label">
+                                                            {__("Add a New Step", "essential-blocks")}
+                                                        </span>
+                                                    </Button>
                                                 )}
-                                            </button>
-                                        </div>
-                                    )}
-                                </form>
+                                            </div>
+
+                                            {formInnerItem?.length > 0 && formType !== "multistep_form" && (
+                                                <div className={"eb-form-submit"}>
+                                                    {applyFilters(
+                                                        "eb_form_step_buttons_html",
+                                                        "",
+                                                        attributes,
+                                                    )}
+
+                                                    <button
+                                                        data-id={blockId}
+                                                        type="button"
+                                                        className="btn btn-primary eb-form-submit-button"
+                                                    >
+                                                        {btnAddIcon &&
+                                                            iconPosition === "left" ? (
+                                                            <EBDisplayIcon
+                                                                className={
+                                                                    "eb-button-icon"
+                                                                }
+                                                                icon={icon}
+                                                            />
+                                                        ) : (
+                                                            ""
+                                                        )}
+                                                        <DynamicInputValueHandler
+                                                            value={buttonText}
+                                                            onChange={(buttonText) =>
+                                                                setAttributes({
+                                                                    buttonText,
+                                                                })
+                                                            }
+                                                            readOnly={true}
+                                                        />
+                                                        {btnAddIcon &&
+                                                            iconPosition === "right" ? (
+                                                            <EBDisplayIcon
+                                                                className={
+                                                                    "eb-button-icon"
+                                                                }
+                                                                icon={icon}
+                                                            />
+                                                        ) : (
+                                                            ""
+                                                        )}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </form>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>

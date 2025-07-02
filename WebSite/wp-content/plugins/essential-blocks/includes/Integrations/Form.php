@@ -43,14 +43,28 @@ class Form extends ThirdPartyIntegration
 
         $fields = (array) json_decode( wp_unslash( $_POST[ 'form_data' ] ) );
 
-        $success          = false;
-        $response_message = "Form isn't configured!";
+        error_log('Original form fields:');
+        error_log(print_r($fields, true));
 
         $settings = $this->get_form_settings( $form_id );
+        // Get settings with field-step mapping
+        // $settings = $this->get_form_settings_with_mapping($form_id);
+        $field_settings = [];
+
+        if (is_object($settings)) {
+            $field_settings = isset($settings->settings) ? unserialize($settings->settings) : [];
+        }
+
+        // Apply filter to process conditional logic before validation
+        $fields = apply_filters('eb_form_before_validation', $fields, $field_settings);
+
+        error_log('Fields after conditional logic processing:');
+        error_log(print_r($fields, true));
+
+        $success = false;
+        $response_message = "Form isn't configured!";
 
         if ( is_object( $settings ) ) {
-            $field_settings = isset( $settings->settings ) ? unserialize( $settings->settings ) : [  ];
-
             //Validate Form
             $is_validate = true;
             if ( isset( $field_settings[ 'validationRules' ] ) ) {
@@ -295,7 +309,7 @@ class Form extends ThirdPartyIntegration
         }
     }
 
-    public function get_form_settings( $form_id, $field = '*' )
+    public static function get_form_settings( $form_id, $field = '*' )
     {
         global $wpdb;
         $table_name = ESSENTIAL_BLOCKS_FORM_SETTINGS_TABLE;
@@ -361,7 +375,7 @@ class Form extends ThirdPartyIntegration
     /**
      * Validate form data according to Form Settings
      */
-    public function form_validation( $formdata, $rules )
+    public static function form_validation( $formdata, $rules )
     {
         $validation = [ 'success' => true ];
         if ( is_array( $formdata ) && count( $formdata ) > 0 ) {

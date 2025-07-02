@@ -15,7 +15,7 @@ import {
     BlockProps,
     withBlockContext,
     filterBlocksByName
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes'
@@ -102,7 +102,7 @@ const Edit = (props) => {
         }
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"

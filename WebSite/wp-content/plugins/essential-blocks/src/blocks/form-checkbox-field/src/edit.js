@@ -83,7 +83,7 @@ const Edit = (props) => {
         }
 
         //Hanlde Field Name
-        if (!fieldName) {
+        if (isBlockJustInserted) {
             if (parentClientId) {
                 const parentAllChildBlocks = select(
                     "core/block-editor"
@@ -98,8 +98,12 @@ const Edit = (props) => {
                         setAttributes({ fieldName: `checkbox-field` });
                     } else {
                         setAttributes({
-                            fieldName: `checkbox-field-${currentBlockIndex + 1
-                                }`,
+                            fieldName: `checkbox-field-${currentBlockIndex + 1}`,
+                            options: [
+                                { name: `Option 1`, value: `checkbox_${currentBlockIndex}_1` },
+                                { name: `Option 2`, value: `checkbox_${currentBlockIndex}_2` },
+                                { name: `Option 3`, value: `checkbox_${currentBlockIndex}_3` },
+                            ]
                         });
                     }
                 }

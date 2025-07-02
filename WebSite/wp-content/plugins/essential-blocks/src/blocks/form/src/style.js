@@ -49,7 +49,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -598,6 +598,7 @@ export default function Style(props) {
 
     const labelDesktop = `
 		.eb-form-wrapper.${blockId} .eb-field-wrapper > label,
+		.eb-form-wrapper.${blockId} .eb-field-wrapper label,
         .eb-form-wrapper.${blockId} .eb-radio-inputarea,
         .eb-form-wrapper.${blockId} .eb-field-wrapper input ~ label,
         .eb-form-wrapper.${blockId} .eb-field-wrapper textarea ~ label {
@@ -619,7 +620,7 @@ export default function Style(props) {
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern input:focus ~ label,
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern input:valid ~ label,
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern textarea:focus ~ label {
-                    left: calc(${inputIconSizeRange}px + (${fieldsPaddingLeft}${fieldsPaddingUnit} * 1.6));
+                    left: calc( ${showInputIcon ? inputIconSizeRange : 0}px + (${fieldsPaddingLeft}${fieldsPaddingUnit} * ${showInputIcon ? 1.6 : .999}));
                 }
 
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern .eb-field-input-wrap textarea ~ label {
@@ -631,19 +632,22 @@ export default function Style(props) {
         }
 	`;
     const labelTab = `
-		.eb-form-wrapper.${blockId} .eb-field-wrapper > label {
+		.eb-form-wrapper.${blockId} .eb-field-wrapper > label,
+		.eb-form-wrapper.${blockId} .eb-field-wrapper label {
             ${labelTypoStylesTab}
             ${labelMarginStylesTab}
 		}
 	`;
     const labelMobile = `
-		.eb-form-wrapper.${blockId} .eb-field-wrapper > label {
+		.eb-form-wrapper.${blockId} .eb-field-wrapper > label,
+		.eb-form-wrapper.${blockId} .eb-field-wrapper label {
             ${labelTypoStylesMobile}
             ${labelMarginStylesMobile}
 		}
 	`;
 
     const fieldsDesktop = `
+        .eb-form-wrapper.${blockId} .eb-multistep-form .eb-form-multistep-wrapper,
         .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
             ${rowGapStylesDesktop}
@@ -1064,7 +1068,8 @@ export default function Style(props) {
 		.eb-form-wrapper.${blockId} .eb_form_submit_response.success:hover {
             ${successBDShadowHoverDesktop}
 		}
-		.eb-form-wrapper.${blockId} .eb_form_submit_response.error {
+		.eb-form-wrapper.${blockId} .eb_form_submit_response.error,
+        .eb-form-wrapper.${blockId} .eb-form-multistep-validation {
 			color: ${errorColor};
 			background-color: ${errorBgColor};
             ${errorTypoStylesDesktop}
@@ -1072,7 +1077,8 @@ export default function Style(props) {
             ${errorBDShadowDesktop}
             ${errorBDShadowTransition}
 		}
-		.eb-form-wrapper.${blockId} .eb_form_submit_response.error:hover {
+		.eb-form-wrapper.${blockId} .eb_form_submit_response.error:hover,
+        .eb-form-wrapper.${blockId} .eb-form-multistep-validation:hover {
             ${errorBDShadowHoverDesktop}
 		}
 	`;

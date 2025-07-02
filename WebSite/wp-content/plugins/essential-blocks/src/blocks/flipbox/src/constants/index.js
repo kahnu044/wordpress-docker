@@ -162,6 +162,17 @@ export const FLIP_MODE = [
     { label: __("Click", "essential-blocks"), value: "click" },
 ];
 
+export const FRONT_IMG_ATTR = {
+    imageUrl: "frontImageUrl",
+    imageAlt: "frontImageAlt",
+    imageId: "frontImageId",
+};
+
+export const BACK_IMG_ATTR = {
+    imageUrl: "backImageUrl",
+    imageAlt: "backImageAlt",
+    imageId: "backImageId",
+};
 export const HEADER_TAGS = [
     { label: __("H1", "essential-blocks"), value: "h1" },
     { label: __("H2", "essential-blocks"), value: "h2" },

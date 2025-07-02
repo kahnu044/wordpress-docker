@@ -30,11 +30,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
             if (Array.isArray(parsedData)) {
                 markers = parsedData;
             } else {
-                let decodedData = atob(markersAttribute);
+                let decodedData = decodeURIComponent(escape(atob(markersAttribute)));
+                
                 markers = JSON.parse(decodedData);
             }
         } catch (e) {
-            let decodedData = atob(markersAttribute);
+            let decodedData = decodeURIComponent(escape(atob(markersAttribute)));
+            
             markers = JSON.parse(decodedData);
         }
 

@@ -8,3 +8,5 @@ export const frontImgSizeAttr = "frontImgSize";
 export const backImgSizeAttr = "backImgSize";
 export const frontImgRadiusAttr = "frontImgRadius";
 export const backImgRadiusAttr = "backImgRadius";
+export const frontImgHeightAttr = "frontImgHeight";
+export const backImgHeightAttr = "backImgHeight";

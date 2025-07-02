@@ -4,13 +4,283 @@
 import { useBlockProps, RichText } from "@wordpress/block-editor";
 import { omit } from "lodash";
 import {
-    EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIcon,
+    sanitizeURL,
+    BlockProps,
 } from "@essential-blocks/controls";
 import attributes from "./attributes";
 
 const deprecated = [
     {
-        attributes: omit({ ...attributes }, ["frontTitleTag", "backTitleTag"]),
+        attributes: omit({ ...attributes }),
+        supports: {
+            anchor: true,
+        },
+        save: ({ attributes }) => {
+            const {
+                blockId,
+                flipType,
+                frontIconOrImage,
+                frontImageUrl,
+                frontImageAlt,
+                frontIcon,
+                showFrontTitle,
+                frontTitle,
+                showFrontContent,
+                frontContent,
+                backIconOrImage,
+                backImageUrl,
+                backImageAlt,
+                backIcon,
+                showBackTitle,
+                backTitle,
+                showBackContent,
+                backContent,
+                link,
+                linkType,
+                buttonText,
+                buttonIcon,
+                buttonClasses,
+                contentPosition,
+                linkOpenNewTab,
+                flipMode,
+                isMouseLeaveOn,
+                classHook,
+                frontTitleTag,
+                backTitleTag,
+            } = attributes;
+
+            const sanitizeLink = sanitizeURL(link);
+
+            const alignmentClass =
+                contentPosition === "center"
+                    ? " eb-flipbox-align-center"
+                    : contentPosition === "right"
+                    ? " eb-flipbox-align-right"
+                    : "";
+            const flipModeClass =
+                flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
+
+            return (
+                <BlockProps.Save attributes={attributes}>
+                    <div
+                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                    >
+                        <div
+                            className={`eb-flipbox-container ${blockId}${alignmentClass}${flipModeClass}`}
+                            data-id={blockId}
+                            data-flip-type={flipType}
+                            data-flip-mode={flipMode}
+                            {...("click" === flipMode
+                                ? { "data-flip-mouseleave": isMouseLeaveOn }
+                                : {})}
+                        >
+                            <div
+                                className={`eb-flipper${
+                                    "hover" === flipMode ? " " + flipType : ""
+                                }`}
+                            >
+                                <div className="eb-flipbox-front">
+                                    <div className="eb-flipbox-items-container">
+                                        {frontIconOrImage !== "none" && (
+                                            <div className="eb-flipbox-icon-wrapper">
+                                                {frontIconOrImage === "image" &&
+                                                    frontImageUrl && (
+                                                        <div className="eb-flipbox-front-image-container">
+                                                            <img
+                                                                src={
+                                                                    frontImageUrl
+                                                                }
+                                                                alt={
+                                                                    frontImageAlt
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                {frontIconOrImage === "icon" &&
+                                                    frontIcon && (
+                                                        <div
+                                                            className="eb-flipbox-icon-front"
+                                                            data-icon={
+                                                                frontIcon
+                                                            }
+                                                        >
+                                                            <EBDisplayIcon
+                                                                icon={frontIcon}
+                                                            />
+                                                        </div>
+                                                    )}
+                                            </div>
+                                        )}
+                                        {showFrontTitle && (
+                                            <div className="eb-flipbox-front-title-wrapper">
+                                                {linkType === "title" &&
+                                                link ? (
+                                                    <a
+                                                        href={
+                                                            link
+                                                                ? sanitizeLink
+                                                                : "#"
+                                                        }
+                                                        className="title-link"
+                                                    >
+                                                        <RichText.Content
+                                                            tagName={
+                                                                frontTitleTag
+                                                            }
+                                                            className="eb-flipbox-front-title"
+                                                            value={frontTitle}
+                                                        />
+                                                    </a>
+                                                ) : (
+                                                    <RichText.Content
+                                                        tagName={frontTitleTag}
+                                                        className="eb-flipbox-front-title"
+                                                        value={frontTitle}
+                                                    />
+                                                )}
+                                            </div>
+                                        )}
+                                        {showFrontContent && (
+                                            <div className="eb-flipbox-front-content-wrapper">
+                                                <RichText.Content
+                                                    tagName="p"
+                                                    className="eb-flipbox-front-content"
+                                                    value={frontContent}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div
+                                    className="eb-flipbox-back"
+                                    onClick={
+                                        linkType === "box" &&
+                                        link &&
+                                        linkOpenNewTab
+                                            ? `window.open('${sanitizeLink}', '_blank');`
+                                            : linkType === "box" && link
+                                            ? `window.location='${sanitizeLink}'`
+                                            : undefined
+                                    }
+                                >
+                                    <div className="eb-flipbox-items-container">
+                                        {backIconOrImage !== "none" && (
+                                            <div className="eb-flipbox-icon-wrapper">
+                                                {backIconOrImage === "image" &&
+                                                    backImageUrl && (
+                                                        <div className="eb-flipbox-back-image-container">
+                                                            <img
+                                                                src={
+                                                                    backImageUrl
+                                                                }
+                                                                alt={
+                                                                    backImageAlt
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                {backIconOrImage === "icon" &&
+                                                    backIcon && (
+                                                        <div
+                                                            className="eb-flipbox-icon-back"
+                                                            data-icon={backIcon}
+                                                        >
+                                                            <EBDisplayIcon
+                                                                icon={backIcon}
+                                                            />
+                                                        </div>
+                                                    )}
+                                            </div>
+                                        )}
+                                        {showBackTitle && (
+                                            <div className="eb-flipbox-back-title-wrapper">
+                                                {linkType === "title" &&
+                                                link ? (
+                                                    <a
+                                                        href={
+                                                            link
+                                                                ? sanitizeLink
+                                                                : "#"
+                                                        }
+                                                        className="title-link"
+                                                        target={
+                                                            linkOpenNewTab
+                                                                ? `_blank`
+                                                                : `_self`
+                                                        }
+                                                        rel="noopener"
+                                                    >
+                                                        <RichText.Content
+                                                            tagName={
+                                                                backTitleTag
+                                                            }
+                                                            className="eb-flipbox-back-title"
+                                                            value={backTitle}
+                                                        />
+                                                    </a>
+                                                ) : (
+                                                    <RichText.Content
+                                                        tagName={backTitleTag}
+                                                        className="eb-flipbox-back-title"
+                                                        value={backTitle}
+                                                    />
+                                                )}
+                                            </div>
+                                        )}
+                                        {showBackContent && (
+                                            <div className="eb-flipbox-back-content-wrapper">
+                                                <RichText.Content
+                                                    tagName="p"
+                                                    className="eb-flipbox-back-content"
+                                                    value={backContent}
+                                                />
+                                            </div>
+                                        )}
+                                        {linkType === "button" && (
+                                            <div className="eb-flipbox-button-container">
+                                                <a
+                                                    className={`eb-flipbox-button-link ${buttonClasses}`}
+                                                    href={
+                                                        link
+                                                            ? sanitizeLink
+                                                            : "#"
+                                                    }
+                                                    target={
+                                                        linkOpenNewTab
+                                                            ? `_blank`
+                                                            : `_self`
+                                                    }
+                                                    rel="noopener"
+                                                >
+                                                    <div className="eb-flipbox-button-content">
+                                                        <span>
+                                                            {buttonText}
+                                                        </span>
+                                                        {buttonIcon && (
+                                                            <EBDisplayIcon
+                                                                icon={
+                                                                    buttonIcon
+                                                                }
+                                                                className="eb-flipbox-button-icon"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </BlockProps.Save>
+            );
+        },
+    },
+    {
+        attributes: { ...attributes },
         supports: {
             anchor: true,
         },
@@ -46,14 +316,14 @@ const deprecated = [
                 classHook,
             } = attributes;
 
-            const sanitizeLink = sanitizeURL(link)
+            const sanitizeLink = sanitizeURL(link);
 
             const alignmentClass =
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
             const flipModeClass =
                 flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
@@ -72,8 +342,9 @@ const deprecated = [
                                 : {})}
                         >
                             <div
-                                className={`eb-flipper${"hover" === flipMode ? " " + flipType : ""
-                                    }`}
+                                className={`eb-flipper${
+                                    "hover" === flipMode ? " " + flipType : ""
+                                }`}
                             >
                                 <div className="eb-flipbox-front">
                                     <div className="eb-flipbox-items-container">
@@ -83,8 +354,12 @@ const deprecated = [
                                                     frontImageUrl && (
                                                         <div className="eb-flipbox-front-image-container">
                                                             <img
-                                                                src={frontImageUrl}
-                                                                alt={frontImageAlt}
+                                                                src={
+                                                                    frontImageUrl
+                                                                }
+                                                                alt={
+                                                                    frontImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -92,18 +367,27 @@ const deprecated = [
                                                     frontIcon && (
                                                         <div
                                                             className="eb-flipbox-icon-front"
-                                                            data-icon={frontIcon}
+                                                            data-icon={
+                                                                frontIcon
+                                                            }
                                                         >
-                                                            <EBDisplayIcon icon={frontIcon} />
+                                                            <EBDisplayIcon
+                                                                icon={frontIcon}
+                                                            />
                                                         </div>
                                                     )}
                                             </div>
                                         )}
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeLink : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeLink
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                     >
                                                         <RichText.Content
@@ -136,11 +420,13 @@ const deprecated = [
                                 <div
                                     className="eb-flipbox-back"
                                     onClick={
-                                        linkType === "box" && link && linkOpenNewTab
+                                        linkType === "box" &&
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${sanitizeLink}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${sanitizeLink}'`
-                                                : undefined
+                                            ? `window.location='${sanitizeLink}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -150,8 +436,12 @@ const deprecated = [
                                                     backImageUrl && (
                                                         <div className="eb-flipbox-back-image-container">
                                                             <img
-                                                                src={backImageUrl}
-                                                                alt={backImageAlt}
+                                                                src={
+                                                                    backImageUrl
+                                                                }
+                                                                alt={
+                                                                    backImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -161,16 +451,23 @@ const deprecated = [
                                                             className="eb-flipbox-icon-back"
                                                             data-icon={backIcon}
                                                         >
-                                                            <EBDisplayIcon icon={backIcon} />
+                                                            <EBDisplayIcon
+                                                                icon={backIcon}
+                                                            />
                                                         </div>
                                                     )}
                                             </div>
                                         )}
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeLink : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeLink
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                         target={
                                                             linkOpenNewTab
@@ -207,7 +504,11 @@ const deprecated = [
                                             <div className="eb-flipbox-button-container">
                                                 <a
                                                     className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                    href={link ? sanitizeLink : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeLink
+                                                            : "#"
+                                                    }
                                                     target={
                                                         linkOpenNewTab
                                                             ? `_blank`
@@ -216,9 +517,16 @@ const deprecated = [
                                                     rel="noopener"
                                                 >
                                                     <div className="eb-flipbox-button-content">
-                                                        <span>{buttonText}</span>
+                                                        <span>
+                                                            {buttonText}
+                                                        </span>
                                                         {buttonIcon && (
-                                                            <EBDisplayIcon icon={buttonIcon} className="eb-flipbox-button-icon" />
+                                                            <EBDisplayIcon
+                                                                icon={
+                                                                    buttonIcon
+                                                                }
+                                                                className="eb-flipbox-button-icon"
+                                                            />
                                                         )}
                                                     </div>
                                                 </a>
@@ -274,8 +582,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
             const flipModeClass =
                 flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
@@ -294,8 +602,9 @@ const deprecated = [
                                 : {})}
                         >
                             <div
-                                className={`eb-flipper${"hover" === flipMode ? " " + flipType : ""
-                                    }`}
+                                className={`eb-flipper${
+                                    "hover" === flipMode ? " " + flipType : ""
+                                }`}
                             >
                                 <div className="eb-flipbox-front">
                                     <div className="eb-flipbox-items-container">
@@ -305,8 +614,12 @@ const deprecated = [
                                                     frontImageUrl && (
                                                         <div className="eb-flipbox-front-image-container">
                                                             <img
-                                                                src={frontImageUrl}
-                                                                alt={frontImageAlt}
+                                                                src={
+                                                                    frontImageUrl
+                                                                }
+                                                                alt={
+                                                                    frontImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -314,16 +627,21 @@ const deprecated = [
                                                     frontIcon && (
                                                         <div
                                                             className="eb-flipbox-icon-front"
-                                                            data-icon={frontIcon}
+                                                            data-icon={
+                                                                frontIcon
+                                                            }
                                                         >
-                                                            <EBDisplayIcon icon={frontIcon} />
+                                                            <EBDisplayIcon
+                                                                icon={frontIcon}
+                                                            />
                                                         </div>
                                                     )}
                                             </div>
                                         )}
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
                                                         href={link ? link : "#"}
                                                         className="title-link"
@@ -358,11 +676,13 @@ const deprecated = [
                                 <div
                                     className="eb-flipbox-back"
                                     onClick={
-                                        linkType === "box" && link && linkOpenNewTab
+                                        linkType === "box" &&
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${link}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${link}'`
-                                                : undefined
+                                            ? `window.location='${link}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -372,8 +692,12 @@ const deprecated = [
                                                     backImageUrl && (
                                                         <div className="eb-flipbox-back-image-container">
                                                             <img
-                                                                src={backImageUrl}
-                                                                alt={backImageAlt}
+                                                                src={
+                                                                    backImageUrl
+                                                                }
+                                                                alt={
+                                                                    backImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -383,14 +707,17 @@ const deprecated = [
                                                             className="eb-flipbox-icon-back"
                                                             data-icon={backIcon}
                                                         >
-                                                            <EBDisplayIcon icon={backIcon} />
+                                                            <EBDisplayIcon
+                                                                icon={backIcon}
+                                                            />
                                                         </div>
                                                     )}
                                             </div>
                                         )}
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
                                                         href={link ? link : "#"}
                                                         className="title-link"
@@ -438,9 +765,16 @@ const deprecated = [
                                                     rel="noopener"
                                                 >
                                                     <div className="eb-flipbox-button-content">
-                                                        <span>{buttonText}</span>
+                                                        <span>
+                                                            {buttonText}
+                                                        </span>
                                                         {buttonIcon && (
-                                                            <EBDisplayIcon icon={buttonIcon} className="eb-flipbox-button-icon" />
+                                                            <EBDisplayIcon
+                                                                icon={
+                                                                    buttonIcon
+                                                                }
+                                                                className="eb-flipbox-button-icon"
+                                                            />
                                                         )}
                                                     </div>
                                                 </a>
@@ -496,8 +830,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
             const flipModeClass =
                 flipMode === "hover" ? " eb-hover-mode" : " eb-click-mode";
 
@@ -516,8 +850,9 @@ const deprecated = [
                                 : {})}
                         >
                             <div
-                                className={`eb-flipper${"hover" === flipMode ? " " + flipType : ""
-                                    }`}
+                                className={`eb-flipper${
+                                    "hover" === flipMode ? " " + flipType : ""
+                                }`}
                             >
                                 <div className="eb-flipbox-front">
                                     <div className="eb-flipbox-items-container">
@@ -527,8 +862,12 @@ const deprecated = [
                                                     frontImageUrl && (
                                                         <div className="eb-flipbox-front-image-container">
                                                             <img
-                                                                src={frontImageUrl}
-                                                                alt={frontImageAlt}
+                                                                src={
+                                                                    frontImageUrl
+                                                                }
+                                                                alt={
+                                                                    frontImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -536,10 +875,14 @@ const deprecated = [
                                                     frontIcon && (
                                                         <div
                                                             className="eb-flipbox-icon-front"
-                                                            data-icon={frontIcon}
+                                                            data-icon={
+                                                                frontIcon
+                                                            }
                                                         >
                                                             <span
-                                                                className={frontIcon}
+                                                                className={
+                                                                    frontIcon
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -547,9 +890,16 @@ const deprecated = [
                                         )}
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                     >
                                                         <RichText.Content
@@ -582,11 +932,13 @@ const deprecated = [
                                 <div
                                     className="eb-flipbox-back"
                                     onClick={
-                                        linkType === "box" && link && linkOpenNewTab
+                                        linkType === "box" &&
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${link}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${link}'`
-                                                : undefined
+                                            ? `window.location='${link}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -596,8 +948,12 @@ const deprecated = [
                                                     backImageUrl && (
                                                         <div className="eb-flipbox-back-image-container">
                                                             <img
-                                                                src={backImageUrl}
-                                                                alt={backImageAlt}
+                                                                src={
+                                                                    backImageUrl
+                                                                }
+                                                                alt={
+                                                                    backImageAlt
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -608,7 +964,9 @@ const deprecated = [
                                                             data-icon={backIcon}
                                                         >
                                                             <span
-                                                                className={backIcon}
+                                                                className={
+                                                                    backIcon
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -616,9 +974,16 @@ const deprecated = [
                                         )}
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
-                                                {linkType === "title" && link ? (
+                                                {linkType === "title" &&
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                         target={
                                                             linkOpenNewTab
@@ -655,7 +1020,11 @@ const deprecated = [
                                             <div className="eb-flipbox-button-container">
                                                 <a
                                                     className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     target={
                                                         linkOpenNewTab
                                                             ? `_blank`
@@ -664,7 +1033,9 @@ const deprecated = [
                                                     rel="noopener"
                                                 >
                                                     <div className="eb-flipbox-button-content">
-                                                        <span>{buttonText}</span>
+                                                        <span>
+                                                            {buttonText}
+                                                        </span>
                                                         {buttonIcon && (
                                                             <i
                                                                 className={`${buttonIcon} eb-flipbox-button-icon`}
@@ -722,8 +1093,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
 
             return (
                 <div {...useBlockProps.save()}>
@@ -773,9 +1144,15 @@ const deprecated = [
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                     >
                                                         <RichText.Content
@@ -809,12 +1186,12 @@ const deprecated = [
                                     className="eb-flipbox-back"
                                     onClick={
                                         linkType === "box" &&
-                                            link &&
-                                            linkOpenNewTab
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${link}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${link}'`
-                                                : undefined
+                                            ? `window.location='${link}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -851,9 +1228,15 @@ const deprecated = [
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                         target={
                                                             linkOpenNewTab
@@ -890,7 +1273,11 @@ const deprecated = [
                                             <div className="eb-flipbox-button-container">
                                                 <a
                                                     className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     target={
                                                         linkOpenNewTab
                                                             ? `_blank`
@@ -957,8 +1344,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
 
             return (
                 <div {...useBlockProps.save()}>
@@ -1005,9 +1392,15 @@ const deprecated = [
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                     >
                                                         <RichText.Content
@@ -1041,12 +1434,12 @@ const deprecated = [
                                     className="eb-flipbox-back"
                                     onClick={
                                         linkType === "box" &&
-                                            link &&
-                                            linkOpenNewTab
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${link}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${link}'`
-                                                : undefined
+                                            ? `window.location='${link}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -1080,9 +1473,15 @@ const deprecated = [
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                         target={
                                                             linkOpenNewTab
@@ -1119,7 +1518,11 @@ const deprecated = [
                                             <div className="eb-flipbox-button-container">
                                                 <a
                                                     className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     target={
                                                         linkOpenNewTab
                                                             ? `_blank`
@@ -1186,8 +1589,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
 
             return (
                 <div {...useBlockProps.save()}>
@@ -1234,9 +1637,15 @@ const deprecated = [
                                         {showFrontTitle && (
                                             <div className="eb-flipbox-front-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                     >
                                                         <h3 className="eb-flipbox-front-title">
@@ -1264,12 +1673,12 @@ const deprecated = [
                                     className="eb-flipbox-back"
                                     onClick={
                                         linkType === "box" &&
-                                            link &&
-                                            linkOpenNewTab
+                                        link &&
+                                        linkOpenNewTab
                                             ? `window.open('${link}', '_blank');`
                                             : linkType === "box" && link
-                                                ? `window.location='${link}'`
-                                                : undefined
+                                            ? `window.location='${link}'`
+                                            : undefined
                                     }
                                 >
                                     <div className="eb-flipbox-items-container">
@@ -1303,9 +1712,15 @@ const deprecated = [
                                         {showBackTitle && (
                                             <div className="eb-flipbox-back-title-wrapper">
                                                 {linkType === "title" &&
-                                                    link ? (
+                                                link ? (
                                                     <a
-                                                        href={link ? sanitizeURL(link) : "#"}
+                                                        href={
+                                                            link
+                                                                ? sanitizeURL(
+                                                                      link,
+                                                                  )
+                                                                : "#"
+                                                        }
                                                         className="title-link"
                                                         target={
                                                             linkOpenNewTab
@@ -1336,7 +1751,11 @@ const deprecated = [
                                             <div className="eb-flipbox-button-container">
                                                 <a
                                                     className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     target={
                                                         linkOpenNewTab
                                                             ? `_blank`
@@ -1401,8 +1820,8 @@ const deprecated = [
                 contentPosition === "center"
                     ? " eb-flipbox-align-center"
                     : contentPosition === "right"
-                        ? " eb-flipbox-align-right"
-                        : "";
+                    ? " eb-flipbox-align-right"
+                    : "";
 
             return (
                 <div {...useBlockProps.save()}>
@@ -1443,7 +1862,11 @@ const deprecated = [
                                         <div className="eb-flipbox-front-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     <h3 className="eb-flipbox-front-title">
@@ -1503,7 +1926,11 @@ const deprecated = [
                                         <div className="eb-flipbox-back-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     <h3 className="eb-flipbox-back-title">
@@ -1528,7 +1955,11 @@ const deprecated = [
                                         <div className="eb-flipbox-button-container">
                                             <a
                                                 className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                href={link ? sanitizeURL(link) : "#"}
+                                                href={
+                                                    link
+                                                        ? sanitizeURL(link)
+                                                        : "#"
+                                                }
                                             >
                                                 <div className="eb-flipbox-button-content">
                                                     <span>{buttonText}</span>
@@ -1554,7 +1985,7 @@ const deprecated = [
             {
                 ...attributes,
             },
-            ["contentPosition"]
+            ["contentPosition"],
         ),
         save: ({ attributes }) => {
             const {
@@ -1620,7 +2051,11 @@ const deprecated = [
                                         <div className="eb-flipbox-front-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     <h3 className="eb-flipbox-front-title">
@@ -1680,7 +2115,11 @@ const deprecated = [
                                         <div className="eb-flipbox-back-title-wrapper">
                                             {linkType === "title" && link ? (
                                                 <a
-                                                    href={link ? sanitizeURL(link) : "#"}
+                                                    href={
+                                                        link
+                                                            ? sanitizeURL(link)
+                                                            : "#"
+                                                    }
                                                     className="title-link"
                                                 >
                                                     <h3 className="eb-flipbox-back-title">
@@ -1705,7 +2144,11 @@ const deprecated = [
                                         <div className="eb-flipbox-button-container">
                                             <a
                                                 className={`eb-flipbox-button-link ${buttonClasses}`}
-                                                href={link ? sanitizeURL(link) : "#"}
+                                                href={
+                                                    link
+                                                        ? sanitizeURL(link)
+                                                        : "#"
+                                                }
                                             >
                                                 <div className="eb-flipbox-button-content">
                                                     <span>{buttonText}</span>

@@ -1,6 +1,6 @@
 import {
     typoPrefix_title,
-    typoPrefix_content
+    typoPrefix_content,
 } from "./constants/typographyPrefixConstants";
 import {
     dimensionsMargin,
@@ -16,6 +16,8 @@ import {
     backContentPadding,
     frontImgPadding,
     backImgPadding,
+    frontImgMargin,
+    backImgMargin,
     frontItemPadding,
     backItemPadding,
 } from "./constants/dimensionsNames";
@@ -29,12 +31,16 @@ import {
     backImgSizeAttr,
     frontImgRadiusAttr,
     backImgRadiusAttr,
+    frontImgHeightAttr,
+    backImgHeightAttr
 } from "./constants/rangeNames";
 import {
     borderShadow,
     borderShadowBtn,
     borderShadowFrontIcon,
     borderShadowBackIcon,
+    frontImageBorder,
+    backImageBorder
 } from "./constants/borderShadowConstants";
 
 import {
@@ -43,9 +49,16 @@ import {
     generateResponsiveRangeAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
-import { flipboxFrontWrapper, flipboxBackWrapper } from "./constants/backgroundsConstants";
+import {
+    flipboxFrontWrapper,
+    flipboxBackWrapper,
+} from "./constants/backgroundsConstants";
+
+import { FRONT_IMG_ATTR, BACK_IMG_ATTR } from "./constants"
+import { image } from "@wordpress/icons";
 
 const attributes = {
     // responsive control attributes ⬇
@@ -333,6 +346,68 @@ const attributes = {
         defaultFillColor: "var(--eb-global-background-color)",
         // defaultBgGradient: "linear-gradient(90deg,#7529f9,#4919f6)",
     }),
+    ...ImageComponent?.addAttributes(
+        {
+            attrObject: FRONT_IMG_ATTR,
+            attrName: "front",
+            hasBorder: true,
+            border: {
+                key: frontImageBorder,
+            },
+            hasPadding: true,
+            padding: {
+                key: frontImgPadding,
+            },
+            hasMargin: true,
+            margin: {
+                key: frontImgMargin,
+            },
+            hasWidth: false,
+            hasHeight: false,
+            useImageSize: true,
+            imageSize: {
+                key: frontImgSizeAttr,
+                default: {
+                    defaultRange: 100,
+                },
+            },
+            hasRadius: true,
+            radius: {
+                key: frontImgRadiusAttr,
+            },
+        }
+    ),
+    ...ImageComponent?.addAttributes(
+        {
+            attrObject: BACK_IMG_ATTR,
+            attrName: "back",
+            hasBorder: true,
+            border: {
+                key: backImageBorder,
+            },
+            hasPadding: true,
+            padding: {
+                key: backImgPadding,
+            },
+            hasMargin: true,
+            margin: {
+                key: backImgMargin,
+            },
+            hasWidth: false,
+            hasHeight: false,
+            useImageSize: true,
+            imageSize: {
+                key: backImgSizeAttr,
+                default: {
+                    defaultRange: 100,
+                },
+            },
+            hasRadius: true,
+            radius: {
+                key: backImgRadiusAttr,
+            },
+        }
+    ),
 };
 
 export default attributes;

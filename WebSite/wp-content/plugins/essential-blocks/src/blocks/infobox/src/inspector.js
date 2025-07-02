@@ -31,7 +31,8 @@ import {
     DynamicInputControl,
     EBIconPicker,
     InspectorPanel,
-    EBButton
+    EBButton,
+    ImageComponent
 } from "@essential-blocks/controls";
 
 import {
@@ -540,50 +541,53 @@ function Inspector(props) {
                                     </>
                                 )}
 
-                                {media === "image" &&
-                                    !imageUrl && (
-                                        <MediaUpload
-                                            onSelect={({
-                                                id,
-                                                url,
-                                                alt,
-                                            }) =>
-                                                setAttributes({
-                                                    imageUrl: url,
-                                                    imageId: id,
-                                                    imageAlt: alt,
-                                                })
-                                            }
-                                            type="image"
-                                            value={imageId}
-                                            render={({
-                                                open,
-                                            }) => {
-                                                return (
-                                                    <Button
-                                                        className="eb-background-control-inspector-panel-img-btn components-button"
-                                                        label={__(
-                                                            "Upload Image",
-                                                            "essential-blocks"
-                                                        )}
-                                                        icon="format-image"
-                                                        onClick={
-                                                            open
-                                                        }
-                                                    />
-                                                );
-                                            }}
-                                        />
-                                    )}
+                                {media === "image" && (
+                                //         <MediaUpload
+                                //             onSelect={({
+                                //                 id,
+                                //                 url,
+                                //                 alt,
+                                //             }) =>
+                                //                 setAttributes({
+                                //                     imageUrl: url,
+                                //                     imageId: id,
+                                //                     imageAlt: alt,
+                                //                 })
+                                //             }
+                                //             type="image"
+                                //             value={imageId}
+                                //             render={({
+                                //                 open,
+                                //             }) => {
+                                //                 return (
+                                //                     <Button
+                                //                         className="eb-background-control-inspector-panel-img-btn components-button"
+                                //                         label={__(
+                                //                             "Upload Image",
+                                //                             "essential-blocks"
+                                //                         )}
+                                //                         icon="format-image"
+                                //                         onClick={
+                                //                             open
+                                //                         }
+                                //                     />
+                                //                 );
+                                //             }}
+                                //         />
+                                //     )}
 
-                                {media === "image" && imageUrl && (
-                                    <ImageAvatar
-                                        imageUrl={imageUrl}
-                                        onDeleteImage={() =>
-                                            setAttributes({
-                                                imageUrl: null,
-                                            })
-                                        }
+                                // {media === "image" && imageUrl && (
+                                //     <ImageAvatar
+                                //         imageUrl={imageUrl}
+                                //         onDeleteImage={() =>
+                                //             setAttributes({
+                                //                 imageUrl: null,
+                                //             })
+                                //         }
+                                //     />
+
+                                    <ImageComponent.GeneralTab 
+                                        hasStyle={false}
                                     />
                                 )}
                             </>
@@ -991,7 +995,7 @@ function Inspector(props) {
                                     )}
 
 
-                                {media === "image" && imageUrl && (
+                                {/* {media === "image" && imageUrl && (
                                     <>
                                         <ResponsiveRangeController
                                             baseLabel={__(
@@ -1041,11 +1045,11 @@ function Inspector(props) {
                                                     step={1}
                                                 />
                                             </>
-                                        )}
+                                        )}                                   
                                     </>
-                                )}
+                                )} */}
 
-                                <Divider />
+                                {/* <Divider /> */}
 
                                 <ResponsiveRangeController
                                     baseLabel={__(
@@ -1198,6 +1202,14 @@ function Inspector(props) {
                         </>
 
                     )}
+                    <ImageComponent.StyleTab 
+                        border={mediaBdShd}
+                        margin={mediaBgMargin}
+                        width={mediaImageWidth}
+                        height={mediaImageHeight}
+                        hasRadius={false}
+                        hasAutoHeight={true}
+                    />
                 </>
             </InspectorPanel.Style>
         </InspectorPanel>
