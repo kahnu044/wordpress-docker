@@ -18,8 +18,11 @@ RUN wget -qO - https://packages.sury.org/php/apt.gpg | apt-key add - && \
 # Update package lists and upgrade system
 RUN apt-get update -y && apt-get dist-upgrade -y
 
-# Install PHP 8.3 and necessary extensions
-RUN apt-get install -y php8.3-cli php8.3-bz2 php8.3-common php8.3-curl php8.3-gd php8.3-mbstring php8.3-mysql php8.3-xml php8.3-soap php8.3-bcmath php8.3-zip php8.3-imagick php8.3-intl
+# Install PHP 8.4 and necessary extensions
+RUN apt-get install -y \
+    php8.4 php8.4-cli php8.4-bz2 php8.4-common php8.4-curl php8.4-gd \
+    php8.4-mbstring php8.4-mysql php8.4-xml php8.4-soap php8.4-bcmath \
+    php8.4-zip php8.4-imagick php8.4-intl php8.4-readline
 
 # Install Composer using the official installer script
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
