@@ -41,10 +41,10 @@ services:
           echo "phpMyAdmin Already Setup"
         else
           echo "Setting Up phpMyAdmin ..."
-          wget -c https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-english.tar.gz
-          tar xf phpMyAdmin-5.2.1-english.tar.gz
-          rm phpMyAdmin-5.2.1-english.tar.gz
-          mv phpMyAdmin-5.2.1-english /home/${USRNAME}_dev/app/pMa
+          wget -c https://files.phpmyadmin.net/phpMyAdmin/5.2.2/phpMyAdmin-5.2.2-english.tar.gz
+          tar xf phpMyAdmin-5.2.2-english.tar.gz
+          rm phpMyAdmin-5.2.2-english.tar.gz
+          mv phpMyAdmin-5.2.2-english /home/${USRNAME}_dev/app/pMa
           cp /home/${USRNAME}_dev/app/pMa/config.sample.inc.php /home/${USRNAME}_dev/app/pMa/config.inc.php
           perl -pi -e "s/\['host'\] = 'localhost';/\['host'\] = 'db';/g" /home/${USRNAME}_dev/app/pMa/config.inc.php
           echo "phpMyAdmin Setup completed."
