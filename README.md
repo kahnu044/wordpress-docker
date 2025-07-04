@@ -77,7 +77,7 @@ LocalGoogle WordPress WebSite.
     3. SMTP Port: `587`
     4. Authentication: On
     5. Username: youremail@gmail.com
-    6. Password: generatedAppPassword
+    6. Password: generatedAppPassword [HERE](https://myaccount.google.com/apppasswords)
 
 ### Using Docker Compose Environment
 
