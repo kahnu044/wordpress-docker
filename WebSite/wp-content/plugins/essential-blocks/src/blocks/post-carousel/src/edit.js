@@ -18,7 +18,7 @@ import parse from "html-react-parser";
 import Inspector from "./inspector";
 import Style from "./style";
 import PostCarouselIcon from "./icon";
-import { Templates } from './templates/templates';
+import Templates from '../../../../patterns/post-carousel.json'
 import defaultAttributes from './attributes';
 
 import {

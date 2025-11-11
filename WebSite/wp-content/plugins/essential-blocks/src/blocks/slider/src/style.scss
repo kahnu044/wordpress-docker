@@ -1,6 +1,13 @@
 .wp-block-essential-blocks-slider {
-	width: 100%;
+	// width: 100%;
 	min-width: 0;
+}
+
+.block-editor-block-list__block {
+	.eb-slider-wrapper .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
+		width: 100% !important;
+		height: 100% !important;
+	}
 }
 
 .eb-slider-wrapper {
@@ -23,6 +30,7 @@
 			img {
 				width: 100%;
 				object-fit: cover;
+				box-sizing: border-box;
 			}
 		}
 	}
@@ -52,19 +60,21 @@
 			img {
 				width: 100%;
 				object-fit: cover;
+				box-sizing: border-box;
 			}
 
 			&.content-1 {
 				.eb-slider-content {
 					position: absolute;
-					left: 0;
-					top: 0;
+					left: 50%;
+					top: 50%;
 					width: 100%;
 					height: 100%;
 					padding: 20px 30px;
 					display: flex;
 					flex-flow: column;
 					box-sizing: border-box;
+					transform: translate(-50%, -50%);
 
 					&.align-left .eb-slider-button,
 					&.align-justify .eb-slider-button {
@@ -78,6 +88,49 @@
 					&.align-right .eb-slider-button {
 						align-self: flex-end;
 					}
+
+					// Content Link Styles
+					&.has-content-link {
+						// position: relative;
+
+						// Create clickable overlay for content area (excluding buttons)
+						&::before {
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 0;
+							right: 0;
+							bottom: 0;
+							z-index: 1;
+							cursor: pointer;
+							transition: all 0.3s ease;
+						}
+
+						&:hover::before {
+							// background-color: rgba(0, 124, 186, 0.1);
+						}
+
+						// Ensure button wrapper is above the overlay
+						.eb-slider-button-wrapper {
+							position: relative;
+							z-index: 2;
+							pointer-events: auto;
+
+							.eb-slider-button,
+							.eb-slider-second-button {
+								pointer-events: auto;
+								position: relative;
+								z-index: 3;
+							}
+						}
+
+						// Make title and subtitle clickable through the overlay
+						.eb-slider-title,
+						.eb-slider-subtitle {
+							position: relative;
+							z-index: 0;
+						}
+					}
 				}
 			}
 
@@ -86,8 +139,8 @@
 				justify-content: flex-start;
 				flex-direction: row;
 
-				img {
-					width: 50%;
+				div {
+					flex: 1 1 100%;
 				}
 
 				.eb-slider-content {
@@ -101,8 +154,8 @@
 				flex-direction: row-reverse;
 				flex-wrap: nowrap;
 
-				img {
-					width: 50%;
+				div {
+					flex: 1 1 100%;
 				}
 
 				.eb-slider-content {

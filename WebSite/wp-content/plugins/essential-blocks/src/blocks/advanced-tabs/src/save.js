@@ -10,6 +10,8 @@ export default function save({ attributes }) {
         tagName,
         closeAllTabs,
         isMinHeightAsTitle,
+        addCaretIcon,
+        caretIcon,
     } = attributes;
 
     const dataAttributes = {
@@ -60,11 +62,24 @@ export default function save({ attributes }) {
                                                 )}
                                         </>
                                     )}
-                                    <RichText.Content
-                                        tagName={tagName}
-                                        className="tab-title-text"
-                                        value={item.text}
-                                    />
+                                    <div className="tab-title-wrap">
+                                        <RichText.Content
+                                            tagName={tagName}
+                                            className="tab-title-text"
+                                            value={item.text}
+                                        />
+                                        {item.enableSubtitle && item.subtitle && (
+                                            <p className="tab-subtitle-text">
+                                                {item.subtitle}
+                                            </p>
+                                        )}
+                                    </div>
+                                    {addCaretIcon && caretIcon && (
+                                        <EBDisplayIcon
+                                            icon={caretIcon}
+                                            className="tab-caret-icon"
+                                        />
+                                    )}
                                 </li>
                             ))}
                         </ul>

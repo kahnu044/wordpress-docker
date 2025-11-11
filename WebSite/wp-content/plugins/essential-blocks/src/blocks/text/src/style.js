@@ -1,4 +1,3 @@
-
 import {
     WRAPPER_BG,
     WRAPPER_MARGIN,
@@ -8,10 +7,10 @@ import {
     COLUMNGAP,
     COLUMNWIDTH,
     COLUMNRULEWIDTH,
+    TEXT_MARGIN,
+    TEXT_PADDING,
 } from "./constants/constants";
-import {
-    TEXT_TYPOGRAPHY
-} from "./constants/typographyPrefixConstants";
+import { TEXT_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
 
 /**
  * External depencencies
@@ -23,7 +22,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
-    StyleComponent
+    StyleComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -34,7 +33,7 @@ export default function Style(props) {
         color,
         hoverColor,
         columnRuleColor,
-        columnRuleStyle
+        columnRuleStyle,
     } = attributes;
 
     // CSS/styling Codes Starts from Here
@@ -78,7 +77,7 @@ export default function Style(props) {
         controlName: COLUMNCOUNT,
         property: "column-count",
         attributes,
-        noUnits: true
+        noUnits: true,
     });
 
     const {
@@ -88,7 +87,7 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: COLUMNRULEWIDTH,
         property: "column-rule-width",
-        attributes
+        attributes,
     });
 
     const {
@@ -98,7 +97,7 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: COLUMNWIDTH,
         property: "column-width",
-        attributes
+        attributes,
     });
 
     const {
@@ -108,7 +107,7 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: COLUMNGAP,
         property: "column-gap",
-        attributes
+        attributes,
     });
 
     const {
@@ -143,6 +142,26 @@ export default function Style(props) {
     } = generateBackgroundControlStyles({
         attributes,
         controlName: WRAPPER_BG,
+    });
+
+    const {
+        dimensionStylesDesktop: textMarginDesktop,
+        dimensionStylesTab: textMarginTab,
+        dimensionStylesMobile: textMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TEXT_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: textPaddingDesktop,
+        dimensionStylesTab: textPaddingTab,
+        dimensionStylesMobile: textPaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TEXT_PADDING,
+        styleFor: "padding",
+        attributes,
     });
 
     // wrapper styles css in strings ⬇
@@ -224,6 +243,8 @@ export default function Style(props) {
 			${columnGapDesktop}
 			${columnWidthDesktop}
 			${columnRuleWidthDesktop}
+            ${textMarginDesktop}
+			${textPaddingDesktop}
 		}
 		.eb-text-wrapper.${blockId}:hover .eb-text{
 			color: ${hoverColor};
@@ -237,6 +258,8 @@ export default function Style(props) {
 			${columnGapTab}
 			${columnWidthTab}
 			${columnRuleWidthTab}
+            ${textMarginTab}
+			${textPaddingTab}
 		}
 	`;
 
@@ -247,6 +270,8 @@ export default function Style(props) {
 			${columnGapMobile}
 			${columnWidthMobile}
 			${columnRuleWidthMobile}
+            ${textMarginMobile}
+			${textPaddingMobile}
 		}
 	`;
 

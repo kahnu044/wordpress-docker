@@ -138,6 +138,16 @@ export default function TabOptions() {
             doc: "https://essential-blocks.com/docs/unfiltered-file-uploads-in-wordpress/",
             default: false,
         },
+        enablePatterns: {
+            logo: `${EssentialBlocksLocalize.image_url}/admin/pattern-icon.svg`,
+            title: __("Block Patterns", "essential-blocks"),
+            description: __(
+                "Enable or disable Essential Blocks patterns in the WordPress block editor. When enabled, you'll have access to pre-designed block patterns and templates for faster website building.",
+                "essential-blocks",
+            ),
+            doc: "https://essential-blocks.com/docs/block-patterns/",
+            default: true,
+        },
     });
 
     /**

@@ -49,8 +49,6 @@ export default function Style(props) {
         colAli,
     } = attributes;
 
-    console.log('columnGap',columnGap, columnNumber);
-
     //Calculate Gap for Responsiveness
     const calculateGap = (gap = columnGap.desktop || 0, columnNumber) => {
 
@@ -348,8 +346,6 @@ export default function Style(props) {
                 editorTabStyles={tabAllStylesEditor}
                 editorMobileStyles={mobileAllStylesEditor}
                 blockName={name}
-                columnGap={columnGap}
-                columnNumber={columnNumber}
             />
         </>
     );

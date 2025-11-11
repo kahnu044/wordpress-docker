@@ -12,6 +12,8 @@ import {
     THUMBNAIL_BORDER_RADIUS,
     THUMBNAIL_MARGIN,
     TITLE_MARGIN,
+    TITLE_PADDING,
+    TITLE_BORDER_SHADOW,
     CONTENT_MARGIN,
     READMORE_MARGIN,
     READMORE_PADDING,
@@ -67,6 +69,7 @@ import {
     TITLE_TYPOGRAPHY,
     NOT_FOUND_TYPOGRAPHY
 } from "./constants/typographyPrefixConstants";
+
 
 const attributes = {
     resOption: {
@@ -704,6 +707,8 @@ const attributes = {
         left: 0,
         isLinked: false,
     }),
+    ...generateDimensionsAttributes(TITLE_PADDING),
+    ...generateBorderShadowAttributes(TITLE_BORDER_SHADOW),
     ...generateDimensionsAttributes(CONTENT_MARGIN, {
         top: 0,
         bottom: 10,

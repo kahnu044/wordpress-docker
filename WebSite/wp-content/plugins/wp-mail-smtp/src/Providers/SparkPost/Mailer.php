@@ -536,30 +536,4 @@ class Mailer extends MailerAbstract {
 
 		return $holder;
 	}
-
-	/**
-	 * Sanitize email header values.
-	 *
-	 * @param string $name  Name of the header.
-	 * @param string $value Value of the header.
-	 *
-	 * @since 3.11.1
-	 */
-	public function sanitize_header_value( $name, $value ) {
-
-		if (
-			in_array(
-				strtolower( $name ),
-				[
-					'message-id',
-					'cc',
-				],
-				true
-			)
-		) {
-			return $value;
-		}
-
-		return parent::sanitize_header_value( $name, $value );
-	}
 }

@@ -8,3 +8,4 @@ export const prefixContentMargin = "conM_";
 export const prefixContentPadding = "conP_";
 export const prefixTtlWrpMargin = "ttlWM_";
 export const prefixTtlWrpPadding = "ttlWP_";
+export const prefixIconPadding = "iconP_";

@@ -84,6 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
                         formDataObj[entry[0]] = entry[1];
                     }
                 });
+
                 delete formDataObj["form-nonce"];
 
                 let sendAjax = true;
@@ -109,8 +110,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     sendAjax = false;
                 }
 
-                // console.log('formDataObj', formDataObj);
-
+                console.log('formDataObj', formDataObj);
 
                 if (sendAjax) {
                     button.classList.add("loading");

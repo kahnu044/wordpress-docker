@@ -15,7 +15,6 @@ import {
 } from "@wordpress/components";
 import { useState, useEffect } from "@wordpress/element";
 import { select } from "@wordpress/data";
-import { MediaUpload } from "@wordpress/block-editor";
 import { applyFilters } from "@wordpress/hooks";
 
 /**
@@ -84,7 +83,8 @@ import {
     ImageAvatar,
     EBButton,
     EBIconPicker,
-    ProSelectControl
+    ProSelectControl,
+    ImageComponent
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -864,52 +864,15 @@ function Inspector(props) {
                 <PanelRow>
                     {__("Image", "essential-blocks")}
                 </PanelRow>
-                {(!each.url || each.url.startsWith('data:image/')) && (
-                    <MediaUpload
-                        onSelect={(value) =>
-                            handleImage(
-                                value,
-                                i,
-                                sources,
-                                setAttributes
-                            )
-                        }
-                        type="image"
-                        value={each.id}
-                        render={({
-                            open,
-                        }) => {
-                            return (
-                                <Button
-                                    className="eb-background-control-inspector-panel-img-btn components-button"
-                                    label={__(
-                                        "Upload Image",
-                                        "essential-blocks"
-                                    )}
-                                    icon="format-image"
-                                    onClick={
-                                        open
-                                    }
-                                />
-                            );
-                        }}
-                    />
-                )}
-
-                {each.url && !each.url.startsWith('data:image/') && (
-                    <ImageAvatar
-                        imageUrl={each.url}
-                        onDeleteImage={() =>
-                            handleImageData(
-                                'url',
-                                null,
-                                each.id,
-                                sources,
-                                setAttributes
-                            )
-                        }
-                    />
-                )}
+                <ImageComponent.GeneralTab
+                    onSelect={(value) => handleImage(value, i, sources, setAttributes)}
+                    value={(!each.url || each.url.startsWith('data:image/')) ? each.id : each.url}
+                    hasTag={false}
+                    hasCaption={false}
+                    hasStyle={false}
+                    hasLink={false}
+                    showInPanel={false}
+                />
 
                 {enableFilter && (
                     <>

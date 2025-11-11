@@ -104,6 +104,12 @@ const getType = (blockName) => {
         case "essential-blocks/pro-form-recaptcha":
             return "recaptcha";
             break;
+        case "essential-blocks/pro-form-country-field":
+            return "country";
+            break;
+        case "essential-blocks/pro-form-phone-field":
+            return "phone";
+            break;
         default:
             return "input";
     }

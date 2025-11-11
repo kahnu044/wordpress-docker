@@ -13,11 +13,12 @@ import {
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext,
+    getBlockParentClientId
 } from "@essential-blocks/controls";
 import { select, dispatch } from "@wordpress/data";
 
 const Edit = (props) => {
-    const { attributes, setAttributes, context } = props;
+    const { attributes, setAttributes, context, clientId } = props;
     const {
         blockId,
         parentBlockId,
@@ -28,7 +29,7 @@ const Edit = (props) => {
         accordionLists,
         itemId,
         accordionType,
-        inheritedAccordionType
+        inheritedAccordionType,
     } = attributes;
 
     const enhancedProps = {
@@ -41,18 +42,22 @@ const Edit = (props) => {
     const accordionTitle = useRef(null);
 
     const { selectBlock } = dispatch("core/block-editor");
-    // Get all blocks
-    const blocks = select('core/block-editor').getBlocks();
 
     const handleSlidingOfAccordion = () => {
-        // Find the block with matching blockId
-        const parentBlock = blocks.find(block => block.attributes.blockId === parentBlockId);
+        const parentBlockClientId = getBlockParentClientId(clientId, "essential-blocks/accordion");
+
+        // Find the block with matching clientId
+        const parentBlock = parentBlockClientId ? select('core/block-editor').getBlock(parentBlockClientId) : null;
 
         let title = accordionTitle.current.querySelector(".eb-accordion-title");
-        let prefixText = accordionTitle.current.querySelector(".eb-accordion-title-prefix-text");
-        let suffixText = accordionTitle.current.querySelector(".eb-accordion-title-suffix-text");
+        let prefixText = accordionTitle.current.querySelector(
+            ".eb-accordion-title-prefix-text",
+        );
+        let suffixText = accordionTitle.current.querySelector(
+            ".eb-accordion-title-suffix-text",
+        );
         if (title) {
-            title.setAttribute("contenteditable", false)
+            title.setAttribute("contenteditable", false);
         }
         if (prefixText) {
             prefixText.setAttribute("contenteditable", false);
@@ -65,7 +70,9 @@ const Edit = (props) => {
         let expandedIcon =
             accordionTitle.current.getAttribute("data-expanded-icon");
         let iconWrapper = accordionTitle.current.children[0].children[0];
-        let accordionItem = accordionTitle.current.closest(".eb-accordion-wrapper");
+        let accordionItem = accordionTitle.current.closest(
+            ".eb-accordion-wrapper",
+        );
         let allAccordionItems = accordionTitle.current
             .closest(".eb-accordion-inner")
             .querySelectorAll(".eb-accordion-wrapper");
@@ -104,20 +111,24 @@ const Edit = (props) => {
 
         if (parentBlock) {
             // Set the active accordion index in the parent block
-            dispatch('essential-blocks').setBlockData(parentBlockId, {
-                tabName: 'general',
+            dispatch("essential-blocks").setBlockData(parentBlockId, {
+                tabName: "general",
                 panelName: "general-individual accordion item",
             });
 
-            dispatch('core/block-editor').updateBlockAttributes(parentBlock.clientId, {
-                activeAccordionIndex: itemId
-            });
+            dispatch("core/block-editor").updateBlockAttributes(
+                parentBlock.clientId,
+                {
+                    activeAccordionIndex: itemId,
+                },
+            );
 
             selectBlock(parentBlock.clientId);
         }
     };
 
     useEffect(() => {
+        const foundItemArray = context["eb/accordionLists"]?.filter((item) => item.id == itemId) ||[];
         setAttributes({
             parentBlockId: context["eb/accordionParentBlockId"],
             inheritedAccordionType:
@@ -127,7 +138,7 @@ const Edit = (props) => {
             inheritedExpandedIcon: context["eb/accordionInheritedExpandedIcon"],
             inheritedTagName: context["eb/accordionInheritedTagName"],
             faqSchema: context["eb/accordionFaqSchema"],
-            accordionLists: context["eb/accordionLists"],
+            accordionLists: foundItemArray,
             accordionType: context["eb/accordionType"],
         });
     }, [
@@ -152,15 +163,19 @@ const Edit = (props) => {
                     data-clickable={foundItem?.clickable}
                 >
                     <div
-                        className={`eb-accordion-title-wrapper eb-accordion-title-wrapper-${parentBlockId}${inheritedAccordionType == "horizontal" ? " eb-accordion-horizontal-enable" : ""}`}
+                        className={`eb-accordion-title-wrapper eb-accordion-title-wrapper-${parentBlockId}${
+                            inheritedAccordionType == "horizontal"
+                                ? " eb-accordion-horizontal-enable"
+                                : ""
+                        }`}
                         onClick={handleSlidingOfAccordion}
                         ref={accordionTitle}
                         data-tab-icon={inheritedTabIcon}
                         data-expanded-icon={inheritedExpandedIcon}
-                        {...(accordionType === 'image' && foundItem?.imageUrl
+                        {...(accordionType === "image" && foundItem?.imageUrl
                             ? { "data-image-url": foundItem?.imageUrl }
                             : {})}
-                        {...(accordionType === 'image' && foundItem?.imageAlt
+                        {...(accordionType === "image" && foundItem?.imageAlt
                             ? { "data-image-alt": foundItem?.imageAlt }
                             : {})}
                     >

@@ -4,7 +4,7 @@ Tags: GraphQL, Headless, REST API, Decoupled, React
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.3.3
+Stable tag: 2.5.1
 License: GPL-3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -283,6 +283,81 @@ The `uri` field was non-null on some Types in the Schema but has been changed to
 Composer dependencies are no longer versioned in Github. Recommended install source is WordPress.org or using Composer to get the code from Packagist.org or WPackagist.org.
 
 == Changelog ==
+
+= 2.5.1 =
+
+**Bug Fixes**
+
+* fix: Add fallback sizes to MediaItemSizeEnum when intermediate sizes are disabled (https://github.com/jasonbahl/automation-tests/pull/3433)
+
+= 2.5.0 =
+
+**Note:** Version 2.4.0 was skipped due to an issue with the release automation workflow where the version was bumped twice (once manually and once by the workflow). The fixes included in this release were originally intended for v2.4.0, but to maintain consistency with the WordPress.org deployment, we're releasing as v2.5.0 instead. The workflow has been updated to prevent this issue in future releases.
+
+**New Features**
+
+* feat: Implement WPGraphQL Experiments API (https://github.com/jasonbahl/automation-tests/pull/3428)
+* feat: Add namespaced get/set API to AppContext (with deprecation for dynamic properties) (https://github.com/jasonbahl/automation-tests/pull/3429)
+
+**Bug Fixes**
+
+* fix: Release Workflow Version Skipping Issue (https://github.com/jasonbahl/automation-tests/pull/3426)
+* fix: use get_query_args and merge args instead of override via set_query_arg (https://github.com/jasonbahl/automation-tests/pull/3424)
+
+= 2.3.8 =
+
+**New Features**
+
+* feat: Implement WPGraphQL Experiments API (https://github.com/jasonbahl/automation-tests/pull/3428)
+* feat: Add namespaced get/set API to AppContext (with deprecation for dynamic properties) (https://github.com/jasonbahl/automation-tests/pull/3429)
+
+**Bug Fixes**
+
+* fix: Release Workflow Version Skipping Issue (https://github.com/jasonbahl/automation-tests/pull/3426)
+* fix: use get_query_args and merge args instead of override via set_query_arg (https://github.com/jasonbahl/automation-tests/pull/3424)
+
+= 2.3.7 =
+
+**Bug Fixes**
+
+* fix: Prevent bad string injection in plugin update message (#3318) (https://github.com/jasonbahl/automation-tests/pull/3419)
+
+= 2.3.6 =
+
+**Bug Fixes**
+
+* fix: update failing e2e tests for graphiql (https://github.com/jasonbahl/automation-tests/pull/3414)
+* fix: Prevent printed scripts from breaking GraphQL responses (https://github.com/jasonbahl/automation-tests/pull/3413)
+* fix: prevent changeset deletions from being synced back to develop (https://github.com/jasonbahl/automation-tests/pull/3412)
+* fix: wp 6.8 test failures (https://github.com/jasonbahl/automation-tests/pull/3410)
+* fix: Move graphql_root_value filter execution to runtime for access to request params (https://github.com/jasonbahl/automation-tests/pull/3406)
+* fix: make  void and call on  (https://github.com/jasonbahl/automation-tests/pull/3371)
+
+**Other Changes**
+
+* chore: update npm deps (https://github.com/jasonbahl/automation-tests/pull/3408)
+* chore: update composer deps (https://github.com/jasonbahl/automation-tests/pull/3407)
+* refactor: prepare deprecations for v3 removal (https://github.com/jasonbahl/automation-tests/pull/3400)
+
+= 2.3.5 =
+
+**Bug Fixes**
+
+* fix: prevent changeset deletions from being synced back to develop (https://github.com/jasonbahl/automation-tests/pull/3412)
+* fix: wp 6.8 test failures (https://github.com/jasonbahl/automation-tests/pull/3410)
+* fix: Move graphql_root_value filter execution to runtime for access to request params (https://github.com/jasonbahl/automation-tests/pull/3406)
+
+**Other Changes**
+
+* chore: update npm deps (https://github.com/jasonbahl/automation-tests/pull/3408)
+* chore: update composer deps (https://github.com/jasonbahl/automation-tests/pull/3407)
+* refactor: prepare deprecations for v3 removal (https://github.com/jasonbahl/automation-tests/pull/3400)
+
+= 2.3.4 =
+
+**Bug Fixes**
+
+* fix: make  void and call on  (https://github.com/jasonbahl/automation-tests/pull/3371)
 
 = 2.3.3 =
 

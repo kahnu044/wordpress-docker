@@ -41,7 +41,8 @@ import {
     ButtonGroupControl,
     DynamicInputControl,
     TypographyDropdown,
-    ColorControl
+    ColorControl,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 import { ReactComponent as Icon } from "./icon.svg";
@@ -157,8 +158,9 @@ function Inspector(props) {
 
                     {lottieSource === 'url' && (
                         <>
-                            <TextControl
+                            <EBTextControl
                                 label={__("Lottie Animation URL", "essential-blocks")}
+                                fieldType="url"
                                 value={customLottieURL}
                                 onChange={(url) => {
                                     if (url.trim() === "") {
@@ -170,6 +172,13 @@ function Inspector(props) {
                                         validateLottie(url);
                                     }
                                 }}
+                                placeholder="https://lottie.host/example/animation.json"
+                                help={__(
+                                    "Enter a valid Lottie animation URL with security filtering.",
+                                    "essential-blocks"
+                                )}
+                                showValidation={true}
+                                enableSecurity={true}
                             />
 
                             {validationMessage?.length > 0 && (

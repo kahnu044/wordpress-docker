@@ -27,7 +27,8 @@ import {
     TypographyDropdown,
     SortControl,
     EBIconPicker,
-    InspectorPanel
+    InspectorPanel,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 import {
@@ -149,11 +150,12 @@ function Inspector({ attributes, setAttributes }) {
                     value={each.icon || null}
                     onChange={(value) => onProfileChange('icon', value, i)}
                 />
-                <TextControl
+                <EBTextControl
                     label={__("Text", "essential-blocks")}
                     className="social-share-name-input"
                     value={each.iconText || ""}
                     onChange={(value) => onProfileChange('iconText', value, i)}
+                    enableAi={true}
                 />
                 <ColorControl
                     label={__("Icon Color", "essential-blocks")}

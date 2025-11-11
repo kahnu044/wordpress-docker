@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI:  https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version:     3.50
+ * Version:     3.51.1
  * Author:      SilkyPress.com
  * Author URI:  https://www.silkypress.com
  * License:     GPL2
@@ -99,6 +99,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 				if ( isset ( $this->search_tree['jquery'] ) && true === $this->search_tree['jquery'] ) {
 					add_action( 'wp_enqueue_scripts', 'CustomCSSandJS::wp_enqueue_scripts' );
 				}
+				add_action( 'enqueue_block_assets', 'CustomCSSandJS::enqueue_block_assets' );
 			}
 		}
 
@@ -128,8 +129,6 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 
 				add_action( $action, array( $this, 'print_' . $_key ), $priority );
 			}
-
-			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 		}
 
 		/**
@@ -162,6 +161,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 			$type_attr = ( 'js' === $type && ! current_theme_supports( 'html5', 'script' ) ) ? ' type="text/javascript"' : '';
 			$type_attr = ( 'css' === $type && ! current_theme_supports( 'html5', 'style' ) ) ? ' type="text/css"' : $type_attr;
 
+			$upload_url = CCJ_UPLOAD_URL . '/';
 			if ( ! apply_filters( 'ccj_default_url_protocol', false ) ) {
 				$upload_url = str_replace( array( 'https://', 'http://' ), '//', CCJ_UPLOAD_URL ) . '/';
 			}
@@ -232,46 +232,47 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		/**
 		 * Load the CSS/JS custom codes to the Block editor.
 		 */
-		function enqueue_block_editor_assets() {
+		public static function enqueue_block_assets() {
 
-			global $wp_version;
+			$search_tree = get_option( 'custom-css-js-tree', array() );
 
-			if ( ! isset( $this->search_tree ) || ! is_array( $this->search_tree ) || count( $this->search_tree ) === 0 ) return;
+			$js_dependency = ( isset( $search_tree['jquery'] ) && true === $search_tree['jquery'] ) ? ['jquery'] : [];
 
-			// Default values for the CCJ_codes variable.
-			$CCJ_codes = [
-				'internal' => [],
-				'external' => [],
-				'path' => CCJ_UPLOAD_URL . '/',
-				'jquery' => false,
-				'wp_version' => $wp_version, 
-			];
-
-			// Get the jQuery path.
-			$suffix     = wp_scripts_get_suffix();
-			$guessurl   = site_url();
-			$guessurl   = ( ! $guessurl ) ? wp_guess_url() : $guessurl;
-			$jquery_url = $guessurl . '/wp-includes/js/jquery/jquery' . $suffix . '.js';
-
-			// Fill in the values for the CCJ_codes variable.
-			foreach ( $this->search_tree as $_where => $_files ) {
-				if ( strpos( $_where, 'html' ) !== false ) continue;
-				if ( strpos( $_where, 'block' ) === false ) continue;
+			foreach ( $search_tree as $_where => $_files ) {
+				if ( strpos( $_where, 'html' ) !== false || strpos( $_where, 'block' ) === false || strpos( $_where, 'external' ) === false ) continue;
 				if ( ! is_array( $_files ) || count( $_files ) === 0 ) continue;
 
-				$type = ( strpos( $_where, 'internal' ) !== false ) ? 'internal' : 'external';
 
-				// Add the 'internal' or 'external' file name to the array.
-				$CCJ_codes[ $type ] = array_merge( $CCJ_codes[ $type ], $_files );
+				// Load external CSS custom codes.
+				if ( strpos( $_where, 'css' ) !== false ) {
+					foreach ( $_files as $__file ) {
+						wp_enqueue_style( $__file, CCJ_UPLOAD_URL . '/' . $__file, [], null );
+					}
+				} 
 
-				// Should the jQuery library be loaded in the Block editor?
-				$CCJ_codes['jquery'] = ( strpos( $_where, 'js' ) !== false ) ? $jquery_url : $CCJ_codes['jquery']; 
+				// Load external JS custom codes.
+				if ( strpos( $_where, 'js' ) !== false ) {
+					$args = [];
+					if ( strpos( $_where, 'footer' ) !== false ) {
+						$args['in_footer'] = true;
+					}
+					foreach ( $_files as $__file ) {
+						wp_enqueue_script( $__file, CCJ_UPLOAD_URL . '/' . $__file, $js_dependency, null, $args );
+					}
+				}
 			}
 
-			// Load the "ccj_block_editor.js" script.
-			wp_register_script( 'ccj_block_editor', plugins_url( '/', CCJ_PLUGIN_FILE ) . 'assets/ccj_block_editor.js', [], CCJ_VERSION );
-			wp_localize_script( 'ccj_block_editor', 'CCJ_codes', $CCJ_codes );
-			wp_enqueue_script( 'ccj_block_editor' );
+			// Load internal CSS/JS codes.
+			// 		Currently (WP6.8) the block editor can load only externally linked files,
+			// 		therefore the internal custom codes are saved in the block_js.js and block_css.css files
+			// 		and then loaded in the block editor as externally linked files.
+			if ( isset( $search_tree['block-css-footer-internal'] ) || isset( $search_tree['block-css-header-internal'] ) ) {
+				wp_enqueue_style( 'ccj-block_css', CCJ_UPLOAD_URL . '/block_css.css', [], rand(1, 1000) );
+			}
+			if ( isset( $search_tree['block-js-footer-internal'] ) || isset( $search_tree['block-js-header-internal'] ) ) {
+				wp_enqueue_script( 'ccj-block_js',  CCJ_UPLOAD_URL . '/block_js.js', $js_dependency, rand(1, 1000) );
+			}
+
 		}
 
 
@@ -281,7 +282,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.50',
+				'CCJ_VERSION'     => '3.51.1',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,

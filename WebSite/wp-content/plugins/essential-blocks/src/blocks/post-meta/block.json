@@ -10,5 +10,14 @@
       "anchor": true,
       "align": ["wide", "full"]
     },
+    "usesContext": [
+      "postId",
+      "postType",
+      "essential-blocks/postId",
+      "essential-blocks/postType",
+      "essential-blocks/queryId",
+      "essential-blocks/isLoopBuilder",
+      "essential-blocks/query"
+    ],
     "editorScript": "essential-blocks-editor-script"
   }

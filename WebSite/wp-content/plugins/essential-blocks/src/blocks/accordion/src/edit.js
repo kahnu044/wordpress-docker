@@ -4,14 +4,13 @@
 import { __ } from "@wordpress/i18n";
 import {
     useEffect,
-    useState,
     useRef,
     useCallback,
     memo,
 } from "@wordpress/element";
 import { InnerBlocks, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { select, dispatch, useSelect } from "@wordpress/data";
+import { dispatch, useSelect } from "@wordpress/data";
 import { createBlock } from "@wordpress/blocks";
 import {
     BlockProps,
@@ -29,7 +28,7 @@ import { times } from "lodash";
 import Style from "./style";
 import defaultAttributes from "./attributes";
 import AccordionIcon from "./icon";
-import { Templates } from "./templates/templates";
+import Templates from '../../../../patterns/accordion.json'
 
 const Edit = (props) => {
     const { attributes, setAttributes, isSelected, clientId } = props;
@@ -46,6 +45,8 @@ const Edit = (props) => {
         accordionLists,
         showBlockContent,
         titleOrientation,
+        activeAccordionIndex,
+        nextItemId,
     } = attributes;
 
     const enhancedProps = {
@@ -63,15 +64,14 @@ const Edit = (props) => {
     );
 
     const innerBlocksRef = useRef(innerBlocks);
-    const [activeAccordionIndex, setActiveAccordionIndex] = useState(1);
 
     const addAccordion = () => {
-        let count = innerBlocks ? innerBlocks.length : 3;
+        const currentNextId = nextItemId || 1;
 
         // create a new accordion item block
         const newBlock = createBlock("essential-blocks/accordion-item", {
-            itemId: count + 1,
-            title: __(`Accordion title ${count + 1}`, "essential-blocks"),
+            itemId: currentNextId,
+            title: __(`Accordion title ${currentNextId}`, "essential-blocks"),
             inheritedAccordionType: accordionType,
             inheritedTagName: tagName,
             inheritedDisplayIcon: displayIcon,
@@ -89,9 +89,9 @@ const Edit = (props) => {
                     accordionLists: [
                         ...accordionLists,
                         {
-                            id: count + 1,
+                            id: currentNextId,
                             title: __(
-                                `Accordion title ${count + 1}`,
+                                `Accordion title ${currentNextId}`,
                                 "essential-blocks",
                             ),
                             clickable: false,
@@ -121,9 +121,10 @@ const Edit = (props) => {
                             isBlockSelected: false,
                         },
                     ],
-                    accordionChildCount: count + 1,
+                    accordionChildCount: (innerBlocks ? innerBlocks.length : 0) + 1,
+                    nextItemId: currentNextId + 1,
                 });
-                setActiveAccordionIndex(count + 1);
+                setAttributes({ activeAccordionIndex: currentNextId });
             });
     };
     const { updateBlockAttributes } = dispatch("core/block-editor");
@@ -223,7 +224,10 @@ const Edit = (props) => {
                     isBlockSelected: false,
                 },
             ];
-            setAttributes({ accordionLists: defaultAccordionLists });
+            setAttributes({
+                accordionLists: defaultAccordionLists,
+                nextItemId: 4 // Next ID after the 3 default items
+            });
         }
 
         const isValid = accordionLists.every(obj =>
@@ -266,9 +270,24 @@ const Edit = (props) => {
                 isBlockSelected: item.attributes.isSelected,
             }));
 
-            setAttributes({ accordionLists: newArray });
+            setAttributes({
+                accordionLists: newArray,
+                nextItemId: innerBlocks.length + 1
+            });
         }
     }, []);
+
+    // Initialize nextItemId based on existing accordion items
+    useEffect(() => {
+        if (innerBlocks.length > 0 && (!nextItemId || nextItemId === 1)) {
+            const maxItemId = Math.max(...innerBlocks.map(block =>
+                block.attributes.itemId || 0
+            ));
+            if (maxItemId > 0) {
+                setAttributes({ nextItemId: maxItemId + 1 });
+            }
+        }
+    }, [innerBlocks, nextItemId]);
 
     const insertAccodionItem = (accordionChildCount) => {
         return times(accordionChildCount, (n) => [
@@ -288,7 +307,7 @@ const Edit = (props) => {
     };
 
     useEffect(() => {
-        
+
         if (innerBlocksRef.current.length === innerBlocks.length) {
             return;
         }
@@ -428,7 +447,7 @@ const Edit = (props) => {
     useEffect(() => {
         if (selectedInnerBlockId) {
             const itemId = selectedInnerBlockId?.attributes?.itemId;
-            setActiveAccordionIndex(itemId);
+            setAttributes({ activeAccordionIndex: itemId });
         }
     }, [selectedInnerBlockId]);
 
@@ -436,8 +455,8 @@ const Edit = (props) => {
         accordionType === "image"
             ? " eb-accordion-type-image"
             : accordionType === "horizontal"
-            ? " eb-accordion-type-horizontal"
-            : "";
+                ? " eb-accordion-type-horizontal"
+                : "";
     const orientationClass =
         accordionType === "horizontal"
             ? titleOrientation === "bottom-top"
@@ -451,7 +470,7 @@ const Edit = (props) => {
                 <Inspector
                     {...props}
                     addAccordion={addAccordion}
-                    setActiveAccordionIndex={setActiveAccordionIndex}
+
                 />
             )}
             <BlockProps.Edit {...enhancedProps}>
@@ -480,7 +499,7 @@ const Edit = (props) => {
                                             template={insertAccodionItem(
                                                 accordionChildCount,
                                             )}
-                                            templateLock={"insert"}
+                                            templateLock="insert"
                                             allowedBlocks={ALLOWED_BLOCKS}
                                         />
                                     </div>

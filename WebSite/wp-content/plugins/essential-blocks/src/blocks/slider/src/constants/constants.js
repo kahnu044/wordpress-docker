@@ -21,6 +21,7 @@ export const DOTS_POSITION = "dotsPosition";
 export const ARROW_SIZE = "arrowSize";
 export const DOTS_SIZE = "dotsSize";
 export const SLIDES_GAP = "slidesGap";
+export const SLIDER_BORDER_SHADOW = "sliderBorderShadow";
 
 export const NORMAL_HOVER = [
     { label: "Normal", value: "normal" },

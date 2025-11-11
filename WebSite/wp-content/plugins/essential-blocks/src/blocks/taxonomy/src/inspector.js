@@ -53,7 +53,7 @@ import {
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
-    const { attributes, setAttributes, taxonomies } = props;
+    const { attributes, setAttributes, taxonomies, context } = props;
     const {
         resOption,
         prefixType,
@@ -81,6 +81,16 @@ function Inspector(props) {
         prefixVerticalAlign
     } = attributes;
 
+    // Check if block is inside Loop Builder context
+    const isInLoopBuilder = Boolean(
+        context &&
+            // Primary check: explicit isLoopBuilder flag
+            (context["essential-blocks/isLoopBuilder"] === true ||
+                // Secondary check: presence of loop context values (even if null initially)
+                (context.hasOwnProperty("essential-blocks/postId") &&
+                    context.hasOwnProperty("essential-blocks/postType"))),
+    );
+
     const taxOptions = taxonomies?.map(taxonomy => taxonomy.visibility.public ? {
         label: `${taxonomy.name}`,
         value: taxonomy.slug
@@ -100,16 +110,18 @@ function Inspector(props) {
                     title={__("General", "essential-blocks")}
                     initialOpen={true}
                 >
-                    <SelectControl
-                        label={__("Source", "essential-blocks")}
-                        value={source}
-                        options={SOURCES}
-                        onChange={(value) => {
-                            setAttributes({
-                                source: value
-                            })
-                        }}
-                    />
+                    {!isInLoopBuilder && (
+                        <SelectControl
+                            label={__("Source", "essential-blocks")}
+                            value={source}
+                            options={SOURCES}
+                            onChange={(value) => {
+                                setAttributes({
+                                    source: value
+                                })
+                            }}
+                        />
+                    )}
                     {taxonomies !== null && (
                         <>
                             <SelectControl

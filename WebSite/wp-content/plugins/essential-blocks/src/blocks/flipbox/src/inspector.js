@@ -17,7 +17,6 @@ import {
 /*
  * Internal dependencies
  */
-import objAttributes from "./attributes";
 import {
     BUTTON_STYLES,
     FLIPBOX_SIDES,
@@ -46,6 +45,7 @@ import {
     EBIconPicker,
     InspectorPanel,
     ImageComponent,
+    EBTextControl,
 } from "@essential-blocks/controls";
 
 import {
@@ -209,9 +209,9 @@ const Inspector = ({ attributes, setAttributes }) => {
                             help={
                                 flipMode === "click"
                                     ? __(
-                                          "Click mode only available in frontend.",
-                                          "essential-blocks",
-                                      )
+                                        "Click mode only available in frontend.",
+                                        "essential-blocks",
+                                    )
                                     : ""
                             }
                         />
@@ -684,16 +684,22 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 ))}
                             </ButtonGroup>
                         </BaseControl>
-                        <DynamicInputControl
+                        <EBTextControl
                             label={__("Link", "essential-blocks")}
-                            attrName="link"
-                            inputValue={link}
-                            setAttributes={setAttributes}
+                            fieldType="url"
+                            value={link || ''}
                             onChange={(text) =>
                                 setAttributes({
                                     link: text,
                                 })
                             }
+                            placeholder="https://example.com"
+                            help={__(
+                                "Enter a valid URL.",
+                                "essential-blocks"
+                            )}
+                            showValidation={true}
+                            enableSecurity={true}
                         />
                         <ToggleControl
                             label={__("Open in New Tab", "essential-blocks")}

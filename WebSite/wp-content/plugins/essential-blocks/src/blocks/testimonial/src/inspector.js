@@ -16,8 +16,6 @@ import {
  * Internal dependencies
  */
 
-import objAttributes from "./attributes";
-
 import {
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
@@ -45,7 +43,8 @@ import {
     BorderShadowControl,
     ResponsiveRangeController,
     ColorControl,
-    InspectorPanel
+    InspectorPanel,
+    ImageComponent
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -550,6 +549,22 @@ function Inspector(props) {
                                 })
                             }
                         />
+                        {displayAvatar && (
+                            <ImageComponent.GeneralTab
+                                onSelect={(media) =>
+                                    setAttributes({
+                                        imageUrl: media.url,
+                                        imageId: media.id,
+                                    })
+                                }
+                                value={imageUrl}
+                                hasTag={false}
+                                hasCaption={false}
+                                hasStyle={false}
+                                hasLink={false}
+                                showInPanel={false}
+                            />
+                        )}
 
                         {layoutPreset == "layout-preset-1" && (
                             <>

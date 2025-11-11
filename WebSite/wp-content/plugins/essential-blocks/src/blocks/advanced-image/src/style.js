@@ -207,6 +207,7 @@ export default function Style(props) {
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignDesktop}
 		}
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper,
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowDesktop : ""}
             }
@@ -232,6 +233,7 @@ export default function Style(props) {
 			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignTab}		}
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper,
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowTab : ""}
             }
@@ -257,6 +259,7 @@ export default function Style(props) {
 			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignMobile}		}
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper,
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowMobile : ""}
             }

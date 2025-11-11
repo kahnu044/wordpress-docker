@@ -27,7 +27,7 @@ import {
     BlockProps,
     withBlockContext,
     EBMediaPlaceholder
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 import { ParallaxSlider } from "./icon";
 
 function getPreviousImgData(previousData, image) {
@@ -117,6 +117,7 @@ const Edit = (props) => {
                 onSelect={(images) => onImageSelect(images)}
                 accept="image/*"
                 allowedTypes={["image"]}
+                enableAI={false}
                 multiple
             />
         );

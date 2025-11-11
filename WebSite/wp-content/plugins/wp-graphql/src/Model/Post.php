@@ -454,7 +454,6 @@ class Post extends Model {
 				},
 				'editLock'                  => function () {
 					if ( ! function_exists( 'wp_check_post_lock' ) ) {
-						// @phpstan-ignore requireOnce.fileNotFound
 						require_once ABSPATH . 'wp-admin/includes/post.php';
 					}
 
@@ -809,10 +808,11 @@ class Post extends Model {
 					'sourceUrl'           => function () {
 						return $this->get_source_url_by_size( 'full' );
 					},
+					// @todo Remove in 1.30.0.
 					'sourceUrlsBySize'    => function () {
 						_doing_it_wrong(
-							__METHOD__,
-							'`sourceUrlsBySize` is deprecated. Use the `sourceUrlBySize` callable instead.',
+							self::class . '->sourceUrlsBySize',
+							'Use the `sourceUrlBySize` callable instead. This will be removed in the next major release.',
 							'1.29.1'
 						);
 

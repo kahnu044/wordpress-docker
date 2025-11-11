@@ -86,6 +86,9 @@ class CustomCSSandJS_Admin {
 
 		add_action( 'current_screen', array( $this, 'current_screen_2' ), 100 );
 
+
+		$this->update_custom_codes_for_block_editor();
+
 	}
 
 
@@ -139,50 +142,69 @@ class CustomCSSandJS_Admin {
 		if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
 			wp_deregister_script( 'wp-codemirror' );
 
-			wp_enqueue_style( 'jquery-ui', 'https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css', array(), $v );
-			wp_enqueue_script( 'ccj-codemirror', $cm . '/lib/codemirror.js', array( 'jquery' ), $v, false );
-			wp_enqueue_style( 'ccj-codemirror', $cm . '/lib/codemirror.css', array(), $v );
+			// JS Scripts
+			$scripts = [
+				'ccj-codemirror'        => 'lib/codemirror.js',
+				'ccj-formatting'        => 'lib/util/formatting.js',
+
+				'ccj-xml'               => 'mode/xml/xml.js',
+				'ccj-js'                => 'mode/javascript/javascript.js',
+				'ccj-css'               => 'mode/css/css.js',
+				'ccj-htmlmixed'         => 'mode/htmlmixed/htmlmixed.js',
+
+				'ccj-comment'           => 'addon/comment/comment.js',
+				'ccj-dialog'            => 'addon/dialog/dialog.js',
+				'ccj-fullscreen'        => 'addon/display/fullscreen.js',
+				'ccj-closebrackets'     => 'addon/edit/closebrackets.js',
+				'ccj-matchbrackets'     => 'addon/edit/matchbrackets.js',
+				'ccj-matchtags'	        => 'addon/edit/matchtags.js',
+				'ccj-search'            => 'addon/search/search.js',
+				'ccj-searchcursor'      => 'addon/search/searchcursor.js',
+				'ccj-active-line'       => 'addon/selection/active-line.js',
+
+				'ccj-show-hint'	        => 'addon/hint/show-hint.js',
+				'ccj-javascript-hint'   => 'addon/hint/javascript-hint.js',
+				'ccj-xml-hint'          => 'addon/hint/xml-hint.js',
+				'ccj-html-hint'	        => 'addon/hint/html-hint.js',
+				'ccj-css-hint'          => 'addon/hint/css-hint.js',
+				'ccj-anyword-hint'      => 'addon/hint/anyword-hint.js',
+
+				'ccj-brace-fold'        => 'addon/fold/brace-fold.js',
+				'ccj-comment-fold'      => 'addon/fold/comment-fold.js',
+				'ccj-foldcode'          => 'addon/fold/foldcode.js',
+				'ccj-foldgutter'        => 'addon/fold/foldgutter.js',
+				'ccj-indent-fold'       => 'addon/fold/indent-fold.js',
+				'ccj-markdown-fold'     => 'addon/fold/markdown-fold.js',
+				'ccj-fold-xml'          => 'addon/fold/xml-fold.js',
+			];
+
+			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+				foreach ( $scripts as $_key => $_script ) {
+					wp_enqueue_script( $_key , $a . '/codemirror/' . $_script , [], $v, false );
+				}
+				// echo 'uglifyjs codemirror/' . implode( ' codemirror/', $scripts )  . ' -o codemirror.min.js';
+			} else {
+				wp_enqueue_script( 'ccj-codemirror', $a . '/codemirror.min.js', array( 'jquery' ), $v, false );
+			}
 			wp_enqueue_script( 'ccj-admin_url_rules', $a . '/ccj_admin-url_rules.js', array( 'jquery' ), $v, false );
 
-			// Add the language modes
-			$cmm = $cm . '/mode/';
-			wp_enqueue_script( 'cm-xml', $cmm . 'xml/xml.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-js', $cmm . 'javascript/javascript.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-css', $cmm . 'css/css.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-htmlmixed', $cmm . 'htmlmixed/htmlmixed.js', array( 'ccj-codemirror' ), $v, false );
+			// CSS Styles
+			$styles = [
+				'ccj-jquery-ui'			=> 'jquery-ui.css', // from https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css
+				'ccj-codemirror'		=> 'codemirror/lib/codemirror.css',
+				'ccj-show-hint'			=> 'codemirror/addon/hint/show-hint.css',
+				'ccj-dialog'			=> 'codemirror/addon/dialog/dialog.css',
+				'ccj-foldgutter'		=> 'codemirror/addon/fold/foldgutter.css'
+			];
 
-			$cma = $cm . '/addon/';
-			wp_enqueue_script( 'ccj-closebrackets', $cma . 'edit/closebrackets.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-matchbrackets', $cma . 'edit/matchbrackets.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-matchtags', $cma . 'edit/matchtags.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-dialog', $cma . 'dialog/dialog.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-search', $cma . 'search/search.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-searchcursor', $cma . 'search/searchcursor.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'cm-jump-to-line', $cma . 'search/jump-to-line.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fullscreen', $cma . 'display/fullscreen.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_style( 'cm-dialog', $cma . 'dialog/dialog.css', array(), $v );
-			wp_enqueue_script( 'ccj-formatting', $cm . '/lib/util/formatting.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-comment', $cma . 'comment/comment.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-active-line', $cma . 'selection/active-line.js', array( 'ccj-codemirror' ), $v, false );
-
-			// Hint Addons
-			wp_enqueue_script( 'ccj-hint', $cma . 'hint/show-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-hint-js', $cma . 'hint/javascript-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-hint-xml', $cma . 'hint/xml-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-hint-html', $cma . 'hint/html-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-hint-css', $cma . 'hint/css-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-hint-anyword', $cma . 'hint/anyword-hint.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_style( 'ccj-hint', $cma . 'hint/show-hint.css', array(), $v );
-
-			// Fold Addons
-			wp_enqueue_script( 'ccj-fold-brace', $cma . 'fold/brace-fold.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-comment', $cma . 'fold/comment-fold.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-code', $cma . 'fold/foldcode.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-gutter', $cma . 'fold/foldgutter.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-indent', $cma . 'fold/indent-fold.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-markdown', $cma . 'fold/markdown-fold.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_script( 'ccj-fold-xml', $cma . 'fold/xml-fold.js', array( 'ccj-codemirror' ), $v, false );
-			wp_enqueue_style( 'ccj-fold-gutter', $cma . 'fold/foldgutter.css', array(), $v );
+			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+				foreach ( $styles as $_key => $_style ) {
+					wp_enqueue_style( $_key, $a . '/' . $_style, [], $v );
+				}
+				// echo 'uglifycss ' . implode( ' ', $styles )  . ' --output codemirror.min.css';
+			} else {
+				wp_enqueue_style( 'ccj-codemirror', $a . '/codemirror.min.css', array(), $v );
+			}
 
 			// remove the assets from other plugins so it doesn't interfere with CodeMirror
 			global $wp_scripts;
@@ -1052,12 +1074,6 @@ End of comment */ ',
 			),
 		);
 
-		if ( version_compare( $wp_version, '6.6', '<' ) ) {
-			$in_block_tipsy = __( 'The "In Block editor" option is available only for "Linking type: External File". For WordPress >= 6.6 the "In Block editor" option is available for both linking types.', 'custom-css-js' );
-			$in_block_tipsy = htmlentities( $in_block_tipsy );
-			$in_block_tipsy = '<span rel="tipsy" class="dashicons dashicons-editor-help tipsy-no-html" style="margin: 7px 3px 0 3px; display: none;" title="' . $in_block_tipsy . '"></span>';
-			$options['side']['values']['block']['title'] .= $in_block_tipsy; 
-		}
 
 		if ( ! version_compare( $wp_version, '5.0' ) || class_exists( 'Classic_Editor' ) ) {
 			// Remove the "In Block editor" option only for WP < 5 or if the "Classic Editor" plugin installed
@@ -1362,7 +1378,9 @@ endif;
 		// Retrieve all the custom-css-js codes
 		$posts = query_posts( 'post_type=custom-css-js&post_status=publish&nopaging=true' );
 
-		$tree = array();
+		$tree      = array();
+		$block_css = '';
+		$block_js  = '';
 		foreach ( $posts as $_post ) {
 			if ( ! $this->is_active( $_post->ID ) ) {
 				continue;
@@ -1384,18 +1402,66 @@ endif;
 			}
 
 			// Mark to enqueue the jQuery library, if necessary
-			if ( $options['language'] === 'js' && strstr( $options['side'], 'frontend' ) ) {
+			if ( $options['language'] === 'js' && ( strstr( $options['side'], 'frontend' ) || strstr( $options['side'], 'block' ) ) ) {
 				$_post->post_content = preg_replace( '@/\* Add your JavaScript code here[\s\S]*?End of comment \*/@im', '/* Default comment here */', $_post->post_content );
 				if ( preg_match( '/jquery\s*(\(|\.)/i', $_post->post_content ) && ! isset( $tree['jquery'] ) ) {
 					$tree['jquery'] = true;
 				}
 			}
 
+			if ( strstr( $options['side'], 'block' ) && $options['linking'] === 'internal' ) {
+				if ( $options['language'] === 'js' ) {
+					$block_js .= $_post->post_content . "\n";
+				}
+				if ( $options['language'] === 'css' ) {
+					$block_css .= $_post->post_content . "\n";
+				}
+			}
 		}
+
+		if ( $this->should_save_files_for_block_editor( get_option( 'custom-css-js-tree', [] ), $tree ) ) {
+			@file_put_contents( CCJ_UPLOAD_DIR . '/block_js.js', $block_js );
+			@file_put_contents( CCJ_UPLOAD_DIR . '/block_css.css', $block_css );
+		} 
+
 
 		// Save the tree in the database
 		update_option( 'custom-css-js-tree', $tree );
 	}
+
+
+	/**
+	 * Should the "block_js.js" and the "block_css.css" files be saved?
+	 *
+	 * Check both the old tree and the new tree for the "block-" keys.
+	 */
+	function should_save_files_for_block_editor( $old_tree, $new_tree ) {
+
+		$keys = array_merge( array_keys( $old_tree ), array_keys( $new_tree ) );
+
+		return strpos( implode(',', $keys ), 'block-' ) !== false;
+	}
+
+
+	/**
+	 * Rebuilt the search tree once.
+	 *
+	 * That will also generate the /uploads/custom-css-js/block_js.js and /uploads/custom-css-js/block_css.css files,
+	 * which will keep the internal CSS/JS codes, so they can be loaded in the block editor.
+	 *
+	 * Note, currently (WP6.8) the block editor can load only externally linked files,
+	 * therefore the custom codes need to be saved in these additional files.
+	 */
+	function update_custom_codes_for_block_editor() {
+		if ( get_option( 'ccj-custom_codes_for_block_editor', false ) ) {
+			return false;
+		}
+
+		$this->build_search_tree();
+
+		update_option( 'ccj-custom_codes_for_block_editor', true );
+	}
+
 
 	/**
 	 * Rebuilt the tree when you trash or restore a custom code

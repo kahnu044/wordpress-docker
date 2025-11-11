@@ -5,6 +5,8 @@ import {
     WRAPPER_BG,
     META_ALIGNMENT,
     METAGAP,
+    AUTHOR_PICTURE_BORDER,
+    AUTHOR_PICTURE_SIZE,
 } from "./constants/constants";
 
 import {
@@ -107,6 +109,22 @@ const attributes = {
         type: "number",
         default: 20,
     },
+    hasLoopBuilderDefaults: {
+        type: "boolean",
+        default: false,
+    },
+    showAuthorPicture: {
+        type: "boolean",
+        default: false,
+    },
+    authorPictureLink: {
+        type: "boolean",
+        default: true,
+    },
+    authorPictureBorderRadius: {
+        type: "number",
+        default: 50,
+    },
 
     // typography attributes ⬇
     ...generateTypographyAttributes(Object.values(typographyObjs)),
@@ -132,6 +150,16 @@ const attributes = {
     }),
     ...generateResponsiveRangeAttributes(METAGAP, {
         defaultRange: 10,
+    }),
+
+    // author picture border attributes ⬇
+    ...generateBorderShadowAttributes(AUTHOR_PICTURE_BORDER, {
+        noShadow: true,
+    }),
+
+    // author picture size attributes ⬇
+    ...generateResponsiveRangeAttributes(AUTHOR_PICTURE_SIZE, {
+        defaultRange: 40,
     }),
 };
 

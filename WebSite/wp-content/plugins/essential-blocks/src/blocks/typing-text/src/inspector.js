@@ -7,7 +7,6 @@ import {
     BaseControl,
     ToggleControl,
     RangeControl,
-    TextControl,
 } from "@wordpress/components";
 
 /**
@@ -19,7 +18,8 @@ import objAttributes from "./attributes";
 import {
     TypographyDropdown,
     ColorControl,
-    InspectorPanel
+    InspectorPanel,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 import {
@@ -65,11 +65,12 @@ const Inspector = ({ attributes, setAttributes }) => {
         }}>
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody title={__("Content Settings", "essential-blocks")} initialOpen={true}>
-                    <TextControl
+                    <EBTextControl
                         label={__("Prefix Text", "essential-blocks")}
                         placeholder={__("Add prefix text", "essential-blocks")}
                         value={prefix}
                         onChange={(prefix) => setAttributes({ prefix })}
+                        enableAi={true}
                     />
 
                     <BaseControl label={__("Typed Text", "essential-blocks")}>
@@ -100,11 +101,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                         </Button>
                     </BaseControl>
 
-                    <TextControl
+                    <EBTextControl
                         label={__("Suffix Text", "essential-blocks")}
                         placeholder={__("Add suffix text", "essential-blocks")}
                         value={suffix}
                         onChange={(suffix) => setAttributes({ suffix })}
+                        enableAi={true}
                     />
 
                     <ToggleControl

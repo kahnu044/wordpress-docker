@@ -10,6 +10,8 @@ export const COLUMNCOUNT = "coumnCount";
 export const COLUMNGAP = "coumnGap";
 export const COLUMNWIDTH = "coumnWidth";
 export const COLUMNRULEWIDTH = "coumnRuleWidth";
+export const TEXT_MARGIN = "textMargin";
+export const TEXT_PADDING = "textPadding";
 
 export const UNIT_TYPES = [
     { label: "px", value: "px" },

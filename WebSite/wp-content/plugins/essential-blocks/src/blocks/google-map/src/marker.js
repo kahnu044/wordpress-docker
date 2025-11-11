@@ -2,18 +2,14 @@
  * WordPress dependencies
  */
 import { useRef, useState } from "@wordpress/element";
-import { MediaUpload } from "@wordpress/block-editor";
 import {
     TextControl,
     TextareaControl,
     SelectControl,
     ToggleControl,
-    Button,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
-import {
-    ImageAvatar
-} from "@essential-blocks/controls";
+import { ImageComponent, EBTextareaControl } from "@essential-blocks/controls";
 import { escapeAttribute } from "@wordpress/escape-html";
 import { safeHTML } from "@wordpress/dom";
 
@@ -163,12 +159,13 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                             onMarkerChange("title", value, position)
                         }
                     />
-                    <TextareaControl
+                    <EBTextareaControl
                         label={__("Description", "essential-blocks")}
                         value={marker.content}
                         onChange={(value) =>
                             onMarkerChange("content", value, position)
                         }
+                        enableAi={true}
                     />
                     <ToggleControl
                         label={__(
@@ -185,49 +182,15 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                         }}
                     />
                     {marker.showCustomIcon === "true" && (
-                        <>
-                            <MediaUpload
-                                onSelect={({ id, url }) =>
-                                    // setAttributes({ icon: url, imageId: id })
-                                    // onMarkerChange("imageId", id, position),
-                                    onMarkerChange(
-                                        "imageUrl",
-                                        url,
-                                        position
-                                    )
-                                }
-                                type="image"
-                                value={marker.url}
-                                render={({ open }) => {
-                                    if (!marker.imageUrl) {
-                                        return (
-                                            <Button
-                                                className="eb-background-control-inspector-panel-img-btn components-button"
-                                                label={__(
-                                                    "Upload Image",
-                                                    "essential-blocks"
-                                                )}
-                                                icon="format-image"
-                                                onClick={open}
-                                            />
-                                        );
-                                    } else {
-                                        return (
-                                            <ImageAvatar
-                                                imageUrl={marker.imageUrl}
-                                                onDeleteImage={(value) =>
-                                                    onMarkerChange(
-                                                        "imageUrl",
-                                                        null,
-                                                        position
-                                                    )
-                                                }
-                                            />
-                                        );
-                                    }
-                                }}
-                            />
-                        </>
+                        <ImageComponent.GeneralTab
+                            onSelect={({ id, url }) => onMarkerChange("imageUrl", url, position)}
+                            value={marker.imageUrl}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            showInPanel={false}
+                        />
                     )}
                     {marker.showCustomIcon !== "true" && (
                         <SelectControl

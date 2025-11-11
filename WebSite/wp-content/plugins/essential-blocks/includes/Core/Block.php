@@ -31,6 +31,7 @@ abstract class Block
     protected $editor_styles    = [];
     protected $animation_script = 'essential-blocks-eb-animation';
     protected $animation_style  = 'essential-blocks-animation';
+    protected $liquid_glass_style  = 'essential-blocks-liquid-glass';
 
     protected $frontend_styles  = [];
     protected $frontend_scripts = [];
@@ -87,6 +88,7 @@ abstract class Block
     {
         // Enqueue Animation
         wp_enqueue_style($this->animation_style);
+        wp_enqueue_style($this->liquid_glass_style);
 
         $frontend_styles = $this->frontend_styles;
 
@@ -146,7 +148,7 @@ abstract class Block
             $this->register_scripts();
         }
 
-        $_args['render_callback'] = function ($attributes, $content) {
+        $_args['render_callback'] = function ($attributes, $content, $block = null) {
             if (!$this->should_display_block($attributes)) {
                 return ''; // Stop execution and return empty content
             }
@@ -155,7 +157,7 @@ abstract class Block
         };
 
         if (method_exists($this, 'render_callback')) {
-            $_args['render_callback'] = function ($attributes, $content) {
+            $_args['render_callback'] = function ($attributes, $content, $block = null) {
                 if (!is_admin()) {
                     $this->load_scripts();
                 }
@@ -168,12 +170,12 @@ abstract class Block
                     $this->load_scripts();
                 }
 
-                return $this->render_callback($attributes, $content);
+                return $this->render_callback($attributes, $content, $block);
             };
         }
 
         if ((!empty($this->frontend_scripts) || !empty($this->frontend_styles)) && ! method_exists($this, 'render_callback')) {
-            $_args['render_callback'] = function ($attributes, $content) {
+            $_args['render_callback'] = function ($attributes, $content, $block = null) {
                 if (!is_admin()) {
 
 

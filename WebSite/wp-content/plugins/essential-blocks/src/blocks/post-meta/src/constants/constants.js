@@ -8,6 +8,8 @@ export const WRAPPER_BORDER_SHADOW = "wrpBorderShadow";
 export const WRAPPER_BG = "wrpBG";
 export const META_ALIGNMENT = 'metaAlign';
 export const METAGAP = 'metaGap';
+export const AUTHOR_PICTURE_BORDER = 'authorPictureBorder';
+export const AUTHOR_PICTURE_SIZE = 'authorPictureSize';
 export const META_DISPLAY = [
     { label: "Inline", value: "inline" },
     { label: "Stacked", value: "stacked" },

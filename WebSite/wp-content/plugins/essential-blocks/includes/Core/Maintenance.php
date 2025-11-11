@@ -2,7 +2,6 @@
 
 namespace EssentialBlocks\Core;
 
-use EssentialBlocks\Core\BlocksPatterns;
 use EssentialBlocks\Modules\StyleHandler;
 use EssentialBlocks\Traits\HasSingletone;
 
@@ -29,7 +28,6 @@ class Maintenance
         if ( $requires_update ) {
             // Version Updated in DB.
             $this->update_version();
-            BlocksPatterns::get_instance()->update_cache();
 
             if ( get_option( 'essential_blocks_user_type' ) !== 'new' ) {
                 update_option( 'essential_blocks_user_type', 'old' );
@@ -85,6 +83,7 @@ class Maintenance
     public function init( $plguin_basename )
     {
         register_activation_hook( $plguin_basename, [ __CLASS__, 'activation' ] );
+        register_deactivation_hook( $plguin_basename, [ __CLASS__, 'deactivation' ] );
         register_uninstall_hook( $plguin_basename, [ __CLASS__, 'uninstall' ] );
     }
 
@@ -103,6 +102,20 @@ class Maintenance
     }
 
     /**
+     * Runs on deactivation
+     *
+     * @since 5.5.3
+     * @return void
+     */
+    public static function deactivation()
+    {
+        // Clean up AI job manager scheduled events
+        if ( class_exists( 'EssentialBlocks\Integrations\AI\JobManager' ) ) {
+            \EssentialBlocks\Integrations\AI\JobManager::cleanup_hooks();
+        }
+    }
+
+    /**
      * Runs on uninstallation.
      *
      * @since 2.0.1
@@ -110,6 +123,11 @@ class Maintenance
      */
     public static function uninstall()
     {
+        // Clean up AI job manager scheduled events and data
+        if ( class_exists( 'EssentialBlocks\Integrations\AI\JobManager' ) ) {
+            \EssentialBlocks\Integrations\AI\JobManager::cleanup_hooks();
+            \EssentialBlocks\Integrations\AI\JobManager::cleanup_expired_jobs();
+        }
     }
 
     private static function db_create_tables()

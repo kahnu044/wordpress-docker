@@ -32,7 +32,7 @@ import {
 
 import { NotFoundImg, gridGapCal } from './helpers';
 import { UserPlaceholder } from "./icon";
-import { Templates } from './templates/templates';
+import Templates from '../../../../patterns/image-gallery.json'
 import { ReactComponent as Icon } from "./icon.svg";
 
 function Edit(props) {
@@ -289,14 +289,14 @@ function Edit(props) {
         }
     }, []);
 
-    // isotopeEA filter
-    const isotopeEA = useRef(null);
+    // refGalleryIsotope filter
+    const refGalleryIsotope = useRef(null);
     // store the filter keyword in a state
     const [filterKey, setFilterKey] = useState("*");
 
     // initialize an Isotope object with configs
     useEffect(() => {
-        if (isotopeEA.current && typeof isotopeEA.current === "object" && Object.keys(isotopeEA.current).length === 0) {
+        if (refGalleryIsotope.current && typeof refGalleryIsotope.current === "object" && Object.keys(refGalleryIsotope.current).length === 0) {
             return;
         }
 
@@ -306,16 +306,16 @@ function Edit(props) {
 
             imagesLoaded(imageGallery, () => {
                 // Destroy existing instance
-                if (isotopeEA.current?.destroy) {
-                    isotopeEA.current.destroy();
-                    isotopeEA.current = null;
+                if (refGalleryIsotope.current?.destroy) {
+                    refGalleryIsotope.current.destroy();
+                    refGalleryIsotope.current = null;
                 }
 
                 // Define layout options
                 const layoutMode = layouts === "grid" ? "fitRows" : "masonry";
 
                 // Initialize Isotope
-                isotopeEA.current = new Isotope(imageGallery, {
+                refGalleryIsotope.current = new Isotope(imageGallery, {
                     itemSelector: ".eb-gallery-img-content",
                     layoutMode,
                     transitionDuration: '0.5s',
@@ -332,18 +332,18 @@ function Edit(props) {
                 initializeIsotope();
             }, 500)
         } else {
-            if (isotopeEA.current?.destroy) {
-                isotopeEA.current.destroy();
-                isotopeEA.current = null;
+            if (refGalleryIsotope.current?.destroy) {
+                refGalleryIsotope.current.destroy();
+                refGalleryIsotope.current = null;
             }
         }
 
 
         // Cleanup on unmount
         return () => {
-            if (isotopeEA.current?.destroy) {
-                isotopeEA.current.destroy();
-                isotopeEA.current = null;
+            if (refGalleryIsotope.current?.destroy) {
+                refGalleryIsotope.current.destroy();
+                refGalleryIsotope.current = null;
             }
         };
 
@@ -381,34 +381,44 @@ function Edit(props) {
     // handling filter key change
     useEffect(() => {
         if (
-            isotopeEA.current &&
-            typeof isotopeEA.current === "object" &&
-            Object.keys(isotopeEA.current).length === 0
+            !refGalleryIsotope.current ||
+            typeof refGalleryIsotope.current !== "object" ||
+            Object.keys(refGalleryIsotope.current).length === 0
         ) {
             return;
         }
 
-        if (enableFilter && isotopeEA.current) {
-            const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
-            const notFoundDiv = imageGallery?.closest(".eb-parent-wrapper").querySelector('#eb-img-gallery-not-found');
-            if (imageGallery) {
-                imagesLoaded(imageGallery, function () {
-                    filterKey === "*"
-                        ? isotopeEA.current?.arrange({ filter: `*` })
-                        : isotopeEA.current?.arrange({
-                            filter: `.${filterKey}`,
-                        });
+        if (!enableFilter) {
+            return;
+        }
 
-                    // not found image
-                    isotopeEA.current.on('arrangeComplete', function (filteredItems) {
-                        if (filteredItems.length === 0) {
-                            notFoundDiv.classList.add('show'); // Ensure show if empty after arrangement
-                        } else {
-                            notFoundDiv.classList.remove('show'); // Ensure hide if items found after arrangement
-                        }
+        const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
+        const parentWrapper = imageGallery?.closest(".eb-parent-wrapper");
+        const notFoundDiv = parentWrapper?.querySelector('#eb-img-gallery-not-found');
+
+        if (imageGallery && refGalleryIsotope.current) {
+            imagesLoaded(imageGallery, () => {
+                // Apply the filter
+                if (refGalleryIsotope.current.arrange) {
+                    refGalleryIsotope.current?.arrange({
+                        filter: filterKey === '*' ? '*' : `.${filterKey}`,
                     });
+                }
+
+                // Remove previous listeners to avoid duplication
+                refGalleryIsotope.current.off?.('arrangeComplete');
+
+                // Attach the event handler once
+                refGalleryIsotope.current.on?.('arrangeComplete', (filteredItems) => {
+                    if (notFoundDiv) {
+                        if (filteredItems.length === 0) {
+                            notFoundDiv.classList.add('show');
+                        } else {
+                            notFoundDiv.classList.remove('show');
+                        }
+                    }
                 });
-            }
+            });
         }
     }, [enableFilter, filterKey]);
 
@@ -466,16 +476,10 @@ function Edit(props) {
                                         <ToolbarItem>
                                             {() => (
                                                 <MediaUpload
-                                                    value={sources.map((img) => img.id)}
-                                                    onSelect={(...sources) => {
-                                                        const newImages = sources[0]
-                                                        const mergedArray = new Map(sources.map(item => [item.id, item]));
-                                                        newImages.forEach(item => {
-                                                            const correspondingItem = mergedArray.get(item.id);
-                                                            if (correspondingItem) {
-                                                                Object.assign(item, correspondingItem);
-                                                            }
-                                                        });
+                                                    key={blockId || props.clientId}
+                                                    value={(sources || []).filter((img) => img && img.url && img.url !== UserPlaceholder && typeof img.id === "number").map((img) => img.id)}
+                                                    onSelect={(selectedImages) => {
+                                                        const newImages = Array.isArray(selectedImages) ? selectedImages : [selectedImages];
                                                         onImageChange(newImages);
                                                     }}
                                                     allowedTypes={["image"]}
@@ -500,7 +504,7 @@ function Edit(props) {
 
                                 <div
                                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                                    ref={isotopeEA}
+                                    ref={refGalleryIsotope}
                                 >
                                     {enableFilter && !enableSearch && (
                                         <ul className={`eb-img-gallery-filter-wrapper ${presets}`}>
@@ -598,6 +602,7 @@ function Edit(props) {
                                                                             className="eb-gallery-img"
                                                                             src={source.url}
                                                                             image-index={index}
+                                                                            alt={source.alt}
                                                                         />
 
                                                                         {displayCaption &&
@@ -621,6 +626,7 @@ function Edit(props) {
                                                                             className="eb-gallery-img"
                                                                             src={source.url}
                                                                             image-index={index}
+                                                                            alt={source.alt}
                                                                         />
                                                                         <span className={`eb-img-gallery-content ${horizontalAlign} ${verticalAlign}`}>
 
@@ -657,6 +663,7 @@ function Edit(props) {
                                                                             className="eb-gallery-img"
                                                                             src={source.url}
                                                                             image-index={index}
+                                                                            alt={source.alt}
                                                                         />
                                                                         {(!disableLightBox || addCustomLink) && (
                                                                             <div className="eb-img-gallery-actions">
@@ -681,6 +688,7 @@ function Edit(props) {
                                                                         className="eb-gallery-img"
                                                                         src={source.url}
                                                                         image-index={index}
+                                                                        alt={source.alt}
                                                                     />
                                                                 )}
                                                                 <div className="eb-img-gallery-overlay">
@@ -771,10 +779,15 @@ function Edit(props) {
 
                                         updatedImages.map((image) => {
                                             let item = {};
-                                            item.url = image.url;
-                                            item.caption = image.caption;
-                                            item.content = image.content;
+                                            item.url = image.url ? image.url : "";
+                                            item.caption = image.caption ? image.caption : "";
+                                            item.content = image.content ? image.content : "";
                                             item.id = image.id;
+                                            item.alt = image.alt ? image.alt : "";
+                                            item.customLink = image.customLink ? image.customLink : "";
+                                            item.openNewTab = image.openNewTab ? image.openNewTab : false;
+                                            item.isValidUrl = image.isValidUrl ? image.isValidUrl : true;
+                                            item.sizes = image.sizes ? image.sizes : null;
 
                                             sources.length > 0 &&
                                                 sources.map((source) => {
@@ -820,7 +833,6 @@ function Edit(props) {
                                                         </defs>
                                                     </svg>
                                                 </span>
-
                                                 Add More Images
                                             </Button>
                                         )

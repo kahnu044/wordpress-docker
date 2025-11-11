@@ -19,7 +19,7 @@ import Inspector from "./inspector";
 import SocialLinks from "./components/social-links";
 import Style from "./style";
 import { ReactComponent as Icon } from "./icon.svg";
-import { Templates } from './templates/templates';
+import Templates from '../../../../patterns/team-member.json'
 import defaultAttributes from './attributes';
 
 function Edit(props) {

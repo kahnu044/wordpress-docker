@@ -189,6 +189,31 @@
 					}
 				}
 			}
+
+			.eb-country-field-wrapper .eb-field-input-wrap .eb-country-dropdown {
+				&~label {
+					position: absolute;
+					top: 15px;
+					// left: 0;
+					padding: 0;
+					margin: 0;
+					pointer-events: none;
+					transform: translateY(-50%);
+					transition: 0.5s;
+
+					&.active {
+						top: 15px;
+						// left: 0;
+						font-size: 12px;
+					}
+				}
+
+				&:focus~label,
+				&~label.active {
+					top: 15px;
+					// left: 0;
+				}
+			}
 		}
 	}
 

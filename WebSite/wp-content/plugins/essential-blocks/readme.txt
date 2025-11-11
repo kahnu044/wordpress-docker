@@ -1,18 +1,18 @@
 === Gutenberg Essential Blocks – Page Builder for Gutenberg Blocks & Patterns ===
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
-Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gutenberg Plugin
+Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Generate with AI
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 5.5.3
+Stable tag: 5.7.4
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Gutenberg block editor with AI. 60+ Gutenberg blocks, patterns, WooCommerce blocks, post grid, gallery, menu with Gutenberg block library.
+Gutenberg block editor with AI. 70+ Gutenberg blocks, patterns, WooCommerce blocks, post grid, gallery, menu with Gutenberg block library.
 
 == Description ==
 Bring your creative visions to life with **[Essential Blocks for Gutenberg](https://essential-blocks.com/)**, the ultimate Gutenberg blocks library for WordPress default editor!
-Enhance your Gutenberg experience with 60+ unique blocks (more coming soon) and the brand‑new Write With AI feature. Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before. Plus, AI helps you generate rich, high‑quality content instantly with just a few keywords.
+Enhance your Gutenberg experience with 70+ unique blocks (more coming soon) and the brand‑new AI feature for image generating & content writing. Add power to the block editor using our easy-to-use blocks, which are designed to make your next WordPress page or post design easier and prettier than ever before. Plus, AI helps you generate rich, high‑quality content instantly with just a few keywords.
 
 https://youtu.be/PnZx4ZOMyzI
 
@@ -27,6 +27,9 @@ Generate engaging content for pages and posts in seconds with the Write With AI 
 ##✨ READY AI CONTENT FOR RICH TEXT INPUT
 
 Get AI-generated content in one click for all your rich text input blocks. With this global AI feature, you can automatically create, modify, or personalize your text content fields for any Gutenberg block.
+
+🦾 GENERATE IMAGE WITH AI IN WORDPRESS
+Directly from your Gutenberg editor, generate AI images with your given prompt within a few seconds. To get the best output, customize options like AI model, image type, sizes, etc. Create AI images for Gutenberg blocks in one click.
 
 ##🧱 BLOCK PLUGIN WITH FULL CUSTOMIZATION
 
@@ -62,6 +65,9 @@ Easily upload SVG and JSON files directly to your WordPress Media Library withou
 ##💻 RESPONSIVE ON ALL DEVICES
 Directly from your Gutenberg block editor, you can control each block’s responsiveness individually. With flexible, responsive customization options, make your website user-friendly for all devices.
 
+##💧LIQUID GLASS EFFECT ON WORDPRESS
+Add smooth, glossy liquid glassmorphism effects to your WordPress site; no coding is needed. Instantly bring modern and futuristic UI to Gutenberg designs.
+
 ##💫 ADVANCED ANIMATION WITH GSAP FOR PAGE BUILDER (PRO)
 With our latest exclusive feature, animation, you can design every block with a stunning animated appearance. Add smooth transitions, scroll effects and vibrant animations. Grab users’ attention instantly with eye-catching animations, transitions, and many more.
 
@@ -72,7 +78,7 @@ Enhance the flexibility and customization options of your Gutenberg-built websit
 Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
 
 ##🎯 STUNNING GUTENBERG TEMPLATES FOR WORDPRESS
-Explore and get access to 2,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
+Explore and get access to 3,000+ ready Gutenberg templates from [Templately](https://templately.com/) that were created using the default block editor and Essential Blocks. You can easily customize the fully responsive templates just the way you want, upload the designs to the Templately cloud solution to use again later, and collaborate with your team with ease.
 
 You will find a wide variety of stunning Gutenberg website or web page templates in any niche:
 - Blog & Magazine
@@ -94,8 +100,8 @@ You will find a wide variety of stunning Gutenberg website or web page templates
 ##👨‍💻 EXPERT SUPPORT
 We have a very friendly support team ready to help you out. Ask your questions in the support forum, we will get back to you immediately.
 
-##60+ FREE GUTENBERG BLOCKS AND COUNTING
-Design without limits in WordPress block editor, using 60+ of the most useful Essential Blocks for Gutenberg.
+##70+ FREE GUTENBERG BLOCKS AND COUNTING
+Design without limits in WordPress block editor, using 70+ of the most useful Essential Blocks for Gutenberg.
 
 - **[Accordion](https://essential-blocks.com/demo/accordion/)** - Add beautiful accordions in your pages, posts, anywhere & reduce scrolling
 - **[Button](https://essential-blocks.com/demo/button/)** - Quickly add modern buttons with hover effect in your post or page
@@ -160,7 +166,9 @@ Design without limits in WordPress block editor, using 60+ of the most useful Es
 - **[Post Meta](https://essential-blocks.com/demo/post-meta/)** - Attractively showcase your current post metadata like author, date, excerpt & more.
 - **[Text](https://essential-blocks.com/demo/text-block/)** - Add and customize text content on your website that catches the attention of the visitors.
 - **[Lottie Animation](https://essential-blocks.com/demo/lottie-animation/)** - Add LottiFiles Animations to your Gutenberg site seamlessly and customize how you want it to appear.
-
+- **[Mega Menu (PRO)](https://essential-blocks.com/demo/mega-menu/)** - Create fully customized & mobile-friendly menu with grid, nested, dropdown,etc. dynamic layouts; add icons, badges, multimedia, etc.
+- **[Query Loop Builder (PRO)](https://essential-blocks.com/demo/query-loop-builder/)** - Easily create advanced, filterable post layouts in Gutenberg with the Query Loop Builder block. Display dynamic content stunningly and hook visitors, no coding required.
+- **[Business Hours (PRO)](https://essential-blocks.com/demo/business-hours/)** - Showcase available opening times in a stylish and interactive table view. Highlight closing days, special days, multi-shift, etc.
 
 More Gutenberg blocks and demos coming soon for the block visual editor (weekly update)
 
@@ -256,6 +264,82 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 == Changelog ==
 
+= 5.7.4 - 30/10/2025 =
+- Added: AI Image Editing feature
+- Fixed: Post Grid | Custom Post Types not appearing in Taxonomy Filter
+- Fixed: Post Grid | PHP warning fix
+- Few minor bug fixes & improvements
+
+= 5.7.3 - 23/10/2025 =
+- Fixed: Advanced Video | Video ratio issue
+- Fixed: Post Grid | Pagination conflict with Filter
+- Fixed: Slider | JQuery dependency issue
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
+
+
+= 5.7.2 - 12/10/2025 =
+- Fixed: Editor not working with the last update
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
+
+= 5.7.1 - 07/10/2025 =
+- Improved: Loop Builder | Added support for more blocks
+- Improved: Slider | Added more image styling options and images clickable option
+- Improved: Post Grid | Added additional styling options for Title and Taxonomy
+- Fixed: Custom Fonts | Fonts were not loading properly
+- Fixed: Post Grid | Certain strings were not translatable
+- Fixed: Filterable Gallery | 'Add More Images' cleared URLs of existing items
+- Fixed: Advanced Navigation | Menu items geting extra spacing in dropdowns
+- Fixed: Advanced Image | Custom height resetting issue
+- Fixed: Advanced Image | Site logo not displaying properly
+- Fixed: Animation conflict with Twentig plugin
+- Few minor bug fixes and improvements
+
+= 5.7.0 - 21/09/2025 =
+- Added: Liquid Glass Effect
+- Added: Block Patterns | 70+ block patterns
+- Added: Text | Spacing options
+- Fixed: Filterable Gallery | Showing pre-selected image on blank gallery
+- Fixed: Image Comparison | Compatibility issue in vertical mode
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
+
+= 5.6.4 - 14/09/2025 =
+- Few minor bug fixes & improvements
+
+= 5.6.3 - 01/09/2025 =
+- Fixed: Color Control | Color automatically reset to default color
+- Fixed: Accordion | Performance improvements
+- Few minor bug fixes & improvements
+
+= 5.6.2 - 20/08/2025 =
+- Minor bug fixes and improvements
+
+= 5.6.1 - 20/08/2025 =
+- Added: AI Content Generation | Added support for input fields
+- Improved: Link Control | Added validation and security enhancements
+- Fixed: Form | Email input field background color issue
+- Fixed: Infobox | Image src issue
+- Fixed: Slider | Full-width layout issue
+- Fixed: Slider | Error when changing the arrow icon
+- Fixed: Column | Editor performance improvements
+- Fixed: Table of Contents | PHP fatal error
+- Improved: Security enhancements
+- Minor bug fixes and improvements
+
+= 5.6.0 - 27/07/2025 =
+- Added: New Feature | AI Image Generation
+- Fixed: Infobox | Image border appearing rounded
+- Fixed: Filterable Gallery | Missing image alt attribute
+- Fixed: Accordion | Animation not smooth on first click
+- Fixed: Slider | Image size issue in "Image with Content" layout
+- Fixed: Post Grid | API request blocked on servers with 8G firewall enabled
+- Fixed: Popup | Not Triggering in External Element
+- Fixed: Animation | FadeInLeft not working correctly on initial viewport
+- Improved: Accordion | Title editing experience enhanced
+- Few minor bug fixes & improvements
+
 = 5.5.3 - 29/06/2025 =
 - Fixed: Google Map | Map Becomes Unresponsive When Entering Diacritic Characters
 - Fixed: Row Column | Column gap issues with responsive device
@@ -266,86 +350,6 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 = 5.5.1 - 19/06/2025 =
 - Fixed: AI Content Generation | Popup was closing upon clicking the generate button in Firefox
-- Few minor bug fixes & improvements
-
-= 5.5.0 - 17/06/2025 =
-- Added: New Feature: AI Content Generation | RichText and Input field support
-- Fixed: EB Filterable Gallery | Lightbox displays all images instead of filtered items only
-- Fixed: Lottie Animation | Height and width set to auto control
-- Fixed: Lottie Animation | Incorrect animation behavior
-- Fixed: Advanced Navigation | Alignment issue
-- Few minor bug fixes & improvements
-
-= 5.4.2 - 01/06/2025 =
-- Added: Infobox | Link option added for the title
-- Fixed: Dual Button | Button gap issue on Preset 4
-- Improved: Security enhancement
-- Few minor bug fixes & improvements
-
-= 5.4.1 - 19/05/2025 =
-- Added: SVG image support
-- Added: Popup Block | Open popup on scroll trigger
-- Improved: Security enhancements
-- Few minor bug fixes & improvements
-
-= 5.4.0 - 08/05/2025 =
-- Added: Write with AI feature
-- Added: Form Block | “Reply-To” option in form settings
-- Added: Product Image | Controls to enable/disable zoom effect
-- Improved: Global Settings | Custom color opacity option and reset issue
-- Improved: Slider Block | Sliding items sorting option and image preview added
-- Improved: Accordion Block | Title edit panel opens on click in editor
-- Fixed: Image Comparison Block | Not working in editor since 5.3.5
-- Fixed: Advanced Video Block | Responsive issue on iPhone
-- Fixed: Slider Block | Slideshow block displays truncated images on initial load
-- Few minor bug fixes & improvements
-
-= 5.3.5 - 23/04/2025 =
-- Added: Quick Setup Wizard
-- Fixed: Advanced Tabs | Conflict with Spectra Image Gallery
-- Few minor bug fixes and improvements
-
-= 5.3.4 - 15/04/2025 =
-- Fixed: FSE throws error in Firefox
-- Fixed: Slider | Adaptive height getting enabled on page reload
-- Fixed: Popup | Popup block conflict with WPForms
-- Few minor bug fixes & improvements
-
-= 5.3.3 - 24/03/2025 =
-- Added: Form | Min-Max value support for number field
-- Fixed: Popup | Page not scrolling properly after closing popup
-- Fixed: Woo Product Grid | Added option to show/hide product category
-- Fixed: Filterable Gallery | Extra border appearing on focused image
-- Few minor bug fixes & improvements
-
-= 5.3.2 - 05/03/2025 =
-- Added: Quick Action Toolbar | Easily access most-used blocks
-- Added: Woo Product Grid | Display product category option
-- Fixed: Slider | RTL issues fixed
-- Fixed: Advanced Tab | Active tab not displaying properly in editor
-- Fixed: Filterable Gallery | Conflict with Autoptimize Lazyload
-- Fixed: Toggle Content | Multiple blocks not supported inside toggle content
-- Improved: Security enhancements
-- Few minor bug fixes & improvements
-
-= 5.3.1 - 26/02/2025 =
-- Added: Global Styles | Separate ‘Save’ and ‘Reset’ options
-- Fixed: Global Styles | Automatically resetting issue
-- Fixed: Filterable Gallery | Stacking issue with popup
-- Added: Popup | Option to prevent background page scroll when popup is open
-- Few minor bug fixes & improvements
-
-= 5.3.0 - 18/02/2025 =
-- Added: New Block | Lottie Animation
-- Fixed: Table of Contents | Design issue fixes
-- Fixed: Progress Bar | Display Alternate Value Based on Percentage Setting
-- Fixed: Advanced Image | Image height getting reset
-- Fixed: Toggle Content | Design control for active item and other design improvements
-- Fixed: Advanced Heading | Background overlay over title
-- Fixed: Editor broken and shows error after update plugin
-- Fixed: Blocks patterns cache update cron broken
-- Fixed: Reset control for Box Shadow
-- Improved: Security Enhancement
 - Few minor bug fixes & improvements
 
 [See changelog for all versions](https://essential-blocks.com/changelog).

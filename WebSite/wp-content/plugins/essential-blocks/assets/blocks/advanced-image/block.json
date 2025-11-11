@@ -19,7 +19,12 @@
   },
   "editorScript": "essential-blocks-editor-script",
   "usesContext": [
-    "postID",
-    "postType"
+    "postId",
+    "postType",
+    "essential-blocks/postId",
+    "essential-blocks/postType",
+    "essential-blocks/queryId",
+    "essential-blocks/isLoopBuilder",
+    "essential-blocks/query"
   ]
 }

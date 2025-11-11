@@ -6,7 +6,9 @@ import {
     COLUMNCOUNT,
     COLUMNGAP,
     COLUMNWIDTH,
-    COLUMNRULEWIDTH
+    COLUMNRULEWIDTH,
+    TEXT_MARGIN,
+    TEXT_PADDING,
 } from "./constants/constants";
 
 import {
@@ -58,6 +60,18 @@ const attributes = {
         type: "string",
         default: "custom"
     },
+    currentPostId: {
+        type: "number",
+        default: 0
+    },
+    currentPostType: {
+        type: "string",
+        default: "post"
+    },
+    excerptLength: {
+        type: "number",
+        default: 20
+    },
     columnRuleColor: {
         type: "string",
         default: "var(--eb-global-text-color)"
@@ -104,7 +118,9 @@ const attributes = {
     // background attributes ⬇
     ...generateBackgroundAttributes(WRAPPER_BG, {
         defaultBgGradient: "linear-gradient(45deg,#ffffff,#ffffff)",
-    })
+    }),
+    ...generateDimensionsAttributes(TEXT_MARGIN),
+    ...generateDimensionsAttributes(TEXT_PADDING),
 };
 
 export default attributes;

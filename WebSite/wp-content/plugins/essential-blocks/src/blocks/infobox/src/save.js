@@ -1,6 +1,3 @@
-import {
-    sanitizeURL
-} from "@essential-blocks/controls";
 import InfoboxContainer from "./components/infobox-save";
 import {
     BlockProps
@@ -66,7 +63,7 @@ export default function save({ attributes }) {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <InfoboxContainer requiredProps={requiredProps} attributes={attributes}/>
+            <InfoboxContainer requiredProps={requiredProps} attributes={attributes} />
         </BlockProps.Save>
     );
 }

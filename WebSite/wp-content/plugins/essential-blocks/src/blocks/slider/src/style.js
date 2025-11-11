@@ -19,6 +19,7 @@ import {
     ARROW_SIZE,
     DOTS_SIZE,
     SLIDES_GAP,
+    SLIDER_BORDER_SHADOW,
 } from "./constants/constants";
 import {
     TITLE_TYPOGRAPHY,
@@ -66,7 +67,8 @@ export default function Style(props) {
         textAlign,
         verticalAlign,
         classHook,
-        isRTLEnable
+        isRTLEnable,
+        slidesGapRange
     } = attributes;
 
     // Title Typography
@@ -353,6 +355,21 @@ export default function Style(props) {
         // noBorder: true,
     });
 
+    const {
+        styesDesktop: sliderBDShadowDesktop,
+        styesTab: sliderBDShadowTab,
+        styesMobile: sliderBDShadowMobile,
+        stylesHoverDesktop: sliderBDShadowHoverDesktop,
+        stylesHoverTab: sliderBDShadowHoverTab,
+        stylesHoverMobile: sliderBDShadowHoverMobile,
+        transitionStyle: sliderBDShadowTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: SLIDER_BORDER_SHADOW,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-slider-wrapper.${blockId}{
@@ -408,10 +425,14 @@ export default function Style(props) {
 		}
 		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img {
 			${isCustomHeight ? sliderHeightDesktop : ""}
+            ${sliderBDShadowDesktop}
 		}
 		.eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
 			background-color: ${overlayColor};
 			justify-content: ${verticalAlign};
+            ${sliderBDShadowDesktop}
+            width: calc(100% - ${slidesGapRange * 2}px);
+            height: calc(100% - ${slidesGapRange * 2}px);
 		}
 		.eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item .eb-slider-content .eb-slider-title {
 			color: ${titleColor};
@@ -467,7 +488,12 @@ export default function Style(props) {
             ? sliderHeightTab
             : ""
         }
+        ${sliderBDShadowTab}
 		}
+
+        .eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
+            ${sliderBDShadowTab}
+        }
 		.eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item .eb-slider-content .eb-slider-title {
 			${titleMarginTab}
 			${titleTypographyTab}
@@ -510,7 +536,11 @@ export default function Style(props) {
             ? sliderHeightMobile
             : ""
         }
+        ${sliderBDShadowMobile}
 		}
+        .eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
+            ${sliderBDShadowMobile}
+        }
 		.eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item .eb-slider-content .eb-slider-title {
 			${titleMarginMobile}
 			${titleTypographyMobile}

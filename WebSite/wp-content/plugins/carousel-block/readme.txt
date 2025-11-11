@@ -5,14 +5,14 @@ Tags: carousel, slide, gutenberg, swiper
 Requires at least: 6.1
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 2.0.2
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Description ==
 
-A responsive carousel slider for the Gutenberg editor that supports adding any blocks to slides.
+A responsive carousel slider for the Gutenberg block editor that lets you add any blocks to your slides.
 
 🚀 **Carousel Slider Version 2 is here!** Now powered by **Swiper.js** for a smoother, faster, and more modern experience. See below for update instructions.
 
@@ -195,3 +195,13 @@ Fix slider init.
 - Added custom CSS variable for pagination bullet gap
 - Corrected documentation for navigation color variable
 - Removed unnecessary max-width property blocking inner block widths in editor
+
+= 2.0.3 =
+Removed block.json from legacy blocks
+
+= 2.0.4 =
+- Fix for hide legacy option
+- Update plugin description
+
+= 2.0.5 =
+- Fix for block inserters

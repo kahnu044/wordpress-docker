@@ -1,4 +1,4 @@
-import { typoPrefixTabTitle } from "./constants/typographyPrefixConstants";
+import { typoPrefixTabTitle, typoPrefixTabSubtitle } from "./constants/typographyPrefixConstants";
 
 import {
     prefixWrapBg,
@@ -14,6 +14,7 @@ import {
     prefixActTitleBdShadow,
     prefixContentBdShadow,
     prefixTtlWrpBdShadow,
+    prefixIconBdShadow,
 } from "./constants/borderShadowConstants";
 
 import {
@@ -25,9 +26,10 @@ import {
     prefixContentPadding,
     prefixTtlWrpMargin,
     prefixTtlWrpPadding,
+    prefixIconPadding,
 } from "./constants/dimensionsConstants";
 
-import { prefixTitleMinWidth, prefixIconSize, prefixIconGap, prefixCaretSize } from "./constants/rangeNames";
+import { prefixTitleMinWidth, prefixIconSize, prefixIconGap, prefixCaretSize, prefixSubtitleSpacing } from "./constants/rangeNames";
 
 import {
     generateDimensionsAttributes,
@@ -110,6 +112,8 @@ const attributes = {
                 isExpanded: true,
                 isDefault: true,
                 customId: "",
+                enableSubtitle: false,
+                subtitle: "",
             },
             {
                 text: "Tab Title 2",
@@ -120,6 +124,8 @@ const attributes = {
                 isExpanded: false,
                 isDefault: false,
                 customId: "",
+                enableSubtitle: false,
+                subtitle: "",
             },
             {
                 text: "Tab Title 3",
@@ -130,6 +136,8 @@ const attributes = {
                 isExpanded: false,
                 isDefault: false,
                 customId: "",
+                enableSubtitle: false,
+                subtitle: "",
             },
         ],
     },
@@ -198,6 +206,22 @@ const attributes = {
         type: "number",
     },
 
+    // Subtitle colors
+    subtitleColor: {
+        type: "string",
+        default: "var(--eb-global-text-color)",
+    },
+    hvSubtitleColor: {
+        type: "string",
+    },
+    actSubtitleColor: {
+        type: "string",
+        default: "var(--eb-global-background-color)",
+    },
+    actHvSubtitleColor: {
+        type: "string",
+    },
+
     //
     showCaret: {
         type: "boolean",
@@ -212,10 +236,38 @@ const attributes = {
         default: false,
     },
 
-    //
+    // Icon background colors
+    titleAlign: {
+        type: "string",
+        default: "center",
+    },
+    iconBgColor: {
+        type: "string",
+    },
+    iconhvBgColor: {
+        type: "string",
+    },
+    actIconBgColor: {
+        type: "string",
+    },
+    actHvIconBgColor: {
+        type: "string",
+    },
+    addCaretIcon: {
+        type: "boolean",
+        default: false,
+    },
+    caretIcon: {
+        type: "string",
+        default: "fas fa-angle-down",
+    },
+
     // typography Control attributes
     ...generateTypographyAttributes(typoPrefixTabTitle, {
         fontSize: 16
+    }),
+    ...generateTypographyAttributes(typoPrefixTabSubtitle, {
+        fontSize: 12
     }),
 
     // Responsive Range Control Attributes
@@ -238,6 +290,10 @@ const attributes = {
         defaultRange: 8,
         noUnits: true,
         // defaultUnit: "%", // if 'noUnits: true' is also passed here then 'defaultUnit' won't work, also it doesn't make sense to pass a defaultUnit when No units given
+    }),
+    ...generateResponsiveRangeAttributes(prefixSubtitleSpacing, {
+        defaultRange: 5,
+        noUnits: true,
     }),
 
     //
@@ -291,8 +347,8 @@ const attributes = {
         defaultBdrStyle: "solid",
     }),
     ...generateBorderShadowAttributes(prefixTtlWrpBdShadow),
+    ...generateBorderShadowAttributes(prefixIconBdShadow),
 
-    //
     // dimensions Control related Attributes
     ...generateDimensionsAttributes(prefixWrapperMargin, {
         // top: 20,
@@ -317,7 +373,8 @@ const attributes = {
         isLinked: false,
     }),
     ...generateDimensionsAttributes(prefixTtlWrpMargin),
-    ...generateDimensionsAttributes(prefixTtlWrpPadding)
+    ...generateDimensionsAttributes(prefixTtlWrpPadding),
+    ...generateDimensionsAttributes(prefixIconPadding),
 };
 
 export default attributes;

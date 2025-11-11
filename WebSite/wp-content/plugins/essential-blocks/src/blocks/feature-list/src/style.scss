@@ -107,6 +107,14 @@
 		margin: 0 !important;
 		padding: 0 !important;
 
+		width: 100%;
+
+		&.eb-inline-feature-list li {
+			&:last-child {
+				margin-right: 0 !important;
+			}
+		}
+
 		.eb-feature-list-item {
 			position: relative;
 
@@ -195,6 +203,13 @@
 			.eb-feature-list-content-box {
 				margin: 0 0 0 20px;
 
+				.eb-feature-list-title-wrapper {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					flex-wrap: wrap;
+				}
+
 				.eb-feature-list-title {
 					margin-top: -2px;
 					line-height: 1.5em;
@@ -204,6 +219,11 @@
 						text-decoration: none !important;
 						font-weight: 600;
 					}
+				}
+
+				.eb-feature-list-badge {
+					display: inline-block;
+					white-space: nowrap;
 				}
 
 				.eb-feature-list-content {
@@ -261,6 +281,29 @@
 
 .eb-feature-list-items .eb-feature-list-item .connector.connector-mobile {
 	display: none;
+}
+
+// Badge responsive styles
+.eb-feature-list-wrapper {
+	&.eb-icon-position-top {
+		.eb-feature-list-content-box .eb-feature-list-title-wrapper {
+			justify-content: center;
+		}
+	}
+
+	&.eb-icon-position-right {
+		.eb-feature-list-content-box .eb-feature-list-title-wrapper {
+			justify-content: flex-start;
+		}
+	}
+}
+
+// Badge mobile responsiveness
+@media (max-width: 767px) {
+	.eb-feature-list-badge {
+		font-size: 0.7em !important;
+		padding: 1px 6px !important;
+	}
 }
 
 @media (min-width: 1025px) {

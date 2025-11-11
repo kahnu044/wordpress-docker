@@ -1,7 +1,6 @@
 <?php
 namespace EssentialBlocks\Core;
 
-use Exception;
 use EssentialBlocks\Traits\HasSingletone;
 
 class BlocksPatterns
@@ -16,19 +15,6 @@ class BlocksPatterns
     private $category = 'essential-blocks';
 
     /**
-     * All patterns
-     *
-     * @var array
-     */
-    private $patterns = [  ];
-    /**
-     * Api url
-     *
-     * @var string
-     */
-    private $api_url;
-
-    /**
      * EssentialBlocksPatterns constructor.
      */
     public function __construct()
@@ -36,8 +22,8 @@ class BlocksPatterns
         if ( ! EB_PATTERN ) {
             return;
         }
-        add_action( 'init', [ $this, 'init' ] );
-        add_action( 'eb_pattern_update_cron', [ $this, 'update_cache' ] );
+
+        add_action( 'admin_init', [ $this, 'init' ] );
     }
 
     /**
@@ -47,13 +33,21 @@ class BlocksPatterns
      */
     public function init()
     {
-        $this->set_api_url();
         if ( current_user_can( 'edit_posts' ) ) {
-            $this->register_category();
-            $this->register_patterns();
-        }
-        if ( ! wp_next_scheduled( 'eb_pattern_update_cron' ) ) {
-            wp_schedule_event( strtotime( gmdate( 'Y-m-d' ) . ' midnight' ), 'daily', 'eb_pattern_update_cron' );
+            // Check if patterns are enabled in settings
+            $eb_settings    = get_option( 'eb_settings', [  ] );
+            $enablePatterns = ! empty( $eb_settings[ 'enablePatterns' ] ) ? $eb_settings[ 'enablePatterns' ] : 'true';
+
+            if ( 'false' !== $enablePatterns ) {
+                $this->register_category();
+                $this->register_local_patterns();
+
+                /**
+                 * Register patterns from Templately
+                 * @note: Disable for Now as we have our own patterns
+                 */
+                // $this->register_templately_patterns();
+            }
         }
     }
 
@@ -68,154 +62,170 @@ class BlocksPatterns
             $this->category,
             [ 'label' => __( 'Essential blocks', 'essential-blocks' ) ]
         );
+
+        // Register block pattern categories for each block
+        $pattern_files = $this->get_all_pattern_files();
+        foreach ( $pattern_files as $block_name => $file_path ) {
+            register_block_pattern_category(
+                $this->get_block_category( $block_name ),
+                [ 'label' => $this->get_block_name( $block_name ) ]
+            );
+        }
     }
 
     /**
-     * Register category
+     * Register local patterns from JSON files
      *
      * @return void
      */
-    public function register_patterns()
+    public function register_local_patterns()
     {
-        $patterns = $this->get_patterns();
-        if ( ! empty( $patterns ) ) {
-            foreach ( $patterns as $pattern ) {
-                if ( ! empty( $pattern->json ) ) {
-                    register_block_pattern(
-                        $this->category . '/' . $pattern->slug,
-                        [
-                            'title'       => $pattern->name,
-                            'categories'  => [ $this->category ],
-                            'description' => $pattern->description,
-                            'content'     => $this->get_pattern_content( $pattern->json ),
-                            'keywords'    => $pattern->tags
-                         ]
-                    );
+        // Get all pattern files from the patterns directories
+        $pattern_files = $this->get_all_pattern_files();
+
+        foreach ( $pattern_files as $block_name => $file_path ) {
+            $patterns = $this->get_patterns_from_file( $file_path );
+
+            if ( ! empty( $patterns ) ) {
+                foreach ( $patterns as $index => $pattern ) {
+                    $name = $this->get_block_name( $block_name );
+                    if ( ! empty( $pattern[ 'content' ] ) ) {
+                        register_block_pattern(
+                            $this->category . '/' . $block_name . '-' . sanitize_title( $pattern[ 'title' ] ),
+                            [
+                                'title'       => $name . ' - ' . $pattern[ 'title' ],
+                                'categories'  => [ $this->category, $this->get_block_category( $block_name ) ],
+                                'description' => sprintf( __( '%s template for %s block', 'essential-blocks' ), $pattern[ 'title' ], $block_name ),
+                                'content'     => $pattern[ 'content' ],
+                                'keywords'    => [ $name, $pattern[ 'title' ], 'essential-blocks', 'template', 'pattern' ]
+                             ]
+                        );
+                    }
                 }
             }
         }
     }
 
-    public function update_cache()
+    /**
+     * Get block name from block slug
+     *
+     * @param string $name
+     * @return string
+     */
+    private function get_block_name( $name )
     {
-        $patterns = $this->get_from_api();
-        if ( ! empty( $patterns ) ) {
-            $this->set_to_cache( $patterns );
-        }
+        $name = str_replace( '-', ' ', $name );
+        $name = str_replace( 'pro', '', $name );
+        $name = trim( ucwords( $name ) );
+        return $name;
     }
 
     /**
-     * Set api url for api call
+     * Get block category from block slug
+     *
+     * @param string $name
+     * @return string
+     */
+    private function get_block_category( $name )
+    {
+        $name = str_replace( '-pro', '', $name );
+        return $this->category . '-' . $name;
+    }
+
+    /**
+     * Summary of get_all_pattern_files
+     * @return array
+     */
+    private function get_all_pattern_files()
+    {
+        $pattern_files = $this->get_pattern_files();
+        if ( ESSENTIAL_BLOCKS_IS_PRO_ACTIVE === true && defined( 'ESSENTIAL_BLOCKS_PRO_DIR_PATH' ) ) {
+            $pro_pattern_files = $this->get_pattern_files( true );
+            $pattern_files     = array_merge( $pattern_files, $pro_pattern_files );
+        }
+
+        return $pattern_files;
+    }
+
+    /**
+     * Get all pattern files from the patterns directory
+     *
+     * @return array Array of block_name => file_path pairs
+     */
+    private function get_pattern_files( $pro_patterns = false )
+    {
+        $patterns_dir = ESSENTIAL_BLOCKS_DIR_PATH . 'patterns/';
+        if ( $pro_patterns ) {
+            $patterns_dir = ESSENTIAL_BLOCKS_PRO_DIR_PATH . 'patterns/';
+        }
+        $pattern_files = [  ];
+
+        if ( ! is_dir( $patterns_dir ) ) {
+            return $pattern_files;
+        }
+
+        $files = scandir( $patterns_dir );
+        if ( ! $files ) {
+            return $pattern_files;
+        }
+
+        foreach ( $files as $file ) {
+            if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'json' ) {
+                $block_name                   = pathinfo( $file, PATHINFO_FILENAME );
+                $pattern_files[ $block_name ] = $patterns_dir . $file;
+            }
+        }
+
+        return $pattern_files;
+    }
+
+    /**
+     * Get patterns from a specific JSON file
+     *
+     * @param string $file_path Path to the JSON file
+     * @return array
+     */
+    private function get_patterns_from_file( $file_path )
+    {
+        if ( ! file_exists( $file_path ) ) {
+            return [  ];
+        }
+
+        $content = file_get_contents( $file_path );
+        if ( ! $content ) {
+            return [  ];
+        }
+
+        $patterns = json_decode( $content, true );
+
+        return is_array( $patterns ) ? $patterns : [  ];
+    }
+
+    /**
+     * Register patterns
      *
      * @return void
      */
-    private function set_api_url()
-    {
-        if ( defined( 'ESSENTIAL_BLOCKS_PATTERNS_API_URL' ) ) {
-            $this->api_url = ESSENTIAL_BLOCKS_PATTERNS_API_URL;
-        } else {
-            $this->api_url = 'https://app.templately.com/api/v1/gutenberg-patterns';
-        }
-    }
-
-    /**
-     * Get patterns from api for register
-     *
-     * @return array|bool
-     */
-    private function get_patterns()
-    {
-        if ( ! empty( $this->patterns ) ) {
-            return $this->patterns;
-        }
-        $cached = $this->get_from_cache();
-        if ( ! empty( $cached ) ) {
-            return $cached;
-        }
-        $data = $this->get_from_api();
-        if ( ! empty( $data ) ) {
-            $this->patterns = $data;
-            $this->set_to_cache( $data );
-            return $this->patterns;
-        }
-        return false;
-    }
-
-    /**
-     * Get patterns from cache
-     *
-     * @return array|false
-     */
-    private function get_from_cache()
-    {
-        $cache_file_path = wp_upload_dir()[ 'basedir' ] . '/eb-patterns/patterns.json';
-        if ( file_exists( $cache_file_path ) ) {
-            $file           = file_get_contents( $cache_file_path );
-            $this->patterns = json_decode( $file );
-            return $this->patterns;
-        }
-        return false;
-    }
-
-    /**
-     * Get patterns from Templately api
-     *
-     * @return mixed
-     */
-    private function get_from_api()
-    {
-        $response = wp_remote_get(
-            $this->api_url
-        );
-
-        if ( is_wp_error( $response ) ) {
-            return false;
-        }
-        if ( is_array( $response ) ) {
-            $data = json_decode( $response[ 'body' ] );
-            if ( ! empty( $data ) && ! empty( $data->data ) ) {
-                return $data->data;
-            }
-            // Todo: response based on status
-            /*
-        if(!empty($data->status) && $data->status == 'success'){
-        return  $data->data;
-        }*/
-        }
-        return false;
-    }
-
-    /**
-     * write patterns in cache
-     *
-     * @return bool
-     */
-
-    private function set_to_cache( $data )
-    {
-        try {
-            $cache_file_dir = wp_upload_dir()[ 'basedir' ] . '/eb-patterns';
-            if ( ! file_exists( $cache_file_dir ) ) {
-                mkdir( $cache_file_dir, 0777, true );
-            }
-            file_put_contents( $cache_file_dir . '/patterns.json', wp_json_encode( $data ) );
-            return true;
-        } catch ( Exception $e ) {
-            return false;
-        }
-    }
-
-    /**
-     * Get pattern content form pattern object
-     *
-     * @return string
-     */
-    private function get_pattern_content( $data )
-    {
-        $content = json_decode( $data );
-        if ( ! empty( $content ) && ! empty( $content->content ) ) {
-            return $content->content;
-        }
-        return '';
-    }
+    // public function register_templately_patterns()
+    // {
+    //     $templately_patterns = TemplatelyPatterns::get_instance();
+    //     $templately_patterns->init();
+    //     $patterns = $templately_patterns->get_patterns();
+    //     if ( ! empty( $patterns ) ) {
+    //         foreach ( $patterns as $pattern ) {
+    //             if ( ! empty( $pattern->json ) ) {
+    //                 register_block_pattern(
+    //                     $this->category . '/' . $pattern->slug,
+    //                     [
+    //                         'title'       => $pattern->name,
+    //                         'categories'  => [ $this->category ],
+    //                         'description' => $pattern->description,
+    //                         'content'     => $templately_patterns->get_pattern_content( $pattern->json ),
+    //                         'keywords'    => $pattern->tags
+    //                      ]
+    //                 );
+    //             }
+    //         }
+    //     }
+    // }
 }

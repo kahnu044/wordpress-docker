@@ -362,16 +362,10 @@ if ( $post ) {
 
 	$formatter->append_preformatted(
 		sprintf(
-			/* translators: 1: FAQ, 2: Docs ("FAQ & Docs") */
-			__( '%1$s and %2$s', 'contact-form-7' ),
-			wpcf7_link(
-				__( 'https://contactform7.com/faq/', 'contact-form-7' ),
-				__( 'FAQ', 'contact-form-7' )
-			),
-			wpcf7_link(
-				__( 'https://contactform7.com/docs/', 'contact-form-7' ),
-				__( 'docs', 'contact-form-7' )
-			)
+			/* translators: 1: URL to FAQ, 2: URL to docs */
+			'<a href="%1$s">FAQ</a> and <a href="%2$s">docs</a>',
+			__( 'https://contactform7.com/faq/', 'contact-form-7' ),
+			__( 'https://contactform7.com/docs/', 'contact-form-7' )
 		)
 	);
 
@@ -405,7 +399,6 @@ if ( $post ) {
 
 	$formatter->append_start_tag( 'div', array(
 		'id' => 'contact-form-editor',
-		'data-active-tab' => '',
 	) );
 
 	$formatter->call_user_func( static function () use ( $post, $post_id ) {
@@ -458,7 +451,7 @@ if ( $post ) {
 		}
 
 		$editor->display();
-	} ) ;
+	} );
 
 	$formatter->end_tag( 'div' ); // #contact-form-editor
 

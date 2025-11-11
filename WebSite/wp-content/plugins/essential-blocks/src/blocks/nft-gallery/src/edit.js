@@ -37,6 +37,7 @@ function Edit(props) {
     const [nftError, setNftError] = useState({ status: false });
     const [nftErrorType, setNftErrorType] = useState('');
     const [loading, setLoading] = useState(true);
+    const [isShowingDummyData, setIsShowingDummyData] = useState(false);
 
     // you must declare this variable
     const enhancedProps = {
@@ -87,13 +88,22 @@ function Edit(props) {
                 const response = JSON.parse(data);
                 if (response.success && response.data) {
                     setOpenseaApi(response.data);
-                    // updpate api key
 
+                    // Check if this is a dummy API key for non-admin users
+                    if (response.data === 'dummy_opensea_api_key_for_editor_preview') {
+                        setIsShowingDummyData(true);
+                    } else {
+                        setIsShowingDummyData(false);
+                    }
+
+                    // update api key
                     if (settings) {
                         let newSettings = { ...settings };
                         newSettings.opensea.apiKey = response.data;
                         setAttributes({ settings: newSettings });
                     }
+                } else {
+                    setIsShowingDummyData(false);
                 }
             })
             .catch((err) => console.log(err));
@@ -138,6 +148,76 @@ function Edit(props) {
 
             data.append("openseaType", settings.opensea.type);
             if (settings.opensea.apiKey && settings.opensea.apiKey.trim().length > 0) {
+                // Check if this is a dummy API key for non-admin users
+                if (settings.opensea.apiKey === 'dummy_opensea_api_key_for_editor_preview') {
+                    // Provide dummy NFT data for editor preview
+                    const dummyNftData = {
+                        nfts: [
+                            {
+                                identifier: 'dummy_1',
+                                name: 'Sample NFT #1',
+                                description: 'This is a sample NFT for preview purposes',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            },
+                            {
+                                identifier: 'dummy_2',
+                                name: 'Sample NFT #2',
+                                description: 'Another sample NFT for preview',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            },
+                            {
+                                identifier: 'dummy_3',
+                                name: 'Sample NFT #3',
+                                description: 'Third sample NFT for preview',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            },
+                            {
+                                identifier: 'dummy_4',
+                                name: 'Sample NFT #4',
+                                description: 'Fourth sample NFT for preview',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            },
+                            {
+                                identifier: 'dummy_5',
+                                name: 'Sample NFT #5',
+                                description: 'Fifth sample NFT for preview',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            },
+                            {
+                                identifier: 'dummy_6',
+                                name: 'Sample NFT #6',
+                                description: 'Sixth sample NFT for preview',
+                                image_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                                opensea_url: '#',
+                                collection: 'Sample Collection',
+                                creator: { username: 'sample_creator' }
+                            }
+                        ]
+                    };
+
+                    setNftData(dummyNftData);
+                    setIsShowingDummyData(true);
+                    setLoading(false);
+                    setNftError({ status: false });
+                    setNftErrorType("");
+                    return;
+                }
+
                 data.append("openseaApiKey", settings.opensea.apiKey);
             }
             data.append("openseaCollectionSlug", settings.opensea.collectionSlug);
@@ -153,6 +233,7 @@ function Edit(props) {
                     const response = JSON.parse(data);
                     if (response.success) {
                         setNftData(JSON.parse(response.data));
+                        setIsShowingDummyData(false);
                         setLoading(false);
                         setNftError({
                             status: false,
@@ -170,6 +251,7 @@ function Edit(props) {
                             message: typeof error === "string" ? error : "Invalid Collection Slug",
                         });
                         setNftErrorType("");
+                        setIsShowingDummyData(false);
                         setLoading(false);
                     }
                 })
@@ -187,6 +269,19 @@ function Edit(props) {
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                     <div className={`eb-nft-gallery-wrapper ${blockId}`} data-id={blockId}>
+                        {isShowingDummyData && !loading && (
+                            <div style={{
+                                background: '#fff3cd',
+                                border: '1px solid #ffeaa7',
+                                borderRadius: '4px',
+                                padding: '12px',
+                                marginBottom: '16px',
+                                fontSize: '14px',
+                                color: '#856404'
+                            }}>
+                                <strong>{__("Preview Mode:", "essential-blocks")}</strong> {__("You're seeing placeholder NFT content because you don't have administrator permissions. The actual NFT gallery will display on the frontend if properly configured by an administrator.", "essential-blocks")}
+                            </div>
+                        )}
                         {loading && <Loading attributes={attributes} />}
                         {!loading && (
                             <>

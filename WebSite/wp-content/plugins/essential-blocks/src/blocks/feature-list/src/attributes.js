@@ -1,6 +1,7 @@
 import {
     typoPrefix_title,
-    typoPrefix_content
+    typoPrefix_content,
+    typoPrefix_badge,
 } from "./constants/typographyPrefixConstants";
 import {
     generateTypographyAttributes,
@@ -27,6 +28,12 @@ import {
     boxBorder,
     wrapperBorder,
     wrapperBackgroundType,
+    listBackgroundType,
+    listBorderShadow,
+    listPadding,
+    badgePadding,
+    badgeBorder,
+    iconLiquidGlassShadowEffectBorder,
 } from "./constants";
 
 const attributes = {
@@ -116,6 +123,26 @@ const attributes = {
                 source: "attribute",
                 attribute: "data-new-tab",
             },
+            showBadge: {
+                type: "string",
+                source: "attribute",
+                attribute: "data-show-badge",
+            },
+            badgeText: {
+                type: "string",
+                source: "attribute",
+                attribute: "data-badge-text",
+            },
+            badgeTextColor: {
+                type: "string",
+                source: "attribute",
+                attribute: "data-badge-text-color",
+            },
+            badgeBackgroundColor: {
+                type: "string",
+                source: "attribute",
+                attribute: "data-badge-background-color",
+            },
         },
         default: [
             {
@@ -128,6 +155,10 @@ const attributes = {
                 link: "",
                 linkOpenNewTab: "false",
                 iconBackgroundColor: "",
+                showBadge: 'false',
+                badgeText: "New",
+                badgeTextColor: "",
+                badgeBackgroundColor: "",
             },
             {
                 iconType: "icon",
@@ -139,6 +170,10 @@ const attributes = {
                 link: "",
                 linkOpenNewTab: "false",
                 iconBackgroundColor: "",
+                showBadge: 'false',
+                badgeText: "New",
+                badgeTextColor: "",
+                badgeBackgroundColor: "",
             },
             {
                 iconType: "icon",
@@ -150,6 +185,10 @@ const attributes = {
                 link: "",
                 linkOpenNewTab: "false",
                 iconBackgroundColor: "",
+                showBadge: 'false',
+                badgeText: "New",
+                badgeTextColor: "",
+                badgeBackgroundColor: "",
             },
         ]
     },
@@ -208,6 +247,37 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+
+    designItemBox: {
+        type: "boolean",
+        default: false,
+    },
+    // Global badge colors
+    badgeTextColor: {
+        type: "string",
+        default: "#fff",
+    },
+    badgeBackgroundColor: {
+        type: "string",
+        default: "var(--eb-global-primary-color)",
+    },
+    badgeGap: {
+        type: "number",
+        default: 5,
+    },
+
+    iconLiquidGlass: {
+        type: "object",
+        default: {
+            enable: false,
+            effect: "effect1",
+            shadowEffect: "effect1",
+            backgroundColor: "#FFFFFF1F",
+            backdropFilter: 24,
+            brightness: 1,
+        },
+    },
+
     ...generateResponsiveRangeAttributes(connectorWidth, {
         defaultRange: 2,
         noUnits: true,
@@ -236,12 +306,16 @@ const attributes = {
         defaultRange: 5,
         noUnits: true,
     }),
+
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_title, {
         fontSize: 18
     }),
     ...generateTypographyAttributes(typoPrefix_content, {
         fontSize: 14
+    }),
+    ...generateTypographyAttributes(typoPrefix_badge, {
+        fontSize: 12
     }),
     // background attributes
     ...generateBackgroundAttributes(iconBackgroundType, {
@@ -277,6 +351,13 @@ const attributes = {
         left: 10,
         isLinked: true,
     }),
+    ...generateDimensionsAttributes(badgePadding, {
+        top: 2,
+        right: 10,
+        bottom: 2,
+        left: 10,
+        isLinked: false,
+    }),
     // border
     ...generateBorderShadowAttributes(iconBorder, {
         bdrDefaults: {
@@ -291,6 +372,39 @@ const attributes = {
     }),
     ...generateBorderShadowAttributes(boxBorder),
     ...generateBorderShadowAttributes(wrapperBorder),
+    ...generateBorderShadowAttributes(badgeBorder, {
+        rdsDefaults: {
+            top: 10,
+            right: 10,
+            bottom: 10,
+            left: 10,
+        },
+    }),
+
+    ...generateBackgroundAttributes(listBackgroundType, {
+        noOverlay: true,
+        noMainBgi: true,
+    }),
+    ...generateBorderShadowAttributes(listBorderShadow, {
+        noShadow: true,
+    }),
+    ...generateDimensionsAttributes(listPadding),
+    ...generateBorderShadowAttributes(iconLiquidGlassShadowEffectBorder, {
+        defaultBdrColor: "#FFFFFF1F",
+        defaultBdrStyle: "solid",
+        bdrDefaults: {
+            top: 1,
+            bottom: 1,
+            right: 1,
+            left: 1,
+        },
+        rdsDefaults: {
+            top: 24,
+            bottom: 24,
+            right: 24,
+            left: 24,
+        },
+    }),
 };
 
 export default attributes;

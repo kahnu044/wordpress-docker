@@ -16,7 +16,6 @@ import {
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
-import objAttributes from "./attributes";
 import SortableMarker from "./marker";
 import {
     wrapMarginConst,
@@ -178,6 +177,7 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                             "Addresses",
                             "essential-blocks"
                         )}
+                        initialOpen={true}
                     >
                         <SortableMarker
                             marker={marker}

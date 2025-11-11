@@ -61,6 +61,7 @@ export const handleImage = (value, position, images, setAttributes) => {
     newImages[position].url = value.url;
     newImages[position].alt = value.alt;
     newImages[position].caption = value.caption;
+    newImages[position].content = value.description;
 
     setAttributes({ sources: newImages });
 };

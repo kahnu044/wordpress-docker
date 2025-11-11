@@ -4,7 +4,9 @@ import {
     WRAPPER_BORDER_SHADOW,
     WRAPPER_BG,
     META_ALIGNMENT,
-    METAGAP
+    METAGAP,
+    AUTHOR_PICTURE_BORDER,
+    AUTHOR_PICTURE_SIZE
 } from "./constants/constants";
 import {
     META_LABEL,
@@ -31,7 +33,9 @@ export default function Style(props) {
         metaValueColor,
         enableContents,
         metaIconColor,
-        metaIconSize
+        metaIconSize,
+        showAuthorPicture,
+        authorPictureBorderRadius
     } = attributes;
 
     // CSS/styling Codes Starts from Here
@@ -146,6 +150,41 @@ export default function Style(props) {
         noUnits: true
     });
 
+    // Author picture border styles
+    const {
+        stylesDesktop: authorPictureBorderDesktop,
+        stylesTab: authorPictureBorderTab,
+        stylesMobile: authorPictureBorderMobile,
+        stylesHoverDesktop: authorPictureBorderHoverDesktop,
+        stylesHoverTab: authorPictureBorderHoverTab,
+        stylesHoverMobile: authorPictureBorderHoverMobile,
+        transitionStyle: authorPictureBorderTransition,
+    } = generateBorderShadowStyles({
+        controlName: AUTHOR_PICTURE_BORDER,
+        attributes,
+    });
+
+    // Author picture size styles
+    const {
+        rangeStylesDesktop: authorPictureSizeDesktop,
+        rangeStylesTab: authorPictureSizeTab,
+        rangeStylesMobile: authorPictureSizeMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: AUTHOR_PICTURE_SIZE,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: authorPictureHeightDesktop,
+        rangeStylesTab: authorPictureHeightTab,
+        rangeStylesMobile: authorPictureHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: AUTHOR_PICTURE_SIZE,
+        property: "height",
+        attributes,
+    });
+
 
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
@@ -253,6 +292,56 @@ export default function Style(props) {
         }
     `;
 
+    // Author picture styles
+    const authorPictureDesktop = showAuthorPicture ? `
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar {
+            ${authorPictureSizeDesktop.replace(/(\d+);/, "$1px;")}
+            ${authorPictureHeightDesktop.replace(/(\d+);/, "$1px;")}
+            border-radius: ${authorPictureBorderRadius}%;
+            object-fit: cover;
+            ${authorPictureBorderDesktop}
+            transition: ${authorPictureBorderTransition};
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar:hover {
+            ${authorPictureBorderHoverDesktop}
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-stacked-layout {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-stacked-layout .eb-author-picture {
+            flex-shrink: 0;
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-stacked-layout .eb-author-meta-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-stacked-layout .eb-author-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-inline-layout {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-inline-layout .eb-author-picture {
+            display: inline-flex;
+            align-items: center;
+        }
+    ` : '';
+
     const postMetaTab = `
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata.eb-post-meta-inline {
             ${postMetaInlineAlignTab}
@@ -270,6 +359,18 @@ export default function Style(props) {
             ${metaGapBottomTab.replace(/(\d+);/, "$1px;")}
         }
     `;
+
+    const authorPictureTab = showAuthorPicture ? `
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar {
+            ${authorPictureSizeTab.replace(/(\d+);/, "$1px;")}
+            ${authorPictureHeightTab.replace(/(\d+);/, "$1px;")}
+            ${authorPictureBorderTab}
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar:hover {
+            ${authorPictureBorderHoverTab}
+        }
+    ` : '';
 
     const postMetaMobile = `
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata.eb-post-meta-inline {
@@ -289,6 +390,18 @@ export default function Style(props) {
         }
     `;
 
+    const authorPictureMobile = showAuthorPicture ? `
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar {
+            ${authorPictureSizeMobile.replace(/(\d+);/, "$1px;")}
+            ${authorPictureHeightMobile.replace(/(\d+);/, "$1px;")}
+            ${authorPictureBorderMobile}
+        }
+
+        .eb-post-meta-wrapper.${blockId} .eb-author-avatar:hover {
+            ${authorPictureBorderHoverMobile}
+        }
+    ` : '';
+
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
@@ -297,6 +410,7 @@ export default function Style(props) {
         ${metaLabelDesktop}
         ${metaValueDesktop}
         ${postMetaDesktop}
+        ${authorPictureDesktop}
 	`);
 
     // all css styles for Tab in strings ⬇
@@ -305,6 +419,7 @@ export default function Style(props) {
         ${metaLabelTab}
         ${metaValueTab}
         ${postMetaTab}
+        ${authorPictureTab}
 	`);
 
     // all css styles for Mobile in strings ⬇
@@ -313,6 +428,7 @@ export default function Style(props) {
         ${metaLabelMobile}
         ${metaValueMobile}
         ${postMetaMobile}
+        ${authorPictureMobile}
 	`);
 
     return (

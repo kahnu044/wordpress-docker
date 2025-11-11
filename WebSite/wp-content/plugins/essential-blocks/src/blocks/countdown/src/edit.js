@@ -16,7 +16,7 @@ import {
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from './attributes';
-import { Templates } from './templates/templates';
+import Templates from '../../../../patterns/countdown.json'
 import { ReactComponent as Icon } from "./icon.svg";
 
 function Edit(props) {

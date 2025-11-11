@@ -123,11 +123,20 @@ export default function BlocksContent({ blocksDefault, blocks, setBlocks, prefer
                                     )}
                                 </div>
                                 <div className="eb-admin-checkboxes-wrapper eb-admin-grid">
-                                    {groupBlocks[group] && Object.keys(groupBlocks[group]).length > 0 && Object.keys(groupBlocks[group]).map((block, index) => (
-                                        <div
-                                            key={index}
-                                            className={`eb-col-4 eb-admin-checkbox eb-block-box ${blocksDefault[block]?.is_pro ? 'pro' : ''}`}
-                                        >
+                                    {groupBlocks[group] && Object.keys(groupBlocks[group]).length > 0 && Object.keys(groupBlocks[group]).map((block, index) => {
+                                        // Check if block should be shown in admin
+                                        const shouldShowInAdmin = !blocksDefault[block] || blocksDefault[block].show_in_admin !== false;
+
+                                        // Don't render if show_in_admin is false
+                                        if (!shouldShowInAdmin) {
+                                            return null;
+                                        }
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`eb-col-4 eb-admin-checkbox eb-block-box ${blocksDefault[block]?.is_pro ? 'pro' : ''}`}
+                                            >
                                             <div className="block-title">
                                                 <img
                                                     src={blocksDefault[block]?.icon}
@@ -163,7 +172,8 @@ export default function BlocksContent({ blocksDefault, blocks, setBlocks, prefer
                                                 <div className="eb-pro">Pro</div>
                                             )}
                                         </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
                         ))}

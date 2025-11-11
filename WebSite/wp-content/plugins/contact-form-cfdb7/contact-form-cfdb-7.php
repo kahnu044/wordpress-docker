@@ -8,7 +8,7 @@ Author URI: http://ciphercoin.com/
 Text Domain: contact-form-cfdb7
 License: GPL v2 or later
 Domain Path: /languages/
-Version: 1.3.2
+Version: 1.3.4
 */
 
 function cfdb7_create_table(){

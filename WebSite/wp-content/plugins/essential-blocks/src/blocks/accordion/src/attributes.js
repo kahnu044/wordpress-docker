@@ -186,6 +186,10 @@ const attributes = {
         type: "number",
         default: null
     },
+    nextItemId: {
+        type: "number",
+        default: 1
+    },
 
     ...generateResponsiveRangeAttributes(titlePrefixIconSize, {
         defaultRange: 20,

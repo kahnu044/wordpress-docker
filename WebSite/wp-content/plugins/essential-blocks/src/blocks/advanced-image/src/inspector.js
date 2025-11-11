@@ -44,7 +44,7 @@ import {
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
-    const { attributes, setAttributes, media, prevImageSize, oldImageData } =
+    const { attributes, setAttributes, media, prevImageSize, oldImageData, context } =
         props;
     const {
         image,
@@ -65,6 +65,16 @@ function Inspector(props) {
         heightRange,
         openInNewTab
     } = attributes;
+
+    // Check if block is inside Loop Builder context
+    const isInLoopBuilder = Boolean(
+        context &&
+        // Primary check: explicit isLoopBuilder flag
+        (context["essential-blocks/isLoopBuilder"] === true ||
+            // Secondary check: presence of loop context values (even if null initially)
+            (context.hasOwnProperty("essential-blocks/postId") &&
+                context.hasOwnProperty("essential-blocks/postType"))),
+    );
 
     const [urlError, setUrlError] = useState("");
 
@@ -185,6 +195,11 @@ function Inspector(props) {
 
     // image size change
     useEffect(() => {
+        // Only run this effect when imageSize actually changes, not on initial render
+        if (prevImageSize.current === imageSize) {
+            return;
+        }
+
         // custom
         if (imgSource === "custom") {
             if (image.sizes && imageSize && imageSize.length > 0) {
@@ -213,26 +228,21 @@ function Inspector(props) {
                     image,
                     widthRange:
                         prevImageSize.current === imageSize && widthRange
-                            ? widthRange
-                            : newWidth
-                            ? newWidth
-                            : "",
+                            ? widthRange : newWidth
+                                ? newWidth : "",
                     widthUnit:
                         prevImageSize.current === imageSize &&
-                        attributes["widthUnit"]
+                            attributes["widthUnit"]
                             ? attributes["widthUnit"]
                             : "px",
+
                     heightRange:
                         prevImageSize.current === imageSize && heightRange
-                            ? heightRange
-                            : newHeight
-                            ? newHeight
-                            : "",
+                            ? heightRange : newHeight
+                                ? newHeight : "",
                     heightUnit:
-                        prevImageSize.current === imageSize &&
-                        attributes["heightUnit"]
-                            ? attributes["heightUnit"]
-                            : "px",
+                        prevImageSize.current === imageSize && attributes["heightUnit"]
+                            ? attributes["heightUnit"] : "px",
                 });
             } else {
                 let newWidth = "";
@@ -241,8 +251,8 @@ function Inspector(props) {
                     newWidth = widthRange
                         ? widthRange
                         : image?.width
-                        ? image.width
-                        : "";
+                            ? image.width
+                            : "";
                     newHeight =
                         !autoHeight && image?.height ? image.height : "";
                 } else if (oldImageData?.media_details?.sizes) {
@@ -251,7 +261,7 @@ function Inspector(props) {
                             imageSize
                         ]?.source_url
                             ? oldImageData.media_details.sizes?.[imageSize]
-                                  ?.source_url
+                                ?.source_url
                             : oldImageData.source_url;
                     } else {
                         image.url = oldImageData.source_url;
@@ -271,25 +281,14 @@ function Inspector(props) {
                 setAttributes({
                     image,
                     widthRange: newWidth ? newWidth : "",
-                    // widthUnit: "px",
-                    widthUnit: attributes["widthUnit"]
-                        ? attributes["widthUnit"]
-                        : "px",
-                    heightRange:
-                        !autoHeight && heightRange > 0
-                            ? heightRange
-                            : newHeight
-                            ? newHeight
-                            : "",
-                    // heightUnit: "px",
-                    heightUnit: attributes["heightUnit"]
-                        ? attributes["heightUnit"]
-                        : "px",
+                    widthUnit: attributes["widthUnit"] ? attributes["widthUnit"] : "px",
+                    // Only update heightRange if autoHeight is false and we don't have a custom value
+                    heightRange: !autoHeight && !heightRange ? (newHeight ? newHeight : "") : heightRange,
+                    heightUnit: attributes["heightUnit"] ? attributes["heightUnit"] : "px",
                 });
             }
         }
-
-        if (imgSource === "featured-img" && media?.media_details?.sizes) {
+        else if (imgSource === "featured-img" && media?.media_details?.sizes) {
             let featuredImgWidth = media.media_details.sizes?.[imageSize]?.width
                 ? media.media_details.sizes?.[imageSize]?.width
                 : media.width;
@@ -300,18 +299,12 @@ function Inspector(props) {
 
             setAttributes({
                 widthRange: featuredImgWidth ? featuredImgWidth : "",
-                // widthUnit: "px",
-                widthUnit: attributes["widthUnit"]
-                    ? attributes["widthUnit"]
-                    : "px",
-                heightRange: featuredImgHeight ? featuredImgHeight : "",
-                // heightUnit: "px",
-                heightUnit: attributes["heightUnit"]
-                    ? attributes["heightUnit"]
-                    : "px",
+                widthUnit: attributes["widthUnit"] ? attributes["widthUnit"] : "px",
+                // Only update heightRange if autoHeight is false and we don't have a custom value
+                heightRange: !autoHeight && !heightRange ? (featuredImgHeight ? featuredImgHeight : "") : heightRange,
+                heightUnit: attributes["heightUnit"] ? attributes["heightUnit"] : "px",
             });
         }
-
         prevImageSize.current = imageSize;
     }, [imageSize]);
 
@@ -343,12 +336,14 @@ function Inspector(props) {
                     title={__("General", "essential-blocks")}
                     initialOpen={true}
                 >
-                    <SelectControl
-                        label={__("Source", "essential-blocks")}
-                        value={imgSource}
-                        options={SOURCE}
-                        onChange={(imgSource) => changImgSource(imgSource)}
-                    />
+                    {!isInLoopBuilder && (
+                        <SelectControl
+                            label={__("Source", "essential-blocks")}
+                            value={imgSource}
+                            options={SOURCE}
+                            onChange={(imgSource) => changImgSource(imgSource)}
+                        />
+                    )}
 
                     {imgSource !== "custom" && (
                         <>
@@ -467,12 +462,7 @@ function Inspector(props) {
                             useImageAlign={true}
                         />
                     )}
-                    {/* <ResponsiveAlignControl
-                        baseLabel={__("Image Align", "essential-blocks")}
-                        controlName={IMAGE_ALIGNMENT}
-                        options={IMAGE_ALIGN}
-                        resOption={resOption}
-                    /> */}
+
                     <SelectControl
                         label={__("Hover Effect", "essential-blocks")}
                         value={hoverEffect}
@@ -508,8 +498,8 @@ function Inspector(props) {
                                     </BaseControl>
                                     <BorderShadowControl
                                         controlName={IMAGE_BORDER_SHADOW}
-                                        // noShadow
-                                        // noBorder
+                                    // noShadow
+                                    // noBorder
                                     />
                                 </>
                             )}

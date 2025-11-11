@@ -227,6 +227,15 @@ export const handleSecondButtonOpenNewTab = (
 export const handleImageData = (key, value, id, images, setAttributes) => {
     let updatedImageArray = images.map((item) => {
         if (item.id == id) {
+            // Handle content link URL validation
+            if (key === 'contentLink') {
+                const validUrl = value.length > 0 && validURL(value);
+                return {
+                    ...item,
+                    [key]: value,
+                    isContentUrlValid: validUrl
+                };
+            }
             return { ...item, [key]: value };
         }
         return item;

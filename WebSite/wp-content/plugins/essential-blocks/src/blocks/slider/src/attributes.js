@@ -19,6 +19,7 @@ import {
     ARROW_SIZE,
     DOTS_SIZE,
     SLIDES_GAP,
+    SLIDER_BORDER_SHADOW,
 } from "./constants/constants";
 import {
     TITLE_TYPOGRAPHY,
@@ -370,6 +371,8 @@ const attributes = {
     ...generateResponsiveRangeAttributes(SLIDES_GAP, {
         defaultRange: 5,
     }),
+
+    ...generateBorderShadowAttributes(SLIDER_BORDER_SHADOW),
 };
 
 export default attributes;

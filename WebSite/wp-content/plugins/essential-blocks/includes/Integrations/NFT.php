@@ -95,21 +95,33 @@ class NFT extends ThirdPartyIntegration {
         wp_send_json_error( __( 'Something went wrong.', 'essential-blocks' ) );
     }
 
+    /**
+     * Get OpenSea API Key
+     * Only admins get real API key, editors get dummy data for preview
+     */
     public function get_api() {
         if ( ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
+
+        // Check if user has at least edit_posts capability
         if ( ! current_user_can( 'edit_posts' ) ) {
             wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
         }
 
-        $settings = get_option( 'eb_settings' );
+        // Only admins get the real API key
+        if ( current_user_can( 'manage_options' ) ) {
+            $settings = get_option( 'eb_settings' );
 
-        if ( is_array( $settings ) && isset( $settings['openseaApi'] ) ) {
-            wp_send_json_success( $settings['openseaApi'] );
+            if ( is_array( $settings ) && isset( $settings['openseaApi'] ) ) {
+                wp_send_json_success( $settings['openseaApi'] );
+            } else {
+                wp_send_json_error( "Couldn't found data" );
+            }
+        } else {
+            // Non-admin users with edit_posts capability get dummy API key for editor preview
+            wp_send_json_success( 'dummy_opensea_api_key_for_editor_preview' );
         }
-
-        wp_send_json_error( "Couldn't found data" );
     }
     public function save_api() {
         if ( ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {

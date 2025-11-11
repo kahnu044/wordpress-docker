@@ -16,11 +16,18 @@ import {
     boxBorder,
     wrapperBackgroundType,
     wrapperBorder,
+    listBackgroundType,
+    listBorderShadow,
+    listPadding,
+    badgePadding,
+    badgeBorder,
+    iconLiquidGlassShadowEffectBorder,
 } from "./constants";
 
 import {
     typoPrefix_title,
     typoPrefix_content,
+    typoPrefix_badge,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -31,7 +38,8 @@ import {
     generateTypographyStyles,
     generateResponsiveRangeStyles,
     StyleComponent,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
+import { applyFilters } from "@wordpress/hooks";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -58,6 +66,11 @@ export default function Style(props) {
         connectorColor,
         classHook,
         useInlineDesign,
+        iconLiquidGlass,
+        designItemBox,
+        badgeTextColor,
+        badgeBackgroundColor,
+        badgeGap
     } = attributes;
     /**
      * CSS/styling Codes Starts from Here
@@ -297,6 +310,84 @@ export default function Style(props) {
         controlName: wrapperBorder,
         attributes,
     });
+    const {
+        styesDesktop: iconLiquidGlassShadowEffectBorderStylesDesktop,
+        styesTab: iconLiquidGlassShadowEffectBorderStylesTab,
+        styesMobile: iconLiquidGlassShadowEffectBorderStylesMobile,
+    } = generateBorderShadowStyles({
+        controlName: iconLiquidGlassShadowEffectBorder,
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: listPaddingDesktop,
+        dimensionStylesTab: listPaddingTab,
+        dimensionStylesMobile: listPaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: listPadding,
+        styleFor: "padding",
+        attributes,
+    });
+
+    const {
+        backgroundStylesDesktop: listBackgroundStylesDesktop,
+        hoverBackgroundStylesDesktop: listHoverBackgroundStylesDesktop,
+        bgTransitionStyle: listBgTransitionStyle,
+        backgroundStylesTab: listBackgroundStylesTab,
+        hoverBackgroundStylesTab: listHoverBackgroundStylesTab,
+        backgroundStylesMobile: listBackgroundStylesMobile,
+        hoverBackgroundStylesMobile: listHoverBackgroundStylesMobile,
+    } = generateBackgroundControlStyles({
+        attributes,
+        controlName: listBackgroundType,
+        noOverlay: true,
+        noMainBgi: true,
+    });
+    const {
+        styesDesktop: listBorderShadowStyesDesktop,
+        styesTab: listBorderShadowStyesTab,
+        styesMobile: listBorderShadowStyesMobile,
+        stylesHoverDesktop: listBorderShadowStylesHoverDesktop,
+        stylesHoverTab: listBorderShadowStylesHoverTab,
+        stylesHoverMobile: listBorderShadowStylesHoverMobile,
+        transitionStyle: listBorderTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: listBorderShadow,
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: badgePaddingDesktop,
+        dimensionStylesTab: badgePaddingTab,
+        dimensionStylesMobile: badgePaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: badgePadding,
+        styleFor: "padding",
+        attributes,
+    });
+    // border & typo
+    const {
+        styesDesktop: badgeBorderStyesDesktop,
+        styesTab: badgeBorderStyesTab,
+        styesMobile: badgeBorderStyesMobile,
+        transitionStyle: badgeBorderTransitionStyle,
+        stylesHoverDesktop: badgeBorderStylesHoverDesktop,
+        stylesHoverTab: badgeBorderStylesHoverTab,
+        stylesHoverMobile: badgeBorderStylesHoverMobile,
+    } = generateBorderShadowStyles({
+        controlName: badgeBorder,
+        attributes,
+    });
+
+    const {
+        typoStylesDesktop: badgeTypoStylesDesktop,
+        typoStylesTab: badgeTypoStylesTab,
+        typoStylesMobile: badgeTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefix_badge,
+    });
+
 
     const connector1position = (iconSize, paddingLeft, PaddingRight) => {
         iconSize = parseInt(iconSize.replace(/\D/g, ""));
@@ -334,6 +425,26 @@ export default function Style(props) {
 			${wrpHoverOverlayStylesDesktop}
 		 }
 
+         ${designItemBox && !showConnector
+            ? `
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item {
+                ${listPaddingDesktop}
+                ${listBackgroundStylesDesktop}
+                ${listBorderShadowStyesDesktop}
+                transition: all 0.3s, ${listBorderTransitionStyle};
+            }
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:hover {
+                ${listHoverBackgroundStylesDesktop}
+                ${listBorderShadowStylesHoverDesktop}
+            }
+
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box{
+                display: flex;
+            }
+            `
+            : ""
+        }
+
 		 ${showContentVertical
             ? `
 		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item {
@@ -368,14 +479,14 @@ export default function Style(props) {
 			 color: ${iconGlobalColor};
 		 }
 
-		 ${!useInlineDesign
-            ? `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:last-child) {
-			padding-bottom: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);
-		}
+		 ${!useInlineDesign ?
+            `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:last-child) {
+			${showConnector ? `padding-bottom: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);` : `margin-bottom: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);`}
+            }
 
-		.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:first-child) {
-			padding-top: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);
-		}`
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:first-child) {
+                ${showConnector ? `padding-top: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);` : `margin-top: calc(${listSpaceDesktop.replace(/\D/g, "") / 2}px);`}
+            }`
             : ""
         }
 
@@ -429,7 +540,7 @@ export default function Style(props) {
 			 transition: ${(iconBgTransitionStyle, iconBorderTransitionStyle)};
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper:hover .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-item:hover .eb-feature-list-icon-box .eb-feature-list-icon-inner {
 			 ${iconHoverBackgroundStylesDesktop}
 			 ${shapeView === "framed" ? iconBorderStylesHoverDesktop : ""}
 		 }
@@ -463,12 +574,21 @@ export default function Style(props) {
 
 
 			.${blockId}.eb-feature-list-wrapper .eb-inline-feature-list li {
-				padding-right: ${listSpaceDesktop.replace(/\D/g, "")}px;
-				padding-bottom: ${rowSpaceDesktop.replace(/\D/g, "")}px;
+				margin-right: ${listSpaceDesktop.replace(/\D/g, "")}px;
+				margin-bottom: ${rowSpaceDesktop.replace(/\D/g, "")}px;
 			}
 		 `
             : ""
         }
+
+        .${blockId}.eb-feature-list-wrapper .eb-feature-list-badge {
+            color: ${badgeTextColor};
+            background-color: ${badgeBackgroundColor};
+            ${badgeTypoStylesDesktop}
+            ${badgeBorderStyesDesktop}
+            ${badgePaddingDesktop}
+            margin-left: ${badgeGap}px;
+		}
 	`;
 
     const tabStyles = `
@@ -491,6 +611,22 @@ export default function Style(props) {
 		 .${blockId}.eb-feature-list-wrapper:before:hover {
 			${wrpHoverOverlayStylesTab}
 		 }
+
+         ${designItemBox && !showConnector
+            ? `
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item {
+                ${listPaddingTab}
+                ${listBackgroundStylesTab}
+                ${listBorderShadowStyesTab}
+                transition: ${listBorderTransitionStyle};
+            }
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:hover {
+                ${listHoverBackgroundStylesTab}
+                ${listBorderShadowStylesHoverTab}
+            }
+            `
+            : ""
+        }
 
 		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-title {
 			 ${titleBottomMarginTab}
@@ -515,11 +651,11 @@ export default function Style(props) {
 
 		 ${!useInlineDesign
             ? `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:last-child) {
-			padding-bottom: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);
+            ${showConnector ? `padding-bottom: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);` : `margin-bottom: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);`}
 		}
 
 		.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:first-child) {
-			padding-top: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);
+            ${showConnector ? `padding-top: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);` : `margin-top: calc(${listSpaceTab.replace(/\D/g, "") / 2}px);`}
 		}`
             : ""
         }
@@ -575,8 +711,8 @@ export default function Style(props) {
 		 ${useInlineDesign
             ? `
 		.${blockId}.eb-feature-list-wrapper .eb-inline-feature-list li {
-			padding-right: ${listSpaceTab.replace(/\D/g, "")}px;
-			padding-bottom: ${rowSpaceTab.replace(/\D/g, "")}px;
+			margin-right: ${listSpaceTab.replace(/\D/g, "")}px;
+			margin-bottom: ${rowSpaceTab.replace(/\D/g, "")}px;
 		}
 	 `
             : ""
@@ -604,6 +740,22 @@ export default function Style(props) {
 			${wrpHoverOverlayStylesMobile}
 		 }
 
+         ${designItemBox && !showConnector
+            ? `
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item {
+                ${listPaddingMobile}
+                ${listBackgroundStylesMobile}
+                ${listBorderShadowStyesMobile}
+                transition: ${listBorderTransitionStyle};
+            }
+            .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:hover {
+                ${listHoverBackgroundStylesMobile}
+                ${listBorderShadowStylesHoverMobile}
+            }
+            `
+            : ""
+        }
+
 		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-title {
 			 ${titleBottomMarginMobile}
 		 }
@@ -627,11 +779,11 @@ export default function Style(props) {
 
 		 ${!useInlineDesign
             ? `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:last-child) {
-			padding-bottom: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);
+            ${showConnector ? `padding-bottom: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);` : `margin-bottom: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);`}
 		}
 
 		.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item:not(:first-child) {
-			padding-top: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);
+            ${showConnector ? `padding-top: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);` : `margin-top: calc(${listSpaceMobile.replace(/\D/g, "") / 2}px);`}
 		}`
             : ""
         }
@@ -686,17 +838,41 @@ export default function Style(props) {
 		 ${useInlineDesign
             ? `
             .${blockId}.eb-feature-list-wrapper .eb-inline-feature-list li {
-                padding-right: ${listSpaceMobile.replace(/\D/g, "")}px;
-                padding-bottom: ${rowSpaceMobile.replace(/\D/g, "")}px;
+                margin-right: ${listSpaceMobile.replace(/\D/g, "")}px;
+                margin-bottom: ${rowSpaceMobile.replace(/\D/g, "")}px;
             }
             `
             : ""
         }
 	 `;
 
+    const liquidGlassBasicStyles = `
+        ${iconLiquidGlass.enable ? `
+         .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner.eb_liquid_glass_shadow-${iconLiquidGlass.shadowEffect} {
+             ${iconLiquidGlassShadowEffectBorderStylesDesktop}
+         }
+        .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner.eb_liquid_glass-${iconLiquidGlass.effect}{
+             background-color: ${iconLiquidGlass.backgroundColor};
+             ${iconLiquidGlass.effect === "effect1" ||
+                iconLiquidGlass.effect === "effect2"
+                ? `backdrop-filter: blur(${iconLiquidGlass.backdropFilter}px)${iconLiquidGlass.effect === "effect2"
+                    ? ` brightness(${iconLiquidGlass.brightness})`
+                    : ""
+                };`
+                : ""
+            }
+         }
+        ` : ""}
+    `;
+
+    // Apply filter for pro liquid glass styles
+    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "iconLiquidGlass", `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner`);
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		   ${desktopStyles}
+		   ${liquidGlassBasicStyles}
+		   ${liquidGlassProStyles}
 	   `);
 
     // all css styles for Tab in strings ⬇

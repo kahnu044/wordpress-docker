@@ -14,7 +14,7 @@ import {
 import Inspector from "./inspector";
 import Style from "./style";
 import { PricingTableIcon } from "./icon";
-import { Templates } from './templates/templates'
+import Templates from '../../../../patterns/pricing-table.json'
 import defaultAttributes from "./attributes"
 import {
     DynamicInputValueHandler,

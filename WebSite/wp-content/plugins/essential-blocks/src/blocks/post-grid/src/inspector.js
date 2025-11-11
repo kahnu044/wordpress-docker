@@ -38,7 +38,9 @@ import {
     THUMBNAIL_IMAGE_SIZE,
     THUMBNAIL_BORDER_RADIUS,
     THUMBNAIL_MARGIN,
+    TITLE_PADDING,
     TITLE_MARGIN,
+    TITLE_BORDER_SHADOW,
     CONTENT_MARGIN,
     READMORE_MARGIN,
     READMORE_PADDING,
@@ -212,8 +214,8 @@ function Inspector(props) {
                     ...item,
                     options: item.options.map(option => {
                         if (typeof option.label === "object") {
-                            const prefix = EssentialBlocksProLocalize?.eb_dynamic_tags 
-                                ? `${EssentialBlocksProLocalize.eb_dynamic_tags}/` 
+                            const prefix = EssentialBlocksProLocalize?.eb_dynamic_tags
+                                ? `${EssentialBlocksProLocalize.eb_dynamic_tags}/`
                                 : "";
                             return {
                                 ...option.label,
@@ -572,6 +574,7 @@ function Inspector(props) {
                                             readmoreText: text,
                                         })
                                     }
+                                    enableAi={true}
                                 />
                                 <InspectorPanel.PanelBody title={__("Icon", "essential-blocks")} initialOpen={false}>
                                     <ToggleControl
@@ -850,6 +853,34 @@ function Inspector(props) {
 
                     {showTitle && (
                         <InspectorPanel.PanelBody title={__("Title", "essential-blocks")} initialOpen={false}>
+                            <TypographyDropdown
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={EBPG_TITLE_TYPOGRAPHY}
+                            />
+                            <BaseControl
+                                label={__("Alignment", "essential-blocks")}
+                                id="essential-blocks"
+                            >
+                                <ButtonGroup id="essential-blocks">
+                                    {TEXT_ALIGN.map((item, index) => (
+                                        <Button
+                                            key={index}
+                                            // isLarge
+                                            isPrimary={titleTextAlign === item.value}
+                                            isSecondary={titleTextAlign !== item.value}
+                                            onClick={() =>
+                                                setAttributes({
+                                                    titleTextAlign: item.value,
+                                                })
+                                            }
+                                        >
+                                            {item.label}
+                                        </Button>
+                                    )
+                                    )}
+                                </ButtonGroup>
+                            </BaseControl>
+
                             <ButtonGroup className="eb-inspector-btn-group">
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button
@@ -883,38 +914,24 @@ function Inspector(props) {
                                     attributeName={'titleHoverColor'}
                                 />
                             )}
-                            <BaseControl
-                                label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
-                            >
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={titleTextAlign === item.value}
-                                            isSecondary={titleTextAlign !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    titleTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
 
-                            <TypographyDropdown
-                                baseLabel={__("Typography", "essential-blocks")}
-                                typographyPrefixConstant={EBPG_TITLE_TYPOGRAPHY}
+                            <ResponsiveDimensionsControl
+                                controlName={TITLE_PADDING}
+                                baseLabel="Padding"
                             />
+
                             <ResponsiveDimensionsControl
                                 controlName={TITLE_MARGIN}
                                 baseLabel="Margin"
                             />
+
+                            <InspectorPanel.PanelBody title={__("Border & Shadow")} initialOpen={false}>
+                                <BorderShadowControl
+                                    controlName={TITLE_BORDER_SHADOW}
+                                // noShadow
+                                // noBorder
+                                />
+                            </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>
                     )}
 
@@ -1468,115 +1485,113 @@ function Inspector(props) {
 
                     {showTaxonomyFilter && (
                         <InspectorPanel.PanelBody title={__("Taxonomy Filter Style")} initialOpen={false}>
-                            <InspectorPanel.PanelBody>
-                                <ButtonGroup className="eb-inspector-btn-group">
-                                    {NORMAL_HOVER.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={filterColorStyle === item.value}
-                                            isSecondary={filterColorStyle !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    filterColorStyle: item.value,
-                                                })
+                            <ButtonGroup className="eb-inspector-btn-group">
+                                {NORMAL_HOVER.map((item, index) => (
+                                    <Button
+                                        key={index}
+                                        // isLarge
+                                        isPrimary={filterColorStyle === item.value}
+                                        isSecondary={filterColorStyle !== item.value}
+                                        onClick={() =>
+                                            setAttributes({
+                                                filterColorStyle: item.value,
+                                            })
+                                        }
+                                    >
+                                        {item.label}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                            {filterColorStyle ===
+                                "normal" && (
+                                    <>
+                                        <ColorControl
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterBgColor
                                             }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                                {filterColorStyle ===
-                                    "normal" && (
-                                        <>
-                                            <ColorControl
-                                                label={__(
-                                                    "Background Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterBgColor
-                                                }
-                                                attributeName={'filterBgColor'}
-                                            />
-                                            <ColorControl
-                                                label={__(
-                                                    "Text Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterTextColor
-                                                }
-                                                attributeName={'filterTextColor'}
-                                            />
-                                            <ColorControl
-                                                label={__(
-                                                    "Active Background Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterActiveBgColor
-                                                }
-                                                attributeName={'filterActiveBgColor'}
-                                            />
-                                            <ColorControl
-                                                label={__(
-                                                    "Active Text Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterActiveTextColor
-                                                }
-                                                attributeName={'filterActiveTextColor'}
-                                            />
-                                        </>
-                                    )}
-                                {filterColorStyle ===
-                                    "hover" && (
-                                        <>
-                                            <ColorControl
-                                                label={__(
-                                                    "Hover Background Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterHoverBgColor
-                                                }
-                                                attributeName={'filterHoverBgColor'}
-                                            />
-                                            <ColorControl
-                                                label={__(
-                                                    "Hover Text Color",
-                                                    "essential-blocks"
-                                                )}
-                                                color={
-                                                    filterHoverTextColor
-                                                }
-                                                attributeName={'filterHoverTextColor'}
-                                            />
-                                        </>
-                                    )}
-                                <ResponsiveRangeController
-                                    baseLabel={__("Items Gap", "essential-blocks")}
-                                    controlName={FILTER_ITEM_GAP}
-                                    units={UNIT_TYPES}
-                                    min={1}
-                                    max={100}
-                                    step={1}
-                                />
-                                <TypographyDropdown
-                                    baseLabel={__("Items Typography", "essential-blocks")}
-                                    typographyPrefixConstant={FILTER_ITEM_TYPOGRAPHY}
-                                />
-                                <ResponsiveDimensionsControl
-                                    controlName={FILTER_MARGIN}
-                                    baseLabel="Filter Wrapper Margin"
-                                />
-                                <ResponsiveDimensionsControl
-                                    controlName={FILTER_ITEM_PADDING}
-                                    baseLabel="Items Padding"
-                                />
-                            </InspectorPanel.PanelBody>
+                                            attributeName={'filterBgColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Text Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterTextColor
+                                            }
+                                            attributeName={'filterTextColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Active Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterActiveBgColor
+                                            }
+                                            attributeName={'filterActiveBgColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Active Text Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterActiveTextColor
+                                            }
+                                            attributeName={'filterActiveTextColor'}
+                                        />
+                                    </>
+                                )}
+                            {filterColorStyle ===
+                                "hover" && (
+                                    <>
+                                        <ColorControl
+                                            label={__(
+                                                "Hover Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterHoverBgColor
+                                            }
+                                            attributeName={'filterHoverBgColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Hover Text Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                filterHoverTextColor
+                                            }
+                                            attributeName={'filterHoverTextColor'}
+                                        />
+                                    </>
+                                )}
+                            <ResponsiveRangeController
+                                baseLabel={__("Items Gap", "essential-blocks")}
+                                controlName={FILTER_ITEM_GAP}
+                                units={UNIT_TYPES}
+                                min={1}
+                                max={100}
+                                step={1}
+                            />
+                            <TypographyDropdown
+                                baseLabel={__("Items Typography", "essential-blocks")}
+                                typographyPrefixConstant={FILTER_ITEM_TYPOGRAPHY}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FILTER_MARGIN}
+                                baseLabel="Filter Wrapper Margin"
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FILTER_ITEM_PADDING}
+                                baseLabel="Items Padding"
+                            />
                             <InspectorPanel.PanelBody title={__("Items Border")} initialOpen={false}>
                                 <BorderShadowControl
                                     controlName={FILTER_ITEM_BORDER_SHADOW}
@@ -1607,7 +1622,7 @@ export default withSelect((select, ownProps) => {
 
     if (showTaxonomyFilter) {
         //Get Taxonomies by post type
-        const postTypes = select("core").getPostTypes();
+        const postTypes = select("core").getPostTypes({ per_page: -1 });
 
         //Get Terms
         const selectedTax = selectedTaxonomy ? JSON.parse(selectedTaxonomy).value : "category";

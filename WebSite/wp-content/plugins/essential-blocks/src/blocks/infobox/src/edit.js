@@ -36,7 +36,23 @@ function Edit(props) {
         contentsAlignment,
         mediaAlignment,
         btnAlign,
+        version,
+        imageUrl,
+        imageUrlOld,
+        imageAlt,
+        imageAltOld
     } = attributes;
+
+    // Handle imageUrlOld fallback logic
+    const finalImageUrl = imageUrlOld || imageUrl;
+    const finalImageAlt = imageAltOld || imageAlt;
+
+    // Create updated attributes object with fallback values
+    const updatedAttributes = {
+        ...attributes,
+        imageUrl: finalImageUrl,
+        imageAlt: finalImageAlt,
+    };
 
     // you must declare this variable
     const enhancedProps = {
@@ -77,21 +93,29 @@ function Edit(props) {
             setAttributes({ btnAlign: 'center' });
         }
 
+        if (!version || version == "1") {
+            setAttributes({ version: "2" });
+        }
+
+        // Handle imageUrlOld migration
+        if (imageUrlOld && (!imageUrl || imageUrl === '')) {
+            setAttributes({ imageUrl: imageUrlOld });
+        }
+
     }, [])
 
     return (
         <>
             {isSelected && (
                 <Inspector
-                    attributes={attributes}
+                    attributes={updatedAttributes}
                     setAttributes={setAttributes}
                 />
             )}
             <BlockProps.Edit {...enhancedProps}>
-
                 <InfoboxContainer
                     setAttributes={setAttributes}
-                    attributes={attributes}
+                    attributes={updatedAttributes}
                 />
             </BlockProps.Edit>
         </>

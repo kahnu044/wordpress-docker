@@ -3,6 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, memo } from "@wordpress/element";
+import { applyFilters } from "@wordpress/hooks";
 /**
  * Internal dependencies
  */
@@ -31,6 +32,7 @@ const Edit = (props) => {
         connectorStyle,
         classHook,
         useInlineDesign,
+        iconLiquidGlass
     } = attributes;
 
     // const setAttributes = useBlockSetAttributes();
@@ -54,6 +56,8 @@ const Edit = (props) => {
     const inlineDesignClass = useInlineDesign ? " eb-inline-feature-list" : "";
 
     let iconStyle = {};
+
+    let badgeStyle = {};
 
     return (
         <>
@@ -86,6 +90,10 @@ const Edit = (props) => {
                                         content,
                                         link,
                                         linkOpenNewTab,
+                                        showBadge,
+                                        badgeText,
+                                        badgeBackgroundColor,
+                                        badgeTextColor,
                                     },
                                     index
                                 ) => {
@@ -93,6 +101,11 @@ const Edit = (props) => {
                                         iconStyle = {
                                             color: iconColor,
                                             backgroundColor: iconBackgroundColor,
+                                        };
+
+                                        badgeStyle = {
+                                            color: badgeTextColor,
+                                            backgroundColor: badgeBackgroundColor,
                                         };
                                     }
                                     return (
@@ -111,10 +124,15 @@ const Edit = (props) => {
                                             data-icon-color={iconColor}
                                             data-icon-background-color={iconBackgroundColor}
                                             data-link={link}
+                                            data-show-badge={showBadge ? showBadge.toString() : "false"}
+                                            data-badge-text={badgeText}
+                                            data-badge-text-color={badgeTextColor}
+                                            data-badge-background-color={badgeBackgroundColor}
                                         >
                                             {iconType !== "none" && (
                                                 <div className="eb-feature-list-icon-box">
-                                                    <div className="eb-feature-list-icon-inner">
+                                                    <div className={`eb-feature-list-icon-inner ${iconLiquidGlass.enable ? 'eb_liquid_glass-' + iconLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + iconLiquidGlass.shadowEffect : ''}`}>
+                                                        {applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "iconLiquidGlass")}
                                                         <span
                                                             className="eb-feature-list-icon"
                                                             style={iconStyle}
@@ -137,15 +155,22 @@ const Edit = (props) => {
                                             )}
 
                                             <div className="eb-feature-list-content-box">
-                                                {link ? (
-                                                    <attributes.titleTag className="eb-feature-list-title">
-                                                        <a href={sanitizeURL(link)}>{title}</a>
-                                                    </attributes.titleTag>
-                                                ) : (
-                                                    <attributes.titleTag className="eb-feature-list-title">
-                                                        {title}
-                                                    </attributes.titleTag>
-                                                )}
+                                                <div className="eb-feature-list-title-wrapper">
+                                                    {link ? (
+                                                        <attributes.titleTag className="eb-feature-list-title">
+                                                            <a href={sanitizeURL(link)}>{title}</a>
+                                                        </attributes.titleTag>
+                                                    ) : (
+                                                        <attributes.titleTag className="eb-feature-list-title">
+                                                            {title}
+                                                        </attributes.titleTag>
+                                                    )}
+                                                    {showBadge == "true" && badgeText && (
+                                                        <span className="eb-feature-list-badge" style={badgeStyle}>
+                                                            {badgeText}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 {!useInlineDesign && (
                                                     <p className="eb-feature-list-content">{content}</p>
                                                 )}

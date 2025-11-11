@@ -1,4 +1,5 @@
 import { useState } from "@wordpress/element";
+import { applyFilters } from "@wordpress/hooks";
 import {
     DEFAULT_BACKGROUND,
     DEFAULT_ACTIVE_BG,
@@ -12,7 +13,7 @@ import {
 } from "./constants/rangeNames";
 
 import { WrpBgConst } from "./constants/backgroundsConstants";
-import { WrpBdShadowConst } from "./constants/borderShadowConstants";
+import { WrpBdShadowConst, switchLiquidGlassShadowEffectBorder } from "./constants/borderShadowConstants";
 
 import {
     typoPrefix_tgl,
@@ -72,6 +73,7 @@ export default function Style(props) {
         [`${typoPrefix_tgl}SizeUnit`]: sizeUnit,
         backgroundColorSecondary,
         controllerColorSecondary,
+        switchLiquidGlass,
     } = attributes;
 
     const [isPrimary, setPrimary] = useState(
@@ -220,6 +222,40 @@ export default function Style(props) {
     });
 
     // styles related to generateBorderShadowStyles End
+
+    // styles related to liquid glass border shadow styles start ⬇
+    const {
+        styesDesktop: switchLiquidGlassShadowEffectBorderStylesDesktop,
+        styesTab: switchLiquidGlassShadowEffectBorderStylesTab,
+        styesMobile: switchLiquidGlassShadowEffectBorderStylesMobile,
+    } = generateBorderShadowStyles({
+        controlName: switchLiquidGlassShadowEffectBorder,
+        attributes,
+        noShadow: true,
+    });
+    // styles related to liquid glass border shadow styles End
+
+    const liquidGlassBasicStyles = `
+        ${switchLiquidGlass.enable ? `
+         .${blockId}.eb-toggle-wrapper .eb-toggle-slider.eb_liquid_glass_shadow-${switchLiquidGlass.shadowEffect} {
+             ${switchLiquidGlassShadowEffectBorderStylesDesktop}
+         }
+        .${blockId}.eb-toggle-wrapper .eb-toggle-slider.eb_liquid_glass-${switchLiquidGlass.effect}{
+             background-color: ${switchLiquidGlass.backgroundColor};
+             ${switchLiquidGlass.effect === "effect1" ||
+                switchLiquidGlass.effect === "effect2"
+                ? `backdrop-filter: blur(${switchLiquidGlass.backdropFilter}px)${switchLiquidGlass.effect === "effect2"
+                    ? ` brightness(${switchLiquidGlass.brightness})`
+                    : ""
+                };`
+                : ""
+            }
+         }
+        ` : ""}
+    `;
+
+    // Apply filter for pro liquid glass styles
+    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "switchLiquidGlass", `.${blockId}.eb-toggle-wrapper .eb-toggle-slider`);
 
     const wrapperStylesDesktop = `
 	.${blockId}.eb-toggle-wrapper{
@@ -434,7 +470,8 @@ export default function Style(props) {
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
-
+		${liquidGlassBasicStyles}
+        ${liquidGlassProStyles}
 
 	`);
 

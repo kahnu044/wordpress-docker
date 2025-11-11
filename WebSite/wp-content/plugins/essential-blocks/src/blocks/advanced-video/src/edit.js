@@ -97,7 +97,10 @@ const Edit = (props) => {
                                         }}
                                         className="eb-react-player"
                                         width="100%"
-                                        height="100%"
+                                        height="auto"
+                                        style={{
+                                            aspectRatio: '16/9',
+                                        }}
                                     />
                                 </div>
                             </div>

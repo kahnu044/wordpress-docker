@@ -643,7 +643,7 @@ const slideDown = (target, duration = 500, callback = null) => {
     setTimeout(function () {
         target.style.display = display;
     }, duration + 1);
-    let height = target.offsetHeight;
+    let height = getHiddenElementHeight(target);
     target.style.overflow = "hidden";
     target.style.height = 0;
     target.style.paddingTop = 0;
@@ -679,6 +679,27 @@ const slideToggle = (target, duration = 500) => {
         return slideUp(target, duration);
     }
 };
+
+function getHiddenElementHeight(el) {
+  // Save original styles
+  const originalDisplay = el.style.display;
+  const originalVisibility = el.style.visibility;
+  const originalPosition = el.style.position;
+
+  // Apply temporary styles
+  el.style.display = 'block';
+  el.style.visibility = 'hidden';
+  el.style.position = 'absolute';
+
+  const height = el.offsetHeight;
+
+  // Revert original styles
+  el.style.display = originalDisplay;
+  el.style.visibility = originalVisibility;
+  el.style.position = originalPosition;
+
+  return height;
+}
 
 // Helper function to get the accordion directly above the clicked one
 function findOpenAccordionAbove(clickedTab) {

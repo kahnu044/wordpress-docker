@@ -4,7 +4,6 @@
 import { __ } from "@wordpress/i18n";
 import { useCallback, useEffect, useState } from "@wordpress/element";
 import { select, dispatch, useSelect } from "@wordpress/data";
-import { MediaUpload } from "@wordpress/block-editor";
 const { times } = lodash;
 import {
     PanelBody,
@@ -43,6 +42,7 @@ import {
     SortControl,
     DynamicInputControl,
     ImageAvatar,
+    ImageComponent
 } from "@essential-blocks/controls";
 import { deleteAccordion } from "./helpers";
 
@@ -138,15 +138,27 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
     // Add this state at the top with other states
     const [activeSettingsId, setActiveSettingsId] = useState(null);
 
-    // Add this useEffect to listen for changes
+    // Convert activeAccordionIndex (itemId) to SortControl position-based ID
     useEffect(() => {
-        if (activeAccordionIndex) {
-            setActiveSettingsId(activeAccordionIndex);
+        if (activeAccordionIndex && accordionLists.length > 0) {
+            // Find the position of the item with the given itemId
+            const itemIndex = accordionLists.findIndex(item => item.id === activeAccordionIndex);
+            if (itemIndex !== -1) {
+                // SortControl uses 1-based indexing
+                setActiveSettingsId(itemIndex + 1);
+            } else {
+                // If the item doesn't exist, clear the active settings
+                setActiveSettingsId(null);
+            }
+        } else {
+            setActiveSettingsId(null);
         }
-    }, [activeAccordionIndex]);
+    }, [activeAccordionIndex, accordionLists]);
 
     const addNewTab = () => {
         addAccordion();
+        // The addAccordion function in edit.js will set the activeAccordionIndex
+        // to the new item's ID, so we don't need to do anything here
     };
 
     const getAccordionsComponents = () => {
@@ -298,53 +310,27 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                     </>
                                 )}
 
-                            {each.titlePrefixType === "image" &&
-                                !each.titlePrefixImgUrl && (
-                                    <MediaUpload
-                                        onSelect={({ id, url, alt }) => {
-                                            onAccordionChange(
-                                                [
-                                                    "titlePrefixImgUrl",
-                                                    "titlePrefixImgId",
-                                                    "titlePrefixImgAlt",
-                                                ],
-                                                [url, id, alt],
-                                                i,
-                                            );
-                                        }}
-                                        type="image"
-                                        value={each.titlePrefixImgId}
-                                        render={({ open }) => {
-                                            return (
-                                                <Button
-                                                    className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks",
-                                                    )}
-                                                    icon="format-image"
-                                                    onClick={open}
-                                                />
-                                            );
-                                        }}
-                                    />
-                                )}
-
-                            {each.titlePrefixType === "image" &&
-                                each.titlePrefixImgUrl && (
-                                    <>
-                                        <ImageAvatar
-                                            imageUrl={each.titlePrefixImgUrl}
-                                            onDeleteImage={() =>
-                                                onAccordionChange(
-                                                    "titlePrefixImgUrl",
-                                                    null,
-                                                    i,
-                                                )
-                                            }
-                                        />
-                                    </>
-                                )}
+                            {each.titlePrefixType === "image" && (
+                                <ImageComponent.GeneralTab
+                                    onSelect={({ id, url, alt }) => {
+                                        onAccordionChange(
+                                            [
+                                                "titlePrefixImgUrl",
+                                                "titlePrefixImgId",
+                                                "titlePrefixImgAlt",
+                                            ],
+                                            [url, id, alt],
+                                            i,
+                                        );
+                                    }}
+                                    value={each.titlePrefixImgUrl}
+                                    hasTag={false}
+                                    hasCaption={false}
+                                    hasStyle={false}
+                                    hasLink={false}
+                                    showInPanel={false}
+                                />
+                            )}
                         </>
                     )}
                     <hr />
@@ -444,53 +430,27 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                     </>
                                 )}
 
-                            {each.titleSuffixType === "image" &&
-                                !each.titleSuffixImgUrl && (
-                                    <MediaUpload
-                                        onSelect={({ id, url, alt }) => {
-                                            onAccordionChange(
-                                                [
-                                                    "titleSuffixImgUrl",
-                                                    "titleSuffixImgId",
-                                                    "titleSuffixImgAlt",
-                                                ],
-                                                [url, id, alt],
-                                                i,
-                                            );
-                                        }}
-                                        type="image"
-                                        value={each.titleSuffixImgId}
-                                        render={({ open }) => {
-                                            return (
-                                                <Button
-                                                    className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks",
-                                                    )}
-                                                    icon="format-image"
-                                                    onClick={open}
-                                                />
-                                            );
-                                        }}
-                                    />
-                                )}
-
-                            {each.titleSuffixType === "image" &&
-                                each.titleSuffixImgUrl && (
-                                    <>
-                                        <ImageAvatar
-                                            imageUrl={each.titleSuffixImgUrl}
-                                            onDeleteImage={() =>
-                                                onAccordionChange(
-                                                    "titleSuffixImgUrl",
-                                                    null,
-                                                    i,
-                                                )
-                                            }
-                                        />
-                                    </>
-                                )}
+                            {each.titleSuffixType === "image" && (
+                                <ImageComponent.GeneralTab
+                                    onSelect={({ id, url, alt }) => {
+                                        onAccordionChange(
+                                            [
+                                                "titleSuffixImgUrl",
+                                                "titleSuffixImgId",
+                                                "titleSuffixImgAlt",
+                                            ],
+                                            [url, id, alt],
+                                            i,
+                                        );
+                                    }}
+                                    value={each.titleSuffixImgUrl}
+                                    hasTag={false}
+                                    hasCaption={false}
+                                    hasStyle={false}
+                                    hasLink={false}
+                                    showInPanel={false}
+                                />
+                            )}
                         </>
                     )}
                     {accordionType === "image" && (
@@ -498,52 +458,25 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             <PanelRow>
                                 {__("Accordion Image", "essential-blocks")}
                             </PanelRow>
-                            {!each.imageUrl && (
-                                <>
-                                    <MediaUpload
-                                        onSelect={({ id, url, alt }) => {
-                                            onAccordionChange(
-                                                [
-                                                    "imageUrl",
-                                                    "imageId",
-                                                    "imageAlt",
-                                                ],
-                                                [url, id, alt],
-                                                i,
-                                            );
-                                        }}
-                                        type="image"
-                                        value={each.imageId}
-                                        render={({ open }) => {
-                                            return (
-                                                <Button
-                                                    className="eb-background-control-inspector-panel-img-btn components-button"
-                                                    label={__(
-                                                        "Upload Image",
-                                                        "essential-blocks",
-                                                    )}
-                                                    icon="format-image"
-                                                    onClick={open}
-                                                />
-                                            );
-                                        }}
-                                    />
-                                </>
-                            )}
-                            {each.imageUrl && (
-                                <>
-                                    <ImageAvatar
-                                        imageUrl={each.imageUrl}
-                                        onDeleteImage={() =>
-                                            onAccordionChange(
-                                                "imageUrl",
-                                                null,
-                                                i,
-                                            )
-                                        }
-                                    />
-                                </>
-                            )}
+                            <ImageComponent.GeneralTab
+                                onSelect={({ id, url, alt }) => {
+                                    onAccordionChange(
+                                        [
+                                            "imageUrl",
+                                            "imageId",
+                                            "imageAlt",
+                                        ],
+                                        [url, id, alt],
+                                        i,
+                                    );
+                                }}
+                                value={each.imageUrl}
+                                hasTag={false}
+                                hasCaption={false}
+                                hasStyle={false}
+                                hasLink={false}
+                                showInPanel={false}
+                            />
                         </>
                     )}
 
@@ -600,7 +533,11 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
 
     const onDeleteAccordion = (index) => {
         deleteAccordion(clientId, setAttributes, accordionLists, index);
-        setActiveAccordionIndex(accordionLists[0]?.itemId);
+        // After deletion, set active to the first remaining item or null
+        const remainingItems = accordionLists.filter((_, i) => i !== index);
+        setAttributes({
+            activeAccordionIndex: remainingItems.length > 0 ? remainingItems[0]?.id : null
+        });
     };
     return (
         <InspectorPanel

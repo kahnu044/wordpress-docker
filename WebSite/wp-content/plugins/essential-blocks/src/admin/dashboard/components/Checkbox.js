@@ -11,9 +11,7 @@ import { IconDemo } from "../icons/blocks/icon-demo";
 import { IconTemplate } from "../icons/blocks/icon-template";
 
 //helper functions
-import {
-    saveEBSettingsData
-} from "@essential-blocks/controls";
+import { saveEBSettingsData } from "@essential-blocks/controls";
 import EBLoader from "./Loader";
 // import EBSaveConfirm from "./save-confirm"
 
@@ -24,25 +22,20 @@ import EBLoader from "./Loader";
  */
 const sortObject = (unordered) => {
     if (Object.keys(unordered).length === 0) {
-        return unordered
+        return unordered;
     }
-    const ordered = Object.keys(unordered).sort().reduce(
-        (obj, key) => {
+    const ordered = Object.keys(unordered)
+        .sort()
+        .reduce((obj, key) => {
             obj[key] = unordered[key];
             return obj;
-        },
-        {}
-    );
-    return ordered
-}
+        }, {});
+    return ordered;
+};
 
 export default function Checkbox() {
-    const {
-        all_blocks,
-        all_blocks_default,
-        is_pro_active,
-        upgrade_pro_url
-    } = EssentialBlocksLocalize;
+    const { all_blocks, all_blocks_default, is_pro_active, upgrade_pro_url } =
+        EssentialBlocksLocalize;
     const [blocks, setBlocks] = useState(sortObject(all_blocks));
     const [groupBlocks, setGroupBlocks] = useState({});
     const [enableDisable, setEnableDisable] = useState(false);
@@ -78,7 +71,7 @@ export default function Checkbox() {
             // Add the item to the corresponding category
             groupedData[category] = {
                 ...groupedData[category],
-                [item.value]: item
+                [item.value]: item,
             };
         }
 
@@ -100,7 +93,7 @@ export default function Checkbox() {
             Object.keys(newblocks).map(
                 (block) =>
                     newblocks[block].value === blockName &&
-                    (newblocks[block].visibility = String(checked))
+                    (newblocks[block].visibility = String(checked)),
             );
 
             //Save to EB Settings
@@ -137,7 +130,7 @@ export default function Checkbox() {
                         message: "",
                     });
                 }, [1500]);
-            }
+            },
         );
     };
 
@@ -147,17 +140,12 @@ export default function Checkbox() {
         let newblocks = { ...blocks };
 
         if (checked) {
-            Object.keys(newblocks).map((block) => {
-                if (is_pro_active === 'false' && newblocks[block].is_pro) {
-                    newblocks[block].visibility = "false"
-                }
-                else {
-                    newblocks[block].visibility = "true"
-                }
-            });
+            Object.keys(newblocks).map(
+                (block) => (newblocks[block].visibility = "true"),
+            );
         } else {
             Object.keys(newblocks).map(
-                (block) => (newblocks[block].visibility = "false")
+                (block) => (newblocks[block].visibility = "false"),
             );
         }
 
@@ -169,15 +157,15 @@ export default function Checkbox() {
         setShowModal(false);
     };
     const groupNames = {
-        content: 'Content Blocks',
-        creative: 'Creative Blocks',
-        dynamic: 'Dynamic Blocks',
-        form: 'Form Blocks',
-        marketing: 'Marketing Blocks',
-        social: 'Social Blocks',
-        woocommerce: 'WooCommerce Blocks',
-        layout: 'Layout Blocks',
-    }
+        content: "Content Blocks",
+        creative: "Creative Blocks",
+        dynamic: "Dynamic Blocks",
+        form: "Form Blocks",
+        marketing: "Marketing Blocks",
+        social: "Social Blocks",
+        woocommerce: "WooCommerce Blocks",
+        layout: "Layout Blocks",
+    };
 
     return (
         <>
@@ -189,7 +177,7 @@ export default function Checkbox() {
                             <p>
                                 {__(
                                     "Use the toggle button to activate or deactivate all the blocks of Essential Blocks at once.",
-                                    "essential-blocks"
+                                    "essential-blocks",
                                 )}
                             </p>
                         </div>
@@ -277,9 +265,17 @@ export default function Checkbox() {
                                     />
                                 </svg>
                             </div>
-                            <h4>{__("Unlock the PRO Features", "essential-blocks")}</h4>
+                            <h4>
+                                {__(
+                                    "Unlock the PRO Features",
+                                    "essential-blocks",
+                                )}
+                            </h4>
                             <p>
-                                {__("Upgrade to Essential Blocks PRO and gain access to advanced blocks and features to build websites more efficiently.", "essential-blocks")}
+                                {__(
+                                    "Upgrade to Essential Blocks PRO and gain access to advanced blocks and features to build websites more efficiently.",
+                                    "essential-blocks",
+                                )}
                             </p>
                             <a
                                 className="eb-btn eb-btn-primary eb-btn-md"
@@ -294,87 +290,183 @@ export default function Checkbox() {
                 </>
             )}
             <div className="eb-admin-checkboxes-group-wrapper">
-
                 {Object.keys(groupBlocks).map((group, index) => (
-                    <div key={index}>
-                        <div className="eb-col-12 eb-group-title-wrapper">
-                            {groupNames[group] && (
-                                <h2 className="eb-block-group-title">{groupNames[group]}</h2>
-                            )}
-                        </div>
-                        <div className="eb-admin-checkboxes-wrapper eb-admin-grid">
-                            {groupBlocks[group] && Object.keys(groupBlocks[group]).length > 0 && Object.keys(groupBlocks[group]).map((block, index) => (
-                                <>
-                                    <div
-                                        key={index}
-                                        className={`eb-col-4 eb-admin-checkbox eb-block-box ${all_blocks_default[block]?.hasOwnProperty("status")
-                                            ? "eb-block-label " +
-                                            all_blocks_default[block].status
-                                            : ""
-                                            } ${all_blocks_default[block]?.is_pro ? "pro" : ""}`}
-                                    >
-                                        <div className="block-title">
-                                            <img
-                                                src={all_blocks_default[block]?.icon}
-                                                className="block-icon"
-                                            />
-                                            <h4>{all_blocks_default[block]?.label}</h4>
-                                        </div>
+                    <>
+                        {group != "undefined" && (
+                            <div key={index}>
+                                <div className="eb-col-12 eb-group-title-wrapper">
+                                    {groupNames[group] && (
+                                        <h2 className="eb-block-group-title">
+                                            {groupNames[group]}
+                                        </h2>
+                                    )}
+                                </div>
+                                <div className="eb-admin-checkboxes-wrapper eb-admin-grid">
+                                    {groupBlocks[group] &&
+                                        Object.keys(groupBlocks[group]).length >
+                                            0 &&
+                                        Object.keys(groupBlocks[group]).map(
+                                            (block, index) => {
+                                                // Check if block should be shown in admin
+                                                const shouldShowInAdmin =
+                                                    !all_blocks_default[
+                                                        block
+                                                    ] ||
+                                                    all_blocks_default[block]
+                                                        .show_in_admin !==
+                                                        false;
 
-                                        <div className="block-content">
-                                            <a
-                                                target="_blank"
-                                                href={all_blocks_default[block]?.demo}
-                                                className="element__icon"
-                                            >
-                                                <IconDemo></IconDemo>
+                                                // Don't render if show_in_admin is false
+                                                if (!shouldShowInAdmin) {
+                                                    return null;
+                                                }
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className={`eb-col-4 eb-admin-checkbox eb-block-box ${
+                                                            all_blocks_default[
+                                                                block
+                                                            ]?.hasOwnProperty(
+                                                                "status",
+                                                            )
+                                                                ? "eb-block-label " +
+                                                                  all_blocks_default[
+                                                                      block
+                                                                  ].status
+                                                                : ""
+                                                        } ${
+                                                            all_blocks_default[
+                                                                block
+                                                            ]?.is_pro
+                                                                ? "pro"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div className="block-title">
+                                                            <img
+                                                                src={
+                                                                    all_blocks_default[
+                                                                        block
+                                                                    ]?.icon
+                                                                }
+                                                                className="block-icon"
+                                                            />
+                                                            <h4>
+                                                                {
+                                                                    all_blocks_default[
+                                                                        block
+                                                                    ]?.label
+                                                                }
+                                                            </h4>
+                                                        </div>
 
-                                                <span className="tooltip-text">Live Demo</span>
-                                            </a>
-                                            <a
-                                                target="_blank"
-                                                href={all_blocks_default[block]?.doc}
-                                                className="element__icon"
-                                            >
-                                                <IconDoc></IconDoc>
+                                                        <div className="block-content">
+                                                            <a
+                                                                target="_blank"
+                                                                href={
+                                                                    all_blocks_default[
+                                                                        block
+                                                                    ]?.demo
+                                                                }
+                                                                className="element__icon"
+                                                            >
+                                                                <IconDemo></IconDemo>
 
-                                                <span className="tooltip-text">
-                                                    Documentation
-                                                </span>
-                                            </a>
+                                                                <span className="tooltip-text">
+                                                                    Live Demo
+                                                                </span>
+                                                            </a>
+                                                            <a
+                                                                target="_blank"
+                                                                href={
+                                                                    all_blocks_default[
+                                                                        block
+                                                                    ]?.doc
+                                                                }
+                                                                className="element__icon"
+                                                            >
+                                                                <IconDoc></IconDoc>
 
-                                            <label
-                                                htmlFor={blocks[block]?.value}
-                                                className="eb-admin-checkbox-label"
-                                            >
-                                                <Switch
-                                                    checked={blocks[block]?.visibility == "true"}
-                                                    onChange={(checked) =>
-                                                        onChangeSwitch(
-                                                            checked,
-                                                            blocks[block]?.value
-                                                        )
-                                                    }
-                                                    defaultChecked={
-                                                        blocks[block]?.visibility == "true"
-                                                    }
-                                                    disabled={false}
-                                                    checkedChildren="ON"
-                                                    unCheckedChildren="OFF"
-                                                />
-                                            </label>
-                                        </div>
-                                        {is_pro_active === "false" && all_blocks_default[block]?.is_pro && (
-                                            <div className="eb-pro">Pro</div>
+                                                                <span className="tooltip-text">
+                                                                    Documentation
+                                                                </span>
+                                                            </a>
+
+                                                            <label
+                                                                htmlFor={
+                                                                    blocks[
+                                                                        block
+                                                                    ]?.value
+                                                                }
+                                                                className="eb-admin-checkbox-label"
+                                                            >
+                                                                <Switch
+                                                                    checked={
+                                                                        is_pro_active ===
+                                                                            "false" &&
+                                                                        all_blocks_default[
+                                                                            block
+                                                                        ]
+                                                                            ?.is_pro
+                                                                            ? false
+                                                                            : blocks[
+                                                                                  block
+                                                                              ]
+                                                                                  ?.visibility ==
+                                                                              "true"
+                                                                    }
+                                                                    onChange={(
+                                                                        checked,
+                                                                    ) =>
+                                                                        onChangeSwitch(
+                                                                            checked,
+                                                                            blocks[
+                                                                                block
+                                                                            ]
+                                                                                ?.value,
+                                                                        )
+                                                                    }
+                                                                    defaultChecked={
+                                                                        is_pro_active ===
+                                                                            "false" &&
+                                                                        all_blocks_default[
+                                                                            block
+                                                                        ]
+                                                                            ?.is_pro
+                                                                            ? false
+                                                                            : blocks[
+                                                                                  block
+                                                                              ]
+                                                                                  ?.visibility ==
+                                                                              "true"
+                                                                    }
+                                                                    disabled={
+                                                                        false
+                                                                    }
+                                                                    checkedChildren="ON"
+                                                                    unCheckedChildren="OFF"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        {is_pro_active ===
+                                                            "false" &&
+                                                            all_blocks_default[
+                                                                block
+                                                            ]?.is_pro && (
+                                                                <div className="eb-pro">
+                                                                    Pro
+                                                                </div>
+                                                            )}
+                                                    </div>
+                                                );
+                                            },
                                         )}
-                                    </div>
-                                </>
-                            ))}
-                        </div>
-                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
                 ))}
-
-            </div >
+            </div>
 
             <EBLoader settings={loaderData} />
         </>

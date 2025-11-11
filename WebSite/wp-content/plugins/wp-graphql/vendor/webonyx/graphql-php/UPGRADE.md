@@ -422,7 +422,7 @@ class MyType extends ScalarType {
 ### Breaking: Descriptions in comments are not used as descriptions by default anymore
 
 Descriptions now need to be inside Strings or BlockStrings in order to be picked up as
-description. If you want to keep the old behaviour you can supply the option `commentDescriptions`
+description. If you want to keep the old behavior you can supply the option `commentDescriptions`
 to BuildSchema::buildAST(), BuildSchema::build() or Printer::doPrint().
 
 Here is the official way now to define descriptions in the graphQL language:
@@ -584,7 +584,7 @@ Before:
 ```php
 use GraphQL\Validator\DocumentValidator;
 
-$myRule = function(ValidationContext $context) {};
+$myRule = function (ValidationContext $context) {};
 DocumentValidator::validate($schema, $ast, [$myRule]);
 ```
 
@@ -594,7 +594,7 @@ After:
 use GraphQL\Validator\Rules\CustomValidationRule;
 use GraphQL\Validator\DocumentValidator;
 
-$myRule = new CustomValidationRule('MyRule', function(ValidationContext $context) {});
+$myRule = new CustomValidationRule('MyRule', function (ValidationContext $context) {});
 DocumentValidator::validate($schema, $ast, [$myRule]);
 ```
 
@@ -605,7 +605,7 @@ Before the change:
 ```php
 use GraphQL\Validator\DocumentValidator;
 
-$myRule = function(ValidationContext $context) {};
+$myRule = function (ValidationContext $context) {};
 DocumentValidator::addRule('MyRuleName', $myRule);
 ```
 
@@ -614,7 +614,7 @@ After the change:
 ```php
 use GraphQL\Validator\DocumentValidator;
 
-$myRule = new CustomValidationRulefunction('MyRule', ValidationContext $context) {});
+$myRule = new CustomValidationRule('MyRule', function (ValidationContext $context) {});
 DocumentValidator::addRule($myRule);
 ```
 

@@ -42,7 +42,8 @@ import {
     BorderShadowControl,
     ResponsiveRangeController,
     ColorControl,
-    InspectorPanel
+    InspectorPanel,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -181,24 +182,30 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 onToggle={() => handlePanelClick(index)}
                                 className="eb-slider-item-single-panel"
                             >
-                                <TextControl
+                                <EBTextControl
                                     label={__("Title Text", "essential-blocks")}
                                     value={slide.title}
                                     onChange={(title) => handleTextChange("title", title, index)}
                                 />
 
-                                <TextControl
+                                <EBTextControl
                                     label={__("Button Text", "essential-blocks")}
                                     value={slide.btnText}
                                     onChange={(btnText) => handleTextChange("btnText", btnText, index)}
                                 />
 
-                                <TextControl
+                                <EBTextControl
                                     label={__("Button Link", "essential-blocks")}
+                                    fieldType="url"
                                     value={slide.link}
                                     onChange={(link) => handleTextChange("link", link, index)}
-                                    onBlur={(val) => validUrl('link', val.target.value, index)}
-                                    help={__("Use http:// or https://", "essential-blocks")}
+                                    placeholder="https://example.com"
+                                    help={__(
+                                        "Enter a valid URL.",
+                                        "essential-blocks"
+                                    )}
+                                    showValidation={true}
+                                    enableSecurity={true}
                                 />
 
                                 <ToggleControl

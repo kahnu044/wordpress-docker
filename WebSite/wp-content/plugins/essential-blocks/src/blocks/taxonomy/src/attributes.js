@@ -83,6 +83,9 @@ const attributes = {
         type: "string",
         // default: "page",
     },
+    currentPostId: {
+        type: "number",
+    },
     taxonomiesQuery: {
         type: "object",
         default: { per_page: -1, }

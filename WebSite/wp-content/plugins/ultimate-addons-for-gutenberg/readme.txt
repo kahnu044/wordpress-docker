@@ -5,7 +5,8 @@ Tags: gutenberg, blocks, gutenberg blocks, editor, block
 Requires at least: 5.6
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 2.19.11
+Stable tag: 2.19.15
+Beta tag: 3.0.0-beta.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -227,6 +228,21 @@ Our external packages use [Rating Star Component](https://github.com/n49/react-s
 
 == Changelog ==
 
+= 2.19.15 - Friday, 3rd October 2025 =
+* This update addressed a security bug. Props to Wordfence for reporting it responsibly to our team.
+Please make sure you are using the latest version on your website.
+
+= 2.19.14 - Wednesday, 17th September 2025 =
+* Fix: Removed unused dependencies from the Block Stats Processor.
+
+= 2.19.13 - Wednesday, 17th September 2025 =
+* Improvement: Popup Builder – Improved popup creation through REST with role flexibility.
+
+= 2.19.12 - Wednesday, 3rd September 2025 =
+* Improvement: Info Box - Alignment options now hide smartly based on icon/image settings.
+* Fix: Post - Corrected behavior where invalid pagination on single posts prevented expected redirects.
+* Fix: Global - Resolved a conflict where editor upsell assets were interfering with the SureCart price selector block.
+
 = 2.19.11 - Tuesday, 15th July 2025 =
 * Fix: Buttons - Resolved an issue wherein the  gap between buttons would not work as intended for mobile.
 * Fix: Container - Resolved an issue wherein the advanced gradient locations 1 & 2 would not be applied on mobile & tablet.
@@ -274,6 +290,9 @@ Our external packages use [Rating Star Component](https://github.com/n49/react-s
 The full changelog is available [here](https://wpspectra.com/whats-new/).
 
 == Upgrade Notice ==
+
+= 3.0.0-beta.1 =
+This is a beta release. Please backup your website before updating. We recommend testing on a staging site first and not using this version on a live production website.
 
 = 2.18.2 =
 The Google Fonts library in Spectra has been updated in this version. Please check your font selections to replace any deprecated fonts and explore the new additions.

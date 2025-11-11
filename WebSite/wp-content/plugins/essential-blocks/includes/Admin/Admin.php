@@ -36,7 +36,7 @@ class Admin
         // Remove OLD notice from 1.0.0 (if other WPDeveloper plugin has notice)
         NoticeRemover::get_instance( '1.0.0' );
 
-        add_action( 'admin_init', [ $this, 'notices' ] );
+        add_action( 'init', [ $this, 'notices' ] );
 
         add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 
@@ -56,7 +56,6 @@ class Admin
         add_action( 'wp_ajax_get_eb_admin_templates', [ $this, 'templates' ] );
         add_action( 'wp_ajax_get_eb_admin_template_count', [ $this, 'template_count' ] );
         add_action( 'wp_ajax_eb_admin_promotion', [ $this, 'eb_admin_promotion' ] );
-        add_action( 'wp_ajax_write_with_ai', [ $this, 'eb_write_with_ai' ] );
         add_action( 'plugin_action_links', [ $this, 'eb_menu_action_links' ], 10, 2 );
         add_action( 'eb_admin_page_setting', [ $this, 'eb_show_admin_menu_notice' ] );
         add_action( 'in_admin_header', [ $this, 'remove_admin_notice' ], 99 );
@@ -253,31 +252,31 @@ class Admin
         );
 
         /**
-         * Occasional Sale
-         * Current: 2025 Early Bird
+         * Milestone Sale
+         * Current: 200K Milestone LTD Sale Notice
          */
-        $occasional_sale_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🎁 <strong>SAVE 25% now</strong> to unlock 60+ advanced blocks & 5500+ ready templates to design websites faster in 2025.</p>
-        <a class="button button-primary" href="https://essential-blocks.com/holiday24-admin-notice" target="_blank"><svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        $milestone_sale_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;"><strong>Best Time to Grab Essential Blocks LTD: $100 Off!</strong> Join in celebrating new milestone of Essential Blocks; powering up <strong>200k+</strong> happy users 🎉</p>
+        <a class="button button-primary" href="https://essential-blocks.com/EB200K-admin-notice" target="_blank"><svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M14.0688 9.24424L14.2136 7.82369C14.2908 7.06574 14.3418 6.56525 14.3018 6.24991L14.3158 6.25C14.9698 6.25 15.5 5.69036 15.5 5C15.5 4.30964 14.9698 3.75 14.3158 3.75C13.6618 3.75 13.1316 4.30964 13.1316 5C13.1316 5.31222 13.24 5.5977 13.4193 5.81677C13.1619 5.98447 12.8254 6.33832 12.3188 6.87093L12.3188 6.87096L12.3188 6.87096C11.9286 7.28129 11.7334 7.48645 11.5158 7.51822C11.3952 7.53583 11.2723 7.51773 11.1609 7.46596C10.9599 7.37254 10.8259 7.1189 10.5578 6.61163L9.14509 3.93783C8.97975 3.6249 8.84136 3.36298 8.71658 3.15221C9.22844 2.87656 9.57895 2.31482 9.57895 1.66667C9.57895 0.746192 8.87203 0 8 0C7.12797 0 6.42105 0.746192 6.42105 1.66667C6.42105 2.31482 6.77156 2.87656 7.28342 3.15221C7.15864 3.36299 7.02027 3.62487 6.85491 3.93783L5.44215 6.61163C5.17413 7.1189 5.04011 7.37254 4.83911 7.46596C4.72774 7.51773 4.60485 7.53583 4.48424 7.51822C4.26656 7.48645 4.07143 7.28129 3.68118 6.87096C3.17463 6.33834 2.83807 5.98447 2.58068 5.81677C2.75998 5.5977 2.86842 5.31222 2.86842 5C2.86842 4.30964 2.33823 3.75 1.68421 3.75C1.03019 3.75 0.5 4.30964 0.5 5C0.5 5.69036 1.03019 6.25 1.68421 6.25L1.69819 6.24991C1.65817 6.56525 1.70917 7.06574 1.7864 7.82368L1.93116 9.24424C2.01151 10.0328 2.07833 10.783 2.16016 11.4583H13.8398C13.9217 10.783 13.9885 10.0328 14.0688 9.24424Z" fill="white"/>
 <path d="M7.1411 15H8.8589C11.0978 15 12.2172 15 12.9642 14.2943C13.2902 13.9863 13.4966 13.431 13.6456 12.7083H2.35444C2.50341 13.431 2.70984 13.9863 3.03585 14.2943C3.78276 15 4.90221 15 7.1411 15Z" fill="white"/>
-</svg> GET PRO Lifetime Access</a>
+</svg> Grab the Deal</a>
         <button data-dismiss="true" class="dismiss-btn button button-link">No, I\'ll Pay Full Price Later</button>';
-        $occasional_sale_notice = [
+        $milestone_sale_notice = [
             'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
-            'html'      => $occasional_sale_message
+            'html'      => $milestone_sale_message
          ];
 
-        //Occasional Sale Notice Add
+        //Milestone Sale Notice Add
         $notices->add(
-            'occasional_sale',
-            $occasional_sale_notice,
+            'milestone_sale',
+            $milestone_sale_notice,
             [
                 'start'       => $notices->time(),
-                'expire'      => strtotime( '11:59:59pm 10th January, 2025' ),
+                'expire'      => strtotime( '11:59:59pm 30th September, 2025' ),
                 'classes'     => 'eb-notice put-dismiss-notice',
                 'dismissible' => true,
                 'refresh'     => ESSENTIAL_BLOCKS_VERSION,
-                'do_action'   => 'eb_occasional_sale_campaign',
+                'do_action'   => 'eb_milestone_sale_campaign',
                 'display_if'  => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
              ]
         );
@@ -500,28 +499,24 @@ class Admin
                      */
                     $value = json_decode( wp_unslash( $value ) );
 
-                    // Validate API key if provided
-                    if ( isset( $value->apiKey ) && ! empty( $value->apiKey ) ) {
-                        // Include the OpenAI class
-                        require_once ESSENTIAL_BLOCKS_DIR_PATH . 'includes/Admin/OpenAI.php';
+                    // Use AI integration class for validation and saving
+                    if ( class_exists( 'EssentialBlocks\Integrations\AI\AI' ) ) {
+                        $result = \EssentialBlocks\Integrations\AI\AI::validate_and_save_ai_settings( $value );
 
-                        // Initialize the OpenAI class
-                        $openai = new OpenAI();
-
-                        // Validate the API key
-                        $validation = $openai->validate_api_key( $value->apiKey );
-
-                        if ( ! $validation[ 'success' ] ) {
+                        if ( ! $result[ 'success' ] ) {
                             wp_send_json_error( [
-                                'message' => $validation[ 'message' ],
-                                'type'    => 'api_key_error'
+                                'message' => $result[ 'message' ],
+                                'type'    => $result[ 'type' ]
                              ] );
                             return;
                         }
-                    }
 
-                    $updated = $settings->save_eb_write_with_ai( $value );
-                    wp_send_json_success( $updated );
+                        wp_send_json_success( $result[ 'data' ] );
+                    } else {
+                        // Fallback to direct save if AI class not available
+                        $updated = $settings->save_eb_write_with_ai( $value );
+                        wp_send_json_success( $updated );
+                    }
                     break;
                 default:
                     wp_send_json_error( __( 'Something went wrong regarding saving options data.', 'essential-blocks' ) );
@@ -580,7 +575,7 @@ class Admin
         if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
         }
-        if ( ! current_user_can( 'edit_posts' ) ) {
+        if ( ! current_user_can( 'activate_plugins' ) ) {
             wp_send_json_error( __( 'You are not authorized to save this!', 'essential-blocks' ) );
         }
 
@@ -813,6 +808,282 @@ class Admin
         }
     }
 
+    //eb_generate_image_with_ai
+    public function eb_generate_image_with_ai()
+    {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+            wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
+        }
+        if ( ! current_user_can( 'upload_files' ) ) {
+            wp_send_json_error( __( 'You do not have permission to upload files!', 'essential-blocks' ) );
+        }
+
+        if ( isset( $_POST[ 'prompt' ] ) ) {
+            $prompt             = sanitize_textarea_field( $_POST[ 'prompt' ] );
+            $model              = isset( $_POST[ 'model' ] ) ? sanitize_text_field( $_POST[ 'model' ] ) : 'dall-e-3';
+            $size               = isset( $_POST[ 'size' ] ) ? sanitize_text_field( $_POST[ 'size' ] ) : '1024x1024';
+            $quality            = isset( $_POST[ 'quality' ] ) ? sanitize_text_field( $_POST[ 'quality' ] ) : 'standard';
+            $style              = isset( $_POST[ 'style' ] ) ? sanitize_text_field( $_POST[ 'style' ] ) : 'vivid';
+            $background         = isset( $_POST[ 'background' ] ) ? sanitize_textarea_field( $_POST[ 'background' ] ) : '';
+            $output_format      = isset( $_POST[ 'output_format' ] ) ? sanitize_text_field( $_POST[ 'output_format' ] ) : 'png';
+            $output_compression = isset( $_POST[ 'output_compression' ] ) ? sanitize_text_field( $_POST[ 'output_compression' ] ) : 'standard';
+            $image_count        = isset( $_POST[ 'image_count' ] ) ? intval( $_POST[ 'image_count' ] ) : 4; // New parameter for number of images
+
+            // Include the OpenAI class
+            require_once ESSENTIAL_BLOCKS_DIR_PATH . 'includes/Admin/OpenAI.php';
+
+            // Initialize the OpenAI class
+            $openai = new OpenAI();
+
+            // Generate image using OpenAI
+            $response = $openai->generate_image( $prompt, $model, $size, $quality, $style, 'writePageContent', $background, $output_format, $output_compression, $image_count );
+
+            if ( $response[ 'success' ] ) {
+                wp_send_json_success( [
+                    'images' => $response[ 'images' ],
+                    'usage'  => isset( $response[ 'usage' ] ) ? $response[ 'usage' ] : null
+                 ] );
+            } else {
+                wp_send_json_error( [
+                    'message'  => $response[ 'message' ],
+                    'response' => isset( $response[ 'response' ] ) ? $response[ 'response' ] : null
+                 ] );
+            }
+        } else {
+            wp_send_json_error( __( 'Prompt is required', 'essential-blocks' ) );
+        }
+    }
+
+    //eb_save_ai_generated_image
+    public function eb_save_ai_generated_image()
+    {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+            wp_send_json_error( __( 'Nonce Error', 'essential-blocks' ) );
+        }
+        if ( ! current_user_can( 'upload_files' ) ) {
+            wp_send_json_error( __( 'You are not authorized to upload files!', 'essential-blocks' ) );
+        }
+
+        // Check if we have either image_url or image_b64 along with prompt
+        if ( ( isset( $_POST[ 'image_url' ] ) || isset( $_POST[ 'image_b64' ] ) ) && isset( $_POST[ 'prompt' ] ) ) {
+            $image_url   = isset( $_POST[ 'image_url' ] ) ? esc_url_raw( $_POST[ 'image_url' ] ) : null;
+            $image_b64   = isset( $_POST[ 'image_b64' ] ) ? sanitize_text_field( $_POST[ 'image_b64' ] ) : null;
+            $prompt      = sanitize_textarea_field( $_POST[ 'prompt' ] );
+            $title       = isset( $_POST[ 'title' ] ) ? sanitize_text_field( $_POST[ 'title' ] ) : $prompt;
+            $alt_tag     = isset( $_POST[ 'alt_tag' ] ) ? sanitize_text_field( $_POST[ 'alt_tag' ] ) : $prompt;
+            $caption     = isset( $_POST[ 'caption' ] ) ? sanitize_text_field( $_POST[ 'caption' ] ) : '';
+            $description = isset( $_POST[ 'description' ] ) ? sanitize_text_field( $_POST[ 'description' ] ) : '';
+
+            $image_body = '';
+
+            // Handle URL format
+            if ( $image_url ) {
+                // Download the image from validated URL
+                $image_data = wp_safe_remote_get( $image_url, [
+                    'timeout'     => 30,
+                    'redirection' => 3,
+                    'user-agent'  => 'Essential Blocks/' . ESSENTIAL_BLOCKS_VERSION,
+                    'headers'     => [
+                        'Accept' => 'image/*'
+                     ]
+                 ] );
+
+                if ( is_wp_error( $image_data ) ) {
+                    wp_send_json_error( [
+                        'message' => __( 'Failed to download image from URL.', 'essential-blocks' )
+                     ] );
+                    return;
+                }
+
+                // Validate response
+                $response_code = wp_remote_retrieve_response_code( $image_data );
+                if ( $response_code !== 200 ) {
+                    wp_send_json_error( [
+                        'message' => __( 'Invalid response from image URL.', 'essential-blocks' )
+                     ] );
+                    return;
+                }
+
+                $image_body = wp_remote_retrieve_body( $image_data );
+            }
+            // Handle base64 format
+            elseif ( $image_b64 ) {
+                // Decode base64 image data
+                $image_body = base64_decode( $image_b64 );
+
+                if ( $image_body === false ) {
+                    wp_send_json_error( [
+                        'message' => __( 'Failed to decode base64 image data.', 'essential-blocks' )
+                     ] );
+                    return;
+                }
+            }
+
+            if ( empty( $image_body ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Image data is empty.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            // Security: Validate image content and size
+            if ( ! $this->is_valid_image_content( $image_body ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Invalid image content provided.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            // Detect image format and set appropriate extension and MIME type
+            $image_info = getimagesizefromstring( $image_body );
+            if ( ! $image_info ) {
+                wp_send_json_error( [
+                    'message' => __( 'Unable to determine image format.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            $mime_type = $image_info[ 'mime' ];
+
+            // Security: Only allow specific image MIME types
+            $allowed_mime_types = [
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+                'image/gif'
+             ];
+
+            if ( ! in_array( $mime_type, $allowed_mime_types, true ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Unsupported image format.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            // Determine file extension based on MIME type
+            $extension = 'png'; // default
+            switch ( $mime_type ) {
+                case 'image/jpeg':
+                    $extension = 'jpg';
+                    break;
+                case 'image/png':
+                    $extension = 'png';
+                    break;
+                case 'image/webp':
+                    $extension = 'webp';
+                    break;
+                case 'image/gif':
+                    $extension = 'gif';
+                    break;
+            }
+
+            // Generate filename with proper extension
+            $filename = 'ai-generated-' . sanitize_title( substr( $title ?: $prompt, 0, 50 ) ) . '-' . time() . '.' . $extension;
+
+            // Upload to WordPress media library
+            $upload = wp_upload_bits( $filename, null, $image_body );
+
+            if ( $upload[ 'error' ] ) {
+                wp_send_json_error( [
+                    'message' => $upload[ 'error' ]
+                 ] );
+                return;
+            }
+
+            // Create attachment
+            $attachment = [
+                'post_mime_type' => $mime_type,
+                'post_title'     => $title,
+                'post_content'   => $description,
+                'post_excerpt'   => $caption,
+                'post_status'    => 'inherit'
+             ];
+
+            $attachment_id = wp_insert_attachment( $attachment, $upload[ 'file' ] );
+
+            if ( is_wp_error( $attachment_id ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Failed to create attachment.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            // Generate attachment metadata
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            $attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload[ 'file' ] );
+            wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+            // Set alt text
+            update_post_meta( $attachment_id, '_wp_attachment_image_alt', $alt_tag );
+
+            // Get attachment URL
+            $attachment_url = wp_get_attachment_url( $attachment_id );
+
+            wp_send_json_success( [
+                'attachment_id' => $attachment_id,
+                'url'           => $attachment_url,
+                'alt'           => $alt_tag,
+                'title'         => $title,
+                'caption'       => $caption,
+                'description'   => $description
+             ] );
+        } else {
+            wp_send_json_error( __( 'Image data (URL or base64) and prompt are required', 'essential-blocks' ) );
+        }
+    }
+
+    /**
+     * Validate image content for security
+     *
+     * @param string $image_data The image data to validate
+     * @return bool True if valid, false otherwise
+     */
+    private function is_valid_image_content( $image_data )
+    {
+        if ( empty( $image_data ) ) {
+            return false;
+        }
+
+        // Check file size (max 10MB)
+        $max_size = 10 * 1024 * 1024; // 10MB
+        if ( strlen( $image_data ) > $max_size ) {
+            return false;
+        }
+
+        // Validate image using getimagesizefromstring
+        $image_info = getimagesizefromstring( $image_data );
+        if ( ! $image_info ) {
+            return false;
+        }
+
+        // Check image dimensions (reasonable limits)
+        $max_width  = 4096;
+        $max_height = 4096;
+        if ( $image_info[ 0 ] > $max_width || $image_info[ 1 ] > $max_height ) {
+            return false;
+        }
+
+        // Additional security: Check for suspicious content patterns
+        // Look for common file signatures that shouldn't be in images
+        $suspicious_patterns = [
+            '<?php', // PHP code
+            '<script', // JavaScript
+            'javascript:', // JavaScript protocol
+            'data:text/', // Text data URLs
+            '<html', // HTML content
+            '#!/bin/' // Shell scripts
+         ];
+
+        $data_start = substr( $image_data, 0, 1024 ); // Check first 1KB
+        foreach ( $suspicious_patterns as $pattern ) {
+            if ( stripos( $data_start, $pattern ) !== false ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * update menu notice flag
      */
@@ -862,30 +1133,12 @@ class Admin
      */
     public function promotion_message_on_admin_screen()
     {
-        // Define the minimum required Pro version to override free message
-        $min_pro_version = '2.0.5';
-        $use_pro_message = false;
-
-        // Check if Pro is active and meets version requirement
-        if ( defined( 'ESSENTIAL_BLOCKS_IS_PRO_ACTIVE' ) && ESSENTIAL_BLOCKS_IS_PRO_ACTIVE ) {
-            if ( defined( 'ESSENTIAL_BLOCKS_PRO_VERSION' ) ) {
-                if ( version_compare( ESSENTIAL_BLOCKS_PRO_VERSION, $min_pro_version, '>=' ) ) {
-                    $use_pro_message = true;
-                }
-            }
-        }
-
         $changelog_url = esc_url( 'https://essential-blocks.com/changelog/' );
 
         $message_template = __(
-            "<p><i>📣</i> Introducing Essential Blocks Pro <strong>v2.2.0</strong> with <strong>“Multi Step Form”</strong> and <strong>Conditional Logic</strong> support! Create smarter, more interactive forms in Gutenberg with step-by-step progression and dynamic field visibility. For more info, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
+            "<p><i>📣</i> Introducing New Block - Business Hours in Essential Blocks Pro <strong>v2.6.0</strong> - Display your business hours with customizable styling and responsive design! For more details, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
             "essential-blocks"
         );
-
-        // Allow Pro to override message
-        // if ( $use_pro_message ) {
-        //     $message_template = apply_filters( 'eb_promotion_message_on_admin_screen', $message_template );
-        // }
 
         $message = sprintf( $message_template, $changelog_url );
 

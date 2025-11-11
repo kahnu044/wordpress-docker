@@ -26,13 +26,16 @@ use EssentialBlocks\Integrations\Pagination;
 use EssentialBlocks\Integrations\GlobalStyles;
 use EssentialBlocks\Integrations\AssetGeneration;
 use EssentialBlocks\Integrations\PluginInstaller;
+use EssentialBlocks\Integrations\AI\AI;
 use EssentialBlocks\Utils\SvgSanitizer;
 use EssentialBlocks\Admin\QuickSetup;
+use EssentialBlocks\Integrations\BlockUsage;
+use EssentialBlocks\Utils\LiquidGlassRenderer;
 
 final class Plugin
 {
     use HasSingletone;
-    public $version = '5.5.3';
+                                                                        public $version = '5.7.4';
 
     public $admin;
     /**
@@ -82,6 +85,9 @@ final class Plugin
 
         FontLoader::get_instance( 'essential-blocks' );
 
+        // Liquid Glass Effect Global SVG Renderer
+        LiquidGlassRenderer::get_instance();
+
         // Templates
         PageTemplates::get_instance();
 
@@ -121,11 +127,17 @@ final class Plugin
         // pagination
         Pagination::get_instance();
 
+        // BlockUsage
+        BlockUsage::get_instance();
+
         // Fetch Enabled Blocks if not than Default Block List
         self::$blocks = Blocks::get_instance( self::$settings );
 
         // SVG Sanitizer
         SvgSanitizer::get_instance();
+
+        // Initialize AI Integration
+        AI::get_instance();
 
         add_action( 'init', function () {
             /**
@@ -223,8 +235,8 @@ final class Plugin
         $this->define( 'EB_PATTERN', true );
 
         //Those flags needs to update if notice
-        $this->define( 'EB_PROMOTION_FLAG', 11 );
-        $this->define( 'EB_ADMIN_MENU_FLAG', 11 );
+        $this->define( 'EB_PROMOTION_FLAG', 13 );
+        $this->define( 'EB_ADMIN_MENU_FLAG', 13 );
         $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', 1 );
 
         //Table Name constants

@@ -29,6 +29,8 @@ const Edit = (props) => {
         classHook,
         tagName,
         isMinHeightAsTitle,
+        addCaretIcon,
+        caretIcon,
     } = attributes;
 
     const tabWrapRef = useRef(null);
@@ -118,7 +120,7 @@ const Edit = (props) => {
                 tabWrapDiv.classList.remove("active");
             }
         }
-    },[activeTabId, innerBlocks]);
+    }, [activeTabId, innerBlocks]);
 
     const handleTabTitleClick = (id) => {
         setIsClickTab(true);
@@ -194,7 +196,7 @@ const Edit = (props) => {
                                             className={
                                                 (activeTabId ||
                                                     activeDefaultTabId) ===
-                                                item.id
+                                                    item.id
                                                     ? "active"
                                                     : "inactive"
                                             }
@@ -218,18 +220,32 @@ const Edit = (props) => {
                                                         )}
                                                 </>
                                             )}
-                                            <RichText
-                                                tagName={tagName}
-                                                className="tab-title-text"
-                                                placeholder="Tab Title"
-                                                value={item.text}
-                                                onChange={(text) =>
-                                                    onTabTitleChange(
-                                                        text,
-                                                        index,
-                                                    )
-                                                }
-                                            />
+                                            <div className="tab-title-wrap">
+
+                                                <RichText
+                                                    tagName={tagName}
+                                                    className="tab-title-text"
+                                                    placeholder="Tab Title"
+                                                    value={item.text}
+                                                    onChange={(text) =>
+                                                        onTabTitleChange(
+                                                            text,
+                                                            index,
+                                                        )
+                                                    }
+                                                />
+                                                {item.enableSubtitle && item.subtitle && (
+                                                    <p className="tab-subtitle-text">
+                                                        {item.subtitle}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            {addCaretIcon && caretIcon && (
+                                                <EBDisplayIcon
+                                                    icon={caretIcon}
+                                                    className="tab-caret-icon"
+                                                />
+                                            )}
                                         </li>
                                     );
                                 })}

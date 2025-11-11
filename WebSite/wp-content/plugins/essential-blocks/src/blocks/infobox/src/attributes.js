@@ -60,6 +60,10 @@ const attributes = {
         type: "string",
         default: "essential_block",
     },
+    version: {
+        type: "string",
+        default: "1",
+    },
 
     // blockMeta is for keeping all the styles ⬇
     blockMeta: {
@@ -115,12 +119,12 @@ const attributes = {
     },
 
     //
-    // imageUrl: {
-    //     source: "attribute",
-    //     selector: ".eb-infobox-image",
-    //     attribute: "src",
-    //     // default: "https://source.unsplash.com/user/cristofer",
-    // },
+    imageUrlOld: {
+        source: "attribute",
+        selector: ".eb-infobox-image",
+        attribute: "src",
+        // default: "https://source.unsplash.com/user/cristofer",
+    },
 
     //
     // imageId: {

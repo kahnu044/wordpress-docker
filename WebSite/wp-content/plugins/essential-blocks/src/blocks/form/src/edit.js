@@ -153,7 +153,7 @@ const Edit = (props) => {
 
         if (multistepdata.length === 0) {
             const multistepDataInit =
-                innerBlocksRef.current.length > 0
+                innerBlocksRef?.current?.length > 0
                     ? innerBlocksRef.current.filter(
                         (item) =>
                             item.name ===
@@ -192,11 +192,7 @@ const Edit = (props) => {
     }, []);
 
     useEffect(() => {
-        // if (innerBlocksRef.current.length === formInnerItem.length) {
-        //     return
-        // }
-
-        if (innerBlocksRef.current.length === formInnerItem.length) {
+        if (innerBlocksRef?.current?.length === formInnerItem?.length) {
             if (!isEqual(innerBlocksRef.current, formInnerItem)) {
                 innerBlocksRef.current = formInnerItem;
                 const newMultistepData = innerBlocksRef.current.filter(

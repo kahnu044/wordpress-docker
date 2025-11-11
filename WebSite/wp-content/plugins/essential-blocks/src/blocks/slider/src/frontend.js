@@ -1,6 +1,6 @@
 import { createRoot, createRef } from "@wordpress/element";
 import domReady from "@wordpress/dom-ready";
-const { sanitizeIconValue} = window.eb_frontend;
+const { sanitizeIconValue } = window.eb_frontend;
 /**
  * External dependencies
  */
@@ -88,7 +88,7 @@ domReady(function () {
                                         <a
                                             href={
                                                 image.buttonUrl &&
-                                                image.isValidUrl
+                                                    image.isValidUrl
                                                     ? image.buttonUrl
                                                     : "#"
                                             }
@@ -132,7 +132,9 @@ domReady(function () {
                                         }
                                     />
                                     <div
-                                        className={`eb-slider-content align-${textAlign}`}
+                                        className={`eb-slider-content align-${textAlign} ${sliderContentType === "content-1" && image.enableContentLink && image.contentLink && image.contentLink.length > 0 && image.isContentUrlValid ? 'has-content-link' : ''}`}
+                                        data-content-link={sliderContentType === "content-1" && image.enableContentLink && image.contentLink && image.contentLink.length > 0 && image.isContentUrlValid ? image.contentLink : ''}
+                                        data-content-target={sliderContentType === "content-1" && image.contentOpenNewTab ? '_blank' : '_self'}
                                     >
                                         {image.title &&
                                             image.title.length > 0 && (
@@ -161,7 +163,7 @@ domReady(function () {
                                                     <a
                                                         href={
                                                             image.buttonUrl &&
-                                                            image.isValidUrl
+                                                                image.isValidUrl
                                                                 ? image.buttonUrl
                                                                 : "#"
                                                         }
@@ -181,11 +183,11 @@ domReady(function () {
                                             {image.showSecondButton &&
                                                 image.secondButtonText &&
                                                 image.secondButtonText.length >
-                                                    0 && (
+                                                0 && (
                                                     <a
                                                         href={
                                                             image.secondButtonUrl &&
-                                                            image.isValidUrl
+                                                                image.isValidUrl
                                                                 ? image.secondButtonUrl
                                                                 : "#"
                                                         }
@@ -324,4 +326,39 @@ domReady(function () {
             }
         }
     }
+
+    // Handle content link clicks for v2+ versions
+    function handleContentLinkClick(event) {
+        const contentElement = event.currentTarget;
+        const contentLink = contentElement.getAttribute('data-content-link');
+        const contentTarget = contentElement.getAttribute('data-content-target');
+
+        // Only handle if we have a content link and the click wasn't on a button
+        if (contentLink && !event.target.closest('.eb-slider-button-wrapper')) {
+            event.preventDefault();
+
+            if (contentTarget === '_blank') {
+                window.open(contentLink, '_blank', 'noopener,noreferrer');
+            } else {
+                window.location.href = contentLink;
+            }
+        }
+    }
+
+    // Add click handlers to all content elements with links
+    const contentElements = document.querySelectorAll('.eb-slider-content.has-content-link');
+    contentElements.forEach(function (element) {
+        element.addEventListener('click', handleContentLinkClick);
+
+        // Add keyboard support
+        element.setAttribute('tabindex', '0');
+        element.setAttribute('role', 'link');
+
+        element.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleContentLinkClick(event);
+            }
+        });
+    });
 });

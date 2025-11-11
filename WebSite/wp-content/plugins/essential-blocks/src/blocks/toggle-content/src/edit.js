@@ -11,6 +11,7 @@ import {
 } from "@wordpress/block-editor";
 import { createBlock } from "@wordpress/blocks";
 import { select, dispatch, useSelect } from "@wordpress/data";
+import { applyFilters } from "@wordpress/hooks";
 /**
  * Internal dependencies
  */
@@ -47,7 +48,8 @@ function Edit(props) {
         controllerType,
         controllerColor,
         controllerGradient,
-        controllerColorSecondary
+        controllerColorSecondary,
+        switchLiquidGlass
     } = attributes;
 
     const [isPrimary, setPrimary] = useState(
@@ -364,9 +366,10 @@ function Edit(props) {
                                     }}
                                 />
                                 <span
-                                    className="eb-toggle-slider"
+                                    className={`eb-toggle-slider ${switchLiquidGlass.enable ? 'eb_liquid_glass-' + switchLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + switchLiquidGlass.shadowEffect : ''}`}
                                 // style={sliderStyle}
                                 />
+                                {applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")}
                             </label>
 
                             <span

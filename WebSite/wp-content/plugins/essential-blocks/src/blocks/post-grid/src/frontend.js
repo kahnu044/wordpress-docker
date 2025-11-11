@@ -2,10 +2,71 @@
  * WordPress dependencies
  */
 import apiFetch from "@wordpress/api-fetch";
+import { __ } from "@wordpress/i18n";
 const rootURL = EssentialBlocksLocalize
     ? EssentialBlocksLocalize.rest_rootURL
     : false;
 apiFetch.use(apiFetch.createRootURLMiddleware(rootURL));
+
+/**
+ * Spinner/Loader utility functions
+ */
+function createSpinner() {
+    const spinner = document.createElement("div");
+    spinner.className = "ebpg-loading-spinner";
+    spinner.innerHTML = `
+        <div class="ebpg-spinner-wrapper">
+            <div class="ebpg-spinner"></div>
+            <span class="ebpg-loading-text">Loading...</span>
+        </div>
+    `;
+    return spinner;
+}
+
+function showSpinner(container, type = "overlay") {
+    // Remove any existing spinner
+    hideSpinner(container);
+
+    const spinner = createSpinner();
+
+    if (type === "overlay") {
+        spinner.classList.add("ebpg-spinner-overlay");
+        container.style.position = "relative";
+    } else if (type === "inline") {
+        spinner.classList.add("ebpg-spinner-inline");
+    }
+
+    container.appendChild(spinner);
+    return spinner;
+}
+
+function hideSpinner(container) {
+    const existingSpinners = container.querySelectorAll(
+        ".ebpg-loading-spinner",
+    );
+    existingSpinners.forEach((spinner) => spinner.remove());
+}
+
+function showButtonSpinner(button) {
+    if (button.querySelector(".ebpg-button-spinner")) return;
+
+    const spinner = document.createElement("span");
+    spinner.className = "ebpg-button-spinner";
+    spinner.innerHTML = '<div class="ebpg-button-spinner-icon"></div>';
+
+    button.classList.add("ebpg-loading");
+    button.insertBefore(spinner, button.firstChild);
+    button.disabled = true;
+}
+
+function hideButtonSpinner(button) {
+    const spinner = button.querySelector(".ebpg-button-spinner");
+    if (spinner) {
+        spinner.remove();
+    }
+    button.classList.remove("ebpg-loading");
+    button.disabled = false;
+}
 
 window.addEventListener("DOMContentLoaded", function () {
     ebPaginationFunc("");
@@ -16,7 +77,7 @@ function ebPaginationFunc(queryParamString) {
 
     if (isPagination.length > 0) {
         const paginationButton = document.querySelectorAll(
-            ".ebpg-pagination button"
+            ".ebpg-pagination button",
         );
 
         if (paginationButton.length > 0) {
@@ -28,19 +89,25 @@ function ebPaginationFunc(queryParamString) {
                 });
 
             paginationButton.forEach((button) => {
+                // Skip if button already has our event listener
+                if (button.hasAttribute('data-eb-pagination-initialized')) {
+                    return;
+                }
+                button.setAttribute('data-eb-pagination-initialized', 'true');
+
                 var pageNumber = 1;
                 button.addEventListener("click", function () {
                     const isLoadMore = eb_hasClass(
                         this,
-                        "ebpg-pagination-button"
+                        "ebpg-pagination-button",
                     ); //Is Pagination Type Load More True
                     const isPrevious = eb_hasClass(
                         this,
-                        "ebpg-pagination-item-previous"
+                        "ebpg-pagination-item-previous",
                     ); //Is Pagination Type Previous
                     const isNext = eb_hasClass(
                         this,
-                        "ebpg-pagination-item-next"
+                        "ebpg-pagination-item-next",
                     ); //Is Pagination Type Previous
 
                     if (isLoadMore) {
@@ -54,86 +121,165 @@ function ebPaginationFunc(queryParamString) {
                     }
 
                     const queryStringSelector = this.closest(
-                        ".eb-post-grid-wrapper"
+                        ".eb-post-grid-wrapper",
                     );
                     if (queryStringSelector) {
                         const queryString = queryStringSelector.dataset;
-                        const queryFilter = queryParamString
-                            ? queryParamString
-                            : "";
+
+                        // Get current filter state from the wrapper element
+                        const currentFilter = queryStringSelector.dataset.currentFilter || "";
+                        const queryParamStringToUse = queryParamString || currentFilter;
 
                         const attributes = JSON.parse(queryString.attributes);
-                        const version = attributes?.version ? attributes?.version : '';
+                        const version = attributes?.version
+                            ? attributes?.version
+                            : "";
+
+                        // Show spinner based on pagination type
+                        if (isLoadMore) {
+                            showButtonSpinner(this);
+                        } else {
+                            // For regular pagination, show overlay spinner on posts container
+                            const postsContainer =
+                                version === "v2"
+                                    ? queryStringSelector.querySelector(
+                                          ".eb-post-grid-posts-wrapper",
+                                      )
+                                    : queryStringSelector;
+                            if (postsContainer) {
+                                showSpinner(postsContainer, "overlay");
+                            }
+                        }
 
                         apiFetch({
-                            path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryFilter}&pageNumber=${pageNumber}`,
-                        }).then((result) => {
-                            if (isLoadMore) {
-                                if (!result) {
-                                    const noPostsMarkup =
-                                        '<p class="eb-no-posts">No more Posts</p>';
-                                    this.closest(
-                                        ".ebpostgrid-pagination"
-                                    ).insertAdjacentHTML(
-                                        "beforebegin",
-                                        noPostsMarkup
-                                    );
-                                    this.closest(
-                                        ".ebpostgrid-pagination"
-                                    ).innerHTML = "";
+                            path: "essential-blocks/v1/queries",
+                            method: "POST",
+                            data: {
+                                query_data: queryString.querydata,
+                                attributes: queryString.attributes,
+                                query_param_string: queryParamStringToUse,
+                                pageNumber: pageNumber,
+                            },
+                        })
+                            .then((result) => {
+                                // Hide spinners after successful response
+                                if (isLoadMore) {
+                                    hideButtonSpinner(this);
+                                    if (!result) {
+                                        // const noPostsMarkup = `<p class="eb-no-posts">${noPostText}</p>`;
+                                        // this.closest(
+                                        //     ".ebpostgrid-pagination",
+                                        // ).insertAdjacentHTML(
+                                        //     "beforebegin",
+                                        //     noPostsMarkup,
+                                        // );
+                                        const noPost = queryStringSelector.querySelector(".eb-loadmore-no-post");
+                                        noPost.style.display = "block";
+                                        this.closest(
+                                            ".ebpostgrid-pagination",
+                                        ).innerHTML = "";
+                                    } else {
+                                        if ("v2" === version) {
+                                            const selector = this.closest(
+                                                ".eb-post-grid-wrapper",
+                                            ).querySelector(
+                                                ".eb-post-grid-posts-wrapper",
+                                            );
+                                            if (selector) {
+                                                selector.insertAdjacentHTML(
+                                                    "beforeend",
+                                                    result,
+                                                );
+                                            }
+                                        } else {
+                                            this.closest(
+                                                ".ebpostgrid-pagination",
+                                            )
+                                                ? this.closest(
+                                                      ".ebpostgrid-pagination",
+                                                  ).insertAdjacentHTML(
+                                                      "beforebegin",
+                                                      result,
+                                                  )
+                                                : "";
+                                        }
+                                    }
                                 } else {
-                                    if ('v2' === version) {
-                                        const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper');
+                                    // Hide overlay spinner for regular pagination
+                                    const postsContainer =
+                                        version === "v2"
+                                            ? queryStringSelector.querySelector(
+                                                  ".eb-post-grid-posts-wrapper",
+                                              )
+                                            : queryStringSelector;
+                                    if (postsContainer) {
+                                        hideSpinner(postsContainer);
+                                    }
+
+                                    this.closest(".eb-post-grid-wrapper")
+                                        .querySelectorAll(".ebpg-grid-post")
+                                        .forEach((post) => {
+                                            post.remove();
+                                        });
+                                    if ("v2" === version) {
+                                        const selector = this.closest(
+                                            ".eb-post-grid-wrapper",
+                                        ).querySelector(
+                                            ".eb-post-grid-posts-wrapper",
+                                        );
                                         if (selector) {
-                                            selector.insertAdjacentHTML("beforeend", result);
+                                            selector.innerHTML = result;
                                         }
                                     } else {
                                         this.closest(".ebpostgrid-pagination")
                                             ? this.closest(
-                                                ".ebpostgrid-pagination"
-                                            ).insertAdjacentHTML(
-                                                "beforebegin",
-                                                result
-                                            )
+                                                  ".ebpostgrid-pagination",
+                                              ).insertAdjacentHTML(
+                                                  "beforebegin",
+                                                  result,
+                                              )
                                             : "";
                                     }
-                                }
-                            } else {
-                                this.closest(".eb-post-grid-wrapper")
-                                    .querySelectorAll(".ebpg-grid-post")
-                                    .forEach((post) => {
-                                        post.remove();
-                                    });
-                                if ('v2' === version) {
-                                    const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper')
-                                    if (selector) {
-                                        selector.innerHTML = result;
+                                    if (
+                                        eb_hasClass(
+                                            this,
+                                            "ebpg-pagination-item",
+                                        )
+                                    ) {
+                                        this.closest(".ebpostgrid-pagination")
+                                            .querySelectorAll(
+                                                ".ebpg-pagination-item",
+                                            )
+                                            .forEach((post) => {
+                                                post.classList.remove("active");
+                                            });
+                                        this.classList.add("active");
                                     }
+                                    eb_paginationNumberHandler(
+                                        this.closest(".ebpostgrid-pagination"),
+                                    );
+                                }
+                            })
+                            .catch((error) => {
+                                // Hide spinners on error
+                                if (isLoadMore) {
+                                    hideButtonSpinner(this);
                                 } else {
-                                    this.closest(".ebpostgrid-pagination")
-                                        ? this.closest(
-                                            ".ebpostgrid-pagination"
-                                        ).insertAdjacentHTML(
-                                            "beforebegin",
-                                            result
-                                        )
-                                        : "";
+                                    const postsContainer =
+                                        version === "v2"
+                                            ? queryStringSelector.querySelector(
+                                                  ".eb-post-grid-posts-wrapper",
+                                              )
+                                            : queryStringSelector;
+                                    if (postsContainer) {
+                                        hideSpinner(postsContainer);
+                                    }
                                 }
-                                if (eb_hasClass(this, "ebpg-pagination-item")) {
-                                    this.closest(".ebpostgrid-pagination")
-                                        .querySelectorAll(
-                                            ".ebpg-pagination-item"
-                                        )
-                                        .forEach((post) => {
-                                            post.classList.remove("active");
-                                        });
-                                    this.classList.add("active");
-                                }
-                                eb_paginationNumberHandler(
-                                    this.closest(".ebpostgrid-pagination")
+                                console.error(
+                                    "Essential Blocks: Failed to load posts",
+                                    error,
                                 );
-                            }
-                        });
+                            });
                     }
                 });
             });
@@ -150,7 +296,7 @@ function eb_paginationNumberHandler(selected) {
     if (active) {
         const active_page_number = parseInt(active.dataset.pagenumber);
         const allPagination = selected.querySelectorAll(
-            ".ebpg-pagination-item"
+            ".ebpg-pagination-item",
         );
         const totalPages = allPagination.length;
 
@@ -181,7 +327,7 @@ function eb_paginationNumberHandler(selected) {
 
         //Remove All Separator HTML and Separator Markup
         const selectSeparator = selected.querySelectorAll(
-            ".ebpg-pagination-item-separator"
+            ".ebpg-pagination-item-separator",
         );
         if (selectSeparator.length > 0) {
             selectSeparator.forEach((item) => {
@@ -194,7 +340,7 @@ function eb_paginationNumberHandler(selected) {
         if (active_page_number < allPagination.length - 2) {
             allPagination[allPagination.length - 1].insertAdjacentHTML(
                 "beforebegin",
-                sepHtml
+                sepHtml,
             );
         }
 
@@ -208,24 +354,24 @@ function eb_paginationNumberHandler(selected) {
         //Previous Next Sow Hide
         if (active_page_number === 1) {
             selected.querySelector(
-                ".ebpg-pagination-item-previous"
+                ".ebpg-pagination-item-previous",
             ).disabled = true;
             selected.querySelector(
-                ".ebpg-pagination-item-next"
+                ".ebpg-pagination-item-next",
             ).disabled = false;
         } else if (active_page_number === totalPages) {
             selected.querySelector(
-                ".ebpg-pagination-item-previous"
+                ".ebpg-pagination-item-previous",
             ).disabled = false;
             selected.querySelector(
-                ".ebpg-pagination-item-next"
+                ".ebpg-pagination-item-next",
             ).disabled = true;
         } else {
             selected.querySelector(
-                ".ebpg-pagination-item-previous"
+                ".ebpg-pagination-item-previous",
             ).disabled = false;
             selected.querySelector(
-                ".ebpg-pagination-item-next"
+                ".ebpg-pagination-item-next",
             ).disabled = false;
         }
     }
@@ -278,14 +424,14 @@ function eb_handlePreviousNext(selector) {
 }
 
 //Filter Category
-window.addEventListener("DOMContentLoaded", (event) => {
+window.addEventListener("DOMContentLoaded", () => {
     const filters = document.getElementsByClassName(
-        `eb-post-grid-category-filter`
+        `eb-post-grid-category-filter`,
     );
     for (let filter of filters) {
         const taxonomy = filter.dataset.ebpgtaxonomy;
         const filterItems = filter.querySelectorAll(
-            `.ebpg-category-filter-list li`
+            `.ebpg-category-filter-list li`,
         );
         filterItems.forEach((item) => {
             item.addEventListener("click", function (event) {
@@ -297,12 +443,38 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     queryParamString = `&taxonomy=${taxonomy}&category=${category}`;
                 }
 
-                const queryString = this.closest(".eb-post-grid-wrapper").dataset;
+                const gridWrapper = this.closest(".eb-post-grid-wrapper");
+                const queryString = gridWrapper.dataset;
                 const attributes = JSON.parse(queryString.attributes);
-                const version = attributes?.version ? attributes?.version : '';
+                const version = attributes?.version ? attributes?.version : "";
+
+                // Store current filter state in the wrapper element
+                if (category === "all") {
+                    // Clear filter state when showing all posts
+                    gridWrapper.dataset.currentFilter = "";
+                } else {
+                    gridWrapper.dataset.currentFilter = queryParamString;
+                }
+
+                // Show spinner overlay on posts container during filter operation
+                const postsContainer =
+                    version === "v2"
+                        ? gridWrapper.querySelector(
+                              ".eb-post-grid-posts-wrapper",
+                          )
+                        : gridWrapper;
+                if (postsContainer) {
+                    showSpinner(postsContainer, "overlay");
+                }
 
                 apiFetch({
-                    path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryParamString}`,
+                    path: "essential-blocks/v1/queries",
+                    method: "POST",
+                    data: {
+                        query_data: queryString.querydata,
+                        attributes: queryString.attributes,
+                        query_param_string: queryParamString,
+                    },
                     parse: false,
                 }).then(
                     (result) => {
@@ -313,7 +485,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                             data.append("action", "post_grid_block_pagination");
                             data.append(
                                 "post_grid_pagination_nonce",
-                                EssentialBlocksLocalize.post_grid_pagination_nonce
+                                EssentialBlocksLocalize.post_grid_pagination_nonce,
                             );
                             data.append("querydata", queryString?.querydata);
                             data.append("attributes", queryString?.attributes);
@@ -325,106 +497,198 @@ window.addEventListener("DOMContentLoaded", (event) => {
                             }) // wrapped
                                 .then((res) => res.text())
                                 .then((data) => {
-                                    const paginationSelector = this.closest(".eb-post-grid-wrapper").querySelector(".ebpostgrid-pagination");
+                                    const paginationSelector = gridWrapper.querySelector(".ebpostgrid-pagination");
                                     if (paginationSelector) {
                                         paginationSelector.innerHTML = data;
-                                    }
-                                    else {
-                                        const newPaginationDiv = document.createElement("div");
-                                        newPaginationDiv.className = "ebpostgrid-pagination ebpg-pagination ";
+                                    } else {
+                                        const newPaginationDiv =
+                                            document.createElement("div");
+                                        newPaginationDiv.className =
+                                            "ebpostgrid-pagination ebpg-pagination ";
                                         newPaginationDiv.innerHTML = data;
 
                                         // Insert the new div where you want it
-                                        const gridWrapper = this.closest(".eb-post-grid-wrapper");
-                                        gridWrapper.appendChild(newPaginationDiv);
+                                        gridWrapper.appendChild(
+                                            newPaginationDiv,
+                                        );
                                     }
+                                    // Pass the current filter state to pagination function
                                     ebPaginationFunc(queryParamString);
                                 })
                                 .catch((err) => console.log(err));
 
                             apiFetch({
-                                path: `essential-blocks/v1/queries?query_data=${queryString.querydata}&attributes=${queryString.attributes}${queryParamString}`,
-                            }).then((result) => {
-                                this.closest(".eb-post-grid-wrapper").querySelectorAll(".ebpg-grid-post")
-                                    .forEach((post) => {
-                                        post.remove();
-                                    });
-                                if (
-                                    this.closest(".eb-post-grid-wrapper").querySelector("p")
-                                ) {
-                                    this.closest(".eb-post-grid-wrapper").querySelector("p").remove();
-                                }
-                                // need to change for v2
-                                if ('v2' === version) {
-                                    const selector = this.closest(".eb-post-grid-wrapper").querySelector('.eb-post-grid-posts-wrapper')
-                                    if (selector) {
-                                        selector.innerHTML = result;
+                                path: "essential-blocks/v1/queries",
+                                method: "POST",
+                                data: {
+                                    query_data: queryString.querydata,
+                                    attributes: queryString.attributes,
+                                    query_param_string: queryParamString,
+                                },
+                            })
+                                .then((result) => {
+                                    // Hide spinner after successful filter operation
+                                    const postsContainer =
+                                        version === "v2"
+                                            ? this.closest(
+                                                  ".eb-post-grid-wrapper",
+                                              ).querySelector(
+                                                  ".eb-post-grid-posts-wrapper",
+                                              )
+                                            : this.closest(
+                                                  ".eb-post-grid-wrapper",
+                                              );
+                                    if (postsContainer) {
+                                        hideSpinner(postsContainer);
                                     }
-                                    else {
-                                        const newSelector = document.createElement("div");
-                                        newSelector.className = "eb-post-grid-posts-wrapper";
-                                        newSelector.innerHTML = result;
-                                        this.closest(".eb-post-grid-category-filter").insertAdjacentHTML("afterend", newSelector.outerHTML);
-                                    }
-                                } else {
-                                    this.closest(".eb-post-grid-category-filter").insertAdjacentHTML("afterend", result);
-                                }
 
-                                this.closest(".eb-post-grid-category-filter")
-                                    .querySelectorAll(".ebpg-category-filter-list-item")
-                                    .forEach((item) => {
-                                        item.classList.remove("active");
-                                    });
-                                this.classList.add("active");
-                            });
+                                    this.closest(".eb-post-grid-wrapper")
+                                        .querySelectorAll(".ebpg-grid-post")
+                                        .forEach((post) => {
+                                            post.remove();
+                                        });
+                                    if (
+                                        this.closest(
+                                            ".eb-post-grid-wrapper",
+                                        ).querySelector("p")
+                                    ) {
+                                        this.closest(".eb-post-grid-wrapper")
+                                            .querySelector("p")
+                                            .remove();
+                                    }
+                                    // need to change for v2
+                                    if ("v2" === version) {
+                                        const selector = this.closest(
+                                            ".eb-post-grid-wrapper",
+                                        ).querySelector(
+                                            ".eb-post-grid-posts-wrapper",
+                                        );
+                                        if (selector) {
+                                            selector.innerHTML = result;
+                                        } else {
+                                            const newSelector =
+                                                document.createElement("div");
+                                            newSelector.className =
+                                                "eb-post-grid-posts-wrapper";
+                                            newSelector.innerHTML = result;
+                                            this.closest(
+                                                ".eb-post-grid-category-filter",
+                                            ).insertAdjacentHTML(
+                                                "afterend",
+                                                newSelector.outerHTML,
+                                            );
+                                        }
+                                    } else {
+                                        this.closest(
+                                            ".eb-post-grid-category-filter",
+                                        ).insertAdjacentHTML(
+                                            "afterend",
+                                            result,
+                                        );
+                                    }
+
+                                    this.closest(
+                                        ".eb-post-grid-category-filter",
+                                    )
+                                        .querySelectorAll(
+                                            ".ebpg-category-filter-list-item",
+                                        )
+                                        .forEach((item) => {
+                                            item.classList.remove("active");
+                                        });
+                                    this.classList.add("active");
+                                })
+                                .catch((error) => {
+                                    // Hide spinner on error
+                                    const postsContainer =
+                                        version === "v2"
+                                            ? this.closest(
+                                                  ".eb-post-grid-wrapper",
+                                              ).querySelector(
+                                                  ".eb-post-grid-posts-wrapper",
+                                              )
+                                            : this.closest(
+                                                  ".eb-post-grid-wrapper",
+                                              );
+                                    if (postsContainer) {
+                                        hideSpinner(postsContainer);
+                                    }
+                                    console.error(
+                                        "Essential Blocks: Failed to load filtered posts",
+                                        error,
+                                    );
+                                });
                         } else {
+                            // Hide spinner when no posts found
+                            const postsContainer =
+                                version === "v2"
+                                    ? this.closest(
+                                          ".eb-post-grid-wrapper",
+                                      ).querySelector(
+                                          ".eb-post-grid-posts-wrapper",
+                                      )
+                                    : this.closest(".eb-post-grid-wrapper");
+                            if (postsContainer) {
+                                hideSpinner(postsContainer);
+                            }
+
                             this.closest(".eb-post-grid-category-filter")
                                 .querySelectorAll(
-                                    ".ebpg-category-filter-list-item"
+                                    ".ebpg-category-filter-list-item",
                                 )
                                 .forEach((item) => {
                                     item.classList.remove("active");
                                 });
                             this.classList.add("active");
-                            this.closest(".eb-post-grid-wrapper")
+
+                            const noPostsGridWrapper = this.closest(".eb-post-grid-wrapper");
+                            // Store current filter state even when no posts found
+                            noPostsGridWrapper.dataset.currentFilter = queryParamString;
+
+                            noPostsGridWrapper
                                 .querySelectorAll(".ebpg-grid-post")
                                 .forEach((post) => {
                                     post.remove();
                                 });
                             if (
-                                this.closest(
-                                    ".eb-post-grid-wrapper"
-                                ).querySelector(".ebpostgrid-pagination")
+                                noPostsGridWrapper.querySelector(".ebpostgrid-pagination")
                             ) {
-                                this.closest(
-                                    ".eb-post-grid-wrapper"
-                                ).querySelector(
-                                    ".ebpostgrid-pagination"
+                                noPostsGridWrapper.querySelector(
+                                    ".ebpostgrid-pagination",
                                 ).innerHTML = "";
                             }
                             if (
-                                this.closest(
-                                    ".eb-post-grid-wrapper"
-                                ).querySelector("p")
+                                noPostsGridWrapper.querySelector("p")
                             ) {
-                                this.closest(".eb-post-grid-wrapper")
+                                noPostsGridWrapper
                                     .querySelectorAll("p")
                                     .forEach((item) => {
                                         item.remove();
                                     });
                             }
 
-                            this.closest(
-                                ".eb-post-grid-wrapper"
-                            ).insertAdjacentHTML(
+                            noPostsGridWrapper.insertAdjacentHTML(
                                 "beforeend",
-                                "<p>No Posts Found</p>"
+                                `<p>${__(
+                                    "No Posts Found",
+                                    "essential-blocks",
+                                )}</p>`,
                             );
                         }
                     },
                     (error) => {
+                        // Hide spinner on error
+                        const postsContainer =
+                            version === "v2"
+                                ? this.closest(
+                                      ".eb-post-grid-wrapper",
+                                  ).querySelector(".eb-post-grid-posts-wrapper")
+                                : this.closest(".eb-post-grid-wrapper");
+                        if (postsContainer) {
+                            hideSpinner(postsContainer);
+                        }
                         console.log("error", error);
-                    }
+                    },
                 );
             });
         });

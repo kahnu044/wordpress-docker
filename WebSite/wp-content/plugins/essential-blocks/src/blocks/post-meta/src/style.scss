@@ -9,6 +9,10 @@
 		&.eb-post-meta-inline {
 			flex-direction: row;
 		}
+		.eb-post-metadata-item a {
+			text-decoration: none;
+			line-height: 0;
+		}
 	}
 	
 	.eb-post-metadata-label {
@@ -27,6 +31,74 @@
 	.eb-post-meta-inline .eb-post-metadata-item {
 		display: inline-block;
 	}
-	  
+
+	// Author picture styles
+	.eb-author-picture {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.eb-author-avatar {
+		display: block;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	// Stacked layout: Picture on left, author name and date stacked on right
+	.eb-author-stacked-layout {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		.eb-author-picture {
+			flex-shrink: 0;
+		}
+
+		.eb-author-meta-content {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 2px;
+
+			.eb-author-info,
+			.eb-date-info {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+		}
+	}
+
+	// Inline layout: Picture before author prefix text
+	.eb-author-inline-layout {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+
+		.eb-author-picture {
+			display: inline-flex;
+			align-items: center;
+		}
+
+		.eb-post-metadata-label,
+		.eb-post-metadata-value,
+		.eb-post-metadata-icon {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+
+	// Legacy support for existing structure
+	.eb-post-metadata-author {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.eb-author-meta-content {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
 
 }

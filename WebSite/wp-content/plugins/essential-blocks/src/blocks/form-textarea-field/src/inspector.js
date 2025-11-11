@@ -20,7 +20,8 @@ import {
     EBIconPicker,
     DynamicInputControl,
     InspectorPanel,
-    FormConditionalLogics
+    FormConditionalLogics,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 import {
@@ -113,7 +114,7 @@ function Inspector(props) {
                             />
                         )}
 
-                        <TextControl
+                        <EBTextControl
                             label={__(
                                 "Placeholder Text",
                                 "essential-blocks"
@@ -124,6 +125,7 @@ function Inspector(props) {
                                     placeholderText: text,
                                 })
                             }
+                            enableAi={true}
                         />
 
                         <RangeControl
@@ -183,7 +185,7 @@ function Inspector(props) {
                         )}
                         initialOpen={true}
                     >
-                        <TextControl
+                        <EBTextControl
                             label={__(
                                 "Default Value",
                                 "essential-blocks"
@@ -194,9 +196,10 @@ function Inspector(props) {
                                     defaultValue: text,
                                 })
                             }
+                            enableAi={true}
                             help={__("Leave empty if no default value.", "essential-blocks")}
                         />
-                        <TextControl
+                        <EBTextControl
                             label={__(
                                 "Field Custom Name Attribute",
                                 "essential-blocks"
@@ -207,11 +210,12 @@ function Inspector(props) {
                                     fieldName: text,
                                 })
                             }
+                            enableAi={false}
                             help={__("This is for the name attributes which is used to submit form data, Name must be unique.", "essential-blocks")}
                         />
 
                         {isRequired && (
-                            <TextControl
+                            <EBTextControl
                                 label={__(
                                     "Custom Validation Message",
                                     "essential-blocks"
@@ -222,6 +226,7 @@ function Inspector(props) {
                                         validationMessage: text,
                                     })
                                 }
+                                enableAi={true}
                             />
                         )}
                     </InspectorPanel.PanelBody>

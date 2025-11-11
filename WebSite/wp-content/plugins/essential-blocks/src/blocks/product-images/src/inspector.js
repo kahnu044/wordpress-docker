@@ -4,9 +4,6 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    TextControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     SelectControl,
 } from "@wordpress/components";

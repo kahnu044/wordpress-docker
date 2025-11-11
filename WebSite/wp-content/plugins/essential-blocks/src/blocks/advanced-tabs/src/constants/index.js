@@ -229,3 +229,18 @@ export const HOVER_EFFECT = [
         value: "hvr-curl-bottom-left",
     },
 ];
+
+export const TITLE_ALIGNMENTS = [
+    {
+        label: __("Left", "essential-blocks"),
+        value: "flex-start",
+    },
+    {
+        label: __("Center", "essential-blocks"),
+        value: "center",
+    },
+    {
+        label: __("Right", "essential-blocks"),
+        value: "flex-end",
+    },
+]

@@ -28,6 +28,7 @@ const Save = ({ attributes }) => {
         openInNewTab
     } = attributes;
 
+    // Return null for dynamic content - will be handled by PHP render callback
     if (source == 'dynamic-title') return null;
     const linkTarget = openInNewTab ? "_blank" : undefined;
 

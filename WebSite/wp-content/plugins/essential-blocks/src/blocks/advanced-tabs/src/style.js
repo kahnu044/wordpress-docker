@@ -1,7 +1,7 @@
 
 import { useState } from "@wordpress/element";
 
-import { typoPrefixTabTitle } from "./constants/typographyPrefixConstants";
+import { typoPrefixTabTitle, typoPrefixTabSubtitle } from "./constants/typographyPrefixConstants";
 
 import {
     prefixWrapBg,
@@ -17,6 +17,7 @@ import {
     prefixActTitleBdShadow,
     prefixContentBdShadow,
     prefixTtlWrpBdShadow,
+    prefixIconBdShadow,
 } from "./constants/borderShadowConstants";
 
 import {
@@ -28,12 +29,15 @@ import {
     prefixContentPadding,
     prefixTtlWrpMargin,
     prefixTtlWrpPadding,
+    prefixIconPadding,
 } from "./constants/dimensionsConstants";
 
 import {
     prefixTitleMinWidth,
     prefixIconSize,
     prefixIconGap,
+    prefixSubtitleSpacing,
+    prefixCaretSize,
 } from "./constants/rangeNames";
 
 import {
@@ -72,7 +76,18 @@ export default function Style(props) {
         MOBcarZ_Range = TABcarZ_Range || carZ_Range,
         isFillTitle,
         enableResponsiveLayout,
-        verticalToHorizontal
+        verticalToHorizontal,
+        subtitleColor,
+        hvSubtitleColor,
+        actSubtitleColor,
+        actHvSubtitleColor,
+        iconBgColor,
+        iconhvBgColor,
+        actIconBgColor,
+        actHvIconBgColor,
+        titleAlign,
+        addCaretIcon,
+        caretIcon,
     } = attributes;
 
     //
@@ -84,6 +99,15 @@ export default function Style(props) {
     } = generateTypographyStyles({
         attributes,
         prefixConstant: typoPrefixTabTitle,
+    });
+
+    const {
+        typoStylesDesktop: subtitleTypoStylesDesktop,
+        typoStylesTab: subtitleTypoStylesTab,
+        typoStylesMobile: subtitleTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: typoPrefixTabSubtitle,
     });
     // styles related to generateTypographyStyles end
 
@@ -149,6 +173,17 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: prefixIconGap,
         property: "gap",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: subtitleSpacingDesktop,
+        rangeStylesTab: subtitleSpacingTab,
+        rangeStylesMobile: subtitleSpacingMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: prefixSubtitleSpacing,
+        property: "margin-top",
         attributes,
         customUnit: "px",
     });
@@ -389,6 +424,43 @@ export default function Style(props) {
         // noBorder: true,
     });
 
+    const {
+        styesDesktop: iconBdShdStyesDesktop,
+        styesTab: iconBdShdStyesTab,
+        styesMobile: iconBdShdStyesMobile,
+        stylesHoverDesktop: iconBdShdStylesHoverDesktop,
+        stylesHoverTab: iconBdShdStylesHoverTab,
+        stylesHoverMobile: iconBdShdStylesHoverMobile,
+        transitionStyle: iconBdShdTransitionStyle,
+    } = generateBorderShadowStyles({
+        controlName: prefixIconBdShadow,
+        attributes,
+        // noShadow: true,
+        // noBorder: true,
+    });
+
+    // icon padding
+    const {
+        dimensionStylesDesktop: iconPaddingDesktop,
+        dimensionStylesTab: iconPaddingTab,
+        dimensionStylesMobile: iconPaddingMobile,
+    } = generateDimensionsControlStyles({
+        attributes,
+        controlName: prefixIconPadding,
+        styleFor: "padding",
+    });
+
+    const {
+        rangeStylesDesktop: caretSizeDesktop,
+        rangeStylesTab: caretSizeTab,
+        rangeStylesMobile: caretSizeMobile,
+    } = generateResponsiveRangeStyles({
+        attributes,
+        controlName: prefixCaretSize,
+        property: "font-size",
+        customUnit: "px",
+    });
+
 
     // transition:all 0.5s, ${contentBgTransitionStyle}, ${contentBdShdTransitionStyle};
     // styles related to generateBorderShadowStyles end
@@ -446,7 +518,7 @@ export default function Style(props) {
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li{
 			display: flex;
-			justify-content: center;
+			justify-content: ${titleAlign};
 			align-items: center;
 			cursor:pointer;
 			text-align: center;
@@ -471,16 +543,35 @@ export default function Style(props) {
 			${ttlBdShdStylesHoverDesktop}
 		}
 
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-title-wrap {
+            ${mediaPositon === "inline" ? `text-align: left;` : "text-align: center;"}
+        }
+
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			display:flex;
 			justify-content:center;
 			align-items:center;
-			${iconWidthDesktop}
-			${iconHeightDesktop}
+			// ${iconWidthDesktop}
+			// ${iconHeightDesktop}
 			${iconSizeDesktop}
 			${iconColor ? `color:${iconColor};` : ""}
 			${colorTransition ? `transition:color ${colorTransition}s;` : ""}
+            ${iconBgColor ? `background-color:${iconBgColor};` : ""}
+			${iconBdShdStyesDesktop}
+			${iconPaddingDesktop}
 		}
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li:hover .tabIcon {
+            ${iconhvBgColor ? `background-color:${iconhvBgColor};` : ""}
+			${iconBdShdStylesHoverDesktop}
+        }
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active .tabIcon {
+            ${actIconBgColor ? `background-color:${actIconBgColor};` : ""}
+        }
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:hover .tabIcon {
+            ${actHvIconBgColor ? `background-color:${actHvIconBgColor};` : ""}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li:hover span{
 			${hvIconColor ? `color:${hvIconColor};` : ""}
@@ -503,7 +594,20 @@ export default function Style(props) {
 			${hvTextColor ? `color:${hvTextColor};` : ""}
 		}
 
-		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active{
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-subtitle-text{
+            display: block;
+            margin: 0;
+            padding: 0;
+            ${subtitleColor ? `color:${subtitleColor};` : ""}
+            ${subtitleTypoStylesDesktop}
+            ${subtitleSpacingDesktop}
+            ${colorTransition ? `transition:color ${colorTransition}s;` : ""}
+        }
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li:hover .tab-subtitle-text{
+            ${hvSubtitleColor ? `color:${hvSubtitleColor};` : ""}
+        }
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active{
 			${actTlBdShdStyesDesktop}
 			${actTlBackgroundStylesDesktop}
 			transition:${actTlBdShdTransitionStyle}, ${actTlBgTransitionStyle};
@@ -544,6 +648,25 @@ export default function Style(props) {
 
 		}
 
+        ${addCaretIcon && caretIcon
+                ? `
+                .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active:after{
+					content: none;
+				}
+				.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-caret-icon {
+                    display: none;
+					${caretSizeDesktop}
+					${caretColor ? `color:${caretColor};` : ""}
+                    ${layout === "horizontal" ? `` : `margin-left: auto;`}
+				}
+                .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li.active .tab-caret-icon {
+                    display: flex;
+                }
+                `
+                : ""
+
+            }
+
 		`
             : ""
         }
@@ -568,7 +691,14 @@ export default function Style(props) {
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover .tab-title-text{
 			${actHvTextColor ? `color:${actHvTextColor};` : ""}
 		}
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active .tab-subtitle-text{
+            ${actSubtitleColor ? `color:${actSubtitleColor};` : ""}
+            ${actColorTransition ? `transition:color ${actColorTransition}s;` : ""}
+        }
 
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id=${blockId}] li.active:hover .tab-subtitle-text{
+            ${actHvSubtitleColor ? `color:${actHvSubtitleColor};` : ""}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-contents{
 			flex:1;
@@ -676,14 +806,20 @@ export default function Style(props) {
 
 			}
 
+            .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-caret-icon {
+                ${caretSizeTab}
+            }
+
 			`
             : ""
         }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			${iconSizeTab}
-			${iconWidthTab}
-			${iconHeightTab}
+			// ${iconWidthTab}
+			// ${iconHeightTab}
+			${iconBdShdStyesTab}
+			${iconPaddingTab}
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li img{
@@ -693,6 +829,10 @@ export default function Style(props) {
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-title-text{
 			${titleTypoStylesTab}
 		}
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-subtitle-text{
+            ${subtitleTypoStylesTab}
+            ${subtitleSpacingTab}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-contents .eb-tab-wrapper[data-tab-parent-id="${blockId}"]{
 			${contentMarginTab}
@@ -794,14 +934,20 @@ export default function Style(props) {
 
 			}
 
+            .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-caret-icon {
+                ${caretSizeMobile}
+            }
+
 			`
             : ""
         }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			${iconSizeMobile}
-			${iconWidthMobile}
-			${iconHeightMobile}
+			// ${iconWidthMobile}
+			// ${iconHeightMobile}
+            ${iconBdShdStyesMobile}
+			${iconPaddingMobile}
 		}
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li img{
@@ -811,6 +957,10 @@ export default function Style(props) {
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-title-text{
 			${titleTypoStylesMobile}
 		}
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-subtitle-text{
+            ${subtitleTypoStylesMobile}
+            ${subtitleSpacingMobile}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-contents .eb-tab-wrapper[data-tab-parent-id="${blockId}"]{
 			${contentMarginMobile}

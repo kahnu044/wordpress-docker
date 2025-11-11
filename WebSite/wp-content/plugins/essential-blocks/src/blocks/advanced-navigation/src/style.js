@@ -383,7 +383,7 @@ export default function Style(props) {
 
         }
 
-		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item{
+		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item:not(.wp-block-navigation__submenu-container .wp-block-navigation-item) {
 			${navMarginDesktop}
 			${navPaddingDesktop}
 			transition: all .5s, ${navBdShdTransitionStyle};
@@ -654,7 +654,7 @@ export default function Style(props) {
 
 
 
-		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item{
+		.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item:not(.wp-block-navigation__submenu-container .wp-block-navigation-item) {
 			${navMarginTab}
 			${navPaddingTab}
 		}
@@ -761,7 +761,7 @@ export default function Style(props) {
 
 
 
-	.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item{
+	.${blockId}.eb-advanced-navigation-wrapper .wp-block-navigation-item:not(.wp-block-navigation__submenu-container .wp-block-navigation-item) {
 		${navMarginMobile}
 		${navPaddingMobile}
 	}

@@ -1,0 +1,249 @@
+// AI WooCommerce Button and Popover Styles
+// Following Essential Blocks BEM methodology with eb- prefix
+
+// Button Wrapper
+.eb-ai-woo-button-wrapper {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+// AI WooCommerce Button
+.eb-ai-woo-button {
+    &.page-title-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        background: #2271b1;
+        color: #fff;
+        border: 1px solid #2271b1;
+        border-radius: 3px;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1.5;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: #135e96;
+            border-color: #135e96;
+            color: #fff;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+            outline: none;
+        }
+    }
+
+    &-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+}
+
+// AI WooCommerce Popover/Modal
+.eb-ai-woo-popover {
+    .components-modal__content {
+        padding: 0;
+        min-height: 400px;
+        max-width: 600px;
+        width: 90vw;
+    }
+
+    .components-modal__header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f9f9f9;
+
+        .components-modal__header-heading {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2327;
+        }
+    }
+}
+
+// AI API Key Warning
+.eb-ai-api-key-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+
+    p {
+        margin: 0;
+        color: #856404;
+        font-size: 14px;
+    }
+
+    a {
+        color: #0073aa;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// AI Header
+.eb-ai-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f9f9f9;
+
+    &-content {
+        flex: 1;
+
+        h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2327;
+        }
+
+        p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+    }
+}
+
+.eb-ai-logo {
+    &-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.eb-ai-close-button {
+    padding: 4px;
+    min-width: auto;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+
+    &:hover {
+        color: #000;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .dashicon {
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+    }
+}
+
+// AI Content
+.eb-ai-content {
+    padding: 24px;
+}
+
+.eb-ai-hello-message {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+
+    h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1d2327;
+        margin: 0 0 16px 0;
+    }
+
+    p {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        margin: 0 0 24px 0;
+    }
+}
+
+.eb-ai-demo-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.eb-ai-demo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+}
+
+// Generating Spinner
+.eb-ai-generating-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: eb-ai-spin 1s ease-in-out infinite;
+}
+
+@keyframes eb-ai-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .eb-ai-woo-popover {
+        .components-modal__content {
+            width: 95vw;
+            min-height: 300px;
+        }
+    }
+
+    .eb-ai-header {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+
+        &-content {
+            h4 {
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+
+    .eb-ai-content {
+        padding: 20px;
+    }
+
+    .eb-ai-hello-message {
+        h3 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 13px;
+        }
+    }
+}

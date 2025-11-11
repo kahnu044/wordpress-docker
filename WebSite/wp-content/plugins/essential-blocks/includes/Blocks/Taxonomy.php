@@ -54,7 +54,7 @@ class Taxonomy extends Block
 
         if ( $attributes[ 'source' ] === 'current-post' ) {
             $terms = get_the_terms( get_the_ID(), $attributes[ 'selectedTaxonomy' ] );
-            if ( ! empty( $terms ) && ! empty( $attributes[ 'taxonomyLimit' ] ) && $attributes[ 'taxonomyLimit' ] !== -1 ) {
+            if ( is_array( $terms ) && ! empty( $terms ) && ! empty( $attributes[ 'taxonomyLimit' ] ) && $attributes[ 'taxonomyLimit' ] !== -1 ) {
                 $terms = array_slice( $terms, 0, $attributes[ 'taxonomyLimit' ] );
             }
         } else {

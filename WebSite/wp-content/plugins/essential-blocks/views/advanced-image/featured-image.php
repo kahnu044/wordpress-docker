@@ -24,8 +24,21 @@
         $featured_image = get_the_post_thumbnail( get_the_ID(), $size_slug );
     }
 
+    // Check if we're in Loop Builder context and no featured image exists
+    $is_in_loop_builder = isset( $isInLoopBuilder ) && $isInLoopBuilder;
+
     if ( ! $featured_image ) {
-        return '';
+        // If in Loop Builder context, show placeholder image instead of returning empty
+        if ( $is_in_loop_builder ) {
+            $placeholder_url = isset( $placeholderImageUrl ) ? $placeholderImageUrl : '';
+            if ( $placeholder_url ) {
+                $featured_image = '<img src="' . esc_url( $placeholder_url ) . '" alt="' . esc_attr__( 'Placeholder image for Loop Builder', 'essential-blocks' ) . '">';
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
     }
 
     if ( $is_link ) {

@@ -42,10 +42,7 @@ function wpcf7_number_form_tag_handler( $tag ) {
 	$atts['max'] = $tag->get_option( 'max', 'signed_num', true );
 	$atts['step'] = $tag->get_option( 'step', 'num', true );
 	$atts['readonly'] = $tag->has_option( 'readonly' );
-
-	$atts['autocomplete'] = $tag->get_option(
-		'autocomplete', '[-0-9a-zA-Z]+', true
-	);
+	$atts['autocomplete'] = $tag->get_autocomplete_option();
 
 	if ( $tag->is_required() ) {
 		$atts['aria-required'] = 'true';
@@ -62,8 +59,7 @@ function wpcf7_number_form_tag_handler( $tag ) {
 
 	$value = (string) reset( $tag->values );
 
-	if ( $tag->has_option( 'placeholder' )
-	or $tag->has_option( 'watermark' ) ) {
+	if ( $tag->has_option( 'placeholder' ) or $tag->has_option( 'watermark' ) ) {
 		$atts['placeholder'] = $value;
 		$value = '';
 	}
@@ -177,18 +173,18 @@ add_filter( 'wpcf7_messages', 'wpcf7_number_messages', 10, 1 );
 function wpcf7_number_messages( $messages ) {
 	return array_merge( $messages, array(
 		'invalid_number' => array(
-			'description' => __( "Number format that the sender entered is invalid", 'contact-form-7' ),
-			'default' => __( "Please enter a number.", 'contact-form-7' ),
+			'description' => __( 'Number format that the sender entered is invalid', 'contact-form-7' ),
+			'default' => __( 'Please enter a number.', 'contact-form-7' ),
 		),
 
 		'number_too_small' => array(
-			'description' => __( "Number is smaller than minimum limit", 'contact-form-7' ),
-			'default' => __( "This field has a too small number.", 'contact-form-7' ),
+			'description' => __( 'Number is smaller than minimum limit', 'contact-form-7' ),
+			'default' => __( 'This field has a too small number.', 'contact-form-7' ),
 		),
 
 		'number_too_large' => array(
-			'description' => __( "Number is larger than maximum limit", 'contact-form-7' ),
-			'default' => __( "This field has a too large number.", 'contact-form-7' ),
+			'description' => __( 'Number is larger than maximum limit', 'contact-form-7' ),
+			'default' => __( 'This field has a too large number.', 'contact-form-7' ),
 		),
 	) );
 }

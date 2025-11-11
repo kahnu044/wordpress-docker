@@ -190,7 +190,8 @@ export const registerProBlocks = () => {
         const all_blocks = EssentialBlocksLocalize?.all_blocks_default || {};
         const proBlocks = [];
         for (const [key, block] of Object.entries(all_blocks)) {
-            if (block?.is_pro && block?.name) {
+            // Include blocks that are pro AND either show_in_admin !== false OR have a parent
+            if (block?.is_pro && block?.name && (block?.show_in_admin !== false || block?.parent)) {
                 proBlocks.push({
                     key: key,
                     name: `essential-blocks/${block.name}`,
@@ -198,6 +199,7 @@ export const registerProBlocks = () => {
                     description: block.description || "",
                     category: "essential-blocks-pro",
                     icon: block.icon || "block-default",
+                    parent: block.parent || null,
                 });
             }
         }
@@ -210,6 +212,7 @@ export const registerProBlocks = () => {
             let metadata = {
                 name: block.name,
                 title: block.title,
+                description: block.description,
                 category: "essential-blocks-pro",
                 apiVersion: 2,
                 textdomain: "essential-blocks",
@@ -221,6 +224,13 @@ export const registerProBlocks = () => {
                     },
                 },
             };
+
+            if (block.parent) {
+                metadata = {
+                    ...metadata,
+                    parent: block.parent,
+                };
+            }
 
             // Function to create an icon element for the title
             const createTitleIcon = (iconName) => {
@@ -267,8 +277,9 @@ export const registerProBlocks = () => {
             };
 
             // Create a placeholder edit component that shows a pro notice
-            const Edit = ({ attributes, isSelected }) => {
-                return attributes?.cover.length ? (
+            const Edit = (props) => {
+                const { attributes } = props;
+                return attributes.cover.length ? (
                     <div>
                         <img
                             src={attributes?.cover}
@@ -319,11 +330,10 @@ export const registerProBlocks = () => {
                 ...metadata,
                 example: {
                     attributes: {
-                        cover: `${
-                            EssentialBlocksLocalize?.image_url
-                        }/block-preview/${block.name
-                            .replace("essential-blocks/", "")
-                            .replace("pro-", "")}.jpg`,
+                        cover: `${EssentialBlocksLocalize?.image_url
+                            }/block-preview/${block.name
+                                .replace("essential-blocks/", "")
+                                .replace("pro-", "")}.jpg`,
                     },
                 },
                 edit: Edit,

@@ -13,7 +13,6 @@ import {
     TextareaControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { MediaUpload } from "@wordpress/block-editor";
 
 /*
  * Internal depencencies
@@ -49,9 +48,9 @@ import {
     TEXT_ALIGN,
     VERTICAL_ALIGN,
     TAGS_TYPE,
+    SLIDER_BORDER_SHADOW,
 } from "./constants/constants";
 
-import objAttributes from "./attributes";
 
 import { TITLE_TYPOGRAPHY, SUBTITLE_TYPOGRAPHY, BUTTON_TYPOGRAPHY, BUTTON2_TYPOGRAPHY } from "./constants/typography-constant";
 
@@ -66,14 +65,14 @@ import {
     BorderShadowControl,
     ResponsiveRangeController,
     ColorControl,
-    stripHtmlTags,
     faArrowIcons,
     EBIconPicker,
     InspectorPanel,
     isValidHtml,
     SortControl,
-    ImageAvatar,
-    sanitizeIconValue
+    sanitizeIconValue,
+    ImageComponent,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -119,7 +118,7 @@ function Inspector(props) {
         titleTag,
         contentTag,
         showLightbox,
-        version
+        version,
     } = attributes;
 
     // Add this function to get the settings components for each slide
@@ -129,56 +128,19 @@ function Inspector(props) {
                 <PanelRow>
                     {__("Image", "essential-blocks")}
                 </PanelRow>
-                {!each.url && (
-                    <MediaUpload
-                        onSelect={(value) =>
-                            handleImage(
-                                value,
-                                i,
-                                images,
-                                setAttributes
-                            )
-                        }
-                        type="image"
-                        value={each.id}
-                        render={({
-                            open,
-                        }) => {
-                            return (
-                                <Button
-                                    className="eb-background-control-inspector-panel-img-btn components-button"
-                                    label={__(
-                                        "Upload Image",
-                                        "essential-blocks"
-                                    )}
-                                    icon="format-image"
-                                    onClick={
-                                        open
-                                    }
-                                />
-                            );
-                        }}
-                    />
-                )}
-
-                {each.url && (
-                    <ImageAvatar
-                        imageUrl={each.url}
-                        onDeleteImage={() =>
-                            handleImageData(
-                                'url',
-                                null,
-                                each.id,
-                                images,
-                                setAttributes
-                            )
-                        }
-                    />
-                )}
+                <ImageComponent.GeneralTab
+                    onSelect={(value) => handleImage(value, i, images, setAttributes)}
+                    value={(!each.url || each.url.startsWith('data:image/')) ? each.id : each.url}
+                    hasTag={false}
+                    hasCaption={false}
+                    hasStyle={false}
+                    hasLink={false}
+                    showInPanel={false}
+                />
 
                 {sliderType === "content" && (
                     <>
-                        <TextControl
+                        <EBTextControl
                             label={__("Title", "essential-blocks")}
                             value={each.title}
                             onChange={(value) =>
@@ -190,6 +152,7 @@ function Inspector(props) {
                                     setAttributes
                                 )
                             }
+                            enableAi={true}
                         />
 
                         {!isValidHtml(each.title) && (
@@ -200,7 +163,7 @@ function Inspector(props) {
                             </PanelRow>
                         )}
 
-                        <TextControl
+                        <EBTextControl
                             label={__("Subtitle", "essential-blocks")}
                             value={each.subtitle}
                             onChange={(value) =>
@@ -212,6 +175,7 @@ function Inspector(props) {
                                     setAttributes
                                 )
                             }
+                            enableAi={true}
                         />
 
                         {!isValidHtml(each.subtitle) && (
@@ -238,7 +202,7 @@ function Inspector(props) {
 
                         {each.showButton && (
                             <>
-                                <TextControl
+                                <EBTextControl
                                     label={__("Button Text", "essential-blocks")}
                                     value={each.buttonText}
                                     onChange={(value) =>
@@ -250,6 +214,7 @@ function Inspector(props) {
                                             setAttributes
                                         )
                                     }
+                                    enableAi={true}
                                 />
 
                                 {!isValidHtml(each.buttonText) && (
@@ -260,8 +225,9 @@ function Inspector(props) {
                                     </PanelRow>
                                 )}
 
-                                <TextControl
+                                <EBTextControl
                                     label={__("Button URL", "essential-blocks")}
+                                    fieldType="url"
                                     value={each.buttonUrl}
                                     onChange={(value) =>
                                         handleImageData(
@@ -272,6 +238,13 @@ function Inspector(props) {
                                             setAttributes
                                         )
                                     }
+                                    placeholder="https://example.com"
+                                    help={__(
+                                        "Enter a valid URL.",
+                                        "essential-blocks"
+                                    )}
+                                    showValidation={true}
+                                    enableSecurity={true}
                                 />
 
                                 {each.buttonUrl && each.buttonUrl.length > 0 && !each.isValidUrl && (
@@ -330,8 +303,9 @@ function Inspector(props) {
                                             </PanelRow>
                                         )}
 
-                                        <TextControl
+                                        <EBTextControl
                                             label={__("Second Button URL", "essential-blocks")}
+                                            fieldType="url"
                                             value={each.secondButtonUrl}
                                             onChange={(value) =>
                                                 handleImageData(
@@ -342,6 +316,13 @@ function Inspector(props) {
                                                     setAttributes
                                                 )
                                             }
+                                            placeholder="https://example.com"
+                                            help={__(
+                                                "Enter a valid URL.",
+                                                "essential-blocks"
+                                            )}
+                                            showValidation={true}
+                                            enableSecurity={true}
                                         />
 
                                         {each.secondButtonUrl && each.secondButtonUrl.length > 0 && !each.isValidUrl && (
@@ -366,13 +347,76 @@ function Inspector(props) {
                                 )}
                             </>
                         )}
+
+                        {sliderContentType === "content-1" && (
+                            <>
+                                <ToggleControl
+                                    label={__("Enable Content Link", "essential-blocks")}
+                                    checked={each.enableContentLink}
+                                    onChange={() =>
+                                        handleImageData(
+                                            'enableContentLink',
+                                            !each.enableContentLink,
+                                            each.id,
+                                            images,
+                                            setAttributes
+                                        )
+                                    }
+                                />
+
+                                {each.enableContentLink && (
+                                    <>
+                                        <EBTextControl
+                                            label={__("Content Link", "essential-blocks")}
+                                            fieldType="url"
+                                            value={each.contentLink}
+                                            onChange={(value) =>
+                                                handleImageData(
+                                                    'contentLink',
+                                                    value,
+                                                    each.id,
+                                                    images,
+                                                    setAttributes
+                                                )
+                                            }
+                                            placeholder="https://example.com"
+                                            help={__(
+                                                "Enter a valid URL.",
+                                                "essential-blocks"
+                                            )}
+                                            showValidation={true}
+                                            enableSecurity={true}
+                                        />
+
+                                        {each.contentLink && each.contentLink.length > 0 && !each.isContentUrlValid && (
+                                            <span className="error">{__("URL is not valid", "essential-blocks")}</span>
+                                        )}
+
+                                        <ToggleControl
+                                            label={__("Open in New Tab", "essential-blocks")}
+                                            checked={each.contentOpenNewTab}
+                                            onChange={() =>
+                                                handleImageData(
+                                                    'contentOpenNewTab',
+                                                    !each.contentOpenNewTab,
+                                                    each.id,
+                                                    images,
+                                                    setAttributes
+                                                )
+                                            }
+                                        />
+                                    </>
+                                )}
+                            </>
+                        )}
                     </>
                 )}
 
                 {sliderType === "image" && (
                     <>
-                        <TextControl
+                        <EBTextControl
                             label={__("URL", "essential-blocks")}
+                            fieldType="url"
                             value={each.buttonUrl}
                             onChange={(value) =>
                                 handleImageData(
@@ -383,6 +427,13 @@ function Inspector(props) {
                                     setAttributes
                                 )
                             }
+                            placeholder="https://example.com"
+                            help={__(
+                                "Enter a valid URL.",
+                                "essential-blocks"
+                            )}
+                            showValidation={true}
+                            enableSecurity={true}
                         />
 
                         {each.buttonUrl && each.buttonUrl.length > 0 && !each.isValidUrl && (
@@ -466,11 +517,13 @@ function Inspector(props) {
                             onChange={() => setAttributes({ dots: !dots })}
                         />
 
-                        <ToggleControl
-                            label={__("Fade", "essential-blocks")}
-                            checked={fade}
-                            onChange={() => setAttributes({ fade: !fade })}
-                        />
+                        {!vertical && (
+                            <ToggleControl
+                                label={__("Fade", "essential-blocks")}
+                                checked={fade}
+                                onChange={() => setAttributes({ fade: !fade })}
+                            />
+                        )}
 
                         <ToggleControl
                             label={__("Infinite", "essential-blocks")}
@@ -722,6 +775,15 @@ function Inspector(props) {
                                 )}
                             </>
                         )}
+
+                        <Divider />
+
+                        <PanelRow>Slider Border</PanelRow>
+                        <BorderShadowControl
+                            controlName={SLIDER_BORDER_SHADOW}
+                            noBdrHover
+                            noShadow
+                        />
                     </InspectorPanel.PanelBody>
 
                     {sliderType === "content" && (

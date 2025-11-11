@@ -2,6 +2,8 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
+import { useSelect } from "@wordpress/data";
+import { store as coreStore } from "@wordpress/core-data";
 import {
     SelectControl
 } from "@wordpress/components";
@@ -18,10 +20,33 @@ import {
     EBButton
 } from "@essential-blocks/controls";
 
-const Inspector = ({ attributes, setAttributes }) => {
+const Inspector = (props) => {
+    const { attributes, setAttributes, context } = props;
     const {
         type,
     } = attributes;
+
+    // Detect Loop Builder/Post Template context
+    const isInLoopBuilder = Boolean(
+        context &&
+        context.hasOwnProperty("essential-blocks/postId") &&
+        context.hasOwnProperty("essential-blocks/postType")
+    );
+
+    const loopPostId = context?.["essential-blocks/postId"];
+    const loopPostType = context?.["essential-blocks/postType"];
+
+    // Fetch the current post permalink for display in inspector when dynamic
+    const postPermalink = useSelect(
+        (select) => {
+            if (!isInLoopBuilder || !loopPostId || !loopPostType) return "";
+            const { getEditedEntityRecord } = select(coreStore);
+            return (
+                getEditedEntityRecord("postType", loopPostType, loopPostId)?.link || ""
+            );
+        },
+        [isInLoopBuilder, loopPostId, loopPostType]
+    );
 
     const changeType = (type) => {
         setAttributes({ type });
@@ -99,7 +124,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         }
                     />
                     </InspectorPanel.PanelBody>
-                <EBButton.GeneralTab />
+                <EBButton.GeneralTab isDynamic={isInLoopBuilder} dynamicPermalink={postPermalink} />
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <EBButton.StyleTab />

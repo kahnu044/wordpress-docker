@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { MediaUpload } from "@wordpress/block-editor";
 import {
     PanelBody,
     ToggleControl,
@@ -11,7 +10,6 @@ import {
     ButtonGroup,
     BaseControl,
     TextControl,
-    TextareaControl,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
@@ -26,6 +24,7 @@ import {
     SHAPE_VIEW,
     ICON_POSITION,
     FEATURE_ITEM_POSITION,
+    BADGE_POSITION,
     connectorWidth,
     listSpace,
     rowSpace,
@@ -44,11 +43,18 @@ import {
     wrapperBackgroundType,
     wrapperBorder,
     MEDIA_TYPES,
+    listBackgroundType,
+    listBorderShadow,
+    listPadding,
+    badgePadding,
+    badgeBorder,
+    iconLiquidGlassShadowEffectBorder,
 } from "./constants";
 
 import {
     typoPrefix_title,
     typoPrefix_content,
+    typoPrefix_badge,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -60,9 +66,12 @@ import {
     BorderShadowControl,
     InspectorPanel,
     SortControl,
-    ImageAvatar,
+    ImageComponent,
     EBIconPicker,
+    LiquidGlassEffectControl,
+    EBTextControl,
 } from "@essential-blocks/controls";
+import { RangeControl } from "@wordpress/components";
 
 const Inspector = ({ attributes, setAttributes }) => {
     const {
@@ -82,6 +91,11 @@ const Inspector = ({ attributes, setAttributes }) => {
         titleTextHoverColor,
         useInlineDesign,
         featureListAlign,
+        iconLiquidGlass,
+        designItemBox,
+        badgeTextColor,
+        badgeBackgroundColor,
+        badgeGap
     } = attributes;
 
     const onFeatureAdd = () => {
@@ -100,6 +114,10 @@ const Inspector = ({ attributes, setAttributes }) => {
                 iconBackgroundColor: "",
                 link: "",
                 linkOpenNewTab: "false",
+                showBadge: 'false',
+                badgeText: "New",
+                badgeTextColor: "",
+                badgeBackgroundColor: "",
             },
         ];
 
@@ -125,19 +143,22 @@ const Inspector = ({ attributes, setAttributes }) => {
 
         return attributes.features.map((each, i) => (
             <div key={i}>
-                <TextControl
+                <EBTextControl
                     onChange={(value) => onFeatureChange("title", value, i)}
                     label={__("Text", "essential-blocks")}
                     value={each.title}
+                    enableAi={true}
                 />
 
                 {!useInlineDesign && (
-                    <TextareaControl
+                    <EBTextControl
                         label={__("Content", "essential-blocks")}
                         value={each.content}
                         onChange={(value) =>
                             onFeatureChange("content", value, i)
                         }
+                        enableAi={true}
+                        isTextarea={true}
                     />
                 )}
                 <BaseControl label={__("Icon Type", "essential-blocks")}>
@@ -166,8 +187,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 }
                             />
                         )}
-                        {each.iconType === "image" && !each.featureImage && (
-                            <MediaUpload
+                        {each.iconType === "image" && (
+                            <ImageComponent.GeneralTab
                                 onSelect={({ id, url, alt, title }) => {
                                     onFeatureChange(
                                         [
@@ -180,38 +201,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         i,
                                     );
                                 }}
-                                type="image"
-                                value={each.featureImageId}
-                                render={({ open }) => {
-                                    return (
-                                        <Button
-                                            className="eb-background-control-inspector-panel-img-btn components-button"
-                                            label={__(
-                                                "Upload Image",
-                                                "essential-blocks",
-                                            )}
-                                            icon="format-image"
-                                            onClick={open}
-                                        />
-                                    );
-                                }}
-                            />
-                        )}
-                        {each.iconType === "image" && each.featureImage && (
-                            <ImageAvatar
-                                imageUrl={each.featureImage}
-                                onDeleteImage={() => {
-                                    onFeatureChange(
-                                        [
-                                            "featureImageId",
-                                            "featureImage",
-                                            "featureImageAlt",
-                                            "featureImageTitle",
-                                        ],
-                                        [null, null, null, null],
-                                        i,
-                                    );
-                                }}
+                                value={each.featureImage}
+                                hasTag={false}
+                                hasCaption={false}
+                                hasStyle={false}
+                                hasLink={false}
+                                showInPanel={false}
                             />
                         )}
                         {each.iconType === "icon" && each.icon && (
@@ -232,10 +227,18 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                     </>
                 )}
-                <TextControl
+                <EBTextControl
                     label={__("Link", "essential-blocks")}
+                    fieldType="url"
                     value={each.link}
                     onChange={(value) => onFeatureChange("link", value, i)}
+                    placeholder="https://example.com"
+                    help={__(
+                        "Enter a valid URL.",
+                        "essential-blocks"
+                    )}
+                    showValidation={true}
+                    enableSecurity={true}
                 />
                 <ToggleControl
                     label={__("Open in New Tab", "essential-blocks")}
@@ -270,7 +273,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         onDeleteItem={(index) => {
                             setAttributes({
                                 features: attributes.features.filter(
-                                    (each, i) => i !== index,
+                                    (_, i) => i !== index,
                                 ),
                             });
                         }}
@@ -390,8 +393,33 @@ const Inspector = ({ attributes, setAttributes }) => {
                             });
                         }}
                     />
-                </InspectorPanel.PanelBody>
-            </InspectorPanel.General>
+
+                    {!showConnector && (
+                        <ToggleControl
+                            label={__("Design Item Box", "essentail-blocks")}
+                            checked={designItemBox}
+                            onChange={() => {
+                                setAttributes({
+                                    designItemBox: !designItemBox,
+                                });
+                            }}
+                        />
+                    )}
+
+                    <ToggleControl
+                        label={__("Icon Liquid Glass Effect", "essentail-blocks")}
+                        checked={iconLiquidGlass.enable}
+                        onChange={() => {
+                            setAttributes({
+                                iconLiquidGlass: {
+                                    ...iconLiquidGlass,
+                                    enable: !iconLiquidGlass.enable
+                                }
+                            });
+                        }}
+                    />
+                </InspectorPanel.PanelBody >
+            </InspectorPanel.General >
             <InspectorPanel.Style>
                 <InspectorPanel.PanelBody
                     title={__("List", "essential-blocks")}
@@ -414,6 +442,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                             step={1}
                             noUnits
                         />
+                    )}
+
+                    {designItemBox && !showConnector && (
+                        <>
+                            <Divider />
+                            <ResponsiveDimensionsControl
+                                controlName={listPadding}
+                                baseLabel={__("Padding", "essential-blocks")}
+                            />
+                            <PanelBody title="Background">
+                                <BackgroundControl
+                                    controlName={listBackgroundType}
+                                    noOverlay={true}
+                                    noMainBgi={true}
+                                />
+                            </PanelBody>
+                            <PanelBody title="Border">
+                                <BorderShadowControl
+                                    controlName={listBorderShadow}
+                                    noShadow={true}
+                                />
+                            </PanelBody>
+                        </>
                     )}
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody
@@ -477,6 +528,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                     )}
                 </InspectorPanel.PanelBody>
+                {iconLiquidGlass.enable && (
+                    <InspectorPanel.PanelBody
+                        title={__("Icon Liquid Glass", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <LiquidGlassEffectControl attributeName="iconLiquidGlass" shadowAttributeName="iconLiquidGlassShadowEffectBorder" />
+                    </InspectorPanel.PanelBody>
+                )}
                 <InspectorPanel.PanelBody
                     title={__("Content", "essential-blocks")}
                     initialOpen={false}
@@ -554,6 +613,43 @@ const Inspector = ({ attributes, setAttributes }) => {
                             </PanelBody>
                         </>
                     )}
+
+                    <InspectorPanel.PanelBody title={__("Badge", "essential-blocks")} initialOpen={false}>
+                        <TypographyDropdown
+                            baseLabel={__("Typography", "essential-blocks")}
+                            typographyPrefixConstant={typoPrefix_badge}
+                        />
+                        <ColorControl
+                            label={__("Text Color", "essential-blocks")}
+                            color={badgeTextColor}
+                            attributeName={"badgeTextColor"}
+                        />
+                        <ColorControl
+                            label={__("Background Color", "essential-blocks")}
+                            color={badgeBackgroundColor}
+                            attributeName={"badgeBackgroundColor"}
+                        />
+                        <ResponsiveDimensionsControl
+                            controlName={badgePadding}
+                            baseLabel={__("Padding", "essential-blocks")}
+                        />
+                        <RangeControl
+                            label={__("Gap from Title", "essential-blocks")}
+                            value={badgeGap}
+                            onChange={(badgeGap) => setAttributes({ badgeGap })}
+                            min={0}
+                            max={100}
+                            step={1}
+                        />
+                        <BaseControl>
+                            <h3 className="eb-control-title">
+                                {__("Border & Shadow", "essential-blocks")}
+                            </h3>
+                        </BaseControl>
+                        <BorderShadowControl
+                            controlName={badgeBorder}
+                        />
+                    </InspectorPanel.PanelBody>
                 </InspectorPanel.PanelBody>
                 {!useInlineDesign && showConnector && iconPosition != "top" && (
                     <>
@@ -604,7 +700,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                     </>
                 )}
             </InspectorPanel.Style>
-        </InspectorPanel>
+        </InspectorPanel >
     );
 };
 

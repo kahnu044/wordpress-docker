@@ -67,7 +67,7 @@ const AdvancedVideo = (props) => {
             <ReactPlayer
                 className="eb-react-player"
                 width="100%"
-                height="100%"
+                height={isLightbox ? "100%" : "auto"}
                 url={url}
                 controls={controls}
                 loop={loop}
@@ -78,6 +78,9 @@ const AdvancedVideo = (props) => {
                 volume={0.5}
                 config={playerConfig}
                 playsinline={!isLightbox}
+                style={{
+                    aspectRatio: isLightbox ? 'unset' : '16/9',
+                }}
             />
         </>
     );

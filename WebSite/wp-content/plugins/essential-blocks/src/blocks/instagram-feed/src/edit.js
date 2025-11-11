@@ -57,6 +57,7 @@ function Edit(props) {
     const [loading, setLoading] = useState(true);
     const [responseCode, setResponseCode] = useState(undefined);
     const [errorMessage, setErrorMessage] = useState("");
+    const [isShowingDummyData, setIsShowingDummyData] = useState(false);
 
     // you must declare this variable
     const enhancedProps = {
@@ -90,6 +91,7 @@ function Edit(props) {
                     setInstagramToken(response.data);
                 } else {
                     setInstagramToken("");
+                    setIsShowingDummyData(false);
                     setLoading(false);
                 }
             })
@@ -211,6 +213,79 @@ function Edit(props) {
             return false;
         }
 
+        // Check if this is a dummy token for non-admin users
+        if (instagramToken === 'dummy_token_for_editor_preview') {
+            // Provide dummy data for editor preview
+            const dummyData = [
+                {
+                    id: 'dummy_1',
+                    caption: 'Sample Instagram post caption for preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                },
+                {
+                    id: 'dummy_2',
+                    caption: 'Another sample post for Instagram feed preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                },
+                {
+                    id: 'dummy_3',
+                    caption: 'Third sample Instagram post for editor preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                },
+                {
+                    id: 'dummy_4',
+                    caption: 'Fourth sample Instagram post for editor preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                },
+                {
+                    id: 'dummy_5',
+                    caption: 'Fifth sample Instagram post for editor preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                },
+                {
+                    id: 'dummy_6',
+                    caption: 'Sixth sample Instagram post for editor preview',
+                    media_type: 'IMAGE',
+                    media_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    permalink: '#',
+                    thumbnail_url: `${EssentialBlocksLocalize?.image_url}/image-placeholder.jpg`,
+                    timestamp: new Date().toISOString(),
+                    username: 'sample_user'
+                }
+            ];
+
+            setResponseCode(200);
+            setAttributes({ thumbs: dummyData });
+            setIsShowingDummyData(true);
+            setLoading(false);
+            return Promise.resolve();
+        }
+
         return fetch(
             `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&limit=500&access_token=${instagramToken}`
         )
@@ -219,6 +294,7 @@ function Edit(props) {
                 if (json.error) {
                     setErrorMessage(json.error.message);
                     setResponseCode(json.error.code);
+                    setIsShowingDummyData(false);
                 }
                 if (json.data) {
                     setResponseCode(200);
@@ -229,6 +305,7 @@ function Edit(props) {
                         setAttributes({ thumbs: [] });
                         setResponseCode(500);
                     }
+                    setIsShowingDummyData(false);
                 }
 
                 setLoading(false);
@@ -418,6 +495,19 @@ function Edit(props) {
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
                     <div className={`eb-instagram-wrapper ${blockId}`}>
+                        {isShowingDummyData && !loading && (
+                            <div style={{
+                                background: '#fff3cd',
+                                border: '1px solid #ffeaa7',
+                                borderRadius: '4px',
+                                padding: '12px',
+                                marginBottom: '16px',
+                                fontSize: '14px',
+                                color: '#856404'
+                            }}>
+                                <strong>{__("Preview Mode:", "essential-blocks")}</strong> {__("You're seeing placeholder content because you don't have administrator permissions. The actual Instagram feed will display on the frontend if properly configured by an administrator.", "essential-blocks")}
+                            </div>
+                        )}
                         <div
                             className={`eb-instagram__gallery${loading ? " hide" : ""
                                 }`}

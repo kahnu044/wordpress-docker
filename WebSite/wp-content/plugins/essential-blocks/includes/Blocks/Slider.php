@@ -7,10 +7,11 @@ use EssentialBlocks\Core\Block;
 class Slider extends Block
 {
     protected $frontend_scripts = [
-        'essential-blocks-slider-frontend',
         'essential-blocks-slickjs',
         'essential-blocks-slick-lightbox-js',
-        'essential-blocks-vendor-bundle'
+        'essential-blocks-babel-bundle',
+        'essential-blocks-vendor-bundle',
+        'essential-blocks-slider-frontend'
      ];
     protected $frontend_styles = [ 'essential-blocks-fontawesome', 'essential-blocks-slick-style', 'essential-blocks-common-style', 'essential-blocks-slick-lightbox-style' ];
 
@@ -34,7 +35,9 @@ class Slider extends Block
         $this->assets_manager->register(
             'slider-frontend',
             $this->path() . '/frontend.js',
-            [ 'jquery', 'essential-blocks-controls-frontend', 'essential-blocks-slick-lightbox-js' ]
+            [ 'essential-blocks-controls-frontend', 'essential-blocks-slick-lightbox-js' ]
         );
+
+        $this->assets_manager->register( 'slickjs', 'js/slick.min.js', [ 'jquery' ] );
     }
 }

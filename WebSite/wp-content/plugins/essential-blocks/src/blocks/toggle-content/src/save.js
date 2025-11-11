@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { InnerBlocks, RichText } from "@wordpress/block-editor";
+import { applyFilters } from "@wordpress/hooks";
 
 /**
  * Internal dependencies
@@ -28,6 +29,7 @@ const Save = ({ attributes }) => {
         backgroundColor,
         backgroundGradient,
         classHook,
+        switchLiquidGlass,
     } = attributes;
 
     const getMargin = () => {
@@ -120,7 +122,9 @@ const Save = ({ attributes }) => {
                         <label className={`eb-toggle-switch toggle-${switchSize}`}>
                             <input className="eb-toggle-input" type="checkbox" />
                             <span className="eb-toggle-controller" />
-                            <span className="eb-toggle-slider" />
+                            <span className={`eb-toggle-slider ${switchLiquidGlass.enable ? 'eb_liquid_glass-' + switchLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + switchLiquidGlass.shadowEffect : ''}`} />
+                            {applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")}
+
                         </label>
 
                         <span

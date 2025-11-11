@@ -7,19 +7,24 @@
 
  @import '../../../controls/src/components/Image/imageComponent.scss';
 
-a.info-click-link.info-wrap-link,
-a.info-click-link.info-wrap-link:hover,
-a.info-click-link.info-wrap-link:focus {
-	color: inherit;
-	display: block;
-	text-decoration: none;
+/* Clickable infobox styling */
+.eb-parent-wrapper[data-clickable="true"] {
 	cursor: pointer;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	height: 100%;
-	width: 100%;
-	z-index: 1;
+	transition: opacity 0.2s ease;
+}
+
+.eb-parent-wrapper[data-clickable="true"]:hover {
+	opacity: 0.9;
+}
+
+.eb-parent-wrapper[data-clickable="true"]:focus {
+	outline: 2px solid #007cba;
+	outline-offset: 2px;
+}
+
+/* Ensure links inside clickable infobox maintain their own cursor */
+.eb-parent-wrapper[data-clickable="true"] a {
+	cursor: pointer;
 }
 
 .wp-block-essential-blocks-infobox {

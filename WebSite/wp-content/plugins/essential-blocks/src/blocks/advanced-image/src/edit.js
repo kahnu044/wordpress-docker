@@ -78,7 +78,37 @@ const Edit = (props) => {
         if (imgSource === undefined && image.url.length > 0) {
             setAttributes({ imgSource: "custom" });
         }
+        if (imageUrl === undefined && image.url.length > 0) {
+            setAttributes({ imageUrl: image.url });
+        }
     }, []);
+
+    // Get post data from Loop Builder context
+    const loopPostId = context?.["essential-blocks/postId"];
+    const loopPostType = context?.["essential-blocks/postType"];
+
+    // Check if block is inside Loop Builder context
+    const isInLoopBuilder = Boolean(
+        context &&
+        // Primary check: explicit isLoopBuilder flag
+        (context["essential-blocks/isLoopBuilder"] === true ||
+            // Secondary check: presence of loop context values (even if null initially)
+            (context.hasOwnProperty("essential-blocks/postId") &&
+                context.hasOwnProperty("essential-blocks/postType"))),
+    );
+
+    // Effect to handle Loop Builder context initialization
+    useEffect(() => {
+        if (isInLoopBuilder) {
+            // Set source to featured-img and enable link
+            setAttributes({
+                imgSource: "featured-img",
+                displayCaption: false,
+                enableLink: true,
+                hoverEffect: "no-effect",
+            });
+        }
+    }, [isInLoopBuilder, loopPostId, loopPostType]);
 
     // Get only urls
     const oldImageData = wp.data.select("core").getMedia(image.id);
@@ -229,14 +259,19 @@ const Edit = (props) => {
         );
     }
 
-    const postId = context["postID"],
-        postTypeSlug = context["postType"];
+    // Use loop context values when in Loop Builder, otherwise use regular context
+    const effectivePostId = isInLoopBuilder
+        ? loopPostId || context["postID"]
+        : context["postID"];
+    const effectivePostType = isInLoopBuilder
+        ? loopPostType || context["postType"]
+        : context["postType"];
 
     const [storedFeaturedImage, setFeaturedImage] = useEntityProp(
         "postType",
-        postTypeSlug,
+        effectivePostType,
         "featured_media",
-        postId,
+        effectivePostId,
     );
 
     let featuredImage = storedFeaturedImage;
@@ -252,15 +287,15 @@ const Edit = (props) => {
                     getMedia(featuredImage, {
                         context: "view",
                     }),
-                postType: postTypeSlug && getPostType(postTypeSlug),
+                postType: effectivePostType && getPostType(effectivePostType),
                 postPermalink: getEditedEntityRecord(
                     "postType",
-                    postTypeSlug,
-                    postId,
+                    effectivePostType,
+                    effectivePostId,
                 )?.link,
             };
         },
-        [featuredImage, postTypeSlug, postId],
+        [featuredImage, effectivePostType, effectivePostId],
     );
 
     const mediaUrl = getMediaSourceUrlBySizeSlug(media, imageSize);
@@ -268,17 +303,14 @@ const Edit = (props) => {
     const featuredPlaceholder = (content) => {
         return (
             <Placeholder
-                className={classnames(
-                    "block-editor-media-placeholder",
-                    // borderProps.className
-                )}
+                className={classnames("block-editor-media-placeholder")}
                 withIllustration
-                // style={{
-                //     height: !!aspectRatio && '100%',
-                //     width: !!aspectRatio && '100%',
-                //     // ...borderProps.style,
-                //     // ...shadowProps.style,
-                // }}
+            // style={{
+            //     height: !!aspectRatio && '100%',
+            //     width: !!aspectRatio && '100%',
+            //     // ...borderProps.style,
+            //     // ...shadowProps.style,
+            // }}
             >
                 {content}
             </Placeholder>
@@ -287,18 +319,17 @@ const Edit = (props) => {
     const featuredImageHtml = (mediaUrl, media) => {
         return (
             <img
-                // className={borderProps.className}
                 src={mediaUrl}
                 alt={
                     media?.alt_text
                         ? sprintf(
-                              // translators: %s: The image's alt text.
-                              __("Featured image: %s"),
-                              media?.alt_text,
-                          )
+                            // translators: %s: The image's alt text.
+                            __("Featured image: %s"),
+                            media?.alt_text,
+                        )
                         : __("Featured image")
                 }
-                // style={imageStyles}
+            // style={imageStyles}
             />
         );
     };
@@ -332,16 +363,12 @@ const Edit = (props) => {
         );
     }
 
-    const classes = `
-    img-style-${stylePreset}
+    const classes = `img-style-${stylePreset}
     ${captionStyle}
     caption-horizontal-${horizontalAlign}
     caption-vertical-${verticalAlign}
     ${verticalAlignCap2}
-    ${hoverEffect}
-`
-        .replace(/\s+/g, " ")
-        .trim();
+    ${hoverEffect}`.replace(/\s+/g, " ").trim();
 
     return (
         <>
@@ -352,11 +379,12 @@ const Edit = (props) => {
                     media={media}
                     prevImageSize={prevImageSize}
                     oldImageData={oldImageData}
+                    context={context}
                 />
             )}
 
             <BlockProps.Edit {...enhancedProps}>
-                {!imgSource && (
+                {!imgSource && !isInLoopBuilder && (
                     <>
                         <div className="eb-adv-img-editor-source-select">
                             <h2>Please Select an Image Source</h2>
@@ -418,72 +446,56 @@ const Edit = (props) => {
 
                 {imgSource && (
                     <>
-                        <>
-                            {imgSource === "custom" &&
-                                (!imageUrl || imageUrl === "") && (
+                        {imgSource === "custom" &&
+                            (!imageUrl || imageUrl === "") && (
+                                <>
+                                    <ImageComponent.Upload
+                                        labels={{
+                                            title: __(
+                                                "Advanced Image",
+                                                "essential-blocks",
+                                            ),
+                                            instructions: __(
+                                                "Drag media file, upload or select image from your library.",
+                                                "essential-blocks",
+                                            ),
+                                        }}
+                                        icon={AdvancedImageIcon}
+                                    />
+                                </>
+                            )}
+
+                        {imgSource === "site-logo" && (
+                            <>
+                                {controls}
+
+                                {!!logoUrl && logoImage}
+
+                                {!logoUrl && !!isLoading && (
+                                    <Placeholder className="eb-adv-img-site-logo-placeholder">
+                                        {ebLoader()}
+                                    </Placeholder>
+                                )}
+
+                                {!logoUrl && !isLoading && (
                                     <>
-                                        <ImageComponent.Upload 
+                                        <EBMediaPlaceholder
+                                            icon={AdvancedImageIcon}
+                                            onSelect={onInitialSelectLogo}
+                                            accept="image/*"
+                                            allowedTypes={["image"]}
                                             labels={{
-                                                title: __("Advanced Image", "essential-blocks"),
+                                                title: __("Site Logo", "essential-blocks"),
                                                 instructions: __(
                                                     "Drag media file, upload or select image from your library.",
                                                     "essential-blocks"
                                                 ),
                                             }}
-                                            icon={AdvancedImageIcon}
                                         />
                                     </>
                                 )}
-
-                            {imgSource === "site-logo" && (
-                                <>
-                                    {controls}
-
-                                    {!!logoUrl && logoImage}
-
-                                    {!logoUrl && !!isLoading && (
-                                        <Placeholder className="eb-adv-img-site-logo-placeholder">
-                                            {ebLoader()}
-                                        </Placeholder>
-                                    )}
-
-                                    {!logoUrl && !isLoading && (
-                                        <>
-                                            <MediaPlaceholder
-                                                onSelect={onInitialSelectLogo}
-                                                accept="image/*"
-                                                allowedTypes={["image"]}
-                                                // onError={onUploadError}
-                                                // placeholder={placeholder}
-                                                mediaLibraryButton={({
-                                                    open,
-                                                }) => {
-                                                    return (
-                                                        <Button
-                                                            icon={upload}
-                                                            variant="primary"
-                                                            label={__(
-                                                                "Add a site logo",
-                                                            )}
-                                                            showTooltip
-                                                            tooltipPosition="top center"
-                                                            onClick={() => {
-                                                                open();
-                                                            }}
-                                                        />
-                                                    );
-                                                }}
-                                                labels={{
-                                                    title: "Site Logo",
-                                                    instructions:
-                                                        "Drag media file, upload or select image from your library.",
-                                                }}
-                                            />
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </>
+                            </>
+                        )}
 
                         {((imgSource === "custom" &&
                             imageUrl &&
@@ -491,63 +503,77 @@ const Edit = (props) => {
                             imageUrl !== "") ||
                             (imgSource === "featured-img" &&
                                 featuredImage != 0)) && (
-                            <>
-                                <div
-                                    className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
-                                >
-                                    <figure
-                                        className={`eb-advanced-image-wrapper ${blockId}${
-                                            imgSource !== "custom"
+                                <>
+                                    <div
+                                        className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                                    >
+                                        <figure
+                                            className={`eb-advanced-image-wrapper ${blockId}${imgSource !== "custom"
                                                 ? " " + classes
                                                 : ""
-                                        } ${imgSource === "custom" ? hoverEffect : ''}`}
-                                        data-id={blockId}
-                                    >
-                                        {imgSource === "custom" && (
-                                            <ImageComponent />
-                                        )}
-                                        {imgSource === "featured-img" &&
-                                            eb_conditional_localize.editor_type !==
-                                                "edit-site" && (
-                                                <>
-                                                    <div className="image-wrapper">
-                                                        <>
-                                                            {!!enableLink ? (
-                                                                <a
-                                                                    href={
-                                                                        postPermalink
-                                                                    }
-                                                                    {...disabledClickProps}
-                                                                >
-                                                                    {
-                                                                        postFeaturedImage
-                                                                    }
-                                                                </a>
-                                                            ) : (
-                                                                postFeaturedImage
-                                                            )}
-                                                        </>
-                                                    </div>
-                                                </>
+                                                } ${imgSource === "custom" ? hoverEffect : ''}`}
+                                            data-id={blockId}
+                                        >
+                                            {imgSource === "custom" && (
+                                                <ImageComponent />
                                             )}
-                                    </figure>
-                                </div>
-                            </>
-                        )}
+                                            {imgSource === "featured-img" &&
+                                                eb_conditional_localize.editor_type !==
+                                                "edit-site" && (
+                                                    <>
+                                                        <div className="image-wrapper">
+                                                            <>
+                                                                {!!enableLink ? (
+                                                                    <a
+                                                                        href={
+                                                                            postPermalink
+                                                                        }
+                                                                        {...disabledClickProps}
+                                                                    >
+                                                                        {
+                                                                            postFeaturedImage
+                                                                        }
+                                                                    </a>
+                                                                ) : (
+                                                                    postFeaturedImage
+                                                                )}
+                                                            </>
+                                                        </div>
+                                                    </>
+                                                )}
+                                        </figure>
+                                    </div>
+                                </>
+                            )}
 
                         {imgSource === "featured-img" &&
                             eb_conditional_localize.editor_type ===
-                                "edit-post" &&
+                            "edit-post" &&
                             !featuredImage && (
-                                <NoticeComponent
-                                    Icon={AdvancedImageIcon}
-                                    title={"Advanced Image"}
-                                    description={postFeaturedImage}
-                                />
+                                <>
+                                    {isInLoopBuilder && EssentialBlocksLocalize?.placeholder_image ? (
+                                        <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                                            <figure className={`eb-advanced-image-wrapper ${blockId}`}>
+                                                <div className="image-wrapper">
+                                                    <img
+                                                        src={EssentialBlocksLocalize.placeholder_image}
+                                                        alt={__("Placeholder image for Loop Builder", "essential-blocks")}
+                                                    />
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    ) : (
+                                        <NoticeComponent
+                                            Icon={AdvancedImageIcon}
+                                            title={"Advanced Image"}
+                                            description={postFeaturedImage}
+                                        />
+                                    )}
+                                </>
                             )}
                         {imgSource === "featured-img" &&
                             eb_conditional_localize.editor_type ===
-                                "edit-site" && (
+                            "edit-site" && (
                                 <div className="feature-image-placeholder">
                                     <img
                                         src={

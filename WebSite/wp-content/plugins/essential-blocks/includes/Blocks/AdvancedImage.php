@@ -32,13 +32,26 @@ class AdvancedImage extends Block
      ];
 
     /**
+     * Check if we're in a Loop Builder context
+     *
+     * @param array $context
+     * @return bool
+     */
+    private function is_in_loop_builder_context( $context )
+    {
+        return isset( $context[ 'essential-blocks/isLoopBuilder' ] ) &&
+            $context[ 'essential-blocks/isLoopBuilder' ] === true;
+    }
+
+    /**
      * Block render callback.
      *
      * @param mixed $attributes
      * @param mixed $content
+     * @param mixed $block Block object containing context
      * @return mixed
      */
-    public function render_callback( $attributes, $content )
+    public function render_callback( $attributes, $content, $block = null )
     {
         if ( is_admin() ) {
             return;
@@ -46,6 +59,10 @@ class AdvancedImage extends Block
         $attributes = wp_parse_args( $attributes, self::$default_attributes );
         $className  = isset( $attributes[ "className" ] ) ? $attributes[ "className" ] : "";
         $classHook  = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';
+
+        // Check if we're in a Loop Builder context
+        $context            = isset( $block->context ) ? $block->context : [];
+        $is_in_loop_builder = $this->is_in_loop_builder_context( $context );
 
         if ( $attributes[ 'imgSource' ] === 'custom' ) {
             return $content;
@@ -60,7 +77,9 @@ class AdvancedImage extends Block
             ob_start();
             Helper::views( 'advanced-image/featured-image', array_merge( $attributes, [
                 'className' => $className,
-                'classHook' => $classHook
+                'classHook' => $classHook,
+                'isInLoopBuilder' => $is_in_loop_builder,
+                'placeholderImageUrl' => defined('ESSENTIAL_BLOCKS_PLACEHOLDER_IMAGE') ? \ESSENTIAL_BLOCKS_PLACEHOLDER_IMAGE : \ESSENTIAL_BLOCKS_URL . 'assets/images/placeholder.png'
              ] ) );
             return ob_get_clean();
         }

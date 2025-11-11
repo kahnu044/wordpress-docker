@@ -47,6 +47,7 @@ const attributes = {
     },
     accordionLists: {
         type: "array",
+        default: [],
     },
     accordionType: {
         type: "string",

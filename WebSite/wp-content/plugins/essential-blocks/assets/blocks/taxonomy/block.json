@@ -13,5 +13,10 @@
       "full"
     ]
   },
+  "usesContext": [
+    "essential-blocks/postId",
+    "essential-blocks/postType",
+    "essential-blocks/isLoopBuilder"
+  ],
   "editorScript": "essential-blocks-editor-script"
 }

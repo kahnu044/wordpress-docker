@@ -29,7 +29,8 @@ import {
     TypographyDropdown,
     ResponsiveRangeController,
     InspectorPanel,
-    ButtonGroupControl
+    ButtonGroupControl,
+    LiquidGlassEffectControl
 } from "@essential-blocks/controls";
 
 import objAttributes from "./attributes";
@@ -75,7 +76,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         inset,
         contentStyles,
         controllerColorSecondary,
-        backgroundColorSecondary
+        backgroundColorSecondary,
+        switchLiquidGlass
     } = attributes;
 
     return (
@@ -172,6 +174,21 @@ const Inspector = ({ attributes, setAttributes }) => {
                         baseLabel="Typography"
                         typographyPrefixConstant={typoPrefix_tgl}
                     />
+
+                    {switchStyle !== "text" && (
+                        <ToggleControl
+                            label={__("Switch Liquid Glass Effect", "essential-blocks")}
+                            checked={switchLiquidGlass.enable}
+                            onChange={() => {
+                                setAttributes({
+                                    switchLiquidGlass: {
+                                        ...switchLiquidGlass,
+                                        enable: !switchLiquidGlass.enable
+                                    }
+                                });
+                            }}
+                        />
+                    )}
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
@@ -350,6 +367,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                         </InspectorPanel.PanelBody>
                     )}
                 </>
+                {switchLiquidGlass.enable && switchStyle !== "text" && (
+                    <InspectorPanel.PanelBody
+                        title={__("Switch Liquid Glass", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <LiquidGlassEffectControl attributeName="switchLiquidGlass" shadowAttributeName="switchLiquidGlassShadowEffectBorder" />
+                    </InspectorPanel.PanelBody>
+                )}
             </InspectorPanel.Style>
         </InspectorPanel>
     );

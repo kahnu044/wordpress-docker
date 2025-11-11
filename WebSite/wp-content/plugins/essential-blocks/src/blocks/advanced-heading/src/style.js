@@ -384,7 +384,7 @@ export default function Style(props) {
 	`;
 
     const handleTitleLineHeight = () => {
-        const css = `.eb-advance-heading-wrapper.${blockId} .eb-ah-title {line-height: 0}`
+        const css = `.eb-advance-heading-wrapper.${blockId} .eb-ah-title {line-height: 1}`
         if (typeof titleTypographyDesktop === 'string' && titleTypographyDesktop.trim().length > 0 && titleTypographyDesktop.includes('line-height')) {
             return css
         }

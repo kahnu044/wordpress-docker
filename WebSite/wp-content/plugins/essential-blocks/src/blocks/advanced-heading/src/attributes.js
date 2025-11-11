@@ -189,7 +189,9 @@ const attributes = {
         type: 'string',
         default: '1'
     },
-
+    titleLength: {
+        type: "number"
+    },
     // typography attributes ⬇
     ...generateTypographyAttributes(TITLE_TYPOGRAPHY),
     ...generateTypographyAttributes(TITLE2_TYPOGRAPHY),

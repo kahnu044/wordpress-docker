@@ -8,7 +8,7 @@ import {
     TabTemplates,
     TabOptions,
     TabIntegrations,
-    TabWriteAi
+    TabAISuite
 } from "./components";
 
 const tabMenus = applyFilters('essential_blocks_settings_menu_list', [
@@ -32,10 +32,10 @@ const tabMenus = applyFilters('essential_blocks_settings_menu_list', [
         comp: <TabTemplates />
     },
     {
-        id: 'writewithai',
+        id: 'ai-suite',
         icon: <WriteWithAiIcon />,
-        label: __("Write With AI", "essential-blocks"),
-        comp: <TabWriteAi />
+        label: __("AI Suite", "essential-blocks"),
+        comp: <TabAISuite />
     },
     {
         id: 'options',

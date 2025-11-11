@@ -18,6 +18,7 @@ class Scripts
     private $writeAIPageContent      = false;
     private $writeAIRichtextContent  = false;
     private $writeAIInputField       = false;
+    private $generateImage           = false;
     private $hasOpenAiApiKey         = false;
     private $writeAiPostTypes        = [ 'all' ];
     private $isEnableUnfilteredFiles = false;
@@ -44,6 +45,7 @@ class Scripts
         $this->writeAIPageContent     = isset( $eb_write_with_ai[ 'writePageContent' ] ) ? $eb_write_with_ai[ 'writePageContent' ] : true;
         $this->writeAIRichtextContent = isset( $eb_write_with_ai[ 'writeRichtext' ] ) ? $eb_write_with_ai[ 'writeRichtext' ] : true;
         $this->writeAIInputField      = isset( $eb_write_with_ai[ 'writeInputFields' ] ) ? $eb_write_with_ai[ 'writeInputFields' ] : true;
+        $this->generateImage          = isset( $eb_write_with_ai[ 'generateImage' ] ) ? $eb_write_with_ai[ 'generateImage' ] : true;
         $this->hasOpenAiApiKey        = isset( $eb_write_with_ai[ 'apiKey' ] ) && ! empty( $eb_write_with_ai[ 'apiKey' ] ) ? true : false;
 
         // Get post types for Write with AI
@@ -81,6 +83,7 @@ class Scripts
         add_action( 'enqueue_block_editor_assets', [ $this, 'block_editor_assets' ] );
         add_action( 'enqueue_block_editor_assets', [ $this, 'frontend_backend_assets' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'frontend_backend_assets' ], 20 );
+        add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
         add_action( 'init', [ $this, 'localize_enqueue_scripts' ] );
 
         //Load Global styles
@@ -147,14 +150,6 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
         wpdev_essential_blocks()->assets->register( 'patterns', 'js/eb-patterns.js' );
         wpdev_essential_blocks()->assets->register( 'editor-breakpoint', 'js/eb-editor-breakpoint.js' );
-        wpdev_essential_blocks()->assets->register(
-            'controls-util',
-            'admin/controls/controls.js',
-            [
-                'regenerator-runtime',
-                'essential-blocks-blocks-localize'
-             ]
-        );
         wpdev_essential_blocks()->assets->register( 'store', 'admin/store/store.js', [ 'regenerator-runtime' ] ); //EB Store
 
         $editor_scripts_deps = [
@@ -185,13 +180,13 @@ class Scripts
             //TODO: Hide for now on v5.5.2. Will make a plan later
             // $show_pattern_library = get_option( ESSENTIAL_BLOCKS_HIDE_PATTERN_LIBRARY );
             // if ( ! $show_pattern_library ) {
-            //     wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.js' );
+            //     wpdev_essential_blocks()->assets->register( 'templately-installer', 'modules/templately-installer/index.js' );
             //     $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
             // }
 
             //Write with AI
             if ( $this->writeAIPageContent === true && $this->is_allowed_post_type_for_ai() ) {
-                wpdev_essential_blocks()->assets->register( 'write-with-ai', 'admin/write-with-ai/index.js' );
+                wpdev_essential_blocks()->assets->register( 'write-with-ai', 'modules/write-with-ai/index.js' );
                 $editor_scripts_deps[  ] = 'essential-blocks-write-with-ai';
             }
         }
@@ -211,7 +206,8 @@ class Scripts
             'essential-blocks-hover-css',
             'essential-blocks-editor-style',
             'essential-blocks-block-common',
-            'essential-blocks-common-style'
+            'essential-blocks-common-style',
+            'essential-blocks-liquid-glass'
          ];
 
         if ( $this->isEnableFontAwesome == 'true' ) {
@@ -224,12 +220,12 @@ class Scripts
             $editor_styles_deps[  ] = 'essential-blocks-global-styles';
 
             //templately-installer
-            wpdev_essential_blocks()->assets->register( 'templately-installer', 'admin/templately/templately.css' );
-            $editor_styles_deps[  ] = 'essential-blocks-templately-installer';
+            // wpdev_essential_blocks()->assets->register( 'templately-installer', 'modules/templately-installer/index.css' );
+            // $editor_styles_deps[  ] = 'essential-blocks-templately-installer';
 
             //write-with-ai
             if ( $this->writeAIPageContent === true && $this->is_allowed_post_type_for_ai() ) {
-                wpdev_essential_blocks()->assets->register( 'write-with-ai', 'admin/write-with-ai/index.css' );
+                wpdev_essential_blocks()->assets->register( 'write-with-ai', 'modules/write-with-ai/index.css' );
                 $editor_styles_deps[  ] = 'essential-blocks-write-with-ai';
             }
         }
@@ -250,9 +246,14 @@ class Scripts
     {
         wpdev_essential_blocks()->assets->register( 'eb-animation', 'js/eb-animation-load.js' );
         wpdev_essential_blocks()->assets->register( 'animation', 'css/animate.min.css' );
+        // Liquid Glass
+        wpdev_essential_blocks()->assets->register( 'liquid-glass', 'css/liquid-glass.css' );
 
         wpdev_essential_blocks()->assets->register( 'babel-bundle', 'vendors/js/bundle.babel.js' );
         wpdev_essential_blocks()->assets->register( 'vendor-bundle', 'vendors/js/bundles.js', [ 'essential-blocks-babel-bundle' ] );
+        wpdev_essential_blocks()->assets->register( 'controls-util', 'admin/controls/controls.js', [ 'regenerator-runtime',
+            'essential-blocks-blocks-localize'
+         ] );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
         wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
@@ -279,7 +280,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'fslightbox-js', 'js/fslightbox.min.js' );
         // dashicon
         wp_enqueue_style( 'dashicons' );
-        wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js' );
+        wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js', [ 'essential-blocks-babel-bundle' ] );
 
         // GSAP
         wpdev_essential_blocks()->assets->register( 'gsap', 'js/gsap/gsap.min.js' );
@@ -594,6 +595,10 @@ class Scripts
 
         $plugin = $this->plugin;
 
+        // Get WordPress timezone settings for business hours block
+        $wp_timezone = wp_timezone_string();
+        $gmt_offset = get_option( 'gmt_offset', 0 );
+
         $localize_array = [
             'eb_plugins_url'             => ESSENTIAL_BLOCKS_URL,
             'image_url'                  => ESSENTIAL_BLOCKS_URL . 'assets/images',
@@ -607,7 +612,9 @@ class Scripts
             'placeholder_image'          => ESSENTIAL_BLOCKS_PLACEHOLDER_IMAGE,
             'is_pro_active'              => ESSENTIAL_BLOCKS_IS_PRO_ACTIVE ? "true" : "false",
             'upgrade_pro_url'            => ESSENTIAL_BLOCKS_UPGRADE_PRO_URL,
-            'responsiveBreakpoints'      => Helper::get_responsive_breakpoints()
+            'responsiveBreakpoints'      => Helper::get_responsive_breakpoints(),
+            'wp_timezone'                => $wp_timezone,
+            'gmt_offset'                 => $gmt_offset
          ];
         if ( is_admin() ) {
             $admin_localize_array = [
@@ -624,6 +631,7 @@ class Scripts
                 'enableWriteAIPageContent' => $this->writeAIPageContent && $this->is_allowed_post_type_for_ai(),
                 'enableWriteAIRichtext'    => $this->writeAIRichtextContent,
                 'enableWriteAIInputField'  => $this->writeAIInputField,
+                'enableGenerateImage'      => $this->generateImage,
                 'hasOpenAiApiKey'          => $this->hasOpenAiApiKey,
                 'writeAiPostTypes'         => $this->writeAiPostTypes,
                 'globalColors'             => Helper::global_colors(),
@@ -642,5 +650,28 @@ class Scripts
         }
 
         wpdev_essential_blocks()->assets->localize( 'blocks-localize', 'EssentialBlocksLocalize', $localize_array );
+    }
+
+    /**
+     * Enqueue admin scripts for specific admin pages
+     */
+    public function admin_enqueue_scripts( $hook_suffix )
+    {
+        global $pagenow, $post;
+
+        // Check if we're on a WooCommerce product edit page
+        $is_woo_product_page = (
+            ( $pagenow === 'post.php' && isset( $post ) && $post->post_type === 'product' ) ||
+            ( $pagenow === 'post-new.php' && isset( $_GET[ 'post_type' ] ) && $_GET[ 'post_type' ] === 'product' )
+        );
+
+        // Load AI for WooCommerce module on product edit pages
+        if ( $is_woo_product_page && class_exists( 'WooCommerce' ) && $this->hasOpenAiApiKey ) {
+            wpdev_essential_blocks()->assets->register( 'ai-for-woo', 'modules/ai-for-woo/index.js' );
+            wpdev_essential_blocks()->assets->register( 'ai-for-woo-style', 'modules/ai-for-woo/index.css' );
+
+            wp_enqueue_script( 'essential-blocks-ai-for-woo' );
+            wp_enqueue_style( 'essential-blocks-ai-for-woo-style' );
+        }
     }
 }

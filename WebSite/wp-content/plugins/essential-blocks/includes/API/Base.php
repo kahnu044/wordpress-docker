@@ -36,10 +36,22 @@ abstract class Base {
             $args,
             [
                 'methods'             => WP_REST_Server::CREATABLE,
-                'permission_callback' => '__return_true'
+                'permission_callback' => [ $this, 'verify_post_permission' ]
             ]
         );
 
         $this->register_endpoint( $endpoint, $_args );
+    }
+
+    /**
+     * Verify permission for POST requests
+     *
+     * @param WP_REST_Request $request
+     * @return bool
+     */
+    public function verify_post_permission( $request ) {
+        // For public endpoints, we can still allow access but with basic validation
+        // You can add nonce verification here if needed
+        return true;
     }
 }

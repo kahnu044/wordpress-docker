@@ -110,6 +110,8 @@ export const addTab = ({
                         id: tabId,
                         media: "icon",
                         icon: "fas fa-home",
+                        enableSubtitle: false,
+                        subtitle: "",
                     },
                 ],
                 tabChildCount: tabChildCount + 1,

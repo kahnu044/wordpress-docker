@@ -37,7 +37,9 @@ import {
     ResponsiveRangeController,
     TypographyDropdown,
     GradientColorControl,
-    InspectorPanel
+    InspectorPanel,
+    EBTextControl,
+    EBTextareaControl
 } from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -114,14 +116,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                         step={1}
                         noUnits
                     />
-                    <TextControl
+                    <EBTextControl
                         label={__("Image alt tag", "essential-blocks")}
                         value={imageAltTag}
                         onChange={(newValue) =>
                             setAttributes({ imageAltTag: newValue })
                         }
                     />
-                    <TextControl
+                    <EBTextControl
                         label={__("Header", "essential-blocks")}
                         value={header}
                         onChange={(header) => setAttributes({ header })}
@@ -158,15 +160,23 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                         </ButtonGroup>
                     </BaseControl>
-                    <TextareaControl
+                    <EBTextareaControl
                         label={__("Content", "essential-blocks")}
                         value={content}
                         onChange={(content) => setAttributes({ content })}
                     />
-                    <TextControl
+                    <EBTextControl
                         label={__("Link", "essential-blocks")}
+                        fieldType="url"
                         value={link}
                         onChange={(link) => setAttributes({ link })}
+                        placeholder="https://example.com"
+                        help={__(
+                            "Enter a valid URL.",
+                            "essential-blocks"
+                        )}
+                        showValidation={true}
+                        enableSecurity={true}
                     />
                     <ToggleControl
                         label={__("Open in New Tab", "essential-blocks")}

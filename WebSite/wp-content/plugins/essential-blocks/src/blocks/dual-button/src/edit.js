@@ -17,7 +17,7 @@ import {
     EBButton
 } from "@essential-blocks/controls";
 
-import { 
+import {
     BUTTON_ONE_KEYS,
     BUTTON_TWO_KEYS
 } from "./constants/constants";
@@ -51,10 +51,11 @@ function Edit(props) {
                         className={`eb-button-group-wrapper ${blockId} ${preset}`}
                         data-id={blockId}
                     >
-                        <EBButton 
+                        <EBButton
                             isSelected={isSelected}
                             className={'eb-button-one'}
                             buttonAttrProps={BUTTON_ONE_KEYS}
+                            attrPrefix="btn1"
                             urlInput={false}
                         />
 
@@ -74,10 +75,11 @@ function Edit(props) {
                         )}
 
                         {/* Button Two */}
-                        <EBButton 
+                        <EBButton
                             isSelected={isSelected}
                             className={'eb-button-two'}
                             buttonAttrProps={BUTTON_TWO_KEYS}
+                            attrPrefix="btn2"
                             urlInput={false}
                         />
                     </div>

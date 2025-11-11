@@ -387,6 +387,7 @@ function Edit(props) {
                         onSelect={selectLottieJSON}
                         onSelectURL={(value) => selectLottieURL(value)}
                         onError={handleError}
+                        enableAI={false}
                     />
                 )}
                 {lottieURl && (

@@ -7,7 +7,7 @@ import { tglWrapMarginConst, tglWrapPaddingConst } from "./constants/dimensionsC
 import { rangeButtonWidth, rangeButtonHeight, rangeHeadingSpace } from "./constants/rangeNames";
 
 import { WrpBgConst } from "./constants/backgroundsConstants";
-import { WrpBdShadowConst } from "./constants/borderShadowConstants";
+import { WrpBdShadowConst, switchLiquidGlassShadowEffectBorder } from "./constants/borderShadowConstants";
 
 // import {
 // 	wrapperWidth,
@@ -192,6 +192,17 @@ const attributes = {
     controllerColorSecondary: {
         type: "string",
     },
+    switchLiquidGlass: {
+        type: "object",
+        default: {
+            enable: false,
+            effect: "effect1",
+            shadowEffect: "effect1",
+            backgroundColor: "#FFFFFF1F",
+            backdropFilter: 24,
+            brightness: 1,
+        },
+    },
 
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_tgl),
@@ -220,6 +231,22 @@ const attributes = {
     ...generateBorderShadowAttributes(WrpBdShadowConst, {
         // noShadow: true,
         // noBorder: true,
+    }),
+    ...generateBorderShadowAttributes(switchLiquidGlassShadowEffectBorder, {
+        defaultBdrColor: "#FFFFFF1F",
+        defaultBdrStyle: "solid",
+        bdrDefaults: {
+            top: 1,
+            bottom: 1,
+            right: 1,
+            left: 1,
+        },
+        rdsDefaults: {
+            top: 24,
+            bottom: 24,
+            right: 24,
+            left: 24,
+        },
     }),
 
     //  background attributes ⬇

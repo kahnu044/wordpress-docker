@@ -17,6 +17,8 @@ import {
     THUMBNAIL_BORDER_RADIUS,
     THUMBNAIL_MARGIN,
     TITLE_MARGIN,
+    TITLE_PADDING,
+    TITLE_BORDER_SHADOW,
     CONTENT_MARGIN,
     READMORE_MARGIN,
     READMORE_PADDING,
@@ -54,7 +56,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name, isContentEnabled } = props;
@@ -233,6 +235,28 @@ export default function Style(props) {
     } = generateDimensionsControlStyles({
         controlName: TITLE_MARGIN,
         styleFor: "margin",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: titlePaddingStylesDesktop,
+        dimensionStylesTab: titlePaddingStylesTab,
+        dimensionStylesMobile: titlePaddingStylesMobile,
+    } = generateDimensionsControlStyles({
+        controlName: TITLE_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+    const {
+        styesDesktop: titleBDShadowDesktop,
+        styesTab: titleBDShadowTab,
+        styesMobile: titleBDShadowMobile,
+        stylesHoverDesktop: titleBDShadowHoverDesktop,
+        stylesHoverTab: titleBDShadowHoverTab,
+        stylesHoverMobile: titleBDShadowHoverMobile,
+        transitionStyle: titleBDShadowTransition,
+    } = generateBorderShadowStyles({
+        controlName: TITLE_BORDER_SHADOW,
         attributes,
     });
 
@@ -840,7 +864,13 @@ export default function Style(props) {
 			text-align: ${titleTextAlign};
 			${titleTypoStylesDesktop}
 			${titleMarginStylesDesktop}
+            ${titlePaddingStylesDesktop}
+            ${titleBDShadowDesktop}
+            transition: ${titleBDShadowTransition};
 		}
+        .eb-post-grid-wrapper.${blockId} .ebpg-entry-title:hover {
+            ${titleBDShadowHoverDesktop}
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title a {
 			color: ${titleColor};
 			${titleTypoStylesDesktop}
@@ -854,7 +884,12 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title {
 			${titleTypoStylesTab}
 			${titleMarginStylesTab}
+            ${titlePaddingStylesTab}
+            ${titleBDShadowTab}
 		}
+        .eb-post-grid-wrapper.${blockId} .ebpg-entry-title:hover {
+            ${titleBDShadowHoverTab}
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title a {
 			${titleTypoStylesTab}
 		}
@@ -864,7 +899,12 @@ export default function Style(props) {
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title {
 			${titleTypoStylesMobile}
 			${titleMarginStylesMobile}
+            ${titlePaddingStylesMobile}
+            ${titleBDShadowMobile}
 		}
+        .eb-post-grid-wrapper.${blockId} .ebpg-entry-title:hover {
+            ${titleBDShadowHoverMobile}
+        }
 		.eb-post-grid-wrapper.${blockId} .ebpg-entry-title a {
 			${titleTypoStylesMobile}
 		}

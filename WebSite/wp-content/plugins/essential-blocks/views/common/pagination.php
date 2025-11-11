@@ -3,7 +3,7 @@
 $html = '';
 
 if ( isset( $totalPosts ) && (int) $totalPosts > (int) $per_page ) {
-    if ( isset( $enableMorePosts ) && $enableMorePosts ) {
+    if ( isset($loadMoreType) && isset( $enableMorePosts ) && $enableMorePosts ) {
         $html .= sprintf(
             '<div class="%1$s ebpg-pagination %2$s">',
             isset( $parent_class ) ? $parent_class : '',

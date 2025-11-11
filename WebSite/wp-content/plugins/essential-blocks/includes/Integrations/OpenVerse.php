@@ -110,8 +110,10 @@ class OpenVerse extends ThirdPartyIntegration
         if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
-        if ( ! current_user_can( 'edit_posts' ) ) {
-            wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
+
+        // Check if user is admin - only admins can access OpenVerse API
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( __( 'You do not have permission to use this block. Only administrators can access OpenVerse functionality.', 'essential-blocks' ) );
         }
 
         /**
@@ -146,7 +148,8 @@ class OpenVerse extends ThirdPartyIntegration
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
-        if ( ! current_user_can( 'edit_posts' ) ) {
+        // Check if user is admin - only admins can access OpenVerse API
+        if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
         }
 

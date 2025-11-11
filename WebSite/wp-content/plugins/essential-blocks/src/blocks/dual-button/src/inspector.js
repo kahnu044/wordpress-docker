@@ -5,7 +5,6 @@ import { __ } from "@wordpress/i18n";
 import {
     SelectControl,
     ToggleControl,
-    TextControl,
     Button,
     ButtonGroup,
     BaseControl,
@@ -47,7 +46,8 @@ import {
     ResponsiveRangeController,
     EBIconPicker,
     InspectorPanel,
-    EBButton
+    EBButton,
+    EBTextControl
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -311,10 +311,11 @@ function Inspector(props) {
                                 )}
 
                                 {connectorType === "text" && (
-                                    <TextControl
+                                    <EBTextControl
                                         label={__("Text", "essential-blocks")}
                                         value={innerButtonText}
                                         onChange={(text) => setAttributes({ innerButtonText: text })}
+                                        enableAi={true}
                                     />
                                 )}
 

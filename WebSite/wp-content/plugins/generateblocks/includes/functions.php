@@ -2128,9 +2128,14 @@ function generateblocks_get_processed_html_attributes( $html ) {
  * @param string $value The raw attribute value.
  */
 function generateblocks_get_escaped_html_attribute( $name, $value ) {
-	$url_fields = [ 'src', 'href' ];
+	$url_fields   = [ 'src', 'href' ];
+	$is_url_field = in_array( $name, $url_fields, true );
 
-	return in_array( $name, $url_fields, true )
+	if ( $is_url_field && ! empty( $value ) ) {
+		$value = do_shortcode( $value ); // esc_url() escapes shortcodes, so we need to do this first.
+	}
+
+	return $is_url_field
 		? esc_url( $value )
 		: esc_attr( $value );
 }
@@ -2217,4 +2222,33 @@ function generateblocks_get_v1_block_names() {
 		'generateblocks/image',
 		'generateblocks/query-loop',
 	];
+}
+
+/**
+ * Get ACF option field keys.
+ *
+ * @since 2.1.2
+ * @return array The ACF option field keys.
+ */
+function generateblocks_get_acf_option_field_keys() {
+	if ( ! function_exists( 'acf_get_option_meta' ) ) {
+		return [];
+	}
+
+	$acf_options = acf_get_option_meta( 'options' );
+
+	if ( ! is_array( $acf_options ) || empty( $acf_options ) ) {
+		return [];
+	}
+
+	$options = array_filter(
+		$acf_options,
+		function( $key ) {
+			// Only allow string keys that don't start with underscore.
+			return is_string( $key ) && strpos( $key, '_' ) !== 0;
+		},
+		ARRAY_FILTER_USE_KEY
+	);
+
+	return array_keys( $options );
 }

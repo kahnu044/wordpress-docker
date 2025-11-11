@@ -6,6 +6,7 @@ import {
     ImageComponent,
 } from "@essential-blocks/controls";
 import { BUTTON_KEYS } from "../constants";
+
 export default function InfoboxContainer({ requiredProps, attributes }) {
     const {
         blockId,
@@ -13,14 +14,12 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
         media,
         number,
         imageUrl,
-        imageAlt,
         infoboxLink,
         linkNewTab,
         enableSubTitle,
         enableDescription,
         enableButton,
         isInfoClick,
-        buttonText,
         title,
         subTitle,
         description,
@@ -30,24 +29,21 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
         classHook,
         showMedia,
         enableTitle,
-        addBtnIcon,
-        btnIconPosition,
-        btnIcon,
     } = requiredProps;
 
     return (
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-            {isInfoClick && (
-                <a
-                    href={
-                        infoboxLink == undefined ? "" : sanitizeURL(infoboxLink)
-                    }
-                    target={linkNewTab ? "_blank" : "_self"}
-                    rel="noopener noreferrer"
-                    className="info-click-link info-wrap-link"
-                ></a>
-            )}
-            <div className={`${blockId} eb-infobox-wrapper`}>
+            <div
+                className={`${blockId} eb-infobox-wrapper`}
+                {...(isInfoClick && {
+                    "data-clickable": "true",
+                    "data-href":
+                        infoboxLink == undefined
+                            ? ""
+                            : sanitizeURL(infoboxLink),
+                    "data-target": linkNewTab ? "_blank" : "_self",
+                })}
+            >
                 <div className="infobox-wrapper-inner">
                     {showMedia && (
                         <>

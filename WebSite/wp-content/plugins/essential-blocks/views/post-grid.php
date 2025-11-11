@@ -93,6 +93,13 @@
         }
 
         /**
+         * No post after load more pagination
+         */
+        if(isset($loadMoreOptions['enableMorePosts']) && $loadMoreOptions['enableMorePosts']) {
+            echo '<p class="eb-no-posts eb-loadmore-no-post" style="display: none;">'.__( 'No more posts', 'essential-blocks' ).'</p>';
+        }
+
+        /**
          * Pagination Markup
          */
         if ( ! empty( $posts ) && is_array( $loadMoreOptions ) && is_array( $queryData ) ) {

@@ -69,7 +69,7 @@ class PostGrid extends PostBlock
             return;
         }
 
-        $queryData = $attributes[ "queryData" ];
+        $queryData = isset( $attributes[ "queryData" ] ) ? $attributes[ "queryData" ] : [  ];
 
         $customQueryData = $queryData; //Update with filter data
 

@@ -44,8 +44,10 @@ function wpcf7_text_form_tag_handler( $tag ) {
 	$atts['maxlength'] = $tag->get_maxlength_option( '400' );
 	$atts['minlength'] = $tag->get_minlength_option();
 
-	if ( $atts['maxlength'] and $atts['minlength']
-	and $atts['maxlength'] < $atts['minlength'] ) {
+	if (
+		$atts['maxlength'] and $atts['minlength'] and
+		$atts['maxlength'] < $atts['minlength']
+	) {
 		unset( $atts['maxlength'], $atts['minlength'] );
 	}
 
@@ -54,10 +56,7 @@ function wpcf7_text_form_tag_handler( $tag ) {
 	$atts['list'] = $tag->get_option( 'list', 'id', true );
 	$atts['tabindex'] = $tag->get_option( 'tabindex', 'signed_int', true );
 	$atts['readonly'] = $tag->has_option( 'readonly' );
-
-	$atts['autocomplete'] = $tag->get_option(
-		'autocomplete', '[-0-9a-zA-Z]+', true
-	);
+	$atts['autocomplete'] = $tag->get_autocomplete_option();
 
 	if ( $tag->is_required() ) {
 		$atts['aria-required'] = 'true';
@@ -74,8 +73,7 @@ function wpcf7_text_form_tag_handler( $tag ) {
 
 	$value = (string) reset( $tag->values );
 
-	if ( $tag->has_option( 'placeholder' )
-	or $tag->has_option( 'watermark' ) ) {
+	if ( $tag->has_option( 'placeholder' ) or $tag->has_option( 'watermark' ) ) {
 		$atts['placeholder'] = $value;
 		$value = '';
 	}
@@ -178,23 +176,23 @@ function wpcf7_text_messages( $messages ) {
 	$messages = array_merge( $messages, array(
 		'invalid_email' => array(
 			'description' =>
-				__( "Email address that the sender entered is invalid", 'contact-form-7' ),
+				__( 'Email address that the sender entered is invalid', 'contact-form-7' ),
 			'default' =>
-				__( "Please enter an email address.", 'contact-form-7' ),
+				__( 'Please enter an email address.', 'contact-form-7' ),
 		),
 
 		'invalid_url' => array(
 			'description' =>
-				__( "URL that the sender entered is invalid", 'contact-form-7' ),
+				__( 'URL that the sender entered is invalid', 'contact-form-7' ),
 			'default' =>
-				__( "Please enter a URL.", 'contact-form-7' ),
+				__( 'Please enter a URL.', 'contact-form-7' ),
 		),
 
 		'invalid_tel' => array(
 			'description' =>
-				__( "Telephone number that the sender entered is invalid", 'contact-form-7' ),
+				__( 'Telephone number that the sender entered is invalid', 'contact-form-7' ),
 			'default' =>
-				__( "Please enter a telephone number.", 'contact-form-7' ),
+				__( 'Please enter a telephone number.', 'contact-form-7' ),
 		),
 	) );
 
