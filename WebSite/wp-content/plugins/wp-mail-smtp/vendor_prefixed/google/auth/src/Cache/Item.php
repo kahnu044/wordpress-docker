@@ -29,7 +29,7 @@ use TypeError;
  * on PHP 7.4 and below. It is compatible with psr/cache 1.0 and 2.0 (PSR-6).
  * @see TypedItem for compatiblity with psr/cache 3.0.
  */
-final class Item implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
+final class Item implements CacheItemInterface
 {
     /**
      * @var string
@@ -100,7 +100,7 @@ final class Item implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
             return $this;
         }
         $error = \sprintf('Argument 1 passed to %s::expiresAt() must implement interface DateTimeInterface, %s given', \get_class($this), \gettype($expiration));
-        throw new \TypeError($error);
+        throw new TypeError($error);
     }
     /**
      * {@inheritdoc}
@@ -116,7 +116,7 @@ final class Item implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
         } else {
             $message = 'Argument 1 passed to %s::expiresAfter() must be an ' . 'instance of DateInterval or of the type integer, %s given';
             $error = \sprintf($message, \get_class($this), \gettype($time));
-            throw new \TypeError($error);
+            throw new TypeError($error);
         }
         return $this;
     }
@@ -131,7 +131,7 @@ final class Item implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
         if ($expiration === null) {
             return \true;
         }
-        if ($expiration instanceof \DateTimeInterface) {
+        if ($expiration instanceof DateTimeInterface) {
             return \true;
         }
         return \false;
@@ -141,6 +141,6 @@ final class Item implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
      */
     protected function currentTime()
     {
-        return new \DateTime('now', new \DateTimeZone('UTC'));
+        return new DateTime('now', new DateTimeZone('UTC'));
     }
 }

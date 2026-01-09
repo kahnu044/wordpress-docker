@@ -165,4 +165,4 @@ class VacationSettings extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\VacationSettings::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_VacationSettings');
+\class_alias(VacationSettings::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_VacationSettings');

@@ -15,7 +15,7 @@ namespace WPMailSMTP\Vendor\GuzzleHttp;
  */
 function describe_type($input) : string
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::describeType($input);
+    return Utils::describeType($input);
 }
 /**
  * Parses an array of header lines into an associative array of headers.
@@ -27,7 +27,7 @@ function describe_type($input) : string
  */
 function headers_from_lines(iterable $lines) : array
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::headersFromLines($lines);
+    return Utils::headersFromLines($lines);
 }
 /**
  * Returns a debug stream based on the provided variable.
@@ -40,14 +40,14 @@ function headers_from_lines(iterable $lines) : array
  */
 function debug_resource($value = null)
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::debugResource($value);
+    return Utils::debugResource($value);
 }
 /**
  * Chooses and creates a default handler to use based on the environment.
  *
  * The returned handler is not wrapped by any default middlewares.
  *
- * @return callable(\Psr\Http\Message\RequestInterface, array): \GuzzleHttp\Promise\PromiseInterface Returns the best handler for the given system.
+ * @return callable(\Psr\Http\Message\RequestInterface, array): Promise\PromiseInterface Returns the best handler for the given system.
  *
  * @throws \RuntimeException if no viable Handler is available.
  *
@@ -55,7 +55,7 @@ function debug_resource($value = null)
  */
 function choose_handler() : callable
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::chooseHandler();
+    return Utils::chooseHandler();
 }
 /**
  * Get the default User-Agent string to use with Guzzle.
@@ -64,7 +64,7 @@ function choose_handler() : callable
  */
 function default_user_agent() : string
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::defaultUserAgent();
+    return Utils::defaultUserAgent();
 }
 /**
  * Returns the default cacert bundle for the current system.
@@ -83,7 +83,7 @@ function default_user_agent() : string
  */
 function default_ca_bundle() : string
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::defaultCaBundle();
+    return Utils::defaultCaBundle();
 }
 /**
  * Creates an associative array of lowercase header names to the actual
@@ -93,7 +93,7 @@ function default_ca_bundle() : string
  */
 function normalize_header_keys(array $headers) : array
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::normalizeHeaderKeys($headers);
+    return Utils::normalizeHeaderKeys($headers);
 }
 /**
  * Returns true if the provided host matches any of the no proxy areas.
@@ -118,7 +118,7 @@ function normalize_header_keys(array $headers) : array
  */
 function is_host_in_noproxy(string $host, array $noProxyArray) : bool
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::isHostInNoProxy($host, $noProxyArray);
+    return Utils::isHostInNoProxy($host, $noProxyArray);
 }
 /**
  * Wrapper for json_decode that throws when an error occurs.
@@ -138,7 +138,7 @@ function is_host_in_noproxy(string $host, array $noProxyArray) : bool
  */
 function json_decode(string $json, bool $assoc = \false, int $depth = 512, int $options = 0)
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::jsonDecode($json, $assoc, $depth, $options);
+    return Utils::jsonDecode($json, $assoc, $depth, $options);
 }
 /**
  * Wrapper for JSON encoding that throws when an error occurs.
@@ -154,5 +154,5 @@ function json_decode(string $json, bool $assoc = \false, int $depth = 512, int $
  */
 function json_encode($value, int $options = 0, int $depth = 512) : string
 {
-    return \WPMailSMTP\Vendor\GuzzleHttp\Utils::jsonEncode($value, $options, $depth);
+    return Utils::jsonEncode($value, $options, $depth);
 }

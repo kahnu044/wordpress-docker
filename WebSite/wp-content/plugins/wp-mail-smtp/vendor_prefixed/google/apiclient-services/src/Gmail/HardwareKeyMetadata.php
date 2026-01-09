@@ -39,4 +39,4 @@ class HardwareKeyMetadata extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\HardwareKeyMetadata::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HardwareKeyMetadata');
+\class_alias(HardwareKeyMetadata::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HardwareKeyMetadata');

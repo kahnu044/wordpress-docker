@@ -11,7 +11,7 @@ namespace WPMailSMTP\Vendor\GuzzleHttp\Promise;
  *
  * @final
  */
-class FulfilledPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+class FulfilledPromise implements PromiseInterface
 {
     private $value;
     /**
@@ -24,17 +24,17 @@ class FulfilledPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseI
         }
         $this->value = $value;
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : PromiseInterface
     {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {
             return $this;
         }
-        $queue = \WPMailSMTP\Vendor\GuzzleHttp\Promise\Utils::queue();
-        $p = new \WPMailSMTP\Vendor\GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $queue = Utils::queue();
+        $p = new Promise([$queue, 'run']);
         $value = $this->value;
         $queue->add(static function () use($p, $value, $onFulfilled) : void {
-            if (\WPMailSMTP\Vendor\GuzzleHttp\Promise\Is::pending($p)) {
+            if (Is::pending($p)) {
                 try {
                     $p->resolve($onFulfilled($value));
                 } catch (\Throwable $e) {
@@ -44,7 +44,7 @@ class FulfilledPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseI
         });
         return $p;
     }
-    public function otherwise(callable $onRejected) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected) : PromiseInterface
     {
         return $this->then(null, $onRejected);
     }

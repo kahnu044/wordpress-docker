@@ -8,7 +8,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
  * Lazily reads or writes to a file that is opened only after an IO operation
  * take place on the stream.
  */
-final class LazyOpenStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+final class LazyOpenStream implements StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var string */
@@ -34,8 +34,8 @@ final class LazyOpenStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Stream
     /**
      * Creates the underlying stream lazily when required.
      */
-    protected function createStream() : \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+    protected function createStream() : StreamInterface
     {
-        return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::tryFopen($this->filename, $this->mode));
+        return Utils::streamFor(Utils::tryFopen($this->filename, $this->mode));
     }
 }

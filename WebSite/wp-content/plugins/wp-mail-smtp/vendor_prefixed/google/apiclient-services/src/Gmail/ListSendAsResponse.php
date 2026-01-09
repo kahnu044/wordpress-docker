@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListSendAsResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'sendAs';
-    protected $sendAsType = \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class;
+    protected $sendAsType = SendAs::class;
     protected $sendAsDataType = 'array';
     /**
      * @param SendAs[]
@@ -38,4 +38,4 @@ class ListSendAsResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListSendAsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListSendAsResponse');
+\class_alias(ListSendAsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListSendAsResponse');

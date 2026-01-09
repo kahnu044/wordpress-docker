@@ -24,7 +24,7 @@ class HistoryLabelRemoved extends \WPMailSMTP\Vendor\Google\Collection
      * @var string[]
      */
     public $labelIds;
-    protected $messageType = \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class;
+    protected $messageType = Message::class;
     protected $messageDataType = '';
     /**
      * @param string[]
@@ -43,7 +43,7 @@ class HistoryLabelRemoved extends \WPMailSMTP\Vendor\Google\Collection
     /**
      * @param Message
      */
-    public function setMessage(\WPMailSMTP\Vendor\Google\Service\Gmail\Message $message)
+    public function setMessage(Message $message)
     {
         $this->message = $message;
     }
@@ -56,4 +56,4 @@ class HistoryLabelRemoved extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\HistoryLabelRemoved::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HistoryLabelRemoved');
+\class_alias(HistoryLabelRemoved::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HistoryLabelRemoved');

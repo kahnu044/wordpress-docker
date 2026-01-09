@@ -142,7 +142,7 @@ class Model implements \ArrayAccess
      */
     public function toSimpleObject()
     {
-        $object = new \stdClass();
+        $object = new stdClass();
         // Process all other data.
         foreach ($this->modelData as $key => $val) {
             $result = $this->getSimpleValue($val);
@@ -151,8 +151,8 @@ class Model implements \ArrayAccess
             }
         }
         // Process all public properties.
-        $reflect = new \ReflectionObject($this);
-        $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $reflect = new ReflectionObject($this);
+        $props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
         foreach ($props as $member) {
             $name = $member->getName();
             $result = $this->getSimpleValue($this->{$name});
@@ -169,7 +169,7 @@ class Model implements \ArrayAccess
      */
     private function getSimpleValue($value)
     {
-        if ($value instanceof \WPMailSMTP\Vendor\Google\Model) {
+        if ($value instanceof Model) {
             return $value->toSimpleObject();
         } elseif (\is_array($value)) {
             $return = [];
@@ -231,7 +231,7 @@ class Model implements \ArrayAccess
     public function assertIsArray($obj, $method)
     {
         if ($obj && !\is_array($obj)) {
-            throw new \WPMailSMTP\Vendor\Google\Exception("Incorrect parameter type passed to {$method}(). Expected an array.");
+            throw new GoogleException("Incorrect parameter type passed to {$method}(). Expected an array.");
         }
     }
     /** @return bool */

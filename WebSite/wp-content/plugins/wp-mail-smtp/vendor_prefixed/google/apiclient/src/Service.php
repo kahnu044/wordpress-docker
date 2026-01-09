@@ -35,14 +35,14 @@ class Service
     private $client;
     public function __construct($clientOrConfig = [])
     {
-        if ($clientOrConfig instanceof \WPMailSMTP\Vendor\Google\Client) {
+        if ($clientOrConfig instanceof Client) {
             $this->client = $clientOrConfig;
         } elseif (\is_array($clientOrConfig)) {
-            $this->client = new \WPMailSMTP\Vendor\Google\Client($clientOrConfig ?: []);
+            $this->client = new Client($clientOrConfig ?: []);
         } else {
             $errorMessage = 'WPMailSMTP\\Vendor\\constructor must be array or instance of Google\\Client';
             if (\class_exists('TypeError')) {
-                throw new \TypeError($errorMessage);
+                throw new TypeError($errorMessage);
             }
             \trigger_error($errorMessage, \E_USER_ERROR);
         }
@@ -62,6 +62,6 @@ class Service
      */
     public function createBatch()
     {
-        return new \WPMailSMTP\Vendor\Google\Http\Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
+        return new Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
     }
 }

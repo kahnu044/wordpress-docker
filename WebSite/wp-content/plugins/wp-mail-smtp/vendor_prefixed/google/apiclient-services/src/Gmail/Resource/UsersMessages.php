@@ -42,7 +42,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param array $optParams Optional parameters.
      * @throws \Google\Service\Exception
      */
-    public function batchDelete($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\BatchDeleteMessagesRequest $postBody, $optParams = [])
+    public function batchDelete($userId, BatchDeleteMessagesRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
@@ -57,7 +57,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @param array $optParams Optional parameters.
      * @throws \Google\Service\Exception
      */
-    public function batchModify($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\BatchModifyMessagesRequest $postBody, $optParams = [])
+    public function batchModify($userId, BatchModifyMessagesRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
@@ -100,7 +100,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('get', [$params], Message::class);
     }
     /**
      * Imports a message into only this user's mailbox, with standard email delivery
@@ -126,11 +126,11 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Message
      * @throws \Google\Service\Exception
      */
-    public function import($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
+    public function import($userId, Message $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('import', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('import', [$params], Message::class);
     }
     /**
      * Directly inserts a message into only this user's mailbox similar to `IMAP
@@ -150,11 +150,11 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Message
      * @throws \Google\Service\Exception
      */
-    public function insert($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
+    public function insert($userId, Message $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('insert', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('insert', [$params], Message::class);
     }
     /**
      * Lists the messages in the user's mailbox. (messages.listUsersMessages)
@@ -186,7 +186,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListMessagesResponse::class);
+        return $this->call('list', [$params], ListMessagesResponse::class);
     }
     /**
      * Modifies the labels on the specified message. (messages.modify)
@@ -199,11 +199,11 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Message
      * @throws \Google\Service\Exception
      */
-    public function modify($userId, $id, \WPMailSMTP\Vendor\Google\Service\Gmail\ModifyMessageRequest $postBody, $optParams = [])
+    public function modify($userId, $id, ModifyMessageRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('modify', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('modify', [$params], Message::class);
     }
     /**
      * Sends the specified message to the recipients in the `To`, `Cc`, and `Bcc`
@@ -218,11 +218,11 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Message
      * @throws \Google\Service\Exception
      */
-    public function send($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Message $postBody, $optParams = [])
+    public function send($userId, Message $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('send', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('send', [$params], Message::class);
     }
     /**
      * Moves the specified message to the trash. (messages.trash)
@@ -238,7 +238,7 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('trash', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('trash', [$params], Message::class);
     }
     /**
      * Removes the specified message from the trash. (messages.untrash)
@@ -254,8 +254,8 @@ class UsersMessages extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('untrash', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('untrash', [$params], Message::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersMessages::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersMessages');
+\class_alias(UsersMessages::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersMessages');

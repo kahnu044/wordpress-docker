@@ -66,7 +66,7 @@ class UsersThreads extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class);
+        return $this->call('get', [$params], Thread::class);
     }
     /**
      * Lists the threads in the user's mailbox. (threads.listUsersThreads)
@@ -95,7 +95,7 @@ class UsersThreads extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListThreadsResponse::class);
+        return $this->call('list', [$params], ListThreadsResponse::class);
     }
     /**
      * Modifies the labels applied to the thread. This applies to all messages in
@@ -109,11 +109,11 @@ class UsersThreads extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Thread
      * @throws \Google\Service\Exception
      */
-    public function modify($userId, $id, \WPMailSMTP\Vendor\Google\Service\Gmail\ModifyThreadRequest $postBody, $optParams = [])
+    public function modify($userId, $id, ModifyThreadRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('modify', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class);
+        return $this->call('modify', [$params], Thread::class);
     }
     /**
      * Moves the specified thread to the trash. Any messages that belong to the
@@ -130,7 +130,7 @@ class UsersThreads extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('trash', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class);
+        return $this->call('trash', [$params], Thread::class);
     }
     /**
      * Removes the specified thread from the trash. Any messages that belong to the
@@ -147,8 +147,8 @@ class UsersThreads extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('untrash', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class);
+        return $this->call('untrash', [$params], Thread::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersThreads::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersThreads');
+\class_alias(UsersThreads::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersThreads');

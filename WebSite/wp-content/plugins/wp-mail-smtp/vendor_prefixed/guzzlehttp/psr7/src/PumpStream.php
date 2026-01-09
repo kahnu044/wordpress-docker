@@ -14,7 +14,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
  * the read() function of the PumpStream. The provided callable MUST return
  * false when there is no more data to read.
  */
-final class PumpStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+final class PumpStream implements StreamInterface
 {
     /** @var callable(int): (string|false|null)|null */
     private $source;
@@ -41,12 +41,12 @@ final class PumpStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInte
         $this->source = $source;
         $this->size = $options['size'] ?? null;
         $this->metadata = $options['metadata'] ?? [];
-        $this->buffer = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\BufferStream();
+        $this->buffer = new BufferStream();
     }
     public function __toString() : string
     {
         try {
-            return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::copyToString($this);
+            return Utils::copyToString($this);
         } catch (\Throwable $e) {
             if (\PHP_VERSION_ID >= 70400) {
                 throw $e;

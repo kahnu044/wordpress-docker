@@ -14,5 +14,5 @@ interface LoggerAwareInterface
      *
      * @return void
      */
-    public function setLogger(\WPMailSMTP\Vendor\Psr\Log\LoggerInterface $logger);
+    public function setLogger(LoggerInterface $logger);
 }

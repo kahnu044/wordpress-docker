@@ -31,7 +31,7 @@ use WPMailSMTP\Vendor\Google\Auth\OAuth2;
  *
  * @see [Application Default Credentials](http://goo.gl/mkAHpZ)
  */
-class UserRefreshCredentials extends \WPMailSMTP\Vendor\Google\Auth\CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface
+class UserRefreshCredentials extends CredentialsLoader implements GetQuotaProjectInterface
 {
     /**
      * The OAuth2 instance used to conduct authorization.
@@ -73,7 +73,7 @@ class UserRefreshCredentials extends \WPMailSMTP\Vendor\Google\Auth\CredentialsL
         if (!\array_key_exists('refresh_token', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the refresh_token field');
         }
-        $this->auth = new \WPMailSMTP\Vendor\Google\Auth\OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
+        $this->auth = new OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
         if (\array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }

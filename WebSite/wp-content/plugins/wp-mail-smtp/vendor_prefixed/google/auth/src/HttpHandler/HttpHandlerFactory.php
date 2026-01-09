@@ -31,30 +31,30 @@ class HttpHandlerFactory
      * @return Guzzle6HttpHandler|Guzzle7HttpHandler
      * @throws \Exception
      */
-    public static function build(?\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $client = null)
+    public static function build(?ClientInterface $client = null)
     {
         if (\is_null($client)) {
             $stack = null;
-            if (\class_exists(\WPMailSMTP\Vendor\GuzzleHttp\BodySummarizer::class)) {
+            if (\class_exists(BodySummarizer::class)) {
                 // double the # of characters before truncation by default
-                $bodySummarizer = new \WPMailSMTP\Vendor\GuzzleHttp\BodySummarizer(240);
-                $stack = \WPMailSMTP\Vendor\GuzzleHttp\HandlerStack::create();
+                $bodySummarizer = new BodySummarizer(240);
+                $stack = HandlerStack::create();
                 $stack->remove('http_errors');
-                $stack->unshift(\WPMailSMTP\Vendor\GuzzleHttp\Middleware::httpErrors($bodySummarizer), 'http_errors');
+                $stack->unshift(Middleware::httpErrors($bodySummarizer), 'http_errors');
             }
-            $client = new \WPMailSMTP\Vendor\GuzzleHttp\Client(['handler' => $stack]);
+            $client = new Client(['handler' => $stack]);
         }
         $version = null;
         if (\defined('WPMailSMTP\\Vendor\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
-            $version = \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface::MAJOR_VERSION;
+            $version = ClientInterface::MAJOR_VERSION;
         } elseif (\defined('WPMailSMTP\\Vendor\\GuzzleHttp\\ClientInterface::VERSION')) {
-            $version = (int) \substr(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface::VERSION, 0, 1);
+            $version = (int) \substr(ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
             case 6:
-                return new \WPMailSMTP\Vendor\Google\Auth\HttpHandler\Guzzle6HttpHandler($client);
+                return new Guzzle6HttpHandler($client);
             case 7:
-                return new \WPMailSMTP\Vendor\Google\Auth\HttpHandler\Guzzle7HttpHandler($client);
+                return new Guzzle7HttpHandler($client);
             default:
                 throw new \Exception('Version not supported');
         }

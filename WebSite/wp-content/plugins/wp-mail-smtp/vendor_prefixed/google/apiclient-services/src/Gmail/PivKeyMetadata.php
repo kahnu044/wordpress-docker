@@ -39,4 +39,4 @@ class PivKeyMetadata extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\PivKeyMetadata::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_PivKeyMetadata');
+\class_alias(PivKeyMetadata::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_PivKeyMetadata');

@@ -14,7 +14,7 @@ namespace WPMailSMTP\Vendor\GuzzleHttp\Promise;
  *
  * @final
  */
-class TaskQueue implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\TaskQueueInterface
+class TaskQueue implements TaskQueueInterface
 {
     private $enableShutdown = \true;
     private $queue = [];

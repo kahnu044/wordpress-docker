@@ -28,7 +28,7 @@ class ListThreadsResponse extends \WPMailSMTP\Vendor\Google\Collection
      * @var string
      */
     public $resultSizeEstimate;
-    protected $threadsType = \WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class;
+    protected $threadsType = Thread::class;
     protected $threadsDataType = 'array';
     /**
      * @param string
@@ -74,4 +74,4 @@ class ListThreadsResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListThreadsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListThreadsResponse');
+\class_alias(ListThreadsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListThreadsResponse');

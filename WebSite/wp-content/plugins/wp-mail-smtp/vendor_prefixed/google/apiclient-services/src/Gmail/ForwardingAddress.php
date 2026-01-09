@@ -57,4 +57,4 @@ class ForwardingAddress extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ForwardingAddress');
+\class_alias(ForwardingAddress::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ForwardingAddress');

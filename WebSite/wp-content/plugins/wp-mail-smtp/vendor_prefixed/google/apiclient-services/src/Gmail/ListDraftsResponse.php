@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListDraftsResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'drafts';
-    protected $draftsType = \WPMailSMTP\Vendor\Google\Service\Gmail\Draft::class;
+    protected $draftsType = Draft::class;
     protected $draftsDataType = 'array';
     /**
      * @var string
@@ -74,4 +74,4 @@ class ListDraftsResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListDraftsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListDraftsResponse');
+\class_alias(ListDraftsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListDraftsResponse');

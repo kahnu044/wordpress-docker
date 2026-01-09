@@ -40,4 +40,4 @@ class BatchDeleteMessagesRequest extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\BatchDeleteMessagesRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_BatchDeleteMessagesRequest');
+\class_alias(BatchDeleteMessagesRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_BatchDeleteMessagesRequest');

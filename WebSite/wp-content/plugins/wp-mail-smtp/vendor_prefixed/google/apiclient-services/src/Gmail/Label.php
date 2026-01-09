@@ -19,7 +19,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 
 class Label extends \WPMailSMTP\Vendor\Google\Model
 {
-    protected $colorType = \WPMailSMTP\Vendor\Google\Service\Gmail\LabelColor::class;
+    protected $colorType = LabelColor::class;
     protected $colorDataType = '';
     /**
      * @var string
@@ -60,7 +60,7 @@ class Label extends \WPMailSMTP\Vendor\Google\Model
     /**
      * @param LabelColor
      */
-    public function setColor(\WPMailSMTP\Vendor\Google\Service\Gmail\LabelColor $color)
+    public function setColor(LabelColor $color)
     {
         $this->color = $color;
     }
@@ -199,4 +199,4 @@ class Label extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Label::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Label');
+\class_alias(Label::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Label');

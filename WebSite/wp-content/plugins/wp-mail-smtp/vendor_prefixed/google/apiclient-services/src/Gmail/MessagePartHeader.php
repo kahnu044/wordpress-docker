@@ -57,4 +57,4 @@ class MessagePartHeader extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\MessagePartHeader::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_MessagePartHeader');
+\class_alias(MessagePartHeader::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_MessagePartHeader');

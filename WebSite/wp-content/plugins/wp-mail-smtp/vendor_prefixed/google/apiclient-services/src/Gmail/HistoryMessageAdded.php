@@ -19,12 +19,12 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 
 class HistoryMessageAdded extends \WPMailSMTP\Vendor\Google\Model
 {
-    protected $messageType = \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class;
+    protected $messageType = Message::class;
     protected $messageDataType = '';
     /**
      * @param Message
      */
-    public function setMessage(\WPMailSMTP\Vendor\Google\Service\Gmail\Message $message)
+    public function setMessage(Message $message)
     {
         $this->message = $message;
     }
@@ -37,4 +37,4 @@ class HistoryMessageAdded extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\HistoryMessageAdded::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HistoryMessageAdded');
+\class_alias(HistoryMessageAdded::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_HistoryMessageAdded');

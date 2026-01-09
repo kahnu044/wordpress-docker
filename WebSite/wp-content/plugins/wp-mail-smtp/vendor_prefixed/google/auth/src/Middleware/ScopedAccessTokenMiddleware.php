@@ -52,7 +52,7 @@ class ScopedAccessTokenMiddleware
      * @param array<mixed> $cacheConfig configuration for the cache when it's present
      * @param CacheItemPoolInterface $cache an implementation of CacheItemPoolInterface
      */
-    public function __construct(callable $tokenFunc, $scopes, ?array $cacheConfig = null, ?\WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public function __construct(callable $tokenFunc, $scopes, ?array $cacheConfig = null, ?CacheItemPoolInterface $cache = null)
     {
         $this->tokenFunc = $tokenFunc;
         if (!(\is_string($scopes) || \is_array($scopes))) {
@@ -98,7 +98,7 @@ class ScopedAccessTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use($handler) {
             // Requests using "auth"="scoped" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'scoped') {
                 return $handler($request, $options);

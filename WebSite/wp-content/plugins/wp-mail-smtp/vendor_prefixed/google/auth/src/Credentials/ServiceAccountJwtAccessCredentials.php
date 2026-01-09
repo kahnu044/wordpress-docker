@@ -32,7 +32,7 @@ use WPMailSMTP\Vendor\Google\Auth\SignBlobInterface;
  * console (via 'Generate new Json Key').  It is not part of any OAuth2
  * flow, rather it creates a JWT and sends that as a credential.
  */
-class ServiceAccountJwtAccessCredentials extends \WPMailSMTP\Vendor\Google\Auth\CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface, \WPMailSMTP\Vendor\Google\Auth\SignBlobInterface, \WPMailSMTP\Vendor\Google\Auth\ProjectIdProviderInterface
+class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {
     use ServiceAccountSignerTrait;
     /**
@@ -79,7 +79,7 @@ class ServiceAccountJwtAccessCredentials extends \WPMailSMTP\Vendor\Google\Auth\
         if (\array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
-        $this->auth = new \WPMailSMTP\Vendor\Google\Auth\OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'scope' => $scope]);
+        $this->auth = new OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'scope' => $scope]);
         $this->projectId = $jsonKey['project_id'] ?? null;
     }
     /**

@@ -20,5 +20,5 @@ interface ServerRequestFactoryInterface
      *
      * @return ServerRequestInterface
      */
-    public function createServerRequest(string $method, $uri, array $serverParams = []) : \WPMailSMTP\Vendor\Psr\Http\Message\ServerRequestInterface;
+    public function createServerRequest(string $method, $uri, array $serverParams = []) : ServerRequestInterface;
 }

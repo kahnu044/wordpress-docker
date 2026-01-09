@@ -58,8 +58,8 @@ final class EasyHandle
      */
     public function createResponse() : void
     {
-        [$ver, $status, $reason, $headers] = \WPMailSMTP\Vendor\GuzzleHttp\Handler\HeaderProcessor::parseHeaders($this->headers);
-        $normalizedKeys = \WPMailSMTP\Vendor\GuzzleHttp\Utils::normalizeHeaderKeys($headers);
+        [$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders($this->headers);
+        $normalizedKeys = Utils::normalizeHeaderKeys($headers);
         if (!empty($this->options['decode_content']) && isset($normalizedKeys['content-encoding'])) {
             $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];
             unset($headers[$normalizedKeys['content-encoding']]);
@@ -74,7 +74,7 @@ final class EasyHandle
             }
         }
         // Attach a response to the easy handle with the parsed headers.
-        $this->response = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Response($status, $headers, $this->sink, $ver, $reason);
+        $this->response = new Response($status, $headers, $this->sink, $ver, $reason);
     }
     /**
      * @param string $name

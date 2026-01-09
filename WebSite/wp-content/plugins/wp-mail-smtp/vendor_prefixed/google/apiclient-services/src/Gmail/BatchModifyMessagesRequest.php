@@ -76,4 +76,4 @@ class BatchModifyMessagesRequest extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\BatchModifyMessagesRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_BatchModifyMessagesRequest');
+\class_alias(BatchModifyMessagesRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_BatchModifyMessagesRequest');

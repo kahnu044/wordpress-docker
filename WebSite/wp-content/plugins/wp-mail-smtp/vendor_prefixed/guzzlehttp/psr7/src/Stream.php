@@ -7,7 +7,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
 /**
  * PHP stream implementation.
  */
-class Stream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+class Stream implements StreamInterface
 {
     /**
      * @see https://www.php.net/manual/en/function.fopen.php
@@ -89,7 +89,7 @@ class Stream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
         if (!$this->readable) {
             throw new \RuntimeException('Cannot read from non-readable stream');
         }
-        return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::tryGetContents($this->stream);
+        return Utils::tryGetContents($this->stream);
     }
     public function close() : void
     {

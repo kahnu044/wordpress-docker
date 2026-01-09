@@ -5,7 +5,7 @@ namespace WPMailSMTP\Vendor\GuzzleHttp\Cookie;
 /**
  * Persists cookies in the client session
  */
-class SessionCookieJar extends \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJar
+class SessionCookieJar extends CookieJar
 {
     /**
      * @var string session key
@@ -45,7 +45,7 @@ class SessionCookieJar extends \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJar
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
@@ -62,7 +62,7 @@ class SessionCookieJar extends \WPMailSMTP\Vendor\GuzzleHttp\Cookie\CookieJar
         $data = \json_decode($_SESSION[$this->sessionKey], \true);
         if (\is_array($data)) {
             foreach ($data as $cookie) {
-                $this->setCookie(new \WPMailSMTP\Vendor\GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\strlen($data)) {
             throw new \RuntimeException('Invalid cookie data');

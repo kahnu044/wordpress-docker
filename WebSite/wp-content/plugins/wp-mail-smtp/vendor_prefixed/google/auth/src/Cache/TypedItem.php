@@ -25,7 +25,7 @@ use WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface;
  * on PHP 8.0 and above. It is compatible with psr/cache 3.0 (PSR-6).
  * @see Item for compatiblity with previous versions of PHP.
  */
-final class TypedItem implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
+final class TypedItem implements CacheItemInterface
 {
     /**
      * @var mixed

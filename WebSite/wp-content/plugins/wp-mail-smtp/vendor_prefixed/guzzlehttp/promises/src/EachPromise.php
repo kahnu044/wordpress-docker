@@ -9,7 +9,7 @@ namespace WPMailSMTP\Vendor\GuzzleHttp\Promise;
  *
  * @final
  */
-class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInterface
+class EachPromise implements PromisorInterface
 {
     private $pending = [];
     private $nextPendingIndex = 0;
@@ -48,7 +48,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
      */
     public function __construct($iterable, array $config = [])
     {
-        $this->iterable = \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::iterFor($iterable);
+        $this->iterable = Create::iterFor($iterable);
         if (isset($config['concurrency'])) {
             $this->concurrency = $config['concurrency'];
         }
@@ -60,7 +60,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
         }
     }
     /** @psalm-suppress InvalidNullableReturnType */
-    public function promise() : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function promise() : PromiseInterface
     {
         if ($this->aggregate) {
             return $this->aggregate;
@@ -81,7 +81,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
     private function createPromise() : void
     {
         $this->mutex = \false;
-        $this->aggregate = new \WPMailSMTP\Vendor\GuzzleHttp\Promise\Promise(function () : void {
+        $this->aggregate = new Promise(function () : void {
             if ($this->checkIfFinished()) {
                 return;
             }
@@ -91,7 +91,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
             while ($promise = \current($this->pending)) {
                 \next($this->pending);
                 $promise->wait();
-                if (\WPMailSMTP\Vendor\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+                if (Is::settled($this->aggregate)) {
                     return;
                 }
             }
@@ -133,7 +133,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
         if (!$this->iterable || !$this->iterable->valid()) {
             return \false;
         }
-        $promise = \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::promiseFor($this->iterable->current());
+        $promise = Create::promiseFor($this->iterable->current());
         $key = $this->iterable->key();
         // Iterable keys may not be unique, so we use a counter to
         // guarantee uniqueness
@@ -172,7 +172,7 @@ class EachPromise implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromisorInter
     private function step(int $idx) : void
     {
         // If the promise was already resolved, then ignore this step.
-        if (\WPMailSMTP\Vendor\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+        if (Is::settled($this->aggregate)) {
             return;
         }
         unset($this->pending[$idx]);

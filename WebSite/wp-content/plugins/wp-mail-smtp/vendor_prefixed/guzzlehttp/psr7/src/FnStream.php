@@ -11,7 +11,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
  * to create a concrete class for a simple extension point.
  */
 #[\AllowDynamicProperties]
-final class FnStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+final class FnStream implements StreamInterface
 {
     private const SLOTS = ['__toString', 'close', 'detach', 'rewind', 'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write', 'isReadable', 'read', 'getContents', 'getMetadata'];
     /** @var array<string, callable> */
@@ -63,7 +63,7 @@ final class FnStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterf
      *
      * @return FnStream
      */
-    public static function decorate(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, array $methods)
+    public static function decorate(StreamInterface $stream, array $methods)
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.

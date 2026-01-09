@@ -26,7 +26,7 @@ use WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface;
  * it doesn't provide any locking mechanism. If multiple processes write to
  * this ItemPool, you have to avoid race condition manually in your code.
  */
-class SysVCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface
+class SysVCacheItemPool implements CacheItemPoolInterface
 {
     const VAR_KEY = 1;
     const DEFAULT_PROJ = 'A';
@@ -79,7 +79,7 @@ class SysVCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInt
      * @param mixed $key
      * @return CacheItemInterface
      */
-    public function getItem($key) : \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
+    public function getItem($key) : CacheItemInterface
     {
         $this->loadItems();
         return \current($this->getItems([$key]));
@@ -93,7 +93,7 @@ class SysVCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInt
     {
         $this->loadItems();
         $items = [];
-        $itemClass = \PHP_VERSION_ID >= 80000 ? \WPMailSMTP\Vendor\Google\Auth\Cache\TypedItem::class : \WPMailSMTP\Vendor\Google\Auth\Cache\Item::class;
+        $itemClass = \PHP_VERSION_ID >= 80000 ? TypedItem::class : Item::class;
         foreach ($keys as $key) {
             $items[$key] = $this->hasItem($key) ? clone $this->items[$key] : new $itemClass($key);
         }
@@ -139,7 +139,7 @@ class SysVCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInt
     /**
      * {@inheritdoc}
      */
-    public function save(\WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface $item) : bool
+    public function save(CacheItemInterface $item) : bool
     {
         if (!$this->hasLoadedItems) {
             $this->loadItems();
@@ -150,7 +150,7 @@ class SysVCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInt
     /**
      * {@inheritdoc}
      */
-    public function saveDeferred(\WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface $item) : bool
+    public function saveDeferred(CacheItemInterface $item) : bool
     {
         $this->deferredItems[$item->getKey()] = $item;
         return \true;

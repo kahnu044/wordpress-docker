@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListSmimeInfoResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'smimeInfo';
-    protected $smimeInfoType = \WPMailSMTP\Vendor\Google\Service\Gmail\SmimeInfo::class;
+    protected $smimeInfoType = SmimeInfo::class;
     protected $smimeInfoDataType = 'array';
     /**
      * @param SmimeInfo[]
@@ -38,4 +38,4 @@ class ListSmimeInfoResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListSmimeInfoResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListSmimeInfoResponse');
+\class_alias(ListSmimeInfoResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListSmimeInfoResponse');

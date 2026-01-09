@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListCseKeyPairsResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'cseKeyPairs';
-    protected $cseKeyPairsType = \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class;
+    protected $cseKeyPairsType = CseKeyPair::class;
     protected $cseKeyPairsDataType = 'array';
     /**
      * @var string
@@ -56,4 +56,4 @@ class ListCseKeyPairsResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListCseKeyPairsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListCseKeyPairsResponse');
+\class_alias(ListCseKeyPairsResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListCseKeyPairsResponse');

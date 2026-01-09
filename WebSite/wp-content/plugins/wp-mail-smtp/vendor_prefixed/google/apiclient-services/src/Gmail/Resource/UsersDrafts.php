@@ -40,11 +40,11 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Draft
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
+    public function create($userId, Draft $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Draft::class);
+        return $this->call('create', [$params], Draft::class);
     }
     /**
      * Immediately and permanently deletes the specified draft. Does not simply
@@ -78,7 +78,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Draft::class);
+        return $this->call('get', [$params], Draft::class);
     }
     /**
      * Lists the drafts in the user's mailbox. (drafts.listUsersDrafts)
@@ -103,7 +103,7 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListDraftsResponse::class);
+        return $this->call('list', [$params], ListDraftsResponse::class);
     }
     /**
      * Sends the specified, existing draft to the recipients in the `To`, `Cc`, and
@@ -116,11 +116,11 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Message
      * @throws \Google\Service\Exception
      */
-    public function send($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
+    public function send($userId, Draft $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('send', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class);
+        return $this->call('send', [$params], Message::class);
     }
     /**
      * Replaces a draft's content. (drafts.update)
@@ -133,12 +133,12 @@ class UsersDrafts extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Draft
      * @throws \Google\Service\Exception
      */
-    public function update($userId, $id, \WPMailSMTP\Vendor\Google\Service\Gmail\Draft $postBody, $optParams = [])
+    public function update($userId, $id, Draft $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Draft::class);
+        return $this->call('update', [$params], Draft::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersDrafts::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersDrafts');
+\class_alias(UsersDrafts::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersDrafts');

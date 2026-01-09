@@ -43,9 +43,9 @@ class Iam
     /**
      * @param callable $httpHandler [optional] The HTTP Handler to send requests.
      */
-    public function __construct(?callable $httpHandler = null, string $universeDomain = \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN)
+    public function __construct(?callable $httpHandler = null, string $universeDomain = GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN)
     {
-        $this->httpHandler = $httpHandler ?: \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build(\WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $this->httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         $this->universeDomain = $universeDomain;
     }
     /**
@@ -78,7 +78,7 @@ class Iam
         }
         $body = ['delegates' => $delegates, 'payload' => \base64_encode($stringToSign)];
         $headers = ['Authorization' => 'Bearer ' . $accessToken];
-        $request = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor(\json_encode($body)));
+        $request = new Psr7\Request('POST', $uri, $headers, Utils::streamFor(\json_encode($body)));
         $res = $httpHandler($request);
         $body = \json_decode((string) $res->getBody(), \true);
         return $body['signedBlob'];

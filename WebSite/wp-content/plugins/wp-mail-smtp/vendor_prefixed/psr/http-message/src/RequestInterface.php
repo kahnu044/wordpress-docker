@@ -21,7 +21,7 @@ namespace WPMailSMTP\Vendor\Psr\Http\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-interface RequestInterface extends \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+interface RequestInterface extends MessageInterface
 {
     /**
      * Retrieves the message's request target.
@@ -57,7 +57,7 @@ interface RequestInterface extends \WPMailSMTP\Vendor\Psr\Http\Message\MessageIn
      * @param string $requestTarget
      * @return static
      */
-    public function withRequestTarget(string $requestTarget) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface;
+    public function withRequestTarget(string $requestTarget) : RequestInterface;
     /**
      * Retrieves the HTTP method of the request.
      *
@@ -79,7 +79,7 @@ interface RequestInterface extends \WPMailSMTP\Vendor\Psr\Http\Message\MessageIn
      * @return static
      * @throws \InvalidArgumentException for invalid HTTP methods.
      */
-    public function withMethod(string $method) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface;
+    public function withMethod(string $method) : RequestInterface;
     /**
      * Retrieves the URI instance.
      *
@@ -89,7 +89,7 @@ interface RequestInterface extends \WPMailSMTP\Vendor\Psr\Http\Message\MessageIn
      * @return UriInterface Returns a UriInterface instance
      *     representing the URI of the request.
      */
-    public function getUri() : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface;
+    public function getUri() : UriInterface;
     /**
      * Returns an instance with the provided URI.
      *
@@ -120,5 +120,5 @@ interface RequestInterface extends \WPMailSMTP\Vendor\Psr\Http\Message\MessageIn
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, bool $preserveHost = \false) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface;
+    public function withUri(UriInterface $uri, bool $preserveHost = \false) : RequestInterface;
 }

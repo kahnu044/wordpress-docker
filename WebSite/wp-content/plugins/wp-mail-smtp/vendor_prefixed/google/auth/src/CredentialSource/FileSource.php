@@ -23,7 +23,7 @@ use UnexpectedValueException;
 /**
  * Retrieve a token from a file.
  */
-class FileSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredentialSourceInterface
+class FileSource implements ExternalAccountCredentialSourceInterface
 {
     private string $file;
     private ?string $format;
@@ -38,7 +38,7 @@ class FileSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCreden
     {
         $this->file = $file;
         if ($format === 'json' && \is_null($subjectTokenFieldName)) {
-            throw new \InvalidArgumentException('subject_token_field_name must be set when format is JSON');
+            throw new InvalidArgumentException('subject_token_field_name must be set when format is JSON');
         }
         $this->format = $format;
         $this->subjectTokenFieldName = $subjectTokenFieldName;
@@ -48,10 +48,10 @@ class FileSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCreden
         $contents = \file_get_contents($this->file);
         if ($this->format === 'json') {
             if (!($json = \json_decode((string) $contents, \true))) {
-                throw new \UnexpectedValueException('Unable to decode JSON file');
+                throw new UnexpectedValueException('Unable to decode JSON file');
             }
             if (!isset($json[$this->subjectTokenFieldName])) {
-                throw new \UnexpectedValueException('subject_token_field_name not found in JSON file');
+                throw new UnexpectedValueException('subject_token_field_name not found in JSON file');
             }
             $contents = $json[$this->subjectTokenFieldName];
         }

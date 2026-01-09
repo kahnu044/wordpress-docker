@@ -43,11 +43,11 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @return CseKeyPair
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair $postBody, $optParams = [])
+    public function create($userId, CseKeyPair $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class);
+        return $this->call('create', [$params], CseKeyPair::class);
     }
     /**
      * Turns off a client-side encryption key pair. The authenticated user can no
@@ -64,11 +64,11 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @return CseKeyPair
      * @throws \Google\Service\Exception
      */
-    public function disable($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\DisableCseKeyPairRequest $postBody, $optParams = [])
+    public function disable($userId, $keyPairId, DisableCseKeyPairRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'keyPairId' => $keyPairId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('disable', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class);
+        return $this->call('disable', [$params], CseKeyPair::class);
     }
     /**
      * Turns on a client-side encryption key pair that was turned off. The key pair
@@ -83,11 +83,11 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @return CseKeyPair
      * @throws \Google\Service\Exception
      */
-    public function enable($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\EnableCseKeyPairRequest $postBody, $optParams = [])
+    public function enable($userId, $keyPairId, EnableCseKeyPairRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'keyPairId' => $keyPairId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('enable', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class);
+        return $this->call('enable', [$params], CseKeyPair::class);
     }
     /**
      * Retrieves an existing client-side encryption key pair. (keypairs.get)
@@ -103,7 +103,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
     {
         $params = ['userId' => $userId, 'keyPairId' => $keyPairId];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class);
+        return $this->call('get', [$params], CseKeyPair::class);
     }
     /**
      * Lists client-side encryption key pairs for an authenticated user.
@@ -125,7 +125,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListCseKeyPairsResponse::class);
+        return $this->call('list', [$params], ListCseKeyPairsResponse::class);
     }
     /**
      * Deletes a client-side encryption key pair permanently and immediately. You
@@ -142,7 +142,7 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
      * @param array $optParams Optional parameters.
      * @throws \Google\Service\Exception
      */
-    public function obliterate($userId, $keyPairId, \WPMailSMTP\Vendor\Google\Service\Gmail\ObliterateCseKeyPairRequest $postBody, $optParams = [])
+    public function obliterate($userId, $keyPairId, ObliterateCseKeyPairRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'keyPairId' => $keyPairId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
@@ -150,4 +150,4 @@ class UsersSettingsCseKeypairs extends \WPMailSMTP\Vendor\Google\Service\Resourc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsCseKeypairs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsCseKeypairs');
+\class_alias(UsersSettingsCseKeypairs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsCseKeypairs');

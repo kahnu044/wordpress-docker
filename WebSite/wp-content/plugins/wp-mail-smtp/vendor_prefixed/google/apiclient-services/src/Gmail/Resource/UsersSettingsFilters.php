@@ -40,11 +40,11 @@ class UsersSettingsFilters extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Filter
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Filter $postBody, $optParams = [])
+    public function create($userId, Filter $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Filter::class);
+        return $this->call('create', [$params], Filter::class);
     }
     /**
      * Immediately and permanently deletes the specified filter. (filters.delete)
@@ -75,7 +75,7 @@ class UsersSettingsFilters extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Filter::class);
+        return $this->call('get', [$params], Filter::class);
     }
     /**
      * Lists the message filters of a Gmail user. (filters.listUsersSettingsFilters)
@@ -90,8 +90,8 @@ class UsersSettingsFilters extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListFiltersResponse::class);
+        return $this->call('list', [$params], ListFiltersResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsFilters::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsFilters');
+\class_alias(UsersSettingsFilters::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsFilters');

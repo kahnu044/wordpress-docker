@@ -21,4 +21,4 @@ class ObliterateCseKeyPairRequest extends \WPMailSMTP\Vendor\Google\Model
 {
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ObliterateCseKeyPairRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ObliterateCseKeyPairRequest');
+\class_alias(ObliterateCseKeyPairRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ObliterateCseKeyPairRequest');

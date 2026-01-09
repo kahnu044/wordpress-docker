@@ -23,7 +23,7 @@ class Draft extends \WPMailSMTP\Vendor\Google\Model
      * @var string
      */
     public $id;
-    protected $messageType = \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class;
+    protected $messageType = Message::class;
     protected $messageDataType = '';
     /**
      * @param string
@@ -42,7 +42,7 @@ class Draft extends \WPMailSMTP\Vendor\Google\Model
     /**
      * @param Message
      */
-    public function setMessage(\WPMailSMTP\Vendor\Google\Service\Gmail\Message $message)
+    public function setMessage(Message $message)
     {
         $this->message = $message;
     }
@@ -55,4 +55,4 @@ class Draft extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Draft::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Draft');
+\class_alias(Draft::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Draft');

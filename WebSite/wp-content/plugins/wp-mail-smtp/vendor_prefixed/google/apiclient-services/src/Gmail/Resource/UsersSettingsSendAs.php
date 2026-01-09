@@ -47,11 +47,11 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return SendAs
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
+    public function create($userId, SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class);
+        return $this->call('create', [$params], SendAs::class);
     }
     /**
      * Deletes the specified send-as alias. Revokes any verification that may have
@@ -85,7 +85,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class);
+        return $this->call('get', [$params], SendAs::class);
     }
     /**
      * Lists the send-as aliases for the specified account. The result includes the
@@ -102,7 +102,7 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListSendAsResponse::class);
+        return $this->call('list', [$params], ListSendAsResponse::class);
     }
     /**
      * Patch the specified send-as alias. (sendAs.patch)
@@ -115,11 +115,11 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return SendAs
      * @throws \Google\Service\Exception
      */
-    public function patch($userId, $sendAsEmail, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
+    public function patch($userId, $sendAsEmail, SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class);
+        return $this->call('patch', [$params], SendAs::class);
     }
     /**
      * Updates a send-as alias. If a signature is provided, Gmail will sanitize the
@@ -135,11 +135,11 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return SendAs
      * @throws \Google\Service\Exception
      */
-    public function update($userId, $sendAsEmail, \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs $postBody, $optParams = [])
+    public function update($userId, $sendAsEmail, SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class);
+        return $this->call('update', [$params], SendAs::class);
     }
     /**
      * Sends a verification email to the specified send-as alias address. The
@@ -161,4 +161,4 @@ class UsersSettingsSendAs extends \WPMailSMTP\Vendor\Google\Service\Resource
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsSendAs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsSendAs');
+\class_alias(UsersSettingsSendAs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsSendAs');

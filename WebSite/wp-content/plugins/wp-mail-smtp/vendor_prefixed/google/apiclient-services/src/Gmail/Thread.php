@@ -28,7 +28,7 @@ class Thread extends \WPMailSMTP\Vendor\Google\Collection
      * @var string
      */
     public $id;
-    protected $messagesType = \WPMailSMTP\Vendor\Google\Service\Gmail\Message::class;
+    protected $messagesType = Message::class;
     protected $messagesDataType = 'array';
     /**
      * @var string
@@ -92,4 +92,4 @@ class Thread extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Thread::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Thread');
+\class_alias(Thread::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Thread');

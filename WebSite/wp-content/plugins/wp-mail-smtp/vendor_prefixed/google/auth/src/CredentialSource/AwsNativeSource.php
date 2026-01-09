@@ -24,7 +24,7 @@ use WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request;
 /**
  * Authenticates requests using AWS credentials.
  */
-class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredentialSourceInterface
+class AwsNativeSource implements ExternalAccountCredentialSourceInterface
 {
     private const CRED_VERIFICATION_QUERY = 'Action=GetCallerIdentity&Version=2011-06-15';
     private string $audience;
@@ -55,7 +55,7 @@ class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountC
     public function fetchSubjectToken(?callable $httpHandler = null) : string
     {
         if (\is_null($httpHandler)) {
-            $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build(\WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
         $headers = [];
         if ($this->imdsv2SessionTokenUrl) {
@@ -91,7 +91,7 @@ class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountC
     public static function getImdsV2SessionToken(string $imdsV2Url, callable $httpHandler) : string
     {
         $headers = ['X-aws-ec2-metadata-token-ttl-seconds' => '21600'];
-        $request = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('PUT', $imdsV2Url, $headers);
+        $request = new Request('PUT', $imdsV2Url, $headers);
         $response = $httpHandler($request);
         return (string) $response->getBody();
     }
@@ -188,7 +188,7 @@ class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountC
     public static function getRegionFromUrl(callable $httpHandler, string $regionUrl, array $headers) : string
     {
         // get the region/zone from the region URL
-        $regionRequest = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('GET', $regionUrl, $headers);
+        $regionRequest = new Request('GET', $regionUrl, $headers);
         $regionResponse = $httpHandler($regionRequest);
         // Remove last character. For example, if us-east-2b is returned,
         // the region would be us-east-2.
@@ -204,7 +204,7 @@ class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountC
     public static function getRoleName(callable $httpHandler, string $securityCredentialsUrl, array $headers) : string
     {
         // Get the AWS role name
-        $roleRequest = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('GET', $securityCredentialsUrl, $headers);
+        $roleRequest = new Request('GET', $securityCredentialsUrl, $headers);
         $roleResponse = $httpHandler($roleRequest);
         $roleName = (string) $roleResponse->getBody();
         return $roleName;
@@ -220,7 +220,7 @@ class AwsNativeSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountC
     public static function getSigningVarsFromUrl(callable $httpHandler, string $securityCredentialsUrl, string $roleName, array $headers) : array
     {
         // Get the AWS credentials
-        $credsRequest = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('GET', $securityCredentialsUrl . '/' . $roleName, $headers);
+        $credsRequest = new Request('GET', $securityCredentialsUrl . '/' . $roleName, $headers);
         $credsResponse = $httpHandler($credsRequest);
         $awsCreds = \json_decode((string) $credsResponse->getBody(), \true);
         return [

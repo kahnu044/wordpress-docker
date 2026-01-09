@@ -58,4 +58,4 @@ class ModifyThreadRequest extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ModifyThreadRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ModifyThreadRequest');
+\class_alias(ModifyThreadRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ModifyThreadRequest');

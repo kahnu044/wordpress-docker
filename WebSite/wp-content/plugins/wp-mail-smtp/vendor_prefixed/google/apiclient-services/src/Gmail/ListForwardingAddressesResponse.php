@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListForwardingAddressesResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'forwardingAddresses';
-    protected $forwardingAddressesType = \WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress::class;
+    protected $forwardingAddressesType = ForwardingAddress::class;
     protected $forwardingAddressesDataType = 'array';
     /**
      * @param ForwardingAddress[]
@@ -38,4 +38,4 @@ class ListForwardingAddressesResponse extends \WPMailSMTP\Vendor\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListForwardingAddressesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListForwardingAddressesResponse');
+\class_alias(ListForwardingAddressesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListForwardingAddressesResponse');

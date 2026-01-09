@@ -75,4 +75,4 @@ class MessagePartBody extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\MessagePartBody::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_MessagePartBody');
+\class_alias(MessagePartBody::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_MessagePartBody');

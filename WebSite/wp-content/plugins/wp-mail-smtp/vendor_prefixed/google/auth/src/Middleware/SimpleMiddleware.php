@@ -71,14 +71,14 @@ class SimpleMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use($handler) {
             // Requests using "auth"="scoped" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'simple') {
                 return $handler($request, $options);
             }
-            $query = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Query::parse($request->getUri()->getQuery());
+            $query = Query::parse($request->getUri()->getQuery());
             $params = \array_merge($query, $this->config);
-            $uri = $request->getUri()->withQuery(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Query::build($params));
+            $uri = $request->getUri()->withQuery(Query::build($params));
             $request = $request->withUri($uri);
             return $handler($request, $options);
         };

@@ -64,14 +64,14 @@ final class Utils
         if (\defined('STDOUT')) {
             return \STDOUT;
         }
-        return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::tryFopen('php://output', 'w');
+        return Psr7\Utils::tryFopen('php://output', 'w');
     }
     /**
      * Chooses and creates a default handler to use based on the environment.
      *
      * The returned handler is not wrapped by any default middlewares.
      *
-     * @return callable(\Psr\Http\Message\RequestInterface, array): \GuzzleHttp\Promise\PromiseInterface Returns the best handler for the given system.
+     * @return callable(\Psr\Http\Message\RequestInterface, array): Promise\PromiseInterface Returns the best handler for the given system.
      *
      * @throws \RuntimeException if no viable Handler is available.
      */
@@ -80,15 +80,15 @@ final class Utils
         $handler = null;
         if (\defined('CURLOPT_CUSTOMREQUEST') && \function_exists('curl_version') && \version_compare(\curl_version()['version'], '7.21.2') >= 0) {
             if (\function_exists('curl_multi_exec') && \function_exists('curl_exec')) {
-                $handler = \WPMailSMTP\Vendor\GuzzleHttp\Handler\Proxy::wrapSync(new \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlMultiHandler(), new \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlHandler());
+                $handler = Proxy::wrapSync(new CurlMultiHandler(), new CurlHandler());
             } elseif (\function_exists('curl_exec')) {
-                $handler = new \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlHandler();
+                $handler = new CurlHandler();
             } elseif (\function_exists('curl_multi_exec')) {
-                $handler = new \WPMailSMTP\Vendor\GuzzleHttp\Handler\CurlMultiHandler();
+                $handler = new CurlMultiHandler();
             }
         }
         if (\ini_get('allow_url_fopen')) {
-            $handler = $handler ? \WPMailSMTP\Vendor\GuzzleHttp\Handler\Proxy::wrapStreaming($handler, new \WPMailSMTP\Vendor\GuzzleHttp\Handler\StreamHandler()) : new \WPMailSMTP\Vendor\GuzzleHttp\Handler\StreamHandler();
+            $handler = $handler ? Proxy::wrapStreaming($handler, new StreamHandler()) : new StreamHandler();
         } elseif (!$handler) {
             throw new \RuntimeException('GuzzleHttp requires cURL, the allow_url_fopen ini setting, or a custom HTTP handler.');
         }
@@ -99,7 +99,7 @@ final class Utils
      */
     public static function defaultUserAgent() : string
     {
-        return \sprintf('GuzzleHttp/%d', \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface::MAJOR_VERSION);
+        return \sprintf('GuzzleHttp/%d', ClientInterface::MAJOR_VERSION);
     }
     /**
      * Returns the default cacert bundle for the current system.
@@ -199,7 +199,7 @@ EOT
     public static function isHostInNoProxy(string $host, array $noProxyArray) : bool
     {
         if (\strlen($host) === 0) {
-            throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\InvalidArgumentException('Empty host provided');
+            throw new InvalidArgumentException('Empty host provided');
         }
         // Strip port if present.
         [$host] = \explode(':', $host, 2);
@@ -244,7 +244,7 @@ EOT
     {
         $data = \json_decode($json, $assoc, $depth, $options);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
-            throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
+            throw new InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
         }
         return $data;
     }
@@ -263,7 +263,7 @@ EOT
     {
         $json = \json_encode($value, $options, $depth);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
-            throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\InvalidArgumentException('json_encode error: ' . \json_last_error_msg());
+            throw new InvalidArgumentException('json_encode error: ' . \json_last_error_msg());
         }
         /** @var string */
         return $json;
@@ -285,7 +285,7 @@ EOT
      *
      * @internal
      */
-    public static function idnUriConvert(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, int $options = 0) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function idnUriConvert(UriInterface $uri, int $options = 0) : UriInterface
     {
         if ($uri->getHost()) {
             $asciiHost = self::idnToAsci($uri->getHost(), $options, $info);
@@ -304,7 +304,7 @@ EOT
                 if ($errors) {
                     $errorMessage .= ' (errors: ' . \implode(', ', $errors) . ')';
                 }
-                throw new \WPMailSMTP\Vendor\GuzzleHttp\Exception\InvalidArgumentException($errorMessage);
+                throw new InvalidArgumentException($errorMessage);
             }
             if ($uri->getHost() !== $asciiHost) {
                 // Replace URI only if the ASCII version is different

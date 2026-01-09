@@ -3,7 +3,7 @@
 namespace WPMailSMTP\Vendor\GuzzleHttp;
 
 use WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface;
-final class BodySummarizer implements \WPMailSMTP\Vendor\GuzzleHttp\BodySummarizerInterface
+final class BodySummarizer implements BodySummarizerInterface
 {
     /**
      * @var int|null
@@ -16,8 +16,8 @@ final class BodySummarizer implements \WPMailSMTP\Vendor\GuzzleHttp\BodySummariz
     /**
      * Returns a summarized message body.
      */
-    public function summarize(\WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface $message) : ?string
+    public function summarize(MessageInterface $message) : ?string
     {
-        return $this->truncateAt === null ? \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Message::bodySummary($message) : \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Message::bodySummary($message, $this->truncateAt);
+        return $this->truncateAt === null ? Psr7\Message::bodySummary($message) : Psr7\Message::bodySummary($message, $this->truncateAt);
     }
 }

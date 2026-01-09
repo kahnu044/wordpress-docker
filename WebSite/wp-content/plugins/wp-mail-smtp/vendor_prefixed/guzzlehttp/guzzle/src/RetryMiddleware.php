@@ -51,7 +51,7 @@ class RetryMiddleware
     {
         return (int) 2 ** ($retries - 1) * 1000;
     }
-    public function __invoke(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options) : PromiseInterface
     {
         if (!isset($options['retries'])) {
             $options['retries'] = 0;
@@ -62,7 +62,7 @@ class RetryMiddleware
     /**
      * Execute fulfilled closure
      */
-    private function onFulfilled(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) : callable
+    private function onFulfilled(RequestInterface $request, array $options) : callable
     {
         return function ($value) use($request, $options) {
             if (!($this->decider)($options['retries'], $request, $value, null)) {
@@ -74,16 +74,16 @@ class RetryMiddleware
     /**
      * Execute rejected closure
      */
-    private function onRejected(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $req, array $options) : callable
+    private function onRejected(RequestInterface $req, array $options) : callable
     {
         return function ($reason) use($req, $options) {
             if (!($this->decider)($options['retries'], $req, null, $reason)) {
-                return \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::rejectionFor($reason);
+                return P\Create::rejectionFor($reason);
             }
             return $this->doRetry($req, $options);
         };
     }
-    private function doRetry(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options, ?\WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    private function doRetry(RequestInterface $request, array $options, ?ResponseInterface $response = null) : PromiseInterface
     {
         $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);

@@ -18,6 +18,6 @@
 namespace WPMailSMTP\Vendor\Google\Task;
 
 use WPMailSMTP\Vendor\Google\Exception as GoogleException;
-class Exception extends \WPMailSMTP\Vendor\Google\Exception
+class Exception extends GoogleException
 {
 }

@@ -682,15 +682,6 @@ class Area {
 			);
 		}
 
-		if ( $this->is_admin_page( 'general' ) ) {
-			wp_enqueue_style(
-				'wp-mail-smtp-admin-general',
-				wp_mail_smtp()->assets_url . '/css/smtp-admin-general.min.css',
-				[ 'wp-mail-smtp-admin' ],
-				WPMS_PLUGIN_VER
-			);
-		}
-
 		if (
 			$this->is_admin_page( 'general' ) &&
 			! wp_mail_smtp()->is_pro() &&
@@ -746,7 +737,7 @@ class Area {
 	public function get_admin_footer( $text ) {
 
 		if ( $this->is_admin_page() ) {
-			$url = 'https://wordpress.org/support/plugin/wp-mail-smtp/reviews/?filter=5#new-post';
+			$url = 'https://wordpress.org/support/plugin/wp-mail-smtp/reviews/#new-post';
 
 			$text = sprintf(
 				wp_kses(

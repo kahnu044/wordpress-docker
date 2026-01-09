@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListHistoryResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'history';
-    protected $historyType = \WPMailSMTP\Vendor\Google\Service\Gmail\History::class;
+    protected $historyType = History::class;
     protected $historyDataType = 'array';
     /**
      * @var string
@@ -74,4 +74,4 @@ class ListHistoryResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListHistoryResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListHistoryResponse');
+\class_alias(ListHistoryResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListHistoryResponse');

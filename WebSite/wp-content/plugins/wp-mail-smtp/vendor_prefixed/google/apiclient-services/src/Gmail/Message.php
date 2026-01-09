@@ -36,7 +36,7 @@ class Message extends \WPMailSMTP\Vendor\Google\Collection
      * @var string[]
      */
     public $labelIds;
-    protected $payloadType = \WPMailSMTP\Vendor\Google\Service\Gmail\MessagePart::class;
+    protected $payloadType = MessagePart::class;
     protected $payloadDataType = '';
     /**
      * @var string
@@ -113,7 +113,7 @@ class Message extends \WPMailSMTP\Vendor\Google\Collection
     /**
      * @param MessagePart
      */
-    public function setPayload(\WPMailSMTP\Vendor\Google\Service\Gmail\MessagePart $payload)
+    public function setPayload(MessagePart $payload)
     {
         $this->payload = $payload;
     }
@@ -182,4 +182,4 @@ class Message extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Message::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Message');
+\class_alias(Message::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Message');

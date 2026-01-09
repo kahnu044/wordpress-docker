@@ -38,7 +38,7 @@ final class Utils
      *
      * @throws \RuntimeException on error.
      */
-    public static function copyToStream(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $source, \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $dest, int $maxLen = -1) : void
+    public static function copyToStream(StreamInterface $source, StreamInterface $dest, int $maxLen = -1) : void
     {
         $bufferSize = 8192;
         if ($maxLen === -1) {
@@ -70,7 +70,7 @@ final class Utils
      *
      * @throws \RuntimeException on error.
      */
-    public static function copyToString(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, int $maxLen = -1) : string
+    public static function copyToString(StreamInterface $stream, int $maxLen = -1) : string
     {
         $buffer = '';
         if ($maxLen === -1) {
@@ -106,7 +106,7 @@ final class Utils
      *
      * @throws \RuntimeException on error.
      */
-    public static function hash(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, string $algo, bool $rawOutput = \false) : string
+    public static function hash(StreamInterface $stream, string $algo, bool $rawOutput = \false) : string
     {
         $pos = $stream->tell();
         if ($pos > 0) {
@@ -138,7 +138,7 @@ final class Utils
      * @param RequestInterface $request Request to clone and modify.
      * @param array            $changes Changes to apply.
      */
-    public static function modifyRequest(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $changes) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
+    public static function modifyRequest(RequestInterface $request, array $changes) : RequestInterface
     {
         if (!$changes) {
             return $request;
@@ -170,14 +170,14 @@ final class Utils
         if (isset($changes['query'])) {
             $uri = $uri->withQuery($changes['query']);
         }
-        if ($request instanceof \WPMailSMTP\Vendor\Psr\Http\Message\ServerRequestInterface) {
-            $new = (new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\ServerRequest($changes['method'] ?? $request->getMethod(), $uri, $headers, $changes['body'] ?? $request->getBody(), $changes['version'] ?? $request->getProtocolVersion(), $request->getServerParams()))->withParsedBody($request->getParsedBody())->withQueryParams($request->getQueryParams())->withCookieParams($request->getCookieParams())->withUploadedFiles($request->getUploadedFiles());
+        if ($request instanceof ServerRequestInterface) {
+            $new = (new ServerRequest($changes['method'] ?? $request->getMethod(), $uri, $headers, $changes['body'] ?? $request->getBody(), $changes['version'] ?? $request->getProtocolVersion(), $request->getServerParams()))->withParsedBody($request->getParsedBody())->withQueryParams($request->getQueryParams())->withCookieParams($request->getCookieParams())->withUploadedFiles($request->getUploadedFiles());
             foreach ($request->getAttributes() as $key => $value) {
                 $new = $new->withAttribute($key, $value);
             }
             return $new;
         }
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request($changes['method'] ?? $request->getMethod(), $uri, $headers, $changes['body'] ?? $request->getBody(), $changes['version'] ?? $request->getProtocolVersion());
+        return new Request($changes['method'] ?? $request->getMethod(), $uri, $headers, $changes['body'] ?? $request->getBody(), $changes['version'] ?? $request->getProtocolVersion());
     }
     /**
      * Read a line from the stream up to the maximum allowed buffer length.
@@ -185,7 +185,7 @@ final class Utils
      * @param StreamInterface $stream    Stream to read from
      * @param int|null        $maxLength Maximum buffer length
      */
-    public static function readLine(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, ?int $maxLength = null) : string
+    public static function readLine(StreamInterface $stream, ?int $maxLength = null) : string
     {
         $buffer = '';
         $size = 0;
@@ -204,7 +204,7 @@ final class Utils
     /**
      * Redact the password in the user info part of a URI.
      */
-    public static function redactUserInfo(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function redactUserInfo(UriInterface $uri) : UriInterface
     {
         $userInfo = $uri->getUserInfo();
         if (\false !== ($pos = \strpos($userInfo, ':'))) {
@@ -246,7 +246,7 @@ final class Utils
      *
      * @throws \InvalidArgumentException if the $resource arg is not valid.
      */
-    public static function streamFor($resource = '', array $options = []) : \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+    public static function streamFor($resource = '', array $options = []) : StreamInterface
     {
         if (\is_scalar($resource)) {
             $stream = self::tryFopen('php://temp', 'r+');
@@ -254,7 +254,7 @@ final class Utils
                 \fwrite($stream, (string) $resource);
                 \fseek($stream, 0);
             }
-            return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Stream($stream, $options);
+            return new Stream($stream, $options);
         }
         switch (\gettype($resource)) {
             case 'resource':
@@ -269,13 +269,13 @@ final class Utils
                     \fseek($stream, 0);
                     $resource = $stream;
                 }
-                return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Stream($resource, $options);
+                return new Stream($resource, $options);
             case 'object':
                 /** @var object $resource */
-                if ($resource instanceof \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface) {
+                if ($resource instanceof StreamInterface) {
                     return $resource;
                 } elseif ($resource instanceof \Iterator) {
-                    return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\PumpStream(function () use($resource) {
+                    return new PumpStream(function () use($resource) {
                         if (!$resource->valid()) {
                             return \false;
                         }
@@ -288,10 +288,10 @@ final class Utils
                 }
                 break;
             case 'NULL':
-                return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Stream(self::tryFopen('php://temp', 'r+'), $options);
+                return new Stream(self::tryFopen('php://temp', 'r+'), $options);
         }
         if (\is_callable($resource)) {
-            return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\PumpStream($resource, $options);
+            return new PumpStream($resource, $options);
         }
         throw new \InvalidArgumentException('Invalid resource type: ' . \gettype($resource));
     }
@@ -323,7 +323,7 @@ final class Utils
         }
         \restore_error_handler();
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            /** @var \RuntimeException $ex */
             throw $ex;
         }
         return $handle;
@@ -357,7 +357,7 @@ final class Utils
         }
         \restore_error_handler();
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            /** @var \RuntimeException $ex */
             throw $ex;
         }
         return $contents;
@@ -373,13 +373,13 @@ final class Utils
      *
      * @throws \InvalidArgumentException
      */
-    public static function uriFor($uri) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function uriFor($uri) : UriInterface
     {
-        if ($uri instanceof \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface) {
+        if ($uri instanceof UriInterface) {
             return $uri;
         }
         if (\is_string($uri)) {
-            return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Uri($uri);
+            return new Uri($uri);
         }
         throw new \InvalidArgumentException('URI must be a string or UriInterface');
     }

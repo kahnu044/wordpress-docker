@@ -45,7 +45,7 @@ class Users extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('getProfile', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Profile::class);
+        return $this->call('getProfile', [$params], Profile::class);
     }
     /**
      * Stop receiving push notifications for the given user mailbox. (users.stop)
@@ -72,12 +72,12 @@ class Users extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return WatchResponse
      * @throws \Google\Service\Exception
      */
-    public function watch($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\WatchRequest $postBody, $optParams = [])
+    public function watch($userId, WatchRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('watch', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\WatchResponse::class);
+        return $this->call('watch', [$params], WatchResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\Users::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_Users');
+\class_alias(Users::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_Users');

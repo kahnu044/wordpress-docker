@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListCseIdentitiesResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'cseIdentities';
-    protected $cseIdentitiesType = \WPMailSMTP\Vendor\Google\Service\Gmail\CseIdentity::class;
+    protected $cseIdentitiesType = CseIdentity::class;
     protected $cseIdentitiesDataType = 'array';
     /**
      * @var string
@@ -56,4 +56,4 @@ class ListCseIdentitiesResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListCseIdentitiesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListCseIdentitiesResponse');
+\class_alias(ListCseIdentitiesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListCseIdentitiesResponse');

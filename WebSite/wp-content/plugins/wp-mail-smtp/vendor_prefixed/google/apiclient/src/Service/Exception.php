@@ -18,7 +18,7 @@
 namespace WPMailSMTP\Vendor\Google\Service;
 
 use WPMailSMTP\Vendor\Google\Exception as GoogleException;
-class Exception extends \WPMailSMTP\Vendor\Google\Exception
+class Exception extends GoogleException
 {
     /**
      * Optional list of errors returned in a JSON body of an HTTP error response.
@@ -34,7 +34,7 @@ class Exception extends \WPMailSMTP\Vendor\Google\Exception
      * @param array<array<string,string>>|null $errors List of errors returned in an HTTP
      * response or null.  Defaults to [].
      */
-    public function __construct($message, $code = 0, ?\WPMailSMTP\Vendor\Google\Service\Exception $previous = null, $errors = [])
+    public function __construct($message, $code = 0, ?Exception $previous = null, $errors = [])
     {
         if (\version_compare(\PHP_VERSION, '5.3.0') >= 0) {
             parent::__construct($message, $code, $previous);

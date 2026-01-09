@@ -28,7 +28,7 @@ use UnexpectedValueException;
  * CredentialsLoader contains the behaviour used to locate and find default
  * credentials files on the file system.
  */
-abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface, \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface, \WPMailSMTP\Vendor\Google\Auth\UpdateMetadataInterface
+abstract class CredentialsLoader implements GetUniverseDomainInterface, FetchAuthTokenInterface, UpdateMetadataInterface
 {
     use UpdateMetadataTrait;
     const TOKEN_CREDENTIAL_URI = 'https://oauth2.googleapis.com/token';
@@ -124,19 +124,19 @@ abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUn
         }
         if ($jsonKey['type'] == 'service_account') {
             // Do not pass $defaultScope to ServiceAccountCredentials
-            return new \WPMailSMTP\Vendor\Google\Auth\Credentials\ServiceAccountCredentials($scope, $jsonKey);
+            return new ServiceAccountCredentials($scope, $jsonKey);
         }
         if ($jsonKey['type'] == 'authorized_user') {
             $anyScope = $scope ?: $defaultScope;
-            return new \WPMailSMTP\Vendor\Google\Auth\Credentials\UserRefreshCredentials($anyScope, $jsonKey);
+            return new UserRefreshCredentials($anyScope, $jsonKey);
         }
         if ($jsonKey['type'] == 'impersonated_service_account') {
             $anyScope = $scope ?: $defaultScope;
-            return new \WPMailSMTP\Vendor\Google\Auth\Credentials\ImpersonatedServiceAccountCredentials($anyScope, $jsonKey);
+            return new ImpersonatedServiceAccountCredentials($anyScope, $jsonKey);
         }
         if ($jsonKey['type'] == 'external_account') {
             $anyScope = $scope ?: $defaultScope;
-            return new \WPMailSMTP\Vendor\Google\Auth\Credentials\ExternalAccountCredentials($anyScope, $jsonKey);
+            return new ExternalAccountCredentials($anyScope, $jsonKey);
         }
         throw new \InvalidArgumentException('invalid value in the type field');
     }
@@ -149,9 +149,9 @@ abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUn
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      * @return \GuzzleHttp\Client
      */
-    public static function makeHttpClient(\WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], ?callable $httpHandler = null, ?callable $tokenCallback = null)
+    public static function makeHttpClient(FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
-        $middleware = new \WPMailSMTP\Vendor\Google\Auth\Middleware\AuthTokenMiddleware($fetcher, $httpHandler, $tokenCallback);
+        $middleware = new Middleware\AuthTokenMiddleware($fetcher, $httpHandler, $tokenCallback);
         $stack = \WPMailSMTP\Vendor\GuzzleHttp\HandlerStack::create();
         $stack->push($middleware);
         return new \WPMailSMTP\Vendor\GuzzleHttp\Client(['handler' => $stack, 'auth' => 'google_auth'] + $httpClientOptions);
@@ -163,7 +163,7 @@ abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUn
      */
     public static function makeInsecureCredentials()
     {
-        return new \WPMailSMTP\Vendor\Google\Auth\Credentials\InsecureCredentials();
+        return new InsecureCredentials();
     }
     /**
      * Fetch a quota project from the environment variable
@@ -194,7 +194,7 @@ abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUn
             if (0 === $returnVar) {
                 return \implode(\PHP_EOL, $output);
             }
-            throw new \RuntimeException('"cert_provider_command" failed with a nonzero exit code');
+            throw new RuntimeException('"cert_provider_command" failed with a nonzero exit code');
         };
     }
     /**
@@ -219,13 +219,13 @@ abstract class CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\GetUn
         $jsonKey = \file_get_contents($path);
         $clientCertSourceJson = \json_decode((string) $jsonKey, \true);
         if (!$clientCertSourceJson) {
-            throw new \UnexpectedValueException('Invalid client cert source JSON');
+            throw new UnexpectedValueException('Invalid client cert source JSON');
         }
         if (!isset($clientCertSourceJson['cert_provider_command'])) {
-            throw new \UnexpectedValueException('cert source requires "cert_provider_command"');
+            throw new UnexpectedValueException('cert source requires "cert_provider_command"');
         }
         if (!\is_array($clientCertSourceJson['cert_provider_command'])) {
-            throw new \UnexpectedValueException('cert source expects "cert_provider_command" to be an array');
+            throw new UnexpectedValueException('cert source expects "cert_provider_command" to be an array');
         }
         return $clientCertSourceJson;
     }

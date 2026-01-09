@@ -93,4 +93,4 @@ class Profile extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Profile::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Profile');
+\class_alias(Profile::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Profile');

@@ -12,7 +12,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\UriInterface;
  * @author Tobias Schultze
  * @author Matthew Weier O'Phinney
  */
-class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSerializable
+class Uri implements UriInterface, \JsonSerializable
 {
     /**
      * Absolute http and https URIs require a host per RFC 7230 Section 2.7
@@ -56,7 +56,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         if ($uri !== '') {
             $parts = self::parse($uri);
             if ($parts === \false) {
-                throw new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Exception\MalformedUriException("Unable to parse URI: {$uri}");
+                throw new MalformedUriException("Unable to parse URI: {$uri}");
             }
             $this->applyParts($parts);
         }
@@ -80,7 +80,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
     {
         // If IPv6
         $prefix = '';
-        if (\preg_match('%^(.*://\\[[0-9:a-f]+\\])(.*?)$%', $url, $matches)) {
+        if (\preg_match('%^(.*://\\[[0-9:a-fA-F]+\\])(.*?)$%', $url, $matches)) {
             /** @var array{0:string, 1:string, 2:string} $matches */
             $prefix = $matches[1];
             $url = $matches[2];
@@ -148,7 +148,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      * `Psr\Http\Message\UriInterface::getPort` may return null or the standard port. This method can be used
      * independently of the implementation.
      */
-    public static function isDefaultPort(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : bool
+    public static function isDefaultPort(UriInterface $uri) : bool
     {
         return $uri->getPort() === null || isset(self::DEFAULT_PORTS[$uri->getScheme()]) && $uri->getPort() === self::DEFAULT_PORTS[$uri->getScheme()];
     }
@@ -167,7 +167,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      * @see Uri::isRelativePathReference
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4
      */
-    public static function isAbsolute(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : bool
+    public static function isAbsolute(UriInterface $uri) : bool
     {
         return $uri->getScheme() !== '';
     }
@@ -178,7 +178,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.2
      */
-    public static function isNetworkPathReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : bool
+    public static function isNetworkPathReference(UriInterface $uri) : bool
     {
         return $uri->getScheme() === '' && $uri->getAuthority() !== '';
     }
@@ -189,7 +189,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.2
      */
-    public static function isAbsolutePathReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : bool
+    public static function isAbsolutePathReference(UriInterface $uri) : bool
     {
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && isset($uri->getPath()[0]) && $uri->getPath()[0] === '/';
     }
@@ -200,7 +200,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.2
      */
-    public static function isRelativePathReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri) : bool
+    public static function isRelativePathReference(UriInterface $uri) : bool
     {
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && (!isset($uri->getPath()[0]) || $uri->getPath()[0] !== '/');
     }
@@ -216,10 +216,10 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.4
      */
-    public static function isSameDocumentReference(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, ?\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $base = null) : bool
+    public static function isSameDocumentReference(UriInterface $uri, ?UriInterface $base = null) : bool
     {
         if ($base !== null) {
-            $uri = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\UriResolver::resolve($base, $uri);
+            $uri = UriResolver::resolve($base, $uri);
             return $uri->getScheme() === $base->getScheme() && $uri->getAuthority() === $base->getAuthority() && $uri->getPath() === $base->getPath() && $uri->getQuery() === $base->getQuery();
         }
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && $uri->getPath() === '' && $uri->getQuery() === '';
@@ -233,7 +233,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      * @param UriInterface $uri URI to use as a base.
      * @param string       $key Query string key to remove.
      */
-    public static function withoutQueryValue(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, string $key) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function withoutQueryValue(UriInterface $uri, string $key) : UriInterface
     {
         $result = self::getFilteredQueryString($uri, [$key]);
         return $uri->withQuery(\implode('&', $result));
@@ -251,7 +251,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      * @param string       $key   Key to set.
      * @param string|null  $value Value to set
      */
-    public static function withQueryValue(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, string $key, ?string $value) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function withQueryValue(UriInterface $uri, string $key, ?string $value) : UriInterface
     {
         $result = self::getFilteredQueryString($uri, [$key]);
         $result[] = self::generateQueryString($key, $value);
@@ -265,7 +265,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      * @param UriInterface    $uri           URI to use as a base.
      * @param (string|null)[] $keyValueArray Associative array of key and values
      */
-    public static function withQueryValues(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, array $keyValueArray) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function withQueryValues(UriInterface $uri, array $keyValueArray) : UriInterface
     {
         $result = self::getFilteredQueryString($uri, \array_keys($keyValueArray));
         foreach ($keyValueArray as $key => $value) {
@@ -280,7 +280,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @throws MalformedUriException If the components do not form a valid URI.
      */
-    public static function fromParts(array $parts) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public static function fromParts(array $parts) : UriInterface
     {
         $uri = new self();
         $uri->applyParts($parts);
@@ -326,7 +326,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
     {
         return $this->fragment;
     }
-    public function withScheme($scheme) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withScheme($scheme) : UriInterface
     {
         $scheme = $this->filterScheme($scheme);
         if ($this->scheme === $scheme) {
@@ -339,7 +339,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->validateState();
         return $new;
     }
-    public function withUserInfo($user, $password = null) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withUserInfo($user, $password = null) : UriInterface
     {
         $info = $this->filterUserInfoComponent($user);
         if ($password !== null) {
@@ -354,7 +354,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->validateState();
         return $new;
     }
-    public function withHost($host) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withHost($host) : UriInterface
     {
         $host = $this->filterHost($host);
         if ($this->host === $host) {
@@ -366,7 +366,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->validateState();
         return $new;
     }
-    public function withPort($port) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withPort($port) : UriInterface
     {
         $port = $this->filterPort($port);
         if ($this->port === $port) {
@@ -379,7 +379,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->validateState();
         return $new;
     }
-    public function withPath($path) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withPath($path) : UriInterface
     {
         $path = $this->filterPath($path);
         if ($this->path === $path) {
@@ -391,7 +391,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->validateState();
         return $new;
     }
-    public function withQuery($query) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withQuery($query) : UriInterface
     {
         $query = $this->filterQueryAndFragment($query);
         if ($this->query === $query) {
@@ -402,7 +402,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         $new->composedComponents = null;
         return $new;
     }
-    public function withFragment($fragment) : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function withFragment($fragment) : UriInterface
     {
         $fragment = $this->filterQueryAndFragment($fragment);
         if ($this->fragment === $fragment) {
@@ -493,7 +493,7 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
      *
      * @return string[]
      */
-    private static function getFilteredQueryString(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, array $keys) : array
+    private static function getFilteredQueryString(UriInterface $uri, array $keys) : array
     {
         $current = $uri->getQuery();
         if ($current === '') {
@@ -562,10 +562,10 @@ class Uri implements \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface, \JsonSeri
         }
         if ($this->getAuthority() === '') {
             if (0 === \strpos($this->path, '//')) {
-                throw new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Exception\MalformedUriException('The path of a URI without an authority must not start with two slashes "//"');
+                throw new MalformedUriException('The path of a URI without an authority must not start with two slashes "//"');
             }
             if ($this->scheme === '' && \false !== \strpos(\explode('/', $this->path, 2)[0], ':')) {
-                throw new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Exception\MalformedUriException('A relative URI must not have a path beginning with a segment containing a colon');
+                throw new MalformedUriException('A relative URI must not have a path beginning with a segment containing a colon');
             }
         }
     }

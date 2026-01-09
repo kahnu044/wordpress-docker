@@ -14,7 +14,7 @@ trait StreamDecoratorTrait
     /**
      * @param StreamInterface $stream Stream to decorate
      */
-    public function __construct(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream)
+    public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
     }
@@ -49,7 +49,7 @@ trait StreamDecoratorTrait
     }
     public function getContents() : string
     {
-        return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::copyToString($this);
+        return Utils::copyToString($this);
     }
     /**
      * Allow decorators to implement custom methods
@@ -124,7 +124,7 @@ trait StreamDecoratorTrait
      *
      * @throws \BadMethodCallException
      */
-    protected function createStream() : \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+    protected function createStream() : StreamInterface
     {
         throw new \BadMethodCallException('Not implemented');
     }

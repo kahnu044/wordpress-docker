@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace WPMailSMTP\Vendor\ParagonIE\ConstantTime;
 
+use function pack;
 /**
  *  Copyright (c) 2016 - 2022 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
@@ -31,7 +32,7 @@ namespace WPMailSMTP\Vendor\ParagonIE\ConstantTime;
  *
  * @package ParagonIE\ConstantTime
  */
-abstract class Base64DotSlash extends \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Base64
+abstract class Base64DotSlash extends Base64
 {
     /**
      * Uses bitwise operators instead of table-lookups to turn 6-bit integers
@@ -73,6 +74,6 @@ abstract class Base64DotSlash extends \WPMailSMTP\Vendor\ParagonIE\ConstantTime\
         $src += 0x5a - $src >> 8 & 6;
         // if ($src > 0x7a) $src += 0x30 - 0x7b; // -75
         $src -= 0x7a - $src >> 8 & 75;
-        return \pack('C', $src);
+        return pack('C', $src);
     }
 }

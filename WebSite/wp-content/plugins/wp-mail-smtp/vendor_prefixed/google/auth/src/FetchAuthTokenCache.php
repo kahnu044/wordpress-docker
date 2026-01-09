@@ -22,7 +22,7 @@ use WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface;
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
  */
-class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface, \WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface, \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface, \WPMailSMTP\Vendor\Google\Auth\SignBlobInterface, \WPMailSMTP\Vendor\Google\Auth\ProjectIdProviderInterface, \WPMailSMTP\Vendor\Google\Auth\UpdateMetadataInterface
+class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, GetUniverseDomainInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
 {
     use CacheTrait;
     /**
@@ -38,11 +38,11 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
-    public function __construct(\WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface $fetcher, ?array $cacheConfig = null, ?\WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?array $cacheConfig = null, ?CacheItemPoolInterface $cache = null)
     {
         $this->fetcher = $fetcher;
         $this->cache = $cache;
-        $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => '', 'cacheUniverseDomain' => $fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\Credentials\GCECredentials], (array) $cacheConfig);
+        $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => '', 'cacheUniverseDomain' => $fetcher instanceof Credentials\GCECredentials], (array) $cacheConfig);
     }
     /**
      * @return FetchAuthTokenInterface
@@ -92,7 +92,7 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function getClientName(?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\SignBlobInterface) {
+        if (!$this->fetcher instanceof SignBlobInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
         }
         return $this->fetcher->getClientName($httpHandler);
@@ -110,13 +110,13 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function signBlob($stringToSign, $forceOpenSsl = \false)
     {
-        if (!$this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\SignBlobInterface) {
+        if (!$this->fetcher instanceof SignBlobInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
         }
         // Pass the access token from cache for credentials that sign blobs
         // using the IAM API. This saves a call to fetch an access token when a
         // cached token exists.
-        if ($this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\Credentials\GCECredentials || $this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\Credentials\ImpersonatedServiceAccountCredentials) {
+        if ($this->fetcher instanceof Credentials\GCECredentials || $this->fetcher instanceof Credentials\ImpersonatedServiceAccountCredentials) {
             $cached = $this->fetchAuthTokenFromCache();
             $accessToken = $cached['access_token'] ?? null;
             return $this->fetcher->signBlob($stringToSign, $forceOpenSsl, $accessToken);
@@ -131,7 +131,7 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function getQuotaProject()
     {
-        if ($this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
         return null;
@@ -146,13 +146,13 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function getProjectId(?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\ProjectIdProviderInterface) {
+        if (!$this->fetcher instanceof ProjectIdProviderInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\ProvidesProjectIdInterface');
         }
         // Pass the access token from cache for credentials that require an
         // access token to fetch the project ID. This saves a call to fetch an
         // access token when a cached token exists.
-        if ($this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\Credentials\ExternalAccountCredentials) {
+        if ($this->fetcher instanceof Credentials\ExternalAccountCredentials) {
             $cached = $this->fetchAuthTokenFromCache();
             $accessToken = $cached['access_token'] ?? null;
             return $this->fetcher->getProjectId($httpHandler, $accessToken);
@@ -166,13 +166,13 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function getUniverseDomain() : string
     {
-        if ($this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface) {
+        if ($this->fetcher instanceof GetUniverseDomainInterface) {
             if ($this->cacheConfig['cacheUniverseDomain']) {
                 return $this->getCachedUniverseDomain($this->fetcher);
             }
             return $this->fetcher->getUniverseDomain();
         }
-        return \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+        return GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
     }
     /**
      * Updates metadata with the authorization token.
@@ -186,7 +186,7 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
      */
     public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\UpdateMetadataInterface) {
+        if (!$this->fetcher instanceof UpdateMetadataInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\UpdateMetadataInterface');
         }
         $cached = $this->fetchAuthTokenFromCache($authUri);
@@ -247,7 +247,7 @@ class FetchAuthTokenCache implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTok
             $this->setCachedValue($cacheKey, $authToken);
         }
     }
-    private function getCachedUniverseDomain(\WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface $fetcher) : string
+    private function getCachedUniverseDomain(GetUniverseDomainInterface $fetcher) : string
     {
         $cacheKey = $this->getFullCacheKey($fetcher->getCacheKey() . 'universe_domain');
         // @phpstan-ignore-line

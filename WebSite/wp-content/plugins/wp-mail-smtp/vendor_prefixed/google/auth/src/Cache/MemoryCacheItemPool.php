@@ -22,7 +22,7 @@ use WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface;
 /**
  * Simple in-memory cache implementation.
  */
-final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface
+final class MemoryCacheItemPool implements CacheItemPoolInterface
 {
     /**
      * @var CacheItemInterface[]
@@ -37,7 +37,7 @@ final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheIte
      *
      * @return CacheItemInterface The corresponding Cache Item.
      */
-    public function getItem($key) : \WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface
+    public function getItem($key) : CacheItemInterface
     {
         return \current($this->getItems([$key]));
         // @phpstan-ignore-line
@@ -54,7 +54,7 @@ final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheIte
     public function getItems(array $keys = []) : iterable
     {
         $items = [];
-        $itemClass = \PHP_VERSION_ID >= 80000 ? \WPMailSMTP\Vendor\Google\Auth\Cache\TypedItem::class : \WPMailSMTP\Vendor\Google\Auth\Cache\Item::class;
+        $itemClass = \PHP_VERSION_ID >= 80000 ? TypedItem::class : Item::class;
         foreach ($keys as $key) {
             $items[$key] = $this->hasItem($key) ? clone $this->items[$key] : new $itemClass($key);
         }
@@ -113,7 +113,7 @@ final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheIte
      * @return bool
      *   True if the item was successfully persisted. False if there was an error.
      */
-    public function save(\WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface $item) : bool
+    public function save(CacheItemInterface $item) : bool
     {
         $this->items[$item->getKey()] = $item;
         return \true;
@@ -124,7 +124,7 @@ final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheIte
      * @return bool
      *   False if the item could not be queued or if a commit was attempted and failed. True otherwise.
      */
-    public function saveDeferred(\WPMailSMTP\Vendor\Psr\Cache\CacheItemInterface $item) : bool
+    public function saveDeferred(CacheItemInterface $item) : bool
     {
         $this->deferredItems[$item->getKey()] = $item;
         return \true;
@@ -154,7 +154,7 @@ final class MemoryCacheItemPool implements \WPMailSMTP\Vendor\Psr\Cache\CacheIte
     {
         $invalidCharacters = '{}()/\\\\@:';
         if (!\is_string($key) || \preg_match("#[{$invalidCharacters}]#", $key)) {
-            throw new \WPMailSMTP\Vendor\Google\Auth\Cache\InvalidArgumentException('The provided key is not valid: ' . \var_export($key, \true));
+            throw new InvalidArgumentException('The provided key is not valid: ' . \var_export($key, \true));
         }
         return \true;
     }

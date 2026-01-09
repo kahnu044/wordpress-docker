@@ -36,9 +36,9 @@ trait ServiceAccountSignerTrait
     {
         $privateKey = $this->auth->getSigningKey();
         $signedString = '';
-        if (\class_exists(\WPMailSMTP\Vendor\Google\Auth\phpseclib3\Crypt\RSA::class) && !$forceOpenssl) {
-            $key = \WPMailSMTP\Vendor\phpseclib3\Crypt\PublicKeyLoader::load($privateKey);
-            $rsa = $key->withHash('sha256')->withPadding(\WPMailSMTP\Vendor\phpseclib3\Crypt\RSA::SIGNATURE_PKCS1);
+        if (\class_exists(phpseclib3\Crypt\RSA::class) && !$forceOpenssl) {
+            $key = PublicKeyLoader::load($privateKey);
+            $rsa = $key->withHash('sha256')->withPadding(RSA::SIGNATURE_PKCS1);
             $signedString = $rsa->sign($stringToSign);
         } elseif (\extension_loaded('openssl')) {
             \openssl_sign($stringToSign, $signedString, $privateKey, 'sha256WithRSAEncryption');

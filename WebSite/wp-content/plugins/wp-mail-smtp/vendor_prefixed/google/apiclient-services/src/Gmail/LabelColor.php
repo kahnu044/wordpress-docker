@@ -57,4 +57,4 @@ class LabelColor extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\LabelColor::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_LabelColor');
+\class_alias(LabelColor::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_LabelColor');

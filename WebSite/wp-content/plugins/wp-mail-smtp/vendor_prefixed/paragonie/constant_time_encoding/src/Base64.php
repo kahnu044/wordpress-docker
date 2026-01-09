@@ -5,7 +5,19 @@ namespace WPMailSMTP\Vendor\ParagonIE\ConstantTime;
 
 use InvalidArgumentException;
 use RangeException;
+use SensitiveParameter;
+use SodiumException;
 use TypeError;
+use function extension_loaded;
+use function pack;
+use function rtrim;
+use function sodium_base642bin;
+use function sodium_bin2base64;
+use function unpack;
+use const SODIUM_BASE64_VARIANT_ORIGINAL;
+use const SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING;
+use const SODIUM_BASE64_VARIANT_URLSAFE;
+use const SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING;
 /**
  *  Copyright (c) 2016 - 2022 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
@@ -34,7 +46,7 @@ use TypeError;
  *
  * @package ParagonIE\ConstantTime
  */
-abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\EncoderInterface
+abstract class Base64 implements EncoderInterface
 {
     /**
      * Encode into Base64
@@ -47,10 +59,29 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
      * @throws TypeError
      */
     public static function encode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $binString
     ) : string
     {
+        if (extension_loaded('sodium')) {
+            switch (static::class) {
+                case Base64::class:
+                    $variant = SODIUM_BASE64_VARIANT_ORIGINAL;
+                    break;
+                case Base64UrlSafe::class:
+                    $variant = SODIUM_BASE64_VARIANT_URLSAFE;
+                    break;
+                default:
+                    $variant = 0;
+            }
+            if ($variant > 0) {
+                try {
+                    return sodium_bin2base64($binString, $variant);
+                } catch (SodiumException $ex) {
+                    throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+                }
+            }
+        }
         return static::doEncode($binString, \true);
     }
     /**
@@ -64,10 +95,29 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
      * @throws TypeError
      */
     public static function encodeUnpadded(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src
     ) : string
     {
+        if (extension_loaded('sodium')) {
+            switch (static::class) {
+                case Base64::class:
+                    $variant = SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING;
+                    break;
+                case Base64UrlSafe::class:
+                    $variant = SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING;
+                    break;
+                default:
+                    $variant = 0;
+            }
+            if ($variant > 0) {
+                try {
+                    return sodium_bin2base64($src, $variant);
+                } catch (SodiumException $ex) {
+                    throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+                }
+            }
+        }
         return static::doEncode($src, \false);
     }
     /**
@@ -78,17 +128,17 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
      * @throws TypeError
      */
     protected static function doEncode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src,
         bool $pad = \true
     ) : string
     {
         $dest = '';
-        $srcLen = \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeStrlen($src);
+        $srcLen = Binary::safeStrlen($src);
         // Main loop (no padding):
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeSubstr($src, $i, 3));
+            $chunk = unpack('C*', Binary::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -97,7 +147,7 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
@@ -127,13 +177,13 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
      * @throws TypeError
      */
     public static function decode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $encodedString,
         bool $strictPadding = \false
     ) : string
     {
         // Remove padding
-        $srcLen = \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeStrlen($encodedString);
+        $srcLen = Binary::safeStrlen($encodedString);
         if ($srcLen === 0) {
             return '';
         }
@@ -147,44 +197,63 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
                 }
             }
             if (($srcLen & 3) === 1) {
-                throw new \RangeException('Incorrect padding');
+                throw new RangeException('Incorrect padding');
             }
             if ($encodedString[$srcLen - 1] === '=') {
-                throw new \RangeException('Incorrect padding');
+                throw new RangeException('Incorrect padding');
+            }
+            if (extension_loaded('sodium')) {
+                switch (static::class) {
+                    case Base64::class:
+                        $variant = SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING;
+                        break;
+                    case Base64UrlSafe::class:
+                        $variant = SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING;
+                        break;
+                    default:
+                        $variant = 0;
+                }
+                if ($variant > 0) {
+                    try {
+                        return sodium_base642bin(Binary::safeSubstr($encodedString, 0, $srcLen), $variant);
+                    } catch (SodiumException $ex) {
+                        throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+                    }
+                }
             }
         } else {
-            $encodedString = \rtrim($encodedString, '=');
-            $srcLen = \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeStrlen($encodedString);
+            $encodedString = rtrim($encodedString, '=');
+            $srcLen = Binary::safeStrlen($encodedString);
         }
         $err = 0;
         $dest = '';
         // Main loop (no padding):
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeSubstr($encodedString, $i, 4));
+            $chunk = unpack('C*', Binary::safeSubstr($encodedString, $i, 4));
             $c0 = static::decode6Bits($chunk[1]);
             $c1 = static::decode6Bits($chunk[2]);
             $c2 = static::decode6Bits($chunk[3]);
             $c3 = static::decode6Bits($chunk[4]);
-            $dest .= \pack('CCC', ($c0 << 2 | $c1 >> 4) & 0xff, ($c1 << 4 | $c2 >> 2) & 0xff, ($c2 << 6 | $c3) & 0xff);
+            $dest .= pack('CCC', ($c0 << 2 | $c1 >> 4) & 0xff, ($c1 << 4 | $c2 >> 2) & 0xff, ($c2 << 6 | $c3) & 0xff);
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeSubstr($encodedString, $i, $srcLen - $i));
+            $chunk = unpack('C*', Binary::safeSubstr($encodedString, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
             if ($i + 2 < $srcLen) {
                 $c1 = static::decode6Bits($chunk[2]);
                 $c2 = static::decode6Bits($chunk[3]);
-                $dest .= \pack('CC', ($c0 << 2 | $c1 >> 4) & 0xff, ($c1 << 4 | $c2 >> 2) & 0xff);
+                $dest .= pack('CC', ($c0 << 2 | $c1 >> 4) & 0xff, ($c1 << 4 | $c2 >> 2) & 0xff);
                 $err |= ($c0 | $c1 | $c2) >> 8;
                 if ($strictPadding) {
                     $err |= $c2 << 6 & 0xff;
                 }
             } elseif ($i + 1 < $srcLen) {
                 $c1 = static::decode6Bits($chunk[2]);
-                $dest .= \pack('C', ($c0 << 2 | $c1 >> 4) & 0xff);
+                $dest .= pack('C', ($c0 << 2 | $c1 >> 4) & 0xff);
                 $err |= ($c0 | $c1) >> 8;
                 if ($strictPadding) {
                     $err |= $c1 << 4 & 0xff;
@@ -195,7 +264,7 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
         }
         $check = $err === 0;
         if (!$check) {
-            throw new \RangeException('Base64::decode() only expects characters in the correct base64 alphabet');
+            throw new RangeException('Base64::decode() only expects characters in the correct base64 alphabet');
         }
         return $dest;
     }
@@ -204,18 +273,18 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
      * @return string
      */
     public static function decodeNoPadding(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $encodedString
     ) : string
     {
-        $srcLen = \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Binary::safeStrlen($encodedString);
+        $srcLen = Binary::safeStrlen($encodedString);
         if ($srcLen === 0) {
             return '';
         }
         if (($srcLen & 3) === 0) {
             // If $strLen is not zero, and it is divisible by 4, then it's at least 4.
             if ($encodedString[$srcLen - 1] === '=' || $encodedString[$srcLen - 2] === '=') {
-                throw new \InvalidArgumentException("decodeNoPadding() doesn't tolerate padding");
+                throw new InvalidArgumentException("decodeNoPadding() doesn't tolerate padding");
             }
         }
         return static::decode($encodedString, \true);
@@ -264,6 +333,6 @@ abstract class Base64 implements \WPMailSMTP\Vendor\ParagonIE\ConstantTime\Encod
         $diff -= 61 - $src >> 8 & 15;
         // if ($src > 62) $diff += 0x2f - 0x2b - 1; // 3
         $diff += 62 - $src >> 8 & 3;
-        return \pack('C', $src + $diff);
+        return pack('C', $src + $diff);
     }
 }

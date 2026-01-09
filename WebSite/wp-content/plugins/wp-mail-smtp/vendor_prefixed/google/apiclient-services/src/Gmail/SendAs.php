@@ -43,7 +43,7 @@ class SendAs extends \WPMailSMTP\Vendor\Google\Model
      * @var string
      */
     public $signature;
-    protected $smtpMsaType = \WPMailSMTP\Vendor\Google\Service\Gmail\SmtpMsa::class;
+    protected $smtpMsaType = SmtpMsa::class;
     protected $smtpMsaDataType = '';
     /**
      * @var bool
@@ -140,7 +140,7 @@ class SendAs extends \WPMailSMTP\Vendor\Google\Model
     /**
      * @param SmtpMsa
      */
-    public function setSmtpMsa(\WPMailSMTP\Vendor\Google\Service\Gmail\SmtpMsa $smtpMsa)
+    public function setSmtpMsa(SmtpMsa $smtpMsa)
     {
         $this->smtpMsa = $smtpMsa;
     }
@@ -181,4 +181,4 @@ class SendAs extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\SendAs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_SendAs');
+\class_alias(SendAs::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_SendAs');

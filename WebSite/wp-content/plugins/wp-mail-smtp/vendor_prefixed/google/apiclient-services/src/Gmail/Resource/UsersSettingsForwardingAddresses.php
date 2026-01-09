@@ -44,11 +44,11 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
      * @return ForwardingAddress
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress $postBody, $optParams = [])
+    public function create($userId, ForwardingAddress $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress::class);
+        return $this->call('create', [$params], ForwardingAddress::class);
     }
     /**
      * Deletes the specified forwarding address and revokes any verification that
@@ -82,7 +82,7 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
     {
         $params = ['userId' => $userId, 'forwardingEmail' => $forwardingEmail];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ForwardingAddress::class);
+        return $this->call('get', [$params], ForwardingAddress::class);
     }
     /**
      * Lists the forwarding addresses for the specified account.
@@ -98,8 +98,8 @@ class UsersSettingsForwardingAddresses extends \WPMailSMTP\Vendor\Google\Service
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListForwardingAddressesResponse::class);
+        return $this->call('list', [$params], ListForwardingAddressesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsForwardingAddresses::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsForwardingAddresses');
+\class_alias(UsersSettingsForwardingAddresses::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsForwardingAddresses');

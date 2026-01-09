@@ -52,7 +52,7 @@ class ProxyAuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(\WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -85,14 +85,14 @@ class ProxyAuthTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use($handler) {
             // Requests using "proxy_auth"="google_auth" will be authorized.
             if (!isset($options['proxy_auth']) || $options['proxy_auth'] !== 'google_auth') {
                 return $handler($request, $options);
             }
             $request = $request->withHeader('proxy-authorization', 'Bearer ' . $this->fetchToken());
             if ($quotaProject = $this->getQuotaProject()) {
-                $request = $request->withHeader(\WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
+                $request = $request->withHeader(GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
             }
             return $handler($request, $options);
         };
@@ -122,7 +122,7 @@ class ProxyAuthTokenMiddleware
      */
     private function getQuotaProject()
     {
-        if ($this->fetcher instanceof \WPMailSMTP\Vendor\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
         return null;

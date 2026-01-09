@@ -34,7 +34,7 @@ class SetCookie
         foreach ($pieces as $part) {
             $cookieParts = \explode('=', $part, 2);
             $key = \trim($cookieParts[0]);
-            $value = isset($cookieParts[1]) ? \trim($cookieParts[1], " \n\r\t\0\v") : \true;
+            $value = isset($cookieParts[1]) ? \trim($cookieParts[1], " \n\r\t\x00\v") : \true;
             // Only check for non-cookies when cookies have been found
             if (!isset($data['Name'])) {
                 $data['Name'] = $key;
@@ -45,6 +45,10 @@ class SetCookie
                         if ($search === 'Max-Age') {
                             if (\is_numeric($value)) {
                                 $data[$search] = (int) $value;
+                            }
+                        } elseif ($search === 'Secure' || $search === 'Discard' || $search === 'HttpOnly') {
+                            if ($value) {
+                                $data[$search] = \true;
                             }
                         } else {
                             $data[$search] = $value;

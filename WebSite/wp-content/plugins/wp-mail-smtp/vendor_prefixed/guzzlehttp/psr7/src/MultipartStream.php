@@ -8,7 +8,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
  * Stream that when read returns bytes for a streaming multipart or
  * multipart/form-data stream.
  */
-final class MultipartStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+final class MultipartStream implements StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var string */
@@ -56,9 +56,9 @@ final class MultipartStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Strea
     /**
      * Create the aggregate stream that will be used to upload the POST data
      */
-    protected function createStream(array $elements = []) : \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+    protected function createStream(array $elements = []) : StreamInterface
     {
-        $stream = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\AppendStream();
+        $stream = new AppendStream();
         foreach ($elements as $element) {
             if (!\is_array($element)) {
                 throw new \UnexpectedValueException('An array is expected');
@@ -66,17 +66,17 @@ final class MultipartStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Strea
             $this->addElement($stream, $element);
         }
         // Add the trailing boundary with CRLF
-        $stream->addStream(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor("--{$this->boundary}--\r\n"));
+        $stream->addStream(Utils::streamFor("--{$this->boundary}--\r\n"));
         return $stream;
     }
-    private function addElement(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\AppendStream $stream, array $element) : void
+    private function addElement(AppendStream $stream, array $element) : void
     {
         foreach (['contents', 'name'] as $key) {
             if (!\array_key_exists($key, $element)) {
                 throw new \InvalidArgumentException("A '{$key}' key is required");
             }
         }
-        $element['contents'] = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor($element['contents']);
+        $element['contents'] = Utils::streamFor($element['contents']);
         if (empty($element['filename'])) {
             $uri = $element['contents']->getMetadata('uri');
             if ($uri && \is_string($uri) && \substr($uri, 0, 6) !== 'php://' && \substr($uri, 0, 7) !== 'data://') {
@@ -84,16 +84,16 @@ final class MultipartStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Strea
             }
         }
         [$body, $headers] = $this->createElement($element['name'], $element['contents'], $element['filename'] ?? null, $element['headers'] ?? []);
-        $stream->addStream(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor($this->getHeaders($headers)));
+        $stream->addStream(Utils::streamFor($this->getHeaders($headers)));
         $stream->addStream($body);
-        $stream->addStream(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor("\r\n"));
+        $stream->addStream(Utils::streamFor("\r\n"));
     }
     /**
      * @param string[] $headers
      *
      * @return array{0: StreamInterface, 1: string[]}
      */
-    private function createElement(string $name, \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, ?string $filename, array $headers) : array
+    private function createElement(string $name, StreamInterface $stream, ?string $filename, array $headers) : array
     {
         // Set a default content-disposition header if one was no provided
         $disposition = self::getHeader($headers, 'content-disposition');
@@ -110,7 +110,7 @@ final class MultipartStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Strea
         // Set a default Content-Type if one was not supplied
         $type = self::getHeader($headers, 'content-type');
         if (!$type && ($filename === '0' || $filename)) {
-            $headers['Content-Type'] = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\MimeType::fromFilename($filename) ?? 'application/octet-stream';
+            $headers['Content-Type'] = MimeType::fromFilename($filename) ?? 'application/octet-stream';
         }
         return [$stream, $headers];
     }

@@ -183,4 +183,4 @@ class FilterCriteria extends \WPMailSMTP\Vendor\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\FilterCriteria::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_FilterCriteria');
+\class_alias(FilterCriteria::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_FilterCriteria');

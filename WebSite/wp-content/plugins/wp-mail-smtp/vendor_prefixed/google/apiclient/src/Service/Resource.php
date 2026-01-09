@@ -67,7 +67,7 @@ class Resource
     {
         if (!isset($this->methods[$name])) {
             $this->client->getLogger()->error('Service method unknown', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name]);
-            throw new \WPMailSMTP\Vendor\Google\Exception("Unknown function: " . "{$this->serviceName}->{$this->resourceName}->{$name}()");
+            throw new GoogleException("Unknown function: " . "{$this->serviceName}->{$this->resourceName}->{$name}()");
         }
         $method = $this->methods[$name];
         $parameters = $arguments[0];
@@ -75,7 +75,7 @@ class Resource
         // document as parameter, but we abuse the param entry for storing it.
         $postBody = null;
         if (isset($parameters['postBody'])) {
-            if ($parameters['postBody'] instanceof \WPMailSMTP\Vendor\Google\Model) {
+            if ($parameters['postBody'] instanceof Model) {
                 // In the cases the post body is an existing object, we want
                 // to use the smart method to create a simple object for
                 // for JSONification.
@@ -102,13 +102,13 @@ class Resource
         foreach ($parameters as $key => $val) {
             if ($key != 'postBody' && !isset($method['parameters'][$key])) {
                 $this->client->getLogger()->error('Service parameter unknown', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name, 'parameter' => $key]);
-                throw new \WPMailSMTP\Vendor\Google\Exception("({$name}) unknown parameter: '{$key}'");
+                throw new GoogleException("({$name}) unknown parameter: '{$key}'");
             }
         }
         foreach ($method['parameters'] as $paramName => $paramSpec) {
             if (isset($paramSpec['required']) && $paramSpec['required'] && !isset($parameters[$paramName])) {
                 $this->client->getLogger()->error('Service parameter missing', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name, 'parameter' => $paramName]);
-                throw new \WPMailSMTP\Vendor\Google\Exception("({$name}) missing required param: '{$paramName}'");
+                throw new GoogleException("({$name}) missing required param: '{$paramName}'");
             }
             if (isset($parameters[$paramName])) {
                 $value = $parameters[$paramName];
@@ -126,12 +126,12 @@ class Resource
         // NOTE: because we're creating the request by hand,
         // and because the service has a rootUrl property
         // the "base_uri" of the Http Client is not accounted for
-        $request = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? \json_encode($postBody) : '');
+        $request = new Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? \json_encode($postBody) : '');
         // support uploads
         if (isset($parameters['data'])) {
             $mimeType = isset($parameters['mimeType']) ? $parameters['mimeType']['value'] : 'application/octet-stream';
             $data = $parameters['data']['value'];
-            $upload = new \WPMailSMTP\Vendor\Google\Http\MediaFileUpload($this->client, $request, $mimeType, $data);
+            $upload = new MediaFileUpload($this->client, $request, $mimeType, $data);
             // pull down the modified request
             $request = $upload->getRequest();
         }
@@ -205,7 +205,7 @@ class Resource
             }
         }
         if (\count($uriTemplateVars)) {
-            $uriTemplateParser = new \WPMailSMTP\Vendor\Google\Utils\UriTemplate();
+            $uriTemplateParser = new UriTemplate();
             $requestUrl = $uriTemplateParser->parse($requestUrl, $uriTemplateVars);
         }
         if (\count($queryVars)) {

@@ -44,12 +44,12 @@ trait IamSignerTrait
      */
     public function signBlob($stringToSign, $forceOpenSsl = \false, $accessToken = null)
     {
-        $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build(\WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         // Providing a signer is useful for testing, but it's undocumented
         // because it's not something a user would generally need to do.
         $signer = $this->iam;
         if (!$signer) {
-            $signer = $this instanceof \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface ? new \WPMailSMTP\Vendor\Google\Auth\Iam($httpHandler, $this->getUniverseDomain()) : new \WPMailSMTP\Vendor\Google\Auth\Iam($httpHandler);
+            $signer = $this instanceof GetUniverseDomainInterface ? new Iam($httpHandler, $this->getUniverseDomain()) : new Iam($httpHandler);
         }
         $email = $this->getClientName($httpHandler);
         if (\is_null($accessToken)) {

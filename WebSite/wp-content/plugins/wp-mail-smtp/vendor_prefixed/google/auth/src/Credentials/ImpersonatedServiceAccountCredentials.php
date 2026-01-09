@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Auth\Credentials;
 use WPMailSMTP\Vendor\Google\Auth\CredentialsLoader;
 use WPMailSMTP\Vendor\Google\Auth\IamSignerTrait;
 use WPMailSMTP\Vendor\Google\Auth\SignBlobInterface;
-class ImpersonatedServiceAccountCredentials extends \WPMailSMTP\Vendor\Google\Auth\CredentialsLoader implements \WPMailSMTP\Vendor\Google\Auth\SignBlobInterface
+class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements SignBlobInterface
 {
     use IamSignerTrait;
     /**
@@ -58,7 +58,7 @@ class ImpersonatedServiceAccountCredentials extends \WPMailSMTP\Vendor\Google\Au
             throw new \LogicException('json key is missing the source_credentials field');
         }
         $this->impersonatedServiceAccountName = $this->getImpersonatedServiceAccountNameFromUrl($jsonKey['service_account_impersonation_url']);
-        $this->sourceCredentials = new \WPMailSMTP\Vendor\Google\Auth\Credentials\UserRefreshCredentials($scope, $jsonKey['source_credentials']);
+        $this->sourceCredentials = new UserRefreshCredentials($scope, $jsonKey['source_credentials']);
     }
     /**
      * Helper function for extracting the Server Account Name from the URL saved in the account

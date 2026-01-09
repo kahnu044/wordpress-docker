@@ -41,7 +41,7 @@ use Throwable;
  *
  * @see https://github.com/petkaantonov/bluebird/blob/master/API.md#generators inspiration
  */
-final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+final class Coroutine implements PromiseInterface
 {
     /**
      * @var PromiseInterface|null
@@ -58,14 +58,14 @@ final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseIn
     public function __construct(callable $generatorFn)
     {
         $this->generator = $generatorFn();
-        $this->result = new \WPMailSMTP\Vendor\GuzzleHttp\Promise\Promise(function () : void {
+        $this->result = new Promise(function () : void {
             while (isset($this->currentPromise)) {
                 $this->currentPromise->wait();
             }
         });
         try {
             $this->nextCoroutine($this->generator->current());
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }
@@ -76,11 +76,11 @@ final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseIn
     {
         return new self($generatorFn);
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : PromiseInterface
     {
         return $this->result->then($onFulfilled, $onRejected);
     }
-    public function otherwise(callable $onRejected) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected) : PromiseInterface
     {
         return $this->result->otherwise($onRejected);
     }
@@ -107,7 +107,7 @@ final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseIn
     }
     private function nextCoroutine($yielded) : void
     {
-        $this->currentPromise = \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
+        $this->currentPromise = Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
     }
     /**
      * @internal
@@ -122,7 +122,7 @@ final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseIn
             } else {
                 $this->result->resolve($value);
             }
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }
@@ -133,10 +133,10 @@ final class Coroutine implements \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseIn
     {
         unset($this->currentPromise);
         try {
-            $nextYield = $this->generator->throw(\WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::exceptionFor($reason));
+            $nextYield = $this->generator->throw(Create::exceptionFor($reason));
             // The throw was caught, so keep iterating on the coroutine
             $this->nextCoroutine($nextYield);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }

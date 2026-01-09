@@ -10,20 +10,20 @@ final class Create
      *
      * @param mixed $value Promise or value.
      */
-    public static function promiseFor($value) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public static function promiseFor($value) : PromiseInterface
     {
-        if ($value instanceof \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface) {
+        if ($value instanceof PromiseInterface) {
             return $value;
         }
         // Return a Guzzle promise that shadows the given promise.
         if (\is_object($value) && \method_exists($value, 'then')) {
             $wfn = \method_exists($value, 'wait') ? [$value, 'wait'] : null;
             $cfn = \method_exists($value, 'cancel') ? [$value, 'cancel'] : null;
-            $promise = new \WPMailSMTP\Vendor\GuzzleHttp\Promise\Promise($wfn, $cfn);
+            $promise = new Promise($wfn, $cfn);
             $value->then([$promise, 'resolve'], [$promise, 'reject']);
             return $promise;
         }
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Promise\FulfilledPromise($value);
+        return new FulfilledPromise($value);
     }
     /**
      * Creates a rejected promise for a reason if the reason is not a promise.
@@ -31,12 +31,12 @@ final class Create
      *
      * @param mixed $reason Promise or reason.
      */
-    public static function rejectionFor($reason) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public static function rejectionFor($reason) : PromiseInterface
     {
-        if ($reason instanceof \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface) {
+        if ($reason instanceof PromiseInterface) {
             return $reason;
         }
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Promise\RejectedPromise($reason);
+        return new RejectedPromise($reason);
     }
     /**
      * Create an exception for a rejected promise value.
@@ -48,7 +48,7 @@ final class Create
         if ($reason instanceof \Throwable) {
             return $reason;
         }
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Promise\RejectionException($reason);
+        return new RejectionException($reason);
     }
     /**
      * Returns an iterator for the given value.

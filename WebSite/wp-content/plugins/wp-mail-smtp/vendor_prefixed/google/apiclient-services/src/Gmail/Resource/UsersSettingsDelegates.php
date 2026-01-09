@@ -49,11 +49,11 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
      * @return Delegate
      * @throws \Google\Service\Exception
      */
-    public function create($userId, \WPMailSMTP\Vendor\Google\Service\Gmail\Delegate $postBody, $optParams = [])
+    public function create($userId, Delegate $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Delegate::class);
+        return $this->call('create', [$params], Delegate::class);
     }
     /**
      * Removes the specified delegate (which can be of any verification status), and
@@ -93,7 +93,7 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId, 'delegateEmail' => $delegateEmail];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\Delegate::class);
+        return $this->call('get', [$params], Delegate::class);
     }
     /**
      * Lists the delegates for the specified account. This method is only available
@@ -110,8 +110,8 @@ class UsersSettingsDelegates extends \WPMailSMTP\Vendor\Google\Service\Resource
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\ListDelegatesResponse::class);
+        return $this->call('list', [$params], ListDelegatesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsDelegates::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsDelegates');
+\class_alias(UsersSettingsDelegates::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsDelegates');

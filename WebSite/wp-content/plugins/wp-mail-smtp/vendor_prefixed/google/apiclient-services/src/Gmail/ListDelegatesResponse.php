@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListDelegatesResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'delegates';
-    protected $delegatesType = \WPMailSMTP\Vendor\Google\Service\Gmail\Delegate::class;
+    protected $delegatesType = Delegate::class;
     protected $delegatesDataType = 'array';
     /**
      * @param Delegate[]
@@ -38,4 +38,4 @@ class ListDelegatesResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListDelegatesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListDelegatesResponse');
+\class_alias(ListDelegatesResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListDelegatesResponse');

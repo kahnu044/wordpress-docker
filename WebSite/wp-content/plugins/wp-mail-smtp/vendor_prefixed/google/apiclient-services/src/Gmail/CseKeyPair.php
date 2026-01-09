@@ -40,7 +40,7 @@ class CseKeyPair extends \WPMailSMTP\Vendor\Google\Collection
      * @var string
      */
     public $pkcs7;
-    protected $privateKeyMetadataType = \WPMailSMTP\Vendor\Google\Service\Gmail\CsePrivateKeyMetadata::class;
+    protected $privateKeyMetadataType = CsePrivateKeyMetadata::class;
     protected $privateKeyMetadataDataType = 'array';
     /**
      * @var string[]
@@ -146,4 +146,4 @@ class CseKeyPair extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\CseKeyPair::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_CseKeyPair');
+\class_alias(CseKeyPair::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_CseKeyPair');

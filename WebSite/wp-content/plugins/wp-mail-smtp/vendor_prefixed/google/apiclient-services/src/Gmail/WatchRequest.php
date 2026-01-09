@@ -94,4 +94,4 @@ class WatchRequest extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\WatchRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_WatchRequest');
+\class_alias(WatchRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_WatchRequest');

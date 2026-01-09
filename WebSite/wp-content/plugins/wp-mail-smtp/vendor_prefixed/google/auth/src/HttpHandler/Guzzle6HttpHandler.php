@@ -29,7 +29,7 @@ class Guzzle6HttpHandler
     /**
      * @param ClientInterface $client
      */
-    public function __construct(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
@@ -40,7 +40,7 @@ class Guzzle6HttpHandler
      * @param array<mixed> $options
      * @return ResponseInterface
      */
-    public function __invoke(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options = [])
+    public function __invoke(RequestInterface $request, array $options = [])
     {
         return $this->client->send($request, $options);
     }
@@ -52,7 +52,7 @@ class Guzzle6HttpHandler
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function async(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options = [])
+    public function async(RequestInterface $request, array $options = [])
     {
         return $this->client->sendAsync($request, $options);
     }

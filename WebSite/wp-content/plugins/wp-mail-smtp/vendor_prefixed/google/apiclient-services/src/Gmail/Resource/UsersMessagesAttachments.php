@@ -45,8 +45,8 @@ class UsersMessagesAttachments extends \WPMailSMTP\Vendor\Google\Service\Resourc
     {
         $params = ['userId' => $userId, 'messageId' => $messageId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \WPMailSMTP\Vendor\Google\Service\Gmail\MessagePartBody::class);
+        return $this->call('get', [$params], MessagePartBody::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersMessagesAttachments::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersMessagesAttachments');
+\class_alias(UsersMessagesAttachments::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersMessagesAttachments');

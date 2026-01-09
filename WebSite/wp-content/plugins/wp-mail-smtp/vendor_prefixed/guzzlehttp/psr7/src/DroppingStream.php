@@ -8,7 +8,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
  * Stream decorator that begins dropping data once the size of the underlying
  * stream becomes too full.
  */
-final class DroppingStream implements \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+final class DroppingStream implements StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var int */
@@ -19,7 +19,7 @@ final class DroppingStream implements \WPMailSMTP\Vendor\Psr\Http\Message\Stream
      * @param StreamInterface $stream    Underlying stream to decorate.
      * @param int             $maxLength Maximum size before dropping data.
      */
-    public function __construct(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $stream, int $maxLength)
+    public function __construct(StreamInterface $stream, int $maxLength)
     {
         $this->stream = $stream;
         $this->maxLength = $maxLength;

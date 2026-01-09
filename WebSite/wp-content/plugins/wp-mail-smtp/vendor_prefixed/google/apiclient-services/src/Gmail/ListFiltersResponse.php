@@ -20,7 +20,7 @@ namespace WPMailSMTP\Vendor\Google\Service\Gmail;
 class ListFiltersResponse extends \WPMailSMTP\Vendor\Google\Collection
 {
     protected $collection_key = 'filter';
-    protected $filterType = \WPMailSMTP\Vendor\Google\Service\Gmail\Filter::class;
+    protected $filterType = Filter::class;
     protected $filterDataType = 'array';
     /**
      * @param Filter[]
@@ -38,4 +38,4 @@ class ListFiltersResponse extends \WPMailSMTP\Vendor\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\ListFiltersResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListFiltersResponse');
+\class_alias(ListFiltersResponse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_ListFiltersResponse');

@@ -166,9 +166,9 @@ class Client
      */
     public function __construct(array $config = [])
     {
-        $this->config = \array_merge(['application_name' => '', 'base_path' => self::API_BASE_PATH, 'client_id' => '', 'client_secret' => '', 'credentials' => null, 'scopes' => null, 'quota_project' => null, 'redirect_uri' => null, 'state' => null, 'developer_key' => '', 'use_application_default_credentials' => \false, 'signing_key' => null, 'signing_algorithm' => null, 'subject' => null, 'hd' => '', 'prompt' => '', 'openid.realm' => '', 'include_granted_scopes' => null, 'login_hint' => '', 'request_visible_actions' => '', 'access_type' => 'online', 'approval_prompt' => 'auto', 'retry' => [], 'retry_map' => null, 'cache' => null, 'cache_config' => [], 'token_callback' => null, 'jwt' => null, 'api_format_v2' => \false, 'universe_domain' => \getenv('GOOGLE_CLOUD_UNIVERSE_DOMAIN') ?: \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN], $config);
+        $this->config = \array_merge(['application_name' => '', 'base_path' => self::API_BASE_PATH, 'client_id' => '', 'client_secret' => '', 'credentials' => null, 'scopes' => null, 'quota_project' => null, 'redirect_uri' => null, 'state' => null, 'developer_key' => '', 'use_application_default_credentials' => \false, 'signing_key' => null, 'signing_algorithm' => null, 'subject' => null, 'hd' => '', 'prompt' => '', 'openid.realm' => '', 'include_granted_scopes' => null, 'login_hint' => '', 'request_visible_actions' => '', 'access_type' => 'online', 'approval_prompt' => 'auto', 'retry' => [], 'retry_map' => null, 'cache' => null, 'cache_config' => [], 'token_callback' => null, 'jwt' => null, 'api_format_v2' => \false, 'universe_domain' => \getenv('GOOGLE_CLOUD_UNIVERSE_DOMAIN') ?: GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN], $config);
         if (!\is_null($this->config['credentials'])) {
-            if ($this->config['credentials'] instanceof \WPMailSMTP\Vendor\Google\Auth\CredentialsLoader) {
+            if ($this->config['credentials'] instanceof CredentialsLoader) {
                 $this->credentials = $this->config['credentials'];
             } else {
                 $this->setAuthConfig($this->config['credentials']);
@@ -227,7 +227,7 @@ class Client
     public function fetchAccessTokenWithAuthCode($code, $codeVerifier = null)
     {
         if (\strlen($code) == 0) {
-            throw new \InvalidArgumentException("Invalid code");
+            throw new InvalidArgumentException("Invalid code");
         }
         $auth = $this->getOAuth2Service();
         $auth->setCode($code);
@@ -235,7 +235,7 @@ class Client
         if ($codeVerifier) {
             $auth->setCodeVerifier($codeVerifier);
         }
-        $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build($this->getHttpClient());
+        $httpHandler = HttpHandlerFactory::build($this->getHttpClient());
         $creds = $auth->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -259,14 +259,14 @@ class Client
      * @param ClientInterface $authHttp optional.
      * @return array access token
      */
-    public function fetchAccessTokenWithAssertion(?\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $authHttp = null)
+    public function fetchAccessTokenWithAssertion(?ClientInterface $authHttp = null)
     {
         if (!$this->isUsingApplicationDefaultCredentials()) {
-            throw new \DomainException('set the JSON service account credentials using' . ' Google\\Client::setAuthConfig or set the path to your JSON file' . ' with the "GOOGLE_APPLICATION_CREDENTIALS" environment variable' . ' and call Google\\Client::useApplicationDefaultCredentials to' . ' refresh a token with assertion.');
+            throw new DomainException('set the JSON service account credentials using' . ' Google\\Client::setAuthConfig or set the path to your JSON file' . ' with the "GOOGLE_APPLICATION_CREDENTIALS" environment variable' . ' and call Google\\Client::useApplicationDefaultCredentials to' . ' refresh a token with assertion.');
         }
         $this->getLogger()->log('info', 'OAuth2 access token refresh with Signed JWT assertion grants.');
         $credentials = $this->createApplicationDefaultCredentials();
-        $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build($authHttp);
+        $httpHandler = HttpHandlerFactory::build($authHttp);
         $creds = $credentials->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -294,14 +294,14 @@ class Client
     {
         if (null === $refreshToken) {
             if (!isset($this->token['refresh_token'])) {
-                throw new \LogicException('refresh token must be passed in or set as part of setAccessToken');
+                throw new LogicException('refresh token must be passed in or set as part of setAccessToken');
             }
             $refreshToken = $this->token['refresh_token'];
         }
         $this->getLogger()->info('OAuth2 access token refresh');
         $auth = $this->getOAuth2Service();
         $auth->setRefreshToken($refreshToken);
-        $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build($this->getHttpClient());
+        $httpHandler = HttpHandlerFactory::build($this->getHttpClient());
         $creds = $auth->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -349,7 +349,7 @@ class Client
      * @param ClientInterface $http the http client object.
      * @return ClientInterface the http client object
      */
-    public function authorize(?\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $http = null)
+    public function authorize(?ClientInterface $http = null)
     {
         $http = $http ?: $this->getHttpClient();
         $authHandler = $this->getAuthHandler();
@@ -435,10 +435,10 @@ class Client
             }
         }
         if ($token == null) {
-            throw new \InvalidArgumentException('invalid json token');
+            throw new InvalidArgumentException('invalid json token');
         }
         if (!isset($token['access_token'])) {
-            throw new \InvalidArgumentException("Invalid token format");
+            throw new InvalidArgumentException("Invalid token format");
         }
         $this->token = $token;
     }
@@ -494,14 +494,14 @@ class Client
      */
     public function getAuth()
     {
-        throw new \BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
+        throw new BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
     }
     /**
      * @deprecated See UPGRADING.md for more information
      */
     public function setAuth($auth)
     {
-        throw new \BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
+        throw new BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
     }
     /**
      * Set the OAuth 2.0 Client ID.
@@ -666,7 +666,7 @@ class Client
      */
     public function revokeToken($token = null)
     {
-        $tokenRevoker = new \WPMailSMTP\Vendor\Google\AccessToken\Revoke($this->getHttpClient());
+        $tokenRevoker = new Revoke($this->getHttpClient());
         return $tokenRevoker->revokeToken($token ?: $this->getAccessToken());
     }
     /**
@@ -681,11 +681,11 @@ class Client
      */
     public function verifyIdToken($idToken = null)
     {
-        $tokenVerifier = new \WPMailSMTP\Vendor\Google\AccessToken\Verify($this->getHttpClient(), $this->getCache(), $this->config['jwt']);
+        $tokenVerifier = new Verify($this->getHttpClient(), $this->getCache(), $this->config['jwt']);
         if (null === $idToken) {
             $token = $this->getAccessToken();
             if (!isset($token['id_token'])) {
-                throw new \LogicException('id_token must be passed in or set as part of setAccessToken');
+                throw new LogicException('id_token must be passed in or set as part of setAccessToken');
             }
             $idToken = $token['id_token'];
         }
@@ -751,7 +751,7 @@ class Client
      * @throws \Google\Exception
      * @return mixed|T|ResponseInterface
      */
-    public function execute(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, $expectedClass = null)
+    public function execute(RequestInterface $request, $expectedClass = null)
     {
         $request = $request->withHeader('User-Agent', \sprintf('%s %s%s', $this->config['application_name'], self::USER_AGENT_SUFFIX, $this->getLibraryVersion()))->withHeader('x-goog-api-client', \sprintf('gl-php/%s gdcl/%s', \phpversion(), $this->getLibraryVersion()));
         if ($this->config['api_format_v2']) {
@@ -760,7 +760,7 @@ class Client
         // call the authorize method
         // this is where most of the grunt work is done
         $http = $this->authorize();
-        return \WPMailSMTP\Vendor\Google\Http\REST::execute($http, $request, $expectedClass, $this->config['retry'], $this->config['retry_map']);
+        return REST::execute($http, $request, $expectedClass, $this->config['retry'], $this->config['retry_map']);
     }
     /**
      * Declare whether batch calls should be used. This may increase throughput
@@ -814,11 +814,11 @@ class Client
     {
         if (\is_string($config)) {
             if (!\file_exists($config)) {
-                throw new \InvalidArgumentException(\sprintf('file "%s" does not exist', $config));
+                throw new InvalidArgumentException(\sprintf('file "%s" does not exist', $config));
             }
             $json = \file_get_contents($config);
             if (!($config = \json_decode($json, \true))) {
-                throw new \LogicException('invalid json for auth config');
+                throw new LogicException('invalid json for auth config');
             }
         }
         $key = isset($config['installed']) ? 'installed' : 'web';
@@ -888,14 +888,14 @@ class Client
      */
     protected function createOAuth2Service()
     {
-        $auth = new \WPMailSMTP\Vendor\Google\Auth\OAuth2(['clientId' => $this->getClientId(), 'clientSecret' => $this->getClientSecret(), 'authorizationUri' => self::OAUTH2_AUTH_URL, 'tokenCredentialUri' => self::OAUTH2_TOKEN_URI, 'redirectUri' => $this->getRedirectUri(), 'issuer' => $this->config['client_id'], 'signingKey' => $this->config['signing_key'], 'signingAlgorithm' => $this->config['signing_algorithm']]);
+        $auth = new OAuth2(['clientId' => $this->getClientId(), 'clientSecret' => $this->getClientSecret(), 'authorizationUri' => self::OAUTH2_AUTH_URL, 'tokenCredentialUri' => self::OAUTH2_TOKEN_URI, 'redirectUri' => $this->getRedirectUri(), 'issuer' => $this->config['client_id'], 'signingKey' => $this->config['signing_key'], 'signingAlgorithm' => $this->config['signing_algorithm']]);
         return $auth;
     }
     /**
      * Set the Cache object
      * @param CacheItemPoolInterface $cache
      */
-    public function setCache(\WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache)
+    public function setCache(CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
     }
@@ -920,7 +920,7 @@ class Client
      * Set the Logger object
      * @param LoggerInterface $logger
      */
-    public function setLogger(\WPMailSMTP\Vendor\Psr\Log\LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
@@ -936,24 +936,24 @@ class Client
     }
     protected function createDefaultLogger()
     {
-        $logger = new \WPMailSMTP\Vendor\Monolog\Logger('google-api-php-client');
+        $logger = new Logger('google-api-php-client');
         if ($this->isAppEngine()) {
-            $handler = new \WPMailSMTP\Vendor\Monolog\Handler\SyslogHandler('app', \LOG_USER, \WPMailSMTP\Vendor\Monolog\Logger::NOTICE);
+            $handler = new MonologSyslogHandler('app', \LOG_USER, Logger::NOTICE);
         } else {
-            $handler = new \WPMailSMTP\Vendor\Monolog\Handler\StreamHandler('php://stderr', \WPMailSMTP\Vendor\Monolog\Logger::NOTICE);
+            $handler = new MonologStreamHandler('php://stderr', Logger::NOTICE);
         }
         $logger->pushHandler($handler);
         return $logger;
     }
     protected function createDefaultCache()
     {
-        return new \WPMailSMTP\Vendor\Google\Auth\Cache\MemoryCacheItemPool();
+        return new MemoryCacheItemPool();
     }
     /**
      * Set the Http Client object
      * @param ClientInterface $http
      */
-    public function setHttpClient(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface $http)
+    public function setHttpClient(ClientInterface $http)
     {
         $this->http = $http;
     }
@@ -982,16 +982,16 @@ class Client
     {
         $guzzleVersion = null;
         if (\defined('\\WPMailSMTP\\Vendor\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
-            $guzzleVersion = \WPMailSMTP\Vendor\GuzzleHttp\ClientInterface::MAJOR_VERSION;
+            $guzzleVersion = ClientInterface::MAJOR_VERSION;
         } elseif (\defined('\\WPMailSMTP\\Vendor\\GuzzleHttp\\ClientInterface::VERSION')) {
-            $guzzleVersion = (int) \substr(\WPMailSMTP\Vendor\GuzzleHttp\ClientInterface::VERSION, 0, 1);
+            $guzzleVersion = (int) \substr(ClientInterface::VERSION, 0, 1);
         }
         if (5 === $guzzleVersion) {
             $options = ['base_url' => $this->config['base_path'], 'defaults' => ['exceptions' => \false]];
             if ($this->isAppEngine()) {
-                if (\class_exists(\WPMailSMTP\Vendor\GuzzleHttp\Ring\Client\StreamHandler::class)) {
+                if (\class_exists(StreamHandler::class)) {
                     // set StreamHandler on AppEngine by default
-                    $options['handler'] = new \WPMailSMTP\Vendor\GuzzleHttp\Ring\Client\StreamHandler();
+                    $options['handler'] = new StreamHandler();
                     $options['defaults']['verify'] = '/etc/ca-certificates.crt';
                 }
             }
@@ -999,9 +999,9 @@ class Client
             // guzzle 6 or 7
             $options = ['base_uri' => $this->config['base_path'], 'http_errors' => \false];
         } else {
-            throw new \LogicException('Could not find supported version of Guzzle.');
+            throw new LogicException('Could not find supported version of Guzzle.');
         }
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Client($options);
+        return new GuzzleClient($options);
     }
     /**
      * @return FetchAuthTokenCache
@@ -1014,24 +1014,24 @@ class Client
         // create credentials using values supplied in setAuthConfig
         if ($signingKey) {
             $serviceAccountCredentials = ['client_id' => $this->config['client_id'], 'client_email' => $this->config['client_email'], 'private_key' => $signingKey, 'type' => 'service_account', 'quota_project_id' => $this->config['quota_project']];
-            $credentials = \WPMailSMTP\Vendor\Google\Auth\CredentialsLoader::makeCredentials($scopes, $serviceAccountCredentials);
+            $credentials = CredentialsLoader::makeCredentials($scopes, $serviceAccountCredentials);
         } else {
             // When $sub is provided, we cannot pass cache classes to ::getCredentials
             // because FetchAuthTokenCache::setSub does not exist.
             // The result is when $sub is provided, calls to ::onGce are not cached.
-            $credentials = \WPMailSMTP\Vendor\Google\Auth\ApplicationDefaultCredentials::getCredentials($scopes, null, $sub ? null : $this->config['cache_config'], $sub ? null : $this->getCache(), $this->config['quota_project']);
+            $credentials = ApplicationDefaultCredentials::getCredentials($scopes, null, $sub ? null : $this->config['cache_config'], $sub ? null : $this->getCache(), $this->config['quota_project']);
         }
         // for service account domain-wide authority (impersonating a user)
         // @see https://developers.google.com/identity/protocols/OAuth2ServiceAccount
         if ($sub) {
-            if (!$credentials instanceof \WPMailSMTP\Vendor\Google\Auth\Credentials\ServiceAccountCredentials) {
-                throw new \DomainException('domain-wide authority requires service account credentials');
+            if (!$credentials instanceof ServiceAccountCredentials) {
+                throw new DomainException('domain-wide authority requires service account credentials');
             }
             $credentials->setSub($sub);
         }
         // If we are not using FetchAuthTokenCache yet, create it now
-        if (!$credentials instanceof \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenCache) {
-            $credentials = new \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenCache($credentials, $this->config['cache_config'], $this->getCache());
+        if (!$credentials instanceof FetchAuthTokenCache) {
+            $credentials = new FetchAuthTokenCache($credentials, $this->config['cache_config'], $this->getCache());
         }
         return $credentials;
     }
@@ -1042,18 +1042,18 @@ class Client
         // sessions.
         //
         // @see https://github.com/google/google-api-php-client/issues/821
-        return \WPMailSMTP\Vendor\Google\AuthHandler\AuthHandlerFactory::build($this->getCache(), $this->config['cache_config']);
+        return AuthHandlerFactory::build($this->getCache(), $this->config['cache_config']);
     }
     private function createUserRefreshCredentials($scope, $refreshToken)
     {
         $creds = \array_filter(['client_id' => $this->getClientId(), 'client_secret' => $this->getClientSecret(), 'refresh_token' => $refreshToken]);
-        return new \WPMailSMTP\Vendor\Google\Auth\Credentials\UserRefreshCredentials($scope, $creds);
+        return new UserRefreshCredentials($scope, $creds);
     }
     private function checkUniverseDomain($credentials)
     {
-        $credentialsUniverse = $credentials instanceof \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface ? $credentials->getUniverseDomain() : \WPMailSMTP\Vendor\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+        $credentialsUniverse = $credentials instanceof GetUniverseDomainInterface ? $credentials->getUniverseDomain() : GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
         if ($credentialsUniverse !== $this->getUniverseDomain()) {
-            throw new \DomainException(\sprintf('The configured universe domain (%s) does not match the credential universe domain (%s)', $this->getUniverseDomain(), $credentialsUniverse));
+            throw new DomainException(\sprintf('The configured universe domain (%s) does not match the credential universe domain (%s)', $this->getUniverseDomain(), $credentialsUniverse));
         }
     }
     public function getUniverseDomain()

@@ -42,7 +42,7 @@ class GCECache
      * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
-    public function __construct(?array $cacheConfig = null, ?\WPMailSMTP\Vendor\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public function __construct(?array $cacheConfig = null, ?CacheItemPoolInterface $cache = null)
     {
         $this->cache = $cache;
         $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
@@ -57,12 +57,12 @@ class GCECache
     public function onGce(?callable $httpHandler = null)
     {
         if (\is_null($this->cache)) {
-            return \WPMailSMTP\Vendor\Google\Auth\Credentials\GCECredentials::onGce($httpHandler);
+            return GCECredentials::onGce($httpHandler);
         }
         $cacheKey = self::GCE_CACHE_KEY;
         $onGce = $this->getCachedValue($cacheKey);
         if (\is_null($onGce)) {
-            $onGce = \WPMailSMTP\Vendor\Google\Auth\Credentials\GCECredentials::onGce($httpHandler);
+            $onGce = GCECredentials::onGce($httpHandler);
             $this->setCachedValue($cacheKey, $onGce);
         }
         return $onGce;

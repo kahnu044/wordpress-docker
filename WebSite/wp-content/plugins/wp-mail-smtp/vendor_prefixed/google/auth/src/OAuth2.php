@@ -35,7 +35,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\UriInterface;
  * - service account authorization
  * - authorization where a user already has an access token
  */
-class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
+class OAuth2 implements FetchAuthTokenInterface
 {
     const DEFAULT_EXPIRY_SECONDS = 3600;
     // 1 hour
@@ -252,7 +252,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
      * represents the identity of the party on behalf of whom the request is
      * being made.
      */
-    private ?\WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredentialSourceInterface $subjectTokenFetcher;
+    private ?ExternalAccountCredentialSourceInterface $subjectTokenFetcher;
     /**
      * For STS requests.
      * An identifier, that indicates the type of the security token in the
@@ -478,7 +478,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
             $assertion['sub'] = $this->getSub();
         }
         $assertion += $this->getAdditionalClaims();
-        return \WPMailSMTP\Vendor\Firebase\JWT\JWT::encode($assertion, $this->getSigningKey(), $this->getSigningAlgorithm(), $this->getSigningKeyId());
+        return JWT::encode($assertion, $this->getSigningKey(), $this->getSigningAlgorithm(), $this->getSigningKeyId());
     }
     /**
      * Generates a request for token credentials.
@@ -537,7 +537,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
                 $params = \array_merge($params, $this->getExtensionParams());
         }
         $headers = ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'];
-        return new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Query::build($params));
+        return new Request('POST', $uri, $headers, Query::build($params));
     }
     /**
      * Fetches the auth tokens based on the current state.
@@ -548,7 +548,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
     public function fetchAuthToken(?callable $httpHandler = null)
     {
         if (\is_null($httpHandler)) {
-            $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build(\WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
         $response = $httpHandler($this->generateCredentialsRequest($httpHandler));
         $credentials = $this->parseTokenResponse($response);
@@ -583,7 +583,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
      * @return array<mixed> the tokens parsed from the response body.
      * @throws \Exception
      */
-    public function parseTokenResponse(\WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $resp)
+    public function parseTokenResponse(ResponseInterface $resp)
     {
         $body = (string) $resp->getBody();
         if ($resp->hasHeader('Content-Type') && $resp->getHeaderLine('Content-Type') == 'application/x-www-form-urlencoded') {
@@ -666,18 +666,18 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
     public function buildFullAuthorizationUri(array $config = [])
     {
         if (\is_null($this->getAuthorizationUri())) {
-            throw new \InvalidArgumentException('requires an authorizationUri to have been set');
+            throw new InvalidArgumentException('requires an authorizationUri to have been set');
         }
         $params = \array_merge(['response_type' => 'code', 'access_type' => 'offline', 'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUri, 'state' => $this->state, 'scope' => $this->getScope()], $config);
         // Validate the auth_params
         if (\is_null($params['client_id'])) {
-            throw new \InvalidArgumentException('missing the required client identifier');
+            throw new InvalidArgumentException('missing the required client identifier');
         }
         if (\is_null($params['redirect_uri'])) {
-            throw new \InvalidArgumentException('missing the required redirect URI');
+            throw new InvalidArgumentException('missing the required redirect URI');
         }
         if (!empty($params['prompt']) && !empty($params['approval_prompt'])) {
-            throw new \InvalidArgumentException('prompt and approval_prompt are mutually exclusive');
+            throw new InvalidArgumentException('prompt and approval_prompt are mutually exclusive');
         }
         if ($this->codeVerifier) {
             $params['code_challenge'] = $this->getCodeChallenge($this->codeVerifier);
@@ -685,10 +685,10 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
         }
         // Construct the uri object; return it if it is valid.
         $result = clone $this->authorizationUri;
-        $existingParams = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Query::parse($result->getQuery());
-        $result = $result->withQuery(\WPMailSMTP\Vendor\GuzzleHttp\Psr7\Query::build(\array_merge($existingParams, $params)));
+        $existingParams = Query::parse($result->getQuery());
+        $result = $result->withQuery(Query::build(\array_merge($existingParams, $params)));
         if ($result->getScheme() != 'https') {
-            throw new \InvalidArgumentException('Authorization endpoint must be protected by TLS');
+            throw new InvalidArgumentException('Authorization endpoint must be protected by TLS');
         }
         return $result;
     }
@@ -816,7 +816,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
             // "postmessage" is a reserved URI string in Google-land
             // @see https://developers.google.com/identity/sign-in/web/server-side-flow
             if ('postmessage' !== (string) $uri) {
-                throw new \InvalidArgumentException('Redirect URI must be absolute');
+                throw new InvalidArgumentException('Redirect URI must be absolute');
             }
         }
         $this->redirectUri = (string) $uri;
@@ -851,12 +851,12 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
             foreach ($scope as $s) {
                 $pos = \strpos($s, ' ');
                 if ($pos !== \false) {
-                    throw new \InvalidArgumentException('array scope values should not contain spaces');
+                    throw new InvalidArgumentException('array scope values should not contain spaces');
                 }
             }
             $this->scope = $scope;
         } else {
-            throw new \InvalidArgumentException('scopes should be a string or array of strings');
+            throw new InvalidArgumentException('scopes should be a string or array of strings');
         }
     }
     /**
@@ -902,7 +902,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
         } else {
             // validate URI
             if (!$this->isAbsoluteUri($grantType)) {
-                throw new \InvalidArgumentException('invalid grant type');
+                throw new InvalidArgumentException('invalid grant type');
             }
             $this->grantType = (string) $grantType;
         }
@@ -1140,7 +1140,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
         if (\is_null($signingAlgorithm)) {
             $this->signingAlgorithm = null;
         } elseif (!\in_array($signingAlgorithm, self::$knownSigningAlgorithms)) {
-            throw new \InvalidArgumentException('unknown signing algorithm');
+            throw new InvalidArgumentException('unknown signing algorithm');
         } else {
             $this->signingAlgorithm = $signingAlgorithm;
         }
@@ -1420,7 +1420,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
         if (\is_null($uri)) {
             return null;
         }
-        return \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::uriFor($uri);
+        return Utils::uriFor($uri);
     }
     /**
      * @param string $idToken
@@ -1437,7 +1437,7 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
         $e = new \InvalidArgumentException('Key may not be empty');
         foreach ($keys as $key) {
             try {
-                return \WPMailSMTP\Vendor\Firebase\JWT\JWT::decode($idToken, $key);
+                return JWT::decode($idToken, $key);
             } catch (\Exception $e) {
                 // try next alg
             }
@@ -1452,15 +1452,15 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
     private function getFirebaseJwtKeys($publicKey, $allowedAlgs)
     {
         // If $publicKey is instance of Key, return it
-        if ($publicKey instanceof \WPMailSMTP\Vendor\Firebase\JWT\Key) {
+        if ($publicKey instanceof Key) {
             return [$publicKey];
         }
         // If $allowedAlgs is empty, $publicKey must be Key or Key[].
         if (empty($allowedAlgs)) {
             $keys = [];
             foreach ((array) $publicKey as $kid => $pubKey) {
-                if (!$pubKey instanceof \WPMailSMTP\Vendor\Firebase\JWT\Key) {
-                    throw new \InvalidArgumentException(\sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', \WPMailSMTP\Vendor\Firebase\JWT\Key::class, \WPMailSMTP\Vendor\Firebase\JWT\Key::class));
+                if (!$pubKey instanceof Key) {
+                    throw new \InvalidArgumentException(\sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', Key::class, Key::class));
                 }
                 $keys[$kid] = $pubKey;
             }
@@ -1481,15 +1481,15 @@ class OAuth2 implements \WPMailSMTP\Vendor\Google\Auth\FetchAuthTokenInterface
             // When publicKey is greater than 1, create keys with the single alg.
             $keys = [];
             foreach ($publicKey as $kid => $pubKey) {
-                if ($pubKey instanceof \WPMailSMTP\Vendor\Firebase\JWT\Key) {
+                if ($pubKey instanceof Key) {
                     $keys[$kid] = $pubKey;
                 } else {
-                    $keys[$kid] = new \WPMailSMTP\Vendor\Firebase\JWT\Key($pubKey, $allowedAlg);
+                    $keys[$kid] = new Key($pubKey, $allowedAlg);
                 }
             }
             return $keys;
         }
-        return [new \WPMailSMTP\Vendor\Firebase\JWT\Key($publicKey, $allowedAlg)];
+        return [new Key($publicKey, $allowedAlg)];
     }
     /**
      * Determines if the URI is absolute based on its scheme and host or path

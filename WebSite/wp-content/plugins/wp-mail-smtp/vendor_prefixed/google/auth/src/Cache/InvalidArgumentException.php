@@ -18,6 +18,6 @@
 namespace WPMailSMTP\Vendor\Google\Auth\Cache;
 
 use WPMailSMTP\Vendor\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
-class InvalidArgumentException extends \InvalidArgumentException implements \WPMailSMTP\Vendor\Psr\Cache\InvalidArgumentException
+class InvalidArgumentException extends \InvalidArgumentException implements PsrInvalidArgumentException
 {
 }

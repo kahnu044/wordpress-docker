@@ -21,4 +21,4 @@ class DisableCseKeyPairRequest extends \WPMailSMTP\Vendor\Google\Model
 {
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\DisableCseKeyPairRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_DisableCseKeyPairRequest');
+\class_alias(DisableCseKeyPairRequest::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_DisableCseKeyPairRequest');

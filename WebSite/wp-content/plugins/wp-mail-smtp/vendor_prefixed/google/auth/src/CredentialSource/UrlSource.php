@@ -26,7 +26,7 @@ use UnexpectedValueException;
 /**
  * Retrieve a token from a URL.
  */
-class UrlSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredentialSourceInterface
+class UrlSource implements ExternalAccountCredentialSourceInterface
 {
     private string $url;
     private ?string $format;
@@ -46,7 +46,7 @@ class UrlSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredent
     {
         $this->url = $url;
         if ($format === 'json' && \is_null($subjectTokenFieldName)) {
-            throw new \InvalidArgumentException('subject_token_field_name must be set when format is JSON');
+            throw new InvalidArgumentException('subject_token_field_name must be set when format is JSON');
         }
         $this->format = $format;
         $this->subjectTokenFieldName = $subjectTokenFieldName;
@@ -55,17 +55,17 @@ class UrlSource implements \WPMailSMTP\Vendor\Google\Auth\ExternalAccountCredent
     public function fetchSubjectToken(?callable $httpHandler = null) : string
     {
         if (\is_null($httpHandler)) {
-            $httpHandler = \WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory::build(\WPMailSMTP\Vendor\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
-        $request = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Request('GET', $this->url, $this->headers ?: []);
+        $request = new Request('GET', $this->url, $this->headers ?: []);
         $response = $httpHandler($request);
         $body = (string) $response->getBody();
         if ($this->format === 'json') {
             if (!($json = \json_decode((string) $body, \true))) {
-                throw new \UnexpectedValueException('Unable to decode JSON response');
+                throw new UnexpectedValueException('Unable to decode JSON response');
             }
             if (!isset($json[$this->subjectTokenFieldName])) {
-                throw new \UnexpectedValueException('subject_token_field_name not found in JSON file');
+                throw new UnexpectedValueException('subject_token_field_name not found in JSON file');
             }
             $body = $json[$this->subjectTokenFieldName];
         }

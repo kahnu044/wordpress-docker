@@ -29,4 +29,4 @@ class UsersSettingsCse extends \WPMailSMTP\Vendor\Google\Service\Resource
 {
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\WPMailSMTP\Vendor\Google\Service\Gmail\Resource\UsersSettingsCse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsCse');
+\class_alias(UsersSettingsCse::class, 'WPMailSMTP\\Vendor\\Google_Service_Gmail_Resource_UsersSettingsCse');
