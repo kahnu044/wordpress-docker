@@ -244,6 +244,28 @@ export default function Style(props) {
         customUnit: "px",
     });
 
+    const {
+        rangeStylesDesktop: svgWidthDesktop,
+        rangeStylesTab: svgWidthTab,
+        rangeStylesMobile: svgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: svgHeightDesktop,
+        rangeStylesTab: svgHeightTab,
+        rangeStylesMobile: svgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
     // icon padding
     const {
         dimensionStylesDesktop: iconPaddingStylesDesktop,
@@ -308,6 +330,12 @@ export default function Style(props) {
 			${iconSizeStylesDesktop}
 			${iconPaddingStylesDesktop}
 			${iconColor ? `color: ${iconColor}` : ""}
+		}
+
+		.eb-cia-wrapper.${blockId} .eb-cia-icon svg, 
+        .eb-cia-wrapper.${blockId} svg.eb-cia-icon {
+			${svgWidthDesktop}
+			${svgHeightDesktop}
 		}
 
 		${buttonSizeCss(buttonSize)}

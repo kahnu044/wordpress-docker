@@ -12,7 +12,7 @@ import Style from "./style";
 import defaultAttributes from './attributes'
 
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     sanitizeURL,
     BlockProps,
     withBlockContext,
@@ -137,7 +137,7 @@ const Edit = (props) => {
                                                             className="eb-feature-list-icon"
                                                             style={iconStyle}
                                                         >
-                                                            {iconType === "icon" && <EBDisplayIcon icon={icon} />}
+                                                            {iconType === "icon" && <EBDisplayIconEdit icon={icon} />}
                                                             {iconType === "image" && (
                                                                 <img
                                                                     className="eb-feature-list-img"

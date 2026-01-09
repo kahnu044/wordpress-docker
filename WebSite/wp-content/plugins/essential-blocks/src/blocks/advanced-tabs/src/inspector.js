@@ -14,6 +14,7 @@ import {
     PanelRow,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
+import { applyFilters } from "@wordpress/hooks";
 
 /**
  * Internal dependencies
@@ -31,6 +32,7 @@ import {
     ImageComponent,
     EBIconPicker,
     EBTextControl,
+    ProSelectControl
 } from "@essential-blocks/controls";
 
 import {
@@ -78,7 +80,7 @@ import {
     typoPrefixTabSubtitle,
 } from "./constants/typographyPrefixConstants";
 
-import { HEADING, VERTICALTOHORIZONTAL, TITLE_ALIGNMENTS } from "./constants";
+import { HEADING, VERTICALTOHORIZONTAL, TITLE_ALIGNMENTS, TAB_STYLES } from "./constants";
 
 function Inspector(props) {
     const { attributes, setAttributes, clientId, handleTabTitleClick } = props;
@@ -120,6 +122,7 @@ function Inspector(props) {
         titleAlign,
         addCaretIcon,
         caretIcon,
+        tabStyle,
     } = attributes;
 
     //
@@ -296,6 +299,13 @@ function Inspector(props) {
                         title={__("Tabs Settings", "essential-blocks")}
                         initialOpen={false}
                     >
+                        <ProSelectControl
+                            label={__("Tabs Style", "essential-blocks")}
+                            value={tabStyle}
+                            options={TAB_STYLES}
+                            onChange={(tabStyle) => setAttributes({ tabStyle })}
+                        />
+
                         <BaseControl
                             label={__("Title Level", "essential-blocks")}
                             id="eb-advance-heading-alignment"
@@ -538,6 +548,12 @@ function Inspector(props) {
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
+                    {applyFilters(
+                        "eb_advanced_tabs_pro_liquid_style_tab",
+                        "",
+                        attributes,
+                        setAttributes,
+                    )}
                     <InspectorPanel.PanelBody
                         title={__("Tab Title", "essential-blocks")}
                     // initialOpen={false}
@@ -1123,42 +1139,44 @@ function Inspector(props) {
                         </InspectorPanel.PanelBody>
                     </InspectorPanel.PanelBody>
 
-                    <InspectorPanel.PanelBody
-                        title={__("Tab Titles' Wrapper", "essential-blocks")}
-                        initialOpen={false}
-                    >
+                    {tabStyle !== 'liquid-glass' && (
                         <InspectorPanel.PanelBody
-                            title={__("Margin Padding", "essential-blocks")}
-                        >
-                            <ResponsiveDimensionsControl
-                                controlName={prefixTtlWrpMargin}
-                                baseLabel={__("Margin", "essential-blocks")}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={prefixTtlWrpPadding}
-                                baseLabel={__("Padding", "essential-blocks")}
-                            />
-                        </InspectorPanel.PanelBody>
-
-                        <InspectorPanel.PanelBody
-                            title={__("Background", "essential-blocks")}
+                            title={__("Tab Titles' Wrapper", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <BackgroundControl
-                                controlName={prefixTtlWrpBg}
-                                noOverlay
-                            />
-                        </InspectorPanel.PanelBody>
+                            <InspectorPanel.PanelBody
+                                title={__("Margin Padding", "essential-blocks")}
+                            >
+                                <ResponsiveDimensionsControl
+                                    controlName={prefixTtlWrpMargin}
+                                    baseLabel={__("Margin", "essential-blocks")}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={prefixTtlWrpPadding}
+                                    baseLabel={__("Padding", "essential-blocks")}
+                                />
+                            </InspectorPanel.PanelBody>
 
-                        <InspectorPanel.PanelBody
-                            title={__("Border & Shadow", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BorderShadowControl
-                                controlName={prefixTtlWrpBdShadow}
-                            />
+                            <InspectorPanel.PanelBody
+                                title={__("Background", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <BackgroundControl
+                                    controlName={prefixTtlWrpBg}
+                                    noOverlay
+                                />
+                            </InspectorPanel.PanelBody>
+
+                            <InspectorPanel.PanelBody
+                                title={__("Border & Shadow", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <BorderShadowControl
+                                    controlName={prefixTtlWrpBdShadow}
+                                />
+                            </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>
-                    </InspectorPanel.PanelBody>
+                    )}
 
                     <InspectorPanel.PanelBody
                         title={__("Content", "essential-blocks")}
@@ -1187,95 +1205,99 @@ function Inspector(props) {
                             />
                         </InspectorPanel.PanelBody>
 
-                        <InspectorPanel.PanelBody
-                            title={__("Border & Shadow", "essential-blocks")}
-                            initialOpen={false}
-                        >
-                            <BorderShadowControl
-                                controlName={prefixContentBdShadow}
-                            />
-                        </InspectorPanel.PanelBody>
-                    </InspectorPanel.PanelBody>
-
-                    <InspectorPanel.PanelBody
-                        title={__("Caret", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <ToggleControl
-                            label={__(
-                                "Show Caret on Active Tab",
-                                "essential-blocks",
-                            )}
-                            checked={showCaret}
-                            onChange={() =>
-                                setAttributes({
-                                    showCaret: !showCaret,
-                                })
-                            }
-                        />
-
-
-
-                        {showCaret && (
-                            <>
-                                <ToggleControl
-                                    label={__(
-                                        "Add Caret Icon",
-                                        "essential-blocks",
-                                    )}
-                                    checked={addCaretIcon}
-                                    onChange={() =>
-                                        setAttributes({
-                                            addCaretIcon: !addCaretIcon,
-                                        })
-                                    }
+                        {tabStyle !== 'liquid-glass' && (
+                            <InspectorPanel.PanelBody
+                                title={__("Border & Shadow", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <BorderShadowControl
+                                    controlName={prefixContentBdShadow}
                                 />
-                                {addCaretIcon && (
-                                    <EBIconPicker
-                                        value={caretIcon}
-                                        onChange={(caretIcon) =>
-                                            setAttributes({
-                                                caretIcon,
-                                            })
-                                        }
-                                        title={__(
-                                            "Caret Icon",
-                                            "essential-blocks",
-                                        )}
-                                    />
-                                )}
-                                <Divider />
-
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Caret Size",
-                                        "essential-blocks",
-                                    )}
-                                    controlName={prefixCaretSize}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    noUnits
-                                />
-
-                                <ColorControl
-                                    label={__(
-                                        "Caret Color",
-                                        "essential-blocks",
-                                    )}
-                                    defaultColor={
-                                        objAttributes.caretColor.default
-                                    }
-                                    color={caretColor}
-                                    onChange={(caretColor) =>
-                                        setAttributes({
-                                            caretColor,
-                                        })
-                                    }
-                                />
-                            </>
+                            </InspectorPanel.PanelBody>
                         )}
                     </InspectorPanel.PanelBody>
+
+                    {tabStyle !== 'liquid-glass' && (
+                        <InspectorPanel.PanelBody
+                            title={__("Caret", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <ToggleControl
+                                label={__(
+                                    "Show Caret on Active Tab",
+                                    "essential-blocks",
+                                )}
+                                checked={showCaret}
+                                onChange={() =>
+                                    setAttributes({
+                                        showCaret: !showCaret,
+                                    })
+                                }
+                            />
+
+
+
+                            {showCaret && (
+                                <>
+                                    <ToggleControl
+                                        label={__(
+                                            "Add Caret Icon",
+                                            "essential-blocks",
+                                        )}
+                                        checked={addCaretIcon}
+                                        onChange={() =>
+                                            setAttributes({
+                                                addCaretIcon: !addCaretIcon,
+                                            })
+                                        }
+                                    />
+                                    {addCaretIcon && (
+                                        <EBIconPicker
+                                            value={caretIcon}
+                                            onChange={(caretIcon) =>
+                                                setAttributes({
+                                                    caretIcon,
+                                                })
+                                            }
+                                            title={__(
+                                                "Caret Icon",
+                                                "essential-blocks",
+                                            )}
+                                        />
+                                    )}
+                                    <Divider />
+
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Caret Size",
+                                            "essential-blocks",
+                                        )}
+                                        controlName={prefixCaretSize}
+                                        min={0}
+                                        max={100}
+                                        step={1}
+                                        noUnits
+                                    />
+
+                                    <ColorControl
+                                        label={__(
+                                            "Caret Color",
+                                            "essential-blocks",
+                                        )}
+                                        defaultColor={
+                                            objAttributes.caretColor.default
+                                        }
+                                        color={caretColor}
+                                        onChange={(caretColor) =>
+                                            setAttributes({
+                                                caretColor,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
+                        </InspectorPanel.PanelBody>
+                    )}
                 </InspectorPanel.Style>
             </InspectorPanel>
         </>

@@ -776,14 +776,18 @@ ${
 			${iconBdShdStylesHoverDesktop}
 		}
 
-		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon{
+		.${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon {
 			text-align:center;
 			color: ${iconColor};
 			${iconSizeDesktop}
 			${icnZ_Range ? `width:${icnZ_Range}px;` : ""}
 			${icnZ_Range ? `height:${icnZ_Range}px;` : ""}
 		}
-
+        .${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon svg {
+            fill: ${iconColor};
+            ${icnZ_Range ? `width:${icnZ_Range}px;` : ""}
+			${icnZ_Range ? `height:${icnZ_Range}px;` : ""}
+        }
 		`
         : ""
 }
@@ -845,6 +849,12 @@ ${
         ${titlePrefixBdShdStyesDesktop}
         transition: ${titlePrefixBgStyleTransition}, ${titlePrefixBdShdTransitionStyle};
 	}
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon svg {
+        fill:${titlePrefixColor};
+        ${titlePrefixIconWidthDesktop}
+		${titlePrefixIconHeightDesktop}
+    }
     
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
@@ -875,6 +885,12 @@ ${
         ${titleSuffixBdShdStyesDesktop}
         transition: ${titleSuffixBgStyleTransition}, ${titleSuffixBdShdTransitionStyle};
 	}
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon svg {
+        fill:${titleSuffixColor};
+        ${titleSuffixIconWidthDesktop}
+		${titleSuffixIconHeightDesktop}
+    }
 
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {
@@ -999,7 +1015,10 @@ ${
 			${TABicnZ_Range ? `width:${TABicnZ_Range}px;` : ""}
 			${TABicnZ_Range ? `height:${TABicnZ_Range}px;` : ""}
 		}
-
+        .${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon svg {
+            ${TABicnZ_Range ? `width:${TABicnZ_Range}px;` : ""}
+			${TABicnZ_Range ? `height:${TABicnZ_Range}px;` : ""}
+        }
 		`
         : ""
 }
@@ -1028,7 +1047,7 @@ ${
         ${titlePrefixPaddingTab}
         ${titlePrefixBdShdStyesTab}
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon {
 		${titlePrefixIconWidthTab}
 		${titlePrefixIconHeightTab}
 		${titlePrefixIconSizeTab}
@@ -1036,6 +1055,11 @@ ${
         ${titlePrefixPaddingTab}
         ${titlePrefixBdShdStyesTab}
 	}
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon svg {
+        ${titlePrefixIconWidthTab}
+		${titlePrefixIconHeightTab}
+    }
 
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
@@ -1051,7 +1075,7 @@ ${
         ${titleSuffixMarginTab}
         ${titleSuffixBdShdStyesTab}
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon {
 		${titleSuffixIconWidthTab}
 		${titleSuffixIconHeightTab}
 		${titleSuffixIconSizeTab}
@@ -1059,7 +1083,10 @@ ${
         ${titleSuffixMarginTab}
         ${titleSuffixBdShdStyesTab}
 	}
-
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon svg {
+        ${titleSuffixIconWidthTab}
+		${titleSuffixIconHeightTab}
+    }
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {
         ${titleSuffixBdShdStylesHoverTab}
@@ -1133,6 +1160,10 @@ ${
 				${MOBicnZ_Range ? `width:${MOBicnZ_Range}px;` : ""}
 				${MOBicnZ_Range ? `height:${MOBicnZ_Range}px;` : ""}
 			}
+            .${blockId}.eb-accordion-container .eb-accordion-icon-wrapper-${blockId} .eb-accordion-icon svg {
+                ${MOBicnZ_Range ? `width:${MOBicnZ_Range}px;` : ""}
+				${MOBicnZ_Range ? `height:${MOBicnZ_Range}px;` : ""}
+            }
 			`
             : ""
     }
@@ -1170,7 +1201,7 @@ ${
         ${titlePrefixPaddingMobile}
         ${titlePrefixBdShdStyesMobile}
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon {
 		${titlePrefixIconWidthMobile}
 		${titlePrefixIconHeightMobile}
 		${titlePrefixIconSizeMobile}
@@ -1178,6 +1209,11 @@ ${
         ${titlePrefixPaddingMobile}
         ${titlePrefixBdShdStyesMobile}
 	}
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-prefix-icon svg {
+        ${titlePrefixIconWidthMobile}
+		${titlePrefixIconHeightMobile}
+    }
     
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-prefix-icon {
@@ -1193,7 +1229,7 @@ ${
         ${titleSuffixMarginMobile}
         ${titleSuffixBdShdStyesMobile}
 	}
-    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon{
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon {
 		${titleSuffixIconWidthMobile}
 		${titleSuffixIconHeightMobile}
 		${titleSuffixIconSizeMobile}
@@ -1201,6 +1237,11 @@ ${
         ${titleSuffixMarginMobile}
         ${titleSuffixBdShdStyesMobile}
 	}
+
+    .${blockId}.eb-accordion-container .title-content-${blockId} .eb-accordion-title-suffix-icon svg {
+        ${titleSuffixIconWidthMobile}
+		${titleSuffixIconHeightMobile}
+    }
     
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-text,
     .${blockId}.eb-accordion-container .eb-accordion-title-wrapper:hover .title-content-${blockId} .eb-accordion-title-suffix-icon {

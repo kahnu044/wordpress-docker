@@ -262,6 +262,11 @@ const attributes = {
         default: "fas fa-angle-down",
     },
 
+    tabStyle: {
+        type: "string",
+        default: "default",
+    },
+
     // typography Control attributes
     ...generateTypographyAttributes(typoPrefixTabTitle, {
         fontSize: 16

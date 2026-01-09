@@ -172,14 +172,18 @@ function Inspector(props) {
                                 })
                             }
                         />
-                        <EBIconPicker
-                            value={icon}
-                            onChange={(icon) =>
-                                setAttributes({
-                                    icon,
-                                })
-                            }
-                        />
+                        {isIcon && (
+                            <>
+                                <EBIconPicker
+                                    value={icon}
+                                    onChange={(icon) =>
+                                        setAttributes({
+                                            icon,
+                                        })
+                                    }
+                                />
+                            </>
+                        )}
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__("Advanced Settings", "essential-blocks")}

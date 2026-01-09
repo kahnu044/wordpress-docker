@@ -3,9 +3,7 @@
  *
  */
 import { useBlockProps } from "@wordpress/block-editor";
-import {
-EBDisplayIcon, BlockProps
-} from "@essential-blocks/controls";
+import { EBDisplayIconSave, BlockProps } from "@essential-blocks/controls";
 
 const save = ({ attributes }) => {
     const {
@@ -23,10 +21,6 @@ const save = ({ attributes }) => {
         icon,
         formStyle,
     } = attributes;
-
-    const blockProps = useBlockProps.save({
-        className: "eb-form-field",
-    });
 
     return (
         <BlockProps.Save attributes={attributes} rootClass={"eb-form-field"}>
@@ -48,7 +42,12 @@ const save = ({ attributes }) => {
                     )}
 
                     <div className="eb-field-input-wrap">
-                        {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
+                        {isIcon && icon && (
+                            <EBDisplayIconSave
+                                icon={icon}
+                                className={"eb-input-icon"}
+                            />
+                        )}
                         <input
                             type={isHidden ? "hidden" : "text"}
                             id={fieldName}

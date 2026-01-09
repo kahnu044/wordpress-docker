@@ -11,20 +11,13 @@ import {
     WRAPPER_HEIGHT,
 } from "./constants";
 
-// import {
-// 	generateResponsiveRangeAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateDimensionsAttributes,
-// } from "../../../util/helpers";
-
 import {
     generateResponsiveRangeAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateDimensionsAttributes,
     generateShapeDividerAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     // responsive control attributes ⬇
@@ -61,6 +54,10 @@ const attributes = {
     contentAlign: {
         type: "string",
         default: "flex-start",
+    },
+    disableGeneralTab: {
+        type: "boolean",
+        default: true,
     },
     // responsive range controller
     ...generateResponsiveRangeAttributes(WRAPPER_WIDTH),

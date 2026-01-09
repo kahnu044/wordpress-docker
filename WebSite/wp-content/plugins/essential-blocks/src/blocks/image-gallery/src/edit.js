@@ -27,7 +27,7 @@ import {
 
 import {
     BlockProps, BrowseTemplate,
-    withBlockContext, EBButton, EBDisplayIcon
+    withBlockContext, EBButton, EBDisplayIconEdit
 } from "@essential-blocks/controls";
 
 import { NotFoundImg, gridGapCal } from './helpers';
@@ -669,13 +669,13 @@ function Edit(props) {
                                                                             <div className="eb-img-gallery-actions">
                                                                                 {!disableLightBox && (
                                                                                     <a href="" className="eb-img-gallery-action">
-                                                                                        <EBDisplayIcon icon={lightboxIcon} />
+                                                                                        <EBDisplayIconEdit icon={lightboxIcon} />
                                                                                     </a>
                                                                                 )}
 
                                                                                 {addCustomLink && (
                                                                                     <a href="" className="eb-img-gallery-action">
-                                                                                        <EBDisplayIcon icon={linkIcon} />
+                                                                                        <EBDisplayIconEdit icon={linkIcon} />
                                                                                     </a>
                                                                                 )}
                                                                             </div>
@@ -696,13 +696,13 @@ function Edit(props) {
                                                                         <div className="eb-img-gallery-actions">
                                                                             {!disableLightBox && (
                                                                                 <a href="" className="eb-img-gallery-action">
-                                                                                    <EBDisplayIcon icon={lightboxIcon} />
+                                                                                    <EBDisplayIconEdit icon={lightboxIcon} />
                                                                                 </a>
                                                                             )}
 
                                                                             {addCustomLink && (
                                                                                 <a href="" className="eb-img-gallery-action">
-                                                                                    <EBDisplayIcon icon={linkIcon} />
+                                                                                    <EBDisplayIconEdit icon={linkIcon} />
                                                                                 </a>
                                                                             )}
                                                                         </div>

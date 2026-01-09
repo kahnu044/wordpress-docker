@@ -1,10 +1,20 @@
 import { createRoot, createRef } from "@wordpress/element";
 import domReady from "@wordpress/dom-ready";
-const { sanitizeIconValue } = window.eb_frontend;
 /**
  * External dependencies
  */
 import Slider from "react-slick";
+
+/**
+ * Get SVG functions from global eb_frontend
+ */
+const {
+    EBRenderIconWithSVG,
+    loadSvgIcons,
+    generateArrowHTML
+} = window.eb_frontend;
+
+
 
 domReady(function () {
     //Execute after DOM loads.
@@ -28,6 +38,8 @@ domReady(function () {
 
             const slider = createRef();
 
+            console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
+
             const SampleNextArrow = (props) => {
                 const { className, style, onClick, arrowNextIcon } = props;
                 return (
@@ -36,10 +48,7 @@ domReady(function () {
                         style={{ ...style, display: "block" }}
                         onClick={onClick}
                     >
-                        <i
-                            aria-hidden="true"
-                            className={sanitizeIconValue(arrowNextIcon)}
-                        ></i>
+                        {EBRenderIconWithSVG(arrowNextIcon)}
                     </div>
                 );
             };
@@ -52,10 +61,7 @@ domReady(function () {
                         style={{ ...style, display: "block" }}
                         onClick={onClick}
                     >
-                        <i
-                            aria-hidden="true"
-                            className={sanitizeIconValue(arrowPrevIcon)}
-                        ></i>
+                        {EBRenderIconWithSVG(arrowPrevIcon)}
                     </div>
                 );
             };
@@ -217,6 +223,11 @@ domReady(function () {
             if (rootElement) {
                 const root = createRoot(rootElement);
                 root.render(<SliderComponent />);
+
+                // Handle SVG URL loading after render
+                setTimeout(() => {
+                    loadSvgIcons(rootElement);
+                }, 100);
             }
         }
 
@@ -228,17 +239,20 @@ domReady(function () {
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
             let showLightbox = wrapper.getAttribute("data-lightbox");
+console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
 
-            settings.prevArrow = `<div class="slick-prev"><i aria-hidden="true" class="${sanitizeIconValue(
-                arrowPrevIcon,
-            )}"></i></div>`;
-            settings.nextArrow = `<div class="slick-next"><i aria-hidden="true" class="${sanitizeIconValue(
-                arrowNextIcon,
-            )}"></i></div>`;
+
+            settings.prevArrow = generateArrowHTML(arrowPrevIcon, 'prev');
+            settings.nextArrow = generateArrowHTML(arrowNextIcon, 'next');
 
             let slickType = wrapper.querySelector(".eb-slider-init");
 
             jQuery(slickType).slick(settings);
+
+            // Load SVG icons for v2
+            setTimeout(() => {
+                loadSvgIcons(wrapper);
+            }, 100);
 
             if (showLightbox == "true") {
                 jQuery(slickType).slickLightbox({
@@ -277,6 +291,8 @@ domReady(function () {
 
             const $slick = jQuery(slickType);
 
+console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
+
             $slick.slick({
                 lazyLoad: "progressive",
                 arrows,
@@ -291,30 +307,45 @@ domReady(function () {
                 speed,
                 vertical,
                 rtl: isRTL,
-                prevArrow: `<div class="slick-prev"><i aria-hidden="true" class="${sanitizeIconValue(
-                    arrowPrevIcon,
-                )}"></i></div>`,
-                nextArrow: `<div class="slick-next"><i aria-hidden="true" class="${sanitizeIconValue(
-                    arrowNextIcon,
-                )}"></i></div>`,
+                prevArrow: generateArrowHTML(arrowPrevIcon, 'prev'),
+                nextArrow: generateArrowHTML(arrowNextIcon, 'next'),
                 responsive: [...responsive],
                 cssEase: "linear",
             });
+
+            // Load SVG icons for v3/v4
+            setTimeout(() => {
+                loadSvgIcons(wrapper);
+            }, 100);
 
             // ✅ Recalculate layout when image is lazy-loaded
             $slick.on(
                 "lazyLoaded",
                 function (event, slick, image, imageSource) {
                     slick.$slider.slick("setPosition");
-                    // console.log('lazyLoaded');
+
+                    // Force height recalculation for adaptiveHeight
+                    if (adaptiveHeight) {
+                        setTimeout(function () {
+                            slick.$slider.slick("setPosition");
+                        }, 50);
+                    }
                 },
             );
 
-            // $slick.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
-            //     console.log('beforeChange');
-            //     // slick.reInit();
-            //     slick.$slider.slick('setPosition');
-            // });
+            // Force height calculation after initialization for adaptiveHeight
+            if (adaptiveHeight) {
+                setTimeout(function () {
+                    $slick.slick("setPosition");
+                }, 100);
+            }
+
+            // Recalculate on slide change for adaptiveHeight
+            $slick.on('afterChange', function (event, slick, currentSlide) {
+                if (adaptiveHeight) {
+                    slick.$slider.slick('setPosition');
+                }
+            });
 
             if (showLightbox == "true") {
                 $slick.slickLightbox({

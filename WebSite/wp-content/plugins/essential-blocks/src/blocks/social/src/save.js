@@ -15,7 +15,11 @@ export default function Save({ attributes }) {
         <BlockProps.Save attributes={attributes}>
             <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                 <div className={`${blockId} eb-social-links-wrapper`}>
-                    <SocialLinks profilesOnly={profilesOnly} icnEffect={icnEffect} />
+                    <SocialLinks
+                        profilesOnly={profilesOnly}
+                        icnEffect={icnEffect}
+                        isEdit={false}
+                    />
                 </div>
             </div>
         </BlockProps.Save>

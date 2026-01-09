@@ -15,7 +15,7 @@ import defaultAttributes from './attributes';
 
 import {
     textInsideForEdit,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext
 } from "@essential-blocks/controls";
@@ -129,7 +129,7 @@ function Edit(props) {
                         {media === "icon" ? (
                             <div className="icon-img-wrapper">
                                 <div className="eb-icon ">
-                                    <EBDisplayIcon icon={selectedIcon} className={`eb-counter-icon-data-selector`} />
+                                    <EBDisplayIconEdit icon={selectedIcon} className={`eb-counter-icon-data-selector`} />
                                 </div>
                             </div>
                         ) : null}

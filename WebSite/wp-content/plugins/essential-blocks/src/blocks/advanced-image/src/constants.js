@@ -39,9 +39,9 @@ export const TEXT_ALIGN = [
     { label: __("Justify", "essential-blocks"), value: "justify" },
 ];
 export const IMAGE_ALIGN = [
-    { label: __("Left", "essential-blocks"), value: "0" },
-    { label: __("Center", "essential-blocks"), value: "0 auto" },
-    { label: __("Right", "essential-blocks"), value: "0 0 0 auto" },
+    { label: __("Left", "essential-blocks"), value: "flex-start" },
+    { label: __("Center", "essential-blocks"), value: "center" },
+    { label: __("Right", "essential-blocks"), value: "flex-end" },
 ];
 
 export const HOVER_EFFECT = [

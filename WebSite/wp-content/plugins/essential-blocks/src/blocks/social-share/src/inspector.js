@@ -28,7 +28,8 @@ import {
     SortControl,
     EBIconPicker,
     InspectorPanel,
-    EBTextControl
+    EBTextControl,
+    socialShareIcons,
 } from "@essential-blocks/controls";
 
 import {
@@ -149,55 +150,57 @@ function Inspector({ attributes, setAttributes }) {
                     title={__("Social Media", "essential-blocks")}
                     value={each.icon || null}
                     onChange={(value) => onProfileChange('icon', value, i)}
+                    enableSvgUpload={false}
+                    icons={{ fontAwesome: socialShareIcons.fontAwesome, dashIcon: socialShareIcons.dashicons }}
                 />
                 <EBTextControl
                     label={__("Text", "essential-blocks")}
                     className="social-share-name-input"
                     value={each.iconText || ""}
-                    onChange={(value) => onProfileChange('iconText', value, i)}
+                    onChange={(value) => onProfileChange("iconText", value, i)}
                     enableAi={true}
                 />
                 <ColorControl
                     label={__("Icon Color", "essential-blocks")}
                     color={each.color || ""}
-                    onChange={(value) => onProfileChange('color', value, i)}
+                    onChange={(value) => onProfileChange("color", value, i)}
                 />
                 <ColorControl
                     label={__("Icon Background Color", "essential-blocks")}
                     color={each.backgroundColor}
-                    onChange={(value) => onProfileChange('backgroundColor', value, i)}
+                    onChange={(value) =>
+                        onProfileChange("backgroundColor", value, i)
+                    }
                 />
                 <ColorControl
                     label={__("Separator Color", "essential-blocks")}
                     color={each.separatorColor}
-                    onChange={(value) => onProfileChange('separatorColor', value, i)}
+                    onChange={(value) =>
+                        onProfileChange("separatorColor", value, i)
+                    }
                 />
             </div>
-        ))
-    }
+        ));
+    };
 
     return (
-        <InspectorPanel advancedControlProps={{
-            marginPrefix: tmbWrapMarginConst,
-            paddingPrefix: tmbWrapPaddingConst,
-            backgroundPrefix: WrpBgConst,
-            borderPrefix: WrpBdShadowConst,
-            hasMargin: true
-        }}>
+        <InspectorPanel
+            advancedControlProps={{
+                marginPrefix: tmbWrapMarginConst,
+                paddingPrefix: tmbWrapPaddingConst,
+                backgroundPrefix: WrpBgConst,
+                borderPrefix: WrpBdShadowConst,
+                hasMargin: true,
+            }}
+        >
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody
-                    title={__(
-                        "Share Buttons",
-                        "essential-blocks"
-                    )}
+                    title={__("Share Buttons", "essential-blocks")}
                     initialOpen={true}
                 >
                     <>
                         <ToggleControl
-                            label={__(
-                                "Show Title",
-                                "essential-blocks"
-                            )}
+                            label={__("Show Title", "essential-blocks")}
                             checked={showTitle}
                             onChange={() =>
                                 setAttributes({
@@ -206,10 +209,7 @@ function Inspector({ attributes, setAttributes }) {
                             }
                         />
                         <ToggleControl
-                            label={__(
-                                "Floating",
-                                "essential-blocks"
-                            )}
+                            label={__("Floating", "essential-blocks")}
                             checked={isFloating}
                             onChange={() =>
                                 setAttributes({
@@ -220,10 +220,17 @@ function Inspector({ attributes, setAttributes }) {
                         <Divider />
                         <SortControl
                             items={attributes.socialDetails}
-                            labelKey={'iconText'}
-                            onSortEnd={socialDetails => setAttributes({ socialDetails })}
-                            onDeleteItem={index => {
-                                setAttributes({ socialDetails: attributes.socialDetails.filter((each, i) => i !== index) })
+                            labelKey={"iconText"}
+                            onSortEnd={(socialDetails) =>
+                                setAttributes({ socialDetails })
+                            }
+                            onDeleteItem={(index) => {
+                                setAttributes({
+                                    socialDetails:
+                                        attributes.socialDetails.filter(
+                                            (each, i) => i !== index,
+                                        ),
+                                });
                             }}
                             hasSettings={true}
                             settingsComponents={getSocialDetailsComponents()}
@@ -235,41 +242,25 @@ function Inspector({ attributes, setAttributes }) {
             <InspectorPanel.Style>
                 <>
                     <InspectorPanel.PanelBody
-                        title={__(
-                            "Icons Styles",
-                            "essential-blocks"
-                        )}
+                        title={__("Icons Styles", "essential-blocks")}
                         initialOpen={true}
                     >
                         <BaseControl
-                            label={__(
-                                "Icon Shape",
-                                "essential-blocks"
-                            )}
+                            label={__("Icon Shape", "essential-blocks")}
                         >
                             <ButtonGroup>
-                                {ICON_SHAPE.map(
-                                    (item, index) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={
-                                                iconShape !==
-                                                item.value
-                                            }
-                                            isPrimary={
-                                                iconShape ===
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                onShapeChange(
-                                                    item.value
-                                                )
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
-                                )}
+                                {ICON_SHAPE.map((item, index) => (
+                                    <Button
+                                        key={index}
+                                        isSecondary={iconShape !== item.value}
+                                        isPrimary={iconShape === item.value}
+                                        onClick={() =>
+                                            onShapeChange(item.value)
+                                        }
+                                    >
+                                        {item.label}
+                                    </Button>
+                                ))}
                             </ButtonGroup>
                         </BaseControl>
 
@@ -290,22 +281,14 @@ function Inspector({ attributes, setAttributes }) {
 
                         {showTitle && (
                             <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    TITLE_TYPOGRAPHY
-                                }
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={TITLE_TYPOGRAPHY}
                             />
                         )}
 
                         <ResponsiveRangeController
                             noUnits
-                            baseLabel={__(
-                                "Size",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Size", "essential-blocks")}
                             controlName={rangeIconSize}
                             min={5}
                             max={300}
@@ -316,23 +299,15 @@ function Inspector({ attributes, setAttributes }) {
                             <>
                                 <ResponsiveRangeController
                                     noUnits
-                                    baseLabel={__(
-                                        "Height",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={
-                                        rangeIconHeight
-                                    }
+                                    baseLabel={__("Height", "essential-blocks")}
+                                    controlName={rangeIconHeight}
                                     min={0}
                                     max={800}
                                     step={1}
                                 />
                                 <ResponsiveRangeController
                                     noUnits
-                                    baseLabel={__(
-                                        "Width",
-                                        "essential-blocks"
-                                    )}
+                                    baseLabel={__("Width", "essential-blocks")}
                                     controlName={rangeIconWidth}
                                     min={0}
                                     max={800}
@@ -347,11 +322,9 @@ function Inspector({ attributes, setAttributes }) {
                                     noUnits
                                     baseLabel={__(
                                         "Floating Width",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    controlName={
-                                        rangeFloatingWidth
-                                    }
+                                    controlName={rangeFloatingWidth}
                                     min={0}
                                     max={800}
                                     step={1}
@@ -360,11 +333,9 @@ function Inspector({ attributes, setAttributes }) {
                                     noUnits
                                     baseLabel={__(
                                         "Floating Height",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    controlName={
-                                        rangeFloatingHeight
-                                    }
+                                    controlName={rangeFloatingHeight}
                                     min={0}
                                     max={2000}
                                     step={1}
@@ -374,10 +345,7 @@ function Inspector({ attributes, setAttributes }) {
 
                         <ResponsiveRangeController
                             noUnits
-                            baseLabel={__(
-                                "Margin",
-                                "essential-blocks"
-                            )}
+                            baseLabel={__("Margin", "essential-blocks")}
                             controlName={rangeIconMargin}
                             min={0}
                             max={250}
@@ -396,11 +364,9 @@ function Inspector({ attributes, setAttributes }) {
                                     noUnits
                                     baseLabel={__(
                                         "Spacing",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    controlName={
-                                        rangeIconDistance
-                                    }
+                                    controlName={rangeIconDistance}
                                     min={0}
                                     max={100}
                                     step={1}
@@ -409,11 +375,9 @@ function Inspector({ attributes, setAttributes }) {
                                     noUnits
                                     baseLabel={__(
                                         "Rows Gap",
-                                        "essential-blocks"
+                                        "essential-blocks",
                                     )}
-                                    controlName={
-                                        rangeIconRowGap
-                                    }
+                                    controlName={rangeIconRowGap}
                                     min={0}
                                     max={100}
                                     step={1}
@@ -426,39 +390,29 @@ function Inspector({ attributes, setAttributes }) {
                                     }}
                                 >
                                     <i>
-                                        N.B. 'Rows Gap' is used
-                                        when you have multiple
-                                        rows of social profiles.
-                                        Normally in case of only
-                                        one row, it's not needed
+                                        N.B. 'Rows Gap' is used when you have
+                                        multiple rows of social profiles.
+                                        Normally in case of only one row, it's
+                                        not needed
                                     </i>
                                 </label>
                             </>
                         )}
 
                         <ColorControl
-                            label={__(
-                                "Hover Color",
-                                "essential-blocks"
-                            )}
+                            label={__("Hover Color", "essential-blocks")}
                             color={hvIcnColor}
-                            attributeName={'hvIcnColor'}
+                            attributeName={"hvIcnColor"}
                         />
 
                         <ColorControl
-                            label={__(
-                                "Hover Background",
-                                "essential-blocks"
-                            )}
+                            label={__("Hover Background", "essential-blocks")}
                             color={hvIcnBgc}
-                            attributeName={'hvIcnBgc'}
+                            attributeName={"hvIcnBgc"}
                         />
 
                         <SelectControl
-                            label={__(
-                                "Icon Hover Effect",
-                                "essential-blocks"
-                            )}
+                            label={__("Icon Hover Effect", "essential-blocks")}
                             value={icnEffect}
                             options={HOVER_EFFECT}
                             onChange={(icnEffect) => {

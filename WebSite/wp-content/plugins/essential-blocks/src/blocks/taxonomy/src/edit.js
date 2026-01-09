@@ -24,7 +24,7 @@ import {
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     NoticeComponent,
 } from "@essential-blocks/controls";
 
@@ -395,7 +395,7 @@ function Edit(props) {
 
                                         {prefixType === "icon" &&
                                             prefixIcon && (
-                                                <EBDisplayIcon
+                                                <EBDisplayIconEdit
                                                     icon={prefixIcon}
                                                     className={`eb-taxonomy-prefix-icon`}
                                                 />
@@ -427,7 +427,7 @@ function Edit(props) {
 
                                         {suffixType === "icon" &&
                                             suffixIcon && (
-                                                <EBDisplayIcon
+                                                <EBDisplayIconEdit
                                                     icon={suffixIcon}
                                                     className={`eb-taxonomy-suffix-icon`}
                                                 />

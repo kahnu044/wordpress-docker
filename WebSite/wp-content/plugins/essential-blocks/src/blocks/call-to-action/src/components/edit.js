@@ -17,7 +17,7 @@ import Style from "./style";
 import defaultAttributes from './attributes';
 
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext
@@ -96,7 +96,7 @@ function Edit(props) {
                                 } else if (value === "icon") {
                                     return (
                                         showIcon && (
-                                            <EBDisplayIcon className="eb-cia-icon" icon={icon} />
+                                            <EBDisplayIconEdit className="eb-cia-icon" icon={icon} />
                                         )
                                     );
                                 } else if (value === "description") {

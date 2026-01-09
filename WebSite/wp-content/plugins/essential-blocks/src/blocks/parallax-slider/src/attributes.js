@@ -17,14 +17,6 @@ import {
     BUTTON_TYPOGRAPHY
 } from "./constants/typography-constant";
 
-// import {
-// 	generateDimensionsAttributes,
-// 	generateTypographyAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes,
-// } from "../../../util/helpers";
-
 import {
     generateDimensionsAttributes,
     generateTypographyAttributes,

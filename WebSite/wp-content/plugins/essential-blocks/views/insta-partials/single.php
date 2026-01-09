@@ -2,9 +2,8 @@
 
 $_item_wrapper_classes = array(
 	( $layout === 'card' ) ? 'instagram__gallery__item--' . $cardStyle : 'instagram__gallery__item--' . $overlayStyle,
-	isset( $hasEqualImages ) ? 'has__equal__height' : '',
+	isset( $hasEqualImages ) && $hasEqualImages ? 'has__equal__height' : '',
 );
-
 ?>
 
 <div class="instagram__gallery__col">

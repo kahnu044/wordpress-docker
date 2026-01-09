@@ -29,6 +29,10 @@ $stack-overflow: #ffa500;
 	a {
 		background: #000;
 		color: #fff;
+		svg {
+			display: block;
+			object-fit: contain;
+		}
 	}
 
 	.facebook-f-original {

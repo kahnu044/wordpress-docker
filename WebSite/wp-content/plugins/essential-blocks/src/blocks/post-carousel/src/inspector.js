@@ -79,11 +79,12 @@ import {
     BackgroundControl,
     CustomQuery,
     faArrowIcons,
+    dashiconsArrows,
     DynamicInputControl,
     EBIconPicker,
     InspectorPanel,
     ImageAvatar,
-    sanitizeIconValue
+    sanitizeIconValue,
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -188,20 +189,21 @@ function Inspector(props) {
         //Set Meta Options
         if (updatedMeta.then) {
             updatedMeta.then((resp) => {
-                const modifiedArray = resp.map(item => ({
+                const modifiedArray = resp.map((item) => ({
                     ...item,
-                    options: item.options.map(option => {
+                    options: item.options.map((option) => {
                         if (typeof option.label === "object") {
-                            const prefix = EssentialBlocksProLocalize?.eb_dynamic_tags
-                                ? `${EssentialBlocksProLocalize.eb_dynamic_tags}/`
-                                : "";
+                            const prefix =
+                                EssentialBlocksProLocalize?.eb_dynamic_tags
+                                    ? `${EssentialBlocksProLocalize.eb_dynamic_tags}/`
+                                    : "";
                             return {
                                 ...option.label,
-                                value: `${prefix}${option.label.value}/settings=[]`
+                                value: `${prefix}${option.label.value}/settings=[]`,
                             };
                         }
                         return { ...option };
-                    })
+                    }),
                 }));
                 setMetaOptions(modifiedArray);
             });
@@ -501,16 +503,24 @@ function Inspector(props) {
 
                         {showTitle && (
                             <>
-                                <BaseControl label={__("Title Tag", "essential-blocks")}>
+                                <BaseControl
+                                    label={__("Title Tag", "essential-blocks")}
+                                >
                                     <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
                                         {TITLE_TAGS.map((item, key) => (
                                             <Button
                                                 key={key}
                                                 // isLarge
-                                                isPrimary={titleTag === item.value}
-                                                isSecondary={titleTag !== item.value}
+                                                isPrimary={
+                                                    titleTag === item.value
+                                                }
+                                                isSecondary={
+                                                    titleTag !== item.value
+                                                }
                                                 onClick={() =>
-                                                    setAttributes({ titleTag: item.value })
+                                                    setAttributes({
+                                                        titleTag: item.value,
+                                                    })
                                                 }
                                             >
                                                 {item.label}
@@ -1425,8 +1435,10 @@ function Inspector(props) {
                                     "Left Arrow Icon",
                                     "essential-blocks",
                                 )}
-                                icons={{ fontAwesome: faArrowIcons }}
-                                disableDashicon={true}
+                                icons={{
+                                    fontAwesome: faArrowIcons,
+                                    dashIcon: dashiconsArrows,
+                                }}
                             />
                             <EBIconPicker
                                 value={rightArrowIcon}
@@ -1439,8 +1451,10 @@ function Inspector(props) {
                                     "Right Arrow Icon",
                                     "essential-blocks",
                                 )}
-                                icons={{ fontAwesome: faArrowIcons }}
-                                disableDashicon={true}
+                                icons={{
+                                    fontAwesome: faArrowIcons,
+                                    dashIcon: dashiconsArrows,
+                                }}
                             />
                             <ButtonGroup className="eb-inspector-btn-group">
                                 {NORMAL_HOVER.map((item, index) => (

@@ -135,7 +135,20 @@ function Edit(props) {
         if (thumbs.length > 0 && instagramToken.length > 0) {
             fetchInstagramDom();
         }
-    }, [thumbs]);
+
+        // Cleanup function to destroy isotope instances
+        return () => {
+            const instagrams = document.querySelectorAll(
+                `.${blockId} .eb-instagram__gallery`
+            );
+            for (let instagram of instagrams) {
+                if (instagram.isotope) {
+                    instagram.isotope.destroy();
+                    instagram.isotope = null;
+                }
+            }
+        };
+    }, [thumbs, hasEqualImages]);
 
     const fetchInstagramDom = () => {
         const instagrams = document.querySelectorAll(
@@ -143,16 +156,23 @@ function Edit(props) {
         );
         setTimeout(() => {
             for (let instagram of instagrams) {
-                var iso;
-
                 imagesLoaded(instagram, function () {
-                    iso = new Isotope(instagram, {
-                        itemSelector: ".instagram__gallery__col",
-                        percentPosition: true,
-                        masonry: {
-                            columnWidth: ".instagram__gallery__col",
-                        },
-                    });
+                    // Destroy existing isotope instance first
+                    if (instagram.isotope) {
+                        instagram.isotope.destroy();
+                        instagram.isotope = null;
+                    }
+
+                    // Only apply masonry layout when hasEqualImages is false
+                    if (!hasEqualImages) {
+                        instagram.isotope = new Isotope(instagram, {
+                            itemSelector: ".instagram__gallery__col",
+                            percentPosition: true,
+                            masonry: {
+                                columnWidth: ".instagram__gallery__col",
+                            },
+                        });
+                    }
                 });
             }
             setLoading(false);

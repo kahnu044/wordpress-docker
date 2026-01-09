@@ -143,7 +143,9 @@ const attributes = {
     ...generateDimensionsAttributes(FIELD_PADDING),
     ...generateBorderShadowAttributes(FIELD_BORDER),
     ...generateDimensionsAttributes(LABEL_MARGIN),
-    ...generateResponsiveRangeAttributes(ICON_SIZE),
+    ...generateResponsiveRangeAttributes(ICON_SIZE, {
+        defaultRange: 18,
+    }),
 };
 
 export default attributes;

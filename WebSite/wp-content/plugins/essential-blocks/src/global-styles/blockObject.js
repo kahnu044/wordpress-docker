@@ -1,11 +1,13 @@
 
 
+import AddToCart from "./block-defaults/add-to-cart";
 import Accordion from "./block-defaults/accordion";
 import AdvancedHeading from "./block-defaults/advanced-heading";
 import AdvancedImage from "./block-defaults/advanced-image";
 import AdvancedTabs from "./block-defaults/advanced-tabs";
 import AdvancedVideo from "./block-defaults/advanced-video";
 import AdvancedNavigation from "./block-defaults/advanced-navigation";
+import Breadcrumbs from "./block-defaults/breadcrumbs";
 import EBButton from "./block-defaults/button";
 import CallToAction from "./block-defaults/call-to-action";
 import Countdown from "./block-defaults/countdown";
@@ -26,7 +28,12 @@ import ParallaxSlider from "./block-defaults/parallax-slider";
 import Popup from "./block-defaults/popup";
 import PostCarousel from "./block-defaults/post-carousel";
 import PostGrid from "./block-defaults/post-grid";
+import PostMeta from "./block-defaults/post-meta";
 import PricingTable from "./block-defaults/pricing-table";
+import ProductDetails from "./block-defaults/product-details";
+import ProductImages from "./block-defaults/product-images";
+import ProductPrice from "./block-defaults/product-price";
+import ProductRating from "./block-defaults/product-rating";
 import ProgressBar from "./block-defaults/progress-bar";
 import Row from "./block-defaults/row";
 import Slider from "./block-defaults/slider";
@@ -34,6 +41,7 @@ import Social from "./block-defaults/social";
 import SocialShare from "./block-defaults/social-share";
 import TableOfContents from "./block-defaults/table-of-contents";
 import TeamMember from "./block-defaults/team-member";
+import Taxonomy from "./block-defaults/taxonomy";
 import Testimonial from "./block-defaults/testimonial";
 import ToggleContent from "./block-defaults/toggle-content";
 import TypingText from "./block-defaults/typing-text";
@@ -42,8 +50,15 @@ import Wpforms from "./block-defaults/wpforms";
 import Wrapper from "./block-defaults/wrapper";
 import GoogleMap from "./block-defaults/google-map";
 import Form from "./block-defaults/form";
+import ShapeDivider from "./block-defaults/shape-divider";
+import Icon from "./block-defaults/icon";
+import Text from "./block-defaults/text";
 
 export const blockComponentObject = {
+    add_to_cart: {
+        component: AddToCart,
+        preview: true,
+    },
     advanced_heading: {
         component: AdvancedHeading,
         preview: true,
@@ -73,6 +88,10 @@ export const blockComponentObject = {
     advanced_navigation: {
         component: AdvancedNavigation,
         preview: false,
+    },
+    breadcrumbs: {
+        component: Breadcrumbs,
+        preview: true,
     },
     button: {
         component: EBButton,
@@ -163,6 +182,10 @@ export const blockComponentObject = {
             ],
         },
     },
+    icon: {
+        component: Icon,
+        preview: true,
+    },
     infobox: {
         component: Infobox,
         preview: true,
@@ -226,8 +249,28 @@ export const blockComponentObject = {
         component: PostGrid,
         preview: false,
     },
+    post_meta: {
+        component: PostMeta,
+        preview: true,
+    },
     pricing_table: {
         component: PricingTable,
+        preview: true,
+    },
+    product_details: {
+        component: ProductDetails,
+        preview: true,
+    },
+    product_images: {
+        component: ProductImages,
+        preview: true,
+    },
+    product_price: {
+        component: ProductPrice,
+        preview: true,
+    },
+    product_rating: {
+        component: ProductRating,
         preview: true,
     },
     progress_bar: {
@@ -237,6 +280,10 @@ export const blockComponentObject = {
     row: {
         component: Row,
         preview: false,
+    },
+    shape_divider: {
+        component: ShapeDivider,
+        preview: true,
     },
     slider: {
         component: Slider,
@@ -274,8 +321,16 @@ export const blockComponentObject = {
         component: TeamMember,
         preview: true,
     },
+    taxonomy: {
+        component: Taxonomy,
+        preview: true,
+    },
     testimonial: {
         component: Testimonial,
+        preview: true,
+    },
+    text: {
+        component: Text,
         preview: true,
     },
     toggle_content: {

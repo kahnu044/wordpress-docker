@@ -39,6 +39,7 @@ import {
     wrapMarginConst,
     wrapPaddingConst,
     HEIGHT_UNITS,
+    ICON_SIZE,
 } from "./constants";
 
 import {
@@ -213,6 +214,16 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 "Button Icon",
                                                 "essential-blocks",
                                             )}
+                                        />
+                                        <ResponsiveRangeController
+                                            baseLabel={__(
+                                                "Icon Size",
+                                                "essential-blocks",
+                                            )}
+                                            controlName={ICON_SIZE}
+                                            min={1}
+                                            max={1000}
+                                            step={1}
                                         />
                                         <BaseControl
                                             label={__(
@@ -520,7 +531,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             value={attributes.scrollOffset}
                                             onChange={(value) =>
                                                 setAttributes({
-                                                    scrollOffset: parseInt(value) || 0,
+                                                    scrollOffset:
+                                                        parseInt(value) || 0,
                                                 })
                                             }
                                             help={__(

@@ -2,7 +2,12 @@
  * WordPress dependencies
  */
 import apiFetch from "@wordpress/api-fetch";
-const { sanitizeIconValue} = window.eb_frontend;
+
+const {
+    generateArrowHTML,
+    loadSvgIcons
+} = window.eb_frontend;
+
 const rootURL = EssentialBlocksLocalize
     ? EssentialBlocksLocalize.rest_rootURL
     : false;
@@ -49,12 +54,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 autoplaySpeed,
                 speed,
                 rtl: isRTL,
-                prevArrow: `<div class='slick-arrow slick-prev'><i class='${sanitizeIconValue(
-                    attributes.leftArrowIcon,
-                )}'></i></div>`,
-                nextArrow: `<div class='slick-arrow slick-next'><i class='${sanitizeIconValue(
-                    attributes.rightArrowIcon,
-                )}'></i></div>`,
+                prevArrow: generateArrowHTML(attributes.leftArrowIcon, 'prev'),
+                nextArrow: generateArrowHTML(attributes.rightArrowIcon, 'next'),
                 responsive: [
                     {
                         breakpoint: 1024,
@@ -70,6 +71,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     },
                 ],
             });
+
+            // Load SVG icons after slick initialization
+            setTimeout(() => {
+                loadSvgIcons(wrapper);
+            }, 100);
         })(jQuery);
     }
 });

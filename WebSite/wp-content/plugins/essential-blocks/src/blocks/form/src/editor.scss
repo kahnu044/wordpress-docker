@@ -10,11 +10,9 @@
 
 	.eb-form-editor-formtype-select {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
 		gap: 15px;
-		flex-wrap: wrap;
-		padding: 20px 0 30px;
+		padding: 20px 10px 30px;
 		border: 1px solid #d5d5db;
 
 		h2 {
@@ -23,6 +21,14 @@
 			font-size: 16px;
 			color: #4b4b4b;
 			font-weight: 600;
+		}
+
+		.eb-form-editor-formtype-item-wrapper {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 12px;
+			flex-wrap: wrap;
 		}
 
 		.eb-form-editor-formtype-item {
@@ -59,6 +65,14 @@
 					color: #888;
 				}
 			}
+		}
+
+		.eb-is-pro-message {
+			margin: 0;
+			font-size: 16px;
+			line-height: 1.2;
+			padding: 10px;
+			transition: all 0.3s ease;
 		}
 	}
 

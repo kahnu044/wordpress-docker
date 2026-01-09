@@ -232,11 +232,13 @@ class Breadcrumbs extends Block
         $_parent_classes = [
             'eb-parent-wrapper',
             'eb-parent-' . $attributes[ 'blockId' ],
-            'root-' . $attributes[ 'blockId' ],
             $classHook
          ];
 
-        $parent_attributes = get_block_wrapper_attributes( [ 'class' => implode( ' ', $_parent_classes ) ] );
+         $wrapper_attributes = get_block_wrapper_attributes(['class' => 'root-' . $attributes[ 'blockId' ]]
+	);
+
+        $parent_attributes = 'class="' . esc_attr( implode( ' ', $_parent_classes ) ) . '"';
 
         $breadcrumb_markup = '';
         $product           = false;
@@ -257,15 +259,18 @@ class Breadcrumbs extends Block
 
         $wrapper = sprintf( '
         <div %1$s>
-            <div aria-label="Breadcrumb" class="eb-breadcrumb-wrapper %2$s" data-id="%2$s">
-                %3$s
-                %4$s
+            <div %5$s>
+                <div aria-label="Breadcrumb" class="eb-breadcrumb-wrapper %2$s" data-id="%2$s">
+                    %3$s
+                    %4$s
+                </div>
             </div>
         </div>',
-            $parent_attributes,
+            $wrapper_attributes,
             $attributes[ 'blockId' ],
             $prefix_markup,
             $breadcrumb_markup,
+            $parent_attributes
         );
 
         return wp_kses_post( $wrapper );

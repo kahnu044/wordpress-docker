@@ -25,7 +25,7 @@ import {
     ebJsonStringCheck,
     CustomQuery,
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BrowseTemplate,
     BlockProps,
     withBlockContext,
@@ -747,7 +747,7 @@ const Edit = (props) => {
                                                                         <div className="ebpg-readmore-btn">
                                                                             <a href={"#"}>
                                                                                 {addIcon && iconPosition === "left" ? (
-                                                                                    <EBDisplayIcon
+                                                                                    <EBDisplayIconEdit
                                                                                         icon={icon}
                                                                                         className={
                                                                                             "eb-button-icon eb-button-icon-left hvr-icon"

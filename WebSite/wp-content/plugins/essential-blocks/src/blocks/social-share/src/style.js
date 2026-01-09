@@ -399,6 +399,11 @@ export default function Style(props) {
 		${showTitle ? titleTypographyDesktop : `font-size: ${iconSizeDesktop};`}
 	}
 
+    .${blockId}.eb-social-share-wrapper ul.eb-social-shares li a svg {
+        width: ${iconSizeDesktop};
+        height: ${iconSizeDesktop};
+    }
+
 	.${blockId}.eb-social-share-wrapper.eb-social-share-floating ul.eb-social-shares {
 		display: inline-block;
 		position: fixed;

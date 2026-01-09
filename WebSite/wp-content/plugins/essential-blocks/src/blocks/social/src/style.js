@@ -77,6 +77,11 @@ export default function Style(props) {
         attributes,
     });
 
+    const svgSizeDesktop = iconSizeDesktop.match(/[\d.]+px/);
+    console.log(svgSizeDesktop)
+    const svgSizeTab = iconSizeTab.match(/[\d.]+px/);
+    const svgSizeMobile = iconSizeMobile.match(/[\d.]+px/);
+
     const {
         rangeStylesDesktop: iconPaddingDesktop,
         rangeStylesTab: iconPaddingTab,
@@ -312,6 +317,14 @@ export default function Style(props) {
 		transition: color 0.5s, background-color 0.5s, ${socialBdrShdwTransitionStyle};
 	}
 
+    .${blockId}.eb-social-links-wrapper ul.eb-socials li a svg {
+        max-width: ${svgSizeDesktop ? svgSizeDesktop[0] : ""};
+        min-width: ${svgSizeDesktop ? svgSizeDesktop[0] : ""};
+        max-height: ${svgSizeDesktop ? svgSizeDesktop[0] : ""};
+        min-height: ${svgSizeDesktop ? svgSizeDesktop[0] : ""};
+        fill: ${hvIcnColor};
+    }
+
 	.${blockId}.eb-social-links-wrapper ul.eb-socials li:hover a {
 		background:${hvIcnBgc};
 		color:${hvIcnColor};
@@ -365,6 +378,13 @@ export default function Style(props) {
 		${socialBdrShdwTab}
 	}
 
+    .${blockId}.eb-social-links-wrapper ul.eb-socials li a svg {
+        max-width: ${svgSizeTab ? svgSizeTab[0] : ""};
+        min-width: ${svgSizeTab ? svgSizeTab[0] : ""};
+        max-height: ${svgSizeTab ? svgSizeTab[0] : ""};
+        min-height: ${svgSizeTab ? svgSizeTab[0] : ""};
+    }
+
 	.${blockId}.eb-social-links-wrapper ul.eb-socials li:hover a {
 		${socialBdrShdwsHoverTab}
 	}
@@ -417,6 +437,12 @@ export default function Style(props) {
 		${socialBdrShdwMobile}
 	}
 
+    .${blockId}.eb-social-links-wrapper ul.eb-socials li a svg {
+        max-width: ${svgSizeMobile ? svgSizeMobile[0] : ""};
+        min-width: ${svgSizeMobile ? svgSizeMobile[0] : ""};
+        max-height: ${svgSizeMobile ? svgSizeMobile[0] : ""};
+        min-height: ${svgSizeMobile ? svgSizeMobile[0] : ""};
+    }
 
 	.${blockId}.eb-social-links-wrapper ul.eb-socials li:hover a {
 		${socialBdrShdwsHoverMobile}

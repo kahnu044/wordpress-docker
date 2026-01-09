@@ -1,6 +1,4 @@
-import {
-EBDisplayIcon, BlockProps
-} from "@essential-blocks/controls";
+import { EBDisplayIconSave, BlockProps } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const { blockId, icon, iconView, iconShape, classHook } = attributes;
     const viewClass = iconView !== "default" ? " eb-icon-view-" + iconView : "";
@@ -17,7 +15,7 @@ const Save = ({ attributes }) => {
                     data-id={blockId}
                 >
                     <div className="eb-icon-container">
-                        <EBDisplayIcon icon={icon} />
+                        <EBDisplayIconSave icon={icon} />
                     </div>
                 </div>
             </div>

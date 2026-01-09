@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         );
                     },
                     parseInt(eb_popups[x].getAttribute("data-popup-delay")) *
-                        1000,
+                    1000,
                 );
             }
             auto_exit(eb_popups[x]);
@@ -142,8 +142,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     eb_popups[x].getAttribute("data-page-scroll") === "true"
                         ? null
                         : document.body.classList.add(
-                              "eb-popup-block-overflow",
-                          );
+                            "eb-popup-block-overflow",
+                        );
                     auto_exit(eb_popups[x]);
                 };
         }
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let displayedCookie = false;
 
             let cookiesValue = eb_get_popup_cookie(
-                eb_popups[x].getAttribute("data-block-id"),
+                eb_popups[x].getAttribute("data-block-id")
             );
 
             if ("yes" == cookiesValue) {
@@ -178,41 +178,70 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     .classList.add("inactive");
                 document.body.classList.remove("eb-popup-block-overflow");
             } else {
-                document.addEventListener("mouseleave", function (e) {
-                    if (e.clientY < 0) {
-                        if (!displayedCookie) {
-                            eb_popups[x]
-                                .querySelector(".eb-popup-overlay")
-                                .classList.remove("inactive");
-                            eb_popups[x]
-                                .querySelector(".modal-main-wrap")
-                                .classList.remove("inactive");
-                            eb_popups[x]
-                                .querySelector(".eb-popup-overlay")
-                                .classList.add("active");
-                            eb_popups[x]
-                                .querySelector(".modal-main-wrap")
-                                .classList.add("active");
-                            eb_popups[x].getAttribute("data-page-scroll") ===
-                            "true"
-                                ? null
-                                : document.body.classList.add(
-                                      "eb-popup-block-overflow",
-                                  );
-                            auto_exit(eb_popups[x]);
+                // Cross-browser exit intent detection
+                // Use mouseout on document.documentElement for better browser support
+                const exitIntentHandler = function (e) {
+                    // Check if mouse is leaving from the top of the viewport
+                    if (e.clientY <= 0 || e.pageY - window.pageYOffset <= 0) {
+                        // Additional check to ensure we're actually leaving the document
+                        if (e.relatedTarget === null || e.relatedTarget.nodeName === "HTML") {
+                            if (!displayedCookie) {
+                                eb_popups[x]
+                                    .querySelector(".eb-popup-overlay")
+                                    .classList.remove("inactive");
+                                eb_popups[x]
+                                    .querySelector(".modal-main-wrap")
+                                    .classList.remove("inactive");
+                                eb_popups[x]
+                                    .querySelector(".eb-popup-overlay")
+                                    .classList.add("active");
+                                eb_popups[x]
+                                    .querySelector(".modal-main-wrap")
+                                    .classList.add("active");
+                                eb_popups[x].getAttribute("data-page-scroll") ===
+                                    "true"
+                                    ? null
+                                    : document.body.classList.add(
+                                        "eb-popup-block-overflow",
+                                    );
+                                auto_exit(eb_popups[x]);
 
-                            //Set Cookies
-                            eb_set_popup_cookie(
-                                eb_popups[x].getAttribute("data-use-cookie"),
-                                eb_popups[x].getAttribute("data-block-id"),
-                                eb_popups[x].getAttribute(
-                                    "data-cookie-expire-time",
-                                ),
-                            );
+                                //Set Cookies
+                                eb_set_popup_cookie(
+                                    eb_popups[x].getAttribute("data-use-cookie"),
+                                    eb_popups[x].getAttribute("data-block-id"),
+                                    eb_popups[x].getAttribute(
+                                        "data-cookie-expire-time",
+                                    ),
+                                );
+                            }
+                            displayedCookie = true;
                         }
-                        displayedCookie = true;
                     }
-                });
+                };
+
+                // Primary method: mouseout on document.documentElement (works in all browsers)
+                document.documentElement.addEventListener("mouseout", exitIntentHandler);
+
+                // Fallback method: mouseleave on document for browsers that support it
+                if (document.addEventListener) {
+                    document.addEventListener("mouseleave", exitIntentHandler);
+                }
+
+                // Additional fallback for older browsers using mousemove tracking
+                let mouseY = 0;
+                const mouseMoveHandler = function (e) {
+                    mouseY = e.clientY;
+                };
+
+                const mouseOutFallback = function (e) {
+                    if (mouseY <= 0 && !displayedCookie) {
+                        exitIntentHandler(e);
+                    }
+                };
+
+                document.addEventListener("mousemove", mouseMoveHandler);
+                document.addEventListener("mouseout", mouseOutFallback);
             }
         }
 
@@ -254,8 +283,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         eb_popups[x].getAttribute("data-page-scroll") === "true"
                             ? null
                             : document.body.classList.add(
-                                  "eb-popup-block-overflow",
-                              );
+                                "eb-popup-block-overflow",
+                            );
                         auto_exit(eb_popups[x]);
                     }
                 });
@@ -301,8 +330,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         eb_popups[x].getAttribute("data-page-scroll") === "true"
                             ? null
                             : document.body.classList.add(
-                                  "eb-popup-block-overflow",
-                              );
+                                "eb-popup-block-overflow",
+                            );
                         auto_exit(eb_popups[x]);
                     }
                 });
@@ -376,8 +405,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                                                 ) === "true"
                                                     ? null
                                                     : document.body.classList.add(
-                                                          "eb-popup-block-overflow",
-                                                      );
+                                                        "eb-popup-block-overflow",
+                                                    );
                                                 auto_exit(eb_popups[x]);
                                             }
                                         };
@@ -405,8 +434,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                                         ) === "true"
                                             ? null
                                             : document.body.classList.add(
-                                                  "eb-popup-block-overflow",
-                                              );
+                                                "eb-popup-block-overflow",
+                                            );
                                         auto_exit(eb_popups[x]);
                                     }
 

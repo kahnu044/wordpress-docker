@@ -17,7 +17,7 @@ import defaultAttributes from './attributes'
 import {
     BlockProps,
     withBlockContext,
-    EBDisplayIcon
+    EBDisplayIconEdit
 } from "@essential-blocks/controls";
 
 function Edit(props) {
@@ -251,7 +251,7 @@ function Edit(props) {
                     return (
                         <div key="author" className="eb-author-info">
                             {shouldShowMetaIcon() && authorIcon && (
-                                <EBDisplayIcon icon={authorIcon} className={`eb-post-metadata-icon`} />
+                                <EBDisplayIconEdit icon={authorIcon} className={`eb-post-metadata-icon`} />
                             )}
                             <span className="eb-post-metadata-label">{authorLabel} </span>
                             <span className="eb-post-metadata-value">{getAuthorName()}</span>
@@ -262,7 +262,7 @@ function Edit(props) {
                     return (
                         <div key="author" className="eb-post-metadata-item eb-post-metadata-author eb-author-inline-layout">
                             {shouldShowMetaIcon() && authorIcon && (
-                                <EBDisplayIcon icon={authorIcon} className={`eb-post-metadata-icon`} />
+                                <EBDisplayIconEdit icon={authorIcon} className={`eb-post-metadata-icon`} />
                             )}
                             {showAuthorPicture && (
                                 <div className="eb-author-picture">
@@ -297,7 +297,7 @@ function Edit(props) {
                     return (
                         <div key="date" className="eb-date-info">
                             {shouldShowMetaIcon() && dateIcon && (
-                                <EBDisplayIcon icon={dateIcon} className={`eb-post-metadata-icon`} />
+                                <EBDisplayIconEdit icon={dateIcon} className={`eb-post-metadata-icon`} />
                             )}
                             <span className="eb-post-metadata-label">{getEffectiveDateLabel()} </span>
                             <span className="eb-post-metadata-value">{getFormattedPostDate()}</span>
@@ -308,7 +308,7 @@ function Edit(props) {
                     return (
                         <div key="date" className="eb-post-metadata-item eb-post-metadata-date">
                             {shouldShowMetaIcon() && dateIcon && (
-                                <EBDisplayIcon icon={dateIcon} className={`eb-post-metadata-icon`} />
+                                <EBDisplayIconEdit icon={dateIcon} className={`eb-post-metadata-icon`} />
                             )}
                             <span className="eb-post-metadata-label">{getEffectiveDateLabel()} </span>
                             <span className="eb-post-metadata-value">{getFormattedPostDate()}</span>
@@ -322,7 +322,7 @@ function Edit(props) {
                 return (
                     <div key="product_sku" className="eb-post-metadata-item eb-post-metadata-product_sku">
                         {showMetaIcon == true && skuIcon && (
-                            <EBDisplayIcon icon={skuIcon} className={`eb-post-metadata-icon`} />
+                            <EBDisplayIconEdit icon={skuIcon} className={`eb-post-metadata-icon`} />
                         )}
                         <span className="eb-post-metadata-label">{productSkuLabel} </span>
                         <span className="eb-post-metadata-value">{__("Product SKU", "essential-blocks")}</span>

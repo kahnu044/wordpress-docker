@@ -20,14 +20,6 @@ import {
     typoPrefix_btn,
 } from "./typographyPrefixConstants";
 
-// import {
-// 	generateTypographyAttributes,
-// 	generateResponsiveRangeAttributes,
-// 	generateDimensionsAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// } from "../../../../util/helpers";
-
 import {
     generateTypographyAttributes,
     generateResponsiveRangeAttributes,
@@ -201,7 +193,7 @@ const attributes = {
     ...generateBorderShadowAttributes(WRAPPER_BORDER),
     ...generateBorderShadowAttributes(BUTTON_BORDER),
     // range controller
-    ...generateResponsiveRangeAttributes(ICON_SIZE),
+    ...generateResponsiveRangeAttributes(ICON_SIZE, { defaultRange: 70 }),
 };
 
 export default attributes;

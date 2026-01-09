@@ -1,6 +1,6 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon,
+    EBDisplayIconSave,
     sanitizeURL,
     EBButton,
     ImageComponent,
@@ -50,7 +50,7 @@ export default function InfoboxContainer({ requiredProps, attributes }) {
                             {media === "icon" ? (
                                 <div className="icon-img-wrapper">
                                     <div className="eb-icon number-or-icon">
-                                        <EBDisplayIcon
+                                        <EBDisplayIconSave
                                             icon={infoboxIcon}
                                             className={`eb-infobox-icon-data-selector`}
                                         />

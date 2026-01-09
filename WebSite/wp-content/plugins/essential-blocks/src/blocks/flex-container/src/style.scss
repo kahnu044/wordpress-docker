@@ -1,0 +1,268 @@
+// Flex Container Block Styles
+.wp-block-essential-blocks-flex-container {
+	margin-block-start: 0;
+	margin-block-end: 0;
+	// width: 100%;
+	box-sizing: border-box;
+
+	>* {
+		box-sizing: border-box;
+	}
+
+	.eb-parent-wrapper.eb-parent-flex-container {
+		display: inline !important;
+	}
+}
+
+.eb-flex-container {
+	position: relative;
+	height: 100%;
+	// Default flex styles will be applied via style.js
+	// This ensures proper fallback behavior
+	// display: flex;
+	// flex-direction: row;
+	// justify-content: flex-start;
+	// align-items: stretch;
+	// flex-wrap: nowrap;
+	// box-sizing: border-box;
+
+	>.eb-flex-container-inner {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: stretch;
+		flex-wrap: nowrap;
+		box-sizing: border-box;
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	// Alignment classes for container width
+	&.eb-flex-container-align-center {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	&.eb-flex-container-align-right {
+		margin-left: auto;
+	}
+
+	>div {
+		width: 100%;
+	}
+}
+
+// Editor specific styles
+.wp-block-essential-blocks-flex-container {
+	.eb-flex-container {
+		>.block-editor-inner-blocks {
+			width: 100%;
+
+			>.block-editor-block-list__layout {
+				display: flex;
+				flex-wrap: wrap;
+				width: 100%;
+				height: 100%;
+
+				// if only child block-list-appender
+				// &:has(> .block-list-appender) {
+				// 	border: 1px solid #1e1e1e;
+				// }
+
+				>.block-list-appender {
+					width: 100%;
+
+					&.wp-block button {
+						// border: none;
+						// box-shadow: none;
+					}
+				}
+
+				>.wp-block {
+					margin: 0;
+				}
+
+				>div {
+					width: 100%;
+				}
+			}
+		}
+	}
+
+	// Ensure proper spacing in editor
+	.eb-flex-container.editor {
+		min-height: 50px;
+
+		&:empty::before {
+			content: '';
+			display: block;
+			min-height: 50px;
+
+			position: absolute;
+			border: 1px solid #1e1e1e;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+		}
+	}
+
+	// Layout selector styles
+	.eb-flex-container-layout-select {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		gap: 15px;
+		padding: 25px;
+		border: 1px solid #d5d5db;
+
+		@media (max-width: 768px) {
+			grid-template-columns: repeat(3, 1fr);
+			padding: 20px;
+		}
+
+		.eb-flex-container-layout-heading {
+			grid-column: 1 / -1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 10px;
+
+			svg {
+				width: 30px;
+				height: 30px;
+			}
+
+			h2 {
+				margin: 0;
+				font-size: 18px;
+				font-weight: 600;
+				color: #333;
+			}
+		}
+
+		p {
+			grid-column: 1 / -1;
+			text-align: center;
+			font-size: 16px;
+			color: #4b4b4b;
+			margin: 0 0 10px 0;
+		}
+
+		.eb-flex-container-layout-item {
+			display: flex;
+			flex-flow: column;
+			align-items: center;
+
+			.eb-flex-container-layout-icon {
+				padding: 10px;
+				background-color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 1px dashed #D8DBE0;
+				// border-radius: 6px;
+				box-sizing: border-box;
+
+				svg {
+					width: 100%;
+					height: auto;
+					max-height: 100px;
+
+					rect {
+						// fill: #d5d8dc;
+					}
+
+					path {
+						// fill: #fff;
+					}
+				}
+			}
+
+			span {
+				font-size: 12px;
+				color: #aaa;
+				line-height: 1.4;
+				margin-top: 10px;
+			}
+
+			&:hover {
+				cursor: pointer;
+
+				.eb-flex-container-layout-icon {
+					border-color: #bebebe;
+				}
+
+				span {
+					color: #888;
+				}
+			}
+		}
+	}
+}
+
+// Inspector panel styles
+.flex-container-control {
+	.components-button {
+		padding-left: 8px;
+		padding-right: 8px;
+
+		&.is-primary {
+			svg {
+				path {
+					stroke: #551ef7;
+				}
+
+				rect {
+					fill: #551ef7;
+				}
+
+				&.eb-flex-wrap-icon {
+					path {
+						stroke: none;
+					}
+				}
+			}
+		}
+
+		&:hover,
+		&:focus {
+			svg {
+				path {
+					stroke: #fff;
+				}
+
+				rect {
+					fill: #fff;
+				}
+
+				&.eb-flex-wrap-icon {
+					path {
+						stroke: none;
+					}
+				}
+			}
+		}
+	}
+
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+.eb-flex-container-note {
+	color: #807c7c;
+	font-size: 12px;
+	line-height: 1.4;
+	font-style: italic;
+}
+
+// Responsive behavior
+@media (max-width: 768px) {
+	.eb-flex-container-block {
+		.eb-flex-container {
+			// Allow mobile-specific flex behavior
+			flex-wrap: wrap;
+		}
+	}
+}

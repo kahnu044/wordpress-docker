@@ -9,23 +9,6 @@ import { rangeButtonWidth, rangeButtonHeight, rangeHeadingSpace } from "./consta
 import { WrpBgConst } from "./constants/backgroundsConstants";
 import { WrpBdShadowConst, switchLiquidGlassShadowEffectBorder } from "./constants/borderShadowConstants";
 
-// import {
-// 	wrapperWidth,
-// 	rangeIconSize,
-// 	rangeIconPadding,
-// 	rangeIconDistance,
-// 	rangeIconRowGap,
-// 	sclDeviderPosRight,
-// } from "./constants/rangeNames";
-
-// import {
-// 	generateTypographyAttributes,
-// 	generateDimensionsAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes,
-// } from "../../../util/helpers";
-
 import {
     //
     generateTypographyAttributes,

@@ -79,6 +79,34 @@ import {
     SortControl,
 } from "@essential-blocks/controls";
 
+import { CdIcon, ProBadge, Crown } from "./icon";
+
+const FilterByTaxonomyUpgradeProContent = () => {
+    return (
+        <div className="eb_ie">
+            <CdIcon />
+            <h3>
+                <a
+                    target="_blank"
+                    href="https://essential-blocks.com/demo/conditional-display/"
+                >
+                    {__("Filter By Taxonomy", "essential-blocks-pro")}
+                    <span className="dashicons dashicons-external"></span>
+                </a>
+            </h3>
+            <p>Supercharge your website with Conditional Display.</p>
+            <a
+                className="eb_upgrade_button"
+                target="_blank"
+                href={EssentialBlocksLocalize?.upgrade_pro_url}
+            >
+                <Crown />
+                Upgrade to PRO
+            </a>
+        </div>
+    );
+};
+
 const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
     const {
         resOption,
@@ -200,6 +228,20 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
             }
         }
     }, [loadMoreOptions]);
+
+    const GeneralProContent = () => {
+        return (
+            <div className="eb-is-pro-toggle-wrapper">
+                <ToggleControl
+                    className="eb-is-pro-toggle"
+                    label={__("Show Sold Count", "essential-blocks")}
+                    checked={false}
+                    disabled
+                />
+                <ProBadge />
+            </div>
+        )
+    };
 
     return (
         <>
@@ -341,7 +383,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                         />
                         {applyFilters(
                             "eb_woo_product_grid_general_toggle",
-                            "",
+                            <GeneralProContent />,
                             attributes,
                             setAttributes,
                             makeEnableContent,
@@ -545,12 +587,23 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             hasDelete={false}
                         ></SortControl>
                     </InspectorPanel.PanelBody>
-                    {applyFilters(
-                        "eb_woo_product_grid_general_tab",
-                        "",
-                        attributes,
-                        setAttributes,
-                    )}
+
+                    <PanelBody
+                        title={__("Filter By Taxonomy", "essential-blocks-pro")}
+                        initialOpen={false}
+                        className={"eb-filter-by-taxonomy eb-group-control-panelbody"}
+                        {...(EssentialBlocksLocalize?.is_pro_active === "false" && {
+                            icon: <ProBadge />,
+                        })}
+                    >
+                        {applyFilters(
+                            "eb_woo_product_grid_general_tab",
+                            <FilterByTaxonomyUpgradeProContent />,
+                            attributes,
+                            setAttributes,
+                        )}
+                    </PanelBody>
+
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody
@@ -624,8 +677,8 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                             >
                                 <BorderShadowControl
                                     controlName={PRODUCTS_BORDER_SHADOW}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </>
@@ -1181,7 +1234,7 @@ const Inspector = ({ attributes, setAttributes, setQueryResults }) => {
                                 <BorderShadowControl
                                     controlName={LOADMORE_BORDER_SHADOW}
                                     noShadow
-                                    // noBorder
+                                // noBorder
                                 />
                             </InspectorPanel.PanelBody>
                         </InspectorPanel.PanelBody>

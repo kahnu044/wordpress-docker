@@ -1,8 +1,7 @@
 
 import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
 import {
-    getIconClass,
-    EBDisplayIcon,
+    EBDisplayIconSave,
 } from "@essential-blocks/controls";
 const save = ({ attributes }) => {
     const {
@@ -32,9 +31,7 @@ const save = ({ attributes }) => {
             >
                 {inheritedDisplayIcon && (
                     <span className={`eb-accordion-icon-wrapper eb-accordion-icon-wrapper-${parentBlockId}`}>
-                        <span
-                            className={`${getIconClass(inheritedTabIcon)} eb-accordion-icon`}
-                        ></span>
+                        <EBDisplayIconSave icon={inheritedTabIcon} className="eb-accordion-icon" />
                     </span>
                 )}
 
@@ -50,7 +47,7 @@ const save = ({ attributes }) => {
                             )}
 
                             {foundItem?.titlePrefixType === 'icon' && foundItem?.titlePrefixIcon && (
-                                <EBDisplayIcon icon={foundItem?.titlePrefixIcon} className={`eb-accordion-title-prefix-icon`} />
+                                <EBDisplayIconSave icon={foundItem?.titlePrefixIcon} className={`eb-accordion-title-prefix-icon`} />
                             )}
 
                             {foundItem?.titlePrefixType === "image" && foundItem?.titlePrefixImgUrl ? (
@@ -79,7 +76,7 @@ const save = ({ attributes }) => {
                             )}
 
                             {foundItem?.titleSuffixType === 'icon' && foundItem?.titleSuffixIcon && (
-                                <EBDisplayIcon icon={foundItem?.titleSuffixIcon} className={`eb-accordion-title-suffix-icon`} />
+                                <EBDisplayIconSave icon={foundItem?.titleSuffixIcon} className={`eb-accordion-title-suffix-icon`} />
                             )}
 
                             {foundItem?.titleSuffixType === "image" && foundItem?.titleSuffixImgUrl ? (

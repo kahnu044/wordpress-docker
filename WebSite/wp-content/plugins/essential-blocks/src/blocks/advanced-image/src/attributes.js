@@ -41,6 +41,9 @@ const attributes = {
     blockMeta: {
         type: "object",
     },
+    classHook: {
+        type: "string",
+    },
     image: {
         type: "object",
         default: {
@@ -232,9 +235,9 @@ const attributes = {
         imageAlign: {
             key: IMAGE_ALIGNMENT,
             default: {
-                defaultAlign: "0 auto",
-                defaultTabAlign: "0 auto",
-                defaultMobileAlign: "0 auto",
+                defaultAlign: "center",
+                defaultTabAlign: "center",
+                defaultMobileAlign: "center",
             },
         },
         hasRadius: true,

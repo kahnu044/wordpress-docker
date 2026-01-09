@@ -28,14 +28,6 @@ import {
     mediaContentGap,
 } from "./constants/rangeNames";
 
-// import {
-// 	generateDimensionsAttributes,
-// 	generateTypographyAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes,
-// } from "../../../util/helpers";
-
 import {
     generateDimensionsAttributes,
     generateTypographyAttributes,

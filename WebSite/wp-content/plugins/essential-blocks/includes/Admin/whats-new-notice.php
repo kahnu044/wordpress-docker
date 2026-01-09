@@ -2,11 +2,11 @@
     if ( ! defined( 'ABSPATH' ) ) {
         exit;
     }
-    $title       = esc_html__( 'New Block - Business Hours', 'essential-blocks' );
-    $description = esc_html__( 'Display your business hours with customizable styling and responsive design', 'essential-blocks' );
+    $title       = esc_html__( 'New Block - Image Hotspots', 'essential-blocks' );
+    $description = esc_html__( 'Create interactive images with clickable hotspots that display tooltips or popups with custom content.', 'essential-blocks' );
     $learn_more  = esc_html__( 'Learn More', 'essential-blocks' );
     $dismiss     = esc_html__( 'Dismiss', 'essential-blocks' );
-    $doc_url     = esc_url( 'https://essential-blocks.com/demo/business-hours/' );
+    $doc_url     = esc_url( 'https://essential-blocks.com/demo/image-hotspots/' );
 ?>
 
 <script type="text/javascript">

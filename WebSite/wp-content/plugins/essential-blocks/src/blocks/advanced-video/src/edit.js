@@ -12,7 +12,7 @@ import ReactPlayer from "react-player";
 import Inspector from "./inspector";
 
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext,
     getEditorRoot
@@ -117,7 +117,7 @@ const Edit = (props) => {
                                 >
                                     {lightboxPlayIcon && (
                                         <>
-                                            {lightboxPlayIconType === "icon" && <EBDisplayIcon icon={lightboxPlayIconlib} />}
+                                            {lightboxPlayIconType === "icon" && <EBDisplayIconEdit icon={lightboxPlayIconlib} />}
                                             {lightboxPlayIconType === "image" && placeholderPlayIconURL && (
                                                 <img src={placeholderPlayIconURL} alt="" />
                                             )}

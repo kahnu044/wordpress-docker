@@ -1,5 +1,5 @@
 import {
-    sanitizeURL, BlockProps, EBButton, EBDisplayIcon
+    sanitizeURL, BlockProps, EBButton, EBDisplayIconSave
 } from "@essential-blocks/controls";
 import { applyFilters } from "@wordpress/hooks";
 
@@ -309,7 +309,7 @@ const Save = ({ attributes }) => {
                                                         <div className="eb-img-gallery-actions">
                                                             {!disableLightBox && (
                                                                 <a href={source.url} data-fslightbox="gallery" className="eb-img-gallery-action">
-                                                                    <EBDisplayIcon icon={lightboxIcon} />
+                                                                    <EBDisplayIconSave icon={lightboxIcon} />
                                                                 </a>
                                                             )}
 
@@ -322,7 +322,7 @@ const Save = ({ attributes }) => {
                                                                     ? "_blank"
                                                                     : "_self"
                                                                 } rel="noopener" className="eb-img-gallery-action">
-                                                                    <EBDisplayIcon icon={linkIcon} />
+                                                                    <EBDisplayIconSave icon={linkIcon} />
                                                                 </a>
                                                             )}
                                                         </div>
@@ -343,7 +343,7 @@ const Save = ({ attributes }) => {
                                                     <div className="eb-img-gallery-actions">
                                                         {!disableLightBox && (
                                                             <a href={source.url} data-fslightbox="gallery" className="eb-img-gallery-action">
-                                                                <EBDisplayIcon icon={lightboxIcon} />
+                                                                <EBDisplayIconSave icon={lightboxIcon} />
                                                             </a>
                                                         )}
 
@@ -356,7 +356,7 @@ const Save = ({ attributes }) => {
                                                                 ? "_blank"
                                                                 : "_self"
                                                             } rel="noopener" className="eb-img-gallery-action">
-                                                                <EBDisplayIcon icon={linkIcon} />
+                                                                <EBDisplayIconSave icon={linkIcon} />
                                                             </a>
                                                         )}
                                                     </div>

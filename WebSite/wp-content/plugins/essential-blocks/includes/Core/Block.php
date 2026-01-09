@@ -125,6 +125,87 @@ abstract class Block
     }
 
     /**
+     * Replace EBDisplayIconSave placeholders (eb-display-icon-svg) with sanitized inline SVG via regex.
+     * This runs only on frontend (not in admin).
+     */
+    private function inline_svg_icons_via_regex($content)
+    {
+        if (is_admin() || empty($content)) {
+            return $content;
+        }
+        if (strpos($content, 'eb-display-icon-svg') === false || strpos($content, 'data-svg-url') === false) {
+            return $content;
+        }
+
+        $pattern = '~<span\b(?=[^>]*\bclass=(["\"]) (?:(?!\\1).)*?\beb-display-icon-svg\b (?:(?!\\1).)*?\\1)(?=[^>]*\bdata-svg-url=(["\"])(.*?)\\2)[^>]*\s*/?>\s*(?:</span>)?~xis';
+
+        $content = preg_replace_callback($pattern, function ($m) {
+            $url = isset($m[3]) ? esc_url_raw($m[3]) : '';
+            if (empty($url)) {
+                return $m[0];
+            }
+            $path = parse_url($url, PHP_URL_PATH);
+            if (! $path || ! preg_match('/\.svg($|[?#])/i', $path)) {
+                return $m[0];
+            }
+
+            $cache_key = 'eb_svg_' . md5($url);
+            $svg = get_transient($cache_key);
+
+            if ($svg === false) {
+                $svg = '';
+                $res = wp_remote_get($url, [
+                    'timeout' => 5,
+                    'redirection' => 3,
+                    'headers' => [ 'Accept' => 'image/svg+xml,text/plain,*/*' ],
+                    'reject_unsafe_urls' => true,
+                ]);
+                if (! is_wp_error($res) && (int) wp_remote_retrieve_response_code($res) === 200) {
+                    $raw = (string) wp_remote_retrieve_body($res);
+                    if (preg_match('/<svg[\s\S]*?<\/svg>/i', $raw, $mm)) {
+                        $raw = $mm[0];
+                    }
+                    $sanitized = \EssentialBlocks\Utils\SvgSanitizer::get_instance()->sanitize($raw);
+                    if (! empty($sanitized)) {
+                        $svg = $sanitized;
+                    }
+                }
+                set_transient($cache_key, $svg, HOUR_IN_SECONDS * 6);
+            }
+
+            // Extract optional data-class-name from the placeholder span and add it to the root <svg>
+            if (! empty($svg)) {
+                $classAttr = '';
+                if (preg_match('/\bdata-class-name=(["\'])(.*?)\1/i', $m[0], $mc)) {
+                    $classAttr = trim($mc[2]);
+                }
+                if ($classAttr !== '') {
+                    $classes = preg_split('/\s+/', $classAttr);
+                    $classes = array_filter(array_map('sanitize_html_class', (array) $classes));
+                    if (! empty($classes)) {
+                        $svg = preg_replace_callback('/<svg\b([^>]*)>/i', function ($m2) use ($classes) {
+                            $before = $m2[1];
+                            if (preg_match('/\sclass=(["\'])(.*?)\1/i', $before, $m3)) {
+                                $final = implode(' ', $classes);
+                                $new_before = preg_replace('/\sclass=(["\'])(.*?)\1/i', ' class=$1' . esc_attr($final) . '$1', $before, 1);
+                                return '<svg' . $new_before . '>';
+                            } else {
+                                $final = implode(' ', $classes);
+                                return '<svg' . $before . ' class="' . esc_attr($final) . '">';
+                            }
+                        }, $svg, 1);
+                    }
+                }
+            }
+
+            return $svg ?: $m[0];
+        }, $content);
+
+        return $content;
+    }
+
+
+    /**
      * Function to handle conditional display logic for the block.
      */
     private function should_display_block($attributes)
@@ -153,6 +234,12 @@ abstract class Block
                 return ''; // Stop execution and return empty content
             }
 
+            // Fire action to notify Pro plugin about block detection
+            do_action('eb_detect_block_on_page', $this->get_name(), $attributes, $block);
+
+            // Inline SVG placeholders before returning content
+            $content = $this->inline_svg_icons_via_regex($content);
+
             return $content;
         };
 
@@ -170,6 +257,12 @@ abstract class Block
                     $this->load_scripts();
                 }
 
+                // Fire action to notify Pro plugin about block detection
+                do_action('eb_detect_block_on_page', $this->get_name(), $attributes, $block);
+
+                // Inline SVG placeholders before returning content
+                $content = $this->inline_svg_icons_via_regex($content);
+
                 return $this->render_callback($attributes, $content, $block);
             };
         }
@@ -185,6 +278,12 @@ abstract class Block
 
                     $this->load_scripts();
                 }
+
+                // Fire action to notify Pro plugin about block detection
+                do_action('eb_detect_block_on_page', $this->get_name(), $attributes, $block);
+
+                // Inline SVG placeholders before returning content
+                $content = $this->inline_svg_icons_via_regex($content);
                 return $content;
             };
         }

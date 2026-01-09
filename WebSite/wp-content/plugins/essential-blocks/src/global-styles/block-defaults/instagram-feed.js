@@ -13,6 +13,7 @@ import {
     Button,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
+import { MediaUpload } from "@wordpress/block-editor";
 
 /**
  * External depencencies

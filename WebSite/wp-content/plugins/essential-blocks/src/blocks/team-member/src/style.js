@@ -204,6 +204,28 @@ export default function Style(props) {
     });
 
     const {
+        rangeStylesDesktop: svgWidthDesktop,
+        rangeStylesTab: svgWidthTab,
+        rangeStylesMobile: svgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: rangeIconSize,
+        customUnit: "px",
+        property: "min-width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: svgHeightDesktop,
+        rangeStylesTab: svgHeightTab,
+        rangeStylesMobile: svgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: rangeIconSize,
+        customUnit: "px",
+        property: "height",
+        attributes,
+    });
+
+    const {
         rangeStylesDesktop: iconPaddingDesktop,
         rangeStylesTab: iconPaddingTab,
         rangeStylesMobile: iconPaddingMobile,
@@ -529,8 +551,11 @@ export default function Style(props) {
 			 background-color: ${curr.bgColor || "#000"};
 			 color: ${curr.color || "#fff"};
 		 }
+        .${blockId}.eb-team-wrapper ul.socials li:nth-child(${i + 1}) a svg {
+            fill: ${curr.color};
+        }
 		 `,
-        ""
+        "",
     );
 
     const wrapperStylesDesktop = `
@@ -564,37 +589,42 @@ export default function Style(props) {
 		 }
 
 
-		 ${preset === "preset3"
-            ? `
+		 ${
+             preset === "preset3"
+                 ? `
 				 .${blockId}.eb-team-wrapper .eb-team-member-image{
 					 position: relative;
 				 }
 				 `
-            : ""
-        }
-		 ${preset === "preset3" && isContentOverlay
-            ? `
+                 : ""
+         }
+		 ${
+             preset === "preset3" && isContentOverlay
+                 ? `
             .${blockId}.eb-team-wrapper.content-overlay .eb-team-member-contents {
                 justify-content: ${conVtAlign || "center"};
                 ${contentsPaddingDesktop}
                 ${contentsMarginDesktop}
                 ${ovlBdShdStyleDesktop}
-                ${isConBgGradient
-                ? `background-image: ${conBgGradient};`
-                : `background-color: ${conBgColor};`
-            }
+                ${
+                    isConBgGradient
+                        ? `background-image: ${conBgGradient};`
+                        : `background-color: ${conBgColor};`
+                }
             }
 				 `
-            : ""
-        }
+                 : ""
+         }
 
-		 ${preset === "preset2"
-            ? `
+		 ${
+             preset === "preset2"
+                 ? `
 				 .${blockId}.eb-team-wrapper .eb-team-member-contents{
-					 ${isConBgGradient
-                ? `background-image: ${conBgGradient};`
-                : `background-color: ${conBgColor};`
-            }
+					 ${
+                         isConBgGradient
+                             ? `background-image: ${conBgGradient};`
+                             : `background-color: ${conBgColor};`
+                     }
 					 height: 50%;
 					 display: flex;
 					 flex-direction: column;
@@ -614,16 +644,20 @@ export default function Style(props) {
 				 }
 
 				 `
-            : ""
-        }
+                 : ""
+         }
 
-         ${preset === "new-preset1" || preset === "new-preset2" || preset === "new-preset3"
-            ? `
+         ${
+             preset === "new-preset1" ||
+             preset === "new-preset2" ||
+             preset === "new-preset3"
+                 ? `
                 .${blockId}.eb-team-wrapper .eb-team-member-contents-inner{
-                    ${isConBgGradient
-                ? `background-image: ${conBgGradient};`
-                : `background-color: ${conBgColor};`
-            }
+                    ${
+                        isConBgGradient
+                            ? `background-image: ${conBgGradient};`
+                            : `background-color: ${conBgColor};`
+                    }
                     ${contentsPaddingDesktop}
 			        ${contentsMarginDesktop}
 			        ${ovlBdShdStyleDesktop}
@@ -649,12 +683,13 @@ export default function Style(props) {
                 }
 
                 `
-            : ""
-        }
+                 : ""
+         }
 
 
-		 ${preset === "preset5"
-            ? `
+		 ${
+             preset === "preset5"
+                 ? `
 				 .${blockId}.eb-team-wrapper .eb-team-inner {
 					 display: flex;
 					 justify-content: space-between;
@@ -671,8 +706,8 @@ export default function Style(props) {
 					 flex:1;
 				 }
 				 `
-            : ""
-        }
+                 : ""
+         }
 
 
 
@@ -695,12 +730,13 @@ export default function Style(props) {
 		 }
 
          .${blockId}.eb-team-wrapper .eb-team-member-image {
-            ${imageAlign === "left"
-            ? "text-align: left;"
-            : imageAlign === "right"
-                ? "text-align: right;"
-                : "text-align: center"
-        }
+            ${
+                imageAlign === "left"
+                    ? "text-align: left;"
+                    : imageAlign === "right"
+                    ? "text-align: right;"
+                    : "text-align: center"
+            }
          }
 
 		 .${blockId}.eb-team-wrapper .eb-team-member-image img {
@@ -712,15 +748,17 @@ export default function Style(props) {
 			 ${imageMarginDesktop}
 			 ${imagePaddingDesktop}
 			 ${isImgHeightAuto ? `height:auto;` : imgHeightDesktop}
-			 ${preset === "preset6"
-            ? `clipPath: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
-            : ""
-        }
+			 ${
+                 preset === "preset6"
+                     ? `clipPath: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
+                     : ""
+             }
 		 }
 
 
-		 ${imgBeforeEl
-            ? `
+		 ${
+             imgBeforeEl
+                 ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 				 content: "";
 				 display: block;
@@ -734,8 +772,8 @@ export default function Style(props) {
 				 ${imgTopHoverBackgroundStyles}
 			 }
 			 `
-            : ""
-        }
+                 : ""
+         }
 
 
 
@@ -747,16 +785,17 @@ export default function Style(props) {
 		 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 			 text-align: ${contentsAlign};
 			 box-sizing: border-box;
-			 ${preset === "preset2"
-            ? `
+			 ${
+                 preset === "preset2"
+                     ? `
 					 position: absolute;
 					 left: 0;
 					 right: 0;
 					 top: 100%;
 					 transition: 0.5s;
 					 `
-            : ""
-        }
+                     : ""
+             }
 		 }
 
 		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
@@ -772,57 +811,63 @@ export default function Style(props) {
 			 ${preset === "preset2" ? `display:none;` : ""}
 		 }
 
-		 ${showDescs
-            ? `
+		 ${
+             showDescs
+                 ? `
 				 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 					 color: ${descsColor};
 					 ${descsPaddingDesktop}
 					 ${descsTypoStylesDesktop}
 				 }
 				 `
-            : ""
-        }
+                 : ""
+         }
 
- ${showCSeparator
-            ? `
+ ${
+     showCSeparator
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 			 border: none;
 			 margin: auto;
 			 border-bottom: 1px ${cSepType} ${cSepColor};
 			 ${contentSepWidthDesktop}
 			 ${contentSepHeightDesktop}
-			 ${cSepAlign === "left"
-                ? "margin-left:0;"
-                : cSepAlign === "right"
-                    ? "margin-right:0;"
-                    : ""
-            }
+			 ${
+                 cSepAlign === "left"
+                     ? "margin-left:0;"
+                     : cSepAlign === "right"
+                     ? "margin-right:0;"
+                     : ""
+             }
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${showSocials && showSSeparator
-            ? `
+ ${
+     showSocials && showSSeparator
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 			 border: none;
 			 margin: auto;
 			 border-bottom: 1px ${sSepType} ${sSepColor};
 			 ${socialSepWidthDesktop}
 			 ${socialSepHeightDesktop}
-			 ${sSepAlign === "left"
-                ? "margin-left:0;"
-                : sSepAlign === "right"
-                    ? "margin-right:0;"
-                    : ""
-            }
+			 ${
+                 sSepAlign === "left"
+                     ? "margin-left:0;"
+                     : sSepAlign === "right"
+                     ? "margin-right:0;"
+                     : ""
+             }
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${preset === "preset4"
-            ? `
+ ${
+     preset === "preset4"
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-inner {
 			 position: relative;
 		 }
@@ -845,18 +890,20 @@ export default function Style(props) {
 			 ${contentsPaddingDesktop}
 			 ${contentsMarginDesktop}
 			 ${ovlBdShdStyleDesktop}
-			 ${isConBgGradient
-                ? `background-image: ${conBgGradient};`
-                : `background-color: ${conBgColor};`
-            }
+			 ${
+                 isConBgGradient
+                     ? `background-image: ${conBgGradient};`
+                     : `background-color: ${conBgColor};`
+             }
 		 }
 
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${showSocials
-            ? `
+ ${
+     showSocials
+         ? `
 		 ${socialStyles}
 
 		 .${blockId}.eb-team-wrapper ul.socials {
@@ -869,8 +916,9 @@ export default function Style(props) {
 			 ${socialWrapBackgroundStyles}
 			 transition: ${socialWrapTransitionStyle}, opacity .5s;
 			 ${preset === "preset2" ? `display:none;` : "display: flex;"}
-			 ${preset === "preset3" && !isContentOverlay
-                ? `
+			 ${
+                 preset === "preset3" && !isContentOverlay
+                     ? `
 				 opacity:0;
 				 position: absolute;
 				 top: 0;
@@ -881,33 +929,36 @@ export default function Style(props) {
 				 ${contentsPaddingDesktop}
 				 ${contentsMarginDesktop}
 				 ${ovlBdShdStyleDesktop}
-				 ${isConBgGradient
-                    ? `background-image: ${conBgGradient};`
-                    : `background-color: ${conBgColor};`
-                }
+				 ${
+                     isConBgGradient
+                         ? `background-image: ${conBgGradient};`
+                         : `background-color: ${conBgColor};`
+                 }
 			 `
-                : `
+                     : `
 					 ${iconsWrapMarginDesktop}
 					 ${iconsWrapPaddingDesktop}
 					 `
-            }
+             }
 		 }
 
-		 ${preset === "preset3"
-                ? `
+		 ${
+             preset === "preset3"
+                 ? `
 				 .${blockId}.eb-team-wrapper:hover ul.socials {
 					 opacity: 1;
 				 }
 				 `
-                : ""
-            }
+                 : ""
+         }
 
 		 .${blockId}.eb-team-wrapper ul.socials:hover {
 			 ${socialWrapHoverBackgroundStyles}
 		 }
 
-	 ${isIconsDevider
-                ? `
+	 ${
+         isIconsDevider
+             ? `
 		 .${blockId}.eb-team-wrapper ul.socials li{
 			 position:relative;
 		 }
@@ -923,8 +974,8 @@ export default function Style(props) {
 			 ${sSepPosRightDesktop}
 		 }
 		 `
-                : ""
-            }
+             : ""
+     }
 
 		 .${blockId}.eb-team-wrapper ul.socials li a {
 			 box-sizing:content-box;
@@ -933,8 +984,8 @@ export default function Style(props) {
 			 display: flex;
 			 justify-content: center;
 			 align-items: center;
-			 height: 0;
-			 width: 0;
+             height:0;
+             width: 0;
              line-height: 1em;
 			 ${iconSizeDesktop}
 			 ${iconPaddingDesktop}
@@ -948,19 +999,25 @@ export default function Style(props) {
 			 ${socialBordersHoverDesktop}
 		 }
 
-         ${icnEffect
-                ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+         .${blockId}.eb-team-wrapper ul.socials li a svg {
+            ${svgWidthDesktop}
+            ${svgHeightDesktop}
+         }
+
+         ${
+             icnEffect
+                 ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
                 background-color:${hvIcnBgc};
 			    color:${hvIcnColor};
 			    ${socialBordersHoverDesktop}
 			}
 			`
-                : ""
-            }
+                 : ""
+         }
 
 		 `
-            : ""
-        }
+         : ""
+ }
 
 
 
@@ -992,8 +1049,9 @@ export default function Style(props) {
 	 }
 
 
-	 ${preset === "preset5"
-            ? `
+	 ${
+         preset === "preset5"
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-image {
 				 ${imgWidthTab}
 			 }
@@ -1003,18 +1061,19 @@ export default function Style(props) {
 			 }
 
 			 `
-            : ""
-        }
+             : ""
+     }
 
 
-	 ${imgBeforeEl
-            ? `
+	 ${
+         imgBeforeEl
+             ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 			 ${imgTopBgHeightTab}
 		 }
 		 `
-            : ""
-        }
+             : ""
+     }
 
 
 	 .${blockId}.eb-team-wrapper .eb-team-member-image > img {
@@ -1032,15 +1091,16 @@ export default function Style(props) {
 	 }
 
 
-	 ${showDescs
-            ? `
+	 ${
+         showDescs
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 				 ${descsTypoStylesTab}
 				 ${descsPaddingTab}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
 	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
 		 ${nameTypoStylesTab}
@@ -1054,39 +1114,43 @@ export default function Style(props) {
 
 
 
- ${showCSeparator
-            ? `
+ ${
+     showCSeparator
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 			 ${contentSepWidthTab}
 			 ${contentSepHeightTab}
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${showSocials && showSSeparator
-            ? `
+ ${
+     showSocials && showSSeparator
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 			 ${socialSepWidthTab}
 			 ${socialSepHeightTab}
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${preset === "preset4"
-            ? `
+ ${
+     preset === "preset4"
+         ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 			 ${contentsPaddingTab}
 			 ${contentsMarginTab}
 			 ${ovlBdShdStyleTab}
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
- ${showSocials
-            ? `
+ ${
+     showSocials
+         ? `
 		 ${socialStyles}
 
 		 .${blockId}.eb-team-wrapper ul.socials {
@@ -1094,47 +1158,54 @@ export default function Style(props) {
 			 ${iconsWrapPaddingTab}
 			 ${iconSpaceTab}
 			 ${iconRowGapTab}
-			 ${preset === "preset3"
-                ? `
+			 ${
+                 preset === "preset3"
+                     ? `
 						 ${contentsPaddingTab}
 						 ${contentsMarginTab}
 						 ${ovlBdShdStyleTab}
 					 `
-                : ""
-            }
+                     : ""
+             }
 		 }
 
 
-	 ${isIconsDevider
-                ? `
+	 ${
+         isIconsDevider
+             ? `
 			 .${blockId}.eb-team-wrapper ul.socials li + li:before {
 				 ${sSepPosRightTab}
 			 }
 			 `
-                : ""
-            }
+             : ""
+     }
 
 		 .${blockId}.eb-team-wrapper ul.socials li a {
 			 ${iconSizeTab}
 			 ${iconPaddingTab}
 			 ${socialBorderTab}
 		 }
+             
+        .${blockId}.eb-team-wrapper ul.socials li a svg {
+            ${svgWidthTab}
+            ${svgHeightTab}
+         }
 
 		 .${blockId}.eb-team-wrapper ul.socials li:hover a {
 			 ${socialBordersHoverTab}
 		 }
 		 `
-            : ""
-        }
+         : ""
+ }
 
-        ${icnEffect
-            ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+        ${
+            icnEffect
+                ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
             ${socialBordersHoverTab}
         }
         `
-            : ""
+                : ""
         }
-
 
 	 `;
 
@@ -1163,8 +1234,9 @@ export default function Style(props) {
 
 	 }
 
-	 ${preset === "preset5"
-            ? `
+	 ${
+         preset === "preset5"
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-image {
 				 ${imgWidthMobile}
 			 }
@@ -1173,18 +1245,19 @@ export default function Style(props) {
 				 ${p9flexGapMobile}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
 
-	 ${imgBeforeEl
-            ? `
+	 ${
+         imgBeforeEl
+             ? `
 		 .${blockId}.eb-team-wrapper .eb-team-member-image:before {
 			 ${imgTopBgHeightMobile}
 		 }
 		 `
-            : ""
-        }
+             : ""
+     }
 
 	 .${blockId}.eb-team-wrapper .eb-team-member-image > img {
 		 ${preset === "preset5" ? "" : imgWidthMobile}
@@ -1202,15 +1275,16 @@ export default function Style(props) {
 		 ${imageBdShdStylesHoverMobile}
 	 }
 
-	 ${showDescs
-            ? `
+	 ${
+         showDescs
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-description {
 				 ${descsTypoStylesMobile}
 				 ${descsPaddingMobile}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
 	 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-name {
 		 ${nameTypoStylesMobile}
@@ -1224,40 +1298,44 @@ export default function Style(props) {
 
 
 
-	 ${showCSeparator
-            ? `
+	 ${
+         showCSeparator
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-contents .eb-team-member-content-separator {
 				 ${contentSepWidthMobile}
 				 ${contentSepHeightMobile}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
-	 ${showSocials && showSSeparator
-            ? `
+	 ${
+         showSocials && showSSeparator
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-social-separator {
 				 ${socialSepWidthMobile}
 				 ${socialSepHeightMobile}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
 
-	 ${preset === "preset4"
-            ? `
+	 ${
+         preset === "preset4"
+             ? `
 			 .${blockId}.eb-team-wrapper .eb-team-member-contents {
 				 ${contentsPaddingMobile}
 				 ${contentsMarginMobile}
 				 ${ovlBdShdStyleMobile}
 			 }
 			 `
-            : ""
-        }
+             : ""
+     }
 
-	 ${showSocials
-            ? `
+	 ${
+         showSocials
+             ? `
 			 ${socialStyles}
 
 			 .${blockId}.eb-team-wrapper ul.socials {
@@ -1265,24 +1343,26 @@ export default function Style(props) {
 				 ${iconRowGapMobile}
 				 ${iconsWrapPaddingMobile}
 				 ${iconsWrapMarginMobile}
-				 ${preset === "preset3"
-                ? `
+				 ${
+                     preset === "preset3"
+                         ? `
 							 ${contentsPaddingMobile}
 							 ${contentsMarginMobile}
 							 ${ovlBdShdStyleMobile}
 						 `
-                : ""
-            }
+                         : ""
+                 }
 			 }
 
-			 ${isIconsDevider
-                ? `
+			 ${
+                 isIconsDevider
+                     ? `
 					 .${blockId}.eb-team-wrapper ul.socials li + li:before {
 						 ${sSepPosRightMobile}
 					 }
 					 `
-                : ""
-            }
+                     : ""
+             }
 
 			 .${blockId}.eb-team-wrapper ul.socials li a {
 				 ${iconSizeMobile}
@@ -1290,22 +1370,27 @@ export default function Style(props) {
 				 ${socialBorderMobile}
 			 }
 
+             .${blockId}.eb-team-wrapper ul.socials li a svg {
+                ${svgWidthMobile}
+                ${svgHeightMobile}
+            }
 
 			 .${blockId}.eb-team-wrapper ul.socials li:hover a {
 				 ${socialBordersHoverMobile}
 			 }
 
-             ${icnEffect
-                ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
+             ${
+                 icnEffect
+                     ? `.${blockId}.eb-team-wrapper ul.socials li a:before {
                 ${socialBordersHoverMobile}
             }
             `
-                : ""
-            }
+                     : ""
+             }
 
 			 `
-            : ""
-        }
+             : ""
+     }
 
 
 	 `;

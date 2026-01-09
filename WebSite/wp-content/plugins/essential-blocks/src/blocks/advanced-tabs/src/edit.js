@@ -11,13 +11,14 @@ const { times } = lodash;
  * Internal dependencies
  */
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext,
 } from "@essential-blocks/controls";
 import Inspector from "./inspector";
 import Style from "./style";
 import defaultAttributes from "./attributes";
+import { applyFilters } from "@wordpress/hooks";
 
 const Edit = (props) => {
     const { attributes, setAttributes, clientId, isSelected } = props;
@@ -31,6 +32,7 @@ const Edit = (props) => {
         isMinHeightAsTitle,
         addCaretIcon,
         caretIcon,
+        tabStyle
     } = attributes;
 
     const tabWrapRef = useRef(null);
@@ -120,11 +122,15 @@ const Edit = (props) => {
                 tabWrapDiv.classList.remove("active");
             }
         }
+
+
     }, [activeTabId, innerBlocks]);
 
     const handleTabTitleClick = (id) => {
         setIsClickTab(true);
         setActiveTabId(`${id}`);
+
+        applyFilters("eb_advanced_tabs_pro_liquid_glass_effect_editor", null, attributes);
     };
 
     const onTabTitleChange = (text, index) => {
@@ -154,6 +160,10 @@ const Edit = (props) => {
         }
     }, [attributes]);
 
+    // Apply liquid glass effect editor enhancements
+    useEffect(() => {
+        applyFilters("eb_advanced_tabs_pro_liquid_glass_effect_editor", null, attributes);
+    }, [attributes]);
 
     const enhancedProps = {
         ...props,
@@ -176,10 +186,10 @@ const Edit = (props) => {
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
                     <div
-                        className={`${blockId} eb-advanced-tabs-wrapper ${layout}`}
+                        className={`${blockId} eb-advanced-tabs-wrapper ${layout} ${tabStyle === 'liquid-glass' ? 'eb-tabs-wrapper-glassed' : ''}`}
                         ref={tabWrapRef}
                     >
-                        <div className="eb-tabs-nav">
+                        <div className={`eb-tabs-nav ${tabStyle === 'liquid-glass' ? 'eb-tabs-glassed' : ''}`} >
                             <ul
                                 ref={tabHeaderWrapRef}
                                 className="tabTitles"
@@ -190,7 +200,7 @@ const Edit = (props) => {
                                         <li
                                             key={index}
                                             data-title-tab-id={item.id}
-                                            onClick={(e) => {
+                                            onClick={() => {
                                                 handleTabTitleClick(item.id);
                                             }}
                                             className={
@@ -205,7 +215,7 @@ const Edit = (props) => {
                                                 <>
                                                     {item.media === "icon" &&
                                                         item.icon && (
-                                                            <EBDisplayIcon
+                                                            <EBDisplayIconEdit
                                                                 icon={item.icon}
                                                                 className="tabIcon"
                                                             />
@@ -241,7 +251,7 @@ const Edit = (props) => {
                                                 )}
                                             </div>
                                             {addCaretIcon && caretIcon && (
-                                                <EBDisplayIcon
+                                                <EBDisplayIconEdit
                                                     icon={caretIcon}
                                                     className="tab-caret-icon"
                                                 />
@@ -249,6 +259,12 @@ const Edit = (props) => {
                                         </li>
                                     );
                                 })}
+
+                                {applyFilters(
+                                    "eb_advanced_tabs_pro_liquid_glass_effect_editor_html",
+                                    "",
+                                    attributes,
+                                )}
                             </ul>
                         </div>
                         <div key={renderId} className={`eb-tabs-contents`}>

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import {
-    EBDisplayIcon, sanitizeURL, BlockProps
+    EBDisplayIconSave, sanitizeURL, BlockProps
 } from "@essential-blocks/controls";
 
 const Save = ({ attributes }) => {
@@ -69,7 +69,7 @@ const Save = ({ attributes }) => {
                                     <div className="eb-pricing-top">
                                         {showHeaderIcon && (
                                             <div className="eb-pricing-icon" data-icon={headerIcon}>
-                                                <EBDisplayIcon className={`icon`} icon={headerIcon} />
+                                                <EBDisplayIconSave className={`icon`} icon={headerIcon} />
                                             </div>
                                         )}
                                         <div className="eb-pricing-tag">
@@ -136,7 +136,7 @@ const Save = ({ attributes }) => {
                                                                 >
                                                                     {clickable && link ? (
                                                                         <a href={sanitizeURL(link)}>
-                                                                            <EBDisplayIcon
+                                                                            <EBDisplayIconSave
                                                                                 className={`eb-pricebox-icon`}
                                                                                 icon={icon}
                                                                                 style={{ color: color }}
@@ -148,7 +148,7 @@ const Save = ({ attributes }) => {
                                                                     ) : (
                                                                         <>
                                                                             {showFeatureIcon && (
-                                                                                <EBDisplayIcon
+                                                                                <EBDisplayIconSave
                                                                                     className={`eb-pricebox-icon`}
                                                                                     icon={icon}
                                                                                     style={{ color: color }}
@@ -176,11 +176,11 @@ const Save = ({ attributes }) => {
                                                         className="eb-pricing-button"
                                                     >
                                                         {buttonIconPosition === "left" && (
-                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                            <EBDisplayIconSave icon={buttonIcon} />
                                                         )}
                                                         <span className="eb-button-text">{buttonText}</span>
                                                         {buttonIconPosition === "right" && (
-                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                            <EBDisplayIconSave icon={buttonIcon} />
                                                         )}
                                                     </a>
                                                 </div>
@@ -194,7 +194,7 @@ const Save = ({ attributes }) => {
                                 <>
                                     {showHeaderIcon && (
                                         <div className="eb-pricing-icon" data-icon={headerIcon}>
-                                            <EBDisplayIcon className={`icon`} icon={headerIcon} />
+                                            <EBDisplayIconSave className={`icon`} icon={headerIcon} />
                                         </div>
                                     )}
                                     <div className="eb-pricing-header">
@@ -259,7 +259,7 @@ const Save = ({ attributes }) => {
                                                         >
                                                             {clickable && link ? (
                                                                 <a href={sanitizeURL(link)}>
-                                                                    <EBDisplayIcon
+                                                                    <EBDisplayIconSave
                                                                         className={`eb-pricebox-icon`}
                                                                         icon={icon}
                                                                         style={{ color: color }}
@@ -271,7 +271,7 @@ const Save = ({ attributes }) => {
                                                             ) : (
                                                                 <>
                                                                     {showFeatureIcon && (
-                                                                        <EBDisplayIcon
+                                                                        <EBDisplayIconSave
                                                                             className={`eb-pricebox-icon`}
                                                                             icon={icon}
                                                                             style={{ color: color }}
@@ -337,11 +337,11 @@ const Save = ({ attributes }) => {
                                                     className="eb-pricing-button"
                                                 >
                                                     {buttonIconPosition === "left" && (
-                                                        <EBDisplayIcon icon={buttonIcon} />
+                                                        <EBDisplayIconSave icon={buttonIcon} />
                                                     )}
                                                     <span className="eb-button-text">{buttonText}</span>
                                                     {buttonIconPosition === "right" && (
-                                                        <EBDisplayIcon icon={buttonIcon} />
+                                                        <EBDisplayIconSave icon={buttonIcon} />
                                                     )}
                                                 </a>
                                             </div>

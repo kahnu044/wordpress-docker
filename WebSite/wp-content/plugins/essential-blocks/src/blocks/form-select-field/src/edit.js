@@ -11,7 +11,7 @@ import { select } from "@wordpress/data"
 import {
     filterBlocksByName,
     getBlockParentClientId,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     DynamicInputValueHandler,
     DynamicFormFieldValueHandler,
     BlockProps,
@@ -176,7 +176,7 @@ const Edit = (props) => {
                         )}
 
                         <div className="eb-field-input-wrap">
-                            {isIcon && icon && <EBDisplayIcon icon={icon} className={"eb-input-icon"} />}
+                            {isIcon && icon && <EBDisplayIconEdit icon={icon} className={"eb-input-icon"} />}
                             {/* <select
                                 id={fieldName}
                                 name={fieldName}

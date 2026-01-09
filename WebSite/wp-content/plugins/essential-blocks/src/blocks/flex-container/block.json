@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Flex Container",
+  "name": "essential-blocks/flex-container",
+  "description": "Create flexible layouts with CSS Flexbox properties for responsive design.",
+  "category": "essential-blocks",
+  "apiVersion": 2,
+  "textdomain": "essential-blocks",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

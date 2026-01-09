@@ -194,12 +194,52 @@ export default function Style(props) {
     });
 
     const {
+        rangeStylesDesktop: frontSvgWidthDesktop,
+        rangeStylesTab: frontSvgWidthTab,
+        rangeStylesMobile: frontSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: boxFrontIconSizeAttr,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: frontSvgHeightDesktop,
+        rangeStylesTab: frontSvgHeightTab,
+        rangeStylesMobile: frontSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: boxFrontIconSizeAttr,
+        property: "height",
+        attributes,
+    });
+
+    const {
         rangeStylesDesktop: backFontSizeDesktop,
         rangeStylesTab: backFontSizeTab,
         rangeStylesMobile: backFontSizeMobile,
     } = generateResponsiveRangeStyles({
         controlName: boxBackIconSizeAttr,
         property: "font-size",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: backSvgWidthDesktop,
+        rangeStylesTab: backSvgWidthTab,
+        rangeStylesMobile: backSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: boxBackIconSizeAttr,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: backSvgHeightDesktop,
+        rangeStylesTab: backSvgHeightTab,
+        rangeStylesMobile: backSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: boxBackIconSizeAttr,
+        property: "height",
         attributes,
     });
 
@@ -800,6 +840,11 @@ export default function Style(props) {
          .eb-flipbox-container.${blockId} .eb-flipbox-icon-front  .dashicons {
             ${frontFontSizeDesktop}
          }
+        .eb-flipbox-container.${blockId} .eb-flipbox-icon-front svg {
+            ${frontSvgWidthDesktop}
+            ${frontSvgHeightDesktop}
+            fill: ${frontIconColor};
+        }
 	 `;
 
     const frontIconStyleTab = `
@@ -816,6 +861,10 @@ export default function Style(props) {
     .eb-flipbox-container.${blockId} .eb-flipbox-icon-front  .dashicons {
         ${frontFontSizeTab}
     }
+        .eb-flipbox-container.${blockId} .eb-flipbox-icon-front svg {
+            ${frontSvgWidthTab}
+            ${frontSvgHeightTab}
+        }
 	 `;
 
     const frontIconStyleMobile = `
@@ -832,6 +881,10 @@ export default function Style(props) {
     .eb-flipbox-container.${blockId} .eb-flipbox-icon-front  .dashicons {
         ${frontFontSizeMobile}
     }
+        .eb-flipbox-container.${blockId} .eb-flipbox-icon-front svg {
+            ${frontSvgWidthMobile}
+            ${frontSvgHeightMobile}
+        }
 	 `;
 
     const backStyleDesktop = `
@@ -983,6 +1036,12 @@ export default function Style(props) {
      .eb-flipbox-container.${blockId} .eb-flipbox-icon-back .dashicons {
         ${backFontSizeDesktop}
      }
+
+     .eb-flipbox-container.${blockId} .eb-flipbox-icon-back svg {
+        ${backSvgWidthDesktop}
+        ${backSvgHeightDesktop}
+        fill: ${backIconColor};
+     }
 	 `;
 
     const backIconStyleTab = `
@@ -999,6 +1058,10 @@ export default function Style(props) {
     .eb-flipbox-container.${blockId} .eb-flipbox-icon-back .dashicons {
         ${backFontSizeTab}
      }
+        .eb-flipbox-container.${blockId} .eb-flipbox-icon-back svg {
+        ${backSvgWidthTab}
+        ${backSvgHeightTab}
+     }
 	`;
 
     const backIconStyleMobile = `
@@ -1014,6 +1077,10 @@ export default function Style(props) {
 	}
     .eb-flipbox-container.${blockId} .eb-flipbox-icon-back .dashicons {
         ${backFontSizeMobile}
+     }
+        .eb-flipbox-container.${blockId} .eb-flipbox-icon-back svg {
+        ${backSvgWidthMobile}
+        ${backSvgHeightMobile}
      }
 	`;
 

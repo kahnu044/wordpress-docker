@@ -7,7 +7,6 @@ import {
 EBDisplayIcon
 } from "@essential-blocks/controls";
 import attributes from "./attributes";
-// import InfoboxContainer from "./components/infobox-save";
 
 const deprecated = [
     {

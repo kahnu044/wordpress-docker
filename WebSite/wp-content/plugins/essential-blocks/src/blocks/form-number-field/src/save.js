@@ -2,7 +2,7 @@
  * WordPress Dependencies
  *
  */
-import { EBDisplayIcon, BlockProps } from "@essential-blocks/controls";
+import { EBDisplayIconSave, BlockProps } from "@essential-blocks/controls";
 const save = ({ attributes }) => {
     const {
         blockId,
@@ -42,7 +42,7 @@ const save = ({ attributes }) => {
 
                     <div className="eb-field-input-wrap">
                         {isIcon && icon && (
-                            <EBDisplayIcon
+                            <EBDisplayIconSave
                                 icon={icon}
                                 className={"eb-input-icon"}
                             />

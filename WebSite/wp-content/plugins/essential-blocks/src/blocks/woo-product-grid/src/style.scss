@@ -1,3 +1,10 @@
+// editor
+.eb-is-pro-toggle-wrapper {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
 .eb-woo-products-wrapper * {
 	box-sizing: border-box;
 	margin: 0;
@@ -487,13 +494,14 @@
 	align-items: center;
 	text-align: center;
 }
+
 .eb-woo-products-wrapper {
 	.eb-woo-product-content {
 		.eb-woo-product-category-list {
 			list-style: none;
 			margin-bottom: 5px;
 		}
-		
+
 		.eb-woo-product-category-list a {
 			text-decoration: none;
 			color: #1d2939;

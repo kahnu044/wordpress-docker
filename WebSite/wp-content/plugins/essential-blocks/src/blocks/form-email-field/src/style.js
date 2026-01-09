@@ -21,8 +21,8 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
-    StyleComponent
- } from "@essential-blocks/controls";
+    StyleComponent,
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -173,6 +173,28 @@ export default function Style(props) {
         customUnit: "px",
     });
 
+    const {
+        rangeStylesDesktop: iconHeightStylesDesktop,
+        rangeStylesTab: iconHeightStylesTab,
+        rangeStylesMobile: iconHeightStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: iconWidhtStylesDesktop,
+        rangeStylesTab: iconWidhtStylesTab,
+        rangeStylesMobile: iconWidhtStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-email-field-wrapper.${blockId}{
@@ -282,30 +304,44 @@ export default function Style(props) {
     const iconDesktop = `
 		.eb-form-wrapper.${parentBlockId} .eb-email-field-wrapper.${blockId} .eb-input-icon {
             ${iconSizeStylesDesktop}
+            ${iconHeightStylesDesktop}
+            ${iconWidhtStylesDesktop}
+            fill: ${iconColor ? iconColor : parentIconColor};
             color: ${iconColor ? iconColor : parentIconColor};
 		}
 
-        ${isIcon
-            ? `
+        .eb-form-wrapper.${parentBlockId} .eb-email-field-wrapper.${blockId} .eb-input-icon svg {
+            ${iconHeightStylesDesktop}
+            ${iconWidhtStylesDesktop}
+            fill: ${iconColor ? iconColor : parentIconColor};
+		}
+
+        ${
+            isIcon
+                ? `
                 .eb-form-wrapper.${parentBlockId} .eb-email-field-wrapper.${blockId} .eb-input-icon {
-                    left: ${fieldPaddingLeft
-                ? fieldPaddingLeft
-                : parentBlockPaddingLeft
-            }${fieldPaddingUnit};
+                    left: ${
+                        fieldPaddingLeft
+                            ? fieldPaddingLeft
+                            : parentBlockPaddingLeft
+                    }${fieldPaddingUnit};
                 }
                 .eb-form-wrapper.${parentBlockId} .eb-email-field-wrapper.${blockId} .eb-field-input {
-                    padding-left: calc(${iconSizeRange ? iconSizeRange : parentBlockIconSize
-            }px + (${fieldPaddingLeft
-                ? fieldPaddingLeft
-                : parentBlockPaddingLeft == 0
-                    ? 8
-                    : parentBlockPaddingLeft
-            }${fieldPaddingUnit
-                ? fieldPaddingUnit
-                : parentBlockPaddingUnit
-            } * 1.6));
+                    padding-left: calc(${
+                        iconSizeRange ? iconSizeRange : parentBlockIconSize
+                    }px + (${
+                        fieldPaddingLeft
+                            ? fieldPaddingLeft
+                            : parentBlockPaddingLeft == 0
+                            ? 8
+                            : parentBlockPaddingLeft
+                    }${
+                        fieldPaddingUnit
+                            ? fieldPaddingUnit
+                            : parentBlockPaddingUnit
+                    } * 1.6));
                 }`
-            : ""
+                : ""
         }
 	`;
 

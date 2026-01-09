@@ -1162,6 +1162,18 @@
 	}
 }
 
+.eb-form-editor-formtype-item-pro {
+	.eb-form-editor-formtype-icon {
+		position: relative;
+	}
+
+	svg {
+		position: absolute;
+		top: 6px;
+		right: 0;
+	}
+}
+
 // Add this CSS for the loading indicator
 .eb-form-template-loading {
 	display: flex;

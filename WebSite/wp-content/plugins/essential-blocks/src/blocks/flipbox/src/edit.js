@@ -15,7 +15,7 @@ import { BACK_IMG_ATTR, FRONT_IMG_ATTR } from "./constants";
 import {
     isValidHtml,
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     sanitizeURL,
     BlockProps,
     withBlockContext,
@@ -142,7 +142,7 @@ function Edit(props) {
                                                         className="eb-flipbox-icon-front"
                                                         data-icon={frontIcon}
                                                     >
-                                                        <EBDisplayIcon
+                                                        <EBDisplayIconEdit
                                                             icon={frontIcon}
                                                         />
                                                     </div>
@@ -275,7 +275,7 @@ function Edit(props) {
                                                         className="eb-flipbox-icon-back"
                                                         data-icon={backIcon}
                                                     >
-                                                        <EBDisplayIcon
+                                                        <EBDisplayIconEdit
                                                             icon={backIcon}
                                                         />
                                                     </div>
@@ -410,7 +410,7 @@ function Edit(props) {
                                                 <div className="eb-flipbox-button-content">
                                                     <span>{buttonText}</span>
                                                     {buttonIcon && (
-                                                        <EBDisplayIcon
+                                                        <EBDisplayIconEdit
                                                             icon={buttonIcon}
                                                             className="eb-flipbox-button-icon"
                                                         />

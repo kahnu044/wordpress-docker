@@ -4,7 +4,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     WRAPPER_MARGIN,
@@ -23,7 +23,7 @@ import {
     TEXT_TYPO,
     LABEL_TYPOGRAPHY,
     FIELD_TEXT_VALIDATION,
-    FIELD_TEXT
+    FIELD_TEXT,
 } from "./constants/typographyPrefixConstants";
 
 const attributes = {
@@ -151,7 +151,7 @@ const attributes = {
     ...generateDimensionsAttributes(FIELD_PADDING),
     ...generateBorderShadowAttributes(FIELD_BORDER),
     ...generateDimensionsAttributes(LABEL_MARGIN),
-    ...generateResponsiveRangeAttributes(ICON_SIZE),
+    ...generateResponsiveRangeAttributes(ICON_SIZE, { defaultRange: 15 }),
 };
 
 export default attributes;

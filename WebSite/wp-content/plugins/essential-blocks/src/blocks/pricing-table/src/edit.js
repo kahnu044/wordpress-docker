@@ -18,7 +18,7 @@ import Templates from '../../../../patterns/pricing-table.json'
 import defaultAttributes from "./attributes"
 import {
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     sanitizeURL,
     BlockProps,
     BrowseTemplate,
@@ -161,7 +161,7 @@ const Edit = (props) => {
                                                             className="eb-pricing-icon"
                                                             data-icon={headerIcon}
                                                         >
-                                                            <EBDisplayIcon className={`icon`} icon={headerIcon} />
+                                                            <EBDisplayIconEdit className={`icon`} icon={headerIcon} />
                                                         </div>
                                                     )}
                                                     <div className="eb-pricing-tag">
@@ -286,7 +286,7 @@ const Edit = (props) => {
                                                                                     }
                                                                                 >
                                                                                     {showFeatureIcon && (
-                                                                                        <EBDisplayIcon
+                                                                                        <EBDisplayIconEdit
                                                                                             className={`eb-pricebox-icon`}
                                                                                             icon={icon}
                                                                                         />
@@ -300,7 +300,7 @@ const Edit = (props) => {
                                                                             ) : (
                                                                                 <>
                                                                                     {showFeatureIcon && (
-                                                                                        <EBDisplayIcon
+                                                                                        <EBDisplayIconEdit
                                                                                             className={`eb-pricebox-icon`}
                                                                                             icon={icon}
                                                                                         />
@@ -331,7 +331,7 @@ const Edit = (props) => {
                                                                 >
                                                                     {buttonIconPosition ===
                                                                         "left" && (
-                                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                                            <EBDisplayIconEdit icon={buttonIcon} />
                                                                         )}
                                                                     <DynamicInputValueHandler
                                                                         value={
@@ -352,7 +352,7 @@ const Edit = (props) => {
                                                                     />
                                                                     {buttonIconPosition ===
                                                                         "right" && (
-                                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                                            <EBDisplayIconEdit icon={buttonIcon} />
                                                                         )}
                                                                 </a>
                                                             </div>
@@ -370,7 +370,7 @@ const Edit = (props) => {
                                                             className="eb-pricing-icon"
                                                             data-icon={headerIcon}
                                                         >
-                                                            <EBDisplayIcon className={`icon`} icon={headerIcon} />
+                                                            <EBDisplayIconEdit className={`icon`} icon={headerIcon} />
                                                         </div>
                                                     )}
                                                     <div className="eb-pricing-header">
@@ -491,7 +491,7 @@ const Edit = (props) => {
                                                                                         href={sanitizeURL(link)}
                                                                                     >
                                                                                         {showFeatureIcon && (
-                                                                                            <EBDisplayIcon
+                                                                                            <EBDisplayIconEdit
                                                                                                 className={`eb-pricebox-icon`}
                                                                                                 icon={icon}
                                                                                                 style={{ color: color }}
@@ -507,7 +507,7 @@ const Edit = (props) => {
                                                                                 ) : (
                                                                                     <>
                                                                                         {showFeatureIcon && (
-                                                                                            <EBDisplayIcon
+                                                                                            <EBDisplayIconEdit
                                                                                                 className={`eb-pricebox-icon`}
                                                                                                 icon={icon}
                                                                                                 style={{ color: color }}
@@ -610,7 +610,7 @@ const Edit = (props) => {
                                                                 >
                                                                     {buttonIconPosition ===
                                                                         "left" && (
-                                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                                            <EBDisplayIconEdit icon={buttonIcon} />
                                                                         )}
                                                                     <DynamicInputValueHandler
                                                                         value={buttonText}
@@ -627,7 +627,7 @@ const Edit = (props) => {
                                                                     />
                                                                     {buttonIconPosition ===
                                                                         "right" && (
-                                                                            <EBDisplayIcon icon={buttonIcon} />
+                                                                            <EBDisplayIconEdit icon={buttonIcon} />
                                                                         )}
                                                                 </a>
                                                             </div>

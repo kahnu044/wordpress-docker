@@ -3,7 +3,7 @@
  */
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon,
+    EBDisplayIconSave,
     sanitizeURL,
     BlockProps,
     ImageComponent
@@ -94,7 +94,7 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-front"
                                                     data-icon={frontIcon}
                                                 >
-                                                    <EBDisplayIcon
+                                                    <EBDisplayIconSave
                                                         icon={frontIcon}
                                                     />
                                                 </div>
@@ -165,7 +165,7 @@ const Save = ({ attributes }) => {
                                                     className="eb-flipbox-icon-back"
                                                     data-icon={backIcon}
                                                 >
-                                                    <EBDisplayIcon
+                                                    <EBDisplayIconSave
                                                         icon={backIcon}
                                                     />
                                                 </div>
@@ -224,7 +224,7 @@ const Save = ({ attributes }) => {
                                             <div className="eb-flipbox-button-content">
                                                 <span>{buttonText}</span>
                                                 {buttonIcon && (
-                                                    <EBDisplayIcon
+                                                    <EBDisplayIconSave
                                                         icon={buttonIcon}
                                                         className="eb-flipbox-button-icon"
                                                     />

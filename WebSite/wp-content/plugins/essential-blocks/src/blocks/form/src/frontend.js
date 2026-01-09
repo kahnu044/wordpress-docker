@@ -110,8 +110,6 @@ window.addEventListener("DOMContentLoaded", () => {
                     sendAjax = false;
                 }
 
-                console.log('formDataObj', formDataObj);
-
                 if (sendAjax) {
                     button.classList.add("loading");
                     ajaxData.append("form_data", JSON.stringify(formDataObj));

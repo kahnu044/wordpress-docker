@@ -178,6 +178,28 @@ export default function Style(props) {
         customUnit: "px",
     });
 
+    const {
+        rangeStylesDesktop: svgWidthDesktop,
+        rangeStylesTab: svgWidthTab,
+        rangeStylesMobile: svgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: svgHeightDesktop,
+        rangeStylesTab: svgHeightTab,
+        rangeStylesMobile: svgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-text-field-wrapper.${blockId}{
@@ -289,6 +311,12 @@ export default function Style(props) {
             ${iconSizeStylesDesktop}
             color: ${iconColor ? iconColor : parentIconColor};
     	}
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} svg.eb-input-icon,
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} .eb-input-icon svg {
+            ${svgWidthDesktop}
+            ${svgHeightDesktop}
+            fill: ${iconColor};
+        }
 
         ${isIcon
             ? `
@@ -314,6 +342,28 @@ export default function Style(props) {
         }
     `;
 
+    const iconTab = `
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} .eb-input-icon {
+            ${iconSizeStylesTab}
+    	}
+    	.eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} svg.eb-input-icon,
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} .eb-input-icon svg {
+            ${svgWidthTab}
+            ${svgHeightTab}
+        }
+    `;
+
+    const iconMobile = `
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} .eb-input-icon {
+            ${iconSizeStylesMobile}
+    	}
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} svg.eb-input-icon,
+        .eb-form-wrapper.${parentBlockId} .eb-text-field-wrapper.${blockId} .eb-input-icon svg {
+            ${svgWidthMobile}
+            ${svgHeightMobile}
+        }
+    `;
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
@@ -327,6 +377,7 @@ export default function Style(props) {
 		${wrapperStylesTab}
 		${labelTab}
 		${fieldTab}
+		${iconTab}
 	`);
 
     // all css styles for Mobile in strings ⬇
@@ -334,6 +385,7 @@ export default function Style(props) {
 		${wrapperStylesMobile}
 		${labelMobile}
 		${fieldMobile}
+		${iconMobile}
 	`);
 
     return (

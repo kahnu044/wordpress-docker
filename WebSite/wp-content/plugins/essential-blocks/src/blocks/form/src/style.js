@@ -127,6 +127,7 @@ export default function Style(props) {
         showInputIcon,
         fieldsPaddingTop,
         formStyle,
+        blockOnMobile
     } = attributes;
 
     //
@@ -554,19 +555,19 @@ export default function Style(props) {
 
         ${formAlign === "left"
             ? `.eb-parent-${blockId}{
-                        justify-content: left;
+                        margin: 0 auto 0 0;
                     }`
             : ""
         }
         ${formAlign === "center"
             ? `.eb-parent-${blockId}{
-                        justify-content: center;
+                        margin: 0 auto;
                     }`
             : ""
         }
         ${formAlign === "right"
             ? `.eb-parent-${blockId}{
-                        justify-content: right;
+                        margin: 0 0 0 auto;
                     }`
             : ""
         }
@@ -878,17 +879,14 @@ export default function Style(props) {
                         flex-basis: calc(100% - ${inlineFormWidthRange}%);
                     }
 
-                    ${btnHorizontalPositionRange !== "undefined"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
-                                    position: relative;
-                                    right: ${btnHorizontalPositionRange}${btnHorizontalPositionUnit};
-                                }`
-                : ""
-            }
+                    .eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                        position: relative;
+                        ${btnHorizontalPositionDesktop}
+                    }
                     ${btnVerticalAlign === "flex-start"
                 ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
-                                    margin-top: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
-                                }`
+                                            margin-top: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
+                                        }`
                 : ""
             }
                     ${btnVerticalAlign === "flex-end"
@@ -957,13 +955,9 @@ export default function Style(props) {
                             flex-basis: calc(100% - ${TABinlineFormWidthRange}%);
                         }
 
-                        ${btnHorizontalPositionRange !== "undefined"
-                ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
-                                        position: relative;
-                                        right: ${btnHorizontalPositionRange}${btnHorizontalPositionUnit};
-                                    }`
-                : ""
-            }
+                        .eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                            ${btnHorizontalPositionTab}
+                        }
                         ${btnVerticalAlign === "flex-start"
                 ? `.eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
                                         margin-top: ${btnVerticalPositionRange}${btnVerticalPositionUnit};
@@ -1032,6 +1026,8 @@ export default function Style(props) {
             ${btnBDShadowHoverMobile}
 		}
 
+
+
         ${buttonWidth !== "auto"
             ? buttonWidth === "full"
                 ? `
@@ -1049,6 +1045,27 @@ export default function Style(props) {
 					${iconSizeMobile}
 					${iconPosition === "left" ? iconGapRightMobile : iconGapLeftMobile}
 				}`
+            : ""
+        }
+
+        ${formLayout === "inline"
+            ? `
+                ${blockOnMobile
+                ? `.eb-form-wrapper.${blockId} .eb-form.form-layout-inline {
+                    flex-direction: column;
+                    }`
+                : ""
+            }
+                .eb-form-wrapper.${blockId} .eb-form.form-layout-inline .eb-form-fields {
+                    flex-basis: ${MOBinlineFormWidthRange}%;
+                }
+                .eb-form-wrapper.${blockId} .eb-form.form-layout-inline .eb-form-submit {
+                    flex-basis: calc(100% - ${MOBinlineFormWidthRange}%);
+                }
+                .eb-form-wrapper.${blockId} .eb-form-submit .eb-form-submit-button{
+                    ${btnHorizontalPositionMobile}
+                }
+                    `
             : ""
         }
 	`;

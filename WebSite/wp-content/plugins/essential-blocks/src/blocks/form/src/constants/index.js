@@ -33,95 +33,95 @@ export const BTN_HORIZONTAL_POSITION = "btnHorizontalPosition";
 export const INPUT_ICON_SIZE = "inputIconSize";
 
 export const FORM_TYPE = [
-    { label: __("Contact Form"), value: "contact_form" },
-    { label: __("Subscription Form"), value: "subscription_form" },
-    { label: __("RSVP Form"), value: "rsvp_form" },
-    { label: __("Blank"), value: "blank" },
-    { label: __("Multi Step Form"), value: "multistep_form", isPro: true },
+    { label: __("Contact Form", "essential-blocks"), value: "contact_form" },
+    { label: __("Subscription Form", "essential-blocks"), value: "subscription_form" },
+    { label: __("RSVP Form", "essential-blocks"), value: "rsvp_form" },
+    { label: __("Blank", "essential-blocks"), value: "blank" },
+    { label: __("Multi Step Form", "essential-blocks"), value: "multistep_form", isPro: true },
     // { label: __("Event Booking Form (Pro)"), value: "event", isPro: true },
     // { label: __("Survey Form (Pro)"), value: "survey", isPro: true },
 ];
 
 export const TEMPLATES = [
-    { label: __("Contact Form (Basic)"), value: "contact_form_1" },
-    { label: __("Contact From Modern"), value: "contact_form_2" },
+    { label: __("Contact Form (Basic)", "essential-blocks"), value: "contact_form_1" },
+    { label: __("Contact From Modern", "essential-blocks"), value: "contact_form_2" },
 ];
 
 export const SUBSCRIPTION_TEMPLATES = [
-    { label: __("Subscription Form 1"), value: "subscription_form_1" },
-    { label: __("Subscription From 2"), value: "subscription_form_2" },
+    { label: __("Subscription Form 1", "essential-blocks"), value: "subscription_form_1" },
+    { label: __("Subscription From 2", "essential-blocks"), value: "subscription_form_2" },
 ];
 
 export const INTEGRATIONS = [
-    { label: __("None"), value: "" },
-    { label: __("MailChimp (Pro)"), value: "mailchimp", isPro: true },
+    { label: __("None", "essential-blocks"), value: "" },
+    { label: __("MailChimp (Pro)", "essential-blocks"), value: "mailchimp", isPro: true },
 ];
 
 export const NOTIFICATION_TYPE = [
-    { label: __("Send Email"), value: "email" },
+    { label: __("Send Email", "essential-blocks"), value: "email" },
     {
-        label: __("Send Email & Save Response (Pro)"),
+        label: __("Send Email & Save Response (Pro)", "essential-blocks"),
         value: "emailsave",
         isPro: true,
     },
     {
-        label: __("Only Save Response (Pro)"),
+        label: __("Only Save Response (Pro)", "essential-blocks"),
         value: "save",
         isPro: true,
     },
 ];
 
 export const CONFIRMATION_TYPE = [
-    { label: __("Message in the Same Page"), value: "message" },
+    { label: __("Message in the Same Page", "essential-blocks"), value: "message" },
     // { label: __("Popup (Pro)"), value: "popup", isPro: true },
     {
-        label: __("Redirect (Pro)"),
+        label: __("Redirect (Pro)", "essential-blocks"),
         value: "redirect",
         isPro: true,
     },
 ];
 
 export const CONTENTS_ALIGNMENTS = [
-    { label: __("Left"), value: "left" },
-    { label: __("Center"), value: "center" },
-    { label: __("Right"), value: "right" },
+    { label: __("Left", "essential-blocks"), value: "left" },
+    { label: __("Center", "essential-blocks"), value: "center" },
+    { label: __("Right", "essential-blocks"), value: "right" },
 ];
 
 export const SIZE_UNIT_TYPES = [
-    { label: __("px"), value: "px" },
-    { label: __("%"), value: "%" },
-    { label: __("em"), value: "em" },
+    { label: __("px", "essential-blocks"), value: "px" },
+    { label: __("%", "essential-blocks"), value: "%" },
+    { label: __("em", "essential-blocks"), value: "em" },
 ];
 
 export const NORMAL_HOVER = [
-    { label: __("Normal"), value: "normal" },
-    { label: __("Hover"), value: "hover" },
+    { label: __("Normal", "essential-blocks"), value: "normal" },
+    { label: __("Hover", "essential-blocks"), value: "hover" },
 ];
 export const NORMAL_CHECKED = [
-    { label: __("Normal"), value: "normal" },
-    { label: __("Checked"), value: "checked" },
+    { label: __("Normal", "essential-blocks"), value: "normal" },
+    { label: __("Checked", "essential-blocks"), value: "checked" },
 ];
 
 export const FORM_WIDTH = [
-    { label: __("Full"), value: "full" },
-    { label: __("Fixed"), value: "fixed" },
+    { label: __("Full", "essential-blocks"), value: "full" },
+    { label: __("Fixed", "essential-blocks"), value: "fixed" },
 ];
 export const BUTTON_WIDTH = [
-    { label: __("Auto"), value: "auto" },
-    { label: __("Full"), value: "full" },
-    { label: __("Fixed"), value: "fixed" },
+    { label: __("Auto", "essential-blocks"), value: "auto" },
+    { label: __("Full", "essential-blocks"), value: "full" },
+    { label: __("Fixed", "essential-blocks"), value: "fixed" },
 ];
 export const ICON_POSITION = [
     { label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
     { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },
 ];
 export const MESSAGE_TYPE = [
-    { label: __("Success"), value: "success" },
-    { label: __("Error"), value: "error" },
+    { label: __("Success", "essential-blocks"), value: "success" },
+    { label: __("Error", "essential-blocks"), value: "error" },
 ];
 export const BUTTON_STYLE = [
-    { label: __("Block"), value: "block" },
-    { label: __("Inline with Input Field"), value: "inline" },
+    { label: __("Block", "essential-blocks"), value: "block" },
+    { label: __("Inline with Input Field", "essential-blocks"), value: "inline" },
 ];
 
 export const VERTICAL_ALIGN = [

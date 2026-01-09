@@ -36,7 +36,9 @@
 }
 
 .eb-pricing .eb-pricing-button {
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	padding: 12px 25px;
 	background: #00c853;
 	line-height: 16px;
@@ -312,7 +314,9 @@
 
 .eb-pricing.style-1 .eb-pricing-item .body ul li,
 .eb-pricing.style-1 .eb-pricing-item .eb-pricing-body ul li {
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: auto;
 	padding: 10px 0px;

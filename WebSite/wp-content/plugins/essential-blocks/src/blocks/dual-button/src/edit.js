@@ -11,7 +11,7 @@ import Style from "./style";
 import defaultAttributes from './attributes';
 
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext,
     EBButton
@@ -67,7 +67,7 @@ function Edit(props) {
                             >
                                 {connectorType === "icon" && (
                                     <span>
-                                        <EBDisplayIcon icon={innerButtonIcon} />
+                                        <EBDisplayIconEdit icon={innerButtonIcon} />
                                     </span>
                                 )}
                                 {connectorType === "text" && <span>{innerButtonText}</span>}

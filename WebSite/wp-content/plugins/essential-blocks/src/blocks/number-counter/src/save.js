@@ -4,7 +4,7 @@
 import { __ } from "@wordpress/i18n";
 import { RichText } from "@wordpress/block-editor";
 import {
-EBDisplayIcon, BlockProps
+EBDisplayIconSave, BlockProps
 } from "@essential-blocks/controls";
 /**
  * Internal dependencies
@@ -38,7 +38,7 @@ const Save = ({ attributes }) => {
                     {media === "icon" ? (
                         <div className="icon-img-wrapper">
                             <div className="eb-icon ">
-                                <EBDisplayIcon icon={selectedIcon} className={`eb-counter-icon-data-selector`} />
+                                <EBDisplayIconSave icon={selectedIcon} className={`eb-counter-icon-data-selector`} />
                             </div>
                         </div>
                     ) : null}

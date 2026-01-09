@@ -35,3 +35,4 @@ export const CLOSE_BTN_RIGHT = "closeRight";
 export const CLOSE_BTN_LEFT = "closeLeft";
 export const wrapMarginConst = "wrpMrg_";
 export const wrapPaddingConst = "wrpPad_";
+export const ICON_SIZE = "iconSize";

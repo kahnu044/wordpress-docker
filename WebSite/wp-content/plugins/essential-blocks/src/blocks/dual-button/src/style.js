@@ -144,6 +144,26 @@ export default function Style(props) {
         attributes,
     });
 
+    const {
+        rangeStylesDesktop: connectorSvgHeightDesktop,
+        rangeStylesTab: connectorSvgHeightTab,
+        rangeStylesMobile: connectorSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: BUTTONS_CONNECTOR_ICON_SIZE,
+        property: "height",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: connectorSvgWidthDesktop,
+        rangeStylesTab: connectorSvgWidthTab,
+        rangeStylesMobile: connectorSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: BUTTONS_CONNECTOR_ICON_SIZE,
+        property: "width",
+        attributes,
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-button-group-wrapper.${blockId}{
@@ -233,6 +253,11 @@ export default function Style(props) {
 			background: ${innerButtonColor};
 			color: ${innerButtonTextColor};
 		}
+
+        .eb-button-group-wrapper.${blockId} .eb-button-group__midldeInner svg {
+            ${connectorSvgHeightDesktop}
+            ${connectorSvgWidthDesktop}
+        }
 	`;
 
     const connectorStylesTab = `
@@ -245,6 +270,11 @@ export default function Style(props) {
 			${buttonConnectorWidthTab}
 			${buttonConnectorLineHeightTab}
 		}
+
+        .eb-button-group-wrapper.${blockId} .eb-button-group__midldeInner svg {
+            ${connectorSvgHeightTab}
+            ${connectorSvgWidthTab}
+        }
 	`;
 
     const connectorStylesMobile = `
@@ -257,6 +287,11 @@ export default function Style(props) {
 			${buttonConnectorWidthMobile}
 			${buttonConnectorLineHeightMobile}
 		}
+
+        .eb-button-group-wrapper.${blockId} .eb-button-group__midldeInner svg {
+            ${connectorSvgHeightMobile}
+            ${connectorSvgWidthMobile}
+        }
 	`;
 
     const wrapperClass = 'eb-button-group-wrapper';

@@ -5,7 +5,7 @@ import {
     generateTypographyStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
-    StyleComponent
+    StyleComponent,
 } from "@essential-blocks/controls";
 
 import {
@@ -31,6 +31,7 @@ import {
     CLOSE_BTN_TOP,
     wrapMarginConst,
     wrapPaddingConst,
+    ICON_SIZE,
 } from "./constants";
 
 export default function Style(props) {
@@ -268,6 +269,37 @@ export default function Style(props) {
         styleFor: "padding",
     });
 
+    const {
+        rangeStylesDesktop: iconSizeStylesDesktop,
+        rangeStylesTab: iconSizeStylesTab,
+        rangeStylesMobile: iconSizeStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "font-size",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: iconHeightStylesDesktop,
+        rangeStylesTab: iconHeightStylesTab,
+        rangeStylesMobile: iconHeightStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+    const {
+        rangeStylesDesktop: iconWidthStylesDesktop,
+        rangeStylesTab: iconWidthStylesTab,
+        rangeStylesMobile: iconWidthStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
     const wrapperStylesDesktop = `
 		.${blockId}.eb-popup-container {
 			${wrpMarginDesktop}
@@ -347,6 +379,16 @@ export default function Style(props) {
 		.${blockId}.eb-popup-container .eb-popup-overlay {
 			${overlayColor ? `background: ${overlayColor};` : ""}
 		}
+        .${blockId}.eb-popup-container .eb-popup-button .eb-popup-button-icon {
+            ${iconSizeStylesDesktop}
+            ${iconHeightStylesDesktop}
+            ${iconWidthStylesDesktop}
+        }
+        .${blockId}.eb-popup-container .eb-popup-button svg.eb-popup-button-icon, 
+        .${blockId}.eb-popup-container .eb-popup-button .eb-popup-button-icon svg {
+            ${iconHeightStylesDesktop}
+            ${iconWidthStylesDesktop}
+        }
 	`;
 
     const wrapperStylesTab = `

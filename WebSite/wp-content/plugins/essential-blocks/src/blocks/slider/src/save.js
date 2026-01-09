@@ -20,7 +20,6 @@ const Save = ({ attributes }) => {
         vertical,
         pauseOnHover,
         speed,
-        initialSlide,
         textAlign,
         classHook,
         arrowNextIcon,
@@ -31,6 +30,7 @@ const Save = ({ attributes }) => {
         contentTag,
         version,
         showLightbox,
+        enableLazyLoad,
     } = attributes;
 
     //Slider Settings
@@ -107,7 +107,8 @@ const Save = ({ attributes }) => {
                                         >
                                             <img
                                                 className="eb-slider-image"
-                                                data-lazy={image.url}
+                                                {...(enableLazyLoad ? { 'data-lazy': image.url } : { src: image.url })}
+
                                             />
                                         </a>
                                     </div>
@@ -115,7 +116,7 @@ const Save = ({ attributes }) => {
                                     <div>
                                         <img
                                             className="eb-slider-image"
-                                            data-lazy={image.url}
+                                            {...(enableLazyLoad ? { 'data-lazy': image.url } : { src: image.url })}
                                         />
                                     </div>
                                 )}

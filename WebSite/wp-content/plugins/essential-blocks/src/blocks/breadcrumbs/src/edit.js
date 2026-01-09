@@ -19,7 +19,7 @@ import {
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext,
-    EBDisplayIcon
+    EBDisplayIconEdit
 } from "@essential-blocks/controls";
 
 function Edit(props) {
@@ -53,7 +53,7 @@ function Edit(props) {
     let separator;
 
     if (separatorType == 'icon') {
-        separator = <EBDisplayIcon icon={separatorIcon} className={`eb-taxonomy-prefix-icon`} />;
+        separator = <EBDisplayIconEdit icon={separatorIcon} className={`eb-taxonomy-prefix-icon`} />;
     } else {
         separator = <DynamicInputValueHandler
             value={separatorText}
@@ -90,7 +90,7 @@ function Edit(props) {
                                 )}
 
                                 {prefixType === 'icon' && prefixIcon && (
-                                    <EBDisplayIcon icon={prefixIcon} className={`eb-taxonomy-prefix-icon`} />
+                                    <EBDisplayIconEdit icon={prefixIcon} className={`eb-taxonomy-prefix-icon`} />
                                 )}
                             </div>
                         )}

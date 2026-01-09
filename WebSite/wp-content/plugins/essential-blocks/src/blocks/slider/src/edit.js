@@ -31,7 +31,7 @@ import {
 } from "./helpers";
 
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     sanitizeURL,
     BlockProps,
     withBlockContext,
@@ -133,7 +133,7 @@ const Edit = (props) => {
                 style={{ ...style, display: "block" }}
                 onClick={onClick}
             >
-                <EBDisplayIcon icon={sanitizeIconValue(arrowNextIcon)} />
+                <EBDisplayIconEdit icon={sanitizeIconValue(arrowNextIcon)} />
             </div>
         );
     }
@@ -146,7 +146,7 @@ const Edit = (props) => {
                 style={{ ...style, display: "block" }}
                 onClick={onClick}
             >
-                <EBDisplayIcon icon={sanitizeIconValue(arrowPrevIcon)} />
+                <EBDisplayIconEdit icon={sanitizeIconValue(arrowPrevIcon)} />
             </div>
         );
     }

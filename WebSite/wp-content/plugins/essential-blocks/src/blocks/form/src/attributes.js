@@ -373,6 +373,11 @@ const attributes = {
         default: false,
     },
 
+    blockOnMobile: {
+        type: "boolean",
+        default: false,
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(FIELDS_TEXT, {
         fontSize: 14,

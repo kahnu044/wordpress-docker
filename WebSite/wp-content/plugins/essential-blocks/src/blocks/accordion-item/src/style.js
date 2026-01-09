@@ -45,6 +45,7 @@ export default function Style(props) {
         .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-prefix-text,
         .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-content .eb-accordion-title-prefix-icon {
             color: ${foundItem?.titlePrefixColor};
+            fill: ${foundItem?.titlePrefixColor};
             background: ${foundItem?.titlePrefixBGColor}
         }
         .${parentBlockId}.eb-accordion-container .${blockId}.eb-accordion-wrapper .eb-accordion-title-wrapper-${parentBlockId} .eb-accordion-title-suffix-text,

@@ -159,6 +159,7 @@ function Edit(props) {
                                                 socialDetails={socialDetails}
                                                 icnEffect={icnEffect}
                                                 preset={preset}
+                                                component={"edit"}
                                             />
                                         )}
 
@@ -230,6 +231,7 @@ function Edit(props) {
                                                             socialDetails={socialDetails}
                                                             icnEffect={icnEffect}
                                                             preset={preset}
+                                                            component={"edit"}
                                                         />
                                                     </>
                                                 )}
@@ -291,6 +293,7 @@ function Edit(props) {
                                                             socialDetails={socialDetails}
                                                             icnEffect={icnEffect}
                                                             preset={preset}
+                                                            component={"edit"}
                                                         />
                                                     </>
                                                 )}

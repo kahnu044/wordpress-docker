@@ -1,4 +1,11 @@
-const { sanitizeIconValue } = window.eb_frontend;
+/**
+ * Get icon functions from global eb_frontend
+ */
+const {
+    sanitizeIconValue,
+    EBRenderIconWithSVG,
+    loadSvgIcons
+} = window.eb_frontend;
 window.addEventListener("DOMContentLoaded", function () {
     const parseTocSlug = function (slug) {
         // If not have the element then return false!
@@ -22,31 +29,7 @@ window.addEventListener("DOMContentLoaded", function () {
         return decodeURIComponent(encodeURIComponent(parsedSlug));
     };
 
-    let ebGetIconType = (value) => {
-        if (value.includes("fa-")) {
-            return "fontawesome";
-        }
-        return "dashicon";
-    };
 
-    let ebRenderIcon = (iconType, className, icon) => {
-        if (iconType === "dashicon") {
-            // Render Dashicon
-            return (
-                '<span class="dashicon dashicons ' +
-                icon +
-                " " +
-                className +
-                '"></span>'
-            );
-        } else if (iconType === "fontawesome") {
-            // Render FontAwesome icon
-            return '<i class="' + icon + " " + className + '"></i>';
-        }
-
-        // Handle other icon types or return an error message if needed.
-        return "Invalid icon type";
-    };
 
     const isInViewport = (element) => {
         const rect = element.getBoundingClientRect();
@@ -180,12 +163,17 @@ window.addEventListener("DOMContentLoaded", function () {
                 // Create go to top element
                 const goTop = document.createElement("span");
                 goTop.setAttribute("class", "eb-toc-go-top");
-                goTop.innerHTML = ebRenderIcon(
-                    ebGetIconType(sanitizeIconValue(scrollIcon)),
-                    "",
-                    sanitizeIconValue(scrollIcon),
-                );
+
+                // Use EBRenderIconWithSVG for all icon types (FontAwesome, Dashicons, SVG URLs, inline SVG)
+                const iconHtml = EBRenderIconWithSVG((scrollIcon), "eb-toc-scroll-icon");
+                goTop.innerHTML = iconHtml;
+
                 document.body.insertBefore(goTop, document.body.lastChild);
+
+                // Load SVG icons after DOM insertion (for SVG URLs)
+                setTimeout(() => {
+                    loadSvgIcons(goTop);
+                }, 100);
 
                 // Add click event
                 goTop.addEventListener("click", function () {

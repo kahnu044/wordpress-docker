@@ -1,7 +1,12 @@
 import {
-sanitizeURL
+    sanitizeURL,
+    EBDisplayIconEdit,
+    EBDisplayIconSave
 } from "@essential-blocks/controls";
-export default function socialLinks({ profilesOnly, icnEffect }) {
+
+export default function socialLinks({ profilesOnly, icnEffect, isEdit = false }) {
+    const IconComponent = isEdit ? EBDisplayIconEdit : EBDisplayIconSave;
+
     return (
         <ul className="eb-socials">
             {profilesOnly.map(({ link, icon, linkOpenNewTab }, index) => (
@@ -17,7 +22,10 @@ export default function socialLinks({ profilesOnly, icnEffect }) {
                         rel="noopener"
                         aria-label="social link"
                     >
-                        <i className={`hvr-icon eb-social-icon ${icon}`}></i>
+                        <IconComponent
+                            className={`hvr-icon eb-social-icon`}
+                            icon={icon}
+                        />
                     </a>
                 </li>
             ))}

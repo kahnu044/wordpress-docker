@@ -34,7 +34,7 @@ import {
     generateBackgroundControlStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
-    StyleComponent
+    StyleComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -321,9 +321,10 @@ export default function Style(props) {
 		display:flex;
 		flex:1;
 		text-align: ${contentAlignment || "center"};
-		${contentsAlignSelf && media !== "none"
-            ? `justify-content:${contentsAlignSelf};`
-            : ""
+		${
+            contentsAlignSelf && media !== "none"
+                ? `justify-content:${contentsAlignSelf};`
+                : ""
         }
 		${wrapperFlexDirection ? `flex-direction: ${wrapperFlexDirection};` : " "}
 		${numTitleGapDesktop}
@@ -367,15 +368,17 @@ export default function Style(props) {
 
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				align-self: ${mediaAlignSelf};
 				${mediaBgMarginStylesDesktop}
 			}
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .icon-img-wrapper{
 						${mediaImgWidthUnit === "%" ? mediaImgWidthDesktop : " "}
@@ -394,25 +397,28 @@ export default function Style(props) {
 						${imageUrl ? " " : mediaRadiusStylesDesktop}
 					}
 					`
-                : " "
+                    : " "
             }
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 				.eb-counter-wrapper.${blockId} .eb-icon {
 
 					${mediaBgPaddingDesktop}
 					${mediaRadiusStylesDesktop}
 
-					${useIconBg
-                    ? `${iconBgType === "fill"
-                        ? `background-color: ${iconBgColor};`
-                        : iconBgType === "gradient"
-                            ? `background-image: ${iconBgGradient};`
+					${
+                        useIconBg
+                            ? `${
+                                  iconBgType === "fill"
+                                      ? `background-color: ${iconBgColor};`
+                                      : iconBgType === "gradient"
+                                      ? `background-image: ${iconBgGradient};`
+                                      : " "
+                              }`
                             : " "
-                    }`
-                    : " "
-                }
+                    }
 
 				}
 
@@ -427,14 +433,21 @@ export default function Style(props) {
 					display:flex;
 					justify-content:center;
 					align-items:center;
+                    fill: ${iconColor};
 				}
 
+                .eb-counter-wrapper.${blockId} .icon-img-wrapper .eb-counter-icon-data-selector svg {
+                    fill: ${iconColor};
+                    height:${mIconZRange}${mIconZUnit};
+					width:${mIconZRange}${mIconZUnit};
+                }
+
 				`
-                : ""
+                    : ""
             }
 			`
             : " "
-        }
+    }
 	`;
 
     const wrapperStylesTab = `
@@ -482,15 +495,17 @@ export default function Style(props) {
 	}
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				${mediaBgMarginStylesTab}
 			}
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .eb-icon {
 						${mediaRadiusStylesTab}
@@ -502,32 +517,38 @@ export default function Style(props) {
 						${TABmIconZRange ? `height:${TABmIconZRange}${TABmIconZUnit};` : ""}
 						${TABmIconZRange ? `width:${TABmIconZRange}${TABmIconZUnit};` : ""}
 					}
-
+                    ${TABmIconZRange ? `.eb-counter-wrapper.${blockId} .icon-img-wrapper .eb-counter-icon-data-selector svg {
+                        height:${TABmIconZRange}${TABmIconZRange};
+						width:${TABmIconZRange}${TABmIconZRange};
+                    }` : ''}
 				`
-                : " "
+                    : " "
             }
 
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper{
-					${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthTab
-                    : mediaImgWidthUnit === "%"
-                        ? `width: auto;`
-                        : " "
-                }
+					${
+                        TABmediaImgWidthUnit === "%"
+                            ? mediaImgWidthTab
+                            : mediaImgWidthUnit === "%"
+                            ? `width: auto;`
+                            : " "
+                    }
 				}
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper img {
 
-					${TABmediaImgWidthUnit === "%"
-                    ? mediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthTab
-                }
+					${
+                        TABmediaImgWidthUnit === "%"
+                            ? mediaImgWidthUnit === "%"
+                                ? " "
+                                : `width: 100%;`
+                            : mediaImgWidthTab
+                    }
 
 					${isMediaImgHeightAuto ? "" : mediaImgHeightTab}
 
@@ -539,11 +560,11 @@ export default function Style(props) {
 				}
 
 				`
-                : " "
+                    : " "
             }
 		`
             : " "
-        }
+    }
 
 	`;
 
@@ -593,15 +614,17 @@ export default function Style(props) {
 
 
 
-	${media !== "none"
+	${
+        media !== "none"
             ? `
 
 			.eb-counter-wrapper.${blockId} .icon-img-wrapper {
 				${mediaBgMarginStylesMobile}
 			}
 
-			${media === "icon"
-                ? `
+			${
+                media === "icon"
+                    ? `
 
 					.eb-counter-wrapper.${blockId} .eb-icon {
 						${mediaRadiusStylesMobile}
@@ -613,32 +636,40 @@ export default function Style(props) {
 						${MOBmIconZRange ? `height:${MOBmIconZRange}${MOBmIconZUnit};` : ""}
 						${MOBmIconZRange ? `width:${MOBmIconZRange}${MOBmIconZUnit};` : ""}
 					}
-
+                    
+                    ${MOBmIconZRange ? `.eb-counter-wrapper.${blockId} .icon-img-wrapper .eb-counter-icon-data-selector svg {
+                        height:${MOBmIconZRange}${MOBmIconZUnit};
+						width:${MOBmIconZRange}${MOBmIconZUnit};
+                    }` : ''}
+                    
 				`
-                : " "
+                    : " "
             }
 
 
-			${media === "image"
-                ? `
+			${
+                media === "image"
+                    ? `
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper{
-					${MOBmediaImgWidthUnit === "%"
-                    ? mediaImgWidthMobile
-                    : mediaImgWidthUnit === "%"
-                        ? `width: auto;`
-                        : " "
-                }
+					${
+                        MOBmediaImgWidthUnit === "%"
+                            ? mediaImgWidthMobile
+                            : mediaImgWidthUnit === "%"
+                            ? `width: auto;`
+                            : " "
+                    }
 				}
 
 				.eb-counter-wrapper.${blockId} .icon-img-wrapper img {
 
-					${MOBmediaImgWidthUnit === "%"
-                    ? mediaImgWidthUnit === "%"
-                        ? " "
-                        : `width: 100%;`
-                    : mediaImgWidthMobile
-                }
+					${
+                        MOBmediaImgWidthUnit === "%"
+                            ? mediaImgWidthUnit === "%"
+                                ? " "
+                                : `width: 100%;`
+                            : mediaImgWidthMobile
+                    }
 
 					${isMediaImgHeightAuto ? "" : mediaImgHeightMobile}
 
@@ -650,11 +681,11 @@ export default function Style(props) {
 				}
 
 				`
-                : " "
+                    : " "
             }
 		`
             : " "
-        }
+    }
 
 
 

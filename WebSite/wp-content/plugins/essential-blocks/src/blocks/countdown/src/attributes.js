@@ -25,15 +25,6 @@ import { cdBoxsBdShadowConst, WrpBdShadowConst } from "./constants/borderShadowC
 
 import { wrapperWidth, boxsSpaceConst, separatorPosTop, separatorPosRight } from "./constants/rangeNames";
 
-// import {
-// 	generateDimensionsAttributes,
-// 	generateTypographyAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes,
-// } from "../../../util/helpers";
-
-//
 import {
     generateDimensionsAttributes,
     generateTypographyAttributes,

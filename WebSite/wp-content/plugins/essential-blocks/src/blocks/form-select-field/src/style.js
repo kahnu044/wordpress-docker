@@ -172,6 +172,28 @@ export default function Style(props) {
         customUnit: "px",
     });
 
+    const {
+        rangeStylesDesktop: iconHeightStylesDesktop,
+        rangeStylesTab: iconHeightStylesTab,
+        rangeStylesMobile: iconHeightStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: iconWidhtStylesDesktop,
+        rangeStylesTab: iconWidhtStylesTab,
+        rangeStylesMobile: iconWidhtStylesMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-select-field-wrapper.${blockId}{
@@ -281,7 +303,16 @@ export default function Style(props) {
     const iconDesktop = `
 		.eb-form-wrapper.${parentBlockId} .eb-select-field-wrapper.${blockId} .eb-input-icon {
             ${iconSizeStylesDesktop}
+            ${iconHeightStylesDesktop}
+            ${iconWidhtStylesDesktop}
+            fill: ${iconColor ? iconColor : parentIconColor};
             color: ${iconColor ? iconColor : parentIconColor};
+		}
+
+        .eb-form-wrapper.${parentBlockId} .eb-select-field-wrapper.${blockId} .eb-input-icon svg {
+            ${iconHeightStylesDesktop}
+            ${iconWidhtStylesDesktop}
+            fill: ${iconColor ? iconColor : parentIconColor};
 		}
 
         ${isIcon

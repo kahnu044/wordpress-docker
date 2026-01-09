@@ -1,6 +1,7 @@
 import { useBlockProps } from "@wordpress/block-editor";
 import {
-BlockProps
+    BlockProps,
+    EBDisplayIconSave
 } from "@essential-blocks/controls";
 const save = ({ attributes }) => {
     // const { blockId, showAfterDismiss, title, text } = attributes;
@@ -74,7 +75,7 @@ const save = ({ attributes }) => {
                             >
                                 {lightboxPlayIcon && (
                                     <>
-                                        {lightboxPlayIconType == "icon" && <i className={lightboxPlayIconlib} />}
+                                        {lightboxPlayIconType == "icon" && <EBDisplayIconSave icon={lightboxPlayIconlib} />}
                                         {lightboxPlayIconType == "image" && placeholderPlayIconURL && (
                                             <img src={placeholderPlayIconURL} alt="" />
                                         )}

@@ -540,7 +540,7 @@ class Insights
             }
 
             $request = $this->remote_post($failed_data);
-            if (! is_wp_error($request)) {
+            if (is_array($old_sent_data) && is_array($failed_data) && ! is_wp_error($request)) {
                 delete_option($site_id_data_failed_key);
                 $replaced_data = array_merge($old_sent_data, $failed_data);
                 update_option($site_id_data_key, $replaced_data, 'no');
@@ -558,7 +558,7 @@ class Insights
             $request = $this->remote_post($diff_data);
             if (is_wp_error($request)) {
                 update_option($site_id_data_failed_key, $diff_data, 'no');
-            } else {
+            } elseif (is_array($old_sent_data) && is_array($diff_data)) {
                 $replaced_data = array_merge($old_sent_data, $diff_data);
                 update_option($site_id_data_key, $replaced_data, 'no');
             }

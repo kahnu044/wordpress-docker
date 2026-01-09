@@ -117,6 +117,10 @@ const attributes = {
         type: "number",
         default: 0,
     },
+    enableLazyLoad: {
+        type: "boolean",
+        default: true,
+    },
     titleColor: {
         type: "string",
         default: "var(--eb-global-heading-color)",
@@ -340,6 +344,7 @@ const attributes = {
     // range controller Slider Height
     ...generateResponsiveRangeAttributes(CUSTOM_HEIGHT, {
         defaultRange: 400,
+        defaultUnit: "px",
     }),
 
     // range controller Dots Gap

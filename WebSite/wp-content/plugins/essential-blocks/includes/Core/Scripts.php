@@ -141,8 +141,6 @@ class Scripts
         global $pagenow;
 
         wpdev_essential_blocks()->assets->register( 'twenty-move', 'js/jquery.event.move.js' );
-        wpdev_essential_blocks()->assets->register( 'image-loaded', 'js/images-loaded.min.js' );
-        wpdev_essential_blocks()->assets->register( 'isotope', 'js/isotope.pkgd.min.js' );
         wpdev_essential_blocks()->assets->register( 'fslightbox-js', 'js/fslightbox.min.js' );
         wpdev_essential_blocks()->assets->register( 'masonry', 'js/masonry.min.js' );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
@@ -244,6 +242,8 @@ class Scripts
      */
     public function frontend_backend_assets()
     {
+        wpdev_essential_blocks()->assets->register( 'image-loaded', 'js/images-loaded.min.js' );
+        wpdev_essential_blocks()->assets->register( 'isotope', 'js/isotope.pkgd.min.js' );
         wpdev_essential_blocks()->assets->register( 'eb-animation', 'js/eb-animation-load.js' );
         wpdev_essential_blocks()->assets->register( 'animation', 'css/animate.min.css' );
         // Liquid Glass
@@ -257,6 +257,7 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
         wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
+        wpdev_essential_blocks()->assets->register( 'zoom', 'js/jquery.zoom.min.js' );
 
         //Register block combined styles
         $editor_css_file = 'admin/editor/editor.css';
@@ -280,12 +281,13 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'fslightbox-js', 'js/fslightbox.min.js' );
         // dashicon
         wp_enqueue_style( 'dashicons' );
-        wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js', [ 'essential-blocks-babel-bundle' ] );
+        wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js', [ 'regenerator-runtime','essential-blocks-babel-bundle' ] );
 
         // GSAP
         wpdev_essential_blocks()->assets->register( 'gsap', 'js/gsap/gsap.min.js' );
         wpdev_essential_blocks()->assets->register( 'gsap-scrolltrigger', 'js/gsap/ScrollTrigger.min.js', [ 'essential-blocks-gsap' ] );
         wpdev_essential_blocks()->assets->register( 'splittype', 'js/gsap/splittype.min.js', [ 'essential-blocks-gsap' ] );
+        wpdev_essential_blocks()->assets->register( 'gsap-observer', 'js/gsap/gsap-observer.min.js', [ 'essential-blocks-gsap' ] );
     }
 
     public function global_styles()
@@ -637,6 +639,7 @@ class Scripts
                 'globalColors'             => Helper::global_colors(),
                 'gradientColors'           => Helper::gradient_colors(),
                 'unfilter_capability'      => current_user_can( 'unfiltered_html' ) ? 'true' : 'false',
+                'is_admin_user'            => current_user_can( 'manage_options' ) ? 'true' : 'false',
                 'is_tracking'              => Insights::get_is_tracking_allowed(),
                 'eb_user_type'             => get_option( 'essential_blocks_user_type' ),
                 'unfilteredFile'           => $this->isEnableUnfilteredFiles

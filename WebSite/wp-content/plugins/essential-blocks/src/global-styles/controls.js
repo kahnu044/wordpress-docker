@@ -661,33 +661,39 @@ function EBGlobalControls(props) {
                     >
                         <div className="eb-block-list-button">
                             {typeof registeredBlocks === "object" &&
-                                Object.keys(components).map((item, index) => (
-                                    <div className="eb-block-button" key={index}>
-                                        <Button
-                                            variant="none"
-                                            className="eb-block-default-button"
-                                            onClick={() =>
-                                                toggleVisible(
-                                                    registeredBlocks[item].value
-                                                )
-                                            }
-                                        >
-                                            <img
-                                                className="eb-global-icon"
-                                                src={registeredBlocks[item]?.icon}
-                                                alt={registeredBlocks[item]?.label}
-                                            />
-                                            {registeredBlocks[item]?.label}
+                                Object.keys(components)
+                                    .sort((a, b) => {
+                                        const labelA = registeredBlocks[a]?.label || '';
+                                        const labelB = registeredBlocks[b]?.label || '';
+                                        return labelA.localeCompare(labelB);
+                                    })
+                                    .map((item, index) => (
+                                        <div className="eb-block-button" key={index}>
+                                            <Button
+                                                variant="none"
+                                                className="eb-block-default-button"
+                                                onClick={() =>
+                                                    toggleVisible(
+                                                        registeredBlocks[item].value
+                                                    )
+                                                }
+                                            >
+                                                <img
+                                                    className="eb-global-icon"
+                                                    src={registeredBlocks[item]?.icon}
+                                                    alt={registeredBlocks[item]?.label}
+                                                />
+                                                {registeredBlocks[item]?.label}
 
-                                            {getBlockDefaults[item] && (
-                                                <span className="active">
-                                                    {" "}
-                                                    {__(<Dashicon icon={"edit"} />)}
-                                                </span>
-                                            )}
-                                        </Button>
-                                    </div>
-                                ))}
+                                                {getBlockDefaults[item] && (
+                                                    <span className="active">
+                                                        {" "}
+                                                        {__(<Dashicon icon={"edit"} />)}
+                                                    </span>
+                                                )}
+                                            </Button>
+                                        </div>
+                                    ))}
                         </div>
                     </PanelBody>
                 </div>

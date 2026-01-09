@@ -4,16 +4,15 @@
 import { __ } from "@wordpress/i18n";
 import { InnerBlocks, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { useRef, memo, useEffect } from "@wordpress/element";
+import { useRef, memo, useEffect, useState } from "@wordpress/element";
 import Style from "./style";
 import defaultAttributes from "./attributes";
 import {
-    EBDisplayIcon,
-    getIconClass,
+    EBDisplayIconEdit,
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext,
-    getBlockParentClientId
+    getBlockParentClientId,
 } from "@essential-blocks/controls";
 import { select, dispatch } from "@wordpress/data";
 
@@ -40,14 +39,35 @@ const Edit = (props) => {
     };
 
     const accordionTitle = useRef(null);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Initialize expanded state based on CSS class
+    useEffect(() => {
+        if (accordionTitle.current) {
+            const accordionItem = accordionTitle.current.closest(
+                ".eb-accordion-wrapper",
+            );
+            if (accordionItem) {
+                const isCurrentlyOpen = !accordionItem.classList.contains(
+                    "eb-accordion-hidden",
+                );
+                setIsExpanded(isCurrentlyOpen);
+            }
+        }
+    }, []);
 
     const { selectBlock } = dispatch("core/block-editor");
 
     const handleSlidingOfAccordion = () => {
-        const parentBlockClientId = getBlockParentClientId(clientId, "essential-blocks/accordion");
+        const parentBlockClientId = getBlockParentClientId(
+            clientId,
+            "essential-blocks/accordion",
+        );
 
         // Find the block with matching clientId
-        const parentBlock = parentBlockClientId ? select('core/block-editor').getBlock(parentBlockClientId) : null;
+        const parentBlock = parentBlockClientId
+            ? select("core/block-editor").getBlock(parentBlockClientId)
+            : null;
 
         let title = accordionTitle.current.querySelector(".eb-accordion-title");
         let prefixText = accordionTitle.current.querySelector(
@@ -66,10 +86,7 @@ const Edit = (props) => {
             suffixText.setAttribute("contenteditable", false);
         }
         let contentWrapper = accordionTitle.current.nextElementSibling;
-        let tabIcon = accordionTitle.current.getAttribute("data-tab-icon");
-        let expandedIcon =
-            accordionTitle.current.getAttribute("data-expanded-icon");
-        let iconWrapper = accordionTitle.current.children[0].children[0];
+        // Icons are now handled by React state, no need for DOM manipulation
         let accordionItem = accordionTitle.current.closest(
             ".eb-accordion-wrapper",
         );
@@ -85,28 +102,22 @@ const Edit = (props) => {
             accordionItem.classList.toggle("editor-expanded");
         }
 
-        if (contentWrapper.style.display === "block") {
+        // Check current state based on CSS classes (more reliable than inline styles)
+        const isCurrentlyOpen = !accordionItem.classList.contains(
+            "eb-accordion-hidden",
+        );
+
+        // Update React state
+        setIsExpanded(!isCurrentlyOpen);
+
+        if (isCurrentlyOpen) {
+            // Accordion is currently open - close it
             contentWrapper.style.display = "none";
             contentWrapper.style.opacity = "0";
-            if (iconWrapper.tagName === "I" || iconWrapper.tagName === "SPAN") {
-                iconWrapper.removeAttribute("class");
-                tabIcon = getIconClass(tabIcon).split(" ");
-                for (let i = 0; i < tabIcon.length; i++) {
-                    iconWrapper.classList.add(tabIcon[i]);
-                }
-                iconWrapper.classList.add("eb-accordion-icon");
-            }
         } else {
+            // Accordion is currently closed - open it
             contentWrapper.style.display = "block";
             contentWrapper.style.opacity = "1";
-            if (iconWrapper.tagName === "I" || iconWrapper.tagName === "SPAN") {
-                iconWrapper.removeAttribute("class");
-                expandedIcon = getIconClass(expandedIcon).split(" ");
-                for (let i = 0; i < expandedIcon.length; i++) {
-                    iconWrapper.classList.add(expandedIcon[i]);
-                }
-                iconWrapper.classList.add("eb-accordion-icon");
-            }
         }
 
         if (parentBlock) {
@@ -128,7 +139,9 @@ const Edit = (props) => {
     };
 
     useEffect(() => {
-        const foundItemArray = context["eb/accordionLists"]?.filter((item) => item.id == itemId) ||[];
+        const foundItemArray =
+            context["eb/accordionLists"]?.filter((item) => item.id == itemId) ||
+            [];
         setAttributes({
             parentBlockId: context["eb/accordionParentBlockId"],
             inheritedAccordionType:
@@ -183,8 +196,12 @@ const Edit = (props) => {
                             <span
                                 className={`eb-accordion-icon-wrapper eb-accordion-icon-wrapper-${parentBlockId}`}
                             >
-                                <EBDisplayIcon
-                                    icon={inheritedTabIcon}
+                                <EBDisplayIconEdit
+                                    icon={
+                                        isExpanded
+                                            ? inheritedExpandedIcon
+                                            : inheritedTabIcon
+                                    }
                                     className="eb-accordion-icon"
                                 />
                             </span>
@@ -212,7 +229,7 @@ const Edit = (props) => {
 
                                     {foundItem?.titlePrefixType === "icon" &&
                                         foundItem?.titlePrefixIcon && (
-                                            <EBDisplayIcon
+                                            <EBDisplayIconEdit
                                                 icon={
                                                     foundItem?.titlePrefixIcon
                                                 }
@@ -296,7 +313,7 @@ const Edit = (props) => {
 
                                     {foundItem?.titleSuffixType === "icon" &&
                                         foundItem?.titleSuffixIcon && (
-                                            <EBDisplayIcon
+                                            <EBDisplayIconEdit
                                                 icon={
                                                     foundItem?.titleSuffixIcon
                                                 }

@@ -19,6 +19,11 @@
 			transform: translateY(-50%);
 			left: 14px;
 		}
+		.eb-input-icon svg {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+		}
 	}
 
 	.dashicons,

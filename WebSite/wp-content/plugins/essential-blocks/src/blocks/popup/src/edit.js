@@ -7,7 +7,7 @@ import { InnerBlocks } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
 import {
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext
  } from "@essential-blocks/controls";
@@ -78,8 +78,8 @@ const Edit = (props) => {
                                                         "left" ===
                                                         iconPosition && (
                                                             <>
-                                                                <EBDisplayIcon
-                                                                    classNam={`eb-popup-button-icon eb-popup-button-icon-left`}
+                                                                <EBDisplayIconEdit
+                                                                    className={`eb-popup-button-icon eb-popup-button-icon-left`}
                                                                     icon={btnIcon}
                                                                 />
                                                             </>
@@ -107,8 +107,8 @@ const Edit = (props) => {
                                                         "right" ===
                                                         iconPosition && (
                                                             <>
-                                                                <EBDisplayIcon
-                                                                    classNam={`eb-popup-button-icon eb-popup-button-icon-right`}
+                                                                <EBDisplayIconEdit
+                                                                    className={`eb-popup-button-icon eb-popup-button-icon-right`}
                                                                     icon={btnIcon}
                                                                 />
                                                             </>
@@ -117,7 +117,7 @@ const Edit = (props) => {
                                             )}
                                             {"icon" === btnType && (
                                                 <>
-                                                    <EBDisplayIcon classNam={`eb-popup-icon`} icon={triggerIcon} />
+                                                    <EBDisplayIconEdit classNam={`eb-popup-icon`} icon={triggerIcon} />
                                                 </>
                                             )}
                                         </a>

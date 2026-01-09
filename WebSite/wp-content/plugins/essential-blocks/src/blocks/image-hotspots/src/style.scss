@@ -1,0 +1,381 @@
+ @import '../../../controls/src/components/Image/imageComponent.scss';
+
+ // Image Hotspots Block Styles
+ :root {
+ 	--tooltip-arrow-color: #333333;
+ 	--eb-tooltip-offset: 10px;
+ }
+
+ .eb-image-hotspots-wrapper {
+ 	position: relative;
+ 	display: inline-block;
+ 	width: 100%;
+
+ 	.eb-image-hotspots-image-wrapper {
+ 		position: relative;
+ 		display: inline-block;
+ 		width: 100%;
+
+ 		img {
+ 			display: block;
+ 		}
+
+ 		&.adding-hotspot {
+ 			cursor: crosshair;
+
+ 			.eb-hotspot-add-overlay {
+ 				position: absolute;
+ 				top: 0;
+ 				left: 0;
+ 				right: 0;
+ 				bottom: 0;
+ 				background: rgba(0, 123, 186, 0.1);
+ 				display: flex;
+ 				align-items: center;
+ 				justify-content: center;
+ 				z-index: 100;
+
+ 				p {
+ 					background: rgba(0, 123, 186, 0.9);
+ 					color: white;
+ 					padding: 8px 16px;
+ 					border-radius: 4px;
+ 					margin: 0;
+ 					font-size: 14px;
+ 				}
+ 			}
+ 		}
+ 	}
+
+ 	.eb-image-hotspots-image {
+ 		width: 100%;
+ 		height: auto;
+ 		display: block;
+ 		object-fit: cover;
+ 	}
+
+ 	// Hotspots container
+ 	.eb-hotspots-container {
+ 		position: absolute;
+ 		top: 0;
+ 		left: 0;
+ 		right: 0;
+ 		bottom: 0;
+ 		pointer-events: none;
+ 	}
+
+ 	// Hotspot markers
+ 	.eb-hotspot-marker {
+ 		position: absolute;
+ 		pointer-events: all;
+ 		cursor: pointer;
+ 		z-index: 10;
+ 		transition: all 0.3s ease;
+
+ 		.eb-hotspot-marker-inner {
+ 			display: flex;
+ 			align-items: center;
+ 			justify-content: center;
+ 			width: 100%;
+ 			height: 100%;
+ 			// border-radius: 50%;
+ 			// background: #007cba;
+ 			// color: #ffffff;
+ 			// font-weight: bold;
+ 			transition: all 0.3s ease;
+ 			box-sizing: border-box;
+ 		}
+
+ 		// Marker types
+ 		&.eb-hotspot-icon {
+ 			.eb-hotspot-marker-inner {
+ 				i {
+ 					font-size: 16px;
+ 				}
+ 			}
+ 		}
+
+ 		&.eb-hotspot-text {
+ 			.eb-hotspot-marker-inner {
+ 				border-radius: 4px;
+ 				padding: 4px 8px;
+ 				white-space: nowrap;
+
+ 				.eb-hotspot-text {
+ 					font-size: 12px;
+ 				}
+ 			}
+ 		}
+
+ 		&.eb-hotspot-number {
+ 			.eb-hotspot-marker-inner {
+ 				.eb-hotspot-number {
+ 					font-size: 14px;
+ 					font-weight: bold;
+ 					display: flex;
+ 					align-items: center;
+ 					justify-content: center;
+ 				}
+ 			}
+ 		}
+
+ 		&.eb-hotspot-dot {
+ 			.eb-hotspot-marker-inner {
+ 				.eb-hotspot-dot {
+ 					width: 8px;
+ 					height: 8px;
+ 					border-radius: 50%;
+ 					background: currentColor;
+ 				}
+ 			}
+ 		}
+
+ 		// Hover effects
+ 		&:hover {
+ 			transform: translate(-50%, -50%) scale(1.1);
+
+ 			.eb-hotspot-marker-inner {
+ 				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+ 			}
+ 		}
+
+ 		// Editor selected state
+ 		&.selected {
+ 			.eb-hotspot-marker-inner {
+ 				box-shadow: 0 0 0 2px #007cba;
+ 			}
+ 		}
+ 	}
+
+ 	// Hotspot controls (editor only)
+ 	.eb-hotspot-controls {
+ 		position: absolute;
+ 		top: -7px;
+ 		right: -7px;
+ 		z-index: 20;
+
+ 		.components-button {
+ 			padding: 0;
+ 			display: block;
+ 			text-align: center;
+ 			background-color: #fff;
+ 			border-radius: 50%;
+ 			border: 1px solid;
+ 			font-size: 18px;
+ 			line-height: 18px;
+ 			width: 20px;
+ 			height: 20px;
+ 			box-sizing: border-box;
+ 		}
+ 	}
+
+ 	// Tooltips
+ 	.eb-hotspot-tooltip {
+ 		position: absolute;
+ 		font-size: 14px;
+ 		line-height: 1.4;
+ 		white-space: nowrap;
+ 		white-space: normal;
+ 		z-index: 1000;
+ 		opacity: 0;
+ 		visibility: hidden;
+ 		transition: all 0.3s ease;
+ 		pointer-events: none;
+
+ 		.eb-tooltip-inner {
+ 			// This inner div handles animations without interfering with positioning transforms
+ 			// The parent .eb-hotspot-tooltip handles positioning, this handles animation transforms
+ 			position: relative;
+ 			width: 100%;
+ 			// height: 100%;
+ 			max-width: 200px;
+ 			width: max-content;
+ 			display: flex;
+ 			flex-direction: column;
+ 			align-items: center;
+ 			justify-content: center;
+
+ 			img {
+ 				max-width: 100%;
+ 				height: auto;
+ 				display: block;
+ 				object-fit: contain;
+ 			}
+
+ 			.eb-tooltip-content {
+ 				position: relative;
+ 				z-index: 1;
+ 			}
+
+ 			.eb-tooltip-arrow {
+ 				position: absolute;
+ 				width: 0;
+ 				height: 0;
+ 				border: 8px solid transparent;
+ 			}
+ 		}
+
+ 		// Tooltip positions
+ 		&.eb-tooltip-top {
+ 			bottom: calc(100% + 10px);
+ 			left: 50%;
+ 			transform: translateX(-50%);
+ 			margin-bottom: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				top: 100%;
+ 				left: 50%;
+ 				transform: translateX(-50%);
+ 				border-top-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-bottom {
+ 			top: calc(100% + 10px);
+ 			left: 50%;
+ 			transform: translateX(-50%);
+ 			margin-top: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				bottom: 100%;
+ 				left: 50%;
+ 				transform: translateX(-50%);
+ 				border-bottom-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-left {
+ 			right: calc(100% + 10px);
+ 			top: 50%;
+ 			transform: translateY(-50%);
+ 			margin-right: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				left: 100%;
+ 				top: 50%;
+ 				transform: translateY(-50%);
+ 				border-left-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-right {
+ 			left: calc(100% + 10px);
+ 			top: 50%;
+ 			transform: translateY(-50%);
+ 			margin-left: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				right: 100%;
+ 				top: 50%;
+ 				transform: translateY(-50%);
+ 				border-right-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		// Corner positions
+ 		&.eb-tooltip-top-left {
+ 			bottom: calc(100% + 10px);
+ 			right: 0;
+ 			margin-bottom: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				top: 100%;
+ 				right: 12px;
+ 				border-top-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-top-right {
+ 			bottom: calc(100% + 10px);
+ 			left: 0;
+ 			margin-left: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				top: 100%;
+ 				left: 12px;
+ 				border-top-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-bottom-left {
+ 			top: calc(100% + 10px);
+ 			right: 0;
+ 			margin-top: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				bottom: 100%;
+ 				right: 12px;
+ 				border-bottom-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+
+ 		&.eb-tooltip-bottom-right {
+ 			top: calc(100% + 10px);
+ 			left: 0;
+ 			margin-right: var(--eb-tooltip-offset, 10px);
+
+ 			.eb-tooltip-arrow {
+ 				bottom: 100%;
+ 				left: 12px;
+ 				border-bottom-color: var(--tooltip-arrow-color, #333333);
+ 			}
+ 		}
+ 	}
+
+ 	// Show tooltips on hover or click
+ 	.eb-hotspot-marker:hover .eb-hotspot-tooltip.eb-tooltip-trigger-hover,
+ 	.eb-hotspot-marker.active .eb-hotspot-tooltip.eb-tooltip-trigger-click {
+ 		opacity: 1;
+ 		visibility: visible;
+ 		pointer-events: all;
+ 	}
+
+ 	// Keep tooltip visible when hovering over tooltip content for hover trigger
+ 	.eb-hotspot-tooltip.eb-tooltip-trigger-hover:hover {
+ 		opacity: 1;
+ 		visibility: visible;
+ 		pointer-events: all;
+ 	}
+
+ 	// Editor toolbar
+ 	.eb-image-hotspots-toolbar {
+ 		margin-top: 10px;
+ 		display: flex;
+ 		gap: 8px;
+ 		flex-wrap: wrap;
+
+ 		button {
+ 			width: 100%;
+ 			display: block;
+ 		}
+ 	}
+
+ 	// Placeholder
+ 	.eb-image-hotspots-placeholder {
+ 		text-align: center;
+ 		padding: 40px 20px;
+ 		border: 2px dashed #ddd;
+ 		border-radius: 4px;
+
+ 		.eb-image-hotspots-upload-btn {
+ 			margin-bottom: 10px;
+ 		}
+
+ 		p {
+ 			margin: 0;
+ 			color: #666;
+ 			font-size: 14px;
+ 		}
+ 	}
+ }
+
+ // Responsive styles
+ @media (max-width: 768px) {
+ 	.eb-image-hotspots-wrapper {
+ 		.eb-hotspot-tooltip {
+ 			max-width: 150px;
+ 			font-size: 12px;
+ 			padding: 6px 8px;
+ 		}
+ 	}
+ }

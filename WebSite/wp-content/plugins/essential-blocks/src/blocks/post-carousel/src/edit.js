@@ -28,14 +28,18 @@ import {
     BrowseTemplate,
     BlockProps,
     withBlockContext,
-    sanitizeIconValue
+    sanitizeIconValue,
+    EBDisplayIconEdit
 } from "@essential-blocks/controls";
+
+
 
 const SlickArrow = (props) => {
     const { className, style, onClick, faClass } = props;
+
     return (
         <div className={className} style={{ ...style }} onClick={onClick}>
-            <i className={sanitizeIconValue(faClass)}></i>
+            <EBDisplayIconEdit icon={sanitizeIconValue(faClass)} />
         </div>
     );
 };

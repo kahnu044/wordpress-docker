@@ -35,6 +35,7 @@ class AdvancedVideo extends Block
             'advanced-video-frontend',
             $this->path() . '/frontend.js',
             [
+                'essential-blocks-controls-frontend',
                 'essential-blocks-vendor-bundle',
                 'essential-blocks-hls',
                 'essential-blocks-flv',

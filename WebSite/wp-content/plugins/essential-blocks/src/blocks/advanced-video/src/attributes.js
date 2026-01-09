@@ -17,6 +17,7 @@ import {
     CLOSE_ICON_WIDTH,
     STICKY_POSITION,
     stickyVisibility,
+    STICKY_BORDER_RADIUS,
 } from "./constants";
 
 import {
@@ -26,7 +27,7 @@ import {
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
     generateResponsiveSelectControlAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     resOption: {
@@ -199,6 +200,9 @@ const attributes = {
         type: "string",
         default: "center",
     },
+    stickyBGColor: {
+        type: "string",
+    },
 
     // margin padding attributes ⬇
     ...generateDimensionsAttributes(WRAPPER_MARGIN),
@@ -306,6 +310,9 @@ const attributes = {
     }),
 
     ...generateResponsiveSelectControlAttributes(stickyVisibility),
+    ...generateResponsiveRangeAttributes(STICKY_BORDER_RADIUS, {
+        defaultRange: 10,
+    }),
 };
 
 export default attributes;

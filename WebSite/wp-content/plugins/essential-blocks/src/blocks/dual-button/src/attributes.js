@@ -16,14 +16,6 @@ import {
     BUTTON_TWO_KEYS
 } from "./constants/constants";
 
-// import {
-// 	generateDimensionsAttributes,
-// 	generateTypographyAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes
-// } from "../../../util/helpers";
-
 import {
     generateDimensionsAttributes,
     generateTypographyAttributes,

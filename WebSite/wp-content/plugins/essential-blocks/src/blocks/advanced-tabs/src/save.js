@@ -1,5 +1,6 @@
 import { InnerBlocks, RichText } from "@wordpress/block-editor";
-import { BlockProps, EBDisplayIcon } from "@essential-blocks/controls";
+import { BlockProps, EBDisplayIconSave } from "@essential-blocks/controls";
+import { applyFilters } from "@wordpress/hooks";
 export default function save({ attributes }) {
     const {
         blockId,
@@ -12,6 +13,7 @@ export default function save({ attributes }) {
         isMinHeightAsTitle,
         addCaretIcon,
         caretIcon,
+        tabStyle,
     } = attributes;
 
     const dataAttributes = {
@@ -25,10 +27,10 @@ export default function save({ attributes }) {
                 className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
             >
                 <div
-                    className={`${blockId} eb-advanced-tabs-wrapper ${layout}`}
+                    className={`${blockId} eb-advanced-tabs-wrapper ${layout} ${tabStyle === 'liquid-glass' ? 'eb-tabs-wrapper-glassed' : ''}`}
                     {...dataAttributes}
                 >
-                    <div className="eb-tabs-nav">
+                    <div className={`eb-tabs-nav ${tabStyle === 'liquid-glass' ? 'eb-tabs-glassed' : ''}`} >
                         <ul
                             className="tabTitles"
                             data-tabs-ul-id={`${blockId}`}
@@ -51,7 +53,7 @@ export default function save({ attributes }) {
                                         <>
                                             {item.media === "icon" &&
                                                 item.icon && (
-                                                    <EBDisplayIcon
+                                                    <EBDisplayIconSave
                                                         icon={item.icon}
                                                         className={"tabIcon"}
                                                     />
@@ -75,13 +77,19 @@ export default function save({ attributes }) {
                                         )}
                                     </div>
                                     {addCaretIcon && caretIcon && (
-                                        <EBDisplayIcon
+                                        <EBDisplayIconSave
                                             icon={caretIcon}
                                             className="tab-caret-icon"
                                         />
                                     )}
                                 </li>
                             ))}
+
+                            {applyFilters(
+                                "eb_advanced_tabs_pro_liquid_glass_effect_editor_html",
+                                "",
+                                attributes,
+                            )}
                         </ul>
                     </div>
 

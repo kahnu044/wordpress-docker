@@ -3,19 +3,19 @@ import {
     WRAPPER_MARGIN,
     WRAPPER_PADDING,
     WRAPPER_BORDER_SHADOW,
-    ICON_SIZE,
     ICON_BG,
+    ICON_SIZE,
     BORDER,
     BORDER_WIDTH,
 } from "./constants";
 
 import {
     generateDimensionsAttributes,
-    generateTypographyAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
+    EBIcon,
     generateResponsiveRangeAttributes,
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 const attributes = {
     resOption: {
@@ -42,6 +42,8 @@ const attributes = {
         type: "string",
         default: "far fa-check-circle",
     },
+    // Icon-specific attributes from reusable EBIcon component
+    ...EBIcon?.addAttributes(),
     iconPrimaryColor: {
         type: "string",
         default: "var(--eb-global-primary-color)",
@@ -86,7 +88,6 @@ const attributes = {
     ...generateDimensionsAttributes(WRAPPER_PADDING),
     ...generateDimensionsAttributes(BORDER, { styleFor: "border-radius" }),
     ...generateDimensionsAttributes(BORDER_WIDTH),
-
     // border shadow attributes ⬇
     ...generateBorderShadowAttributes(WRAPPER_BORDER_SHADOW, {
         bdrDefaults: {
@@ -95,8 +96,6 @@ const attributes = {
             right: 0,
             left: 0,
         },
-        // noShadow: true,
-        // noBorder: true,
     }),
 
     // background attributes ⬇

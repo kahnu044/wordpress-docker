@@ -277,29 +277,29 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.7.4", "essential-blocks")}
+                                    {__("Version: 5.9.1", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("30/10/2025", "essential-blocks")}
+                                        {__("24/12/2025", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Added: AI Image Editing feature",
+                                            "Fixed: Quick Setup showing blank page",
                                             "essential-blocks"
                                         )}
 
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Post Grid | Custom Post Types not appearing in Taxonomy Filter",
+                                            "Fixed: Slider | Images getting cropped for Custom Height",
                                             "essential-blocks"
                                         )}
 
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Post Grid | PHP warning fix",
+                                            "Fixed: Interactive Animation | Animation fails to trigger in frontend",
                                             "essential-blocks"
                                         )}
 

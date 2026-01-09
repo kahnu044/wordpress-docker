@@ -93,7 +93,7 @@ export default function Style(props) {
         alignStylesMobile: imageAlignMobile,
     } = generateResponsiveAlignStyles({
         controlName: IMAGE_ALIGNMENT,
-        property: "margin",
+        property: "justify-content",
         attributes,
     });
 
@@ -195,42 +195,32 @@ export default function Style(props) {
 	`;
 
     const imageStylesDesktop = `
-		.eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
-			${imageAlignDesktop}
-		}
-            ${
-                imgSource !== "custom"
-                    ? `
-                .eb-advanced-image-wrapper.${blockId} .image-wrapper {
-			width${imageWidthDesktop};
-			${autoHeight ? `height: auto;` : `height${imageHeightDesktop}`};
-			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
-			${imageAlignDesktop}
-		}
+            ${imgSource !== "custom"
+            ? `
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper {
+                transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+			    ${imageAlignDesktop}
+		    }
             .eb-advanced-image-wrapper.${blockId} .image-wrapper,
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowDesktop : ""}
             }
-		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
-			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
-			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthDesktop ? "width: 100%" : ""}
-		}
+		    .eb-advanced-image-wrapper.${blockId} .image-wrapper img{
+                transition: transform 0.5s, ${imageBDShadowTransitionStyle};
+                ${autoFit ? `object-fit: ${fitStyles};` : ""}
+                ${imageWidthDesktop ? `width ${imageWidthDesktop};` : ""}
+                ${autoHeight ? `height: auto;` : `height${imageHeightDesktop}`};
+		    }
                 `
-                    : ``
-            }
+            : ``
+        }
 	`;
 
     const imageStylesTab = `
-		.eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
-			${imageAlignTab}
-		}
-            ${
-                imgSource !== "custom"
-                    ? `
+            ${imgSource !== "custom"
+            ? `
                 .eb-advanced-image-wrapper.${blockId} .image-wrapper {
-			width${imageWidthTab};
-			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
+
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignTab}		}
             .eb-advanced-image-wrapper.${blockId} .image-wrapper,
@@ -240,23 +230,18 @@ export default function Style(props) {
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthTab ? "width: 100%" : ""}
+            ${imageWidthTab ? `width${imageWidthTab};` : ""}
+			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
 		}
                 `
-                    : ``
-            }
+            : ``
+        }
 	`;
 
     const imageStylesMobile = `
-        .eb-advanced-image-wrapper.${blockId} .eb-image-wrapper{
-			${imageAlignMobile}
-		}
-            ${
-                imgSource !== "custom"
-                    ? `
+            ${imgSource !== "custom"
+            ? `
                 .eb-advanced-image-wrapper.${blockId} .image-wrapper {
-			width${imageWidthMobile};
-			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${imageAlignMobile}		}
             .eb-advanced-image-wrapper.${blockId} .image-wrapper,
@@ -266,11 +251,12 @@ export default function Style(props) {
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthMobile? "width: 100%" : ""}
+            ${imageWidthMobile ? `width${imageWidthMobile};` : ""}
+			${autoHeight ? `height: auto;` : `height${imageHeightMobile}`};
 		}
                 `
-                    : ``
-            }
+            : ``
+        }
 	`;
     const wrapperClass = "eb-advanced-image-wrapper";
     const {
@@ -284,6 +270,7 @@ export default function Style(props) {
         height: IMAGE_HEIGHT, // height
         border: IMAGE_BORDER_SHADOW, // border
         hasFilter: false,
+        useImageAlign: true
     });
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇

@@ -137,6 +137,7 @@ function Inspector(props) {
                                 <EBIconPicker
                                     value={prefixIcon}
                                     attributeName={'prefixIcon'}
+                                    enableSvgUpload={false}
                                 />
                             )}
                             {prefixType === "text" && (
@@ -189,6 +190,7 @@ function Inspector(props) {
                         <EBIconPicker
                             value={separatorIcon}
                             attributeName={'separatorIcon'}
+                            enableSvgUpload={false}
                         />
                     )}
                     {separatorType === "text" && (

@@ -1,6 +1,6 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon,
+    EBDisplayIconSave,
     sanitizeURL,
     BlockProps
 } from "@essential-blocks/controls";
@@ -59,7 +59,7 @@ const save = ({ attributes }) => {
                             } else if (value === "icon") {
                                 return (
                                     showIcon && (
-                                        <EBDisplayIcon className="eb-cia-icon" icon={icon} />
+                                        <EBDisplayIconSave className="eb-cia-icon" icon={icon} />
                                     )
                                 );
                             } else if (value === "description") {

@@ -1,11 +1,18 @@
-import { render } from "@wordpress/element";
+import { createRoot } from "@wordpress/element";
 import ReactPlayer from "react-player";
+
+/**
+ * Get SVG functions from global eb_frontend
+ */
+const {
+    EBRenderIconWithSVG,
+    loadSvgIcons
+} = window.eb_frontend || {};
 
 const AdvancedVideo = (props) => {
     const { wrapper, _autoplay, _muted } = props;
 
     let url = wrapper.getAttribute("data-url");
-    let option = wrapper.getAttribute("data-option");
     let controls = wrapper.getAttribute("data-controls") === "true" ? true : false;
     let loop = wrapper.getAttribute("data-loop") === "true" ? true : false;
     let muted = _muted ? _muted : wrapper.getAttribute("data-muted") === "true" ? true : false;
@@ -29,7 +36,14 @@ const AdvancedVideo = (props) => {
     if (imageOverlay == true && customPlayIcon == true && customPlayIconType == "image") {
         videoPlayIcon = <img src={customPlayIconURL} />;
     } else if (imageOverlay == true && customPlayIcon == true && customPlayIconType == "icon") {
-        videoPlayIcon = <i class={customPlayIconLib}></i>;
+        // Use EBRenderIconWithSVG for all icon types (FontAwesome, Dashicons, SVG URLs, inline SVG)
+        if (EBRenderIconWithSVG) {
+            const iconHtml = EBRenderIconWithSVG(customPlayIconLib, "eb-video-play-icon");
+            videoPlayIcon = <span dangerouslySetInnerHTML={{ __html: iconHtml }} />;
+        } else {
+            // Fallback to basic icon rendering if SVG functions not available
+            videoPlayIcon = <i className={customPlayIconLib}></i>;
+        }
     } else {
         videoPlayIcon = null;
     }
@@ -86,176 +100,134 @@ const AdvancedVideo = (props) => {
     );
 };
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
     const advVideoWrappers = document.getElementsByClassName(`eb-advanced-video-wrapper`);
     for (let advVideoWrapper of advVideoWrappers) {
+
         let playerOptions = advVideoWrapper.getElementsByClassName("eb-player-option");
         let playerOption = playerOptions[0];
         let imageOverlay = playerOption.getAttribute("data-overlay") === "true" ? true : false;
-        let videoId = playerOption.getAttribute("data-id");
 
         // sticky
         let option = playerOption.getAttribute("data-option");
 
+        // Create root once and store it
+        const root = createRoot(playerOption);
+        root.render(<AdvancedVideo wrapper={playerOption} />);
+
         if (imageOverlay) {
-            playerOption.addEventListener("click", (event) => {
-                render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />, playerOption);
+            playerOption.addEventListener("click", () => {
+                root.render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />);
+
+                // Load SVG icons after render (for SVG URLs)
+                if (loadSvgIcons) {
+                    setTimeout(() => {
+                        loadSvgIcons(playerOption);
+                    }, 100);
+                }
             });
         }
 
-        render(<AdvancedVideo wrapper={playerOption} />, playerOption);
+        // Load SVG icons after render (for SVG URLs)
+        if (loadSvgIcons) {
+            setTimeout(() => {
+                loadSvgIcons(playerOption);
+            }, 100);
+        }
 
         if (option === "eb-sticky") {
-            var videoWrap = videoId;
             var $video = document.querySelector(".eb-player-option.eb-sticky");
-            var videoHeight = $video.innerHeight;
-            var height = document.querySelector(".eb-react-player").offsetHeight;
-            var parent = playerOption.closest(".eb-sticky").closest(".wp-block-essential-blocks-advanced-video")
-                .offsetTop;
 
-            // close button
-            var closeBtnEl = playerOption.querySelector(".eb-sticky-video-close");
-            var closeSpan = document.createElement("span");
-            closeSpan.innerHTML = "&times;";
-            closeSpan.setAttribute("class", "eb-sticky-video-close");
+            // Wait for React component to render before getting height
+            setTimeout(() => {
+                var reactPlayer = document.querySelector(".eb-react-player");
+                if (!reactPlayer) {
+                    console.warn("React player element not found");
+                    return;
+                }
+                var height = reactPlayer.offsetHeight;
+                var parent = playerOption.closest(".eb-sticky").closest(".wp-block-essential-blocks-advanced-video")
+                    .offsetTop;
 
-            const scrollUp = "stuck-out";
-            const scrollDown = "scroll-down";
-            let lastScroll = 0;
+                // close button
+                var closeBtnEl = playerOption.querySelector(".eb-sticky-video-close");
+                var closeSpan = document.createElement("span");
+                closeSpan.innerHTML = "&times;";
+                closeSpan.setAttribute("class", "eb-sticky-video-close");
 
-            const stickyVisibility = playerOption.getAttribute("data-stickyVisibility");
-            const stickyVisibilityTAB = playerOption.getAttribute("data-stickyVisibilityTAB");
-            const stickyVisibilityMOB = playerOption.getAttribute("data-stickyVisibilityMOB");
+                let lastScroll = 0;
+                // let isSticky = false;
+                let stickyState = 'none'; // 'none', 'stuck', 'stuck-out'
 
-            if (window.matchMedia("(min-width: 1025px)").matches && stickyVisibility != "hidden") {
-                document.addEventListener("scroll", function () {
-                    var videoBottomU = height + parent + 200;
-                    var videoBottom = height + parent + 320;
+                const stickyVisibility = playerOption.getAttribute("data-stickyVisibility");
+                const stickyVisibilityTAB = playerOption.getAttribute("data-stickyVisibilityTAB");
+                const stickyVisibilityMOB = playerOption.getAttribute("data-stickyVisibilityMOB");
 
-                    const currentScroll = window.pageYOffset;
-                    if (currentScroll <= videoBottomU) {
-                        $video.classList.remove(scrollUp);
-                        return;
-                    }
+                // Determine which device we're on and if sticky should be enabled
+                let shouldEnableSticky = false;
+                if (window.matchMedia("(min-width: 1025px)").matches && stickyVisibility != "hidden") {
+                    shouldEnableSticky = true;
+                } else if (window.matchMedia("(min-width: 768px) and (max-width: 1024px)").matches && stickyVisibilityTAB != "hidden") {
+                    shouldEnableSticky = true;
+                } else if (window.matchMedia("(max-width: 767px)").matches && stickyVisibilityMOB != "hidden") {
+                    shouldEnableSticky = true;
+                }
 
-                    if (window.scrollY > videoBottomU) {
-                        if (window.scrollY > videoBottom) {
+                if (shouldEnableSticky) {
+                    // Single scroll event listener with unified logic
+                    const handleScroll = function () {
+                        const videoThreshold = height + parent + 320;
+                        const currentScroll = window.pageYOffset;
+
+                        // Reset sticky state when scrolled back to top
+                        if (currentScroll < height + parent + 200) {
+
+                            if (stickyState !== 'none') {
+                                $video.classList.remove("stuck", "stuck-out");
+                                stickyState = 'none';
+                                // isSticky = false;
+                                closeSpan.style.display = "none";
+                            }
+
+                            return;
+                        }
+
+                        // Make video sticky when scrolled past threshold
+                        if (currentScroll > videoThreshold && stickyState !== 'stuck') {
                             $video.classList.remove("stuck-out");
                             $video.classList.add("stuck");
+                            stickyState = 'stuck';
+                            // isSticky = true;
 
                             if (closeBtnEl == null) {
                                 $video.prepend(closeSpan);
                             }
                             closeSpan.style.display = "inline";
 
-                            closeSpan.addEventListener("click", function () {
-                                $video.classList.remove("eb-sticky");
-                            });
-                        } else {
-                            if (currentScroll < lastScroll && $video.classList.contains("stuck")) {
-                                // up
-                                $video.classList.remove("stuck");
-                                $video.classList.add(scrollUp);
-                                // closeSpan.style.display = "none";
+                            // Add close button click handler once
+                            if (!closeSpan.hasAttribute('data-listener-added')) {
+                                closeSpan.addEventListener("click", function () {
+                                    $video.classList.remove("eb-sticky");
+                                    stickyState = 'none';
+                                    // isSticky = false;
+                                });
+                                closeSpan.setAttribute('data-listener-added', 'true');
                             }
-                            lastScroll = currentScroll;
                         }
-                    } else {
-                        $video.classList.remove("stuck-out");
-                    }
-                });
-            }
 
-            if (
-                window.matchMedia("(min-width: 768px) and (max-width: 1024px)").matches &&
-                stickyVisibilityTAB != "hidden"
-            ) {
-                document.addEventListener("scroll", function () {
-                    var videoBottomU = height + parent + 200;
-                    var videoBottom = height + parent + 320;
+                        lastScroll = currentScroll;
+                    };
 
-                    const currentScroll = window.pageYOffset;
-                    if (currentScroll <= videoBottomU) {
-                        $video.classList.remove(scrollUp);
-                        return;
-                    }
-
-                    if (window.scrollY > videoBottomU) {
-                        if (window.scrollY > videoBottom) {
-                            $video.classList.remove("stuck-out");
-                            $video.classList.add("stuck");
-
-                            if (closeBtnEl == null) {
-                                $video.prepend(closeSpan);
-                            }
-                            closeSpan.style.display = "inline";
-
-                            closeSpan.addEventListener("click", function () {
-                                $video.classList.remove("eb-sticky");
-                            });
-                        } else {
-                            if (currentScroll < lastScroll && $video.classList.contains("stuck")) {
-                                // up
-                                $video.classList.remove("stuck");
-                                $video.classList.add(scrollUp);
-                                // closeSpan.style.display = "none";
-                            }
-                            lastScroll = currentScroll;
-                        }
-                    } else {
-                        $video.classList.remove("stuck-out");
-                    }
-                });
-            }
-            if (window.matchMedia("(max-width: 767px)").matches && stickyVisibilityMOB != "hidden") {
-                document.addEventListener("scroll", function () {
-                    var videoBottomU = height + parent + 200;
-                    var videoBottom = height + parent + 320;
-
-                    const currentScroll = window.pageYOffset;
-                    if (currentScroll <= videoBottomU) {
-                        $video.classList.remove(scrollUp);
-                        return;
-                    }
-
-                    if (window.scrollY > videoBottomU) {
-                        if (window.scrollY > videoBottom) {
-                            $video.classList.remove("stuck-out");
-                            $video.classList.add("stuck");
-
-                            if (closeBtnEl == null) {
-                                $video.prepend(closeSpan);
-                            }
-                            closeSpan.style.display = "inline";
-
-                            closeSpan.addEventListener("click", function () {
-                                $video.classList.remove("eb-sticky");
-                            });
-                        } else {
-                            if (currentScroll < lastScroll && $video.classList.contains("stuck")) {
-                                // up
-                                $video.classList.remove("stuck");
-                                $video.classList.add(scrollUp);
-                                // closeSpan.style.display = "none";
-                            }
-                            lastScroll = currentScroll;
-                        }
-                    } else {
-                        $video.classList.remove("stuck-out");
-                    }
-                });
-            }
+                    document.addEventListener("scroll", handleScroll);
+                }
+            }, 100); // Close setTimeout with 100ms delay
         }
 
         if (advVideoWrapper.classList.contains("lightbox")) {
             const lightbox = advVideoWrapper.getAttribute("data-id");
             const lightboxWrapper = document.querySelector(`[data-id="${lightbox}"]`);
 
-            let modalId = "#eb-modal-" + lightbox;
             let btnId = "#myBtn-" + lightbox;
-
-            // Get the modal
-            var modal = lightboxWrapper.querySelector(modalId);
 
             // Get the button that opens the modal
             var btn = lightboxWrapper.querySelector(btnId);
@@ -275,7 +247,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 wrapperModal.style.display = "block";
 
                 if (modalAutoplay === "true") {
-                    render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />, playerOption);
+                    root.render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />);
+
+                    // Load SVG icons after render (for SVG URLs)
+                    if (loadSvgIcons) {
+                        setTimeout(() => {
+                            loadSvgIcons(playerOption);
+                        }, 100);
+                    }
                 }
             };
 
@@ -288,7 +267,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 var wrapperModal = document.querySelector(wrapperModalId);
 
                 wrapperModal.style.display = "none";
-                render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />, playerOption);
+                root.render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />);
+
+                // Load SVG icons after render (for SVG URLs)
+                if (loadSvgIcons) {
+                    setTimeout(() => {
+                        loadSvgIcons(playerOption);
+                    }, 100);
+                }
             };
 
             // When the user clicks anywhere outside of the modal, close it
@@ -296,7 +282,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (event.target.classList.contains("eb-modal-player")) {
                     var wrapperModal = document.getElementById(event.target.id);
                     wrapperModal.style.display = "none";
-                    render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />, playerOption);
+                    root.render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />);
+
+                    // Load SVG icons after render (for SVG URLs)
+                    if (loadSvgIcons) {
+                        setTimeout(() => {
+                            loadSvgIcons(playerOption);
+                        }, 100);
+                    }
                 }
             };
         }

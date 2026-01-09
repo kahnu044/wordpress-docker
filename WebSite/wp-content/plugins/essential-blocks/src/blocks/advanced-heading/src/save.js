@@ -1,6 +1,6 @@
 import { RichText } from "@wordpress/block-editor";
 import {
-    EBDisplayIcon,
+    EBDisplayIconSave,
     BlockProps,
     sanitizeURL
 } from "@essential-blocks/controls";
@@ -79,7 +79,7 @@ const Save = ({ attributes }) => {
                     {displaySeperator && seperatorPosition === "top" && (
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
-                                <EBDisplayIcon icon={separatorIcon} />
+                                <EBDisplayIconSave icon={separatorIcon} />
                             )}
                         </div>
                     )}
@@ -109,7 +109,7 @@ const Save = ({ attributes }) => {
                     {displaySeperator && seperatorPosition === "bottom" && (
                         <div className={"eb-ah-separator " + seperatorType}>
                             {seperatorType === "icon" && (
-                                <EBDisplayIcon icon={separatorIcon} />
+                                <EBDisplayIconSave icon={separatorIcon} />
                             )}
                         </div>
                     )}

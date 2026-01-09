@@ -83,7 +83,7 @@ class InstagramFeed extends Block
     protected $frontend_scripts = [
         'essential-blocks-isotope',
         'essential-blocks-image-loaded',
-        'essential-blocks-instagram-feed-block-script'
+        'essential-blocks-instagram-feed-frontend'
      ];
 
     protected static $default_attributes = [
@@ -136,7 +136,7 @@ class InstagramFeed extends Block
     public function register_scripts()
     {
         $this->assets_manager->register(
-            'instagram-feed-block-script',
+            'instagram-feed-frontend',
             $this->path() . '/frontend.js',
             [
                 'essential-blocks-isotope',

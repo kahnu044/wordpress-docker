@@ -518,8 +518,8 @@ export default function Style(props) {
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li{
 			display: flex;
-			justify-content: ${titleAlign};
-			align-items: center;
+			justify-content: ${mediaPositon === "inline" ? titleAlign : "center"};
+			align-items: ${mediaPositon === "inline" ? "center" : titleAlign};
 			cursor:pointer;
 			text-align: center;
 			position:relative;
@@ -544,15 +544,15 @@ export default function Style(props) {
 		}
 
         .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tab-title-wrap {
-            ${mediaPositon === "inline" ? `text-align: left;` : "text-align: center;"}
+            text-align: ${titleAlign === "flex-start" ? "left" : titleAlign === "flex-end" ? "right" : "center"};
         }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			display:flex;
 			justify-content:center;
 			align-items:center;
-			// ${iconWidthDesktop}
-			// ${iconHeightDesktop}
+			${iconWidthDesktop}
+			${iconHeightDesktop}
 			${iconSizeDesktop}
 			${iconColor ? `color:${iconColor};` : ""}
 			${colorTransition ? `transition:color ${colorTransition}s;` : ""}
@@ -560,6 +560,11 @@ export default function Style(props) {
 			${iconBdShdStyesDesktop}
 			${iconPaddingDesktop}
 		}
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon svg {
+            ${iconWidthDesktop}
+			${iconHeightDesktop}
+        }
 
         .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li:hover .tabIcon {
             ${iconhvBgColor ? `background-color:${iconhvBgColor};` : ""}
@@ -816,11 +821,16 @@ export default function Style(props) {
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			${iconSizeTab}
-			// ${iconWidthTab}
-			// ${iconHeightTab}
+			${iconWidthTab}
+			${iconHeightTab}
 			${iconBdShdStyesTab}
 			${iconPaddingTab}
 		}
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon svg {
+			${iconWidthTab}
+			${iconHeightTab}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li img{
 			${imageWidthTab}
@@ -944,11 +954,16 @@ export default function Style(props) {
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon {
 			${iconSizeMobile}
-			// ${iconWidthMobile}
-			// ${iconHeightMobile}
+			${iconWidthMobile}
+			${iconHeightMobile}
             ${iconBdShdStyesMobile}
 			${iconPaddingMobile}
 		}
+
+        .${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li .tabIcon svg {
+            ${iconWidthMobile}
+			${iconHeightMobile}
+        }
 
 		.${blockId}.eb-advanced-tabs-wrapper .eb-tabs-nav ul.tabTitles[data-tabs-ul-id="${blockId}"] li img{
 			${imageWidthMobile}

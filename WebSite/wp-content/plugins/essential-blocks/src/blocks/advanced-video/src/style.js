@@ -15,6 +15,7 @@ import {
     PLACEHOLDER_IMAGE_WIDTH,
     PLACEHOLDER_IMAGE_HEIGHT,
     PLACEHOLDER_PLAY_ICON_WIDTH,
+    STICKY_BORDER_RADIUS,
 } from "./constants";
 
 /**
@@ -27,7 +28,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -42,6 +43,7 @@ export default function Style(props) {
         videoAlignment,
         customPlayIconlibColor,
         lightboxPlayIconlibColor,
+        stickyBGColor,
     } = attributes;
 
     /**
@@ -241,6 +243,16 @@ export default function Style(props) {
         // noBorder: true,
     });
 
+    const {
+        rangeStylesDesktop: stickyBorderRadiusDesktop,
+        rangeStylesTab: stickyBorderRadiusTab,
+        rangeStylesMobile: stickyBorderRadiusMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: STICKY_BORDER_RADIUS,
+        property: "border-radius",
+        attributes,
+    });
+
     let closePosition = closeIconWidthRange + 25;
 
     // wrapper styles css in strings ⬇
@@ -312,15 +324,35 @@ export default function Style(props) {
 		.eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview img {
 			width${playIconWidthDesktop || ": auto"};
 		}
-		.eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview i {
+		.eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview i,
+        .eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview span {
 			font-size${playIconWidthDesktop || ": 60px"};
             color: ${customPlayIconlibColor}
 		}
 
+        .eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview svg {
+            width${playIconWidthDesktop || ": 60px"};
+            height${playIconWidthDesktop || ": 60px"};
+            fill: ${customPlayIconlibColor};
+        }
+
 		.eb-advanced-video-wrapper.${blockId} .eb-player-option.sticky.stuck {
+		.eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out {
 			width${stickyVideoWidthDesktop};
 			height${stickyVideoHeightDesktop};
+			${stickyBorderRadiusDesktop}
+            background-color: ${stickyBGColor};
 		}
+
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe {
+            ${stickyBorderRadiusDesktop}
+        }
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe:hover,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe:hover {
+            ${stickyBorderRadiusDesktop}
+        }
 
 		.eb-advanced-video-wrapper.${blockId} .player-placeholder{
 			width${placeholderWidthDesktop};
@@ -333,10 +365,18 @@ export default function Style(props) {
 		.eb-advanced-video-wrapper.${blockId} .player-placeholder img{
 			width${placeholderPlayIconWidthDesktop};
 		}
-		.eb-advanced-video-wrapper.${blockId} .player-placeholder i{
+		.eb-advanced-video-wrapper.${blockId} .player-placeholder i,
+        .eb-advanced-video-wrapper.${blockId} .player-placeholder span {
 			font-size${placeholderPlayIconWidthDesktop};
-            color: ${lightboxPlayIconlibColor}
+            color: ${lightboxPlayIconlibColor};
 		}
+        
+        .eb-advanced-video-wrapper.${blockId} .player-placeholder svg,
+        .eb-advanced-video-wrapper.${blockId} .player-placeholder span svg {
+            width${placeholderPlayIconWidthDesktop};
+            height${placeholderPlayIconWidthDesktop};
+            fill: ${lightboxPlayIconlibColor};
+        }
 
 		.eb-advanced-video-wrapper.${blockId}.lightbox .eb-player-wrapper {
 			width${lightboxWidthDesktop};
@@ -386,11 +426,25 @@ export default function Style(props) {
         .eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview i {
 			font-size${playIconWidthTab || playIconWidthDesktop};
 		}
+        .eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview svg {
+            width${playIconWidthTab};
+            height${playIconWidthTab};
+        }
 
-		.eb-advanced-video-wrapper.${blockId} .eb-player-option.sticky.stuck {
+		.eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out {
 			width${stickyVideoWidthTab};
 			height${stickyVideoHeightTab};
+            ${stickyBorderRadiusTab}
 		}
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe {
+            ${stickyBorderRadiusTab}
+        }
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe:hover,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe:hover {
+            ${stickyBorderRadiusTab}
+        }
 
 		.eb-advanced-video-wrapper.${blockId} .player-placeholder{
 			width${placeholderWidthTab};
@@ -451,10 +505,26 @@ export default function Style(props) {
 			font-size${playIconWidthMobile || playIconWidthMobile};
 		}
 
+        .eb-advanced-video-wrapper.${blockId} .eb-react-player .react-player__preview svg {
+            width${playIconWidthMobile};
+            height${playIconWidthMobile};
+        }
+
 		.eb-advanced-video-wrapper.${blockId} .eb-player-option.sticky.stuck {
+		.eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out {
 			width${stickyVideoWidthMobile};
 			height${stickyVideoHeightMobile};
+            ${stickyBorderRadiusMobile}
 		}
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe {
+            ${stickyBorderRadiusMobile}
+        }
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck .eb-react-player iframe:hover,
+        .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out .eb-react-player iframe:hover {
+            ${stickyBorderRadiusMobile}
+        }
 
 		.eb-advanced-video-wrapper.${blockId} .player-placeholder{
 			width${placeholderWidthMobile};

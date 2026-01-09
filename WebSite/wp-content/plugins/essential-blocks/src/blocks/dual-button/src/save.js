@@ -1,5 +1,5 @@
 import {
-    EBDisplayIcon,
+    EBDisplayIconSave,
     BlockProps,
     EBButton
 } from "@essential-blocks/controls";
@@ -42,7 +42,7 @@ const Save = ({ attributes }) => {
                         <div className="eb-button-group__midldeInner">
                             {connectorType === "icon" && (
                                 <span>
-                                    <EBDisplayIcon icon={innerButtonIcon} />
+                                    <EBDisplayIconSave icon={innerButtonIcon} />
                                 </span>
                             )}
 

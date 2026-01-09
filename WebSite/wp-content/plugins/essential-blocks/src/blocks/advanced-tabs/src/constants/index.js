@@ -244,3 +244,15 @@ export const TITLE_ALIGNMENTS = [
         value: "flex-end",
     },
 ]
+
+export const TAB_STYLES = [
+    {
+        label: __("Default", "essential-blocks"),
+        value: "default",
+    },
+    {
+        label: __("Liquid Glass", "essential-blocks"),
+        value: "liquid-glass",
+        isPro: true,
+    },
+];

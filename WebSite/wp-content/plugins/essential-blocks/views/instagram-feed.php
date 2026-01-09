@@ -21,7 +21,7 @@
 <div <?php echo wp_kses_data( $wrapper_attributes); ?>>
     <div class="eb-parent-wrapper <?php echo esc_attr( implode( ' ', $_parent_wrapper_classes ) );?>">
         <div class="<?php echo esc_attr( implode( ' ', $_wrapper_classes ) );?> eb-instagram-wrapper">
-            <div class="eb-instagram__gallery">
+            <div class="eb-instagram__gallery" data-has-equal-images="<?php echo esc_attr( $hasEqualImages ? 'true' : 'false' ); ?>">
 
                 <?php
                     foreach ( $images as $key => $image ) {

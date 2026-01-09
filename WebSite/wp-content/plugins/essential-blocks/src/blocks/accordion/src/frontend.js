@@ -1,4 +1,10 @@
-const { EBGetIconClass, EBGetIconType } = window.eb_frontend;
+/**
+ * Get icon functions from global eb_frontend
+ */
+const {
+    EBRenderIconWithSVG,
+    loadSvgIcons
+} = window.eb_frontend;
 document.addEventListener("DOMContentLoaded", function (event) {
 
     let accordions = document.querySelectorAll(
@@ -116,52 +122,34 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
-        const testEl = document.createElement("span");
-
         // Get all data attributes
-        let tabIcon = accordion.getAttribute("data-tab-icon") || "_ _";
-        let expandedIcon =
-            accordion.getAttribute("data-expanded-icon") || "_ _";
+        let tabIcon = accordion.getAttribute("data-tab-icon") || "";
+        let expandedIcon = accordion.getAttribute("data-expanded-icon") || "";
 
-        tabIcon = EBGetIconClass(tabIcon);
-        expandedIcon = EBGetIconClass(expandedIcon);
-
-        // Seperate fontawesome 5 prefix and postfix classes.
-        let faTabPrefix = tabIcon.split(" ")[0];
-        let faTabPostfix =
-            "fontawesome" === EBGetIconType(tabIcon)
-                ? tabIcon.split(" ")[1]
-                : tabIcon.split(" ")[2];
-        let faExpandPrefix = expandedIcon.split(" ")[0];
-        let faExpandPostfix =
-            "fontawesome" === EBGetIconType(expandedIcon)
-                ? expandedIcon.split(" ")[1]
-                : expandedIcon.split(" ")[2];
+        // Note: Don't sanitize here - EBRenderIconWithSVG handles sanitization internally
 
         function changeIcon(clickedTab) {
             // Replace tab icon with expanded or vice versa
-            let iconNode =
-                clickedTab.querySelector(".eb-accordion-icon") || testEl;
-            let isExpanded = iconNode.classList.contains(faExpandPostfix);
-            if (isExpanded) {
-                if ("dashicon" === EBGetIconType(faExpandPostfix)) {
-                    iconNode.classList.remove("dashicons");
-                }
-                iconNode.classList.remove(faExpandPrefix, faExpandPostfix);
-                if ("dashicon" === EBGetIconType(faTabPostfix)) {
-                    iconNode.classList.add("dashicons");
-                }
-                iconNode.classList.add(faTabPrefix, faTabPostfix);
-            } else {
-                if ("dashicon" === EBGetIconType(faTabPostfix)) {
-                    iconNode.classList.remove("dashicons");
-                }
-                iconNode.classList.remove(faTabPrefix, faTabPostfix);
-                if ("dashicon" === EBGetIconType(faExpandPostfix)) {
-                    iconNode.classList.add("dashicons");
-                }
-                iconNode.classList.add(faExpandPrefix, faExpandPostfix);
-            }
+            let iconWrapper = clickedTab.querySelector(".eb-accordion-icon-wrapper");
+            if (!iconWrapper) return;
+
+            // Check current state by looking for expanded icon data attribute
+            let isExpanded = iconWrapper.getAttribute('data-expanded') === 'true';
+
+            // Determine which icon to show
+            let iconToShow = isExpanded ? tabIcon : expandedIcon;
+
+            // Use EBRenderIconWithSVG for all icon types (FontAwesome, Dashicons, SVG URLs, inline SVG)
+            let iconHtml = EBRenderIconWithSVG(iconToShow, "eb-accordion-icon");
+            iconWrapper.innerHTML = iconHtml;
+
+            // Update state
+            iconWrapper.setAttribute('data-expanded', isExpanded ? 'false' : 'true');
+
+            // Load SVG icons after DOM insertion (for SVG URLs)
+            setTimeout(() => {
+                loadSvgIcons(iconWrapper);
+            }, 10);
         }
 
         // without clicked on accordion
@@ -258,15 +246,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
 
         function changeAllExpandIcons(accordion) {
-            let iconNodes = accordion.querySelectorAll(".eb-accordion-icon");
-            // Replace expand icon with tab icon & change color
-            for (let i = 0; i < iconNodes.length; i++) {
-                if (iconNodes[i].classList.contains(faExpandPostfix)) {
-                    iconNodes[i].classList.remove(
-                        faExpandPrefix,
-                        faExpandPostfix,
-                    );
-                    iconNodes[i].classList.add(faTabPrefix, faTabPostfix);
+            let iconWrappers = accordion.querySelectorAll(".eb-accordion-icon-wrapper");
+            // Replace expand icon with tab icon for all accordions
+            for (let i = 0; i < iconWrappers.length; i++) {
+                let iconWrapper = iconWrappers[i];
+                if (iconWrapper.getAttribute('data-expanded') === 'true') {
+                    // Use EBRenderIconWithSVG for all icon types
+                    let iconHtml = EBRenderIconWithSVG(tabIcon, "eb-accordion-icon");
+                    iconWrapper.innerHTML = iconHtml;
+                    iconWrapper.setAttribute('data-expanded', 'false');
+
+                    // Load SVG icons after DOM insertion (for SVG URLs)
+                    setTimeout(() => {
+                        loadSvgIcons(iconWrapper);
+                    }, 10);
                 }
             }
         }
@@ -578,6 +571,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // Change tab icon (optional)
             changeIcon(clickedTab);
         }
+
+        // Load SVG icons after accordion initialization
+        setTimeout(() => {
+            loadSvgIcons(accordion);
+        }, 100);
     }
 });
 

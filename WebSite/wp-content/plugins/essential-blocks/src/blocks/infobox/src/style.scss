@@ -5,7 +5,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- @import '../../../controls/src/components/Image/imageComponent.scss';
+@import "../../../controls/src/components/Image/imageComponent.scss";
 
 /* Clickable infobox styling */
 .eb-parent-wrapper[data-clickable="true"] {
@@ -75,9 +75,14 @@ div.eb-infobox-wrapper {
 		.infobox-btn:hover:before {
 			opacity: 1;
 		}
+		.eb-button-anchor {
+			display: flex;
+			align-items: center;
 
-		.infobox-btn {
-			display: inline-block;
+			span,
+			svg {
+				line-height: 0;
+			}
 		}
 	}
 	.eb-image-caption-wrap {

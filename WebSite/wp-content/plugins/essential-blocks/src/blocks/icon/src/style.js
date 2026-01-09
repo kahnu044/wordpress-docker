@@ -96,6 +96,28 @@ export default function Style(props) {
     });
 
     const {
+        rangeStylesDesktop: iconHeightDesktop,
+        rangeStylesTab: iconHeightTab,
+        rangeStylesMobile: iconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: iconWidthDesktop,
+        rangeStylesTab: iconWidthTab,
+        rangeStylesMobile: iconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ICON_SIZE,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
         dimensionStylesDesktop: iconBorderDesktop,
         dimensionStylesTab: iconBorderTab,
         dimensionStylesMobile: iconBorderMobile,
@@ -177,7 +199,18 @@ export default function Style(props) {
             ${iconPadding ? `padding: ${iconPadding}px;` : ""}
             ${iconBorderDesktop}
             ${iconBorderWidthDesktop}
-         }
+        }
+
+        .${blockId}.eb-icon-wrapper .eb-icon-container svg {
+            ${iconHeightDesktop}
+            ${iconWidthDesktop}
+        }
+
+        .${blockId}.eb-icon-wrapper.eb-icon-view-framed .eb-icon-container svg,
+        .${blockId}.eb-icon-wrapper.eb-icon-view-default .eb-icon-container svg {
+            ${iconPrimaryColor ? `fill: ${iconPrimaryColor};` : ""}
+
+        }
     `;
 
     // ALL TAB Styles
@@ -200,6 +233,10 @@ export default function Style(props) {
             ${iconSizeTab}
             ${iconBorderTab}
             ${iconBorderWidthTab}
+        }
+        .${blockId}.eb-icon-wrapper .eb-icon-container svg {
+            ${iconHeightTab}
+            ${iconWidthTab}
         }
     `;
 
@@ -227,6 +264,10 @@ export default function Style(props) {
             ${iconSizeMobile}
             ${iconBorderMobile}
             ${iconBorderWidthMobile}
+        }
+        .${blockId}.eb-icon-wrapper .eb-icon-container svg {
+            ${iconHeightMobile}
+            ${iconWidthMobile}
         }
     `;
 

@@ -42,7 +42,8 @@ const Inspector = ({ attributes, setAttributes }) => {
         shapeDividerPosition,
         useCustomHeight,
         contentAlign,
-        align
+        align,
+        disableGeneralTab
     } = attributes;
 
     return (
@@ -58,110 +59,112 @@ const Inspector = ({ attributes, setAttributes }) => {
         >
             <InspectorPanel.General>
                 <>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "General",
-                            "essential-blocks"
-                        )}
-                        initialOpen={true}
-                    >
-                        <BaseControl
-                            label={__(
-                                "Wrapper Width",
+                    {disableGeneralTab && (
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "General",
                                 "essential-blocks"
                             )}
+                            initialOpen={true}
                         >
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {WRAPPER_ALIGN.map(
-                                    (item, index) => (
-                                        <Button
-                                            key={index}
-                                            isPrimary={
-                                                align ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                align !==
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    align:
-                                                        item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
+                            <BaseControl
+                                label={__(
+                                    "Wrapper Width",
+                                    "essential-blocks"
                                 )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            >
+                                <ButtonGroup id="eb-button-group-alignment">
+                                    {WRAPPER_ALIGN.map(
+                                        (item, index) => (
+                                            <Button
+                                                key={index}
+                                                isPrimary={
+                                                    align ===
+                                                    item.value
+                                                }
+                                                isSecondary={
+                                                    align !==
+                                                    item.value
+                                                }
+                                                onClick={() =>
+                                                    setAttributes({
+                                                        align:
+                                                            item.value,
+                                                    })
+                                                }
+                                            >
+                                                {item.label}
+                                            </Button>
+                                        )
+                                    )}
+                                </ButtonGroup>
+                            </BaseControl>
 
-                        <ResponsiveRangeController
-                            baseLabel={__(
-                                "Content Width",
-                                "essential-blocks"
+                            <ResponsiveRangeController
+                                baseLabel={__(
+                                    "Content Width",
+                                    "essential-blocks"
+                                )}
+                                controlName={WRAPPER_WIDTH}
+                                min={0}
+                                max={2560}
+                                step={1}
+                                noUnits
+                            />
+                            <ToggleControl
+                                label={__(
+                                    "Use Width In Wrapper",
+                                    "essential-blocks"
+                                )}
+                                checked={isWrapperWidth}
+                                onChange={() => {
+                                    setAttributes({
+                                        isWrapperWidth: !isWrapperWidth,
+                                    });
+                                }}
+                            />
+                            <ToggleControl
+                                label={__(
+                                    "Use Custom Height",
+                                    "essential-blocks"
+                                )}
+                                checked={useCustomHeight}
+                                onChange={() => {
+                                    setAttributes({
+                                        useCustomHeight: !useCustomHeight,
+                                    });
+                                }}
+                            />
+                            {useCustomHeight && (
+                                <>
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Height",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={WRAPPER_HEIGHT}
+                                        min={0}
+                                        max={2560}
+                                        step={1}
+                                        units={HEIGHT_UNIT_TYPES}
+                                    />
+                                    <SelectControl
+                                        label={__(
+                                            "Content Alignment",
+                                            "essential-blocks"
+                                        )}
+                                        value={contentAlign}
+                                        options={CONTENT_ALIGNMENT}
+                                        onChange={(selected) =>
+                                            setAttributes({
+                                                contentAlign: selected,
+                                            })
+                                        }
+                                    />
+                                </>
                             )}
-                            controlName={WRAPPER_WIDTH}
-                            min={0}
-                            max={2560}
-                            step={1}
-                            noUnits
-                        />
-                        <ToggleControl
-                            label={__(
-                                "Use Width In Wrapper",
-                                "essential-blocks"
-                            )}
-                            checked={isWrapperWidth}
-                            onChange={() => {
-                                setAttributes({
-                                    isWrapperWidth: !isWrapperWidth,
-                                });
-                            }}
-                        />
-                        <ToggleControl
-                            label={__(
-                                "Use Custom Height",
-                                "essential-blocks"
-                            )}
-                            checked={useCustomHeight}
-                            onChange={() => {
-                                setAttributes({
-                                    useCustomHeight: !useCustomHeight,
-                                });
-                            }}
-                        />
-                        {useCustomHeight && (
-                            <>
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Height",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={WRAPPER_HEIGHT}
-                                    min={0}
-                                    max={2560}
-                                    step={1}
-                                    units={HEIGHT_UNIT_TYPES}
-                                />
-                                <SelectControl
-                                    label={__(
-                                        "Content Alignment",
-                                        "essential-blocks"
-                                    )}
-                                    value={contentAlign}
-                                    options={CONTENT_ALIGNMENT}
-                                    onChange={(selected) =>
-                                        setAttributes({
-                                            contentAlign: selected,
-                                        })
-                                    }
-                                />
-                            </>
-                        )}
-                    </InspectorPanel.PanelBody>
+                        </InspectorPanel.PanelBody>
+                    )}
                     <InspectorPanel.PanelBody
                         title={__(
                             "Shape Divider",

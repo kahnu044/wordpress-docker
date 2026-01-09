@@ -77,6 +77,35 @@ $xing: #026466;
 	.whatsapp-original {
 		background: $whatsapp;
 	}
+
+	// Dashicons support - using same colors as FontAwesome equivalents
+	.facebook-alt-original {
+		background: $facebook;
+	}
+
+	.twitter-alt-original {
+		background: $twitter;
+	}
+
+	.googleplus-original {
+		background: #dd4b39;
+	}
+
+	.email-original,
+	.email-alt-original,
+	.email-alt2-original {
+		background: $envelope;
+	}
+
+	.rss-original {
+		background: #ff6600;
+	}
+
+	.share-original,
+	.share-alt-original,
+	.share-alt2-original {
+		background: #666;
+	}
 }
 
 .social-icon {

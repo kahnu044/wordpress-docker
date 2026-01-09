@@ -21,6 +21,7 @@ import {
     CLOSE_BTN_LEFT,
     wrapMarginConst,
     wrapPaddingConst,
+    ICON_SIZE,
 } from "./constants";
 
 import {
@@ -229,6 +230,9 @@ const attributes = {
     ...generateBorderShadowAttributes(POPUP_BORDER),
     ...generateBorderShadowAttributes(CLOSE_BORDER, {
         noShadow: true,
+    }),
+    ...generateResponsiveRangeAttributes(ICON_SIZE, {
+        defaultRange: 18,
     }),
 };
 

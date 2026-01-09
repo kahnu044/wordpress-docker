@@ -22,15 +22,16 @@ import { createBlocksFromInnerBlocksTemplate, createBlock } from "@wordpress/blo
 /**
  * Internal dependencies
  */
-import { getValidationRules, getFormFields } from "./helpers";
+import { getValidationRules, getFormFields, FormProTypeContent } from "./helpers";
 import {
     fetchFormBlockData,
     saveFormBlockData,
     DynamicInputValueHandler,
     getAllBlockClientIds,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext,
+    NoticeComponent,
 } from "@essential-blocks/controls";
 
 import {
@@ -89,6 +90,8 @@ const Edit = (props) => {
         nextBtnText,
         prevBtnText,
     } = attributes;
+
+    const [isProPreset, setIspro] = useState(false);
 
     const [formSettings, setFormSettings] = useState({});
     const [allFields, setAllFields] = useState({});
@@ -659,7 +662,7 @@ const Edit = (props) => {
         </div>
     ) : (
         <>
-            {isSelected && (
+            {isSelected && formType && (
                 <Inspector
                     clientId={clientId}
                     attributes={attributes}
@@ -691,81 +694,96 @@ const Edit = (props) => {
                             <>
                                 <div className="eb-form-editor-formtype-select">
                                     <h2>Please Select a Form Type</h2>
-                                    <div
-                                        className="eb-form-editor-formtype-item"
-                                        onClick={() => {
-                                            setIsTemplateLoading(true)
-                                            setAttributes({
-                                                formType: "contact_form",
-                                            })
-                                        }}
-                                    >
-                                        <div className="eb-form-editor-formtype-icon">
-                                            <img
-                                                src={ContactFormIcon}
-                                                alt={"conact form icon"}
-                                            />
+                                    <div className="eb-form-editor-formtype-item-wrapper">
+                                        <div
+                                            className="eb-form-editor-formtype-item"
+                                            onClick={() => {
+                                                setIsTemplateLoading(true)
+                                                setAttributes({
+                                                    formType: "contact_form",
+                                                })
+                                            }}
+                                        >
+                                            <div className="eb-form-editor-formtype-icon">
+                                                <img
+                                                    src={ContactFormIcon}
+                                                    alt={"conact form icon"}
+                                                />
+                                            </div>
+                                            <span>Contact Form</span>
                                         </div>
-                                        <span>Contact Form</span>
-                                    </div>
-                                    <div
-                                        className="eb-form-editor-formtype-item"
-                                        onClick={() => {
-                                            setIsTemplateLoading(true)
-                                            setAttributes({
-                                                formType: "subscription_form",
-                                            })
-                                        }}
+                                        <div
+                                            className="eb-form-editor-formtype-item"
+                                            onClick={() => {
+                                                setIsTemplateLoading(true)
+                                                setAttributes({
+                                                    formType: "subscription_form",
+                                                    template: "subscription_form_1",
+                                                })
+                                            }}
 
-                                    >
-                                        <div className="eb-form-editor-formtype-icon">
-                                            <img
-                                                src={SubscriptionFormIcon}
-                                                alt={"subscription form icon"}
-                                            />
+                                        >
+                                            <div className="eb-form-editor-formtype-icon">
+                                                <img
+                                                    src={SubscriptionFormIcon}
+                                                    alt={"subscription form icon"}
+                                                />
+                                            </div>
+                                            <span>Subscription Form</span>
                                         </div>
-                                        <span>Subscription Form</span>
-                                    </div>
-                                    <div
-                                        className="eb-form-editor-formtype-item"
-                                        onClick={() => {
-                                            setIsTemplateLoading(true)
-                                            setAttributes({
-                                                formType: "rsvp_form",
-                                            })
-                                        }}
-                                    >
-                                        <div className="eb-form-editor-formtype-icon">
-                                            <img
-                                                src={RSVPFormIcon}
-                                                alt={"rsvp form icon"}
-                                            />
+                                        <div
+                                            className="eb-form-editor-formtype-item"
+                                            onClick={() => {
+                                                setIsTemplateLoading(true)
+                                                setAttributes({
+                                                    formType: "rsvp_form",
+                                                })
+                                            }}
+                                        >
+                                            <div className="eb-form-editor-formtype-icon">
+                                                <img
+                                                    src={RSVPFormIcon}
+                                                    alt={"rsvp form icon"}
+                                                />
+                                            </div>
+                                            <span>RSVP Form</span>
                                         </div>
-                                        <span>RSVP Form</span>
+
+                                        {applyFilters(
+                                            "eb_pro_form_type_selector",
+                                            <FormProTypeContent setIspro={setIspro} />,
+                                            attributes,
+                                            setAttributes,
+                                            setIsTemplateLoading
+                                        )}
+
+                                        <div
+                                            className="eb-form-editor-formtype-item"
+                                            onClick={() =>
+                                                setAttributes({ formType: "blank" })
+                                            }
+                                        >
+                                            <div className="eb-form-editor-formtype-icon">
+                                                <img
+                                                    src={BlankIcon}
+                                                    alt={"blank form icon"}
+                                                />
+                                            </div>
+                                            <span>Blank</span>
+                                        </div>
                                     </div>
 
-                                    {applyFilters(
-                                        "eb_pro_form_type_selector",
-                                        "",
-                                        attributes,
-                                        setAttributes,
-                                        setIsTemplateLoading
+                                    {isProPreset && (
+                                        <div className="eb-is-pro-message">
+                                            <span className="dashicons dashicons-lock"></span>
+                                            <span>
+                                                <a href={EssentialBlocksLocalize?.upgrade_pro_url} target="_blank">
+                                                    Upgrade to pro
+                                                </a>{" "}
+                                                for this premium feature!
+                                            </span>
+                                        </div>
                                     )}
-
-                                    <div
-                                        className="eb-form-editor-formtype-item"
-                                        onClick={() =>
-                                            setAttributes({ formType: "blank" })
-                                        }
-                                    >
-                                        <div className="eb-form-editor-formtype-icon">
-                                            <img
-                                                src={BlankIcon}
-                                                alt={"blank form icon"}
-                                            />
-                                        </div>
-                                        <span>Blank</span>
-                                    </div>
                                 </div>
                             </>
                         )}
@@ -850,7 +868,7 @@ const Edit = (props) => {
                                                     >
                                                         {btnAddIcon &&
                                                             iconPosition === "left" ? (
-                                                            <EBDisplayIcon
+                                                            <EBDisplayIconEdit
                                                                 className={
                                                                     "eb-button-icon"
                                                                 }
@@ -870,7 +888,7 @@ const Edit = (props) => {
                                                         />
                                                         {btnAddIcon &&
                                                             iconPosition === "right" ? (
-                                                            <EBDisplayIcon
+                                                            <EBDisplayIconEdit
                                                                 className={
                                                                     "eb-button-icon"
                                                                 }
@@ -889,7 +907,7 @@ const Edit = (props) => {
                         )}
                     </div>
                 </div>
-            </BlockProps.Edit>
+            </BlockProps.Edit >
         </>
     );
 };

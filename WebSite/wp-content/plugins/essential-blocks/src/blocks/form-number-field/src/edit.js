@@ -8,7 +8,7 @@ import { select } from "@wordpress/data";
  * Internal dependencies
  */
 import {
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     DynamicInputValueHandler,
     BlockProps,
     withBlockContext,
@@ -200,7 +200,7 @@ const Edit = (props) => {
 
                         <div className="eb-field-input-wrap">
                             {isIcon && icon && (
-                                <EBDisplayIcon
+                                <EBDisplayIconEdit
                                     icon={icon}
                                     className={"eb-input-icon"}
                                 />

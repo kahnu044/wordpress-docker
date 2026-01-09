@@ -34,6 +34,10 @@
 
 	.eb-gallery-img-content {
 		color: transparent;
+
+		&[href*="javascript:void(0)"] {
+			cursor: default;
+		}
 	}
 
 	.eb-gallery-link-wrapper {
@@ -658,7 +662,8 @@
 			align-items: center;
 			gap: 10px;
 
-			.eb-img-gallery-action {
+			.eb-img-gallery-action, 
+			.eb-img-gallery-action span svg {
 				text-align: center;
 				box-sizing: border-box;
 				display: flex;

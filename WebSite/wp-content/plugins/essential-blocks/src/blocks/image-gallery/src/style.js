@@ -619,6 +619,11 @@ export default function Style(props) {
 			transition: ${iconBDShadowTransitionStyle};
 		}
 
+        .eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-img-gallery-action svg {
+            width: ${iconSize}px;
+			height: ${iconSize}px;
+        }
+
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-img-gallery-action:hover {
 			color: ${iconHoverColor};
 			background-color: ${iconHoverBGColor};

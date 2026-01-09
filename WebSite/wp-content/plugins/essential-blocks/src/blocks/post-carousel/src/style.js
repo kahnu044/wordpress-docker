@@ -430,6 +430,26 @@ export default function Style(props) {
         attributes,
     });
 
+	const {
+        rangeStylesDesktop: arrowSvgWidthDesktop,
+        rangeStylesTab: arrowSvgWidthTab,
+        rangeStylesMobile: arrowSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ARROW_SIZE,
+        property: "width",
+        attributes,
+    });
+
+	const {
+        rangeStylesDesktop: arrowSvgHeightDesktop,
+        rangeStylesTab: arrowSvgHeightTab,
+        rangeStylesMobile: arrowSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ARROW_SIZE,
+        property: "height",
+        attributes,
+    });
+
     // range controller Slider Arrow Size
     const {
         rangeStylesDesktop: dotsSizeDesktop,
@@ -1278,13 +1298,28 @@ export default function Style(props) {
             ${!isRTLEnable ? rightArrowPositionDesktop : leftArrowPositionDesktop}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
-		.eb-post-carousel-wrapper.${blockId} .slick-next i {
+		.eb-post-carousel-wrapper.${blockId} .slick-next i,
+        .eb-post-carousel-wrapper.${blockId} .slick-prev span,
+		.eb-post-carousel-wrapper.${blockId} .slick-next span {
 			color: ${arrowColor} !important;
 			${arrowSizeDesktop}
+		}
+		.eb-post-carousel-wrapper.${blockId} .slick-prev,
+		.eb-post-carousel-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthDesktop}
+			${arrowSvgHeightDesktop}
+		}
+		.eb-post-carousel-wrapper.${blockId} .slick-prev svg,
+		.eb-post-carousel-wrapper.${blockId} .slick-next svg {
+			fill: ${arrowColor} !important;
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev:hover i,
 		.eb-post-carousel-wrapper.${blockId} .slick-next:hover i {
 			color: ${arrowHoverColor} !important;
+		}
+		.eb-post-carousel-wrapper.${blockId} .slick-prev:hover svg,
+		.eb-post-carousel-wrapper.${blockId} .slick-next:hover svg {
+			fill: ${arrowHoverColor} !important;
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{
@@ -1366,8 +1401,15 @@ export default function Style(props) {
             ${!isRTLEnable ? rightArrowPositionTab : leftArrowPositionTab}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
-		.eb-post-carousel-wrapper.${blockId} .slick-next i {
+		.eb-post-carousel-wrapper.${blockId} .slick-next i,
+        .eb-post-carousel-wrapper.${blockId} .slick-prev span,
+		.eb-post-carousel-wrapper.${blockId} .slick-next span  {
 			${arrowSizeTab}
+		}
+		.eb-post-carousel-wrapper.${blockId} .slick-prev,
+		.eb-post-carousel-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthTab}
+			${arrowSvgHeightTab}
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{
@@ -1413,8 +1455,15 @@ export default function Style(props) {
             ${!isRTLEnable ? rightArrowPositionMobile : leftArrowPositionMobile}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-prev i,
-		.eb-post-carousel-wrapper.${blockId} .slick-next i {
+		.eb-post-carousel-wrapper.${blockId} .slick-next i,
+        .eb-post-carousel-wrapper.${blockId} .slick-prev span,
+		.eb-post-carousel-wrapper.${blockId} .slick-next span {
 			${arrowSizeMobile}
+		}
+		.eb-post-carousel-wrapper.${blockId} .slick-prev,
+		.eb-post-carousel-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthMobile}
+			${arrowSvgHeightMobile}
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{

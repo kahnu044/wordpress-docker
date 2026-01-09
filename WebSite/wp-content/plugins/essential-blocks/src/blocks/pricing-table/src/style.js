@@ -41,7 +41,7 @@ import {
     generateBorderShadowStyles,
     generateTypographyStyles,
     generateResponsiveRangeStyles,
-    StyleComponent
+    StyleComponent,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -265,6 +265,28 @@ export default function Style(props) {
     });
 
     const {
+        rangeStylesDesktop: featuresIconHeightDesktop,
+        rangeStylesTab: featuresIconHeightTab,
+        rangeStylesMobile: featuresIconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: featuresIconSize,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: featuresIconWidthDesktop,
+        rangeStylesTab: featuresIconWidthTab,
+        rangeStylesMobile: featuresIconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: featuresIconSize,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
         rangeStylesDesktop: buttonIconSpaceRightDesktop,
         rangeStylesTab: buttonIconSpaceRightTab,
         rangeStylesMobile: buttonIconSpaceRightMobile,
@@ -318,6 +340,27 @@ export default function Style(props) {
     });
 
     const {
+        rangeStylesDesktop: buttonIconHeightDesktop,
+        rangeStylesTab: buttonIconHeightTab,
+        rangeStylesMobile: buttonIconHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: buttonIconSize,
+        property: "height",
+        attributes,
+        customUnit: "px",
+    });
+    const {
+        rangeStylesDesktop: buttonIconWidthDesktop,
+        rangeStylesTab: buttonIconWidthTab,
+        rangeStylesMobile: buttonIconWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: buttonIconSize,
+        property: "width",
+        attributes,
+        customUnit: "px",
+    });
+
+    const {
         typoStylesDesktop: buttonTypoStylesDesktop,
         typoStylesTab: buttonTypoStylesTab,
         typoStylesMobile: buttonTypoStylesMobile,
@@ -356,6 +399,26 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: headerIconSize,
         property: "font-size",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: headerSvgWidthDesktop,
+        rangeStylesTab: headerSvgWidthTab,
+        rangeStylesMobile: headerSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: headerIconSize,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: headerSvgHeightDesktop,
+        rangeStylesTab: headerSvgHeightTab,
+        rangeStylesMobile: headerSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: headerIconSize,
+        property: "height",
         attributes,
     });
 
@@ -463,7 +526,10 @@ export default function Style(props) {
 		  .eb-pricing-wrapper.eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header {
 			  ${titlePaddingStylesDesktop}
 			  ${titleMarginStylesDesktop}
-			  background: ${titleBackgroundColor || (pricingStyle === "style-2" ? "#c8e6c9" : "none")};
+			  background: ${
+                  titleBackgroundColor ||
+                  (pricingStyle === "style-2" ? "#c8e6c9" : "none")
+              };
 			  position: relative;
 			  z-index: 0;
 		  }
@@ -505,6 +571,11 @@ export default function Style(props) {
 			  ${featuresIconSizeDesktop}
 			  margin-right: 8px;
 		  }
+          .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li svg.eb-pricebox-icon,
+          .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon svg {
+              ${featuresIconWidthDesktop}
+              ${featuresIconHeightDesktop}
+          }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button-wrapper {
 			  ${buttonMarginStylesDesktop}
 		  }
@@ -523,13 +594,33 @@ export default function Style(props) {
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button .dashicon,
           .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
-			  ${buttonIconPosition === "left" ? buttonIconSpaceRightDesktop : buttonIconSpaceLeftDesktop}
+			  ${
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightDesktop
+                      : buttonIconSpaceLeftDesktop
+              }
 			  ${buttonIconSizeDesktop}
 		  }
+          .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button svg {
+                ${
+                    buttonIconPosition === "left"
+                        ? buttonIconSpaceRightDesktop
+                        : buttonIconSpaceLeftDesktop
+                }
+              ${buttonIconWidthDesktop}
+              ${buttonIconHeightDesktop}
+          }
+          
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon {
 			  display: flex;
 			  align-items: center;
-			  justify-content: ${iconAlign === "left" ? "flex-start" : iconAlign === "right" ? "flex-end" : "center"};
+			  justify-content: ${
+                  iconAlign === "left"
+                      ? "flex-start"
+                      : iconAlign === "right"
+                      ? "flex-end"
+                      : "center"
+              };
 		  }
 
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
@@ -539,47 +630,70 @@ export default function Style(props) {
 			  ${headerIconWidthDesktop}
 			  ${headerIconHeightDesktop}
 			  ${iconBorderShadowDesktop}
-			  ${showIconBackground ? "background-color: " + iconBackgroundColor + ";" : "background-color: transparent;"}
+			  ${
+                  showIconBackground
+                      ? "background-color: " + iconBackgroundColor + ";"
+                      : "background-color: transparent;"
+              }
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item:hover .eb-pricing-icon .icon {
 			  ${iconBorderShadowHoverDesktop}
-			  ${showIconBackground ? "background-color: " + iconBackgroundHoverColor + ";" : "background-color: transparent;"}
+			  ${
+                  showIconBackground
+                      ? "background-color: " + iconBackgroundHoverColor + ";"
+                      : "background-color: transparent;"
+              }
 		  }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  ${headerIconSizeDesktop}
 			  color: ${iconColor};
 		  }
+            .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon svg.icon,
+            .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon svg {
+			  ${headerSvgWidthDesktop}
+			  ${headerSvgHeightDesktop}
+              fill: ${iconColor};
+		    }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item:hover .eb-pricing-icon .icon {
 			  color: ${iconHoverColor};
 		  }
 
-		  ${featuresAlignment
-            ? `.eb-pricing-wrapper.${blockId} .eb-pricing-body {
+          .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item:hover .eb-pricing-icon svg.icon,
+          .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon svg {
+              fill: ${iconHoverColor};
+		  }
+
+		  ${
+              featuresAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-body {
 				  text-align: ${featuresAlignment};
 			  }`
-            : ""
-        }
+                  : ""
+          }
 
-		  ${buttonAlignment
-            ? `.eb-pricing-wrapper.${blockId} .eb-pricing-footer {
+		  ${
+              buttonAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-footer {
 				  text-align: ${buttonAlignment};
 			  }`
-            : ""
-        }
+                  : ""
+          }
 
-		  ${headerAlignment
-            ? `.eb-pricing-wrapper.${blockId} .eb-pricing-header {
+		  ${
+              headerAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-header {
 				  text-align: ${headerAlignment};
 			  }`
-            : ""
-        }
+                  : ""
+          }
 
-		  ${priceAlignment
-            ? `.eb-pricing-wrapper.${blockId} .eb-pricing-tag {
+		  ${
+              priceAlignment
+                  ? `.eb-pricing-wrapper.${blockId} .eb-pricing-tag {
 				  text-align: ${priceAlignment};
 			  }`
-            : ""
-        }
+                  : ""
+          }
 
 	  `;
 
@@ -638,6 +752,11 @@ export default function Style(props) {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon {
 			  ${featuresIconSizeTab}
 		  }
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li svg.eb-pricebox-icon,
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon svg {
+            ${featuresIconWidthTab}
+            ${featuresIconHeightTab}
+        }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button-wrapper {
 			  ${buttonMarginStylesTab}
 		  }
@@ -651,9 +770,22 @@ export default function Style(props) {
 		  }
           .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button .dashicon,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
-			  ${buttonIconPosition === "left" ? buttonIconSpaceRightTab : buttonIconSpaceLeftTab}
+			  ${
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightTab
+                      : buttonIconSpaceLeftTab
+              }
 			  ${buttonIconSizeTab}
 		  }
+              .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button svg {
+              ${
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightTab
+                      : buttonIconSpaceLeftTab
+              }
+              ${buttonIconWidthTab}
+              ${buttonIconHeightTab}
+          }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  ${headerIconWidthTab}
 			  ${headerIconHeightTab}
@@ -665,6 +797,11 @@ export default function Style(props) {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  ${headerIconSizeTab}
 		  }
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon svg.icon
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon svg {
+			  ${headerSvgWidthTab}
+			  ${headerSvgHeightTab}
+		}
 	  `;
 
     const mobileStyles = `
@@ -723,6 +860,11 @@ export default function Style(props) {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon {
 			  ${featuresIconSizeMobile}
 		  }
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li svg.eb-pricebox-icon,
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-body ul li .eb-pricebox-icon svg {
+            ${featuresIconWidthMobile}
+            ${featuresIconHeightMobile}
+        }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button-wrapper {
 			  ${buttonMarginStylesMobile}
 		  }
@@ -736,9 +878,22 @@ export default function Style(props) {
 		  }
           .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button .dashicon,
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button i {
-			  ${buttonIconPosition === "left" ? buttonIconSpaceRightMobile : buttonIconSpaceLeftMobile}
+			  ${
+                  buttonIconPosition === "left"
+                      ? buttonIconSpaceRightMobile
+                      : buttonIconSpaceLeftMobile
+              }
 			  ${buttonIconSizeMobile}
 		  }
+            .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-footer .eb-pricing-button svg {
+                ${
+                    buttonIconPosition === "left"
+                        ? buttonIconSpaceRightMobile
+                        : buttonIconSpaceLeftMobile
+                }
+              ${buttonIconWidthMobile}
+              ${buttonIconHeightMobile}
+            }
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  ${headerIconWidthMobile}
 			  ${headerIconHeightMobile}
@@ -750,6 +905,11 @@ export default function Style(props) {
 		  .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon {
 			  ${headerIconSizeMobile}
 		  }
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon svg.icon
+        .eb-pricing-wrapper.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-icon .icon svg {
+			${headerSvgWidthMobile}
+			${headerSvgHeightMobile}
+		}
 	  `;
 
     var titleLineStyle = "";
@@ -757,20 +917,20 @@ export default function Style(props) {
         headerAlignment === "left"
             ? "margin: 0 !important;"
             : headerAlignment === "right"
-                ? "margin: 0 0 0 auto !important;"
-                : "margin: 0 auto !important;";
+            ? "margin: 0 0 0 auto !important;"
+            : "margin: 0 auto !important;";
     var headerAlignStyle3 =
         headerAlignment === "left"
             ? "transform: translateX(-80%) !important;"
             : headerAlignment === "right"
-                ? "transform: translateX(80%) !important;"
-                : "margin: 0 auto !important;";
+            ? "transform: translateX(80%) !important;"
+            : "margin: 0 auto !important;";
     var priceAlign =
         priceAlignment === "left"
             ? "margin: 0 !important;"
             : priceAlignment === "right"
-                ? "margin: 0 0 0 auto !important;"
-                : "margin: 0 auto !important;";
+            ? "margin: 0 0 0 auto !important;"
+            : "margin: 0 auto !important;";
     if (showTitleLine) {
         titleLineStyle = `
 		  .${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
@@ -793,19 +953,21 @@ export default function Style(props) {
 		  .${blockId}.eb-pricing-content-right .eb-pricing-item .eb-pricing-tag::after {
 			  margin: 0 0 0 auto;
 		  }
-		  ${headerAlignment
-                ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
+		  ${
+              headerAlignment
+                  ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-header::after {
 							 ${headerAlign}
 						 }`
-                : ""
-            }
+                  : ""
+          }
 
-		 ${priceAlignment
-                ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-tag::after {
+		 ${
+             priceAlignment
+                 ? `.${blockId} .eb-pricing .eb-pricing-item .eb-pricing-tag::after {
 						 ${priceAlign}
 					 }`
-                : ""
-            }
+                 : ""
+         }
 
 		  .${blockId}.eb-pricing-content-left .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header:after, .${blockId}.eb-pricing-content-left .eb-pricing.style-3 .eb-pricing-item .eb-pricing-tag:after {
 			  transform: translateX(-80%);
@@ -813,12 +975,13 @@ export default function Style(props) {
 		  .${blockId}.eb-pricing-content-right .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header:after, .${blockId}.eb-pricing-content-right .eb-pricing.style-3 .eb-pricing-item .eb-pricing-tag:after {
 			  transform: translateX(80%);
 		  }
-		  ${headerAlignment
-                ? `.${blockId} .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header::after {
+		  ${
+              headerAlignment
+                  ? `.${blockId} .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header::after {
 							 ${headerAlignStyle3}
 						 }`
-                : ""
-            }
+                  : ""
+          }
 		  .eb-pricing.style-3 .eb-pricing-item .eb-pricing-header:after {
 			  position: absolute;
 			  content: "";

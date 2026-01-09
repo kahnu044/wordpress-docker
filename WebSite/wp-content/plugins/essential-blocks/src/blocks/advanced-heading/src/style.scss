@@ -88,6 +88,13 @@
 		font-size: inherit;
 	}
 
+	.eb-ah-separator.icon svg {
+		width: 1em;
+		height: 1em;
+		display: block;
+		position: relative;
+	}
+
 	@keyframes marquee {
 		0% {
 			transform: translateX(100%);

@@ -7,7 +7,7 @@ import { Button } from "@wordpress/components";
  */
 import {
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     EBButton,
     ImageComponent,
 } from "@essential-blocks/controls";
@@ -44,7 +44,7 @@ export default function InfoboxContainer({ attributes, setAttributes }) {
                             {media === "icon" ? (
                                 <div className="icon-img-wrapper">
                                     <div className={`eb-icon number-or-icon`}>
-                                        <EBDisplayIcon
+                                        <EBDisplayIconEdit
                                             icon={infoboxIcon}
                                             className={`eb-infobox-icon-data-selector`}
                                         />

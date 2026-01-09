@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { RichText, InnerBlocks } from "@wordpress/block-editor";
-import { EBDisplayIcon, BlockProps } from "@essential-blocks/controls";
+import { EBDisplayIconSave, BlockProps } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
         blockId,
@@ -84,8 +84,8 @@ const Save = ({ attributes }) => {
                                                 {btnIcon &&
                                                     "left" === iconPosition && (
                                                         <>
-                                                            <EBDisplayIcon
-                                                                classNam={`eb-popup-button-icon eb-popup-button-icon-left`}
+                                                            <EBDisplayIconSave
+                                                                className={`eb-popup-button-icon eb-popup-button-icon-left`}
                                                                 icon={btnIcon}
                                                             />
                                                         </>
@@ -98,8 +98,8 @@ const Save = ({ attributes }) => {
                                                     "right" ===
                                                         iconPosition && (
                                                         <>
-                                                            <EBDisplayIcon
-                                                                classNam={`eb-popup-button-icon eb-popup-button-icon-right`}
+                                                            <EBDisplayIconSave
+                                                                className={`eb-popup-button-icon eb-popup-button-icon-right`}
                                                                 icon={btnIcon}
                                                             />
                                                         </>
@@ -108,8 +108,8 @@ const Save = ({ attributes }) => {
                                         )}
                                         {"icon" === btnType && (
                                             <>
-                                                <EBDisplayIcon
-                                                    classNam={`eb-popup-icon`}
+                                                <EBDisplayIconSave
+                                                    className={`eb-popup-icon`}
                                                     icon={triggerIcon}
                                                 />
                                             </>

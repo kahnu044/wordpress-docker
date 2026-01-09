@@ -15,7 +15,7 @@ import defaultAttributes from './attributes';
  */
 import {
     BlockProps,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     withBlockContext
 } from "@essential-blocks/controls";
 
@@ -65,7 +65,7 @@ const Edit = (props) => {
                         data-id={blockId}
                     >
                         <div className="eb-icon-container">
-                            <EBDisplayIcon icon={icon} />
+                            <EBDisplayIconEdit icon={icon} />
                         </div>
                     </div>
                 </div>

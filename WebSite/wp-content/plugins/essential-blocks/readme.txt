@@ -2,9 +2,9 @@
 Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
 Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Generate with AI
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 5.7.4
+Stable tag: 5.9.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -169,6 +169,9 @@ Design without limits in WordPress block editor, using 70+ of the most useful Es
 - **[Mega Menu (PRO)](https://essential-blocks.com/demo/mega-menu/)** - Create fully customized & mobile-friendly menu with grid, nested, dropdown,etc. dynamic layouts; add icons, badges, multimedia, etc.
 - **[Query Loop Builder (PRO)](https://essential-blocks.com/demo/query-loop-builder/)** - Easily create advanced, filterable post layouts in Gutenberg with the Query Loop Builder block. Display dynamic content stunningly and hook visitors, no coding required.
 - **[Business Hours (PRO)](https://essential-blocks.com/demo/business-hours/)** - Showcase available opening times in a stylish and interactive table view. Highlight closing days, special days, multi-shift, etc.
+- **[Flex Container](https://essential-blocks.com/demo/flex-container/)** - Create outstanding, complex design layouts in Gutenberg editor and easily handle responsive layouts without coding.
+- **[Animated Wrapper (PRO)](https://essential-blocks.com/demo/animated-wrapper/)** - Design interactive layouts & containers in Gutenberg with dynamic animation effects.
+- **[Image Hotspots](https://essential-blocks.com/demo/image-hotspots/)** - This block enables you to pin items, products, etc into images with detailed pricing, URL, and description and make them interactive.
 
 More Gutenberg blocks and demos coming soon for the block visual editor (weekly update)
 
@@ -263,6 +266,44 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+= 5.9.1 - 24/12/2025 =
+- Fixed: Quick Setup showing blank page
+- Fixed: Slider | Images getting cropped for Custom Height
+- Fixed: Interactive Animation | Animation fails to trigger in frontend
+- Few minor bug fixes & improvements
+
+
+= 5.9.0 - 17/12/2025 =
+- Added: New Block | Image Hotspots
+- Added: SVG icon support in All icon picker
+- Fixed: Flex Container | Content width and alignment not working
+- Fixed: Advanced Tabs | Title alignment not working
+- Fixed: Product Image | Zoom not working
+- Fixed: Advanced Video | Overlay image conflict in frontend
+- Fixed: Image Control multiple conflicts
+- Few minor bug fixes & improvements
+
+= 5.8.2 - 08/12/2025 =
+- Improved: Asset Generation optimization
+- Fixed: Advanced Video | Sticky video height width not working
+- Fixed: Instagram Feed | Disabling Square thumbnail not working
+- Fixed: Form | Alignment and Button inline issue
+- Fixed: Filterable Gallery | Images remained clickable when Lightbox is disabled
+- Few minor bug fixes & improvements
+
+= 5.8.1 - 27/11/2025 =
+- Few minor bug fixes & improvements
+
+= 5.8.0 - 17/11/2025 =
+- Added: New Block | Flex Container
+- Added: Block Defaults for all missing blocks
+- Fixed: Popup | Exit Intent not working in Firefox and Safari
+- Fixed: Advanced Heading | Line height issue
+- Fixed: Social Share | Changing icon hides the icon
+- Fixed: Default Typography not inherited from Theme
+- Fixed: Style not generating in Astra Theme Builder
+- Fixed: Compatibility issue with WPFunnel Pro
+- Few minor bug fixes & improvements
 
 = 5.7.4 - 30/10/2025 =
 - Added: AI Image Editing feature

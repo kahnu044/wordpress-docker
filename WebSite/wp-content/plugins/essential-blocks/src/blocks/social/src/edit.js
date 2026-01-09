@@ -122,6 +122,7 @@ function Edit(props) {
                         <SocialLinks
                             profilesOnly={profilesOnly}
                             icnEffect={icnEffect}
+                            isEdit={true}
                         />
                     </div>
                 </div>

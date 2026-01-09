@@ -1,5 +1,5 @@
 
-import { EBDisplayIcon, sanitizeURL, BlockProps } from "@essential-blocks/controls";
+import { EBDisplayIconSave, sanitizeURL, BlockProps } from "@essential-blocks/controls";
 import { applyFilters } from "@wordpress/hooks";
 
 const Save = ({ attributes }) => {
@@ -101,7 +101,7 @@ const Save = ({ attributes }) => {
                                                         className="eb-feature-list-icon"
                                                         style={iconStyle}
                                                     >
-                                                        {iconType === "icon" && <EBDisplayIcon icon={icon} />}
+                                                        {iconType === "icon" && <EBDisplayIconSave icon={icon} />}
                                                         {iconType === "image" && (
                                                             <img
                                                                 className="eb-feature-list-img"

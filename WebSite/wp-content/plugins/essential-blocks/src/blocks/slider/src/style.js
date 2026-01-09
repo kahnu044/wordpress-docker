@@ -206,6 +206,17 @@ export default function Style(props) {
         attributes,
     });
 
+    // range controller Slider Height
+    const {
+        rangeStylesDesktop: sliderMinHeightDesktop,
+        rangeStylesTab: sliderMinHeightTab,
+        rangeStylesMobile: sliderMinHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: CUSTOM_HEIGHT,
+        property: "min-height",
+        attributes,
+    });
+
     // range controller Slides to Show
     const {
         rangeStylesDesktop: slideToShowDesktop,
@@ -258,6 +269,26 @@ export default function Style(props) {
     } = generateResponsiveRangeStyles({
         controlName: ARROW_SIZE,
         property: "font-size",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: arrowSvgWidthDesktop,
+        rangeStylesTab: arrowSvgWidthTab,
+        rangeStylesMobile: arrowSvgWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ARROW_SIZE,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        rangeStylesDesktop: arrowSvgHeightDesktop,
+        rangeStylesTab: arrowSvgHeightTab,
+        rangeStylesMobile: arrowSvgHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: ARROW_SIZE,
+        property: "height",
         attributes,
     });
 
@@ -423,7 +454,10 @@ export default function Style(props) {
 			text-align: ${textAlign};
 			align-items: ${verticalAlign};
 		}
-		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img {
+        .eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item {
+			${isCustomHeight ? sliderMinHeightDesktop : ""}
+		}
+		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img:not(.slick-loading) {
 			${isCustomHeight ? sliderHeightDesktop : ""}
             ${sliderBDShadowDesktop}
 		}
@@ -480,7 +514,10 @@ export default function Style(props) {
 		.eb-slider-wrapper.${blockId} .slick-slide > * {
 			${slidesGapTab}
 		}
-		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img {
+        .eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item {
+			${isCustomHeight ? sliderMinHeightTab : ""}
+		}
+		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img:not(.slick-loading) {
 			${isCustomHeight &&
             (sliderType === "image" ||
                 (sliderType === "content" &&
@@ -528,7 +565,10 @@ export default function Style(props) {
 		.eb-slider-wrapper.${blockId} .slick-slide > * {
 			${slidesGapMobile}
 		}
-		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img {
+        .eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item {
+			${isCustomHeight ? sliderMinHeightMobile : ""}
+		}
+		.eb-slider-wrapper.${blockId} .slick-slider .eb-slider-item img:not(.slick-loading) {
 			${isCustomHeight &&
             (sliderType === "image" ||
                 (sliderType === "content" &&
@@ -586,14 +626,29 @@ export default function Style(props) {
 			${!isRTLEnable ? rightArrowPositionDesktop : leftArrowPositionDesktop}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
-		.eb-slider-wrapper.${blockId} .slick-next i {
+		.eb-slider-wrapper.${blockId} .slick-next i,
+        .eb-slider-wrapper.${blockId} .slick-prev span,
+		.eb-slider-wrapper.${blockId} .slick-next span {
 			color: ${arrowColor} !important;
 			${arrowSizeDesktop}
 		}
+        .eb-slider-wrapper.${blockId} .slick-prev,
+        .eb-slider-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthDesktop}
+			${arrowSvgHeightDesktop}
+		}
+        .eb-slider-wrapper.${blockId} .slick-prev svg,
+        .eb-slider-wrapper.${blockId} .slick-next svg {
+			fill: ${arrowColor} !important;
+        }
 		.eb-slider-wrapper.${blockId} .slick-prev i:hover,
 		.eb-slider-wrapper.${blockId} .slick-next i:hover {
 			color: ${arrowHoverColor} !important;
 		}
+        .eb-slider-wrapper.${blockId} .slick-prev:hover svg,
+        .eb-slider-wrapper.${blockId} .slick-next:hover svg {
+			fill: ${arrowHoverColor} !important;
+        }
 		.eb-slider-wrapper.${blockId} .slick-dots {
 			${dotsPositionDesktop}
 		}
@@ -624,8 +679,15 @@ export default function Style(props) {
             ${!isRTLEnable ? rightArrowPositionTab : leftArrowPositionTab}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
-		.eb-slider-wrapper.${blockId} .slick-next i {
+		.eb-slider-wrapper.${blockId} .slick-next i,
+        .eb-slider-wrapper.${blockId} .slick-prev span,
+		.eb-slider-wrapper.${blockId} .slick-next span  {
 			${arrowSizeTab}
+		}
+        .eb-slider-wrapper.${blockId} .slick-prev,
+        .eb-slider-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthTab}
+			${arrowSvgHeightTab}
 		}
 		.eb-slider-wrapper.${blockId} .slick-dots {
 			${dotsPositionTab}
@@ -653,8 +715,15 @@ export default function Style(props) {
             ${!isRTLEnable ? rightArrowPositionMobile : leftArrowPositionMobile}
 		}
 		.eb-slider-wrapper.${blockId} .slick-prev i,
-		.eb-slider-wrapper.${blockId} .slick-next i {
+		.eb-slider-wrapper.${blockId} .slick-next i,
+        .eb-slider-wrapper.${blockId} .slick-prev span,
+		.eb-slider-wrapper.${blockId} .slick-next span {
 			${arrowSizeMobile}
+		}
+        .eb-slider-wrapper.${blockId} .slick-prev,
+        .eb-slider-wrapper.${blockId} .slick-next {
+			${arrowSvgWidthMobile}
+			${arrowSvgHeightMobile}
 		}
 		.eb-slider-wrapper.${blockId} .slick-dots {
 			${dotsPositionMobile}

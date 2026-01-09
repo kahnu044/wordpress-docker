@@ -170,6 +170,7 @@ function Inspector(props) {
         showLabel,
         inputIconColor,
         formStyle,
+        blockOnMobile,
     } = attributes;
 
     const [formTemplates, setFormTemplates] = useState([]);
@@ -665,6 +666,18 @@ function Inspector(props) {
 
                         {formLayout == "inline" && (
                             <>
+                                <ToggleControl
+                                    label={__(
+                                        "Block Button on Mobile",
+                                        "essential-blocks",
+                                    )}
+                                    checked={blockOnMobile}
+                                    onChange={() =>
+                                        setAttributes({
+                                            blockOnMobile: !blockOnMobile,
+                                        })
+                                    }
+                                />
                                 <ResponsiveRangeController
                                     baseLabel={__(
                                         "Fields Width (%)",

@@ -1,12 +1,14 @@
 import {
-EBDisplayIcon, sanitizeURL
+EBDisplayIconSave, EBDisplayIconEdit, sanitizeURL
 } from "@essential-blocks/controls";
-export default function SocialLinks({
-    socialDetails = [],
-    icnEffect,
-    linkNewTab,
-    preset
-}) {
+export default function SocialLinks(props) {
+    const {
+        socialDetails = [],
+        icnEffect,
+        linkNewTab,
+        preset,
+        component
+    } = props;
     return (
         <ul className={`socials ${preset === 'new-preset3' ? 'socials-title' : ""}`}>
             {socialDetails.map(({ title, link, icon }, index) => (
@@ -21,7 +23,11 @@ export default function SocialLinks({
                         rel="noopener"
                         title={title ? title : ""}
                     >
-                        <EBDisplayIcon className={'hvr-icon social-icon'} icon={icon} />
+                        {component === "edit" ? (
+                            <EBDisplayIconEdit className={'hvr-icon social-icon'} icon={icon} />
+                        ) : (
+                            <EBDisplayIconSave className={'hvr-icon social-icon'} icon={icon} />
+                        )}
                         {preset === 'new-preset3' && title ? title : ""}
                     </a>
                 </li>

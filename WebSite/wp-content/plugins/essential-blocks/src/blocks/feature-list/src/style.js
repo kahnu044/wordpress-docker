@@ -475,8 +475,10 @@ export default function Style(props) {
 			 width: ${iconFontSizeDesktop.replace(/\D/g, "")}px;
 		 }`}
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-items .eb-feature-list-icon svg {
-			 color: ${iconGlobalColor};
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon svg {
+            height: ${iconFontSizeDesktop.replace(/\D/g, "")}px;
+			width: ${iconFontSizeDesktop.replace(/\D/g, "")}px;
+			fill: ${iconGlobalColor};
 		 }
 
 		 ${!useInlineDesign ?

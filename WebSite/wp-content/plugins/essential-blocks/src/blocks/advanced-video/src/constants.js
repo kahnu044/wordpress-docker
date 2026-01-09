@@ -19,6 +19,7 @@ export const PLACEHOLDER_IMAGE_WIDTH = "placeholderImageWidth";
 export const PLACEHOLDER_IMAGE_HEIGHT = "placeholderImageHeight";
 export const PLACEHOLDER_PLAY_ICON_WIDTH = "placeholderPlayIconWidth";
 export const stickyVisibility = "stickyVisibility";
+export const STICKY_BORDER_RADIUS = "stickyBorderRadius";
 
 export const SOURCE = [
     { label: __("YouTube", "essential-blocks"), value: "youtube" },

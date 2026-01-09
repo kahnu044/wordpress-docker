@@ -39,14 +39,6 @@ import {
     p9LGap,
 } from "./constants/rangeNames";
 
-// import {
-// 	generateDimensionsAttributes,
-// 	generateTypographyAttributes,
-// 	generateBackgroundAttributes,
-// 	generateBorderShadowAttributes,
-// 	generateResponsiveRangeAttributes,
-// } from "../../../util/helpers";
-
 import {
     //
     generateDimensionsAttributes,

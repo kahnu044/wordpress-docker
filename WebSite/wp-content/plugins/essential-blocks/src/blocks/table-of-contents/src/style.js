@@ -313,6 +313,11 @@ export default function Style(props) {
 				  ${arrowBg ? `background-color: ${arrowBg};` : ""}
 				  ${arrowColor ? `color: ${arrowColor};` : ""}
 			  }
+                .eb-toc-go-top.show-scroll svg {
+				  ${arrowHeight ? `height: ${arrowHeight}px;` : ""}
+				  ${arrowWidth ? `width: ${arrowWidth}px;` : ""}
+                  ${arrowColor ? `fill: ${arrowColor};` : ""}
+			    }
 			  `
             : // Important N.B. : in the selector above we used ".eb-toc-go-top.show-scroll" this. It's very important to start the selector with ".eb-" if this css strings goes inside "softMinifyCssStrings" function. Always make sure to use a selector that starts with ".eb-" when using this string inside "softMinifyCssStrings" function
             ""

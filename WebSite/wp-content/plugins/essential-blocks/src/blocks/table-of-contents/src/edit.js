@@ -20,11 +20,14 @@ import {
 import striptags from "striptags";
 import {
     DynamicInputValueHandler,
-    EBDisplayIcon,
     BlockProps,
     withBlockContext,
     sanitizeIconValue,
+    isInlineSvgMarkup,
+    isSvgIconValue,
+    fetchSvgAsHTML
 } from "@essential-blocks/controls";
+
 import { parseTocSlug } from "./helper";
 import Inspector from "./inspector";
 import List from "./list";
@@ -207,12 +210,71 @@ const Edit = (props) => {
             previousGoTop.remove();
         }
 
-        const goTop = document.createElement("span");
-        goTop.innerHTML = renderToString(<EBDisplayIcon icon={sanitizeIconValue(scrollToTopIcon)} />);
+        // Simple SVG sanitization function (basic version)
+        const sanitizeSVG = (svgContent) => {
+            if (!svgContent || typeof svgContent !== 'string') {
+                return '';
+            }
+            // Basic SVG sanitization - remove script tags and event handlers
+            return svgContent
+                .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+                .replace(/javascript:/gi, '');
+        };
 
+        // Create a synchronous icon component that follows EBDisplayIconEdit pattern
+        const SyncIconComponent = ({ icon, className }) => {
+            const iconClass = className || "";
+
+            if (!icon) return null;
+
+            // Handle inline SVG markup (same as EBDisplayIconEdit)
+            if (isInlineSvgMarkup(icon)) {
+                return <span className={iconClass} dangerouslySetInnerHTML={{ __html: sanitizeSVG(icon) }} />;
+            }
+
+            // Handle SVG URLs - create placeholder span that will be filled with actual SVG
+            if (isSvgIconValue(icon)) {
+                return <span className={iconClass}></span>;
+            }
+
+            // Handle FontAwesome and Dashicons (same as EBDisplayIconEdit fallback)
+            if (icon.includes('fa-')) {
+                return <i aria-hidden="true" className={icon}></i>;
+            } else {
+                return <i aria-hidden="true" className={`dashicons ${icon}`}></i>;
+            }
+        };
+
+        const iconValue = sanitizeIconValue(scrollToTopIcon);
+        
+        const iconHtml = renderToString(
+            <SyncIconComponent
+                icon={iconValue}
+                className="eb-toc-scroll-icon"
+            />
+        );
+
+        const goTop = document.createElement("span");
+        goTop.innerHTML = iconHtml;
         goTop.setAttribute("class", "eb-toc-go-top ");
         goTop.style.right = "300px";
         document.body.insertBefore(goTop, document.body.lastChild);
+
+        // If it's an SVG URL, fetch and inject the actual SVG content (following EBDisplayIconEdit pattern)
+        if (isSvgIconValue(iconValue)) {
+            fetchSvgAsHTML(iconValue)
+                .then((html) => {
+                    const iconSpan = goTop.querySelector('.eb-toc-scroll-icon');
+                    if (iconSpan && html) {
+                        const sanitizedHtml = sanitizeSVG(html);
+                        iconSpan.innerHTML = sanitizedHtml;
+                    }
+                })
+                .catch(() => {
+                    // Silently fail, keep the placeholder span
+                });
+        }
     }, [scrollToTopIcon]);
 
     useEffect(() => {

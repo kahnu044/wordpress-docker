@@ -16,7 +16,7 @@ import Inspector from "./inspector";
  */
 import {
     DynamicInputValueHandler,
-    EBDisplayIcon,
+    EBDisplayIconEdit,
     BlockProps,
     withBlockContext,
 } from "@essential-blocks/controls";
@@ -197,7 +197,7 @@ function Edit(props) {
                                             }
                                         >
                                             {seperatorType === "icon" && (
-                                                <EBDisplayIcon
+                                                <EBDisplayIconEdit
                                                     icon={separatorIcon}
                                                 />
                                             )}
@@ -345,7 +345,7 @@ function Edit(props) {
                                                 //         : "fas fa-arrow-circle-down"
                                                 //         }`}
                                                 // ></i>
-                                                <EBDisplayIcon
+                                                <EBDisplayIconEdit
                                                     icon={separatorIcon}
                                                 />
                                             )}
