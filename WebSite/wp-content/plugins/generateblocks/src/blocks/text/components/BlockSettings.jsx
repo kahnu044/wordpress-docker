@@ -11,8 +11,6 @@ import {
 	DynamicTagsOnboarder,
 } from '@components/index.js';
 import { useBlockStyles } from '@hooks/useBlockStyles';
-import generalSvgs from '@components/icon-picker/svgs-general';
-import socialSvgs from '@components/icon-picker/svgs-social';
 
 export function BlockSettings( {
 	getStyleValue,
@@ -44,16 +42,7 @@ export function BlockSettings( {
 
 	const icons = applyFilters(
 		'generateblocks.editor.iconSVGSets',
-		{
-			general: {
-				group: __( 'General', 'generateblocks' ),
-				svgs: generalSvgs,
-			},
-			social: {
-				group: __( 'Social', 'generateblocks' ),
-				svgs: socialSvgs,
-			},
-		},
+		{},
 		{ attributes }
 	);
 

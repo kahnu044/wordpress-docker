@@ -2137,7 +2137,7 @@ function generateblocks_get_escaped_html_attribute( $name, $value ) {
 
 	return $is_url_field
 		? esc_url( $value )
-		: esc_attr( $value );
+		: $value; // set_attribute() handles escaping as of WP 6.9.
 }
 
 /**

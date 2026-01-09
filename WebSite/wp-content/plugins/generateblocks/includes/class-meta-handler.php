@@ -16,12 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 
-	const DISALLOWED_KEYS = [
-		'post_password',
-		'password',
-		'user_pass',
-		'user_activation_key',
-	];
+	/**
+	 * Back-compat proxy so external code can keep referencing this constant.
+	 */
+	const DISALLOWED_KEYS = GenerateBlocks_Dynamic_Tag_Security::DISALLOWED_KEYS;
 
 	/**
 	 * Initialize all hooks.
@@ -68,7 +66,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 			'/meta/get-term-meta',
 			[
 				'methods'  => 'GET',
-				'callback' => [ $this, 'get_post_meta_rest' ],
+				'callback' => [ $this, 'get_term_meta_rest' ],
 				'permission_callback' => function() {
 					return current_user_can( 'edit_posts' );
 				},
@@ -260,6 +258,26 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 			$meta = $pre_value ? $pre_value : call_user_func( $callable, $parent_name );
 		}
 
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! current_user_can( 'manage_options' ) ) {
+			if ( 'get_user_meta' === $callable && is_numeric( $id ) ) {
+				if ( self::should_restrict_user_meta_access( $id, $key ) ) {
+					return '';
+				}
+			}
+
+			if ( 'get_post_meta' === $callable ) {
+				if ( is_protected_meta( $key, 'post' ) ) {
+					return '';
+				}
+			}
+
+			if ( 'get_term_meta' === $callable ) {
+				if ( is_protected_meta( $key, 'term' ) ) {
+					return '';
+				}
+			}
+		}
+
 		// Some user meta is stored as user data.
 		// If we're looking for user meta and can't find it, let's check for user data as well.
 		if ( ! $meta && 'get_user_meta' === $callable ) {
@@ -311,8 +329,42 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 	 */
 	public function get_post_meta_rest( $request ) {
 		$id          = (int) $request->get_param( 'id' );
-		$key         = $request->get_param( 'key' );
 		$single_only = true;
+
+		// Verify user can read this post.
+		if ( ! current_user_can( 'read_post', $id ) ) {
+			return new WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to read this post.', 'generateblocks' ),
+				array( 'status' => 403 )
+			);
+		}
+
+		$post = get_post( $id );
+
+		if ( $post ) {
+			$requires_password = ! empty( $post->post_password ) && post_password_required( $post );
+			$can_bypass_pw     = current_user_can( 'edit_post', $post->ID ) || get_current_user_id() === (int) $post->post_author;
+
+			if ( $requires_password && ! $can_bypass_pw ) {
+				return new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to read meta for this password-protected post.', 'generateblocks' ),
+					array( 'status' => 403 )
+				);
+			}
+		}
+
+		$key = $request->get_param( 'key' );
+
+		// Block protected meta keys (WordPress convention for private/internal meta).
+		if ( is_string( $key ) && is_protected_meta( $key, 'post' ) ) {
+			return new WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to access protected meta fields.', 'generateblocks' ),
+				array( 'status' => 403 )
+			);
+		}
 
 		if ( 'false' === $request->get_param( 'singleOnly' ) ) {
 			$single_only = false;
@@ -335,15 +387,116 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 	}
 
 	/**
+	 * Determine if user meta access should be restricted.
+	 *
+	 * This checks whether security restrictions should apply based on:
+	 * - User capabilities (list_users bypasses all restrictions)
+	 * - Whether user is viewing their own data (allowed)
+	 * - Whether the field is in the safe list
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int    $user_id The user ID being accessed.
+	 * @param string $key     The meta key being accessed.
+	 * @return bool True if access should be restricted, false if allowed.
+	 */
+	public static function should_restrict_user_meta_access( $user_id, $key ) {
+		$current_user_id = get_current_user_id();
+		$is_privileged   = current_user_can( 'list_users' );
+		$is_viewing_own  = (int) $user_id === $current_user_id && $current_user_id > 0;
+
+		// Privileged users or viewing own data - no restrictions.
+		if ( $is_privileged || $is_viewing_own ) {
+			return false;
+		}
+
+		// Check if field is in safe list.
+		$parent_key = '';
+		if ( is_string( $key ) ) {
+			$parent_key = trim( explode( '.', $key )[0] );
+		}
+
+		$safe_keys = [];
+
+		if (
+			class_exists( 'GenerateBlocks_Dynamic_Tag_Security' ) &&
+			method_exists( 'GenerateBlocks_Dynamic_Tag_Security', 'get_safe_user_meta_keys' )
+		) {
+			$safe_keys = GenerateBlocks_Dynamic_Tag_Security::get_safe_user_meta_keys();
+		}
+
+		// If key is in safe list, allow access.
+		if ( $parent_key && in_array( $parent_key, $safe_keys, true ) ) {
+			return false;
+		}
+
+		/**
+		 * Filter whether to restrict user_meta access.
+		 *
+		 * WARNING: Returning false disables security restrictions and may
+		 * expose sensitive user data to all visitors. Only disable if you
+		 * have implemented your own access controls.
+		 *
+		 * @since 2.1.4
+		 *
+		 * @param bool $should_restrict   Whether to apply restrictions.
+		 * @param int  $user_id           The user ID being accessed.
+		 * @param int  $current_user_id   Current user ID (0 if logged out).
+		 */
+		return apply_filters(
+			'generateblocks_restrict_user_meta_access',
+			true,
+			$user_id,
+			$current_user_id
+		);
+	}
+
+	/**
 	 * Rest handler for get_user_meta
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 * @return WP_REST_Response|WP_Error The response object.
 	 */
 	public function get_user_meta_rest( $request ) {
-		$id          = (int) $request->get_param( 'id' );
+		$requested_id = (int) $request->get_param( 'id' );
+		$current_id   = get_current_user_id();
+
+		$id = $requested_id ? $requested_id : $current_id;
+
+		if ( ! $id ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'invalid_user_id',
+					__( 'A valid user ID is required.', 'generateblocks' ),
+					array( 'status' => 400 )
+				)
+			);
+		}
+
 		$key         = $request->get_param( 'key' );
 		$single_only = true;
+
+		// Block protected meta keys (WordPress convention for private/internal meta).
+		if ( is_string( $key ) && is_protected_meta( $key, 'user' ) ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to access protected meta fields.', 'generateblocks' ),
+					array( 'status' => rest_authorization_required_code() )
+				)
+			);
+		}
+
+		// Check if access should be restricted (preview/draft context and safe list).
+		if ( self::should_restrict_user_meta_access( $id, $key ) ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to view this user meta field.', 'generateblocks' ),
+					array( 'status' => rest_authorization_required_code() )
+				)
+			);
+		}
 
 		if ( 'false' === $request->get_param( 'singleOnly' ) ) {
 			$single_only = false;
@@ -374,6 +527,51 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 		$id          = (int) $request->get_param( 'id' );
 		$key         = $request->get_param( 'key' );
 		$single_only = true;
+
+		if ( ! $id ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'invalid_term_id',
+					__( 'A valid term ID is required.', 'generateblocks' ),
+					[ 'status' => 400 ]
+				)
+			);
+		}
+
+		$term = get_term( $id );
+
+		if ( ! $term || is_wp_error( $term ) ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'term_not_found',
+					__( 'Term not found.', 'generateblocks' ),
+					[ 'status' => 404 ]
+				)
+			);
+		}
+
+		$can_manage_term = current_user_can( 'edit_term', $term->term_id );
+		$can_edit_posts  = current_user_can( 'edit_posts' );
+
+		if ( ! $can_manage_term && ! $can_edit_posts ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to read this term.', 'generateblocks' ),
+					[ 'status' => 403 ]
+				)
+			);
+		}
+
+		if ( is_string( $key ) && is_protected_meta( $key, 'term' ) ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to access protected term meta fields.', 'generateblocks' ),
+					[ 'status' => 403 ]
+				)
+			);
+		}
 
 		if ( 'false' === $request->get_param( 'singleOnly' ) ) {
 			$single_only = false;

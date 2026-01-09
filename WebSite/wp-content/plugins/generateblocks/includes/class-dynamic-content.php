@@ -188,7 +188,7 @@ class GenerateBlocks_Dynamic_Content {
 						wp_kses_post( $attributes['customMoreLinkText'] ),
 						sprintf(
 							/* translators: Aria-label describing the read more button */
-							_x( 'More on %s', 'more on post title', 'gp-premium' ),
+							_x( 'More on %s', 'more on post title', 'generateblocks' ),
 							the_title_attribute( 'echo=0' )
 						)
 					)
@@ -1182,6 +1182,199 @@ class GenerateBlocks_Dynamic_Content {
 		$tags = apply_filters( 'generateblocks_dynamic_content_allowed_html', $tags, $context );
 
 		return $tags;
+	}
+
+	/**
+	 * Detect whether legacy v1 dynamic content attributes exist in serialized content.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $content Serialized post content.
+	 * @return bool
+	 */
+	public static function content_has_dynamic_attribute_markers( $content ) {
+		$content = GenerateBlocks_Dynamic_Tag_Security::normalize_serialized_content( $content );
+
+		if ( '' === $content ) {
+			return false;
+		}
+
+		$markers = [
+			'"useDynamicData":true',
+			'"dynamicLinkType":"post-meta"',
+			'"dynamicLinkType":"author-meta"',
+			'"dynamicContentType":"author-email"',
+			'"dynamicLinkType":"author-email"',
+		];
+
+		foreach ( $markers as $marker ) {
+			if ( false !== strpos( $content, $marker ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Validate dynamic content block attributes (metaFieldName/linkMetaFieldName) for legacy v1 blocks.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $content Serialized post content.
+	 * @return true|WP_Error
+	 */
+	public static function validate_dynamic_content_attributes( $content ) {
+		$violations = self::get_dynamic_attribute_violation_items( $content );
+
+		if ( empty( $violations ) ) {
+			return true;
+		}
+
+		$first = reset( $violations );
+
+		return $first['error'];
+	}
+
+	/**
+	 * Retrieve dynamic attribute violation items.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $content Serialized post content.
+	 * @return array<int, array{type:string,field:string,error:WP_Error}>
+	 */
+	public static function get_dynamic_attribute_violation_items( $content ) {
+		$content = GenerateBlocks_Dynamic_Tag_Security::normalize_serialized_content( $content );
+
+		if ( ! self::content_has_dynamic_attribute_markers( $content ) ) {
+			return [];
+		}
+
+		if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $content ) ) {
+			return [];
+		}
+
+		if ( ! function_exists( 'parse_blocks' ) ) {
+			return [];
+		}
+
+		$blocks = parse_blocks( $content );
+
+		if ( empty( $blocks ) || ! is_array( $blocks ) ) {
+			return [];
+		}
+
+		return self::collect_dynamic_attribute_block_violations( $blocks );
+	}
+
+	/**
+	 * Recursively collect parsed block violations for unsafe meta usage.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array $blocks Parsed block list.
+	 * @return array<int, array{type:string,field:string,error:WP_Error}>
+	 */
+	protected static function collect_dynamic_attribute_block_violations( $blocks ) {
+		$violations = [];
+
+		foreach ( $blocks as $block ) {
+			$violations = array_merge(
+				$violations,
+				self::collect_single_block_dynamic_attribute_violations( $block )
+			);
+
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$violations = array_merge(
+					$violations,
+					self::collect_dynamic_attribute_block_violations( $block['innerBlocks'] )
+				);
+			}
+		}
+
+		return $violations;
+	}
+
+	/**
+	 * Validate a single block's dynamic attributes.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array $block Parsed block data.
+	 * @return array<int, array{type:string,field:string,error:WP_Error}>
+	 */
+	protected static function collect_single_block_dynamic_attribute_violations( $block ) {
+		$violations = [];
+
+		if ( empty( $block['attrs'] ) || ! is_array( $block['attrs'] ) ) {
+			return $violations;
+		}
+
+		$attrs = $block['attrs'];
+		$should_validate_user_meta = GenerateBlocks_Dynamic_Tag_Security::should_validate_user_meta_fields();
+
+		if ( ! empty( $attrs['useDynamicData'] ) ) {
+			$field_name = isset( $attrs['metaFieldName'] ) ? trim( (string) $attrs['metaFieldName'] ) : '';
+			$type       = isset( $attrs['dynamicContentType'] ) ? (string) $attrs['dynamicContentType'] : '';
+
+			if ( 'author-email' === $type ) {
+				$field_name = 'user_email';
+			}
+
+			if ( $field_name ) {
+				if ( in_array( $type, [ 'author-meta', 'author-email' ], true ) ) {
+					$result   = $should_validate_user_meta ? GenerateBlocks_Dynamic_Tag_Security::validate_user_meta_field_name( $field_name ) : true;
+					$type_key = 'user_meta';
+				} elseif ( 'post-meta' === $type ) {
+					$result   = GenerateBlocks_Dynamic_Tag_Security::validate_post_meta_field_name( $field_name );
+					$type_key = 'post_meta';
+				} else {
+					$result   = true;
+					$type_key = '';
+				}
+
+				if ( isset( $result ) && is_wp_error( $result ) && $type_key ) {
+					$violations[] = [
+						'type'  => $type_key,
+						'field' => $field_name,
+						'error' => $result,
+					];
+				}
+			}
+		}
+
+		if ( isset( $attrs['linkMetaFieldName'] ) || ! empty( $attrs['dynamicLinkType'] ) ) {
+			$link_field = isset( $attrs['linkMetaFieldName'] ) ? trim( (string) $attrs['linkMetaFieldName'] ) : '';
+			$link_type  = isset( $attrs['dynamicLinkType'] ) ? (string) $attrs['dynamicLinkType'] : '';
+
+			if ( 'author-email' === $link_type ) {
+				$link_field = 'user_email';
+			}
+
+			if ( $link_field ) {
+				if ( in_array( $link_type, [ 'author-meta', 'author-email' ], true ) ) {
+					$result   = $should_validate_user_meta ? GenerateBlocks_Dynamic_Tag_Security::validate_user_meta_field_name( $link_field ) : true;
+					$type_key = 'user_meta';
+				} elseif ( 'post-meta' === $link_type ) {
+					$result   = GenerateBlocks_Dynamic_Tag_Security::validate_post_meta_field_name( $link_field );
+					$type_key = 'post_meta';
+				} else {
+					$result   = true;
+					$type_key = '';
+				}
+
+				if ( isset( $result ) && is_wp_error( $result ) && $type_key ) {
+					$violations[] = [
+						'type'  => $type_key,
+						'field' => $link_field,
+						'error' => $result,
+					];
+				}
+			}
+		}
+
+		return $violations;
 	}
 }
 

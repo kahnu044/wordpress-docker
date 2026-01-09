@@ -662,7 +662,7 @@ class GenerateBlocks_Dynamic_Tag_Callbacks extends GenerateBlocks_Singleton {
 						esc_url( get_permalink( get_the_ID() ) ),
 						sprintf(
 							/* translators: Aria-label describing the read more button */
-							_x( 'More on %s', 'more on post title', 'gp-premium' ),
+							_x( 'More on %s', 'more on post title', 'generateblocks' ),
 							the_title_attribute( 'echo=0' )
 						),
 						wp_kses_post( $read_more )

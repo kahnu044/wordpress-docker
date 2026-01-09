@@ -152,6 +152,27 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 			)
 		);
 
+		// Filter sensitive data in-place so consumers still receive the full WP_Query object.
+		$query->posts = array_map(
+			function( $post ) {
+				$requires_password = ! empty( $post->post_password ) && post_password_required( $post );
+				$can_read_post     = current_user_can( 'read_post', $post->ID );
+				$can_bypass_pw     = current_user_can( 'edit_post', $post->ID ) || get_current_user_id() === (int) $post->post_author;
+
+				unset( $post->post_password );
+				unset( $post->guid );
+				unset( $post->post_content_filtered );
+
+				if ( ! $can_read_post || ( $requires_password && ! $can_bypass_pw ) ) {
+					unset( $post->post_content );
+					unset( $post->post_excerpt );
+				}
+
+				return $post;
+			},
+			$query->posts
+		);
+
 		return rest_ensure_response( $query );
 	}
 

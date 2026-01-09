@@ -3,6 +3,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { isBlobURL, getBlobByURL, revokeBlobURL } from '@wordpress/blob';
 import { useSelect } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 
 import { BlockStyles, withUniqueId } from '@edge22/block-styles';
 
@@ -78,13 +79,21 @@ function EditBlock( props ) {
 		if ( !! image ) {
 			const imageUrl = ( image?.sizes && image?.sizes[ sizeSlug ]?.url ) || image?.url;
 
+			const filteredAttributes = applyFilters(
+				'generateblocks.media.imageAttributes',
+				{
+					alt: image.alt,
+					title: image.title,
+					height: image.height,
+					width: image.width,
+				},
+				{ image, attributes }
+			);
+
 			const newAttributes = {
 				...htmlAttributes,
+				...filteredAttributes,
 				src: imageUrl,
-				alt: image.alt,
-				title: image.title,
-				height: image.height,
-				width: image.width,
 			};
 
 			setAttributes( {

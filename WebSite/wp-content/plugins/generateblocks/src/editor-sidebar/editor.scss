@@ -18,6 +18,7 @@
 		display: flex;
 		flex-grow: 1;
 		align-items: center;
+		justify-content: space-between;
 	}
 
 	& > *:not(.gblocks-editor-sidebar-header__inner) {
