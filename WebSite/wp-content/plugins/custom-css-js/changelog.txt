@@ -1,5 +1,21 @@
 == Changelog ==
 
+= 3.51.2 =
+* 12/21/2025
+* Compatibility WP6.9
+* Tweak: add translators' notes to translatable strings
+* Tweak: use `wp_delete_file` function, which allows a filter before deleting a file
+
+= 3.51.1 =
+* 10/14/2025
+* Fix: add the drag icon that makes the editor expandable
+* Fix: the syntax highlighting was missing for HTML custom codes due to an array id overridding  
+
+= 3.51 =
+* 09/06/2025
+* Tweak: update the CodeMirror library to the 5.65.20 version 
+* Fix: change the loading method in the Block editor to the recommended "enqueue_block_assets"
+
 = 3.50 =
 * 02/17/2025
 * Fix: the editor doesn't show up under certain conditions 

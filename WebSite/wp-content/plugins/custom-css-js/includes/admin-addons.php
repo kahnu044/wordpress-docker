@@ -111,7 +111,7 @@ class CustomCSSandJS_Addons {
      * Output the revisions 
      */
     function revisions_meta_box_callback( $post ) {
-        $datef = _x( 'F j, Y @ H:i:s', 'revision date format' );
+        $datef = _x( 'F j, Y @ H:i:s', 'revision date format', 'custom-css-js' );
         $users = get_users(array('number' => 3));
         $revisions = array(
             array(

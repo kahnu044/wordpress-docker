@@ -4,8 +4,8 @@ Contributors: diana_burduja
 Email: diana@burduja.eu
 Tags: custom CSS, custom JS, site css, add style, customize theme 
 Requires at least: 3.0.1
-Tested up to: 6.8 
-Stable tag: 3.51.1
+Tested up to: 6.9 
+Stable tag: 3.51.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -102,6 +102,12 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 
 == Changelog ==
 
+= 3.51.2 =
+* 12/21/2025
+* Compatibility WP6.9
+* Tweak: add translators' notes to translatable strings
+* Tweak: use `wp_delete_file` function, which allows a filter before deleting a file
+
 = 3.51.1 =
 * 10/14/2025
 * Fix: add the drag icon that makes the editor expandable
@@ -133,23 +139,5 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 * 01/31/2024
 * Tweak: update the Bootstrap and jQuery library links 
 * Tweak: remove the qTranslate-x warning. The qTranslate-x plugin was removed from wp.org since Aug 2021
-
-= 3.45 =
-* 10/17/2023
-* Fix: enqueue the jQuery library only if there is a frontend JS custom code that requires it 
-
-= 3.44 =
-* 06/07/2023
-* Compatibility with the WooCommerce "custom order tables" feature
-
-= 3.43 =
-* 03/13/2023
-* Fix: PHP8.1 deprecation notices
-* Fix: after adding a JS/HTML custom code with empty content will show the CSS default message in the editor
-
-= 3.42 =
-* 01/17/2023
-* Fix: the "LH Archived Post Status" plugin was removing the "Publish" button on the add/edit custom code page
-* Feature: multiple values for the "Where in site" option
 
 [See changelog for all versions](https://plugins.svn.wordpress.org/custom-css-js/trunk/changelog.txt).

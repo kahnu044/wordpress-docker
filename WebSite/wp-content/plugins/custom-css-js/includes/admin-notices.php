@@ -188,7 +188,7 @@ class CustomCSSandJS_Notices {
                 <div id="<?php echo $p; ?>_notice" class="updated notice <?php echo $p; ?>_notice is-dismissible" data-nonce="<?php echo wp_create_nonce( $this->prefix .'_notice'); ?>">
             <p><?php echo $message ?></p>
             <button type="button" class="notice-dismiss">
-            <span class="screen-reader-text"><?php _e('Dismiss this notice'); ?></span>
+            <span class="screen-reader-text"><?php _e('Dismiss this notice', 'custom-css-js'); ?></span>
             </button>
             </div>
 <?php
