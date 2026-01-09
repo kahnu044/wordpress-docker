@@ -3,16 +3,16 @@ Contributors: virgildia
 Donate link: http://virgiliudiaconu.com/
 Tags: carousel, slide, gutenberg, swiper
 Requires at least: 6.1
-Tested up to: 6.8
+Tested up to: 6.8.3
 Requires PHP: 7.0
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Description ==
 
-A responsive carousel slider for the Gutenberg block editor that lets you add any blocks to your slides.
+A responsive modern carousel slider for the Gutenberg block editor that lets you add any blocks to your slides.
 
 🚀 **Carousel Slider Version 2 is here!** Now powered by **Swiper.js** for a smoother, faster, and more modern experience. See below for update instructions.
 
@@ -70,29 +70,55 @@ You can show/hide legacy blocks from the block inserter and disable v2 upgrade n
 
 Carousel Slider v2 supports custom styling via CSS variables:
 
-### Navigation  
-- `--wp--custom--carousel-block--navigation-size`: Arrow size  
+### Navigation
+- `--wp--custom--carousel-block--navigation-size`: Arrow icon size  
 - `--wp--custom--carousel-block--navigation-sides-offset`: Distance from edge  
 - `--wp--custom--carousel-block--navigation-color`: Arrow color  
-- `--wp--custom--carousel-block--navigation-alignfull-color`: Arrow color when the carousel is full width
+- `--wp--custom--carousel-block--navigation-hover-color`: Arrow hover color (falls back to `navigation-color`)  
+- `--wp--custom--carousel-block--navigation-alignfull-color`: Arrow color when carousel is full width  
 
-### Pagination (dots)  
-- `--wp--custom--carousel-block--pagination-top`: Top offset for pagination  
-- `--wp--custom--carousel-block--pagination-bullet-size`: Dot size  
-- `--wp--custom--carousel-block--pagination-bullet-color`: Dot color (inactive)  
-- `--wp--custom--carousel-block--pagination-bullet-active-color`: Dot color (active)  
-- `--wp--custom--carousel-block--pagination-bullet-opacity`: Dot opacity (inactive)  
-- `--wp--custom--carousel-block--pagination-bullet-active-opacity`: Dot opacity (active)  
-- `--wp--custom--carousel-block--pagination-bullet-horizontal-gap`: Horizontal spacing between dots  
-- `--wp--custom--carousel-block--pagination-bullet-vertical-gap`: Vertical spacing between dots  
+---
 
-### Block spacing  
-- `--wp--custom--carousel-block--image-margin-top`: Top spacing for image blocks 
-- `--wp--custom--carousel-block--image-margin-bottom`: Bottom spacing for image blocks
-- `--wp--custom--carousel-block--cover-margin-top`: Top spacing for cover blocks  
-- `--wp--custom--carousel-block--cover-margin-bottom`: Bottom spacing for cover blocks
+### Pagination (dots)
+- `--wp--custom--carousel-block--pagination-top`: Top offset  
+- `--wp--custom--carousel-block--pagination-bottom`: Bottom offset  
+- `--wp--custom--carousel-block--pagination-bullet-size`: Bullet size  
+- `--wp--custom--carousel-block--pagination-bullet-active-color`: Active bullet color  
+- `--wp--custom--carousel-block--pagination-bullet-inactive-color`: Inactive bullet color  
+- `--wp--custom--carousel-block--pagination-bullet-inactive-hover-color`: Inactive bullet hover color (falls back to `active-color` if set)  
+- `--wp--custom--carousel-block--pagination-bullet-active-opacity`: Active bullet opacity  
+- `--wp--custom--carousel-block--pagination-bullet-inactive-opacity`: Inactive bullet opacity  
+- `--wp--custom--carousel-block--pagination-bullet-inactive-hover-opacity`: Inactive bullet opacity on hover (falls back to `inactive-opacity` if not set)  
+- `--wp--custom--carousel-block--pagination-bullet-horizontal-gap`: Space between bullets (horizontal)  
+- `--wp--custom--carousel-block--pagination-bullet-vertical-gap`: Space between bullets (vertical)  
 
-Note: The CSS variables use the WordPress `--wp--custom--` prefix, allowing you to override them in your theme's theme.json for site-wide styling.
+---
+
+### Block Spacing
+- `--wp--custom--carousel-block--image-margin-top`: Top margin for image blocks  
+- `--wp--custom--carousel-block--image-margin-bottom`: Bottom margin for image blocks  
+- `--wp--custom--carousel-block--cover-margin-top`: Top margin for cover blocks  
+- `--wp--custom--carousel-block--cover-margin-bottom`: Bottom margin for cover blocks  
+
+
+### Theme JSON Support
+
+All the CSS variables can also be defined directly inside your theme's `theme.json` under the `settings.custom` key.  
+
+For example:
+
+<pre><code>{
+  "settings": {
+    "custom": {
+      "carousel-block": {
+        "navigation-size": "22px",
+        "navigation-color": "#000",
+        "pagination-bullet-active-color": "#000"
+      }
+    }
+  }
+}
+</code></pre>
 
 == Installation ==
 
@@ -204,4 +230,7 @@ Removed block.json from legacy blocks
 - Update plugin description
 
 = 2.0.5 =
-- Fix for block inserters
+Fix block insert
+
+= 2.0.6 =
+Additional CSS variables 
