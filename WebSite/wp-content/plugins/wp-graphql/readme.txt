@@ -4,7 +4,7 @@ Tags: GraphQL, Headless, REST API, Decoupled, React
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.5.1
+Stable tag: 2.5.4
 License: GPL-3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,16 @@ Learn more about how [Appsero collects and uses this data](https://appsero.com/p
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Upgrade Notice ==
+
+= 2.6.0 =
+
+This release aligns cookie authentication with the WordPress REST API pattern. Cookie-authenticated requests now require a nonce (`X-WP-Nonce` header or `_wpnonce` parameter) to execute as an authenticated user. Requests without a valid nonce will be downgraded to guest access (`viewer: null`).
+
+**Not affected:** JWT authentication, Application Passwords, OAuth, or any authentication using the `Authorization` header. The built-in GraphiQL IDE is also unaffected as it already sends nonces.
+
+**Action required:** If you have custom JavaScript making GraphQL requests with cookie authentication, add the nonce header. See the [built-in GraphiQL IDE fetcher](https://github.com/wp-graphql/wp-graphql/blob/develop/packages/wpgraphiql/utils/fetcher.js) for an example implementation.
+
+For development/testing, you can temporarily disable the requirement with: `add_filter('graphql_cookie_auth_require_nonce', '__return_false');`
 
 = 2.0.0 =
 
@@ -283,6 +293,25 @@ The `uri` field was non-null on some Types in the Schema but has been changed to
 Composer dependencies are no longer versioned in Github. Recommended install source is WordPress.org or using Composer to get the code from Packagist.org or WPackagist.org.
 
 == Changelog ==
+
+= 2.5.4 =
+
+**Bug Fixes**
+
+* fix: align cookie authentication with WordPress REST API pattern (https://github.com/jasonbahl/automation-tests/pull/3448)
+
+= 2.5.3 =
+
+**Other Changes**
+
+* fix(#3438, #1999): Media item privacy inheritance and attachment status queries  (https://github.com/jasonbahl/automation-tests/pull/3444)
+* chore: cleanup orphaned files and configs (https://github.com/jasonbahl/automation-tests/pull/3442)
+
+= 2.5.2 =
+
+**Bug Fixes**
+
+* fix: Prevent fatal error when updating options via /wp-admin/options.php  (https://github.com/jasonbahl/automation-tests/pull/3440)
 
 = 2.5.1 =
 
