@@ -86,9 +86,7 @@ class CustomCSSandJS_Admin {
 
 		add_action( 'current_screen', array( $this, 'current_screen_2' ), 100 );
 
-
-		$this->update_custom_codes_for_block_editor();
-
+		add_action( 'admin_init', array( $this, 'update_custom_codes_for_block_editor' ) );
 	}
 
 
@@ -1414,7 +1412,7 @@ endif;
 			$filename = $_post->ID . '.' . $options['language'];
 
 			if ( $options['linking'] == 'external' ) {
-				$filename .= '?v=' . wp_rand( 1, 10000 );
+				$filename .= '?v=' . rand( 1, 10000 );
 			}
 
 			// Add the code file names to the branches, example: frontend-css-header-external
