@@ -24,15 +24,20 @@ class Carousel {
      */
     public function render( $attributes, $content ) {
         if ( ! is_admin() ) {
+            $use_full_swiper_bundle = Settings_Utils::get_setting( 'use_full_swiper_bundle', false );
+            $swiper_asset_base = $use_full_swiper_bundle
+                ? CB_PLUGIN_URL . '/blocks/vendor/swiper/swiper-bundle.min'
+                : CB_PLUGIN_URL . '/build/vendor/swiper-custom';
+
             wp_enqueue_style(
                 'cb-slider-style',
-                plugins_url( '/vendor/swiper/swiper-bundle.min.css', __FILE__ ),
+                $swiper_asset_base . '.css',
                 [],
                 CB_VERSION
             );
             wp_enqueue_script(
                 'cb-slider-script',
-                plugins_url( '/vendor/swiper/swiper-bundle.min.js', __FILE__ ),
+                $swiper_asset_base . '.js',
                 [],
                 CB_VERSION,
                 true

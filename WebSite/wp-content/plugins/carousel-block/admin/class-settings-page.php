@@ -12,7 +12,6 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * Handles the admin settings page for the Carousel Block plugin.
  */
 class Settings_Page {
-
     /**
      * Initialize settings page.
      */
@@ -54,6 +53,7 @@ class Settings_Page {
         $options = \get_option( 'cb_carousel_settings' );
         self::add_settings_field( 'show_legacy_blocks', \__( 'Show Old Carousel Blocks', 'cb' ), $options );
         self::add_settings_field( 'hide_legacy_notice', __( 'Hide Legacy Warning Notice', 'cb' ), $options );
+        self::add_settings_field( 'use_full_swiper_bundle', __( 'Load Full Swiper Bundle', 'cb' ), $options );
     }
 
     /**
@@ -71,6 +71,10 @@ class Settings_Page {
 
         $sanitized_input['hide_legacy_notice'] = isset( $input['hide_legacy_notice'] )
             ? \filter_var( $input['hide_legacy_notice'], \FILTER_VALIDATE_BOOLEAN )
+            : false;
+
+        $sanitized_input['use_full_swiper_bundle'] = isset( $input['use_full_swiper_bundle'] )
+            ? \filter_var( $input['use_full_swiper_bundle'], \FILTER_VALIDATE_BOOLEAN )
             : false;
 
         return $sanitized_input;
@@ -134,6 +138,10 @@ class Settings_Page {
             echo __( 'Hide the notice about legacy Carousel Slider blocks in the editor.', 'cb' );
         }
 
+        if ( $setting_id === 'use_full_swiper_bundle' ) {
+            echo __( 'Load the full Swiper JS and CSS bundle instead of the smaller custom build.', 'cb' );
+        }
+
         echo '</label>';
 
         if ( $forced_by_filter ) {
@@ -153,9 +161,9 @@ class Settings_Page {
                 <p><strong>New in Version 2:</strong> We've introduced a modern Swiper-based carousel block.</p>
                 <p>Legacy blocks will continue to work, but are no longer recommended.</p>
                 <ul style="list-style: disc; padding-left: 20px;">
-                    <li>To insert new carousels, use the <strong>Carousel Slider v2</strong> block.</li>
-                    <li>To upgrade a legacy block, select it in the editor, then click the block icon (the first button in the toolbar) and choose <strong>"Transform to Carousel Slider v2."</strong></li>
-                    <li><strong>Note:</strong> When transforming a legacy block to Carousel Slider v2, the carousel settings will remain unchanged, but the design and markup will be updated.</li>
+                    <li>To insert new carousels, use the <strong>Carousel Slider</strong> block (legacy blocks are marked <strong>v1</strong>).</li>
+                    <li>To upgrade a legacy block, select it in the editor, then click the block icon (the first button in the toolbar) and choose <strong>"Transform to Carousel Slider."</strong></li>
+                    <li><strong>Note:</strong> When transforming a legacy block to Carousel Slider, the carousel settings will remain unchanged, but the design and markup will be updated.</li>
                 </ul>
                 <p>You can optionally re-enable legacy blocks below.</p>
             </div>

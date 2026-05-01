@@ -32,10 +32,10 @@ class Carousel_Legacy {
 
         register_block_type( 'cb/carousel', [
             'api_version'   => 3,
-            'title'         => __( 'Carousel Slider', 'cb' ),
+            'title'         => __( 'Carousel Slider v1', 'cb' ),
             'version'       => '1.0.0',
             'category'      => 'design',
-            'description'   => __( 'Display a carousel with any blocks in the slides.', 'cb' ),
+            'description'   => __( 'Display a carousel using any blocks as slides.', 'cb' ),
             'editor_script' => 'cb-carousel-editor',
             'editor_style'  => 'cb-carousel-editor-style',
             'style'         => 'cb-carousel-style',
@@ -117,7 +117,7 @@ class Carousel_Legacy {
 
         register_block_type( 'cb/slide', [
             'api_version'   => 3,
-            'title'         => __( 'Slide', 'cb' ),
+            'title'         => __( 'Slide v1', 'cb' ),
             'description'   => __( 'A single slide within the carousel.', 'cb' ),
             'category'      => 'design',
             'icon'          => 'slides',

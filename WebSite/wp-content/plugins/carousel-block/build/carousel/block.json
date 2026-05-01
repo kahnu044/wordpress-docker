@@ -3,9 +3,9 @@
   "apiVersion": 3,
   "name": "cb/carousel-v2",
   "version": "1.0.0",
-  "title": "Carousel Slider v2",
+  "title": "Carousel Slider",
   "category": "design",
-  "description": "Display a carousel with any blocks in the slides.",
+  "description": "Display a carousel using any blocks as slides.",
   "attributes": {
     "slides": {
       "type": "number"
@@ -49,6 +49,14 @@
       "type": "number",
       "default": 3000
     },
+    "pauseOnMouseEnter": {
+      "type": "boolean",
+      "default": false
+    },
+    "disableOnInteraction": {
+      "type": "boolean",
+      "default": false
+    },
     "loop": {
       "type": "boolean",
       "default": false
@@ -66,13 +74,21 @@
         }
       ]
     },
-    "navigationSize": {
-      "type": "number",
-      "default": 22
+    "resizeObserver": {
+      "type": "boolean",
+      "default": false
     },
-    "navigationColor": {
-      "type": "string",
-      "default": "#000"
+    "observer": {
+      "type": "boolean",
+      "default": false
+    },
+    "observeParents": {
+      "type": "boolean",
+      "default": false
+    },
+    "observeSlideChildren": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

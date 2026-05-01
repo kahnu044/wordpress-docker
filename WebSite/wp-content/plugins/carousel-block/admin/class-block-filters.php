@@ -34,16 +34,20 @@ class Block_Filters {
      * @return array
      */
     public static function filter_legacy_blocks_inserter_from_php( $args, $block_type ) {
-        if ( self::should_show_legacy() ) {
-            return $args;
-        }
-
         // Extract the block name from the parameter (handles both modern and older WP).
         $name = '';
         if ( is_object( $block_type ) && isset( $block_type->name ) ) {
             $name = $block_type->name;
         } elseif ( is_string( $block_type ) ) {
             $name = $block_type;
+        }
+
+        if ( self::should_show_legacy() ) {
+            if ( 'cb/carousel-v2' === $name ) {
+                $args['title'] = __( 'Carousel Slider v2', 'cb' );
+            }
+
+            return $args;
         }
 
         if ( $name && \in_array( $name, self::$legacy_block_names, true ) ) {
