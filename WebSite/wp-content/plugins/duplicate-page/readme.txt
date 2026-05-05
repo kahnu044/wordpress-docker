@@ -2,8 +2,8 @@
 Contributors: mndpsingh287
 Tags: Page Duplicate, Post duplicate, duplicate custom posts, duplicate page, duplicate post, duplicate ,custom posts, post, page, duplicate this, duplicate, content duplicate, duplicate content, data duplicate, duplicate data, copy page, clone page,wordpress page duplicate, wordpress post duplicate, Copy post, wordpress page duplicator, wordpress post duplicator, Cloner, duplicate post
 Requires at least: 3.4
-Tested up to: 6.8.3
-Stable tag: 4.5.6
+Tested up to: 6.9.4
+Stable tag: 4.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,17 @@ https://www.youtube.com/watch?v=Fj8BHxvebXs&feature=youtu.be
 5. Duplicate Post / Page will Appear. 
 
 == Changelog ==
+= 4.5.9 (8th May, 2026) =
+* Security Fix: Replaced role-based check (contributor) with capability-based check (edit_posts) per WordPress coding standards.
+* Bug Fix: Resolved Elementor and page builder layout not preserved after duplication.
+* Bug Fix: Switched from add_post_meta() to update_post_meta() to prevent duplicate meta entries on duplicated posts.
+* Bug Fix: Added wp_slash() to meta values before saving to prevent double-unslashing which corrupted page builder JSON data.
+
+= 4.5.8 (21st Apr, 2026) =
+* Security fixes 
+
+= 4.5.7 (2nd March, 2026) =
+* Compatible with WordPress 6.9.4
 
 = 4.5.6 (16th Oct, 2025) =
 * Compatible with WordPress 6.8.3

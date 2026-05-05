@@ -4,7 +4,7 @@ Plugin Name: Duplicate Page
 Plugin URI: https://duplicatepro.com/
 Description: Duplicate Posts, Pages and Custom Posts using single click.
 Author: mndpsingh287
-Version: 4.5.6
+Version: 4.5.9
 Author URI: https://profiles.wordpress.org/mndpsingh287/
 License: GPLv2
 Text Domain: duplicate-page
@@ -13,7 +13,7 @@ if (!defined('DUPLICATE_PAGE_PLUGIN_DIRNAME')) {
     define('DUPLICATE_PAGE_PLUGIN_DIRNAME', plugin_basename(dirname(__FILE__)));
 }
 if (!defined('DUPLICATE_PAGE_PLUGIN_VERSION')) {
-    define('DUPLICATE_PAGE_PLUGIN_VERSION', '4.5.6');
+    define('DUPLICATE_PAGE_PLUGIN_VERSION', '4.5.9');
 }
 if (!class_exists('duplicate_page')):
     class duplicate_page
@@ -115,27 +115,23 @@ if (!class_exists('duplicate_page')):
             */
            
            $post_id = (isset($_GET['post']) ? intval($_GET['post']) : intval($_POST['post']));
+           if(!wp_verify_nonce( $nonce, 'dt-duplicate-page-'.$post_id)) {
+            wp_die(__('Security check issue, Please try again.','duplicate-page'));
+           }
            $post = get_post($post_id);
            $current_user_id = get_current_user_id();
-           if(wp_verify_nonce( $nonce, 'dt-duplicate-page-'.$post_id)) {
             if (current_user_can('manage_options') || current_user_can('edit_others_posts')) {
               $this->duplicate_edit_post($post_id);
             }
-            else if (current_user_can('contributor') && $current_user_id == $post->post_author){
+            else if (current_user_can('edit_posts') && !current_user_can('publish_posts') && $current_user_id == $post->post_author){
                 $this->duplicate_edit_post($post_id, 'pending');
             }
-            else if (current_user_can('edit_posts') && $current_user_id == $post->post_author ){
+            else if (current_user_can('edit_post', $post_id) && $current_user_id == $post->post_author ){
               $this->duplicate_edit_post($post_id);
             }
             else {
                 wp_die(__('Unauthorized Access.','duplicate-page'));
 			}
-          }
-         
-          else {
-            wp_die(__('Security check issue, Please try again.','duplicate-page'));
-          } 
-          
         }
         /**
          * Duplicate edit post
@@ -208,23 +204,64 @@ if (!class_exists('duplicate_page')):
                 * duplicate all post meta
                 */
                 $post_meta_keys = get_post_custom_keys( $post_id );
-                if(!empty($post_meta_keys)){
+                if ( ! empty( $post_meta_keys ) ) {
                     foreach ( $post_meta_keys as $meta_key ) {
-                        $meta_values = get_post_custom_values( $meta_key, $post_id );
+                        // get_post_meta returns already-unserialized values safely
+                        $meta_values = get_post_meta( $post_id, $meta_key );
                         foreach ( $meta_values as $meta_value ) {
-                            $meta_value = maybe_unserialize( $meta_value );
+                            // Block object injection - reject serialized objects (O: and C: patterns)
+                            // unless the meta key belongs to a known plugin that legitimately stores them.
+                            if ( is_string( $meta_value ) && preg_match( '/^O:\d+:|C:\d+:/', $meta_value ) ) {
+                                $safe_prefixes = apply_filters( 'duplicate_page_safe_meta_prefixes', array(
+                                    'breakdance_',
+                                    '_breakdance_',
+                                ) );
+                                $is_safe = false;
+                                foreach ( $safe_prefixes as $prefix ) {
+                                    if ( strpos( $meta_key, $prefix ) === 0 ) {
+                                        $is_safe = true;
+                                        break;
+                                    }
+                                }
+                                if ( ! $is_safe ) {
+                                    continue;
+                                }
+                            }
                             update_post_meta( $new_post_id, $meta_key, wp_slash( $meta_value ) );
                         }
                     }
                 }
-                   
+
                 /**
                  * Elementor compatibility fixes
                  */
-                 if(is_plugin_active( 'elementor/elementor.php' )){
-                        $css = Elementor\Core\Files\CSS\Post::create( $new_post_id );
+                 if(is_plugin_active( 'elementor/elementor.php' ) && class_exists('\Elementor\Core\Files\CSS\Post')){
+                        $css = \Elementor\Core\Files\CSS\Post::create( $new_post_id );
                         $css->update();
-                 } 
+                 }
+
+                /**
+                 * Breakdance compatibility
+                 */
+                if ( defined( 'BREAKDANCE_PLUGIN_FILE' ) || function_exists( 'Breakdance\isBreakdanceRequest' ) ) {
+                    $breakdance_timestamp_keys = apply_filters( 'duplicate_page_breakdance_timestamp_keys', array(
+                        'breakdance_created_at',
+                        '_breakdance_created_at',
+                    ) );
+                    foreach ( $breakdance_timestamp_keys as $ts_key ) {
+                        if ( get_post_meta( $new_post_id, $ts_key, true ) ) {
+                            update_post_meta( $new_post_id, $ts_key, current_time( 'mysql' ) );
+                        }
+                    }
+                }
+
+                /**
+                 * The Events Calendar compatibility
+                 */
+                if ( function_exists( 'tribe_get_event' ) ) {
+                    wp_update_post( array( 'ID' => $new_post_id ) );
+                }
+
                 /*
                 * finally, redirecting to your choice
                 */
@@ -243,6 +280,7 @@ if (!class_exists('duplicate_page')):
             else {
                 wp_die(__('Error! Post creation failed, could not find original post: ','duplicate-page').$post_id);
             }
+          exit;
           }
 
         /*
@@ -257,7 +295,7 @@ if (!class_exists('duplicate_page')):
 
             $opt = get_option('duplicate_page_options');
             $post_status = !empty($opt['duplicate_post_status']) ? esc_attr($opt['duplicate_post_status']) : 'draft';
-            if (current_user_can('edit_posts')) {
+            if (current_user_can('edit_post', $post->ID)) {
                 $actions['duplicate'] = isset($post) ? '<a href="admin.php?action=dt_duplicate_post_as_draft&amp;post='.intval($post->ID).'&amp;nonce='.wp_create_nonce( 'dt-duplicate-page-'.intval($post->ID) ).'" title="'.__('Duplicate this as ', 'duplicate-page').$post_status.'" rel="permalink">'.__('Duplicate This', 'duplicate-page').'</a>' : '';
             }
             
@@ -277,7 +315,7 @@ if (!class_exists('duplicate_page')):
             $html .= isset($post) ? '<a href="admin.php?action=dt_duplicate_post_as_draft&amp;post='.intval($post->ID).'&amp;nonce='.wp_create_nonce( 'dt-duplicate-page-'.$post->ID ).'" title="'.__('Duplicate this as ','duplicate-page').$post_status.'" rel="permalink">'.__('Duplicate This', 'duplicate-page').'</a>' :'';
             $html .= '</div>';
             $html .= '</div>';
-            $content = apply_filters('wpautop', $html);
+            $content = wpautop($html);
             $content = str_replace(']]>', ']]>', $content);
             echo $content;
         }
@@ -288,6 +326,10 @@ if (!class_exists('duplicate_page')):
         public function duplicate_page_custom_button_guten()
         {
             global $post;
+            $screen = get_current_screen();
+            if ( ! $screen || $screen->base !== 'post' ) {
+                return;
+            }
             if ($post) {
                 $opt = get_option('duplicate_page_options');
                 $post_status = !empty($opt['duplicate_post_status']) ? esc_attr($opt['duplicate_post_status']) : 'draft';
