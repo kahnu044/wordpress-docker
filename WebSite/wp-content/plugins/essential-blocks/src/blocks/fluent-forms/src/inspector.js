@@ -6,9 +6,9 @@ import {
     ToggleControl,
     SelectControl,
     BaseControl,
-    ButtonGroup,
-    Button,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { applyFilters } from "@wordpress/hooks";
 
@@ -19,7 +19,7 @@ import {
     BorderShadowControl,
     TypographyDropdown,
     InspectorPanel
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 import {
     FORM_LISTS,
@@ -109,7 +109,7 @@ const Inspector = ({ attributes, setAttributes }) => {
 
     return (
         <>
-        <InspectorPanel advancedControlProps={{
+            <InspectorPanel advancedControlProps={{
                 marginPrefix: FORM_MARGIN,
                 paddingPrefix: FORM_PADDING,
                 borderPrefix: FORM_BORDER,
@@ -138,6 +138,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     formId: newFormId,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -148,6 +150,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(showLabels) =>
                                 setAttributes({ showLabels })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -160,6 +163,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showPlaceholder,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -172,843 +176,187 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showErrorMessage,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
-                <>
-                    <InspectorPanel.PanelBody
-                        title={__("Labels", "essential-blocks")}
-                        initialOpen={true}
-                    >
-                        <>
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={labelColor}
-                                attributeName={'labelColor'}
-                            />
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_label
-                                }
-                            />
-                        </>
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Input & Textarea",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <>
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __(
-                                                "NORMAL",
-                                                "essential-blocks"
-                                            ),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __(
-                                                "FOCUS",
-                                                "essential-blocks"
-                                            ),
-                                            value: "focus",
-                                        },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    inputHoverType ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    inputHoverType !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            inputHoverType: value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
-                            {inputHoverType === "normal" && (
-                                <>
-                                    <ColorControl
-                                        label={__(
-                                            "Background Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={
-                                            inputBackgroundColor
-                                        }
-                                        attributeName={'inputBackgroundColor'}
-                                    />
-                                    <ColorControl
-                                        label={__(
-                                            "Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={inputTextColor}
-                                        attributeName={'inputTextColor'}
-                                    />
-                                </>
-                            )}
-                            {inputHoverType === "focus" && (
-                                <>
-                                    <ColorControl
-                                        label={__(
-                                            "Background Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={
-                                            inputFocusBackgroundColor
-                                        }
-                                        attributeName={'inputFocusBackgroundColor'}
-                                    />
-                                </>
-                            )}
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_input
-                                }
-                            />
-                            <Divider />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Text Indent",
-                                    "essential-blocks"
-                                )}
-                                controlName={
-                                    INPUT_TEXTAREA_INDENT
-                                }
-                                min={0}
-                                max={60}
-                                step={1}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Input Width",
-                                    "essential-blocks"
-                                )}
-                                controlName={INPUT_WIDTH}
-                                min={0}
-                                max={1200}
-                                step={1}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Input Height",
-                                    "essential-blocks"
-                                )}
-                                controlName={INPUT_HEIGHT}
-                                min={0}
-                                max={200}
-                                step={1}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Textarea Width",
-                                    "essential-blocks"
-                                )}
-                                controlName={TEXTAREA_WIDTH}
-                                min={0}
-                                max={1200}
-                                step={1}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Textarea Height",
-                                    "essential-blocks"
-                                )}
-                                controlName={TEXTAREA_HEIGHT}
-                                min={0}
-                                max={400}
-                                step={1}
-                            />
-                            <Divider />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    INPUT_TEXTAREA_PADDING
-                                }
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Spacing",
-                                    "essential-blocks"
-                                )}
-                                controlName={
-                                    INPUT_TEXTAREA_SPACING
-                                }
-                                min={0}
-                                max={100}
-                                step={1}
-                            />
-                        </>
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__(
-                                    "Border & Shadow",
-                                    "essential-blocks"
-                                )}
-                            </h3>
-                        </BaseControl>
-                        <BorderShadowControl
-                            controlName={INPUT_TEXTAREA_BORDER}
-                        />
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Placeholder",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <>
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={placeholderColor}
-                                attributeName={'placeholderColor'}
-                            />
-                        </>
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Radio & Checkbox",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <ToggleControl
-                            label={__(
-                                "Custom Style",
-                                "essential-blocks"
-                            )}
-                            checked={customCheckboxStyle}
-                            onChange={(customCheckboxStyle) =>
-                                setAttributes({
-                                    customCheckboxStyle,
-                                })
-                            }
-                        />
-                        {customCheckboxStyle && (
+                    <>
+                        <InspectorPanel.PanelBody
+                            title={__("Labels", "essential-blocks")}
+                            initialOpen={true}
+                        >
                             <>
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Size",
+                                <ColorControl
+                                    label={__(
+                                        "Color",
                                         "essential-blocks"
                                     )}
-                                    controlName={CHECKBOX_SIZE}
-                                    min={0}
-                                    max={80}
-                                    step={1}
+                                    color={labelColor}
+                                    attributeName={'labelColor'}
                                 />
-                                <BaseControl>
-                                    <ButtonGroup>
-                                        {[
-                                            {
-                                                label: __(
-                                                    "NORMAL",
-                                                    "essential-blocks"
-                                                ),
-                                                value: "normal",
-                                            },
-                                            {
-                                                label: __(
-                                                    "CHECKED",
-                                                    "essential-blocks"
-                                                ),
-                                                value:
-                                                    "checked",
-                                            },
-                                        ].map(
-                                            (
-                                                {
-                                                    value,
-                                                    label,
-                                                },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        btnHoverType ===
-                                                        value
-                                                    }
-                                                    isSecondary={
-                                                        btnHoverType !==
-                                                        value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                checkboxSwitcher: value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
-                                {checkboxSwitcher ===
-                                    "normal" && (
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_label
+                                    }
+                                />
+                            </>
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "Input & Textarea",
+                                "essential-blocks"
+                            )}
+                            initialOpen={false}
+                        >
+                            <>
+                                <ToggleGroupControl
+
+                                    value={inputHoverType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            inputHoverType: value,
+                                        })
+                                    }
+                                    isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                                >
+                                    <ToggleGroupControlOption
+                                        value="normal"
+                                        label={__("NORMAL", "essential-blocks")}
+                                    />
+                                    <ToggleGroupControlOption
+                                        value="focus"
+                                        label={__("FOCUS", "essential-blocks")}
+                                    />
+                                </ToggleGroupControl>
+                                {inputHoverType === "normal" && (
                                     <>
+                                        <ColorControl
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                inputBackgroundColor
+                                            }
+                                            attributeName={'inputBackgroundColor'}
+                                        />
                                         <ColorControl
                                             label={__(
                                                 "Color",
                                                 "essential-blocks"
                                             )}
-                                            color={
-                                                checkboxColor
-                                            }
-                                            attributeName={'checkboxColor'}
-                                        />
-                                        <ResponsiveRangeController
-                                            baseLabel={__(
-                                                "Border Width",
-                                                "essential-blocks"
-                                            )}
-                                            controlName={
-                                                CHECKBOX_BORDER
-                                            }
-                                            min={0}
-                                            max={15}
-                                            step={1}
-                                            noUnits={true}
-                                        />
-                                        <ColorControl
-                                            label={__(
-                                                "Border Color",
-                                                "essential-blocks"
-                                            )}
-                                            color={
-                                                checkboxBorderColor
-                                            }
-                                            attributeName={'checkboxBorderColor'}
-                                        />
-                                        <BaseControl>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "Checkbox",
-                                                    "essential-blocks"
-                                                )}
-                                            </h3>
-                                        </BaseControl>
-                                        <ResponsiveDimensionsControl
-                                            controlName={
-                                                CHECKBOX_RADIUS
-                                            }
-                                            baseLabel={__(
-                                                "Border Radius",
-                                                "essential-blocks"
-                                            )}
-                                        />
-
-                                        <BaseControl>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "Radio Buttons",
-                                                    "essential-blocks"
-                                                )}
-                                            </h3>
-                                        </BaseControl>
-                                        <ResponsiveDimensionsControl
-                                            controlName={
-                                                RADIO_RADIUS
-                                            }
-                                            baseLabel={__(
-                                                "Border Radius",
-                                                "essential-blocks"
-                                            )}
+                                            color={inputTextColor}
+                                            attributeName={'inputTextColor'}
                                         />
                                     </>
                                 )}
-                                {checkboxSwitcher ===
-                                    "checked" && (
-                                    <ColorControl
-                                        label={__(
-                                            "Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={
-                                            checkboxCheckedColor
-                                        }
-                                        attributeName={'checkboxCheckedColor'}
-                                    />
+                                {inputHoverType === "focus" && (
+                                    <>
+                                        <ColorControl
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                inputFocusBackgroundColor
+                                            }
+                                            attributeName={'inputFocusBackgroundColor'}
+                                        />
+                                    </>
                                 )}
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_input
+                                    }
+                                />
+                                <Divider />
                                 <ResponsiveRangeController
                                     baseLabel={__(
-                                        "Item Spacing",
+                                        "Text Indent",
                                         "essential-blocks"
                                     )}
                                     controlName={
-                                        CHECKBOX_ITEM_SPACING
+                                        INPUT_TEXTAREA_INDENT
+                                    }
+                                    min={0}
+                                    max={60}
+                                    step={1}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Input Width",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={INPUT_WIDTH}
+                                    min={0}
+                                    max={1200}
+                                    step={1}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Input Height",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={INPUT_HEIGHT}
+                                    min={0}
+                                    max={200}
+                                    step={1}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Textarea Width",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={TEXTAREA_WIDTH}
+                                    min={0}
+                                    max={1200}
+                                    step={1}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Textarea Height",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={TEXTAREA_HEIGHT}
+                                    min={0}
+                                    max={400}
+                                    step={1}
+                                />
+                                <Divider />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        INPUT_TEXTAREA_PADDING
+                                    }
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Spacing",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={
+                                        INPUT_TEXTAREA_SPACING
                                     }
                                     min={0}
                                     max={100}
                                     step={1}
                                 />
                             </>
-                        )}
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Section Break",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <>
-                            <BaseControl
-                                label={__(
-                                    "Alignment",
-                                    "essential-blocks"
-                                )}
-                                id="eb-button-group-alignment"
-                            >
-                                <ButtonGroup id="eb-button-group-alignment">
-                                    {SECTION_BREAK_POSITION.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    sectionBreakPosition ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    sectionBreakPosition !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            sectionBreakPosition:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
-                            <Divider />
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__(
-                                        "Label",
-                                        "essential-blocks"
-                                    )}
-                                </h3>
-                            </BaseControl>
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={sectionBreakColor}
-                                attributeName={'sectionBreakColor'}
-                            />
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_section_break
-                                }
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SECTION_BREAK_PADDING
-                                }
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SECTION_BREAK_MARGIN
-                                }
-                                baseLabel={__(
-                                    "Margin",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <Divider />
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__(
-                                        "Description",
-                                        "essential-blocks"
-                                    )}
-                                </h3>
-                            </BaseControl>
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={sectionBreakDescColor}
-                                attributeName={'sectionBreakDescColor'}
-                            />
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_section_break_desc
-                                }
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SECTION_BREAK_DESC_PADDING
-                                }
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SECTION_BREAK_DESC_MARGIN
-                                }
-                                baseLabel={__(
-                                    "Margin",
-                                    "essential-blocks"
-                                )}
-                            />
-                        </>
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Custom HTML",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <>
-                            <BaseControl
-                                label={__(
-                                    "Alignment",
-                                    "essential-blocks"
-                                )}
-                                id="eb-button-group-alignment"
-                            >
-                                <ButtonGroup id="eb-button-group-alignment">
-                                    {SECTION_BREAK_POSITION.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    customHtmlPosition ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    customHtmlPosition !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            customHtmlPosition:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
-                            <ColorControl
-                                label={__(
-                                    "Color",
-                                    "essential-blocks"
-                                )}
-                                color={customHtmlColor}
-                                attributeName={'customHtmlColor'}
-                            />
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_custom_html
-                                }
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    CUSTOM_HTML_PADDING
-                                }
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={CUSTOM_HTML_MARGIN}
-                                baseLabel={__(
-                                    "Margin",
-                                    "essential-blocks"
-                                )}
-                            />
-                        </>
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__("Submit", "essential-blocks")}
-                        initialOpen={false}
-                    >
-                        <>
-                            {btnWidthType === "custom" && (
-                                <BaseControl
-                                    label={__(
-                                        "Alignment",
-                                        "essential-blocks"
-                                    )}
-                                    id="eb-button-group-alignment"
-                                >
-                                    <ButtonGroup id="eb-button-group-alignment">
-                                        {SUBMIT_BUTTON_POSITION.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        btnAlignment ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        btnAlignment !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                btnAlignment:
-                                                                    item.value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
-                            )}
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Height",
-                                    "essential-blocks"
-                                )}
-                                controlName={
-                                    SUBMIT_BUTTON_HEIGHT
-                                }
-                                min={0}
-                                max={500}
-                                step={1}
-                            />
-                            <SelectControl
-                                label={__(
-                                    "Width",
-                                    "essential-blocks"
-                                )}
-                                value={btnWidthType}
-                                options={BTN_WIDTH_STYLE}
-                                onChange={(newBtnWidthType) =>
-                                    setAttributes({
-                                        btnWidthType: newBtnWidthType,
-                                    })
-                                }
-                            />
-                            {btnWidthType === "custom" && (
-                                <ResponsiveRangeController
-                                    baseLabel={__(
-                                        "Width",
-                                        "essential-blocks"
-                                    )}
-                                    controlName={
-                                        SUBMIT_BUTTON_WIDTH
-                                    }
-                                    min={0}
-                                    max={1200}
-                                    step={1}
-                                />
-                            )}
-                            <TypographyDropdown
-                                baseLabel={__(
-                                    "Typography",
-                                    "essential-blocks"
-                                )}
-                                typographyPrefixConstant={
-                                    typoPrefix_submit_btn
-                                }
-                            />
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __(
-                                                "NORMAL",
-                                                "essential-blocks"
-                                            ),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __(
-                                                "HOVER",
-                                                "essential-blocks"
-                                            ),
-                                            value: "hover",
-                                        },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    btnHoverType ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    btnHoverType !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            btnHoverType: value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
-                            {btnHoverType === "normal" && (
-                                <>
-                                    <ColorControl
-                                        label={__(
-                                            "Background Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={
-                                            btnBackgroundColor
-                                        }
-                                        attributeName={'btnBackgroundColor'}
-                                    />
-                                    <ColorControl
-                                        label={__(
-                                            "Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={btnColor}
-                                        attributeName={'btnColor'}
-                                    />
-                                </>
-                            )}
-                            {btnHoverType === "hover" && (
-                                <>
-                                    <ColorControl
-                                        label={__(
-                                            "Background Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={
-                                            btnBackgroundHoverColor
-                                        }
-                                        attributeName={'btnBackgroundHoverColor'}
-                                    />
-                                    <ColorControl
-                                        label={__(
-                                            "Color",
-                                            "essential-blocks"
-                                        )}
-                                        color={btnHoverColor}
-                                        attributeName={'btnHoverColor'}
-                                    />
-                                </>
-                            )}
-                            <Divider />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SUBMIT_BUTTON_PADDING
-                                }
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={
-                                    SUBMIT_BUTTON_MARGIN
-                                }
-                                baseLabel={__(
-                                    "Margin",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveRangeController
-                                baseLabel={__(
-                                    "Button Position",
-                                    "essential-blocks"
-                                )}
-                                controlName={BUTTON_POSITION}
-                                min={-1000}
-                                max={1000}
-                                step={1}
-                            />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__(
                                         "Border & Shadow",
@@ -1017,64 +365,588 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 </h3>
                             </BaseControl>
                             <BorderShadowControl
-                                controlName={
-                                    SUBMIT_BUTTON_BORDER
-                                }
+                                controlName={INPUT_TEXTAREA_BORDER}
                             />
-                        </>
-                    </InspectorPanel.PanelBody>
-                    <InspectorPanel.PanelBody
-                        title={__(
-                            "Success Message",
-                            "essential-blocks"
-                        )}
-                        initialOpen={false}
-                    >
-                        <ColorControl
-                            label={__(
-                                "Background Color",
-                                "essential-blocks"
-                            )}
-                            color={successBackgroundColor}
-                            attributeName={'successBackgroundColor'}
-                        />
-                        <ColorControl
-                            label={__(
-                                "Color",
-                                "essential-blocks"
-                            )}
-                            color={successColor}
-                            attributeName={'successColor'}
-                        />
-                        <TypographyDropdown
-                            baseLabel={__(
-                                "Typography",
-                                "essential-blocks"
-                            )}
-                            typographyPrefixConstant={
-                                typoPrefix_success
-                            }
-                        />
-                        <BorderShadowControl
-                            controlName={SUCCESS_BORDER}
-                            noShadow={true}
-                        />
-                    </InspectorPanel.PanelBody>
-                    {showErrorMessage && (
+                        </InspectorPanel.PanelBody>
                         <InspectorPanel.PanelBody
                             title={__(
-                                "Error Message",
+                                "Placeholder",
+                                "essential-blocks"
+                            )}
+                            initialOpen={false}
+                        >
+                            <>
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={placeholderColor}
+                                    attributeName={'placeholderColor'}
+                                />
+                            </>
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "Radio & Checkbox",
+                                "essential-blocks"
+                            )}
+                            initialOpen={false}
+                        >
+                            <ToggleControl
+                                label={__(
+                                    "Custom Style",
+                                    "essential-blocks"
+                                )}
+                                checked={customCheckboxStyle}
+                                onChange={(customCheckboxStyle) =>
+                                    setAttributes({
+                                        customCheckboxStyle,
+                                    })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                            {customCheckboxStyle && (
+                                <>
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Size",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={CHECKBOX_SIZE}
+                                        min={0}
+                                        max={80}
+                                        step={1}
+                                    />
+                                    <ToggleGroupControl
+
+                                        value={checkboxSwitcher}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                checkboxSwitcher: value,
+                                            })
+                                        }
+                                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                                    >
+                                        <ToggleGroupControlOption
+                                            value="normal"
+                                            label={__("NORMAL", "essential-blocks")}
+                                        />
+                                        <ToggleGroupControlOption
+                                            value="checked"
+                                            label={__("CHECKED", "essential-blocks")}
+                                        />
+                                    </ToggleGroupControl>
+                                    {checkboxSwitcher ===
+                                        "normal" && (
+                                            <>
+                                                <ColorControl
+                                                    label={__(
+                                                        "Color",
+                                                        "essential-blocks"
+                                                    )}
+                                                    color={
+                                                        checkboxColor
+                                                    }
+                                                    attributeName={'checkboxColor'}
+                                                />
+                                                <ResponsiveRangeController
+                                                    baseLabel={__(
+                                                        "Border Width",
+                                                        "essential-blocks"
+                                                    )}
+                                                    controlName={
+                                                        CHECKBOX_BORDER
+                                                    }
+                                                    min={0}
+                                                    max={15}
+                                                    step={1}
+                                                    noUnits={true}
+                                                />
+                                                <ColorControl
+                                                    label={__(
+                                                        "Border Color",
+                                                        "essential-blocks"
+                                                    )}
+                                                    color={
+                                                        checkboxBorderColor
+                                                    }
+                                                    attributeName={'checkboxBorderColor'}
+                                                />
+                                                <BaseControl __nextHasNoMarginBottom>
+                                                    <h3 className="eb-control-title">
+                                                        {__(
+                                                            "Checkbox",
+                                                            "essential-blocks"
+                                                        )}
+                                                    </h3>
+                                                </BaseControl>
+                                                <ResponsiveDimensionsControl
+                                                    controlName={
+                                                        CHECKBOX_RADIUS
+                                                    }
+                                                    baseLabel={__(
+                                                        "Border Radius",
+                                                        "essential-blocks"
+                                                    )}
+                                                />
+
+                                                <BaseControl __nextHasNoMarginBottom>
+                                                    <h3 className="eb-control-title">
+                                                        {__(
+                                                            "Radio Buttons",
+                                                            "essential-blocks"
+                                                        )}
+                                                    </h3>
+                                                </BaseControl>
+                                                <ResponsiveDimensionsControl
+                                                    controlName={
+                                                        RADIO_RADIUS
+                                                    }
+                                                    baseLabel={__(
+                                                        "Border Radius",
+                                                        "essential-blocks"
+                                                    )}
+                                                />
+                                            </>
+                                        )}
+                                    {checkboxSwitcher ===
+                                        "checked" && (
+                                            <ColorControl
+                                                label={__(
+                                                    "Color",
+                                                    "essential-blocks"
+                                                )}
+                                                color={
+                                                    checkboxCheckedColor
+                                                }
+                                                attributeName={'checkboxCheckedColor'}
+                                            />
+                                        )}
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Item Spacing",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={
+                                            CHECKBOX_ITEM_SPACING
+                                        }
+                                        min={0}
+                                        max={100}
+                                        step={1}
+                                    />
+                                </>
+                            )}
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "Section Break",
+                                "essential-blocks"
+                            )}
+                            initialOpen={false}
+                        >
+                            <>
+                                <ToggleGroupControl
+                                    label={__(
+                                        "Alignment",
+                                        "essential-blocks"
+                                    )}
+
+                                    value={sectionBreakPosition}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            sectionBreakPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {SECTION_BREAK_POSITION.map(
+                                        (item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
+                                <Divider />
+                                <BaseControl __nextHasNoMarginBottom>
+                                    <h3 className="eb-control-title">
+                                        {__(
+                                            "Label",
+                                            "essential-blocks"
+                                        )}
+                                    </h3>
+                                </BaseControl>
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={sectionBreakColor}
+                                    attributeName={'sectionBreakColor'}
+                                />
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_section_break
+                                    }
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SECTION_BREAK_PADDING
+                                    }
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SECTION_BREAK_MARGIN
+                                    }
+                                    baseLabel={__(
+                                        "Margin",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <Divider />
+                                <BaseControl __nextHasNoMarginBottom>
+                                    <h3 className="eb-control-title">
+                                        {__(
+                                            "Description",
+                                            "essential-blocks"
+                                        )}
+                                    </h3>
+                                </BaseControl>
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={sectionBreakDescColor}
+                                    attributeName={'sectionBreakDescColor'}
+                                />
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_section_break_desc
+                                    }
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SECTION_BREAK_DESC_PADDING
+                                    }
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SECTION_BREAK_DESC_MARGIN
+                                    }
+                                    baseLabel={__(
+                                        "Margin",
+                                        "essential-blocks"
+                                    )}
+                                />
+                            </>
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "Custom HTML",
+                                "essential-blocks"
+                            )}
+                            initialOpen={false}
+                        >
+                            <>
+                                <ToggleGroupControl
+                                    label={__(
+                                        "Alignment",
+                                        "essential-blocks"
+                                    )}
+
+                                    value={customHtmlPosition}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            customHtmlPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {SECTION_BREAK_POSITION.map(
+                                        (item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={customHtmlColor}
+                                    attributeName={'customHtmlColor'}
+                                />
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_custom_html
+                                    }
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        CUSTOM_HTML_PADDING
+                                    }
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={CUSTOM_HTML_MARGIN}
+                                    baseLabel={__(
+                                        "Margin",
+                                        "essential-blocks"
+                                    )}
+                                />
+                            </>
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__("Submit", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <>
+                                {btnWidthType === "custom" && (
+                                    <ToggleGroupControl
+                                        label={__(
+                                            "Alignment",
+                                            "essential-blocks"
+                                        )}
+
+                                        value={btnAlignment}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                btnAlignment: value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {SUBMIT_BUTTON_POSITION.map(
+                                            (item, index) => (
+                                                <ToggleGroupControlOption
+                                                    key={index}
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            )
+                                        )}
+                                    </ToggleGroupControl>
+                                )}
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Height",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={
+                                        SUBMIT_BUTTON_HEIGHT
+                                    }
+                                    min={0}
+                                    max={500}
+                                    step={1}
+                                />
+                                <SelectControl
+                                    label={__(
+                                        "Width",
+                                        "essential-blocks"
+                                    )}
+                                    value={btnWidthType}
+                                    options={BTN_WIDTH_STYLE}
+                                    onChange={(newBtnWidthType) =>
+                                        setAttributes({
+                                            btnWidthType: newBtnWidthType,
+                                        })
+                                    }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                />
+                                {btnWidthType === "custom" && (
+                                    <ResponsiveRangeController
+                                        baseLabel={__(
+                                            "Width",
+                                            "essential-blocks"
+                                        )}
+                                        controlName={
+                                            SUBMIT_BUTTON_WIDTH
+                                        }
+                                        min={0}
+                                        max={1200}
+                                        step={1}
+                                    />
+                                )}
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_submit_btn
+                                    }
+                                />
+                                <ToggleGroupControl
+
+                                    value={btnHoverType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            btnHoverType: value,
+                                        })
+                                    }
+                                    isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                                >
+                                    <ToggleGroupControlOption
+                                        value="normal"
+                                        label={__("NORMAL", "essential-blocks")}
+                                    />
+                                    <ToggleGroupControlOption
+                                        value="hover"
+                                        label={__("HOVER", "essential-blocks")}
+                                    />
+                                </ToggleGroupControl>
+                                {btnHoverType === "normal" && (
+                                    <>
+                                        <ColorControl
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                btnBackgroundColor
+                                            }
+                                            attributeName={'btnBackgroundColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={btnColor}
+                                            attributeName={'btnColor'}
+                                        />
+                                    </>
+                                )}
+                                {btnHoverType === "hover" && (
+                                    <>
+                                        <ColorControl
+                                            label={__(
+                                                "Background Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={
+                                                btnBackgroundHoverColor
+                                            }
+                                            attributeName={'btnBackgroundHoverColor'}
+                                        />
+                                        <ColorControl
+                                            label={__(
+                                                "Color",
+                                                "essential-blocks"
+                                            )}
+                                            color={btnHoverColor}
+                                            attributeName={'btnHoverColor'}
+                                        />
+                                    </>
+                                )}
+                                <Divider />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SUBMIT_BUTTON_PADDING
+                                    }
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={
+                                        SUBMIT_BUTTON_MARGIN
+                                    }
+                                    baseLabel={__(
+                                        "Margin",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Button Position",
+                                        "essential-blocks"
+                                    )}
+                                    controlName={BUTTON_POSITION}
+                                    min={-1000}
+                                    max={1000}
+                                    step={1}
+                                />
+                                <BaseControl __nextHasNoMarginBottom>
+                                    <h3 className="eb-control-title">
+                                        {__(
+                                            "Border & Shadow",
+                                            "essential-blocks"
+                                        )}
+                                    </h3>
+                                </BaseControl>
+                                <BorderShadowControl
+                                    controlName={
+                                        SUBMIT_BUTTON_BORDER
+                                    }
+                                />
+                            </>
+                        </InspectorPanel.PanelBody>
+                        <InspectorPanel.PanelBody
+                            title={__(
+                                "Success Message",
                                 "essential-blocks"
                             )}
                             initialOpen={false}
                         >
                             <ColorControl
                                 label={__(
+                                    "Background Color",
+                                    "essential-blocks"
+                                )}
+                                color={successBackgroundColor}
+                                attributeName={'successBackgroundColor'}
+                            />
+                            <ColorControl
+                                label={__(
                                     "Color",
                                     "essential-blocks"
                                 )}
-                                color={errorColor}
-                                attributeName={'errorColor'}
+                                color={successColor}
+                                attributeName={'successColor'}
                             />
                             <TypographyDropdown
                                 baseLabel={__(
@@ -1082,26 +954,56 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     "essential-blocks"
                                 )}
                                 typographyPrefixConstant={
-                                    typoPrefix_error
+                                    typoPrefix_success
                                 }
                             />
-                            <ResponsiveDimensionsControl
-                                controlName={ERROR_PADDING}
-                                baseLabel={__(
-                                    "Padding",
-                                    "essential-blocks"
-                                )}
-                            />
-                            <ResponsiveDimensionsControl
-                                controlName={ERROR_MARGIN}
-                                baseLabel={__(
-                                    "Margin",
-                                    "essential-blocks"
-                                )}
+                            <BorderShadowControl
+                                controlName={SUCCESS_BORDER}
+                                noShadow={true}
                             />
                         </InspectorPanel.PanelBody>
-                    )}
-                </>
+                        {showErrorMessage && (
+                            <InspectorPanel.PanelBody
+                                title={__(
+                                    "Error Message",
+                                    "essential-blocks"
+                                )}
+                                initialOpen={false}
+                            >
+                                <ColorControl
+                                    label={__(
+                                        "Color",
+                                        "essential-blocks"
+                                    )}
+                                    color={errorColor}
+                                    attributeName={'errorColor'}
+                                />
+                                <TypographyDropdown
+                                    baseLabel={__(
+                                        "Typography",
+                                        "essential-blocks"
+                                    )}
+                                    typographyPrefixConstant={
+                                        typoPrefix_error
+                                    }
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={ERROR_PADDING}
+                                    baseLabel={__(
+                                        "Padding",
+                                        "essential-blocks"
+                                    )}
+                                />
+                                <ResponsiveDimensionsControl
+                                    controlName={ERROR_MARGIN}
+                                    baseLabel={__(
+                                        "Margin",
+                                        "essential-blocks"
+                                    )}
+                                />
+                            </InspectorPanel.PanelBody>
+                        )}
+                    </>
                 </InspectorPanel.Style>
             </InspectorPanel>
         </>

@@ -123,6 +123,7 @@ function WooProductGrid(props) {
                                         showRating: !showRating,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__("Show Price", "essential-blocks")}
@@ -132,6 +133,7 @@ function WooProductGrid(props) {
                                         showPrice: !showPrice,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__(
@@ -144,6 +146,7 @@ function WooProductGrid(props) {
                                         showSaleBadge: !showSaleBadge,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </>
                     </PanelBody>
@@ -162,6 +165,7 @@ function WooProductGrid(props) {
                                     isCustomCartBtn: !isCustomCartBtn,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {isCustomCartBtn && (
                             <>
@@ -176,6 +180,8 @@ function WooProductGrid(props) {
                                             simpleCartText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__(
@@ -188,6 +194,8 @@ function WooProductGrid(props) {
                                             variableCartText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__(
@@ -200,6 +208,8 @@ function WooProductGrid(props) {
                                             groupedCartText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__(
@@ -212,6 +222,8 @@ function WooProductGrid(props) {
                                             externalCartText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__(
@@ -224,6 +236,8 @@ function WooProductGrid(props) {
                                             defaultCartText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -235,6 +249,7 @@ function WooProductGrid(props) {
                         <BaseControl
                             label={__("Alignment", "essential-blocks")}
                             id="eb-woo-products-alignment"
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup>
                                 {SALE_BADGE_ALIGN.map((item, key) => (
@@ -263,6 +278,8 @@ function WooProductGrid(props) {
                             onChange={(text) =>
                                 handleBlockDefault({ saleText: text })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody
@@ -276,6 +293,7 @@ function WooProductGrid(props) {
                                     "essential-blocks"
                                 )}
                                 id="eb-woo-products-content-alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup>
                                     {CONTENT_ALIGNMENT.map((item, key) => (
@@ -374,6 +392,7 @@ function WooProductGrid(props) {
                                         autoHeight: !autoHeight,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <Divider />
                             <ColorControl
@@ -477,6 +496,8 @@ function WooProductGrid(props) {
                                 value={productDescLength}
                                 type="number"
                                 onChange={(value) => textToNumber(value)}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <ResponsiveDimensionsControl
                                 controlName={DESC_MARGIN}
@@ -594,7 +615,7 @@ function WooProductGrid(props) {
                                 controlName={BUTTON_MARGIN}
                                 baseLabel={__("Space", "essential-blocks")}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Border", "essential-blocks")}
                                 </h3>
@@ -629,7 +650,7 @@ function WooProductGrid(props) {
                                 handleBlockDefault({ saleTextBackgroundColor })
                             }
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Border", "essential-blocks")}
                             </h3>

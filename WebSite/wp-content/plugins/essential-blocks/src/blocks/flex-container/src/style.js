@@ -12,6 +12,8 @@ import {
     JUSTIFY_CONTENT_CONTROL,
     ALIGN_ITEM_CONTROL,
     FLEX_WRAP_CONTROL,
+    getThemeWidthVars,
+    VARIABLE_WIDTH_FALLBACK,
 } from "./constants";
 
 import {
@@ -37,6 +39,10 @@ export default function Style(props) {
         resOption,
         isContainerCustomWidth,
         contentWidth,
+        inheritTheme,
+        adminWidthVar,
+        frontMaxWidthVar,
+        frontWidthVar,
         justifyContent,
         TABjustifyContent,
         MOBjustifyContent,
@@ -202,6 +208,36 @@ export default function Style(props) {
         attributes,
     });
 
+    // Resolve CSS-variable names for "variable" content-width mode.
+    // When a theme preset is picked, names come from the built-in map;
+    // otherwise use whatever the user typed into the custom inputs.
+    const presetVars = getThemeWidthVars(inheritTheme);
+    const resolvedAdminVar = inheritTheme ? presetVars.admin : adminWidthVar;
+    const resolvedFrontMaxVar = inheritTheme ? presetVars.frontMax : frontMaxWidthVar;
+    const resolvedFrontWidthVar = inheritTheme ? presetVars.frontWidth : frontWidthVar;
+
+    const fallbackPx = `${VARIABLE_WIDTH_FALLBACK}px`;
+    const normalizeVar = (name) => {
+        if (!name) return "";
+        const trimmed = String(name).trim();
+        if (!trimmed) return "";
+        return trimmed.startsWith("--") ? trimmed : `--${trimmed}`;
+    };
+
+    const adminVarCss = (() => {
+        const n = normalizeVar(resolvedAdminVar);
+        return n ? `width: var(${n}, ${fallbackPx}); max-width: var(${n}, 100%);` : "";
+    })();
+    const frontMaxVarCss = (() => {
+        const n = normalizeVar(resolvedFrontMaxVar);
+        return n ? `max-width: var(${n}, 100%);` : "";
+    })();
+    const frontWidthVarCss = (() => {
+        const n = normalizeVar(resolvedFrontWidthVar);
+        return n ? `width: var(${n}, ${fallbackPx});` : "";
+    })();
+    const frontVarCss = `${frontMaxVarCss} ${frontWidthVarCss}`.trim();
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopStyles = `
         .block-editor-block-list__layout.is-root-container > .root-${blockId},
@@ -243,6 +279,7 @@ export default function Style(props) {
             overflow: ${overflow};
             ${contentHeightDesktop}
             ${contentWidth === "boxed" ? `${contentWidthDesktop}` : ""}
+            ${contentWidth === "variable" ? frontVarCss : ""}
         }
 
         .eb-flex-container.${blockId} > .block-editor-inner-blocks > .block-editor-block-list__layout {
@@ -253,6 +290,7 @@ export default function Style(props) {
             ${rowGapDesktop}
             ${columnGapDesktop}
             ${contentWidth === "boxed" ? `${contentWidthDesktop}` : ""}
+            ${contentWidth === "variable" ? adminVarCss : ""}
             ${contentHeightDesktop}
             overflow: ${overflow};
             margin: 0 auto;
@@ -291,6 +329,7 @@ export default function Style(props) {
             align-items: ${TABalignItems || alignItems || "stretch"};
             flex-wrap: ${TABflexWrap || flexWrap || "nowrap"};
             ${contentWidth === "boxed" ? `${contentWidthTab}` : ""}
+            ${contentWidth === "variable" ? frontVarCss : ""}
             ${contentHeightTab}
             ${rowGapTab}
             ${columnGapTab}
@@ -303,6 +342,7 @@ export default function Style(props) {
             ${rowGapTab}
             ${columnGapTab}
             ${contentWidth === "boxed" ? `${contentWidthTab}` : ""}
+            ${contentWidth === "variable" ? adminVarCss : ""}
             ${contentHeightTab}
         }
 
@@ -339,6 +379,7 @@ export default function Style(props) {
             align-items: ${MOBalignItems || TABalignItems || alignItems || "stretch"};
             flex-wrap: ${MOBflexWrap || TABflexWrap || flexWrap || "nowrap"};
             ${contentWidth === "boxed" ? `${contentWidthMobile}` : ""}
+            ${contentWidth === "variable" ? frontVarCss : ""}
             ${contentHeightMobile}
             ${rowGapMobile}
             ${columnGapMobile}
@@ -351,6 +392,7 @@ export default function Style(props) {
             ${rowGapMobile}
             ${columnGapMobile}
             ${contentWidth === "boxed" ? `${contentWidthMobile}` : ""}
+            ${contentWidth === "variable" ? adminVarCss : ""}
             ${contentHeightMobile}
         }
 

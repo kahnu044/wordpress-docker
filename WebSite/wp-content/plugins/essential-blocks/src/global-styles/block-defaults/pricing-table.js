@@ -137,6 +137,8 @@ function PricingTable(props) {
                             label={__("Title", "essential-blocks")}
                             value={title}
                             onChange={(newTitle) => handleBlockDefault({ title: newTitle })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Subtitle?")}
@@ -147,6 +149,7 @@ function PricingTable(props) {
                                     defaultSubtitle: !showSubtitle,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showSubtitle && (
@@ -158,6 +161,8 @@ function PricingTable(props) {
                                         subtitle: newSubtitle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <ToggleControl
@@ -169,6 +174,7 @@ function PricingTable(props) {
                                     defaultHeaderIcon: !showHeaderIcon,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showHeaderIcon && (
                             <EBIconPicker
@@ -187,6 +193,7 @@ function PricingTable(props) {
                                         defaultTitleLine: !showTitleLine,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -195,6 +202,8 @@ function PricingTable(props) {
                             label={__("Price", "essential-blocks")}
                             value={mainPrice}
                             onChange={(newPrice) => handleBlockDefault({ mainPrice: newPrice })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("On Sale?")}
@@ -202,6 +211,7 @@ function PricingTable(props) {
                             onChange={() => {
                                 handleBlockDefault({ showOnSale: !showOnSale });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showOnSale && (
                             <TextControl
@@ -212,6 +222,8 @@ function PricingTable(props) {
                                         salePrice: newsalePrice,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <TextControl
@@ -222,6 +234,8 @@ function PricingTable(props) {
                                     priceCurrency: newPriceCurrency,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Currency Placement", "essential-blocks")}
@@ -233,16 +247,22 @@ function PricingTable(props) {
                             onChange={(currencyPlacement) => {
                                 handleBlockDefault({ currencyPlacement });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Price Period (per)")}
                             value={pricePeriod}
                             onChange={(pricePeriod) => handleBlockDefault({ pricePeriod })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Period Separator", "essential-blocks")}
                             value={periodSeparator}
                             onChange={(periodSeparator) => handleBlockDefault({ periodSeparator })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                     </PanelBody>
@@ -255,6 +275,7 @@ function PricingTable(props) {
                                     hideFeatures: !hideFeatures,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {hideFeatures !== true && (
                             <>
@@ -266,6 +287,7 @@ function PricingTable(props) {
                                             showFeatureLine: !showFeatureLine,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -278,6 +300,7 @@ function PricingTable(props) {
                             onChange={() => {
                                 handleBlockDefault({ showButton: !showButton });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         <EBIconPicker
                             value={buttonIcon}
@@ -294,6 +317,8 @@ function PricingTable(props) {
                             onChange={(buttonIconPosition) => {
                                 handleBlockDefault({ buttonIconPosition });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ResponsiveRangeController
                             baseLabel={__("Icon Spacing", "essential-blocks")}
@@ -307,11 +332,15 @@ function PricingTable(props) {
                             label={__("Button Text", "essential-blocks")}
                             value={buttonText}
                             onChange={(text) => handleBlockDefault({ buttonText: text })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Button Link", "essential-blocks")}
                             value={buttonURL}
                             onChange={(link) => handleBlockDefault({ buttonURL: link })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {buttonURL && (
@@ -323,6 +352,7 @@ function PricingTable(props) {
                                         newWindow: !newWindow,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -336,6 +366,7 @@ function PricingTable(props) {
                                     showRibbon: !showRibbon,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showRibbon && (
                             <>
@@ -351,9 +382,11 @@ function PricingTable(props) {
                                     onChange={(ribbonStyle) => {
                                         handleBlockDefault({ ribbonStyle });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {ribbonStyle == "ribbon-1" && (
-                                    <BaseControl label={__("Align", "essential-blocks")}>
+                                    <BaseControl label={__("Align", "essential-blocks")} __nextHasNoMarginBottom>
                                         <ButtonGroup>
                                             {RIBBON_ALIGNMENT_VERTICAL.map((item, index) => (
                                                 <Button
@@ -376,7 +409,7 @@ function PricingTable(props) {
 
                                 {ribbonStyle !== "ribbon-1" && (
                                     <>
-                                        <BaseControl label={__("Align", "essential-blocks")}>
+                                        <BaseControl label={__("Align", "essential-blocks")} __nextHasNoMarginBottom>
                                             <ButtonGroup>
                                                 {RIBBON_ALIGNMENT_HORIZONTAL.map((item, index) => (
                                                     <Button
@@ -403,6 +436,8 @@ function PricingTable(props) {
                                                     ribbonText,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                     </>
                                 )}
@@ -410,11 +445,11 @@ function PricingTable(props) {
                         )}
                     </PanelBody>
                     <PanelBody title={__("Price Table Box Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl controlName={priceTableBackground} />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">Border</h3>
                         </BaseControl>
 
@@ -429,7 +464,7 @@ function PricingTable(props) {
                         )}
                     </PanelBody>
                     <PanelBody title={__("Header Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
@@ -449,7 +484,7 @@ function PricingTable(props) {
                             </ButtonGroup>
                         </BaseControl>
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Title Style", "essential-blocks")}</h3>
                         </BaseControl>
                         <ColorControl
@@ -477,7 +512,7 @@ function PricingTable(props) {
                         <Divider />
                         {showSubtitle && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Subtitle Style", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <ColorControl
@@ -496,7 +531,7 @@ function PricingTable(props) {
                                 <Divider />
                             </>
                         )}
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Margin & Padding")}</h3>
                         </BaseControl>
                         <ResponsiveDimensionsControl
@@ -509,7 +544,7 @@ function PricingTable(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Price Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
@@ -529,7 +564,7 @@ function PricingTable(props) {
                             </ButtonGroup>
                         </BaseControl>
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Original Price", "essential-blocks")}</h3>
                         </BaseControl>
                         <ColorControl
@@ -542,7 +577,7 @@ function PricingTable(props) {
                             typographyPrefixConstant={typoPrefix_price_title}
                         />
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Original Price Currency", "essential-blocks")}</h3>
                         </BaseControl>
                         <ColorControl
@@ -561,7 +596,7 @@ function PricingTable(props) {
                         <Divider />
                         {showOnSale && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Sale Price", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <ColorControl
@@ -578,7 +613,7 @@ function PricingTable(props) {
                                     typographyPrefixConstant={typoPrefix_saleprice}
                                 />
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Sale Price Currency", "essential-blocks")}
                                     </h3>
@@ -603,7 +638,7 @@ function PricingTable(props) {
                                 <Divider />
                             </>
                         )}
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Pricing Period", "essential-blocks")}</h3>
                         </BaseControl>
                         <ColorControl
@@ -618,7 +653,7 @@ function PricingTable(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Features Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">Alignment</h3>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
@@ -657,7 +692,7 @@ function PricingTable(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Button Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">Alignment</h3>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
@@ -707,7 +742,7 @@ function PricingTable(props) {
                             color={hoverTextColor}
                             onChange={(hoverTextColor) => handleBlockDefault({ hoverTextColor })}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Button Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl
@@ -715,14 +750,14 @@ function PricingTable(props) {
                             noOverlay={true}
                             noMainBgi={true}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Button Border Style", "essential-blocks")}</h3>
                         </BaseControl>
                         <BorderShadowControl controlName={buttonBorderShadow} />
                     </PanelBody>
                     {showHeaderIcon && (
                         <PanelBody title={__("Icon Settings Style", "essential-blocks")} initialOpen={false}>
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
                                 <ButtonGroup>
                                     {ALIGNMENT.map((item, index) => (
@@ -750,6 +785,7 @@ function PricingTable(props) {
                                         showIconBackground: !showIconBackground,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                             {showIconBackground && (
                                 <>
@@ -808,7 +844,7 @@ function PricingTable(props) {
                                 onChange={(iconHoverColor) => handleBlockDefault({ iconHoverColor })}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">Border</h3>
                             </BaseControl>
                             <BorderShadowControl

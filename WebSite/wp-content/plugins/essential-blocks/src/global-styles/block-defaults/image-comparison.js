@@ -7,8 +7,8 @@ import {
     BaseControl,
     ToggleControl,
     RangeControl,
-    ButtonGroup,
-    Button,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -88,6 +88,7 @@ function ImageComparison(props) {
                             {leftImageURL && (
                                 <BaseControl
                                     label={__("Left Image", "essential-blocks")}
+                                    __nextHasNoMarginBottom
                                 >
                                     <ImageAvatar
                                         imageUrl={leftImageURL}
@@ -106,6 +107,7 @@ function ImageComparison(props) {
                                         "Right Image",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 >
                                     <ImageAvatar
                                         imageUrl={rightImageURL}
@@ -118,37 +120,18 @@ function ImageComparison(props) {
                                 </BaseControl>
                             )}
                         </>
-                        <BaseControl
-                            label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
-                        >
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            contentPosition === item.value
-                                        }
-                                        isSecondary={
-                                            contentPosition !== item.value
-                                        }
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl label={__("Alignment", "essential-blocks")} value={contentPosition} onChange={(value) => handleBlockDefault({ contentPosition: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                            ))}
+                        </ToggleGroupControl>
                         <ToggleControl
                             label={__("Full Width", "essential-blocks")}
                             checked={fullWidth}
                             onChange={() =>
                                 handleBlockDefault({ fullWidth: !fullWidth })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!fullWidth && (
                             <>
@@ -171,6 +154,7 @@ function ImageComparison(props) {
                             onChange={() =>
                                 handleBlockDefault({ hover: !hover })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Vertical Mode", "essential-blocks")}
@@ -180,6 +164,7 @@ function ImageComparison(props) {
                                     verticalMode: !verticalMode,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Labels", "essential-blocks")}
@@ -187,76 +172,23 @@ function ImageComparison(props) {
                             onChange={() =>
                                 handleBlockDefault({ showLabels: !showLabels })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showLabels && (
                             <>
                                 {verticalMode && (
-                                    <BaseControl
-                                        label={__(
-                                            "Label Position",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <ButtonGroup>
-                                            {VERTICAL_LABEL_POSITION.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isPrimary={
-                                                            verticalLabelPosition ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            verticalLabelPosition !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                verticalLabelPosition:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl label={__("Label Position", "essential-blocks")} value={verticalLabelPosition} onChange={(value) => handleBlockDefault({ verticalLabelPosition: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                        {VERTICAL_LABEL_POSITION.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
                                 {!verticalMode && (
-                                    <BaseControl
-                                        label={__(
-                                            "Label Position",
-                                            "essential-blocks"
-                                        )}
-                                    >
-                                        <ButtonGroup>
-                                            {HORIZONTAL_LABEL_POSITION.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isPrimary={
-                                                            horizontalLabelPosition ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            horizontalLabelPosition !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                horizontalLabelPosition:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl label={__("Label Position", "essential-blocks")} value={horizontalLabelPosition} onChange={(value) => handleBlockDefault({ horizontalLabelPosition: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                        {HORIZONTAL_LABEL_POSITION.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
                             </>
                         )}
@@ -264,6 +196,7 @@ function ImageComparison(props) {
                             label={__("Swap Images", "essential-blocks")}
                             checked={swap}
                             onChange={() => onImageSwap()}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("No Handle", "essential-blocks")}
@@ -271,6 +204,7 @@ function ImageComparison(props) {
                             onChange={() =>
                                 handleBlockDefault({ noHandle: !noHandle })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ResetControl
                             onReset={() =>
@@ -294,6 +228,8 @@ function ImageComparison(props) {
                                     "Update & reload to see effect in backend",
                                     "image-comparison"
                                 )}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
                         <ResetControl
@@ -314,6 +250,8 @@ function ImageComparison(props) {
                                 }
                                 min={0}
                                 max={10}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
                     </PanelBody>

@@ -4,7 +4,7 @@
   "name": "essential-blocks/team-member",
   "description": "Present your team members beautifully & gain instant credibility",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

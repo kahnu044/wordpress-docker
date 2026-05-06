@@ -6,7 +6,8 @@
      ];
     $_wrapper_classes = [
         $blockId,
-        $preset
+        $preset,
+        $showFeaturedPost && !empty($featuredPostId) ? 'has-featured-post' : ''
      ];
 
     $wrapper_attributes = get_block_wrapper_attributes(
@@ -69,7 +70,59 @@
                     'footerMeta' => ! empty( $footerMeta ) ? json_decode( $footerMeta ) : []
                 ]
             );
+
+            /**
+             * Featured Post Rendering
+             */
+            $featured_post = null;
+            $filtered_posts = $posts;
+
+            if ( isset( $showFeaturedPost ) && $showFeaturedPost && ! empty( $featuredPostId ) ) {
+                try {
+                    $featured_post_data = json_decode( $featuredPostId, true );
+                    if ( isset( $featured_post_data['value'] ) ) {
+                        $featured_post_id = intval( $featured_post_data['value'] );
+                        $featured_post = get_post( $featured_post_id );
+
+                        // Filter out the featured post from regular posts to avoid duplication
+                        if ( $featured_post && ! is_wp_error( $featured_post ) ) {
+                            $filtered_posts = array_filter( $posts, function( $post ) use ( $featured_post_id ) {
+                                return $post->ID !== $featured_post_id;
+                            } );
+                        }
+                    }
+                } catch ( Exception $e ) {
+                    // Silently fail if JSON parsing fails
+                    $featured_post = null;
+                }
+            }
+
+            // Update $_params with filtered posts
+            $_params['posts'] = $filtered_posts;
+
+            // When featured post is shown separately in v2, limit regular posts so
+            // total displayed stays equal to per_page (not per_page + 1).
+            if ( $version === 'v2' && $featured_post && ! is_wp_error( $featured_post ) ) {
+                $per_page = isset( $queryData['per_page'] ) ? max( 0, (int) $queryData['per_page'] - 1 ) : count( $filtered_posts );
+                $_params['posts'] = array_slice( array_values( $filtered_posts ), 0, $per_page );
+            }
+
             if ( $version === 'v2' ) {
+                // Display featured post before the regular posts wrapper
+                if ( $featured_post && ! is_wp_error( $featured_post ) ) {
+                    echo '<div class="ebpg-featured-post-wrapper">';
+
+                    // Create params for featured post with single post array
+                    $_featured_params = $_params;
+                    $_featured_params['posts'] = [ $featured_post ];
+                    $_featured_params['_is_featured'] = true;
+
+                    // Render featured post using featured-post-markup partial
+                    $helper::views( 'post-partials/grid-markup', $_featured_params );
+
+                    echo '</div>';
+                }
+
                 echo '<div class="eb-post-grid-posts-wrapper">';
             }
 

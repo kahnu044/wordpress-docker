@@ -4,7 +4,7 @@
   "name": "essential-blocks/product-details",
   "category": "essential-blocks",
   "description": "Display WooCommerce product details with an organized layout that helps grab customers' attention",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

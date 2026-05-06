@@ -43,6 +43,7 @@
 	position: relative;
 	/* Improve rendering performance */
 	will-change: auto;
+	overflow: hidden;
 
 	.eb-tab-wrapper {
 		box-sizing: border-box;

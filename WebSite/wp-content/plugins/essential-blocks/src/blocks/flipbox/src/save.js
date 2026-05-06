@@ -57,7 +57,7 @@ const Save = ({ attributes }) => {
     return (
         <BlockProps.Save attributes={attributes}>
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div
                     className={`eb-flipbox-container ${blockId}${alignmentClass}${flipModeClass}`}

@@ -4,11 +4,9 @@
 import { __ } from "@wordpress/i18n";
 import {
     SelectControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
-    PanelRow,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -93,56 +91,56 @@ function Inspector(props) {
                                     source === "dynamic-content" &&
                                     "Dynamic content will be displayed only within the Single Template."
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )
                     }
 
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Alignment", "essential-blocks")}
-                        id="eb-advance-heading-alignment"
+
+                        value={align}
+                        onChange={(value) =>
+                            setAttributes({
+                                align: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup id="eb-advance-heading-alignment">
-                            {TEXT_ALIGN.map((item, key) => (
-                                <Button
-                                    key={key}
-                                    // isLarge
-                                    isPrimary={align === item.value}
-                                    isSecondary={align !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            align: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {TEXT_ALIGN.map((item, key) => (
+                            <ToggleGroupControlOption
+                                key={key}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     {
                         source !== "dynamic-content" && (
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Tag", "essential-blocks")}
-                                id="eb-advance-heading-alignment"
+                                className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                                value={tagName}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        tagName: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                    {HEADING.map((item, key) => (
-                                        <Button
-                                            key={key}
-                                            // isLarge
-                                            isPrimary={tagName === item.value}
-                                            isSecondary={tagName !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    tagName: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {HEADING.map((item, key) => (
+                                    <ToggleGroupControlOption
+                                        key={key}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                         )
                     }
 
@@ -190,6 +188,8 @@ function Inspector(props) {
                                             min={1}
                                             max={200}
                                             step={1}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     )}
                             </>
@@ -254,6 +254,8 @@ function Inspector(props) {
                                 onChange={(value) =>
                                     setAttributes({ columnRuleStyle: value })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {columnRuleStyle !== "none" && (
                                 <>

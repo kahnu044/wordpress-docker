@@ -85,6 +85,7 @@ function ProgressBar(props) {
                                         showInline: !showInline,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <Divider />
@@ -104,6 +105,8 @@ function ProgressBar(props) {
                                 { label: "p", value: "p" },
                             ]}
                             onChange={(newTitleTag) => handleBlockDefault({ titleTag: newTitleTag })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                         <RangeControl
@@ -113,6 +116,8 @@ function ProgressBar(props) {
                             step={1}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ToggleControl
                             label={__("Show Counter?", "progress-bar")}
@@ -122,6 +127,7 @@ function ProgressBar(props) {
                                     displayProgress: !displayProgress,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {(layout === "line" || layout === "line_rainbow") && (
                             <>
@@ -134,6 +140,7 @@ function ProgressBar(props) {
                                             showStripe: !showStripe,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {showStripe && (
                                     <SelectControl
@@ -158,6 +165,8 @@ function ProgressBar(props) {
                                                 stripeAnimation,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -174,6 +183,8 @@ function ProgressBar(props) {
                                             prefix: newPrefix,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__("Suffix", "essential-blocks")}
@@ -183,6 +194,8 @@ function ProgressBar(props) {
                                             suffix: newSuffix,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -271,6 +284,8 @@ function ProgressBar(props) {
                             step={100}
                             min={1000}
                             max={10000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </PanelBody>
 
@@ -286,7 +301,7 @@ function ProgressBar(props) {
                                 />
                                 {layout !== "line_rainbow" && (
                                     <>
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">{__("Fill Color", "essential-blocks")}</h3>
                                         </BaseControl>
                                         <ToggleControl
@@ -297,6 +312,7 @@ function ProgressBar(props) {
                                                     isProgressGradient: !isProgressGradient,
                                                 });
                                             }}
+                                            __nextHasNoMarginBottom
                                         />
                                         {isProgressGradient || (
                                             <ColorControl
@@ -354,7 +370,7 @@ function ProgressBar(props) {
                                     color={backgroundColor}
                                     onChange={(backgroundColor) => handleBlockDefault({ backgroundColor })}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Fill Color", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <ToggleControl
@@ -365,6 +381,7 @@ function ProgressBar(props) {
                                             isProgressGradient: !isProgressGradient,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {isProgressGradient || (
                                     <ColorControl

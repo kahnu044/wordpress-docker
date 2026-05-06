@@ -6,10 +6,10 @@ import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
     RangeControl,
-    Button,
-    BaseControl,
-    ButtonGroup,
     SelectControl,
+    BaseControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -301,130 +301,148 @@ function Inspector(props) {
                             value={layoutPreset}
                             options={LAYOUT_PRESETS}
                             onChange={(layoutPreset) => handlePresetChange(layoutPreset)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {avatarInline && (
-                            <BaseControl label={__("User Info Position", "essential-blocks")}>
-                                <ButtonGroup>
-                                    {ALIGN_ITEMS.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={avatarPosition !== item.value}
-                                            isPrimary={avatarPosition === item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    avatarPosition: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("User Info Position", "essential-blocks")}
+
+                                value={avatarPosition}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        avatarPosition: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {ALIGN_ITEMS.map((item, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                         )}
 
                         {!avatarInline && displayAvatar && (
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={
                                     avatarInline
                                         ? __("User Info Align", "essential-blocks")
                                         : __("Image Align", "essential-blocks")
                                 }
+
+                                value={avatarAlign}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        avatarAlign: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup>
-                                    {ALIGN_ITEMS.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={avatarAlign !== item.value}
-                                            isPrimary={avatarAlign === item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    avatarAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {ALIGN_ITEMS.map((item, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                         )}
 
-                        <BaseControl label={__("Description Position", "essential-blocks")}>
-                            <ButtonGroup>
-                                {DESC_POSITIONS.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={avatarOrder !== item.value}
-                                        isPrimary={avatarOrder === item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                avatarOrder: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Description Position", "essential-blocks")}
 
-                        <BaseControl label={__("Description Align", "essential-blocks")}>
-                            <ButtonGroup>
-                                {TEXT_ALIGN.map((option, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={descTextAlign !== option.value}
-                                        isPrimary={descTextAlign === option.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                descTextAlign: option.value,
-                                            })
-                                        }
-                                    >
-                                        {option.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            value={avatarOrder}
+                            onChange={(value) =>
+                                setAttributes({
+                                    avatarOrder: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {DESC_POSITIONS.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
-                        <BaseControl label={__("User Name Align", "essential-blocks")}>
-                            <ButtonGroup>
-                                {TEXT_ALIGN.map((option, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={textAlign !== option.value}
-                                        isPrimary={textAlign === option.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                textAlign: option.value,
-                                            })
-                                        }
-                                    >
-                                        {option.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Description Align", "essential-blocks")}
 
-                        <BaseControl label={__("User Info Align", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ALIGN_ITEMS_VERTICAL.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={userInfoAlign !== item.value}
-                                        isPrimary={userInfoAlign === item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                userInfoAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            value={descTextAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    descTextAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TEXT_ALIGN.map((option, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={option.value}
+                                    label={option.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+
+                        <ToggleGroupControl
+                            label={__("User Name Align", "essential-blocks")}
+
+                            value={textAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    textAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TEXT_ALIGN.map((option, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={option.value}
+                                    label={option.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+
+                        <ToggleGroupControl
+                            label={__("User Info Align", "essential-blocks")}
+
+                            value={userInfoAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    userInfoAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGN_ITEMS_VERTICAL.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <ToggleControl
                             label="Enable Quote"
@@ -434,50 +452,55 @@ function Inspector(props) {
                                     enableQuote: !enableQuote,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {enableQuote && (
                             <>
-                                <BaseControl label={__("Quote Horizontal Align", "essential-blocks")}>
-                                    <ButtonGroup>
-                                        {ALIGN_ITEMS.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isSecondary={quoteHorizontalPosition !== item.value}
-                                                isPrimary={quoteHorizontalPosition === item.value}
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        quoteHorizontalPosition: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Quote Horizontal Align", "essential-blocks")}
+
+                                    value={quoteHorizontalPosition}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            quoteHorizontalPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {ALIGN_ITEMS.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 {quoteHorizontalPosition === "center" && (
-                                    <BaseControl
+                                    <ToggleGroupControl
                                         label={__("Quote Vertical Position", "essential-blocks")}
+
+                                        value={quoteVerticalPosition}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                quoteVerticalPosition: value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {DESC_POSITIONS.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={quoteVerticalPosition !== item.value}
-                                                    isPrimary={quoteVerticalPosition === item.value}
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            quoteVerticalPosition: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {DESC_POSITIONS.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
                             </>
                         )}
@@ -490,6 +513,7 @@ function Inspector(props) {
                                     showRating: !showRating,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showRating && (
@@ -506,33 +530,39 @@ function Inspector(props) {
                                     max={5}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ToggleControl
                                     label="Rating With Description"
                                     checked={ratingIndivisual}
                                     onChange={(ratingIndivisual) => handleRating(ratingIndivisual)}
+                                    __nextHasNoMarginBottom
                                 />
                                 {ratingIndivisual && (
                                     <>
-                                        <BaseControl label={__("Rating Position", "essential-blocks")}>
-                                            <ButtonGroup>
-                                                {RATING_POSITION.map((item, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={ratingPosition !== item.value}
-                                                        isPrimary={ratingPosition === item.value}
-                                                        onClick={() =>
-                                                            setAttributes({
-                                                                ratingPosition: item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                        <ToggleGroupControl
+                                            label={__("Rating Position", "essential-blocks")}
+
+                                            value={ratingPosition}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    ratingPosition: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        >
+                                            {RATING_POSITION.map((item, index) => (
+                                                <ToggleGroupControlOption
+                                                    key={index}
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            ))}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                             </>
@@ -548,6 +578,7 @@ function Inspector(props) {
                                     displayAvatar: !displayAvatar,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {displayAvatar && (
                             <ImageComponent.GeneralTab
@@ -577,6 +608,7 @@ function Inspector(props) {
                                                 avatarInline: !avatarInline,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
 
@@ -584,6 +616,7 @@ function Inspector(props) {
                                     <BaseControl
                                         id="eb-testimonial-image-pos"
                                         label={__("Image Position", "essential-blocks")}
+                                        __nextHasNoMarginBottom
                                     >
                                         <ToggleButton
                                             options={IMG_POSITIONS}
@@ -619,6 +652,7 @@ function Inspector(props) {
                                             borderRadius: borderRadius === 50 ? 0 : 50,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <RangeControl
@@ -631,6 +665,8 @@ function Inspector(props) {
                                     }
                                     min={0}
                                     max={50}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </InspectorPanel.PanelBody>
                         )}

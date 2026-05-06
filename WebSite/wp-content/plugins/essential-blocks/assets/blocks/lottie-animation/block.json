@@ -4,7 +4,7 @@
   "name": "essential-blocks/lottie-animation",
   "category": "essential-blocks",
   "description": "Lottie animation block allows you to add Lottie flies to your site. Control animation appearances, speeds, loop and so on.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

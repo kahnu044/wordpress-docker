@@ -159,6 +159,7 @@ function TeamMember(props) {
                                         showSocials: !showSocials,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </>
                     </PanelBody>
@@ -177,6 +178,7 @@ function TeamMember(props) {
                                     showCSeparator: !showCSeparator,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showSocials && "preset3" !== preset && (
                             <ToggleControl
@@ -190,6 +192,7 @@ function TeamMember(props) {
                                         showSSeparator: !showSSeparator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -215,6 +218,7 @@ function TeamMember(props) {
                                 "Avatar Horizontal Alignments",
                                 "essential-blocks"
                             )}
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup className="eb-btngrp-align">
                                 <Button
@@ -268,6 +272,7 @@ function TeamMember(props) {
                         <BaseControl
                             id="eb-team-contents-alignments"
                             label="Contents Horizontal Alignments"
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup className="eb-btngrp-align">
                                 <Button
@@ -323,6 +328,7 @@ function TeamMember(props) {
                                 <BaseControl
                                     id="eb-team-icons-alignments"
                                     label="Social Icons Horizontal Alignments"
+                                    __nextHasNoMarginBottom
                                 >
                                     <SelectControl
                                         // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -331,6 +337,8 @@ function TeamMember(props) {
                                         onChange={(iconsJustify) =>
                                             handleBlockDefault({ iconsJustify })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
                             </>
@@ -343,6 +351,7 @@ function TeamMember(props) {
                                     "Content Separator Alignment",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup className="eb-btngrp-align">
                                     <Button
@@ -398,6 +407,7 @@ function TeamMember(props) {
                             <BaseControl
                                 id="eb-team-contents-alignments"
                                 label="Social Separator Alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup className="eb-btngrp-align">
                                     <Button
@@ -476,6 +486,7 @@ function TeamMember(props) {
                                             isImgHeightAuto: !isImgHeightAuto,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {!isImgHeightAuto && (
                                     <ResponsiveRangeController
@@ -510,6 +521,7 @@ function TeamMember(props) {
                                             imgBeforeEl: !imgBeforeEl,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {imgBeforeEl && (
                                     <>
@@ -584,6 +596,7 @@ function TeamMember(props) {
                             onChange={() =>
                                 handleBlockDefault({ showDescs: !showDescs })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showDescs && (
                             <>
@@ -679,6 +692,7 @@ function TeamMember(props) {
                                         isIconsDevider: !isIconsDevider,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {isIconsDevider && (
                                 <>
@@ -700,6 +714,8 @@ function TeamMember(props) {
                                         step={1}
                                         min={1}
                                         max={50}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                     <RangeControl
                                         label={__("Height", "essential-blocks")}
@@ -710,6 +726,8 @@ function TeamMember(props) {
                                         step={1}
                                         min={1}
                                         max={300}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                     <ResponsiveRangeController
                                         baseLabel={__(
@@ -733,6 +751,8 @@ function TeamMember(props) {
                                 onChange={(icnEffect) => {
                                     handleBlockDefault({ icnEffect });
                                 }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <PanelBody
                                 title={__("Icons Border", "essential-blocks")}
@@ -804,6 +824,7 @@ function TeamMember(props) {
                             />
                             <BaseControl
                                 label={__("Separator Type", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 <SelectControl
                                     value={cSepType}
@@ -811,6 +832,8 @@ function TeamMember(props) {
                                     onChange={(cSepType) => {
                                         handleBlockDefault({ cSepType });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                         </PanelBody>
@@ -843,6 +866,7 @@ function TeamMember(props) {
                             />
                             <BaseControl
                                 label={__("Separator Type", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 <SelectControl
                                     value={sSepType}
@@ -850,6 +874,8 @@ function TeamMember(props) {
                                     onChange={(sSepType) => {
                                         handleBlockDefault({ sSepType });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                         </PanelBody>

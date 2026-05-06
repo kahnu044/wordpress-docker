@@ -62,11 +62,23 @@ class CSSParser
                 }
                 $blockMeta = "";
                 if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
-                    $blockMeta = $attributes[ 'blockMeta' ];
+                    // Decode HTML entities that WordPress encodes when saving block attributes
+                    $blockMeta = is_array( $attributes[ 'blockMeta' ] )
+                        ? array_map( function( $style ) {
+                            $decoded = html_entity_decode( $style, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                            // Strip any literal 'undefined' values leaked from JS during save
+                            return str_replace( 'undefined', '', $decoded );
+                        }, $attributes[ 'blockMeta' ] )
+                        : $attributes[ 'blockMeta' ];
                 }
                 $commonStyles = "";
                 if ( isset( $attributes[ 'commonStyles' ] ) && ! empty( $attributes[ 'commonStyles' ] ) ) {
-                    $commonStyles = $attributes[ 'commonStyles' ];
+                    // Decode HTML entities that WordPress encodes when saving block attributes
+                    $commonStyles = is_array( $attributes[ 'commonStyles' ] )
+                        ? array_map( function( $style ) {
+                            return html_entity_decode( $style, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                        }, $attributes[ 'commonStyles' ] )
+                        : $attributes[ 'commonStyles' ];
                 }
                 $customCss = "";
                 if ( ! $isCustomCssError && isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
@@ -188,7 +200,21 @@ class CSSParser
             }
         }
 
-        return trim( $css );
+        $css = trim( $css );
+
+        /**
+         * Filter the generated CSS before it's written to file.
+         *
+         * This filter allows third-party plugins (like Optimole) to modify the CSS output
+         * before it's persisted to disk. This is particularly useful for CDN-based image
+         * optimization plugins that need to process background image URLs.
+         *
+         * @since 5.0.9
+         *
+         * @param string $css The generated CSS string.
+         * @param array $style_object The original style object array used to generate the CSS.
+         */
+        return apply_filters( 'eb_blocks_generated_css', $css, $style_object );
     }
 
     /**

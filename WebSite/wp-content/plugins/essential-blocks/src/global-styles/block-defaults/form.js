@@ -198,6 +198,8 @@ function Form(props) {
                                         formTitle: value,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__(
@@ -210,6 +212,7 @@ function Form(props) {
                                         showLabel: !showLabel,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__(
@@ -222,6 +225,7 @@ function Form(props) {
                                         showInputIcon: !showInputIcon,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {/* {applyFilters(
@@ -288,6 +292,7 @@ function Form(props) {
                                             value={mailBody}
                                             rows={5}
                                             onChange={(text) => handleBlockDefault({ mailBody: text })}
+                                            __nextHasNoMarginBottom
                                         /> */}
                             <TextControl
                                 label={__(
@@ -313,6 +318,8 @@ function Form(props) {
                                     "Use commas to separate emails",
                                     "essential-blocks"
                                 )}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <TextControl
                                 label={__(
@@ -334,6 +341,8 @@ function Form(props) {
                                     "Use commas to separate emails",
                                     "essential-blocks"
                                 )}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <TextControl
                                 label={__(
@@ -355,6 +364,8 @@ function Form(props) {
                                     "Use commas to separate emails",
                                     "essential-blocks"
                                 )}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <TextControl
                                 label={__(
@@ -374,6 +385,8 @@ function Form(props) {
                                         mailSubject: text,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
 
                             {/* <TextareaControl
@@ -386,6 +399,7 @@ function Form(props) {
                                                     mailBody: text,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         /> */}
                         </PanelBody>
                         <PanelBody
@@ -427,6 +441,7 @@ function Form(props) {
                                                 successMessage: text,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                     <TextareaControl
                                         label="Default Error Message"
@@ -438,6 +453,7 @@ function Form(props) {
                                                 errorMessage: text,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 </>
                             )}
@@ -451,6 +467,7 @@ function Form(props) {
                                         validationErrorMessage: text,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </PanelBody>
 
@@ -500,6 +517,8 @@ function Form(props) {
                                             buttonText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -512,6 +531,7 @@ function Form(props) {
                                             btnAddIcon: !btnAddIcon,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {btnAddIcon && (
                                     <>
@@ -550,6 +570,7 @@ function Form(props) {
                                     "Width",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {FORM_WIDTH.map(
@@ -598,6 +619,7 @@ function Form(props) {
                                             "Alignment",
                                             "essential-blocks"
                                         )}
+                                        __nextHasNoMarginBottom
                                     >
                                         <ButtonGroup id="eb-button-group-alignment">
                                             {CONTENTS_ALIGNMENTS.map(
@@ -676,6 +698,7 @@ function Form(props) {
                                         "Alignment",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 >
                                     <ButtonGroup id="eb-button-group-alignment">
                                         {CONTENTS_ALIGNMENTS.map(
@@ -828,6 +851,7 @@ function Form(props) {
                                         "Alignment",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 >
                                     <ButtonGroup id="eb-button-group-alignment">
                                         {CONTENTS_ALIGNMENTS.map(
@@ -946,6 +970,8 @@ function Form(props) {
                                     max={5}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ButtonGroup className="eb-inspector-btn-group">
@@ -1094,6 +1120,8 @@ function Form(props) {
                                     max={5}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ButtonGroup className="eb-inspector-btn-group">
@@ -1217,6 +1245,7 @@ function Form(props) {
                                     "Alignment",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {CONTENTS_ALIGNMENTS.map(
@@ -1251,6 +1280,7 @@ function Form(props) {
                                             "Vertical Align",
                                             "essential-blocks"
                                         )}
+                                        __nextHasNoMarginBottom
                                     >
                                         <ButtonGroup>
                                             {VERTICAL_ALIGN.map(
@@ -1314,6 +1344,7 @@ function Form(props) {
                                     "Width",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {BUTTON_WIDTH.map(
@@ -1499,6 +1530,7 @@ function Form(props) {
                                             "Icon Postion",
                                             "essential-blocks"
                                         )}
+                                        __nextHasNoMarginBottom
                                     >
                                         <ButtonGroup id="eb-button-group-alignment">
                                             {ICON_POSITION.map(
@@ -1595,6 +1627,7 @@ function Form(props) {
                                     "Alignment",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {CONTENTS_ALIGNMENTS.map(
@@ -1635,6 +1668,7 @@ function Form(props) {
                                     "Alignment",
                                     "essential-blocks"
                                 )}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {CONTENTS_ALIGNMENTS.map(

@@ -7,11 +7,11 @@ import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     TabPanel,
     PanelRow,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -245,6 +245,8 @@ function Inspector(props) {
                         value={stylePreset}
                         options={STYLES}
                         onChange={(stylePreset) => changeStyle(stylePreset)}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     {stylePreset === "circle" && (
                         <PanelRow>
@@ -276,6 +278,7 @@ function Inspector(props) {
                         label={__("Auto Fit Image?", "essential-blocks")}
                         checked={autoFit}
                         onChange={(autoFit) => setAttributes({ autoFit })}
+                        __nextHasNoMarginBottom
                     />
 
                     <SelectControl
@@ -283,12 +286,15 @@ function Inspector(props) {
                         value={hoverEffect}
                         options={HOVER_EFFECT}
                         onChange={(hoverEffect) => setAttributes({ hoverEffect })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     <ToggleControl
                         label={__("Display Attribution", "essential-blocks")}
                         checked={displayAttribution}
                         onChange={() => checkAttribution(!displayAttribution)}
+                        __nextHasNoMarginBottom
                     />
 
                     {displayAttribution && (
@@ -297,6 +303,8 @@ function Inspector(props) {
                             value={attributionStyle}
                             options={ATTRIBUTION_STYLES}
                             onChange={(attributionStyle) => changCaptionStyle(attributionStyle)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                 </InspectorPanel.PanelBody>
@@ -306,7 +314,7 @@ function Inspector(props) {
                     <InspectorPanel.PanelBody title={__("Image Settings", "essential-blocks")} initialOpen={true}>
                         {!complexStyle && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Border", "essential-blocks")}
                                     </h3>
@@ -349,23 +357,25 @@ function Inspector(props) {
 
                             {displayAttribution && (
                                 <>
-                                    <BaseControl label={__("Text Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {TEXT_ALIGN.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    // isLarge
-                                                    isPrimary={textAlign === item.value}
-                                                    isSecondary={textAlign !== item.value}
-                                                    onClick={() =>
-                                                        setAttributes({ textAlign: item.value })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Text Align", "essential-blocks")}
+
+                                        value={textAlign}
+                                        onChange={(value) =>
+                                            setAttributes({ textAlign: value })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {TEXT_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
 
                                     <ResponsiveDimensionsControl
                                         controlName={ATTRIBUTION_MARGIN}

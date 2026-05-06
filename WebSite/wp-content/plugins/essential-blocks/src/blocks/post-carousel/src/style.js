@@ -524,11 +524,11 @@ export default function Style(props) {
 		}
 
 		.eb-post-carousel-wrapper.${blockId} .slick-list {
-			margin: calc(-${slidesGapRange}${slidesGapUnit}/2);
+			margin: calc(-${slidesGapRange ?? 0}${slidesGapUnit || 'px'}/2);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-slide .ebpg-carousel-post-holder {
-			margin: calc(${slidesGapRange}${slidesGapUnit}/2);
-			height: calc(100% - ${slideGap});
+			margin: calc(${slidesGapRange ?? 0}${slidesGapUnit || 'px'}/2);
+			height: calc(100% - ${slideGap || '0px'});
 		}
 	`;
 
@@ -544,11 +544,11 @@ export default function Style(props) {
 			${wrapperBDShadowHoverTab}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-list {
-			margin: calc(-${TABslidesGapRange}${TABslidesGapUnit}/2);
+			margin: calc(-${TABslidesGapRange ?? 0}${TABslidesGapUnit || 'px'}/2);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-slide .ebpg-carousel-post-holder {
-			margin: calc(${TABslidesGapRange}${TABslidesGapUnit}/2);
-			height: calc(100% - ${slideGapTab});
+			margin: calc(${TABslidesGapRange ?? 0}${TABslidesGapUnit || 'px'}/2);
+			height: calc(100% - ${slideGapTab || '0px'});
 		}
 	`;
     const wrapperStylesMobile = `
@@ -563,11 +563,11 @@ export default function Style(props) {
 			${wrapperBDShadowHoverMobile}
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-list {
-			margin: calc(-${MOBslidesGapRange}${MOBslidesGapUnit}/2);
+			margin: calc(-${MOBslidesGapRange ?? 0}${MOBslidesGapUnit || 'px'}/2);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-slide .ebpg-carousel-post-holder {
-			margin: calc(${MOBslidesGapRange}${MOBslidesGapUnit}/2);
-			height: calc(100% - ${slideGapMob});
+			margin: calc(${MOBslidesGapRange ?? 0}${MOBslidesGapUnit || 'px'}/2);
+			height: calc(100% - ${slideGapMob || '0px'});
 		}
 	`;
 
@@ -1323,7 +1323,7 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{
-			margin-bottom: calc(${carouselDotPosition}px + 20px);
+			margin-bottom: calc(${carouselDotPosition ?? 0}px + 20px);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-dots {
 			${dotsPositionDesktop}
@@ -1356,10 +1356,10 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active button:before {
 			background-color: ${dotsActiveColor} !important;
-			width: calc(${dotsSizeRange}${dotsSizeUnit}* 2);
+			width: calc(${dotsSizeRange ?? 0}${dotsSizeUnit || 'px'}* 2);
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active {
-			width: calc(${dotsSizeRange}${dotsSizeUnit}* 2);
+			width: calc(${dotsSizeRange ?? 0}${dotsSizeUnit || 'px'}* 2);
 		}
 
 		.eb-post-carousel-wrapper.${blockId}.dot-style-4 .slick-dots li button:before {
@@ -1369,10 +1369,10 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-4 .slick-dots li.slick-active button:before {
 			background-color: ${dotsActiveColor} !important;
-			width: calc(${dotsSizeRange}${dotsSizeUnit});
+			width: calc(${dotsSizeRange ?? 0}${dotsSizeUnit || 'px'});
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-4 .slick-dots li.slick-active {
-			width: calc(${dotsSizeRange}${dotsSizeUnit});
+			width: calc(${dotsSizeRange ?? 0}${dotsSizeUnit || 'px'});
 		}
 
 		.eb-post-carousel-wrapper.${blockId}.eb-dot-style-modern-1 .slick-dots li button:before,
@@ -1413,7 +1413,7 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{
-			margin-bottom: calc(${carouselDotPositionTab}px + 20px);
+			margin-bottom: calc(${carouselDotPositionTab ?? 0}px + 20px);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-dots {
 			${dotsPositionTab}
@@ -1435,10 +1435,10 @@ export default function Style(props) {
 		}
 
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active button:before {
-			width: calc(${TABdotsSizeRange}${TABdotsSizeUnit}* 2);
+			width: calc(${TABdotsSizeRange ?? 0}${TABdotsSizeUnit || 'px'}* 2);
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active {
-			width: calc(${TABdotsSizeRange}${TABdotsSizeUnit}* 2);
+			width: calc(${TABdotsSizeRange ?? 0}${TABdotsSizeUnit || 'px'}* 2);
 		}
 	`;
     const sliderControlsStylesMobile = `
@@ -1467,7 +1467,7 @@ export default function Style(props) {
 		}
 		.eb-post-carousel-wrapper.${blockId}.eb-slider-dots,
 		.eb-post-carousel-wrapper.${blockId}.slick-dotted.slick-slider{
-			margin-bottom: calc(${carouselDotPositionMob}px + 20px);
+			margin-bottom: calc(${carouselDotPositionMob ?? 0}px + 20px);
 		}
 		.eb-post-carousel-wrapper.${blockId} .slick-dots {
 			${dotsPositionMobile}
@@ -1489,10 +1489,10 @@ export default function Style(props) {
 		}
 
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active button:before {
-			width: calc(${MOBdotsSizeRange}${MOBdotsSizeUnit}* 2);
+			width: calc(${MOBdotsSizeRange ?? 0}${MOBdotsSizeUnit || 'px'}* 2);
 		}
 		.eb-post-carousel-wrapper.${blockId}.dot-style-3 .slick-dots li.slick-active {
-			width: calc(${MOBdotsSizeRange}${MOBdotsSizeUnit}* 2);
+			width: calc(${MOBdotsSizeRange ?? 0}${MOBdotsSizeUnit || 'px'}* 2);
 		}
 	`;
 

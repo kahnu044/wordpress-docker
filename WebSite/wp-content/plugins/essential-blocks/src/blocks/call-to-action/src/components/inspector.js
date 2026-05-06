@@ -4,10 +4,10 @@
 import { __ } from "@wordpress/i18n";
 import {
     SelectControl,
-    ButtonGroup,
-    Button,
     BaseControl,
     ToggleControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -111,6 +111,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     contentStyle: newStyle,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -123,6 +125,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showSubtitle: !showSubtitle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -135,6 +138,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showIcon: !showIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -147,6 +151,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showButton: !showButton,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <DynamicInputControl
                             label={__("Title", "essential-blocks")}
@@ -174,7 +179,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(text) => setAttributes({ description: text })}
                             isTextarea={true}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__(
                                     "Sorting",
@@ -201,7 +206,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={false}
                         >
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <EBIconPicker
                                     value={icon}
                                     attributeName={'icon'}
@@ -229,41 +234,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={false}
                         >
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__(
                                     "Alignment",
                                     "essential-blocks"
                                 )}
-                                id="eb-button-group-alignment"
+
+                                value={buttonPosition}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        buttonPosition: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="eb-button-group-alignment">
-                                    {BUTTON_POSITION.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    buttonPosition ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    buttonPosition !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            buttonPosition:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {BUTTON_POSITION.map(
+                                    (item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
                             <SelectControl
                                 label={__(
                                     "Button Size",
@@ -276,6 +272,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         buttonSize: newButtonSize,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {buttonSize === "custom" && (
                                 <ResponsiveDimensionsControl
@@ -320,6 +318,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             linkNewTab: !linkNewTab,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             )}
 
@@ -335,6 +334,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         btnHoverEffect: newHoverEffect,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </InspectorPanel.PanelBody>
                     )}
@@ -346,38 +347,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Title", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__(
                                 "Title Tag",
                                 "essential-blocks"
                             )}
+
+                            value={titleTag}
+                            onChange={(value) =>
+                                setAttributes({
+                                    titleTag: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {HEADER_TAGS.map(
-                                    (header, index) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={
-                                                titleTag !==
-                                                header.value
-                                            }
-                                            isPrimary={
-                                                titleTag ===
-                                                header.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    titleTag:
-                                                        header.value,
-                                                })
-                                            }
-                                        >
-                                            {header.label}
-                                        </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {HEADER_TAGS.map(
+                                (header, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={header.value}
+                                        label={header.label}
+                                    />
+                                )
+                            )}
+                        </ToggleGroupControl>
                         <TypographyDropdown
                             baseLabel={__(
                                 "Typography",
@@ -411,38 +406,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={false}
                         >
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__(
                                     "Subtitle Tag",
                                     "essential-blocks"
                                 )}
+
+                                value={subtitleTag}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        subtitleTag: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup>
-                                    {HEADER_TAGS.map(
-                                        (header, index) => (
-                                            <Button
-                                                key={index}
-                                                isSecondary={
-                                                    subtitleTag !==
-                                                    header.value
-                                                }
-                                                isPrimary={
-                                                    subtitleTag ===
-                                                    header.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        subtitleTag:
-                                                            header.value,
-                                                    })
-                                                }
-                                            >
-                                                {header.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {HEADER_TAGS.map(
+                                    (header, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={header.value}
+                                            label={header.label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__(
                                     "Typography",
@@ -577,7 +566,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 }
                                 attributeName={'buttonHoverBackgroundColor'}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__(
                                         "Border",

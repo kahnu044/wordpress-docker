@@ -6,11 +6,11 @@ import { useEffect, useState } from "@wordpress/element";
 import {
     PanelBody,
     SelectControl,
-    ButtonGroup,
-    Button,
     BaseControl,
     TextControl,
     ToggleControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -103,24 +103,27 @@ function CallToAction(props) {
                     )}
 
                     <PanelBody title={__("Button Settings", "essential-blocks")} initialOpen={false}>
-                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-button-group-alignment">
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {BUTTON_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={buttonPosition === item.value}
-                                        isSecondary={buttonPosition !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                buttonPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={buttonPosition}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {BUTTON_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <SelectControl
                             label={__("Button Size", "essential-blocks")}
                             value={buttonSize}
@@ -130,6 +133,8 @@ function CallToAction(props) {
                                     buttonSize: newButtonSize,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {buttonSize === "custom" && (
                             <ResponsiveDimensionsControl
@@ -142,6 +147,8 @@ function CallToAction(props) {
                             value={buttonURL}
                             help={__("Use https or http", "essential-blocks")}
                             onChange={(link) => handleBlockDefault({ buttonURL: link })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {buttonURL && (
                             <ToggleControl
@@ -152,6 +159,7 @@ function CallToAction(props) {
                                         linkNewTab: !linkNewTab,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -164,27 +172,32 @@ function CallToAction(props) {
                                     btnHoverEffect: newHoverEffect,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody title={__("Title Style", "essential-blocks")} initialOpen={false}>
-                        <BaseControl label={__("Title Tag", "essential-blocks")}>
-                            <ButtonGroup>
-                                {HEADER_TAGS.map((header, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={titleTag !== header.value}
-                                        isPrimary={titleTag === header.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                titleTag: header.value,
-                                            })
-                                        }
-                                    >
-                                        {header.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Title Tag", "essential-blocks")}
+
+                            value={titleTag}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    titleTag: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {HEADER_TAGS.map((header, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={header.value}
+                                    label={header.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={typoPrefix_title}
@@ -278,7 +291,7 @@ function CallToAction(props) {
                                     })
                                 }
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                             </BaseControl>
                             <BorderShadowControl controlName={BUTTON_BORDER} />
@@ -297,10 +310,10 @@ function CallToAction(props) {
                             />
                         </PanelBody>
                         <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
-                            <BackgroundControl controlName={WRAPPER_BACK}  />
+                            <BackgroundControl controlName={WRAPPER_BACK} />
                         </PanelBody>
                         <PanelBody title={__("Border", "essential-blocks")} initialOpen={false}>
-                            <BorderShadowControl controlName={WRAPPER_BORDER}  />
+                            <BorderShadowControl controlName={WRAPPER_BORDER} />
                         </PanelBody>
                     </PanelBody>
                 </div>

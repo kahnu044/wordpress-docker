@@ -4,15 +4,14 @@
 import { __ } from "@wordpress/i18n";
 import { useState, useEffect } from "@wordpress/element";
 import {
-    BaseControl,
     ToggleControl,
     RangeControl,
     SelectControl,
-    ButtonGroup,
-    Button,
     TextControl,
     CheckboxControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { unescape as unescapeString } from "lodash";
 /**
@@ -121,7 +120,9 @@ const Inspector = ({ attributes, setAttributes }) => {
         closeBtnSize,
         closeIconSize,
         enableHighlight,
-        alignment
+        alignment,
+        allowConfigurablePrefix,
+        configurablePrefix
     } = attributes;
 
     const [options, setOptions] = useState(HEADERS);
@@ -284,6 +285,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             displayTitle: !displayTitle,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             )}
                             <DynamicInputControl
@@ -339,6 +341,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             value={preset}
                             options={PRESET}
                             onChange={(preset) => handlePresetChange(preset)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -351,6 +355,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     hasUnderline: !hasUnderline,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {displayTitle && !isSticky && (
                             <ToggleControl
@@ -364,6 +369,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         collapsible: !collapsible,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -379,6 +385,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         initialCollapse: !initialCollapse,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -396,6 +403,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     isSticky: !isSticky,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {isSticky && (
                             <>
@@ -413,6 +421,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             stickyPosition,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -425,6 +435,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             stickyHideOnMobile: !stickyHideOnMobile,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -439,6 +450,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     itemCollapsed: !itemCollapsed,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -451,6 +463,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     enableHighlight: !enableHighlight,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -466,6 +479,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     enableCopyLink: !enableCopyLink,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__(
@@ -479,6 +493,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 })
                             }
                             type="number"
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -492,6 +508,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     enableListStyle: !enableListStyle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {enableListStyle && (
@@ -522,10 +539,35 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         listStyle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
-
+                        <ToggleControl
+                            label={__("Allow Configurable Prefix", "essential-blocks")}
+                            checked={allowConfigurablePrefix}
+                            onChange={() =>
+                                setAttributes({
+                                    allowConfigurablePrefix: !allowConfigurablePrefix,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        {allowConfigurablePrefix && (
+                            <TextControl
+                                label={__("Configurable Prefix", "essential-blocks")}
+                                value={configurablePrefix}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        configurablePrefix: value,
+                                    })
+                                }
+                                placeholder="eb-toc-"
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                        )}
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__("Scroll", "essential-blocks")}
@@ -542,6 +584,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     isSmooth: !isSmooth,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -555,6 +598,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     scrollToTop: !scrollToTop,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {scrollToTop && (
@@ -583,6 +627,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 scrollTarget,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 <RangeControl
@@ -598,6 +644,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <RangeControl
@@ -613,6 +661,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ColorControl
@@ -679,42 +729,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={true}
                         >
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__(
                                     "Align",
                                     "essential-blocks"
                                 )}
-                                className="eb-base-control"
+                                className="eb-base-control newtogglegroupcontrol"
+                                value={titleAlign}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        titleAlign: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup>
-                                    {ALIGNS.map(
-                                        (align, index) => (
-                                            <Button
-                                                key={index}
-                                                isSmall
-                                                isPrimary={
-                                                    titleAlign ===
-                                                    align.value
-                                                }
-                                                isSecondary={
-                                                    titleAlign !==
-                                                    align.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            titleAlign:
-                                                                align.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {align.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {ALIGNS.map(
+                                    (align, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={align.value}
+                                            label={align.label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
 
                             <ColorControl
                                 label={__(
@@ -756,6 +796,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         seperator: !seperator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {seperator && (
                                 <>
@@ -774,6 +815,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         }
                                         min={0}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
 
                                     <ColorControl
@@ -799,6 +842,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 seperatorStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </>
                             )}
@@ -833,6 +878,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 onChange={(indent) =>
                                     setAttributes({ indent })
                                 }
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
 
                             <UnitControl
@@ -869,6 +916,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 min={0}
                                 max={CONTENT_GAP_MAX}
                                 step={CONTENT_GAP_STEP}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
 
                             <ColorControl
@@ -924,6 +973,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         showListSeparator: !showListSeparator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {showListSeparator && (
                                 <>
@@ -944,6 +994,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         }
                                         min={0}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                     <SelectControl
                                         label={__(
@@ -961,6 +1013,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 listSeperatorStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
 
                                     <ColorControl
@@ -1035,6 +1089,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         }
                                         min={0}
                                         max={1000}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                 </ResetControl>
                             </div>
@@ -1063,6 +1119,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             )}
 
@@ -1122,6 +1180,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         }
                                         min={0}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                     <RangeControl
                                         label={__(
@@ -1136,6 +1196,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         }
                                         min={0}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
 
 

@@ -9,10 +9,10 @@ import {
     SelectControl,
     ToggleControl,
     TextControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -179,6 +179,7 @@ function PostCarousel(props) {
                             onChange={() => {
                                 handleBlockDefault({ arrows: !arrows });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Equal Height", "essential-blocks")}
@@ -188,6 +189,7 @@ function PostCarousel(props) {
                                     adaptiveHeight: !adaptiveHeight,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
 
@@ -195,18 +197,21 @@ function PostCarousel(props) {
                             label={__("Autoplay", "essential-blocks")}
                             checked={autoplay}
                             onChange={() => handleBlockDefault({ autoplay: !autoplay })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Dots", "essential-blocks")}
                             checked={dots}
                             onChange={() => handleBlockDefault({ dots: !dots })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Infinite", "essential-blocks")}
                             checked={infinite}
                             onChange={() => handleBlockDefault({ infinite: !infinite })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -217,6 +222,7 @@ function PostCarousel(props) {
                                     pauseOnHover: !pauseOnHover,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ResponsiveRangeController
@@ -235,6 +241,8 @@ function PostCarousel(props) {
                                 onChange={(autoplaySpeed) => handleBlockDefault({ autoplaySpeed })}
                                 min={0}
                                 max={8000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -244,6 +252,8 @@ function PostCarousel(props) {
                             onChange={(speed) => handleBlockDefault({ speed })}
                             min={0}
                             max={3000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {dots && (
@@ -252,6 +262,8 @@ function PostCarousel(props) {
                                 value={dotPreset}
                                 options={DOT_PRESETS}
                                 onChange={(dotPreset) => handleBlockDefault({ dotPreset })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -262,6 +274,8 @@ function PostCarousel(props) {
                             value={preset}
                             options={PRESETS}
                             onChange={(selected) => changePreset(selected)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -272,6 +286,7 @@ function PostCarousel(props) {
                                     showThumbnail: !showThumbnail,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showThumbnail && (
@@ -279,7 +294,7 @@ function PostCarousel(props) {
                                 <ResponsiveRangeController
                                     baseLabel={__("Thumbnail Height", "essential-blocks")}
                                     controlName={THUMBNAIL_IMAGE_SIZE}
-                                   
+
                                     units={HEIGHT_UNIT_TYPES}
                                     min={1}
                                     max={500}
@@ -289,7 +304,7 @@ function PostCarousel(props) {
                                     <ResponsiveRangeController
                                         baseLabel={__("Thumbnail Width", "essential-blocks")}
                                         controlName={COLUMN_MEDIA_WIDTH}
-                                       
+
                                         units={[{ label: "%", value: "%" }]}
                                         min={0}
                                         max={100}
@@ -300,28 +315,11 @@ function PostCarousel(props) {
                         )}
 
                         {preset === "style-4" && (
-                            <BaseControl
-                                label={__("Content Vertical Alignment", "essential-blocks")}
-                                id="essential-blocks"
-                            >
-                                <ButtonGroup id="essential-blocks">
-                                    {VERTICAL_POSITION.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={styleVerticalAlignment === item.value}
-                                            isSecondary={styleVerticalAlignment !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    styleVerticalAlignment: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Content Vertical Alignment", "essential-blocks")} value={styleVerticalAlignment} onChange={(value) => handleBlockDefault({ styleVerticalAlignment: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {VERTICAL_POSITION.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                         )}
 
                         <ToggleControl
@@ -330,6 +328,7 @@ function PostCarousel(props) {
                             onChange={() => {
                                 handleBlockDefault({ showTitle: !showTitle });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showTitle && (
@@ -341,6 +340,8 @@ function PostCarousel(props) {
                                     onChange={(value) => {
                                         handleBlockDefault({ titleTag: value });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <RangeControl
@@ -353,6 +354,8 @@ function PostCarousel(props) {
                                     }
                                     min={-1}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -365,6 +368,7 @@ function PostCarousel(props) {
                                     showContent: !showContent,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showContent && (
@@ -379,6 +383,8 @@ function PostCarousel(props) {
                                     }
                                     min={-1}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <TextControl
@@ -390,6 +396,8 @@ function PostCarousel(props) {
                                             expansionIndicator: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -403,6 +411,7 @@ function PostCarousel(props) {
                                         showReadMore: !showReadMore,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -417,6 +426,8 @@ function PostCarousel(props) {
                                             readmoreText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -427,6 +438,7 @@ function PostCarousel(props) {
                             onChange={() => {
                                 handleBlockDefault({ showMeta: !showMeta });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showMeta && (
@@ -499,13 +511,13 @@ function PostCarousel(props) {
                             {preset != "style-4" && (
                                 <>
                                     <ResponsiveDimensionsControl
-                                       
+
                                         controlName={THUMBNAIL_BORDER_RADIUS}
                                         baseLabel="Border Radius"
                                     />
 
                                     <ResponsiveDimensionsControl
-                                       
+
                                         controlName={THUMBNAIL_MARGIN}
                                         baseLabel="Margin"
                                     />
@@ -535,23 +547,11 @@ function PostCarousel(props) {
 
                     {showTitle && (
                         <PanelBody title={__("Title", "essential-blocks")} initialOpen={false}>
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl label={__("Title", "essential-blocks")} className="newtogglegroupcontrol eb-inspector-btn-group" value={titleColorStyle} onChange={(value) => handleBlockDefault({ titleColorStyle: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={titleColorStyle === item.value}
-                                        isSecondary={titleColorStyle !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                titleColorStyle: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {titleColorStyle === "normal" && (
                                 <ColorControl
@@ -576,25 +576,11 @@ function PostCarousel(props) {
                                     }
                                 />
                             )}
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={titleTextAlign === item.value}
-                                            isSecondary={titleTextAlign !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    titleTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Alignment", "essential-blocks")} value={titleTextAlign} onChange={(value) => handleBlockDefault({ titleTextAlign: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_TITLE_TYPOGRAPHY}
@@ -613,25 +599,11 @@ function PostCarousel(props) {
                                 color={contentColor}
                                 onChange={(color) => handleBlockDefault({ contentColor: color })}
                             />
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={contentTextAlign === item.value}
-                                            isSecondary={contentTextAlign !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    contentTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Alignment", "essential-blocks")} value={contentTextAlign} onChange={(value) => handleBlockDefault({ contentTextAlign: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_CONTENT_TYPOGRAPHY}
@@ -645,23 +617,11 @@ function PostCarousel(props) {
 
                     {preset != "style-4" && showReadMore && (
                         <PanelBody title={__("Read More Button", "essential-blocks")} initialOpen={false}>
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl label={__("Read More Button", "essential-blocks")} className="newtogglegroupcontrol eb-inspector-btn-group" value={readmoreColorType} onChange={(value) => handleBlockDefault({ readmoreColorType: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={readmoreColorType === item.value}
-                                        isSecondary={readmoreColorType !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                readmoreColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {readmoreColorType === "normal" && (
                                 <>
@@ -708,25 +668,11 @@ function PostCarousel(props) {
                                     />
                                 </>
                             )}
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={readmoreTextAlign === item.value}
-                                            isSecondary={readmoreTextAlign !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    readmoreTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Alignment", "essential-blocks")} value={readmoreTextAlign} onChange={(value) => handleBlockDefault({ readmoreTextAlign: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_READMORE_TYPOGRAPHY}
@@ -744,25 +690,11 @@ function PostCarousel(props) {
 
                     {showMeta && (
                         <PanelBody title={__("Meta", "essential-blocks")} initialOpen={false}>
-                            <BaseControl label={__("Header Meta Alignment", "essential-blocks")} id="essential-blocks">
-                                <ButtonGroup id="essential-blocks">
-                                    {CONTENT_POSITION.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={headerMetaTextAlign === item.value}
-                                            isSecondary={headerMetaTextAlign !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    headerMetaTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Header Meta Alignment", "essential-blocks")} value={headerMetaTextAlign} onChange={(value) => handleBlockDefault({ headerMetaTextAlign: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {CONTENT_POSITION.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <ResponsiveRangeController
                                 baseLabel={__("Header Meta Gap", "essential-blocks")}
                                 controlName={HEADER_META_SPACE}
@@ -776,25 +708,11 @@ function PostCarousel(props) {
                                 baseLabel="Header Meta Margin"
                             />
 
-                            <BaseControl label={__("Footer Meta Alignment", "essential-blocks")} id="essential-blocks">
-                                <ButtonGroup id="essential-blocks">
-                                    {CONTENT_POSITION.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={footerMetaTextAlign === item.value}
-                                            isSecondary={footerMetaTextAlign !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    footerMetaTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl label={__("Footer Meta Alignment", "essential-blocks")} value={footerMetaTextAlign} onChange={(value) => handleBlockDefault({ footerMetaTextAlign: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                {CONTENT_POSITION.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <ResponsiveRangeController
                                 baseLabel={__("Footer Meta Gap", "essential-blocks")}
                                 controlName={FOOTER_META_SPACE}
@@ -808,23 +726,11 @@ function PostCarousel(props) {
                                 baseLabel="Footer Meta Margin"
                             />
 
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl label={__("Meta", "essential-blocks")} className="newtogglegroupcontrol eb-inspector-btn-group" value={metaColorType} onChange={(value) => handleBlockDefault({ metaColorType: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={metaColorType === item.value}
-                                        isSecondary={metaColorType !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                metaColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {metaColorType === "normal" && (
                                 <>
@@ -976,22 +882,11 @@ function PostCarousel(props) {
 
                     {arrows && (
                         <PanelBody title={__("Arrow", "essential-blocks")} initialOpen={false}>
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl label={__("Arrow", "essential-blocks")} className="newtogglegroupcontrol eb-inspector-btn-group" value={arrowColorType} onChange={(value) => handleBlockDefault({ arrowColorType: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={arrowColorType === item.value}
-                                        isSecondary={arrowColorType !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                arrowColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {arrowColorType === "normal" && (
                                 <ColorControl

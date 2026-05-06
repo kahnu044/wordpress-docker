@@ -306,6 +306,8 @@ export default function Style(props) {
 		}
 
 		.eb-advanced-video-wrapper.${blockId} .eb-react-player iframe {
+			width: 100%;
+			height: 100%;
 			${videoBDShadowDesktop}
 		}
 
@@ -336,7 +338,6 @@ export default function Style(props) {
             fill: ${customPlayIconlibColor};
         }
 
-		.eb-advanced-video-wrapper.${blockId} .eb-player-option.sticky.stuck {
 		.eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck,
         .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out {
 			width${stickyVideoWidthDesktop};
@@ -406,6 +407,8 @@ export default function Style(props) {
 		}
 
 		.eb-advanced-video-wrapper.${blockId} .eb-react-player iframe {
+			width: 100%;
+			height: 100%;
 			${videoBDShadowTab}
 		}
 
@@ -484,6 +487,8 @@ export default function Style(props) {
 		}
 
 		.eb-advanced-video-wrapper.${blockId} .eb-react-player iframe {
+			width: 100%;
+			height: 100%;
 			${videoBDShadowMobile}
 		}
 
@@ -510,7 +515,6 @@ export default function Style(props) {
             height${playIconWidthMobile};
         }
 
-		.eb-advanced-video-wrapper.${blockId} .eb-player-option.sticky.stuck {
 		.eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck,
         .eb-advanced-video-wrapper.${blockId} .eb-player-option.eb-sticky.stuck-out {
 			width${stickyVideoWidthMobile};

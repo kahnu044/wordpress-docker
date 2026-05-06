@@ -335,7 +335,12 @@ function EBGlobalControls(props) {
      * Setup Popup
      */
     useEffect(() => {
-        const editor = document.querySelector("#editor");
+        // #editor exists in the post editor; site editor uses an iframe so fall
+        // back to the closest layout container or document body.
+        const editor =
+            document.querySelector("#editor") ||
+            document.querySelector(".edit-site-visual-editor") ||
+            document.body;
         setPopoverAnchor(editor);
     }, []);
 

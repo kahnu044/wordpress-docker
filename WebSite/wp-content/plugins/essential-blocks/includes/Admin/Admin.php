@@ -247,28 +247,28 @@ class Admin {
         );
 
         /**
-         * Black Friday 2025 Notice
+         * Summer Campaign 2026 Notice
          */
-        $black_friday2025_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;"><strong>Black Friday Mega Sale:</strong> Get <strong>70+ AI-Powered blocks</strong> and features & unlock smarter design flexibility on Gutenberg – <strong>now up to $140 OFF!</strong> 🎁 </p>
-        <a class="button button-primary" href="https://essential-blocks.com/bfcm2025-admin-notice" target="_blank" style="background-color: #3B4045; border-color: #3B4045;" >Upgrade to PRO</a>
-        <a class="button button-secondary" href="https://essential-blocks.com/bfcm2025-admin-notice-ltd" target="_blank">Give Me LIFETIME Access</a>
-        <button data-dismiss="true" class="dismiss-btn button button-link">No, I\'ll Grab It Later</button>';
-        $black_friday2025_notice = array(
+        $summer_campaign2026_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;text-transform: capitalize;">🏖️ <strong>Summer Savings:</strong> Get 70+ AI-powered blocks and features to unlock design flexibility on Gutenberg – now <strong>up to $150 OFF!</strong></p>
+        <a class="button button-primary" href="https://essential-blocks.com/summer2026-admin-notice" target="_blank" style="background-color: #5252DC; border-color: #5252DC; border-radius: 6px; font-size: 14px; font-weight: 500;" >Upgrade To Pro Now</a>
+        <a class="button button-secondary" href="https://essential-blocks.com/summer2026-admin-notice-ltd" target="_blank" style="color: #171717; background-color: #EFEFEF; border-color: #D1D1D1; border-radius: 6px; font-size: 14px; font-weight: 500;">Give Me LIFETIME Access</a>
+        <button data-dismiss="true" class="dismiss-btn button button-link" style="color: #424242; font-size: 14px;">I Don’t Want Any Discount</button>';
+        $summer_campaign2026_notice = array(
             'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
-            'html' => $black_friday2025_message
+            'html' => $summer_campaign2026_message
         );
 
-        //Milestone Sale Notice Add
+        //Summer Campaign 2026 Notice Add
         $notices->add(
-            'black_friday2025',
-            $black_friday2025_notice,
+            'summer_campaign2026',
+            $summer_campaign2026_notice,
             array(
                 'start' => $notices->time(),
-                'expire' => strtotime( '11:59:59pm 04th December, 2025' ),
+                'expire' => strtotime( '11:59:59pm 25th June, 2026' ),
                 'classes' => 'eb-notice put-dismiss-notice',
                 'dismissible' => true,
                 'refresh' => ESSENTIAL_BLOCKS_VERSION,
-                'do_action' => 'eb_black_friday2025_campaign',
+                'do_action' => 'eb_summer2026_campaign',
                 'display_if' => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
             )
         );
@@ -1110,7 +1110,7 @@ class Admin {
         $changelog_url = esc_url( 'https://essential-blocks.com/changelog/' );
 
         $message_template = __(
-            "<p><i>📣</i> Introducing Image Hotspots Block in <strong>Essential Blocks 5.9.0</strong> - Create interactive images with clickable hotspots that display tooltips or popups with custom content.! For more details, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
+            "<p><i>📣</i> Introducing Protected Content in <strong>Essential Blocks Pro 2.9.0</strong> - You can now password-protect any block or section directly in WordPress to show it to the right audience! For more details, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
             "essential-blocks"
         );
 

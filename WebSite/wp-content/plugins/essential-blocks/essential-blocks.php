@@ -6,7 +6,7 @@
  * Description: The Ultimate Gutenberg blocks library to create WordPress sites in the Gutenberg Block Editor with 70+ essential blocks, patterns, templates for WooCommerce, posts, & more.
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
- * Version: 5.9.1
+ * Version: 6.1.3
  * License: GPL3+
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: essential-blocks

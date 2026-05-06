@@ -6,11 +6,10 @@ import { useEffect, useState } from "@wordpress/element";
 const { times } = lodash;
 import {
     PanelBody,
-    BaseControl,
-    ButtonGroup,
-    Button,
     ToggleControl,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -110,52 +109,48 @@ function Accordion(props) {
                         title={__("General", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Accordion Types", "essential-blocks")}
-                            id="eb-accordion-type"
+
+                            value={accordionType}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    accordionType: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-accordion-type-btgrp">
-                                {ACCORDION_TYPES.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isSecondary={
-                                            accordionType !== item.value
-                                        }
-                                        isPrimary={accordionType === item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                accordionType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
-                        <BaseControl
+                            {ACCORDION_TYPES.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <ToggleGroupControl
                             label={__("Title Level", "essential-blocks")}
-                            id="eb-accordion-heading-alignment"
+                            className="eb-accordion-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                            value={tagName}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    tagName: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup className="eb-accordion-heading-alignment eb-html-tag-buttongroup">
-                                {HEADING.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={tagName === item.value}
-                                        isSecondary={tagName !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                tagName: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {HEADING.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <RangeControl
                             label={__("Toggle Speed", "essential-blocks")}
                             value={transitionDuration}
@@ -166,6 +161,8 @@ function Accordion(props) {
                             max={5}
                             step={0.1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ResponsiveRangeController
                             noUnits
@@ -180,31 +177,27 @@ function Accordion(props) {
                         title={__("Tab Style", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Title Align ", "essential-blocks")}
-                            id="eb-accoridon-title-align"
+
+                            value={titleAlignment}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    titleAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {TITLE_ALIGNMENT.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        isSecondary={
-                                            titleAlignment !== item.value
-                                        }
-                                        isPrimary={
-                                            titleAlignment === item.value
-                                        }
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                titleAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {TITLE_ALIGNMENT.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <TypographyDropdown
                             baseLabel="Title Typography"
@@ -294,27 +287,27 @@ function Accordion(props) {
                         title={__("Content Style", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl label={__("Align", "essential-blocks")}>
-                            <ButtonGroup>
-                                {CONTENT_ALIGN.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isSecondary={
-                                            contentAlign !== item.value
-                                        }
-                                        isPrimary={contentAlign === item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Align", "essential-blocks")}
+
+                            value={contentAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    contentAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {CONTENT_ALIGN.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <TypographyDropdown
                             baseLabel="Content Typography"

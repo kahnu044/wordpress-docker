@@ -20,7 +20,7 @@ const save = ({ attributes }) => {
     return (
         <BlockProps.Save attributes={attributes}>
             {imageurl && (
-                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                     <figure
                         className={`eb-openverse-wrapper ${blockId} img-style-${stylePreset} ${attributionStyle}  ${hoverEffect}`}
                         data-id={blockId}

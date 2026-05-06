@@ -3,15 +3,14 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-    Button,
-    ButtonGroup,
-    BaseControl,
     SelectControl,
     RangeControl,
     ToggleControl,
     PanelRow,
     TextControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -84,11 +83,11 @@ function Inspector(props) {
     // Check if block is inside Loop Builder context
     const isInLoopBuilder = Boolean(
         context &&
-            // Primary check: explicit isLoopBuilder flag
-            (context["essential-blocks/isLoopBuilder"] === true ||
-                // Secondary check: presence of loop context values (even if null initially)
-                (context.hasOwnProperty("essential-blocks/postId") &&
-                    context.hasOwnProperty("essential-blocks/postType"))),
+        // Primary check: explicit isLoopBuilder flag
+        (context["essential-blocks/isLoopBuilder"] === true ||
+            // Secondary check: presence of loop context values (even if null initially)
+            (context.hasOwnProperty("essential-blocks/postId") &&
+                context.hasOwnProperty("essential-blocks/postType"))),
     );
 
     const taxOptions = taxonomies?.map(taxonomy => taxonomy.visibility.public ? {
@@ -120,6 +119,8 @@ function Inspector(props) {
                                     source: value
                                 })
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                     {taxonomies !== null && (
@@ -131,6 +132,8 @@ function Inspector(props) {
                                 onChange={value => {
                                     setAttributes({ selectedTaxonomy: value })
                                 }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
 
                             {selectedTaxonomy && (
@@ -150,6 +153,8 @@ function Inspector(props) {
                                     step={1}
                                     allowReset={true}
                                     help={__('Select 0 to show all terms.', "essential-blocks")}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             )}
                         </>
@@ -164,33 +169,32 @@ function Inspector(props) {
                     title={__("Additional", "essential-blocks")}
                     initialOpen={false}
                 >
-                    <BaseControl label={__("Prefix", "essential-blocks")}>
-                        <ButtonGroup id="eb-accordion-image-icon">
-                            {PREFIX_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            prefixType !== value
-                                        }
-                                        isPrimary={
-                                            prefixType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                prefixType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Prefix", "essential-blocks")}
+
+                        value={prefixType}
+                        onChange={(value) =>
+                            setAttributes({
+                                prefixType: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {PREFIX_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {prefixType !== "none" && (
                         <>
@@ -217,64 +221,62 @@ function Inspector(props) {
                             )}
 
                             {displayStyle == 'display-inline' && (
-                                <BaseControl label={__("Vertical Align", "essential-blocks")}>
-                                    <ButtonGroup id="eb-accordion-image-icon">
-                                        {VERTICAL_ALIGN.map(
-                                            (
-                                                { label, value },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        prefixVerticalAlign !== value
-                                                    }
-                                                    isPrimary={
-                                                        prefixVerticalAlign === value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            prefixVerticalAlign: value,
-                                                        })
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Vertical Align", "essential-blocks")}
+
+                                    value={prefixVerticalAlign}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            prefixVerticalAlign: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {VERTICAL_ALIGN.map(
+                                        (
+                                            { label, value },
+                                            index
+                                        ) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={value}
+                                                label={label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
                             )}
                         </>
                     )}
 
-                    <BaseControl label={__("Sufix", "essential-blocks")} >
-                        <ButtonGroup id="eb-accordion-image-icon">
-                            {PREFIX_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            suffixType !== value
-                                        }
-                                        isPrimary={
-                                            suffixType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                suffixType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Sufix", "essential-blocks")}
+
+                        value={suffixType}
+                        onChange={(value) =>
+                            setAttributes({
+                                suffixType: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {PREFIX_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {suffixType !== "none" && (
                         <>
@@ -301,33 +303,32 @@ function Inspector(props) {
                             )}
 
                             {displayStyle == 'display-inline' && (
-                                <BaseControl label={__("Vertical Align", "essential-blocks")}>
-                                    <ButtonGroup id="eb-accordion-image-icon">
-                                        {VERTICAL_ALIGN.map(
-                                            (
-                                                { label, value },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        suffixVerticalAlign !== value
-                                                    }
-                                                    isPrimary={
-                                                        suffixVerticalAlign === value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            suffixVerticalAlign: value,
-                                                        })
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Vertical Align", "essential-blocks")}
+
+                                    value={suffixVerticalAlign}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            suffixVerticalAlign: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {VERTICAL_ALIGN.map(
+                                        (
+                                            { label, value },
+                                            index
+                                        ) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={value}
+                                                label={label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
                             )}
                         </>
                     )}
@@ -343,6 +344,7 @@ function Inspector(props) {
                                 showSeparator: !showSeparator,
                             })
                         }
+                        __nextHasNoMarginBottom
                     />
 
                     {showSeparator && (
@@ -353,79 +355,83 @@ function Inspector(props) {
                                 setAttributes({ separator: nextValue });
                             }}
                             help={__('Enter character(s) used to separate terms.', "essential-blocks")}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <InspectorPanel.PanelBody title={__("Taxonomy Style", "essential-blocks")} initialOpen={true}>
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Display", "essential-blocks")}
+                        className="eb-inspector-btn-group newtogglegroupcontrol"
+                        value={displayStyle}
+                        onChange={(value) =>
+                            setAttributes({
+                                displayStyle: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup className="eb-inspector-btn-group">
-                            {DISPLAY_STYLE.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    // isLarge
-                                    isPrimary={displayStyle === item.value}
-                                    isSecondary={displayStyle !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            displayStyle: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {DISPLAY_STYLE.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     <Divider />
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Alignment", "essential-blocks")}
-                        id="eb-advance-heading-alignment"
+
+                        value={align}
+                        onChange={(value) =>
+                            setAttributes({
+                                align: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup id="eb-advance-heading-alignment">
-                            {ALIGNMENT.map((item, key) => (
-                                <Button
-                                    key={key}
-                                    // isLarge
-                                    isPrimary={align === item.value}
-                                    isSecondary={align !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            align: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {ALIGNMENT.map((item, key) => (
+                            <ToggleGroupControlOption
+                                key={key}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     <TypographyDropdown
                         baseLabel={__("Typography", "essential-blocks")}
                         typographyPrefixConstant={TAXONOMIES_TYPOGRAPHY}
                     />
 
-                    <ButtonGroup className="eb-inspector-btn-group">
+                    <ToggleGroupControl
+                        className="eb-inspector-btn-group newtogglegroupcontrol"
+                        value={taxonomiesStyle}
+                        onChange={(value) =>
+                            setAttributes({
+                                taxonomiesStyle: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
                         {NORMAL_HOVER.map((item, index) => (
-                            <Button
+                            <ToggleGroupControlOption
                                 key={index}
-                                // isLarge
-                                isPrimary={taxonomiesStyle === item.value}
-                                isSecondary={taxonomiesStyle !== item.value}
-                                onClick={() =>
-                                    setAttributes({
-                                        taxonomiesStyle: item.value,
-                                    })
-                                }
-                            >
-                                {item.label}
-                            </Button>
+                                value={item.value}
+                                label={item.label}
+                            />
                         ))}
-                    </ButtonGroup>
+                    </ToggleGroupControl>
                     {taxonomiesStyle ===
                         "normal" && (
                             <>

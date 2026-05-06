@@ -4,7 +4,7 @@
   "name": "essential-blocks/flex-container",
   "description": "Create flexible layouts with CSS Flexbox properties for responsive design.",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "align": [

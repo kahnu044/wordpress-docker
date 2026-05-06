@@ -74,6 +74,10 @@ class Scripts
         }
 
         // Enqueue Assets Only for FSE
+        // Note: In WP 6.3+, the site editor uses an iframe. Assets registered via
+        // register_block_type() with editor_script/editor_style are automatically
+        // injected into the iframe. This admin_init hook is a legacy workaround
+        // for older WP versions where site-editor.php didn't fire enqueue_block_editor_assets.
         global $pagenow;
         if ( $pagenow === 'site-editor.php' ) {
             add_action( 'admin_init', [ $this, 'block_editor_assets' ], 1 );
@@ -145,7 +149,6 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'masonry', 'js/masonry.min.js' );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
-        wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
         wpdev_essential_blocks()->assets->register( 'patterns', 'js/eb-patterns.js' );
         wpdev_essential_blocks()->assets->register( 'editor-breakpoint', 'js/eb-editor-breakpoint.js' );
         wpdev_essential_blocks()->assets->register( 'store', 'admin/store/store.js', [ 'regenerator-runtime' ] ); //EB Store
@@ -161,10 +164,8 @@ class Scripts
             'essential-blocks-typedjs',
             'essential-blocks-slickjs',
             'essential-blocks-slick-lightbox-js',
-            'essential-blocks-tweenMaxjs',
             'essential-blocks-patterns',
             'essential-blocks-store',
-            'essential-blocks-gsap-scrolltrigger',
             'essential-blocks-editor-breakpoint'
          ];
 
@@ -256,7 +257,6 @@ class Scripts
          ] );
         wpdev_essential_blocks()->assets->register( 'slickjs', 'js/slick.min.js' );
         wpdev_essential_blocks()->assets->register( 'slick-lightbox-js', 'js/slick-lightbox.js' );
-        wpdev_essential_blocks()->assets->register( 'tweenMaxjs', 'js/tweenMax.min.js' );
         wpdev_essential_blocks()->assets->register( 'zoom', 'js/jquery.zoom.min.js' );
 
         //Register block combined styles
@@ -282,12 +282,6 @@ class Scripts
         // dashicon
         wp_enqueue_style( 'dashicons' );
         wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js', [ 'regenerator-runtime','essential-blocks-babel-bundle' ] );
-
-        // GSAP
-        wpdev_essential_blocks()->assets->register( 'gsap', 'js/gsap/gsap.min.js' );
-        wpdev_essential_blocks()->assets->register( 'gsap-scrolltrigger', 'js/gsap/ScrollTrigger.min.js', [ 'essential-blocks-gsap' ] );
-        wpdev_essential_blocks()->assets->register( 'splittype', 'js/gsap/splittype.min.js', [ 'essential-blocks-gsap' ] );
-        wpdev_essential_blocks()->assets->register( 'gsap-observer', 'js/gsap/gsap-observer.min.js', [ 'essential-blocks-gsap' ] );
     }
 
     public function global_styles()
@@ -370,8 +364,8 @@ class Scripts
             {$global_typography_css}
         ";
 
-        //Load Google fonts
-        if ( is_array( $google_fonts ) && ! empty( $google_fonts ) ) {
+        //Load Google fonts (honor site-wide googleFont toggle)
+        if ( is_array( $google_fonts ) && ! empty( $google_fonts ) && 'false' !== $this->isEnableGoogleFont ) {
             Helper::load_google_font( $google_fonts, 'eb-global-fonts' );
         }
         return $custom_css;

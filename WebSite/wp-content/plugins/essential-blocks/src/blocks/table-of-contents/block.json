@@ -4,7 +4,7 @@
   "name": "essential-blocks/table-of-contents",
   "category": "essential-blocks",
   "description": "Insert Table of Contents on your posts/pages and enhance user experience on your WordPress website",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

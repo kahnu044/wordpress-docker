@@ -94,6 +94,8 @@ function ProductImages(props) {
                             onChange={(galleryPosition) =>
                                 handleBlockDefault({ galleryPosition })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Large Image Scale", "essential-blocks")}
@@ -102,8 +104,10 @@ function ProductImages(props) {
                             onChange={(largeImgScale) =>
                                 handleBlockDefault({ largeImgScale })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl label={__("Feature Image Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Feature Image Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {ALIGNMENT_OPTIONS.map((item, index) => (
                                     <Button
@@ -127,6 +131,7 @@ function ProductImages(props) {
                             onChange={(useAdaptiveHeight) =>
                                 handleBlockDefault({ useAdaptiveHeight })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Disable Navigation Arrow", "essential-blocks")}
@@ -134,6 +139,7 @@ function ProductImages(props) {
                             onChange={(disableNavArrow) =>
                                 handleBlockDefault({ disableNavArrow })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Enable Zoom", "essential-blocks")}
@@ -141,6 +147,7 @@ function ProductImages(props) {
                             onChange={(enableZoom) =>
                                 handleBlockDefault({ enableZoom })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody

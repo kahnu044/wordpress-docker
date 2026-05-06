@@ -22,7 +22,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;

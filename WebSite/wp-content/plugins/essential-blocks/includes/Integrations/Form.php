@@ -497,10 +497,11 @@ class Form extends ThirdPartyIntegration
 
     public function replace_placeholder_value( $input, $data )
     {
-        // Replace {key} placeholders with data values
+        // Replace {key} placeholders with data values, stripping \r\n to prevent header injection
         $replaced = preg_replace_callback( '/\{([^}]+)\}/', function ( $matches ) use ( $data ) {
-            $key = $matches[ 1 ];
-            return ! empty( $data[ $key ] ) ? $data[ $key ] : '';
+            $key   = $matches[ 1 ];
+            $value = ! empty( $data[ $key ] ) ? $data[ $key ] : '';
+            return str_replace( [ "\r", "\n", "\r\n" ], '', $value );
         }, $input );
 
         // Split by comma, trim whitespace, and remove empty values

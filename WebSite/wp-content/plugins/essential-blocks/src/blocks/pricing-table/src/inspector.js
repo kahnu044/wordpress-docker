@@ -6,10 +6,10 @@ import {
     ToggleControl,
     SelectControl,
     TextControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -162,12 +162,18 @@ const Inspector = ({ attributes, setAttributes }) => {
                     label={__("Text", "essential-blocks")}
                     value={each.text}
                 />
+                <ColorControl
+                    label={__("Text Color", "essential-blocks")}
+                    color={each.textColor}
+                    onChange={(value) => onFeatureChange("textColor", value, i)}
+                />
                 <ToggleControl
                     label={__("Link", "essential-blocks")}
                     checked={each.clickable === "true"}
                     onChange={(value) =>
                         onFeatureChange("clickable", value.toString(), i)
                     }
+                    __nextHasNoMarginBottom
                 />
                 {each.clickable === "true" && (
                     <EBTextControl
@@ -248,6 +254,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(pricingStyle) =>
                                 handlePricingStyle(pricingStyle)
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         /> */}
 
                         <EBTextControl
@@ -259,30 +267,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 })
                             }
                         />
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Title Level", "essential-blocks")}
-                            id="eb-advance-heading-alignment"
+                            className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                            value={titleTagName}
+                            onChange={(value) =>
+                                setAttributes({
+                                    titleTagName: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                {HEADING.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={titleTagName === item.value}
-                                        isSecondary={
-                                            titleTagName !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                titleTagName: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {HEADING.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ToggleControl
                             label={__("Show Subtitle?")}
                             checked={showSubtitle}
@@ -292,6 +297,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     defaultSubtitle: !showSubtitle,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showSubtitle && (
@@ -315,6 +321,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     defaultHeaderIcon: !showHeaderIcon,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showHeaderIcon && (
@@ -339,6 +346,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         defaultTitleLine: !showTitleLine,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>
@@ -354,6 +362,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     mainPrice: newPrice,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("On Sale?")}
@@ -363,6 +373,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showOnSale: !showOnSale,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showOnSale && (
                             <TextControl
@@ -373,6 +384,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         salePrice: newsalePrice,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <TextControl
@@ -383,6 +396,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     priceCurrency: newPriceCurrency,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Currency Placement", "essential-blocks")}
@@ -402,6 +417,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     currencyPlacement,
                                 });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Price Period (per)")}
@@ -409,6 +426,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(pricePeriod) =>
                                 setAttributes({ pricePeriod })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Period Separator", "essential-blocks")}
@@ -418,6 +437,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     periodSeparator,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                     </InspectorPanel.PanelBody>
@@ -433,6 +454,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     hideFeatures: !hideFeatures,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {hideFeatures !== true && (
                             <>
@@ -444,6 +466,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showFeatureLine: !showFeatureLine,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__("Show Icon?")}
@@ -453,6 +476,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showFeatureIcon: !showFeatureIcon,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {/*<SortableFeatures
@@ -521,6 +545,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showButton: !showButton,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         <EBIconPicker
                             value={buttonIcon}
@@ -531,36 +556,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                             }
                             title={__("Button Icon", "essential-blocks")}
                         />
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Icon Position", "essential-blocks")}
+
+                            value={buttonIconPosition}
+                            onChange={(value) =>
+                                setAttributes({
+                                    buttonIconPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {RIBBON_ALIGNMENT_HORIZONTAL.map(
-                                    (item, index) => (
-                                        <Button
-                                            // isLarge
-                                            key={index}
-                                            isPrimary={
-                                                buttonIconPosition ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                buttonIconPosition !==
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    buttonIconPosition:
-                                                        item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ),
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {RIBBON_ALIGNMENT_HORIZONTAL.map(
+                                (item, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ),
+                            )}
+                        </ToggleGroupControl>
                         <ResponsiveRangeController
                             baseLabel={__("Icon Spacing", "essential-blocks")}
                             controlName={buttonIconSpacing}
@@ -609,6 +627,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         newWindow: !newWindow,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>
@@ -624,6 +643,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showRibbon: !showRibbon,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showRibbon && (
                             <>
@@ -656,75 +676,63 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             ribbonStyle,
                                         });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {ribbonStyle == "ribbon-1" && (
-                                    <BaseControl
+                                    <ToggleGroupControl
                                         label={__("Align", "essential-blocks")}
+
+                                        value={ribbonAlignVertical}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                ribbonAlignVertical: value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {RIBBON_ALIGNMENT_VERTICAL.map(
-                                                (item, index) => (
-                                                    <Button
-                                                        // isLarge
-                                                        key={index}
-                                                        isPrimary={
-                                                            ribbonAlignVertical ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            ribbonAlignVertical !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes({
-                                                                ribbonAlignVertical:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ),
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {RIBBON_ALIGNMENT_VERTICAL.map(
+                                            (item, index) => (
+                                                <ToggleGroupControlOption
+                                                    key={index}
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            ),
+                                        )}
+                                    </ToggleGroupControl>
                                 )}
 
                                 {ribbonStyle !== "ribbon-1" && (
                                     <>
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Align",
                                                 "essential-blocks",
                                             )}
+
+                                            value={ribbonAlignHorizontal}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    ribbonAlignHorizontal: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup>
-                                                {RIBBON_ALIGNMENT_HORIZONTAL.map(
-                                                    (item, index) => (
-                                                        <Button
-                                                            // isLarge
-                                                            key={index}
-                                                            isPrimary={
-                                                                ribbonAlignHorizontal ===
-                                                                item.value
-                                                            }
-                                                            isSecondary={
-                                                                ribbonAlignHorizontal !==
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    ribbonAlignHorizontal:
-                                                                        item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ),
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {RIBBON_ALIGNMENT_HORIZONTAL.map(
+                                                (item, index) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
+                                                ),
+                                            )}
+                                        </ToggleGroupControl>
                                         <TextControl
                                             label={__(
                                                 "Featured Tag Text",
@@ -736,6 +744,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     ribbonText,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                     </>
                                 )}
@@ -748,13 +758,13 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Price Table Box", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Background", "essential-blocks")}
                             </h3>
                         </BaseControl>
                         <BackgroundControl controlName={priceTableBackground} />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">Border</h3>
                         </BaseControl>
 
@@ -777,33 +787,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Header", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Alignment", "essential-blocks")}
-                            </h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            headerAlignment === item.value
-                                        }
-                                        isSecondary={
-                                            headerAlignment !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                headerAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+                            className="eb-control-title newtogglegroupcontrol"
+                            value={headerAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    headerAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Title Style", "essential-blocks")}
                             </h3>
@@ -833,7 +839,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         <Divider />
                         {showSubtitle && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Subtitle Style",
@@ -858,7 +864,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 <Divider />
                             </>
                         )}
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Margin & Padding")}
                             </h3>
@@ -876,33 +882,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Price", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
-                            <h3 className="eb-control-title">
-                                {__("Alignment", "essential-blocks")}
-                            </h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            priceAlignment === item.value
-                                        }
-                                        isSecondary={
-                                            priceAlignment !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                priceAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+                            className="eb-control-title newtogglegroupcontrol"
+                            value={priceAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    priceAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Original Price", "essential-blocks")}
                             </h3>
@@ -917,7 +919,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             typographyPrefixConstant={typoPrefix_price_title}
                         />
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__(
                                     "Original Price Currency",
@@ -941,7 +943,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                         <Divider />
                         {showOnSale && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Sale Price", "essential-blocks")}
                                     </h3>
@@ -961,7 +963,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     }
                                 />
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Sale Price Currency",
@@ -990,7 +992,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 <Divider />
                             </>
                         )}
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Pricing Period", "essential-blocks")}
                             </h3>
@@ -1009,29 +1011,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Features", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
-                            <h3 className="eb-control-title">Alignment</h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            featuresAlignment === item.value
-                                        }
-                                        isSecondary={
-                                            featuresAlignment !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                featuresAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label="Alignment"
+                            className="eb-control-title newtogglegroupcontrol"
+                            value={featuresAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    featuresAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <Divider />
                         <ColorControl
                             label={__("Color", "essential-blocks")}
@@ -1058,29 +1058,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Button", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
-                            <h3 className="eb-control-title">Alignment</h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            buttonAlignment === item.value
-                                        }
-                                        isSecondary={
-                                            buttonAlignment !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                buttonAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label="Alignment"
+                            className="eb-control-title newtogglegroupcontrol"
+                            value={buttonAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    buttonAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <Divider />
                         <ResponsiveDimensionsControl
                             controlName={buttonPadding}
@@ -1112,7 +1110,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             color={hoverTextColor}
                             attributeName={"hoverTextColor"}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Button Background", "essential-blocks")}
                             </h3>
@@ -1122,7 +1120,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             noOverlay={true}
                             noMainBgi={true}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Button Border Style", "essential-blocks")}
                             </h3>
@@ -1134,31 +1132,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                             title={__("Icon Settings", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <BaseControl>
-                                <h3 className="eb-control-title">
-                                    {__("Alignment", "essential-blocks")}
-                                </h3>
-                                <ButtonGroup>
-                                    {ALIGNMENT.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            isPrimary={
-                                                iconAlignment === item.value
-                                            }
-                                            isSecondary={
-                                                iconAlignment !== item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    iconAlignment: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Alignment", "essential-blocks")}
+                                className="eb-control-title newtogglegroupcontrol"
+                                value={iconAlignment}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        iconAlignment: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {ALIGNMENT.map((item, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                             <Divider />
                             <ToggleControl
                                 label={__(
@@ -1171,6 +1165,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         showIconBackground: !showIconBackground,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                             {showIconBackground && (
                                 <>
@@ -1238,7 +1233,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 attributeName={"iconHoverColor"}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">Border</h3>
                             </BaseControl>
                             <BorderShadowControl

@@ -68,7 +68,8 @@ export default function Style(props) {
         verticalAlign,
         classHook,
         isRTLEnable,
-        slidesGapRange
+        slidesGapRange,
+
     } = attributes;
 
     // Title Typography
@@ -401,6 +402,8 @@ export default function Style(props) {
         // noBorder: true,
     });
 
+
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-slider-wrapper.${blockId}{
@@ -461,6 +464,9 @@ export default function Style(props) {
 			${isCustomHeight ? sliderHeightDesktop : ""}
             ${sliderBDShadowDesktop}
 		}
+        .eb-slider-wrapper.${blockId}:not(.default-slider) .eb-slider-item img {
+            ${sliderBDShadowDesktop}
+        }
 		.eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
 			background-color: ${overlayColor};
 			justify-content: ${verticalAlign};
@@ -528,6 +534,10 @@ export default function Style(props) {
         ${sliderBDShadowTab}
 		}
 
+        .eb-slider-wrapper.${blockId}:not(.default-slider) .eb-slider-item img {
+            ${sliderBDShadowTab}
+        }
+
         .eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
             ${sliderBDShadowTab}
         }
@@ -560,6 +570,7 @@ export default function Style(props) {
 			${button2TypographyTab}
 			${button2BDShadowHoverTab}
 		}
+
 	`;
     const sliderStylesMobile = `
 		.eb-slider-wrapper.${blockId} .slick-slide > * {
@@ -578,6 +589,10 @@ export default function Style(props) {
         }
         ${sliderBDShadowMobile}
 		}
+
+        .eb-slider-wrapper.${blockId}:not(.default-slider) .eb-slider-item img {
+            ${sliderBDShadowMobile}
+        }
         .eb-slider-wrapper.${blockId} .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
             ${sliderBDShadowMobile}
         }

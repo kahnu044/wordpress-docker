@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { PanelBody, PanelRow, ToggleControl, Button, ButtonGroup, RangeControl } from "@wordpress/components";
+import { PanelBody, PanelRow, ToggleControl, RangeControl, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from "@wordpress/components";
 
 /**
  * Internal dependencies
@@ -74,6 +74,8 @@ function ParallaxSlider(props) {
                             onChange={(intensity) => handleBlockDefault({ intensity })}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ToggleControl
                             label={__("Custom Height", "essential-blocks")}
@@ -83,6 +85,7 @@ function ParallaxSlider(props) {
                                     isCustomHeight: !isCustomHeight,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isCustomHeight && (
@@ -106,41 +109,41 @@ function ParallaxSlider(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Slides Style", "essential-blocks")} initialOpen={true}>
-                        <PanelRow>Content Horizontal Align</PanelRow>
-                        <ButtonGroup>
-                            {HORIZONTAL_ALIGN.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={horizontalAlign === item.value}
-                                    isSecondary={horizontalAlign !== item.value}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            horizontalAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
+                        <ToggleGroupControl
+                            label="Content Horizontal Align"
 
-                        <PanelRow>Content Vertical Align</PanelRow>
-                        <ButtonGroup className="eb-margin-bottom-20">
-                            {VERTICAL_ALIGN.map((item, index) => (
-                                <Button
+                            value={horizontalAlign}
+                            onChange={(value) => handleBlockDefault({ horizontalAlign: value })}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {HORIZONTAL_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
                                     key={index}
-                                    isPrimary={verticalAlign === item.value}
-                                    isSecondary={verticalAlign !== item.value}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            verticalAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
+                                    value={item.value}
+                                    label={item.label}
+                                />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
+
+                        <ToggleGroupControl
+                            label="Content Vertical Align"
+
+                            value={verticalAlign}
+                            onChange={(value) => handleBlockDefault({ verticalAlign: value })}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {VERTICAL_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ResponsiveDimensionsControl
                             controlName={CONTENTS_PADDING}
                             baseLabel="Content Padding"
@@ -183,22 +186,22 @@ function ParallaxSlider(props) {
                     </PanelBody>
 
                     <PanelBody title={__("Button Styles", "essential-blocks")} initialOpen={false}>
-                        <ButtonGroup className="eb-inspector-btn-group">
+                        <ToggleGroupControl
+
+                            value={buttonColorType}
+                            onChange={(value) => handleBlockDefault({ buttonColorType: value })}
+                            isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                        >
                             {NORMAL_HOVER.map((item, index) => (
-                                <Button
+                                <ToggleGroupControlOption
                                     key={index}
-                                    isPrimary={buttonColorType === item.value}
-                                    isSecondary={buttonColorType !== item.value}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            buttonColorType: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
+                                    value={item.value}
+                                    label={item.label}
+                                />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
 
                         {buttonColorType === "normal" && (
                             <>

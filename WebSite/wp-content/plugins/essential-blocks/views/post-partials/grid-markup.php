@@ -31,6 +31,15 @@ $allMeta  = array_merge( $headerMeta, $footerMeta );
 $tax_meta = array_intersect( $allMeta, $taxonomies );
 $html     = '';
 
+// Check if this is a featured post rendering
+$is_featured = isset( $_is_featured ) && $_is_featured === true;
+
+// Override variables with featured post specific settings if this is a featured post
+if ( $is_featured ) {
+    $showTitle      = isset( $showFeaturedPostTitle ) ? $showFeaturedPostTitle : true;
+    $showContent    = isset( $showFeaturedPostContent ) ? $showFeaturedPostContent : false;
+}
+
 foreach ( $posts as $result ) {
     $tax_meta_html = require __DIR__ . '/meta/tax.php';
     $author        = require __DIR__ . '/meta/author.php';
@@ -60,9 +69,14 @@ foreach ( $posts as $result ) {
     /**
      * Article Markup
      */
-    $html .= sprintf( '<article class="ebpg-grid-post ebpg-post-grid-column" data-id="%1$s">', $result->ID );
+    $article_classes = 'ebpg-grid-post ebpg-post-grid-column';
+    if ( $is_featured ) {
+        $article_classes = 'ebpg-featured-post';
+        $thumbnail_inside_content_wpr = false;
+    }
+    $html .= sprintf( '<article class="%1$s" data-id="%2$s">', esc_attr( $article_classes ), $result->ID );
     $html .= '<div class="ebpg-grid-post-holder">';
-    $wrapper_link_html = sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', get_permalink( $result->ID ), wp_kses( $result->post_title, 'post' ) );
+    $wrapper_link_html = $is_featured ? '' : sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', get_permalink( $result->ID ), wp_kses( $result->post_title, 'post' ) );
     if ( $preset === 'style-5' || $preset === 'style-6' ) {
         $html .= $wrapper_link_html;
         $wrapper_link_html = '';

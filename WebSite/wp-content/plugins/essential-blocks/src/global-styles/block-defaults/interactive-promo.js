@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { PanelBody, Button, ButtonGroup, BaseControl, ToggleControl } from "@wordpress/components";
+import { PanelBody, BaseControl, ToggleControl, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from "@wordpress/components";
 
 /**
  * External depencencies
@@ -72,29 +72,27 @@ function InteractivePromo(props) {
                             noUnits
                         />
 
-                        <BaseControl>
-                            <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={imageAlignment === item.value}
-                                        isSecondary={imageAlignment !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                imageAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={imageAlignment}
+                            onChange={(value) => handleBlockDefault({ imageAlignment: value })}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </PanelBody>
                     {/* Styles */}
                     <PanelBody title={__("General Styles", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Background Color", "essential-blocks")}</h3>
                         </BaseControl>
                         <ToggleControl
@@ -105,6 +103,7 @@ function InteractivePromo(props) {
                                     isBackgroundGradient: !isBackgroundGradient,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {isBackgroundGradient || (
                             <ColorControl

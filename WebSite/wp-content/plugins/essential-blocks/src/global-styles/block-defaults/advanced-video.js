@@ -9,12 +9,13 @@ import {
     SelectControl,
     ToggleControl,
     Button,
-    ButtonGroup,
     BaseControl,
     TabPanel,
     TextControl,
     PanelRow,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -105,6 +106,7 @@ function AdvancedVideo(props) {
                                             },
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {videoConfig.autoplay && (
                                     <PanelRow>
@@ -123,6 +125,7 @@ function AdvancedVideo(props) {
                                             },
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -138,11 +141,13 @@ function AdvancedVideo(props) {
                                     },
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Controls", "essential-blocks")}
                             checked={showBar}
                             onChange={(showBar) => handleBlockDefault({ showBar })}
+                            __nextHasNoMarginBottom
                         />
 
                         {videoOptions != "lightbox" && (
@@ -153,6 +158,7 @@ function AdvancedVideo(props) {
                                     label={__("Image Overlay", "essential-blocks")}
                                     checked={imageOverlay}
                                     onChange={(imageOverlay) => handleBlockDefault({ imageOverlay })}
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {imageOverlay && (
@@ -198,6 +204,7 @@ function AdvancedVideo(props) {
                                                     customPlayIcon,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
 
                                         {!customPlayIconURL && customPlayIcon && (
@@ -239,24 +246,26 @@ function AdvancedVideo(props) {
                         )}
 
                         {videoOptions == "eb-sticky" && (
-                            <BaseControl label={__("Sticky Position", "essential-blocks")}>
-                                <ButtonGroup>
-                                    {STICKY_POSITION.map((item) => (
-                                        <Button
-                                            // isLarge
-                                            isPrimary={stickyPosition === item.value}
-                                            isSecondary={stickyPosition !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    stickyPosition: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Sticky Position", "essential-blocks")}
+
+                                value={stickyPosition}
+                                onChange={(value) =>
+                                    handleBlockDefault({
+                                        stickyPosition: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {STICKY_POSITION.map((item) => (
+                                    <ToggleGroupControlOption
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                         )}
 
                         {videoOptions == "lightbox" && (
@@ -301,6 +310,7 @@ function AdvancedVideo(props) {
                                     label={__("Show Play Icon", "essential-blocks")}
                                     checked={lightboxPlayIcon}
                                     onChange={(lightboxPlayIcon) => handleBlockDefault({ lightboxPlayIcon })}
+                                    __nextHasNoMarginBottom
                                 />
                                 {!placeholderPlayIconURL && lightboxPlayIcon && (
                                     <MediaUpload
@@ -389,7 +399,7 @@ function AdvancedVideo(props) {
                             </>
                         )}
 
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                         </BaseControl>
                         <BorderShadowControl
@@ -530,7 +540,7 @@ function AdvancedVideo(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
-                        <BackgroundControl controlName={WRAPPER_BG}  noOverlay />
+                        <BackgroundControl controlName={WRAPPER_BG} noOverlay />
                     </PanelBody>
                     <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl

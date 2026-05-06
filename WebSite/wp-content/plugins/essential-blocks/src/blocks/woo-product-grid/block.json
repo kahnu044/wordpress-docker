@@ -4,7 +4,7 @@
   "name": "essential-blocks/woo-product-grid",
   "category": "essential-blocks",
   "description": "Display WooCommerce products in a stunning, organized layout & help customers with EB Woo Product Grid.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "editorScript": "essential-blocks-editor-script",
   "supports": {

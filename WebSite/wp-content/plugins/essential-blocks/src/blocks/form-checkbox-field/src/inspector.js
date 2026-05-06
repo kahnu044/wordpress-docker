@@ -6,9 +6,9 @@ import { useState } from "@wordpress/element";
 import {
     ToggleControl,
     TextControl,
-    Button,
     RangeControl,
-    ButtonGroup,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -94,6 +94,7 @@ function Inspector(props) {
                                     showLabel: !showLabel,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showLabel && (
                             <DynamicInputControl
@@ -130,6 +131,7 @@ function Inspector(props) {
                                     isRequired: !isRequired,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
@@ -283,33 +285,32 @@ function Inspector(props) {
                                 max={5}
                                 step={1}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
 
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl
+                                className="newtogglegroupcontrol eb-inspector-btn-group"
+                                value={checkboxType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        checkboxType: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
                                 {NORMAL_CHECKED.map(
                                     (item, index) => (
-                                        <Button
+                                        <ToggleGroupControlOption
                                             key={index}
-                                            isPrimary={
-                                                checkboxType ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                checkboxType !==
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    checkboxType:
-                                                        item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
+                                            value={item.value}
+                                            label={item.label}
+                                        />
                                     )
                                 )}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {checkboxType === "normal" && (
                                 <>

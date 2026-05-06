@@ -5,9 +5,9 @@ import { __ } from "@wordpress/i18n";
 import {
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
     BaseControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -184,38 +184,42 @@ function Inspector(props) {
                             value={preset}
                             options={PRESETS}
                             onChange={(selected) => changePreset(selected)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
+
+                            value={contentPosition}
+                            onChange={(value) =>
+                                setAttributes({
+                                    contentPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={contentPosition === item.value}
-                                        isSecondary={contentPosition !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                contentPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Buttons", "essential-blocks")} initialOpen={true}>
-                        <BaseControl label={__("Button Width Type", "essential-blocks")}>
+                        <BaseControl label={__("Button Width Type", "essential-blocks")} __nextHasNoMarginBottom>
                             <SelectControl
                                 value={buttonsWidthType}
                                 options={BUTTON_WIDTH_TYPE}
                                 onChange={(value) => {
                                     setAttributes({ buttonsWidthType: value });
                                 }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
                         {buttonsWidthType === "custom" && (
@@ -238,27 +242,27 @@ function Inspector(props) {
                             step={1}
                         />
 
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Text Align", "essential-blocks")}
-                            id="eb-button-group-text-align"
+
+                            value={buttonTextAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    buttonTextAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-button-group-text-align">
-                                {TEXT_ALIGN.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={buttonTextAlign === item.value}
-                                        isSecondary={buttonTextAlign !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                buttonTextAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {TEXT_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Connector", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
@@ -267,27 +271,31 @@ function Inspector(props) {
                             onChange={() => {
                                 setAttributes({ showConnector: !showConnector });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showConnector && (
                             <>
-                                <BaseControl label={__("Connector Type", "essential-blocks")}>
-                                    <ButtonGroup id="eb-button-group-connector-type">
-                                        {CONNECTOR_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={connectorType === item.value}
-                                                isSecondary={connectorType !== item.value}
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        connectorType: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Connector Type", "essential-blocks")}
+
+                                    value={connectorType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            connectorType: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {CONNECTOR_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 {connectorType === "icon" && (
                                     <InspectorPanel.PanelBody

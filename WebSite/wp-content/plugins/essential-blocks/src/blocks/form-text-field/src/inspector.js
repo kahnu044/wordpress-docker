@@ -106,6 +106,7 @@ function Inspector(props) {
                                     showLabel: !showLabel,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showLabel && (
@@ -150,6 +151,7 @@ function Inspector(props) {
                                     isRequired: !isRequired,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -159,6 +161,7 @@ function Inspector(props) {
                             )}
                             checked={isHidden}
                             onChange={() => handleHiddenField()}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -172,6 +175,7 @@ function Inspector(props) {
                                     isIcon: !isIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isIcon && (

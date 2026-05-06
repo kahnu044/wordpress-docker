@@ -342,6 +342,8 @@ function Inspector(props) {
                             value={imgSource}
                             options={SOURCE}
                             onChange={(imgSource) => changImgSource(imgSource)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
 
@@ -359,6 +361,8 @@ function Inspector(props) {
                                     onChange={(stylePreset) =>
                                         changeStyle(stylePreset)
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             )}
 
@@ -394,6 +398,7 @@ function Inspector(props) {
                                 onChange={(autoHeight) =>
                                     setAttributes({ autoHeight })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {!autoHeight && (
                                 <ResponsiveRangeController
@@ -416,6 +421,7 @@ function Inspector(props) {
                                 onChange={(autoFit) =>
                                     setAttributes({ autoFit })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {imgSource !== "site-logo" && autoFit && (
@@ -429,6 +435,8 @@ function Inspector(props) {
                                     onChange={(fitStyles) =>
                                         setAttributes({ fitStyles })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             )}
 
@@ -438,6 +446,7 @@ function Inspector(props) {
                                 onChange={(enableLink) =>
                                     setAttributes({ enableLink })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {enableLink && (
                                 <ToggleControl
@@ -451,16 +460,20 @@ function Inspector(props) {
                                             openInNewTab,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             )}
                         </>
                     )}
 
                     {imgSource === "custom" && (
-                        <ImageComponent.GeneralTab
-                            hasTag={false}
-                            useImageAlign={true}
-                        />
+                        <>
+                            <ImageComponent.GeneralTab
+                                hasTag={false}
+                                useImageAlign={true}
+                                hasAltText={true}
+                            />
+                        </>
                     )}
 
                     <SelectControl
@@ -470,6 +483,8 @@ function Inspector(props) {
                         onChange={(hoverEffect) =>
                             setAttributes({ hoverEffect })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                 </PanelBody>
             </InspectorPanel.General>
@@ -491,7 +506,7 @@ function Inspector(props) {
 
                             {!complexStyle && (
                                 <>
-                                    <BaseControl>
+                                    <BaseControl __nextHasNoMarginBottom>
                                         <h3 className="eb-control-title">
                                             {__("Border", "essential-blocks")}
                                         </h3>
@@ -529,7 +544,7 @@ function Inspector(props) {
                     </>
                 )}
             </InspectorPanel.Style>
-        </InspectorPanel>
+        </InspectorPanel >
     );
 }
 

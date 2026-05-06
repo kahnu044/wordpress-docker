@@ -5,12 +5,12 @@ import { __ } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
     PanelBody,
-    Button,
-    ButtonGroup,
     BaseControl,
     TabPanel,
     SelectControl,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -79,6 +79,8 @@ function Inspector(props) {
                                 iconView: newIconView,
                             })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     {iconView !== "default" && (
                         <SelectControl
@@ -90,51 +92,55 @@ function Inspector(props) {
                                     iconShape: newIconShape,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Alignment", "essential-blocks")}
-                        id="eb-advance-heading-alignment"
+
+                        value={iconAlign}
+                        onChange={(value) =>
+                            setAttributes({
+                                iconAlign: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup id="eb-advance-heading-alignment">
-                            {ICON_ALIGN.map((item, key) => (
-                                <Button
-                                    key={key}
-                                    // isLarge
-                                    isPrimary={iconAlign === item.value}
-                                    isSecondary={iconAlign !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            iconAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {ICON_ALIGN.map((item, key) => (
+                            <ToggleGroupControlOption
+                                key={key}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <InspectorPanel.PanelBody initialOpen={true}>
-                    <ButtonGroup className="eb-inspector-btn-group">
+                    <ToggleGroupControl
+                        className="newtogglegroupcontrol eb-inspector-btn-group"
+                        value={iconColorType}
+                        onChange={(value) =>
+                            setAttributes({
+                                iconColorType: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
                         {NORMAL_HOVER.map((item, key) => (
-                            <Button
+                            <ToggleGroupControlOption
                                 key={key}
-                                // isLarge
-                                isPrimary={iconColorType === item.value}
-                                isSecondary={iconColorType !== item.value}
-                                onClick={() =>
-                                    setAttributes({
-                                        iconColorType: item.value,
-                                    })
-                                }
-                            >
-                                {item.label}
-                            </Button>
+                                value={item.value}
+                                label={item.label}
+                            />
                         ))}
-                    </ButtonGroup>
+                    </ToggleGroupControl>
                     {iconColorType === "normal" && (
                         <>
                             <ColorControl
@@ -188,17 +194,19 @@ function Inspector(props) {
                         max={100}
                         step={1}
                         allowReset={true}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     {iconView === "framed" && (
                         <ResponsiveDimensionsControl
                             controlName={BORDER_WIDTH}
-                            baseLabel={__("Border Width","essential-blocks")}
+                            baseLabel={__("Border Width", "essential-blocks")}
                         />
                     )}
                     <ResponsiveDimensionsControl
                         forBorderRadius
                         controlName={BORDER}
-                        baseLabel={__("Border Radius","essential-blocks")}
+                        baseLabel={__("Border Radius", "essential-blocks")}
                     />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.Style>

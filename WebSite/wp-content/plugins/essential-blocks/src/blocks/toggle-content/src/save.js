@@ -30,6 +30,7 @@ const Save = ({ attributes }) => {
         backgroundGradient,
         classHook,
         switchLiquidGlass,
+        effectStyle,
     } = attributes;
 
     const getMargin = () => {
@@ -61,9 +62,9 @@ const Save = ({ attributes }) => {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div
-                    className={`${blockId} eb-toggle-wrapper eb-toggle-primary`}
+                    className={`${blockId} eb-toggle-wrapper ${effectStyle === "default" ? `switch-style-${switchStyle}` : ''} eb-toggle-effect-${effectStyle} eb-toggle-primary`}
                     data-init-content={initialContent}
                     data-size={switchSize}
                     data-switch-style={switchStyle}
@@ -92,17 +93,31 @@ const Save = ({ attributes }) => {
                                 <label className="eb-text-switch-label" for={`eb-${id}`}>
                                     <div className="eb-text-switch-toggle"></div>
                                     <div className="eb-switch-names">
-                                        <RichText.Content
-                                            tagName="span"
-                                            className="eb-toggle-primary-label-text"
-                                            value={primaryLabelText}
-                                        />
-                                        <RichText.Content
-                                            tagName="span"
-                                            className="eb-toggle-secondary-label-text"
-                                            value={secondaryLabelText}
-                                        />
+                                        <div className="eb-switch-name primary">
+                                            {effectStyle !== "default" && (
+                                                applyFilters("eb_toggle_content_pro_icon_primary_save", "", attributes)
+                                            )}
+                                            <RichText.Content
+                                                tagName="span"
+                                                className="eb-toggle-primary-label-text"
+                                                value={primaryLabelText}
+                                            />
+                                        </div>
+                                        <div className="eb-switch-name secondary">
+                                            {effectStyle !== "default" && (
+                                                applyFilters("eb_toggle_content_pro_icon_secondary_save", "", attributes)
+                                            )}
+                                            <RichText.Content
+                                                tagName="span"
+                                                className="eb-toggle-secondary-label-text"
+                                                value={secondaryLabelText}
+                                            />
+                                        </div>
                                     </div>
+
+                                    {effectStyle !== "default" && (
+                                        applyFilters("eb_toggle_content_pro_effect_html", "", attributes)
+                                    )}
                                 </label>
                             </div>
                         </div>
@@ -121,9 +136,25 @@ const Save = ({ attributes }) => {
                         />
                         <label className={`eb-toggle-switch toggle-${switchSize}`}>
                             <input className="eb-toggle-input" type="checkbox" />
+                            {effectStyle !== "default" && (
+                                <div className="eb-toggle-effect-icons">
+                                    <span className="icon-wrapper">
+                                        {applyFilters("eb_toggle_content_pro_icon_primary_save", "", attributes)}
+                                    </span>
+                                    <span className="icon-wrapper">
+                                        {applyFilters("eb_toggle_content_pro_icon_secondary_save", "", attributes)}
+                                    </span>
+                                </div>
+                            )}
                             <span className="eb-toggle-controller" />
                             <span className={`eb-toggle-slider ${switchLiquidGlass.enable ? 'eb_liquid_glass-' + switchLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + switchLiquidGlass.shadowEffect : ''}`} />
-                            {applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")}
+                            {effectStyle === "default" && (
+                                applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")
+                            )}
+
+                            {effectStyle !== "default" && (
+                                applyFilters("eb_toggle_content_pro_effect_html", "", attributes)
+                            )}
 
                         </label>
 

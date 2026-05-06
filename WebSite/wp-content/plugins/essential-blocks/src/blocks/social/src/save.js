@@ -13,7 +13,7 @@ export default function Save({ attributes }) {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div className={`${blockId} eb-social-links-wrapper`}>
                     <SocialLinks
                         profilesOnly={profilesOnly}

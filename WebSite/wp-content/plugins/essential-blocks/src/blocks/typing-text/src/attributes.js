@@ -108,6 +108,11 @@ const attributes = {
         type: "string",
         default: "left",
     },
+
+    tagName: {
+        type: "string",
+        default: "div",
+    },
     // typography attributes ⬇
     ...generateTypographyAttributes(typoPrefix_prefixText, {
         fontSize: 22,

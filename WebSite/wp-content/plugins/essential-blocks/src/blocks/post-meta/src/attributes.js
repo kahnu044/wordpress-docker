@@ -113,6 +113,14 @@ const attributes = {
         type: "boolean",
         default: false,
     },
+    customFields: {
+        type: "string",
+        default: "[]",
+    },
+    metaItems: {
+        type: "string",
+        default: "",
+    },
     showAuthorPicture: {
         type: "boolean",
         default: false,

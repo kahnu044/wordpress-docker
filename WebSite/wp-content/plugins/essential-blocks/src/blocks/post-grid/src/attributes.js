@@ -46,6 +46,21 @@ import {
     TAXONOMY_BORDER,
     ICON_SIZE,
     ICON_SPACE,
+    POST_MIN_HEIGHT,
+    POST_WIDTH,
+    LIST_POST_WIDTH,
+    FEATURED_TITLE_PADDING,
+    FEATURED_TITLE_MARGIN,
+    FEATURED_TITLE_BORDER,
+    FEATURED_EXCERPT_PADDING,
+    FEATURED_EXCERPT_MARGIN,
+    FEATURED_EXCERPT_BORDER,
+    FEATURED_META_PADDING,
+    FEATURED_META_MARGIN,
+    FEATURED_META_BORDER,
+    FEATURED_POST_BORDER,
+    FEATURED_POST_PADDING,
+    FEATURED_AVATAR_RADIUS
 } from "./constants/constants";
 
 import {
@@ -67,7 +82,10 @@ import {
     INPUT_TYPOGRAPHY,
     CONTENT_TYPOGRAPHY,
     TITLE_TYPOGRAPHY,
-    NOT_FOUND_TYPOGRAPHY
+    NOT_FOUND_TYPOGRAPHY,
+    FEATURED_TITLE_TYPO,
+    FEATURED_EXCERPT_TYPO,
+    FEATURED_META_TYPO,
 } from "./constants/typographyPrefixConstants";
 
 
@@ -499,6 +517,170 @@ const attributes = {
     fallbackImgAlt: {
         type: "string",
     },
+    showFeaturedPost: {
+        type: "boolean",
+        default: false,
+    },
+    featuredPostId: {
+        type: "string",
+        default: "",
+    },
+    showFeaturedPostTitle: {
+        type: "boolean",
+        default: true,
+    },
+    showFeaturedPostContent: {
+        type: "boolean",
+        default: false,
+    },
+    showFeaturedPostMeta: {
+        type: "boolean",
+        default: true,
+    },
+    showFeaturedHeaderMeta: {
+        type: "boolean",
+        default: true,
+    },
+    showFeaturedFooterMeta: {
+        type: "boolean",
+        default: true,
+    },
+    featuredMetaItems: {
+        type: "string",
+        default: '{}',
+    },
+    featuredExcerptLength: {
+        type: "number",
+        default: 10,
+    },
+    featuredTitleColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredTitleHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredExcerptColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredExcerptHoverColor: {
+        type: "string",
+    },
+    featuredMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredMetaHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostBorderRadius: {
+        type: "number",
+        default: 0,
+    },
+    featuredPostBottomSpacing: {
+        type: "number",
+        default: 20,
+    },
+    featuredPostHorizontalAlign: {
+        type: "string",
+        default: "flex-start",
+    },
+    featuredPostVerticalAlign: {
+        type: "string",
+        default: "flex-end",
+    },
+    featuredMetaBGColor: {
+        type: "string",
+        default: "#FFFFFF3D",
+    },
+    featuredMetaBGHoverColor: {
+        type: "string",
+        default: "#FFFFFF3D",
+    },
+    featuredOverlayColor: {
+        type: "string",
+        default: "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.32) 39.66%, rgba(0, 0, 0, 0.8) 100%)",
+    },
+    featuredPostMetaStatus: {
+        type: "string",
+        default: "normal",
+    },
+    featuredPostAuthorMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostAuthorMetaHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostDateMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostCommonMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostCommonMetaBgColor: {
+        type: "string",
+        default: "transparent",
+    },
+    featuredPostCategoryMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostCategoryMetaBgColor: {
+        type: "string",
+        default: "var(--eb-global-secondary-color)",
+    },
+    featuredPostTagMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostTagMetaBgColor: {
+        type: "string",
+        default: "var(--eb-global-tertiary-color)",
+    },
+    featuredPostReadTimeMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostDynamicMetaColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostDynamicMetaBgColor: {
+        type: "string",
+        default: "transparent",
+    },
+    featuredPostCommonMetaHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostCommonMetaHoverBgColor: {
+        type: "string",
+        default: "transparent",
+    },
+    featuredPostCategoryMetaHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostCategoryMetaHoverBgColor: {
+        type: "string",
+        default: "transparent",
+    },
+    featuredPostTagMetaHoverColor: {
+        type: "string",
+        default: "#fff",
+    },
+    featuredPostTagMetaHoverBgColor: {
+        type: "string",
+        default: "transparent",
+    },
+
     ...generateDimensionsAttributes(SEARCH_CONTENT_PADDING, {
         top: 0,
         bottom: 0,
@@ -828,6 +1010,66 @@ const attributes = {
     ...generateResponsiveRangeAttributes(ICON_SPACE, {
         defaultRange: 8,
         noUnits: true,
+    }),
+    ...generateResponsiveRangeAttributes(POST_MIN_HEIGHT, {
+        defaultRange: 300,
+        defaultUnit: "px",
+    }),
+    ...generateResponsiveRangeAttributes(POST_WIDTH, {
+        defaultRange: 100,
+        defaultUnit: "%",
+    }),
+    ...generateResponsiveRangeAttributes(LIST_POST_WIDTH, {
+        defaultRange: 100,
+        defaultUnit: "%",
+    }),
+
+    // Featured Post Typography
+    ...generateTypographyAttributes(FEATURED_TITLE_TYPO, {
+        defaultFontSize: 32,
+    }),
+    ...generateTypographyAttributes(FEATURED_EXCERPT_TYPO, {
+        defaultFontSize: 18,
+    }),
+    ...generateTypographyAttributes(FEATURED_META_TYPO, {
+        defaultFontSize: 14,
+    }),
+
+    // Featured Post Dimensions
+    ...generateDimensionsAttributes(FEATURED_POST_PADDING, {
+        top: 20,
+        bottom: 20,
+        right: 20,
+        left: 20,
+        isLinked: true,
+    }),
+    ...generateDimensionsAttributes(FEATURED_TITLE_PADDING),
+    ...generateDimensionsAttributes(FEATURED_TITLE_MARGIN),
+    ...generateDimensionsAttributes(FEATURED_EXCERPT_PADDING),
+    ...generateDimensionsAttributes(FEATURED_EXCERPT_MARGIN),
+    ...generateDimensionsAttributes(FEATURED_META_PADDING),
+    ...generateDimensionsAttributes(FEATURED_META_MARGIN),
+    ...generateDimensionsAttributes(FEATURED_AVATAR_RADIUS),
+
+    // Featured Post Border & Shadow
+    ...generateBorderShadowAttributes(FEATURED_POST_BORDER),
+    ...generateBorderShadowAttributes(FEATURED_TITLE_BORDER),
+    ...generateBorderShadowAttributes(FEATURED_EXCERPT_BORDER),
+    ...generateBorderShadowAttributes(FEATURED_META_BORDER, {
+        defaultBdrColor: "#c3c3c3",
+        defaultBdrStyle: "none",
+        bdrDefaults: {
+            top: 1,
+            right: 1,
+            bottom: 1,
+            left: 1,
+        },
+        rdsDefaults: {
+            top: 3,
+            right: 3,
+            bottom: 3,
+            left: 3,
+        },
     }),
 };
 

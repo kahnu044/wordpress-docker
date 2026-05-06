@@ -24,7 +24,7 @@ export default function save({ attributes }) {
     return (
         <BlockProps.Save attributes={attributes}>
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div
                     className={`${blockId} eb-advanced-tabs-wrapper ${layout} ${tabStyle === 'liquid-glass' ? 'eb-tabs-wrapper-glassed' : ''}`}

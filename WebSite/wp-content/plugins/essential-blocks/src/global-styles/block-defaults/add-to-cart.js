@@ -6,10 +6,9 @@ import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    BaseControl,
-    ButtonGroup,
-    Button,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -113,6 +112,7 @@ function AddToCart(props) {
                                     showQuantity: !showQuantity,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showQuantity && (
                             <SelectControl
@@ -122,26 +122,31 @@ function AddToCart(props) {
                                 onChange={(displayType) =>
                                     handleBlockDefault({ displayType })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={alignment === item.value}
-                                        isSecondary={alignment !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                alignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={alignment}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    alignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <SelectControl
                             label={__("Price Type", "essential-blocks")}
                             value={priceType}
@@ -149,6 +154,8 @@ function AddToCart(props) {
                             onChange={(priceType) =>
                                 handleBlockDefault({ priceType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
 
@@ -156,43 +163,32 @@ function AddToCart(props) {
                         title={__("Button Styles", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl label={__("Button State", "essential-blocks")}>
-                            <ButtonGroup>
-                                <Button
-                                    isPrimary={buttonSwitcher === "normal"}
-                                    isSecondary={buttonSwitcher !== "normal"}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            buttonSwitcher: "normal",
-                                        })
-                                    }
-                                >
-                                    {__("Normal", "essential-blocks")}
-                                </Button>
-                                <Button
-                                    isPrimary={buttonSwitcher === "hover"}
-                                    isSecondary={buttonSwitcher !== "hover"}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            buttonSwitcher: "hover",
-                                        })
-                                    }
-                                >
-                                    {__("Hover", "essential-blocks")}
-                                </Button>
-                                <Button
-                                    isPrimary={buttonSwitcher === "disabled"}
-                                    isSecondary={buttonSwitcher !== "disabled"}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            buttonSwitcher: "disabled",
-                                        })
-                                    }
-                                >
-                                    {__("Disabled", "essential-blocks")}
-                                </Button>
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Button State", "essential-blocks")}
+
+                            value={buttonSwitcher}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonSwitcher: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            <ToggleGroupControlOption
+                                value="normal"
+                                label={__("Normal", "essential-blocks")}
+                            />
+                            <ToggleGroupControlOption
+                                value="hover"
+                                label={__("Hover", "essential-blocks")}
+                            />
+                            <ToggleGroupControlOption
+                                value="disabled"
+                                label={__("Disabled", "essential-blocks")}
+                            />
+                        </ToggleGroupControl>
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={btnTypo}
@@ -271,32 +267,28 @@ function AddToCart(props) {
                             title={__("Quantity Styles", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <BaseControl label={__("Quantity State", "essential-blocks")}>
-                                <ButtonGroup>
-                                    <Button
-                                        isPrimary={quantitySwitcher === "normal"}
-                                        isSecondary={quantitySwitcher !== "normal"}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                quantitySwitcher: "normal",
-                                            })
-                                        }
-                                    >
-                                        {__("Normal", "essential-blocks")}
-                                    </Button>
-                                    <Button
-                                        isPrimary={quantitySwitcher === "active"}
-                                        isSecondary={quantitySwitcher !== "active"}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                quantitySwitcher: "active",
-                                            })
-                                        }
-                                    >
-                                        {__("Active", "essential-blocks")}
-                                    </Button>
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Quantity State", "essential-blocks")}
+
+                                value={quantitySwitcher}
+                                onChange={(value) =>
+                                    handleBlockDefault({
+                                        quantitySwitcher: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption
+                                    value="normal"
+                                    label={__("Normal", "essential-blocks")}
+                                />
+                                <ToggleGroupControlOption
+                                    value="active"
+                                    label={__("Active", "essential-blocks")}
+                                />
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={quantityTypo}

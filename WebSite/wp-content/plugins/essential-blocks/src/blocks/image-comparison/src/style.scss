@@ -1,4 +1,34 @@
 .eb-image-comparison-wrapper {
+  // Graceful no-JS fallback / FOUC fix.
+  //
+  // Server-rendered markup is two raw <img> tags inside a [data-testid="container"]
+  // div. Until frontend.js runs `createRoot(wrapper)` on DOMContentLoaded, both
+  // images render block-level at full natural width and stack vertically — visible
+  // as a flash on every fresh page load (and especially after Protected Content
+  // unlock reloads). It's also what no-JS visitors see.
+  //
+  // Stack the images on top of each other instead: the first stays in normal flow
+  // (anchors the container's intrinsic height), the rest are absolutely positioned
+  // at top-left with the same dimensions. With JS off, only the topmost image is
+  // visible — a sensible single-image fallback. With JS on, createRoot replaces
+  // the container entirely (these rules no longer match) and the slider takes over.
+  > div[data-testid="container"] {
+    position: relative;
+
+    > img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+    }
+
+    > img:not(:first-child) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
   &[data-vertical-mode="true"] {
     div[data-testid="container"] {
       touch-action: pan-x;

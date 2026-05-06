@@ -274,7 +274,10 @@ function Edit(props) {
      * Resize Columns when Duplicate/Delete Columns
      */
     useEffect(() => {
-        if (typeof rowChildBlockNumber != "number") {
+        if (
+            typeof rowChildBlockNumber != "number" ||
+            typeof desktopColNumber != "number"
+        ) {
             return;
         }
 

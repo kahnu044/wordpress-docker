@@ -4,7 +4,7 @@
   "name": "essential-blocks/shape-divider",
   "description": "Make your website designs stand out by showcasing different sections with stunning shape dividers",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "editorScript": "essential-blocks-editor-script",
   "supports": {

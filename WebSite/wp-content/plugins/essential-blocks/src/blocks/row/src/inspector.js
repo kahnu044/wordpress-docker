@@ -65,13 +65,15 @@ function Inspector(props) {
         >
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody title={__("Row settings", "essential-blocks")} initialOpen={true}>
-                    <BaseControl label={__("Layout", "essential-blocks")}>
+                    <BaseControl label={__("Layout", "essential-blocks")} __nextHasNoMarginBottom>
                         <SelectControl
                             value={rowWidthName}
                             options={CONTENT_WIDTH_OPTIONS}
                             onChange={(rowWidthName) =>
                                 setAttributes({ rowWidthName })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </BaseControl>
                     {rowWidthName === "boxed" && (
@@ -103,13 +105,15 @@ function Inspector(props) {
                         step={1}
                     />
 
-                    <BaseControl label={__("Height", "essential-blocks")}>
+                    <BaseControl label={__("Height", "essential-blocks")} __nextHasNoMarginBottom>
                         <SelectControl
                             value={rowHeightName}
                             options={ROW_HEIGHTS}
                             onChange={(rowHeightName) =>
                                 setAttributes({ rowHeightName })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </BaseControl>
                     {rowHeightName === "minH" && (
@@ -128,6 +132,7 @@ function Inspector(props) {
                     )}
                     <BaseControl
                         label={__("Columns Vertical Align", "essential-blocks")}
+                        __nextHasNoMarginBottom
                     >
                         <SelectControl
                             // label={__("Design Preset", "essential-blocks")}
@@ -136,6 +141,8 @@ function Inspector(props) {
                             onChange={(rowAli) => {
                                 setAttributes({ rowAli });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </BaseControl>
 

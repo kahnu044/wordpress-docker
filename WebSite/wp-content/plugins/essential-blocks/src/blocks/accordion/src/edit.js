@@ -16,6 +16,7 @@ import {
     BlockProps,
     withBlockContext,
     BrowseTemplate,
+    ImgPlaceholder,
 } from "@essential-blocks/controls";
 
 const ALLOWED_BLOCKS = ["essential-blocks/accordion-item"];
@@ -54,9 +55,6 @@ const Edit = (props) => {
         blockPrefix: "eb-accordion",
         style: <Style {...props} />,
     };
-
-    const defaultImageUrl =
-        EssentialBlocksLocalize?.image_url + "/image-placeholder.jpg";
 
     const { innerBlocks } = useSelect(
         (select) =>
@@ -115,7 +113,7 @@ const Edit = (props) => {
                             accordionColor: "",
                             titleColor: "",
                             iconColor: "",
-                            imageUrl: defaultImageUrl,
+                            imageUrl: ImgPlaceholder,
                             imageId: "",
                             imageAlt: "",
                             isBlockSelected: false,
@@ -162,7 +160,7 @@ const Edit = (props) => {
                     accordionColor: "",
                     titleColor: "",
                     iconColor: "",
-                    imageUrl: defaultImageUrl,
+                    imageUrl: ImgPlaceholder,
                     imageId: "",
                     imageAlt: "",
                     isBlockSelected: false,
@@ -190,7 +188,7 @@ const Edit = (props) => {
                     accordionColor: "",
                     titleColor: "",
                     iconColor: "",
-                    imageUrl: defaultImageUrl,
+                    imageUrl: ImgPlaceholder,
                     imageId: "",
                     imageAlt: "",
                     isBlockSelected: false,
@@ -218,7 +216,7 @@ const Edit = (props) => {
                     accordionColor: "",
                     titleColor: "",
                     iconColor: "",
-                    imageUrl: defaultImageUrl,
+                    imageUrl: ImgPlaceholder,
                     imageId: "",
                     imageAlt: "",
                     isBlockSelected: false,
@@ -380,10 +378,7 @@ const Edit = (props) => {
                                 render={({ open }) => (
                                     <>
                                         <img
-                                            src={
-                                                EssentialBlocksLocalize?.image_url +
-                                                "/image-placeholder.jpg"
-                                            }
+                                            src={ImgPlaceholder}
                                         />
                                         <Button
                                             className="components-button eb-replace-img-button"

@@ -4,7 +4,7 @@
   "name": "essential-blocks/toggle-content",
   "category": "essential-blocks",
   "description": "Toggle Contents or blocks with a beautiful switcher.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

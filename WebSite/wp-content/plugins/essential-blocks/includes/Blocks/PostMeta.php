@@ -152,7 +152,7 @@ class PostMeta extends Block
 
         // Get published date with WordPress date format
         $date_format  = get_option( 'date_format' );
-        $publish_date = isset( $current_post->post_date ) ? date( $date_format, strtotime( $current_post->post_date ) ) : '';
+        $publish_date = isset( $current_post->post_date ) ? date_i18n( $date_format, strtotime( $current_post->post_date ) ) : '';
 
         // Get product SKU if applicable
         $product_sku = '';
@@ -176,6 +176,80 @@ class PostMeta extends Block
             Helper::eb_render_icon( Helper::eb_get_icon_type( $attributes[ 'skuIcon' ] ), 'eb-post-metadata-icon', $attributes[ 'skuIcon' ] )
         );
 
+        // Decode unified meta items (Select2-driven canonical list).
+        $parsed_meta_items = null;
+        if ( ! empty( $attributes[ 'metaItems' ] ) && \is_string( $attributes[ 'metaItems' ] ) ) {
+            $decoded = json_decode( $attributes[ 'metaItems' ], true );
+            if ( \is_array( $decoded ) ) {
+                $parsed_meta_items = $decoded;
+            }
+        }
+
+        // Decode legacy custom / ACF fields (used as fallback when metaItems is empty).
+        $parsed_custom_fields = [];
+        if ( ! empty( $attributes[ 'customFields' ] ) && \is_string( $attributes[ 'customFields' ] ) ) {
+            $decoded = json_decode( $attributes[ 'customFields' ], true );
+            if ( \is_array( $decoded ) ) {
+                $parsed_custom_fields = $decoded;
+            }
+        }
+
+        // Build the effective ordered item list. Once metaItems has been touched
+        // (even cleared to []), treat it as canonical so the user can intentionally
+        // show zero items. Only fall through to legacy when never set (null).
+        $effective_items = [];
+        if ( $parsed_meta_items !== null ) {
+            $effective_items = $parsed_meta_items;
+        } else {
+            $enable_contents = isset( $attributes[ 'enableContents' ] ) && \is_array( $attributes[ 'enableContents' ] )
+                ? $attributes[ 'enableContents' ]
+                : [];
+            foreach ( $enable_contents as $key ) {
+                if ( $key === 'author' && ! empty( $attributes[ 'showAuthor' ] ) ) {
+                    $effective_items[] = [ 'value' => 'author', 'label' => '' ];
+                } elseif ( $key === 'date' && ! empty( $attributes[ 'showDate' ] ) ) {
+                    $effective_items[] = [ 'value' => 'date', 'label' => '' ];
+                } elseif (
+                    $key === 'product_sku'
+                    && ! empty( $attributes[ 'showProductSku' ] )
+                    && $post_type === 'product'
+                ) {
+                    $effective_items[] = [ 'value' => 'product_sku', 'label' => '' ];
+                }
+            }
+            foreach ( $parsed_custom_fields as $field ) {
+                $effective_items[] = $field;
+            }
+        }
+
+        // Run any non-builtin keys through the meta markup filter so the Pro
+        // plugin's ACF integration (AcfData::eb_acf_dynamic_posts_meta) can
+        // generate HTML for ACF / dynamic tag values.
+        $builtin_keys = [ 'author', 'date', 'product_sku' ];
+        $custom_meta_html = [];
+        $custom_meta_keys = [];
+        $custom_icon_html = [];
+        foreach ( $effective_items as $item ) {
+            if ( isset( $item[ 'value' ] ) && ! \in_array( $item[ 'value' ], $builtin_keys, true ) ) {
+                $custom_meta_keys[] = $item[ 'value' ];
+                if ( ! empty( $item[ 'icon' ] ) && \is_string( $item[ 'icon' ] ) ) {
+                    $custom_icon_html[ $item[ 'value' ] ] = Helper::eb_render_icon(
+                        Helper::eb_get_icon_type( $item[ 'icon' ] ),
+                        'eb-post-metadata-icon',
+                        $item[ 'icon' ]
+                    );
+                }
+            }
+        }
+        if ( ! empty( $custom_meta_keys ) ) {
+            $custom_meta_html = apply_filters(
+                'eb_post_grid_meta_markup',
+                [],
+                $post_id,
+                $custom_meta_keys
+            );
+        }
+
         $data = [
             'author'             => $author_name,
             'author_avatar_url'  => $author_avatar_url,
@@ -188,7 +262,10 @@ class PostMeta extends Block
             'sku_icon'           => $sku_icon,
             'is_in_loop_builder' => $is_in_loop_builder,
             'post_id'            => $post_id,
-            'post_type'          => $post_type
+            'post_type'          => $post_type,
+            'effective_items'    => $effective_items,
+            'custom_meta_html'   => $custom_meta_html,
+            'custom_icon_html'   => $custom_icon_html
          ];
 
         ob_start();

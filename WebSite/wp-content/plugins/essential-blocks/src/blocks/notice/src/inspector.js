@@ -116,6 +116,7 @@ function Inspector(props) {
                                     dismissible: !dismissible,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -129,6 +130,7 @@ function Inspector(props) {
                                     showAfterDismiss: !showAfterDismiss,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <SelectControl
@@ -141,6 +143,8 @@ function Inspector(props) {
                             onChange={(type) =>
                                 onTypeChange(type)
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>

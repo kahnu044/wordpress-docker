@@ -171,6 +171,11 @@ const attributes = {
                 source: "attribute",
                 attribute: "data-color",
             },
+            textColor: {
+                type: "string",
+                source: "attribute",
+                attribute: "data-text-color",
+            },
             link: {
                 type: "string",
                 source: "attribute",
@@ -304,6 +309,7 @@ const attributes = {
     },
     featuresAlignment: {
         type: "string",
+        default: 'center',
     },
     buttonAlignment: {
         type: "string",

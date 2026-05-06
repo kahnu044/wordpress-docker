@@ -4,7 +4,7 @@
   "name": "essential-blocks/parallax-slider",
   "description": "Create a captivating visual experience & impress your audience",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

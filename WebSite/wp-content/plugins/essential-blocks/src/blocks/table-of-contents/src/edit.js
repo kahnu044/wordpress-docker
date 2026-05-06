@@ -34,7 +34,9 @@ import List from "./list";
 import Style from "./style";
 import defaultAttributes from "./attributes";
 
-function getHeadingsFromHeadingElements(headingElements) {
+function getHeadingsFromHeadingElements(headingElements, allowConfigurablePrefix = false, configurablePrefix = 'eb-toc-') {
+    const usedIds = {}; // Track used IDs to handle duplicates
+
     return [...headingElements].map((heading, index) => {
         let level;
         switch (heading.tagName) {
@@ -58,12 +60,37 @@ function getHeadingsFromHeadingElements(headingElements) {
                 break;
         }
         const content = heading.textContent;
+        const headingString = parseTocSlug(striptags(content));
+
+        // Generate base link based on prefix settings
+        const baseLink = allowConfigurablePrefix && configurablePrefix
+            ? `${configurablePrefix}${headingString || index}`
+            : (headingString || `eb-table-content-${index}`);
+
+        // Handle duplicate IDs by appending a numeric suffix
+        let link = baseLink;
+        if (usedIds[baseLink]) {
+            // This ID has been used before, append a counter
+            let counter = usedIds[baseLink] + 1;
+            link = `${baseLink}-${counter}`;
+            usedIds[baseLink] = counter;
+
+            // Ensure the new link with counter is also unique
+            while (usedIds[link]) {
+                counter++;
+                link = `${baseLink}-${counter}`;
+            }
+            usedIds[link] = 0; // Mark this specific link as used
+        } else {
+            // First occurrence of this ID
+            usedIds[baseLink] = 1;
+        }
 
         return {
             level: level,
             content: content,
             text: content,
-            link: parseTocSlug(striptags(content)),
+            link: link,
         };
     });
 }
@@ -100,7 +127,9 @@ const getHeadersFromContent = (attributes, postContent) => {
     const queryString = queryArray.toString();
     if (queryString) {
         const headingElements = tempPostContentDOM.querySelectorAll(queryString);
-        return getHeadingsFromHeadingElements(headingElements);
+        const allowConfigurablePrefix = attributes?.allowConfigurablePrefix || false;
+        const configurablePrefix = attributes?.configurablePrefix || 'eb-toc-';
+        return getHeadingsFromHeadingElements(headingElements, allowConfigurablePrefix, configurablePrefix);
     }
     return [];
 };
@@ -139,6 +168,8 @@ const Edit = (props) => {
         preset,
         itemCollapsed,
         alignment,
+        allowConfigurablePrefix,
+        configurablePrefix,
     } = attributes;
 
     const isBlockJustInserted = select(
@@ -146,7 +177,7 @@ const Edit = (props) => {
     ).wasBlockJustInserted(clientId);
 
     const headerList = useMemo(() => getHeadersFromContent(attributes, postContent),
-        [blockOrder, isTyping, postContent]
+        [blockOrder, isTyping, postContent, allowConfigurablePrefix, configurablePrefix]
     );
     const deleteHeadersLists = useMemo(() => {
         let _headerList = headerList.map((item) => {
@@ -247,7 +278,7 @@ const Edit = (props) => {
         };
 
         const iconValue = sanitizeIconValue(scrollToTopIcon);
-        
+
         const iconHtml = renderToString(
             <SyncIconComponent
                 icon={iconValue}

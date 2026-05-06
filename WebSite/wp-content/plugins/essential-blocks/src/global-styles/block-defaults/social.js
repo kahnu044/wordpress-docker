@@ -132,6 +132,7 @@ function Social(props) {
                     >
                         <BaseControl
                             label={__("Icon Shape", "essential-blocks")}
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup>
                                 {ICON_SHAPE.map((item, index) => (
@@ -152,6 +153,7 @@ function Social(props) {
                         <BaseControl
                             id="eb-team-icons-alignments"
                             label="Social Icons Horizontal Alignments"
+                            __nextHasNoMarginBottom
                         >
                             <SelectControl
                                 // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -160,6 +162,8 @@ function Social(props) {
                                 onChange={(iconsJustify) =>
                                     handleBlockDefault({ iconsJustify })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
 
@@ -220,6 +224,7 @@ function Social(props) {
                                     isIconsDevider: !isIconsDevider,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isIconsDevider && (
@@ -241,6 +246,8 @@ function Social(props) {
                                     step={1}
                                     min={1}
                                     max={50}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <RangeControl
@@ -252,6 +259,8 @@ function Social(props) {
                                     step={1}
                                     min={1}
                                     max={300}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ResponsiveRangeController
@@ -291,6 +300,8 @@ function Social(props) {
                             onChange={(icnEffect) => {
                                 handleBlockDefault({ icnEffect });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
 
@@ -337,6 +348,8 @@ function Social(props) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
 
@@ -358,6 +371,8 @@ function Social(props) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
 
@@ -374,6 +389,8 @@ function Social(props) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
                     </PanelBody>

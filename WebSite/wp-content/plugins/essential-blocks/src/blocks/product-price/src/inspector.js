@@ -3,13 +3,13 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-    Button,
-    ButtonGroup,
     BaseControl,
     SelectControl,
     ToggleControl,
     RangeControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -105,6 +105,8 @@ function Inspector(props) {
                                 pricePlacement,
                             });
                         }}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     <InspectorPanel.PanelBody title={__("Prefix & Suffix", "essential-blocks")} initialOpen={true}>
@@ -112,36 +114,36 @@ function Inspector(props) {
                             label={__("Show Prefix", "essential-blocks")}
                             checked={showPrefix}
                             onChange={() => setAttributes({ showPrefix: !showPrefix })}
+                            __nextHasNoMarginBottom
                         />
                         {showPrefix === true && (
                             <>
-                                <BaseControl label={__("Prefix Type", "essential-blocks")}>
-                                    <ButtonGroup>
-                                        {PREFIX_TYPES.map(
-                                            (
-                                                { label, value },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        prefixType !== value
-                                                    }
-                                                    isPrimary={
-                                                        prefixType === value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            prefixType: value,
-                                                        })
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Prefix Type", "essential-blocks")}
+
+                                    value={prefixType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            prefixType: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {PREFIX_TYPES.map(
+                                        (
+                                            { label, value },
+                                            index
+                                        ) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={value}
+                                                label={label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
 
                                 {prefixType === "icon" && (
                                     <EBIconPicker
@@ -171,37 +173,37 @@ function Inspector(props) {
                             label={__("Show Suffix", "essential-blocks")}
                             checked={showSuffix}
                             onChange={() => setAttributes({ showSuffix: !showSuffix })}
+                            __nextHasNoMarginBottom
                         />
 
                         {showSuffix === true && (
                             <>
-                                <BaseControl label={__("Sufix Type", "essential-blocks")} >
-                                    <ButtonGroup>
-                                        {PREFIX_TYPES.map(
-                                            (
-                                                { label, value },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        suffixType !== value
-                                                    }
-                                                    isPrimary={
-                                                        suffixType === value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            suffixType: value,
-                                                        })
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Sufix Type", "essential-blocks")}
+
+                                    value={suffixType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            suffixType: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {PREFIX_TYPES.map(
+                                        (
+                                            { label, value },
+                                            index
+                                        ) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={value}
+                                                label={label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
 
                                 {suffixType === "icon" && (
                                     <EBIconPicker
@@ -235,27 +237,29 @@ function Inspector(props) {
                     title={__("Styles", "essential-blocks")}
                     initialOpen={true}
                 >
-                    <BaseControl>
-                        <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
-                        <ButtonGroup>
-                            {ALIGNMENT.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={priceAlignment === item.value}
-                                    isSecondary={priceAlignment !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            priceAlignment: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Alignment", "essential-blocks")}
+                        className="eb-control-title newtogglegroupcontrol"
+                        value={priceAlignment}
+                        onChange={(value) =>
+                            setAttributes({
+                                priceAlignment: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {ALIGNMENT.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     <Divider />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Regular Price", "essential-blocks")}
                         </h3>
@@ -276,7 +280,7 @@ function Inspector(props) {
                     />
 
                     <Divider />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Sale Price", "essential-blocks")}
                         </h3>
@@ -296,7 +300,7 @@ function Inspector(props) {
                         typographyPrefixConstant={typoPrefix_saleprice}
                     />
 
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Currency Sign", "essential-blocks")}
                         </h3>
@@ -321,35 +325,35 @@ function Inspector(props) {
                         max={1000}
                         step={1}
                         allowReset={true}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
 
-                    <BaseControl >
-                        <ButtonGroup>
-                            {PRICE_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            priceType !== value
-                                        }
-                                        isPrimary={
-                                            priceType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                priceType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+
+                        value={priceType}
+                        onChange={(value) =>
+                            setAttributes({
+                                priceType: value,
+                            })
+                        }
+                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                    >
+                        {PRICE_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
                     {priceType === 'regular' && (
                         <>
                             <ColorControl
@@ -372,6 +376,8 @@ function Inspector(props) {
                                 max={1000}
                                 step={1}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </>
                     )}
@@ -397,6 +403,8 @@ function Inspector(props) {
                                 max={1000}
                                 step={1}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </>
                     )}
@@ -406,6 +414,8 @@ function Inspector(props) {
                         value={currencyAlign}
                         options={CURRENCY_ALIGN}
                         onChange={(currencyAlign) => setAttributes({ currencyAlign })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     <Divider />

@@ -111,3 +111,8 @@ export const TAGS_TYPE = [
     { label: "P", value: "p" },
     { label: "Span", value: "span" },
 ];
+
+export const SLIDER_STYLE = [
+    { label: __("Default", "essential-blocks"), value: "default-slider" },
+    { label: __("Marquee", "essential-blocks"), value: "marquee-slider", isPro: true },
+];

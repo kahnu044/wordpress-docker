@@ -51,6 +51,7 @@ const Edit = (props) => {
         showDetailBtn,
         detailBtnText,
         titleTag: TitleTag,
+        imageSize,
     } = attributes;
 
     const [queryResults, setQueryResults] = useState(false);
@@ -121,6 +122,14 @@ const Edit = (props) => {
     };
 
     const presetClass = "grid" === layout ? gridPreset : listPreset;
+
+    // Get the appropriate image size from the item.image object
+    const getImageSrc = (imageObj) => {
+        if (!imageObj) return null;
+
+        // If imageSize exists in the image object, use it; otherwise fallback to 'large'
+        return imageObj[imageSize] || imageObj['large'] || imageObj['full'];
+    };
 
     return cover.length ? (
         <div>
@@ -214,7 +223,7 @@ const Edit = (props) => {
                                                                         <div className="eb-woo-product-image">
                                                                             {item.image ? (
                                                                                 <a href="#">
-                                                                                    <img src={item.image["large"]} />
+                                                                                    <img src={getImageSrc(item.image)} />
                                                                                 </a>
                                                                             ) : (
                                                                                 <a href="#">

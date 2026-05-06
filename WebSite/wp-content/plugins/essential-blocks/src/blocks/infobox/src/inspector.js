@@ -7,9 +7,8 @@ import { MediaUpload } from "@wordpress/block-editor";
 import {
     SelectControl,
     ToggleControl,
-    Button,
-    BaseControl,
-    ButtonGroup,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
     __experimentalDivider as Divider,
 } from "@wordpress/components";
 
@@ -288,6 +287,8 @@ function Inspector(props) {
                             value={layoutPreset}
                             options={LAYOUT_TYPES}
                             onChange={(layoutPreset) => changePreset(layoutPreset)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <Divider />
@@ -302,6 +303,7 @@ function Inspector(props) {
                                     enableTitle: !enableTitle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {enableTitle && (
                             <>
@@ -320,37 +322,32 @@ function Inspector(props) {
                                     }
                                 />
 
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__(
                                         "Title Tag",
                                         "essential-blocks"
                                     )}
+                                    className="infobox-button-group newtogglegroupcontrol"
+                                    value={titleTag}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            titleTag: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup className="infobox-button-group">
-                                        {HEADER_TAGS.map(
-                                            (header, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        titleTag !==
-                                                        header
-                                                    }
-                                                    isPrimary={
-                                                        titleTag ===
-                                                        header
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            titleTag: header,
-                                                        })
-                                                    }
-                                                >
-                                                    {header.toUpperCase()}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {HEADER_TAGS.map(
+                                        (header, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={header}
+                                                label={header.toUpperCase()}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
 
                                 <ToggleControl
                                     label={__(
@@ -363,6 +360,7 @@ function Inspector(props) {
                                             enableSubTitle: !enableSubTitle,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {enableSubTitle && (
@@ -381,39 +379,32 @@ function Inspector(props) {
                                                 })
                                             }
                                         />
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Subtitle Tag",
                                                 "essential-blocks"
                                             )}
+                                            className="infobox-button-group newtogglegroupcontrol"
+                                            value={subTitleTag}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    subTitleTag: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup className="infobox-button-group">
-                                                {HEADER_TAGS.map(
-                                                    (header, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isSecondary={
-                                                                subTitleTag !==
-                                                                header
-                                                            }
-                                                            isPrimary={
-                                                                subTitleTag ===
-                                                                header
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes(
-                                                                    {
-                                                                        subTitleTag: header,
-                                                                    }
-                                                                )
-                                                            }
-                                                        >
-                                                            {header.toUpperCase()}
-                                                        </Button>
-                                                    )
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {HEADER_TAGS.map(
+                                                (header, index) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={header}
+                                                        label={header.toUpperCase()}
+                                                    />
+                                                )
+                                            )}
+                                        </ToggleGroupControl>
                                     </>
 
                                 )}
@@ -431,6 +422,7 @@ function Inspector(props) {
                                     enableDescription: !enableDescription,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {enableDescription && (
@@ -461,36 +453,36 @@ function Inspector(props) {
                                     showMedia: !showMedia,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showMedia && (
                             <>
-                                <BaseControl id="eb-infobox-image-icon">
-                                    <ButtonGroup id="eb-infobox-image-icon">
-                                        {MEDIA_TYPES.map(
-                                            (
-                                                { label, value },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={
-                                                        media !== value
-                                                    }
-                                                    isPrimary={
-                                                        media === value
-                                                    }
-                                                    onClick={() => {
-                                                        setAttributes({ media: value })
-                                                        changeIconShape(media, iconView, iconShape)
-                                                    }}
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Media Type", "essential-blocks")}
+
+                                    value={media}
+                                    onChange={(value) => {
+                                        setAttributes({ media: value })
+                                        changeIconShape(media, iconView, iconShape)
+                                    }}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {MEDIA_TYPES.map(
+                                        (
+                                            { label, value },
+                                            index
+                                        ) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={value}
+                                                label={label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
 
                                 {media === "icon" && (
                                     <>
@@ -506,6 +498,8 @@ function Inspector(props) {
                                                 setAttributes({ iconView });
                                                 changeIconShape(media, iconView, iconShape);
                                             }}
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                         {iconView !== "default" && (
                                             <SelectControl
@@ -516,6 +510,8 @@ function Inspector(props) {
                                                     setAttributes({ iconShape: newIconShape });
                                                     changeIconShape(media, iconView, newIconShape);
                                                 }}
+                                                __next40pxDefaultSize
+                                                __nextHasNoMarginBottom
                                             />
                                         )}
                                     </>
@@ -542,51 +538,51 @@ function Inspector(props) {
                                 )}
 
                                 {media === "image" && (
-                                //         <MediaUpload
-                                //             onSelect={({
-                                //                 id,
-                                //                 url,
-                                //                 alt,
-                                //             }) =>
-                                //                 setAttributes({
-                                //                     imageUrl: url,
-                                //                     imageId: id,
-                                //                     imageAlt: alt,
-                                //                 })
-                                //             }
-                                //             type="image"
-                                //             value={imageId}
-                                //             render={({
-                                //                 open,
-                                //             }) => {
-                                //                 return (
-                                //                     <Button
-                                //                         className="eb-background-control-inspector-panel-img-btn components-button"
-                                //                         label={__(
-                                //                             "Upload Image",
-                                //                             "essential-blocks"
-                                //                         )}
-                                //                         icon="format-image"
-                                //                         onClick={
-                                //                             open
-                                //                         }
-                                //                     />
-                                //                 );
-                                //             }}
-                                //         />
-                                //     )}
+                                    //         <MediaUpload
+                                    //             onSelect={({
+                                    //                 id,
+                                    //                 url,
+                                    //                 alt,
+                                    //             }) =>
+                                    //                 setAttributes({
+                                    //                     imageUrl: url,
+                                    //                     imageId: id,
+                                    //                     imageAlt: alt,
+                                    //                 })
+                                    //             }
+                                    //             type="image"
+                                    //             value={imageId}
+                                    //             render={({
+                                    //                 open,
+                                    //             }) => {
+                                    //                 return (
+                                    //                     <Button
+                                    //                         className="eb-background-control-inspector-panel-img-btn components-button"
+                                    //                         label={__(
+                                    //                             "Upload Image",
+                                    //                             "essential-blocks"
+                                    //                         )}
+                                    //                         icon="format-image"
+                                    //                         onClick={
+                                    //                             open
+                                    //                         }
+                                    //                     />
+                                    //                 );
+                                    //             }}
+                                    //         />
+                                    //     )}
 
-                                // {media === "image" && imageUrl && (
-                                //     <ImageAvatar
-                                //         imageUrl={imageUrl}
-                                //         onDeleteImage={() =>
-                                //             setAttributes({
-                                //                 imageUrl: null,
-                                //             })
-                                //         }
-                                //     />
+                                    // {media === "image" && imageUrl && (
+                                    //     <ImageAvatar
+                                    //         imageUrl={imageUrl}
+                                    //         onDeleteImage={() =>
+                                    //             setAttributes({
+                                    //                 imageUrl: null,
+                                    //             })
+                                    //         }
+                                    //     />
 
-                                    <ImageComponent.GeneralTab 
+                                    <ImageComponent.GeneralTab
                                         hasStyle={false}
                                     />
                                 )}
@@ -605,6 +601,7 @@ function Inspector(props) {
                                     isInfoClick: !isInfoClick,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isInfoClick && (
@@ -640,6 +637,7 @@ function Inspector(props) {
                                             linkNewTab: !linkNewTab,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -656,6 +654,7 @@ function Inspector(props) {
                                         enableButton: !enableButton,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>
@@ -687,130 +686,105 @@ function Inspector(props) {
                                 {(flexDirection === "row" ||
                                     flexDirection ===
                                     "row-reverse") && (
-                                        <BaseControl
-                                            id="eb-infobox-alignments"
+                                        <ToggleGroupControl
                                             label={__("Media alignments", "essential-blocks")}
+
+                                            value={mediaAlignment}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    mediaAlignment: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup id="eb-infobox-alignments">
-                                                {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
-                                                    (
-                                                        {
-                                                            value,
-                                                            label,
-                                                        },
-                                                        index
-                                                    ) => (
-                                                        <Button
-                                                            key={
-                                                                index
-                                                            }
-                                                            isSecondary={
-                                                                mediaAlignment !==
-                                                                value
-                                                            }
-                                                            isPrimary={
-                                                                mediaAlignment ===
-                                                                value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes(
-                                                                    {
-                                                                        mediaAlignment: value,
-                                                                    }
-                                                                )
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    )
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(
+                                                (
+                                                    {
+                                                        value,
+                                                        label,
+                                                    },
+                                                    index
+                                                ) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={value}
+                                                        label={label}
+                                                    />
+                                                )
+                                            )}
+                                        </ToggleGroupControl>
                                     )}
 
                                 {(flexDirection === "column" ||
                                     flexDirection ===
                                     "column-reverse") && (
-                                        <BaseControl
-                                            id="eb-infobox-alignments"
+                                        <ToggleGroupControl
                                             label={__("Media alignments", "essential-blocks")}
+
+                                            value={mediaAlignment}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    mediaAlignment: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup id="eb-infobox-alignments">
-                                                {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
-                                                    (
-                                                        {
-                                                            value,
-                                                            label,
-                                                        },
-                                                        index
-                                                    ) => (
-                                                        <Button
-                                                            key={
-                                                                index
-                                                            }
-                                                            isSecondary={
-                                                                mediaAlignment !==
-                                                                value
-                                                            }
-                                                            isPrimary={
-                                                                mediaAlignment ===
-                                                                value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes(
-                                                                    {
-                                                                        mediaAlignment: value,
-                                                                    }
-                                                                )
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    )
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(
+                                                (
+                                                    {
+                                                        value,
+                                                        label,
+                                                    },
+                                                    index
+                                                ) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={value}
+                                                        label={label}
+                                                    />
+                                                )
+                                            )}
+                                        </ToggleGroupControl>
                                     )}
                             </>
                         )}
 
-                        <BaseControl
-                            id="eb-infobox-alignments"
+                        <ToggleGroupControl
                             label={__("Contents alignments", "essential-blocks")}
+
+                            value={contentsAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    contentsAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-infobox-alignments">
-                                {CONTENTS_ALIGNMENTS.map(
-                                    (
-                                        { value, label },
-                                        index
-                                    ) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={
-                                                contentsAlignment !==
-                                                value
-                                            }
-                                            isPrimary={
-                                                contentsAlignment ===
-                                                value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    contentsAlignment: value,
-                                                })
-                                            }
-                                        >
-                                            {label}
-                                        </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {CONTENTS_ALIGNMENTS.map(
+                                (
+                                    { value, label },
+                                    index
+                                ) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={value}
+                                        label={label}
+                                    />
+                                )
+                            )}
+                        </ToggleGroupControl>
 
                         {/* {enableButton && !isInfoClick && (
                             <BaseControl
                                 id="eb-infobox-alignments"
                                 label={__("Button alignments", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-infobox-alignments">
                                     {CONTENTS_ALIGNMENTS.map(
@@ -908,53 +882,43 @@ function Inspector(props) {
                                                         useNumIconBg: !useNumIconBg,
                                                     })
                                                 }
+                                                __nextHasNoMarginBottom
                                             />
 
                                             {useNumIconBg && (
                                                 <>
-                                                    <BaseControl
+                                                    <ToggleGroupControl
                                                         label={__(
                                                             "Background Type",
                                                             "essential-blocks"
                                                         )}
+
+                                                        value={numIconBgType}
+                                                        onChange={(value) =>
+                                                            setAttributes({
+                                                                numIconBgType: value,
+                                                            })
+                                                        }
+                                                        isBlock
+                                                        __next40pxDefaultSize
+                                                        __nextHasNoMarginBottom
                                                     >
-                                                        <ButtonGroup id="eb-infobox-infobox-background">
-                                                            {ICON_IMAGE_BG_TYPES.map(
-                                                                (
-                                                                    {
-                                                                        value,
-                                                                        label,
-                                                                    },
-                                                                    index
-                                                                ) => (
-                                                                    <Button
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        isPrimary={
-                                                                            numIconBgType ===
-                                                                            value
-                                                                        }
-                                                                        isSecondary={
-                                                                            numIconBgType !==
-                                                                            value
-                                                                        }
-                                                                        onClick={() =>
-                                                                            setAttributes(
-                                                                                {
-                                                                                    numIconBgType: value,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            label
-                                                                        }
-                                                                    </Button>
-                                                                )
-                                                            )}
-                                                        </ButtonGroup>
-                                                    </BaseControl>
+                                                        {ICON_IMAGE_BG_TYPES.map(
+                                                            (
+                                                                {
+                                                                    value,
+                                                                    label,
+                                                                },
+                                                                index
+                                                            ) => (
+                                                                <ToggleGroupControlOption
+                                                                    key={index}
+                                                                    value={value}
+                                                                    label={label}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </ToggleGroupControl>
 
                                                     {numIconBgType ===
                                                         "fill" && (
@@ -1031,6 +995,7 @@ function Inspector(props) {
                                                     isMediaImgHeightAuto: !isMediaImgHeightAuto,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
 
                                         {!isMediaImgHeightAuto && (
@@ -1208,7 +1173,7 @@ function Inspector(props) {
                         </>
 
                     )}
-                    <ImageComponent.StyleTab 
+                    <ImageComponent.StyleTab
                         border={mediaBdShd}
                         margin={mediaBgMargin}
                         width={mediaImageWidth}

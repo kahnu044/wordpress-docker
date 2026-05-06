@@ -11,7 +11,8 @@ import Inspector from "./inspector";
 import {
     NoticeComponent,
     BlockProps,
-    withBlockContext
+    withBlockContext,
+    getEditorDocument,
 } from "@essential-blocks/controls";
 
 import {
@@ -60,10 +61,6 @@ function Edit(props) {
     const mapRef = useRef(null);
     const isMount = useRef(null);
 
-    const getEditorIframe = () => {
-        return document.querySelector('iframe[name^="editor-canvas"]');
-    };
-
     useEffect(() => {
         isMount.current = true;
         return () => {
@@ -107,7 +104,7 @@ function Edit(props) {
 
     // initialize map
     const initMap = () => {
-        const editor = getEditorIframe()?.contentWindow?.document ?? document;
+        const editor = getEditorDocument();
         if (!window.google || !editor.getElementById(blockId)) {
             setIsMapInit(false);
             return;

@@ -48,6 +48,22 @@ const attributes = {
         type: "string",
         default: "full",
     },
+    inheritTheme: {
+        type: "string",
+        default: "",
+    },
+    adminWidthVar: {
+        type: "string",
+        default: "",
+    },
+    frontMaxWidthVar: {
+        type: "string",
+        default: "",
+    },
+    frontWidthVar: {
+        type: "string",
+        default: "",
+    },
     containerAlign: {
         type: "string",
         default: "center",

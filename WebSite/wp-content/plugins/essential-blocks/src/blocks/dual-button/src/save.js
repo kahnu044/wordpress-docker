@@ -24,7 +24,7 @@ const Save = ({ attributes }) => {
             attributes={attributes}
         >
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div
                     className={`eb-button-group-wrapper ${blockId} ${preset}`}

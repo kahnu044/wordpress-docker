@@ -125,6 +125,8 @@ function Edit(props) {
                                     value={formId}
                                     options={FORM_LISTS}
                                     onChange={(newFormId) => setAttributes({ formId: newFormId })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </Placeholder>
                         )}

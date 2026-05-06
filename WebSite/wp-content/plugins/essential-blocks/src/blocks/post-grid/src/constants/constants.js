@@ -56,6 +56,27 @@ export const TAXONOMY_BORDER = "taxonomyBorder";
 export const ICON_SIZE = "iconSize";
 export const ICON_SPACE = "iconSpace";
 
+export const POST_MIN_HEIGHT = "postMinHeight";
+export const POST_WIDTH = "postWidth";
+export const LIST_POST_WIDTH = "listPostWidth";
+
+
+export const FEATURED_POST_BORDER = "featuredPostBorder";
+export const FEATURED_POST_PADDING = "featuredPostPadding";
+export const FEATURED_TITLE_PADDING = "featuredTitlePadding";
+export const FEATURED_TITLE_MARGIN = "featuredTitleMargin";
+export const FEATURED_TITLE_BORDER = "featuredTitleBorder";
+export const FEATURED_EXCERPT_PADDING = "featuredExcerptPadding";
+export const FEATURED_EXCERPT_MARGIN = "featuredExcerptMargin";
+export const FEATURED_EXCERPT_BORDER = "featuredExcerptBorder";
+export const FEATURED_META_PADDING = "featuredMetaPadding";
+export const FEATURED_META_MARGIN = "featuredMetaMargin";
+export const FEATURED_META_BORDER = "featuredMetaBorder";
+export const FEATURED_READMORE_PADDING = "featuredReadmorePadding";
+export const FEATURED_READMORE_MARGIN = "featuredReadmoreMargin";
+export const FEATURED_READMORE_BORDER = "featuredReadmoreBorder";
+export const FEATURED_AVATAR_RADIUS = "featuredAvatarRadius";
+
 export const UNIT_TYPES = [
     { label: "px", value: "px" },
     { label: "em", value: "em" },
@@ -135,6 +156,19 @@ export const VERTICAL_POSITION = [
     { label: "Middle", value: "center" },
     { label: "Bottom", value: "flex-end" },
 ];
+
+export const HORIZONTAL_CONTENT_POSITION = [
+    { label: __(<Dashicon icon={"editor-alignleft"} />), value: "flex-start" },
+    { label: __(<Dashicon icon={"editor-aligncenter"} />), value: "center" },
+    { label: __(<Dashicon icon={"editor-alignright"} />), value: "flex-end" },
+];
+
+export const VERTICAL_CONTENT_POSITION = [
+    { label: "Top", value: "flex-start" },
+    { label: "Middle", value: "center" },
+    { label: "Bottom", value: "flex-end" },
+];
+
 export const ICON_POSITION = [
     { label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
     { label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },

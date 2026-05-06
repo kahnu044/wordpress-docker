@@ -7,8 +7,9 @@ import {
     ToggleControl,
     BaseControl,
     Button,
-    ButtonGroup,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { MediaUpload } from "@wordpress/block-editor";
 import {
@@ -99,18 +100,11 @@ function NumberCounter(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     <PanelBody initialOpen={true} title={__("Media Options", "essential-blocks")}>
-                        <ButtonGroup id="eb-infobox-image-icon">
+                        <ToggleGroupControl label={__("Media Options", "essential-blocks")} value={media} onChange={(value) => handleBlockDefault({ media: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
                             {MEDIA_TYPES.map((value, index) => (
-                                <Button
-                                    key={index}
-                                    isSecondary={media !== value}
-                                    isPrimary={media === value}
-                                    onClick={() => handleBlockDefault({ media: value })}
-                                >
-                                    {value}
-                                </Button>
+                                <ToggleGroupControlOption key={index} value={value} label={value} />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
                     </PanelBody>
 
                     {media !== "none" && (
@@ -171,28 +165,16 @@ function NumberCounter(props) {
                                                 useIconBg: !useIconBg,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
 
                                     {useIconBg && (
                                         <>
-                                            <BaseControl label={__("Background Type", "essential-blocks")}>
-                                                <ButtonGroup id="eb-infobox-infobox-background">
-                                                    {ICON_IMAGE_BG_TYPES.map(({ value, label }, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isPrimary={iconBgType === value}
-                                                            isSecondary={iconBgType !== value}
-                                                            onClick={() =>
-                                                                handleBlockDefault({
-                                                                    iconBgType: value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    ))}
-                                                </ButtonGroup>
-                                            </BaseControl>
+                                            <ToggleGroupControl label={__("Background Type", "essential-blocks")} value={iconBgType} onChange={(value) => handleBlockDefault({ iconBgType: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                                {ICON_IMAGE_BG_TYPES.map(({ value, label }, index) => (
+                                                    <ToggleGroupControlOption key={index} value={value} label={label} />
+                                                ))}
+                                            </ToggleGroupControl>
 
                                             {iconBgType === "fill" && (
                                                 <ColorControl
@@ -275,6 +257,7 @@ function NumberCounter(props) {
                                                 isMediaImgHeightAuto: !isMediaImgHeightAuto,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
 
                                     {!isMediaImgHeightAuto && (
@@ -282,7 +265,7 @@ function NumberCounter(props) {
                                             <ResponsiveRangeController
                                                 baseLabel={__("Image Height", "essential-blocks")}
                                                 controlName={mediaImageHeight}
-                                               
+
                                                 units={imgHeightUnits}
                                                 min={0}
                                                 max={500}
@@ -313,87 +296,35 @@ function NumberCounter(props) {
                             <>
                                 {(rootFlexDirection === "row" || rootFlexDirection === "row-reverse") && (
                                     <>
-                                        <BaseControl id="eb-infobox-alignments" label="Media Vertical alignments">
-                                            <ButtonGroup id="eb-infobox-alignments">
-                                                {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(({ value, label }, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={mediaAlignSelf !== value}
-                                                        isPrimary={mediaAlignSelf === value}
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                mediaAlignSelf: value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                        <ToggleGroupControl label="Media Vertical alignments" value={mediaAlignSelf} onChange={(value) => handleBlockDefault({ mediaAlignSelf: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                            {MEDIA_ALIGNMENTS_ON_FLEX_ROW.map(({ value, label }, index) => (
+                                                <ToggleGroupControlOption key={index} value={value} label={label} />
+                                            ))}
+                                        </ToggleGroupControl>
 
-                                        <BaseControl id="eb-infobox-alignments" label="Content Vertical alignments">
-                                            <ButtonGroup id="eb-infobox-alignments">
-                                                {CONTENTS_ALIGNMENTS_ON_FLEX_ROW.map(({ value, label }, index) => (
-                                                    <Button
-                                                        key={index}
-                                                        isSecondary={contentsAlignSelf !== value}
-                                                        isPrimary={contentsAlignSelf === value}
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                contentsAlignSelf: value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                        <ToggleGroupControl label="Content Vertical alignments" value={contentsAlignSelf} onChange={(value) => handleBlockDefault({ contentsAlignSelf: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                            {CONTENTS_ALIGNMENTS_ON_FLEX_ROW.map(({ value, label }, index) => (
+                                                <ToggleGroupControlOption key={index} value={value} label={label} />
+                                            ))}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
 
                                 {(rootFlexDirection === "column" || rootFlexDirection === "column-reverse") && (
-                                    <BaseControl id="eb-infobox-alignments" label="Media alignments">
-                                        <ButtonGroup id="eb-infobox-alignments">
-                                            {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(({ value, label }, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isSecondary={mediaAlignSelf !== value}
-                                                    isPrimary={mediaAlignSelf === value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            mediaAlignSelf: value,
-                                                        })
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl label="Media alignments" value={mediaAlignSelf} onChange={(value) => handleBlockDefault({ mediaAlignSelf: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                        {MEDIA_ALIGNMENTS_ON_FLEX_COLUMN.map(({ value, label }, index) => (
+                                            <ToggleGroupControlOption key={index} value={value} label={label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
                             </>
                         )}
 
-                        <BaseControl id="eb-infobox-alignments" label="Contents alignments">
-                            <ButtonGroup id="eb-infobox-alignments">
-                                {CONTENTS_ALIGNMENTS.map(({ value, label }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={contentAlignment !== value}
-                                        isPrimary={contentAlignment === value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentAlignment: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl label="Contents alignments" value={contentAlignment} onChange={(value) => handleBlockDefault({ contentAlignment: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                            {CONTENTS_ALIGNMENTS.map(({ value, label }, index) => (
+                                <ToggleGroupControlOption key={index} value={value} label={label} />
+                            ))}
+                        </ToggleGroupControl>
                     </PanelBody>
 
                     <PanelBody title={__("Number", "essential-blocks")} initialOpen={false}>

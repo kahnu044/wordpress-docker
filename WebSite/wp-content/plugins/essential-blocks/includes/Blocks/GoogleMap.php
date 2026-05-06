@@ -91,6 +91,19 @@ class GoogleMap extends Block
             }
         }
 
+        // Re-encode marker data from translated attributes into the rendered HTML.
+        // WPML translates marker titles/content in the block comment JSON, but the
+        // saved HTML still contains the old base64-encoded marker data. We need to
+        // replace it with the freshly encoded translated data.
+        if ( ! empty( $attributes['marker'] ) && is_array( $attributes['marker'] ) ) {
+            $encoded_marker = base64_encode( wp_json_encode( $attributes['marker'] ) );
+            $content        = preg_replace(
+                '/data-marker="[^"]*"/',
+                'data-marker="' . esc_attr( $encoded_marker ) . '"',
+                $content
+            );
+        }
+
         return $content;
     }
 }

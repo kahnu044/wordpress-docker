@@ -30,7 +30,7 @@ const save = ({ attributes }) => {
     return (
         <BlockProps.Save attributes={attributes}>
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <figure
                     className={`eb-advanced-image-wrapper ${blockId} ${hoverEffect}`}

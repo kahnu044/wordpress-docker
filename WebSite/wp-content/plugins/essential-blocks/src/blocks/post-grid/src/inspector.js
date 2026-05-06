@@ -12,6 +12,9 @@ import {
     ButtonGroup,
     BaseControl,
     RangeControl,
+    __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { withSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
@@ -21,6 +24,7 @@ import { MediaUpload } from "@wordpress/block-editor";
  * External Dependencies
  */
 import Select2 from "react-select";
+import AsyncSelect from "react-select/async";
 
 /**
  * Internal depencencies
@@ -70,6 +74,23 @@ import {
     ICON_POSITION,
     ICON_SIZE,
     ICON_SPACE,
+    POST_MIN_HEIGHT,
+    POST_WIDTH,
+    LIST_POST_WIDTH,
+    FEATURED_TITLE_PADDING,
+    FEATURED_TITLE_MARGIN,
+    FEATURED_TITLE_BORDER,
+    FEATURED_EXCERPT_PADDING,
+    FEATURED_EXCERPT_MARGIN,
+    FEATURED_EXCERPT_BORDER,
+    FEATURED_META_PADDING,
+    FEATURED_META_MARGIN,
+    FEATURED_META_BORDER,
+    FEATURED_POST_BORDER,
+    FEATURED_POST_PADDING,
+    HORIZONTAL_CONTENT_POSITION,
+    VERTICAL_CONTENT_POSITION,
+    FEATURED_AVATAR_RADIUS
 } from "./constants/constants";
 import {
     EBPG_TITLE_TYPOGRAPHY,
@@ -78,6 +99,10 @@ import {
     EBPG_META_TYPOGRAPHY,
     EBPG_LOAD_MORE_TYPOGRAPHY,
     FILTER_ITEM_TYPOGRAPHY,
+    FEATURED_TITLE_TYPO,
+    FEATURED_EXCERPT_TYPO,
+    FEATURED_META_TYPO,
+    FEATURED_READMORE_TYPO,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -95,8 +120,10 @@ import {
     SortControl,
     InspectorPanel,
     ButtonGroupControl,
-    ImageAvatar
+    ImageAvatar,
+    getPostsBySearchString,
 } from "@essential-blocks/controls";
+import { use } from "react";
 
 function Inspector(props) {
     const { attributes, setAttributes, taxonomyData, setQueryResults } = props;
@@ -183,9 +210,52 @@ function Inspector(props) {
         fallbackImgUrl,
         fallbackImgId,
         fallbackImgAlt,
+        showFeaturedPost,
+        featuredPostId,
+        showFeaturedPostTitle,
+        showFeaturedPostContent,
+        showFeaturedPostMeta,
+        showFeaturedHeaderMeta,
+        showFeaturedFooterMeta,
+        featuredMetaItems,
+        featuredExcerptLength,
+        featuredTitleColor,
+        featuredTitleHoverColor,
+        featuredExcerptColor,
+        featuredExcerptHoverColor,
+        featuredMetaColor,
+        featuredMetaHoverColor,
+        featuredPostBorderRadius,
+        featuredPostBottomSpacing,
+        featuredPostHorizontalAlign,
+        featuredPostVerticalAlign,
+        featuredMetaBGColor,
+        featuredMetaBGHoverColor,
+        featuredOverlayColor,
+        showSearch,
+        featuredPostMetaStatus,
+        featuredPostAuthorMetaColor,
+        featuredPostAuthorMetaHoverColor,
+        featuredPostCommonMetaColor,
+        featuredPostCommonMetaBgColor,
+        featuredPostCategoryMetaColor,
+        featuredPostCategoryMetaBgColor,
+        featuredPostTagMetaColor,
+        featuredPostTagMetaBgColor,
+        featuredPostReadTimeMetaColor,
+        featuredPostDynamicMetaColor,
+        featuredPostDynamicMetaBgColor,
+        featuredPostDateMetaColor,
+        featuredPostCommonMetaHoverColor,
+        featuredPostCommonMetaHoverBgColor,
+        featuredPostCategoryMetaHoverColor,
+        featuredPostCategoryMetaHoverBgColor,
+        featuredPostTagMetaHoverColor,
+        featuredPostTagMetaHoverBgColor,
     } = attributes;
 
     const [metaOptions, setMetaOptions] = useState([]);
+    const [featuredPostOptions, setFeaturedPostOptions] = useState([]);
 
     /**
      * Prepare Post Terms
@@ -285,6 +355,39 @@ function Inspector(props) {
     };
 
     useEffect(() => {
+        // pro preset
+        applyFilters("eb_post_grid_preset_change", preset, attributes, setAttributes);
+
+        switch (preset) {
+            case "style-1":
+                setAttributes({
+                    featuredPostBorderRadius: 0,
+                });
+                break;
+            case "style-2":
+                setAttributes({
+                    featuredPostBorderRadius: 5,
+                });
+            case "style-3":
+                setAttributes({
+                    featuredPostBorderRadius: 5,
+                });
+                break;
+            case "style-4":
+                setAttributes({
+                    featuredPostBorderRadius: 0,
+                });
+                break;
+            case "style-5":
+                setAttributes({
+                    featuredPostBorderRadius: 0,
+                });
+                break;
+
+        }
+    }, [preset]);
+
+    useEffect(() => {
         if (!enableThumbnailSort && enableContents.includes("thumbnail")) {
             setAttributes({
                 enableContents: enableContents.filter((item) => item !== "thumbnail"),
@@ -305,6 +408,31 @@ function Inspector(props) {
         }
     }, [selectedTaxonomy])
 
+    // Function to load featured posts by search
+    const loadFeaturedPosts = (value) => {
+        if (!value || value.length < 2) {
+            return featuredPostOptions;
+        }
+
+        return getPostsBySearchString(value, queryData).then((postData) => {
+            let postDataForOptions = [];
+            postData.length > 0 &&
+                postData.forEach((item) => {
+                    let filterPostData = {};
+                    Object.keys(item).forEach((key) => {
+                        if (key === "title") {
+                            filterPostData.label = item[key];
+                        }
+                        if (key === "id") {
+                            filterPostData.value = item[key];
+                        }
+                    });
+                    postDataForOptions.push(filterPostData);
+                });
+            return postDataForOptions;
+        });
+    };
+
     return (
         <>
             <InspectorPanel advancedControlProps={{
@@ -316,6 +444,16 @@ function Inspector(props) {
                 <InspectorPanel.General>
                     <CustomQuery attributes={attributes} setAttributes={setAttributes} setQueryResults={setQueryResults} />
                     <InspectorPanel.PanelBody title={__("Layout Style", "essential-blocks")} initialOpen={false}>
+                        <ToggleControl
+                            label={__("Show Featured Post?")}
+                            checked={showFeaturedPost}
+                            onChange={() => {
+                                setAttributes({
+                                    showFeaturedPost: !showFeaturedPost,
+                                    showSearch: !showFeaturedPost && showSearch ? false : showSearch,
+                                });
+                            }}
+                        />
                         <ResponsiveRangeController
                             baseLabel={__("Columns", "essential-blocks")}
                             controlName={COLUMNS}
@@ -345,6 +483,7 @@ function Inspector(props) {
 
                                     makeEnableContent(!showThumbnail, "thumbnail");
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -387,6 +526,7 @@ function Inspector(props) {
                                             showFallbackImg: !showFallbackImg,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {showFallbackImg && !fallbackImgUrl && (
@@ -438,28 +578,18 @@ function Inspector(props) {
                         )}
 
                         {(preset === "style-4" || preset === "style-5" || preset === "pro-style-6") && (
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Content Vertical Alignment", "essential-blocks")}
-                                id="essential-blocks"
+                                value={styleVerticalAlignment}
+                                onChange={(value) => setAttributes({ styleVerticalAlignment: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="essential-blocks">
-                                    {VERTICAL_POSITION.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={styleVerticalAlignment === item.value}
-                                            isSecondary={styleVerticalAlignment !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    styleVerticalAlignment: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {VERTICAL_POSITION.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                         )}
 
                         <ToggleControl
@@ -471,27 +601,23 @@ function Inspector(props) {
                                 });
                                 makeEnableContent(!showTitle, "title");
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showTitle && (
                             <>
-                                <BaseControl label={__("Title Tag", "essential-blocks")}>
-                                    <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                        {TITLE_TAGS.map((item, key) => (
-                                            <Button
-                                                key={key}
-                                                // isLarge
-                                                isPrimary={titleTag === item.value}
-                                                isSecondary={titleTag !== item.value}
-                                                onClick={() =>
-                                                    setAttributes({ titleTag: item.value })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Title Tag", "essential-blocks")}
+                                    value={titleTag}
+                                    onChange={(value) => setAttributes({ titleTag: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {TITLE_TAGS.map((item, key) => (
+                                        <ToggleGroupControlOption key={key} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 <RangeControl
                                     label="Title Words"
@@ -504,6 +630,8 @@ function Inspector(props) {
                                     min={-1}
                                     max={100}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -517,6 +645,7 @@ function Inspector(props) {
                                 });
                                 makeEnableContent(!showContent, "excerpt");
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showContent && (
@@ -532,6 +661,8 @@ function Inspector(props) {
                                     min={-1}
                                     max={100}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <TextControl
@@ -543,6 +674,8 @@ function Inspector(props) {
                                             expansionIndicator: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -555,6 +688,7 @@ function Inspector(props) {
                                     showReadMore: !showReadMore,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showReadMore && (
@@ -585,6 +719,7 @@ function Inspector(props) {
                                                 addIcon: !addIcon,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                     {addIcon && (
                                         <>
@@ -596,24 +731,18 @@ function Inspector(props) {
                                                     })
                                                 }
                                             />
-                                            <BaseControl label={__("Icon Postion", "essential-blocks")}>
-                                                <ButtonGroup id="eb-button-group-alignment">
-                                                    {ICON_POSITION.map((item, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isPrimary={iconPosition === item.value}
-                                                            isSecondary={iconPosition !== item.value}
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    iconPosition: item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ))}
-                                                </ButtonGroup>
-                                            </BaseControl>
+                                            <ToggleGroupControl
+                                                label={__("Icon Postion", "essential-blocks")}
+                                                value={iconPosition}
+                                                onChange={(value) => setAttributes({ iconPosition: value })}
+                                                isBlock
+                                                __next40pxDefaultSize
+                                                __nextHasNoMarginBottom
+                                            >
+                                                {ICON_POSITION.map((item, index) => (
+                                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                                ))}
+                                            </ToggleGroupControl>
                                             <ResponsiveRangeController
                                                 baseLabel={__("Size", "essential-blocks")}
                                                 controlName={ICON_SIZE}
@@ -639,6 +768,7 @@ function Inspector(props) {
                                 });
                                 makeEnableContent(!showMeta, "meta");
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showMeta && (
@@ -726,6 +856,7 @@ function Inspector(props) {
                                             enableThumbnailSort: !enableThumbnailSort,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             )
                         }
@@ -738,6 +869,182 @@ function Inspector(props) {
                             hasDelete={false}
                         ></SortControl>
                     </InspectorPanel.PanelBody>
+
+                    {showFeaturedPost && (
+                        <InspectorPanel.PanelBody title={__("Featured Post", "essential-blocks")} initialOpen={false}>
+                            <div className="eb-control-item-wrapper ">
+                                <PanelRow>{__("Select Featured Post", "essential-blocks")}</PanelRow>
+                                <AsyncSelect
+                                    cacheOptions
+                                    value={
+                                        featuredPostId && featuredPostId.length > 0
+                                            ? JSON.parse(featuredPostId)
+                                            : ""
+                                    }
+                                    defaultOptions={featuredPostOptions}
+                                    placeholder={`Search for ${queryData?.source ? queryData.source : "Posts"}`}
+                                    loadOptions={loadFeaturedPosts}
+                                    onChange={(selected) =>
+                                        setAttributes({
+                                            featuredPostId: JSON.stringify(selected),
+                                        })
+                                    }
+                                    menuPortalTarget={document.body}
+                                    menuPosition="fixed"
+                                    styles={{
+                                        menuPortal: (base) => ({
+                                            ...base,
+                                            zIndex: 9999
+                                        }),
+                                    }}
+                                />
+                            </div>
+
+                            <EbImageSizeSelector
+                                attrName={"thumbnailSize"}
+                                setAttributes={setAttributes}
+                            />
+
+                            <ResponsiveRangeController
+                                baseLabel={__("Post Height", "essential-blocks")}
+                                controlName={POST_MIN_HEIGHT}
+                                noUnits
+                                min={0}
+                                max={1000}
+                                step={1}
+                            />
+                            {preset === "style-4" && (
+                                <>
+                                    <ResponsiveRangeController
+                                        baseLabel={__("Featured Post Width", "essential-blocks")}
+                                        controlName={POST_WIDTH}
+                                        units={UNIT_TYPES}
+                                        min={0}
+                                        max={1000}
+                                        step={1}
+                                    />
+                                    <ResponsiveRangeController
+                                        baseLabel={__("List Post Width", "essential-blocks")}
+                                        controlName={LIST_POST_WIDTH}
+                                        units={UNIT_TYPES}
+                                        min={0}
+                                        max={1000}
+                                        step={1}
+                                    />
+                                </>
+                            )}
+
+                            <ToggleControl
+                                label={__("Show Title", "essential-blocks")}
+                                checked={showFeaturedPostTitle}
+                                onChange={() => {
+                                    setAttributes({
+                                        showFeaturedPostTitle: !showFeaturedPostTitle,
+                                    });
+                                }}
+                            />
+                            <ToggleControl
+                                label={__("Show Excerpt", "essential-blocks")}
+                                checked={showFeaturedPostContent}
+                                onChange={() => {
+                                    setAttributes({
+                                        showFeaturedPostContent: !showFeaturedPostContent,
+                                    });
+                                }}
+                            />
+                            {showFeaturedPostContent && (
+                                <RangeControl
+                                    label={__("Excerpt Words", "essential-blocks")}
+                                    value={featuredExcerptLength}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            featuredExcerptLength: value,
+                                        })
+                                    }
+                                    min={1}
+                                    max={1000}
+                                    allowReset={true}
+                                    resetFallbackValue={10}
+                                />
+                            )}
+
+                            <ToggleControl
+                                label={__("Show Meta", "essential-blocks")}
+                                checked={showFeaturedPostMeta}
+                                onChange={() => {
+                                    setAttributes({
+                                        showFeaturedPostMeta: !showFeaturedPostMeta,
+                                    });
+                                }}
+                            />
+                            {showFeaturedPostMeta && (
+                                <>
+                                    <Divider />
+                                    <ToggleControl
+                                        label={__("Show Header Meta", "essential-blocks")}
+                                        checked={showFeaturedHeaderMeta}
+                                        onChange={() =>
+                                            setAttributes({
+                                                showFeaturedHeaderMeta: !showFeaturedHeaderMeta,
+                                            })
+                                        }
+                                    />
+                                    {showFeaturedHeaderMeta && headerMeta && headerMeta.length > 0 && (
+                                        <>
+                                            {JSON.parse(headerMeta).map((item, index) => {
+                                                const metaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
+                                                const isChecked = metaItemsObj[item.value] !== undefined ? metaItemsObj[item.value] : true;
+                                                return (
+                                                    <ToggleControl
+                                                        key={index}
+                                                        label={__(item.label, "essential-blocks")}
+                                                        checked={isChecked}
+                                                        onChange={() => {
+                                                            const updatedItems = { ...metaItemsObj, [item.value]: !isChecked };
+                                                            setAttributes({
+                                                                featuredMetaItems: JSON.stringify(updatedItems),
+                                                            });
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </>
+                                    )}
+                                    <Divider />
+                                    <ToggleControl
+                                        label={__("Show Footer Meta", "essential-blocks")}
+                                        checked={showFeaturedFooterMeta}
+                                        onChange={() =>
+                                            setAttributes({
+                                                showFeaturedFooterMeta: !showFeaturedFooterMeta,
+                                            })
+                                        }
+                                    />
+                                    {showFeaturedFooterMeta && footerMeta && footerMeta.length > 0 && (
+                                        <>
+                                            {JSON.parse(footerMeta).map((item, index) => {
+                                                const metaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
+                                                const isChecked = metaItemsObj[item.value] !== undefined ? metaItemsObj[item.value] : true;
+                                                return (
+                                                    <ToggleControl
+                                                        key={index}
+                                                        label={__(item.label, "essential-blocks")}
+                                                        checked={isChecked}
+                                                        onChange={() => {
+                                                            const updatedItems = { ...metaItemsObj, [item.value]: !isChecked };
+                                                            setAttributes({
+                                                                featuredMetaItems: JSON.stringify(updatedItems),
+                                                            });
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </InspectorPanel.PanelBody>
+                    )}
 
                     <MorePosts
                         loadMoreOptions={loadMoreOptions}
@@ -754,6 +1061,7 @@ function Inspector(props) {
                                     showTaxonomyFilter: !showTaxonomyFilter,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showTaxonomyFilter && (
                             <>
@@ -808,6 +1116,249 @@ function Inspector(props) {
                     )}
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
+                    {showFeaturedPost && (
+                        <InspectorPanel.PanelBody title={__("Featured Post", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Overlay Color", "essential-blocks")}
+                                color={featuredOverlayColor}
+                                attributeName={'featuredOverlayColor'}
+                                isGradient={true}
+                            />
+                            <RangeControl
+                                label={__("Border Radius", "essential-blocks")}
+                                value={featuredPostBorderRadius}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        featuredPostBorderRadius: value,
+                                    })
+                                }
+                                min={0}
+                                max={100}
+                                step={1}
+                            />
+                            <BorderShadowControl
+                                controlName={FEATURED_POST_BORDER}
+                                noBorder
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FEATURED_POST_PADDING}
+                                baseLabel="Content Padding"
+                            />
+                            <RangeControl
+                                label={__("Bottom Spacing", "essential-blocks")}
+                                value={featuredPostBottomSpacing}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        featuredPostBottomSpacing: value,
+                                    })
+                                }
+                                min={0}
+                                max={1000}
+                                step={1}
+                            />
+                            <ButtonGroupControl
+                                label={__("Horizontal Align", "essential-blocks")}
+                                options={HORIZONTAL_CONTENT_POSITION}
+                                currentValue={featuredPostHorizontalAlign}
+                                attrName="featuredPostHorizontalAlign"
+                                onChange={(featuredPostHorizontalAlign) => setAttributes({ featuredPostHorizontalAlign })}
+                            />
+
+                            {/* not display Vertical Align for preset 7, 8 */}
+
+                            {!(preset === "pro-style-7" || preset === "pro-style-8") && (
+                                <>
+                                    <ButtonGroupControl
+                                        label={__("Vertical Align", "essential-blocks")}
+                                        options={VERTICAL_CONTENT_POSITION}
+                                        currentValue={featuredPostVerticalAlign}
+                                        attrName="featuredPostVerticalAlign"
+                                        onChange={(featuredPostVerticalAlign) => setAttributes({ featuredPostVerticalAlign })}
+                                    />
+                                </>
+                            )}
+
+                            <BaseControl>
+                                <h3 className="eb-control-title">
+                                    {__("Title Style", "essential-blocks")}
+                                </h3>
+                            </BaseControl>
+                            <TypographyDropdown
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={FEATURED_TITLE_TYPO}
+                            />
+                            <ColorControl
+                                label={__("Title Color", "essential-blocks")}
+                                color={featuredTitleColor}
+                                attributeName={'featuredTitleColor'}
+                            />
+                            <ColorControl
+                                label={__("Title Hover Color", "essential-blocks")}
+                                color={featuredTitleHoverColor}
+                                attributeName={'featuredTitleHoverColor'}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FEATURED_TITLE_PADDING}
+                                baseLabel="Title Padding"
+                            />
+                            <Divider />
+                            <BaseControl>
+                                <h3 className="eb-control-title">
+                                    {__("Excerpt Style", "essential-blocks")}
+                                </h3>
+                            </BaseControl>
+                            <TypographyDropdown
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={FEATURED_EXCERPT_TYPO}
+                            />
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={featuredExcerptColor}
+                                attributeName={'featuredExcerptColor'}
+                            />
+                            <ColorControl
+                                label={__("Hover Color", "essential-blocks")}
+                                color={featuredExcerptHoverColor}
+                                attributeName={'featuredExcerptHoverColor'}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FEATURED_EXCERPT_PADDING}
+                                baseLabel="Excerpt Padding"
+                            />
+                            <Divider />
+                            <BaseControl>
+                                <h3 className="eb-control-title">
+                                    {__("Meta Style", "essential-blocks")}
+                                </h3>
+                            </BaseControl>
+                            <TypographyDropdown
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={FEATURED_META_TYPO}
+                            />
+                            <ButtonGroupControl
+                                options={NORMAL_HOVER}
+                                currentValue={featuredPostMetaStatus}
+                                attrName="featuredPostMetaStatus"
+                                onChange={(featuredPostMetaStatus) => setAttributes({ featuredPostMetaStatus })}
+                            />
+                            {featuredPostMetaStatus === "normal" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Author Color", "essential-blocks")}
+                                        color={featuredPostAuthorMetaColor}
+                                        attributeName={'featuredPostAuthorMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Date Color", "essential-blocks")}
+                                        color={featuredPostDateMetaColor}
+                                        attributeName={'featuredPostDateMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta Color", "essential-blocks")}
+                                        color={featuredPostCommonMetaColor}
+                                        attributeName={'featuredPostCommonMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta BG Color", "essential-blocks")}
+                                        color={featuredPostCommonMetaBgColor}
+                                        attributeName={'featuredPostCommonMetaBgColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Category Color", "essential-blocks")}
+                                        color={featuredPostCategoryMetaColor}
+                                        attributeName={'featuredPostCategoryMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Category BG Color", "essential-blocks")}
+                                        color={featuredPostCategoryMetaBgColor}
+                                        attributeName={'featuredPostCategoryMetaBgColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Tag Color", "essential-blocks")}
+                                        color={featuredPostTagMetaColor}
+                                        attributeName={'featuredPostTagMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Tag BG Color", "essential-blocks")}
+                                        color={featuredPostTagMetaBgColor}
+                                        attributeName={'featuredPostTagMetaBgColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Read Time Color", "essential-blocks")}
+                                        color={featuredPostReadTimeMetaColor}
+                                        attributeName={'featuredPostReadTimeMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Dynamic Data Color", "essential-blocks")}
+                                        color={featuredPostDynamicMetaColor}
+                                        attributeName={'featuredPostDynamicMetaColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Dynamic Data BG Color", "essential-blocks")}
+                                        color={featuredPostDynamicMetaBgColor}
+                                        attributeName={'featuredPostDynamicMetaBgColor'}
+                                    />
+                                </>
+                            )}
+
+                            {featuredPostMetaStatus === "hover" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Author Color", "essential-blocks")}
+                                        color={featuredPostAuthorMetaHoverColor}
+                                        attributeName={'featuredPostAuthorMetaHoverColor'}
+                                    />
+
+                                    <ColorControl
+                                        label={__("Common Meta Color", "essential-blocks")}
+                                        color={featuredPostCommonMetaHoverColor}
+                                        attributeName={'featuredPostCommonMetaHoverColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Common Meta BG Color", "essential-blocks")}
+                                        color={featuredPostCommonMetaHoverBgColor}
+                                        attributeName={'featuredPostCommonMetaHoverBgColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Category Color", "essential-blocks")}
+                                        color={featuredPostCategoryMetaHoverColor}
+                                        attributeName={'featuredPostCategoryMetaHoverColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Category BG Color", "essential-blocks")}
+                                        color={featuredPostCategoryMetaHoverBgColor}
+                                        attributeName={'featuredPostCategoryMetaHoverBgColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Tag Color", "essential-blocks")}
+                                        color={featuredPostTagMetaHoverColor}
+                                        attributeName={'featuredPostTagMetaHoverColor'}
+                                    />
+                                    <ColorControl
+                                        label={__("Tag BG Color", "essential-blocks")}
+                                        color={featuredPostTagMetaHoverBgColor}
+                                        attributeName={'featuredPostTagMetaHoverBgColor'}
+                                    />
+                                </>
+                            )}
+                            <Divider />
+                            <ResponsiveDimensionsControl
+                                controlName={FEATURED_META_PADDING}
+                                baseLabel="Meta Padding"
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={FEATURED_AVATAR_RADIUS}
+                                baseLabel="Avatar Radius"
+                            />
+                            <BaseControl
+                                label={__("Category Border & Shadow", "essential-blocks")}
+                            ></BaseControl>
+                            <BorderShadowControl
+                                controlName={FEATURED_META_BORDER}
+                            />
+                        </InspectorPanel.PanelBody>
+                    )}
+
                     <InspectorPanel.PanelBody title={__("Columns", "essential-blocks")} initialOpen={false}>
                         <ResponsiveDimensionsControl
                             controlName={COLUMN_PADDING}
@@ -857,47 +1408,32 @@ function Inspector(props) {
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_TITLE_TYPOGRAPHY}
                             />
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
+                                value={titleTextAlign}
+                                onChange={(value) => setAttributes({ titleTextAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={titleTextAlign === item.value}
-                                            isSecondary={titleTextAlign !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    titleTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
-
-                            <ButtonGroup className="eb-inspector-btn-group">
-                                {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={titleColorStyle === item.value}
-                                        isSecondary={titleColorStyle !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                titleColorStyle: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
+
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={titleColorStyle}
+                                onChange={(value) => setAttributes({ titleColorStyle: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {NORMAL_HOVER.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
 
                             {titleColorStyle === "normal" && (
                                 <ColorControl
@@ -942,28 +1478,18 @@ function Inspector(props) {
                                 color={contentColor}
                                 attributeName={'contentColor'}
                             />
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Alignment", "essential-blocks")}
-                                id="essential-blocks"
+                                value={contentTextAlign}
+                                onChange={(value) => setAttributes({ contentTextAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={contentTextAlign === item.value}
-                                            isSecondary={contentTextAlign !== item.value}
-                                            onClick={() =>
-                                                setAttributes({
-                                                    contentTextAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_CONTENT_TYPOGRAPHY}
@@ -980,23 +1506,19 @@ function Inspector(props) {
                             title={__("Read More Button", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={readmoreColorType}
+                                onChange={(value) => setAttributes({ readmoreColorType: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={readmoreColorType === item.value}
-                                        isSecondary={readmoreColorType !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                readmoreColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {readmoreColorType === "normal" && (
                                 <>
@@ -1028,42 +1550,18 @@ function Inspector(props) {
                                 </>
                             )}
 
-                            <BaseControl
-                                label={__(
-                                    "Alignment",
-                                    "essential-blocks"
-                                )}
-                                id="essential-blocks"
+                            <ToggleGroupControl
+                                label={__("Alignment", "essential-blocks")}
+                                value={readmoreTextAlign}
+                                onChange={(value) => setAttributes({ readmoreTextAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="essential-blocks">
-                                    {TEXT_ALIGN.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                // isLarge
-                                                isPrimary={
-                                                    readmoreTextAlign ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    readmoreTextAlign !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            readmoreTextAlign:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {TEXT_ALIGN.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={EBPG_READMORE_TYPOGRAPHY}
@@ -1125,23 +1623,19 @@ function Inspector(props) {
                                 baseLabel="Footer Meta Margin"
                             />
 
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={metaColorType}
+                                onChange={(value) => setAttributes({ metaColorType: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={metaColorType === item.value}
-                                        isSecondary={metaColorType !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                metaColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {metaColorType === "normal" && (
                                 <>
@@ -1339,52 +1833,36 @@ function Inspector(props) {
                             <InspectorPanel.PanelBody title={__("Load More Styles", "essential-blocks")} initialOpen={false}>
                                 {/* If load More type "Load More Button" */}
                                 {loadMoreOptions.loadMoreType === "1" && (
-                                    <ButtonGroup
-                                        id="essential-blocks"
-                                        className="eb-inspector-btn-group"
+                                    <ToggleGroupControl
+                                        label=""
+                                        hideLabelFromVision
+                                        value={loadMoreColorType}
+                                        onChange={(value) => setAttributes({ loadMoreColorType: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
                                         {NORMAL_HOVER.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isLarge
-                                                isPrimary={loadMoreColorType === item.value}
-                                                isSecondary={loadMoreColorType !== item.value}
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        loadMoreColorType: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                         ))}
-                                    </ButtonGroup>
+                                    </ToggleGroupControl>
                                 )}
 
                                 {/* If load More type "Pagination" */}
                                 {loadMoreOptions.loadMoreType === "2" && (
-                                    <BaseControl
-                                        label={__("", "essential-blocks")}
-                                        id="eb-advance-heading-alignment"
+                                    <ToggleGroupControl
+                                        label=""
+                                        hideLabelFromVision
+                                        value={loadMoreColorType}
+                                        onChange={(value) => setAttributes({ loadMoreColorType: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup id="eb-advance-heading-alignment">
-                                            {NORMAL_HOVER_ACTIVE.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isLarge
-                                                    isPrimary={loadMoreColorType === item.value}
-                                                    isSecondary={loadMoreColorType !== item.value}
-                                                    onClick={() =>
-                                                        setAttributes({
-                                                            loadMoreColorType: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {NORMAL_HOVER_ACTIVE.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
 
                                 {loadMoreColorType === "normal" && (
@@ -1485,23 +1963,19 @@ function Inspector(props) {
 
                     {showTaxonomyFilter && (
                         <InspectorPanel.PanelBody title={__("Taxonomy Filter Style")} initialOpen={false}>
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={filterColorStyle}
+                                onChange={(value) => setAttributes({ filterColorStyle: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={filterColorStyle === item.value}
-                                        isSecondary={filterColorStyle !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                filterColorStyle: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
                             {filterColorStyle ===
                                 "normal" && (
                                     <>

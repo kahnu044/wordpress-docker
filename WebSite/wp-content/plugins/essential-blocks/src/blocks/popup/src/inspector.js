@@ -5,14 +5,14 @@ import { __ } from "@wordpress/i18n";
 import {
     PanelBody,
     BaseControl,
-    ButtonGroup,
-    Button,
     TextControl,
     SelectControl,
     ToggleControl,
     TabPanel,
     __experimentalUnitControl as UnitControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -152,6 +152,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     trigger: newTrigger,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {"btn_click" === trigger && (
                             <>
@@ -160,6 +162,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         "Button Settings",
                                         "essential-blocks",
                                     )}
+                                    __nextHasNoMarginBottom
                                 >
                                     <SelectControl
                                         label={__("Type", "essential-blocks")}
@@ -185,6 +188,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 btnType: newBtnType,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
                                 {"button" === btnType && (
@@ -225,39 +230,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             max={1000}
                                             step={1}
                                         />
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Icon Position",
                                                 "essential-blocks",
                                             )}
-                                            id="eb-button-icon-position"
+
+                                            value={iconPosition}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    iconPosition: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup id="eb-icon-position-btgrp">
-                                                {ICON_POSITIONS.map(
-                                                    (item, key) => (
-                                                        <Button
-                                                            key={key}
-                                                            isSecondary={
-                                                                iconPosition !==
-                                                                item.value
-                                                            }
-                                                            isPrimary={
-                                                                iconPosition ===
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    iconPosition:
-                                                                        item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ),
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {ICON_POSITIONS.map(
+                                                (item, key) => (
+                                                    <ToggleGroupControlOption
+                                                        key={key}
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
+                                                ),
+                                            )}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                                 {"icon" === btnType && (
@@ -276,37 +274,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         />
                                     </>
                                 )}
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Alignment ", "essential-blocks")}
-                                    id="eb-popup-button-alignment"
+
+                                    value={btnAlignment}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            btnAlignment: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {BUTTON_ALIGNMENT.map((item, key) => (
-                                            <Button
-                                                key={key}
-                                                isSecondary={
-                                                    btnAlignment !== item.value
-                                                }
-                                                isPrimary={
-                                                    btnAlignment === item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        btnAlignment:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {BUTTON_ALIGNMENT.map((item, key) => (
+                                        <ToggleGroupControlOption
+                                            key={key}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                         {"page_load" === trigger && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3>
                                         {__(
                                             "Page Load Settings",
@@ -325,6 +318,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             pageLoadDelay: newPageLoadDelay,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -337,6 +332,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             useCookies: !useCookies,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {useCookies && (
                                     <TextControl
@@ -355,6 +351,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "Leave blank if you want to delete cookie after browser closed.",
                                             "essential-blocks",
                                         )}
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -373,12 +371,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         "You can also use class identifier such as .open-popup",
                                         "essential-blocks",
                                     )}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
                         {"exit_intent" === trigger && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3>
                                         {__(
                                             "Exit Intent Settings",
@@ -397,6 +397,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             useCookies: !useCookies,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {useCookies && (
                                     <TextControl
@@ -415,6 +416,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "Leave blank if you want to delete cookie after browser closed.",
                                             "essential-blocks",
                                         )}
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -456,6 +459,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             scrollType: newScrollType,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {"percentage" === scrollType && (
@@ -474,6 +479,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     parseInt(value) || 50,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
 
@@ -521,6 +528,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 "Enter CSS selector (e.g., #section-id or .section-class)",
                                                 "essential-blocks",
                                             )}
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                         <TextControl
                                             label={__(
@@ -539,13 +548,15 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 "Additional offset in pixels when element is in viewport",
                                                 "essential-blocks",
                                             )}
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                     </>
                                 )}
                             </>
                         )}
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3>{__("Exit Settings", "essential-blocks")}</h3>
                         </BaseControl>
                         <ToggleControl
@@ -556,6 +567,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     displayCloseIcon: !displayCloseIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Esc to Exit", "essential-blocks")}
@@ -569,6 +581,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 "Close the modal box by pressing the Esc key",
                                 "essential-blocks",
                             )}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Click to Exit", "essential-blocks")}
@@ -582,6 +595,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 "Close the modal box by clicking anywhere outside the modal window",
                                 "essential-blocks",
                             )}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Auto Exit", "essential-blocks")}
@@ -591,6 +605,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     autoExit: !autoExit,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {autoExit && (
                             <TextControl
@@ -604,6 +619,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         autoExitTime: newAutoExitTime,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -619,6 +636,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 "Page scroll when popup open",
                                 "essential-blocks",
                             )}
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
@@ -633,6 +651,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     popupFullWidth: !popupFullWidth,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!popupFullWidth && (
                             <>
@@ -654,6 +673,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     autoHeight: !autoHeight,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!autoHeight && (
                             <>
@@ -731,6 +751,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     position: newPosition,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
@@ -746,6 +768,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         useCloseIcon: !useCloseIcon,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {!useCloseIcon && (
                                 <TextControl
@@ -756,10 +779,12 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             closeBtnText: newCloseBtnText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             )}
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3>
                                     {__("Icon Position", "essential-blocks")}
                                 </h3>

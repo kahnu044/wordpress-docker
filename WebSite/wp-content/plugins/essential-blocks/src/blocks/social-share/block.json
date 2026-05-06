@@ -4,7 +4,7 @@
   "name": "essential-blocks/social-share",
   "category": "essential-blocks",
   "description": "Share your posts & pages instantly on popular social platforms in one click from your website.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

@@ -7,6 +7,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { dateI18n, format, getSettings } from "@wordpress/date";
 import { isEmpty } from "lodash";
 import { safeHTML } from "@wordpress/dom";
+import apiFetch from "@wordpress/api-fetch";
 
 /**
  * Externnal depencencies
@@ -70,6 +71,15 @@ const Edit = (props) => {
         showFallbackImg,
         fallbackImgUrl,
         fallbackImgAlt,
+        showFeaturedPost,
+        featuredPostId,
+        showFeaturedPostTitle,
+        showFeaturedPostContent,
+        showFeaturedPostMeta,
+        showFeaturedHeaderMeta,
+        showFeaturedFooterMeta,
+        featuredMetaItems,
+        featuredExcerptLength,
     } = attributes;
 
     const dateFormat = getSettings().formats.date;
@@ -81,6 +91,8 @@ const Edit = (props) => {
     const [searchError, setSearchError] = useState(false);
     const [queryResults, setQueryResults] = useState(false);
     const [didMount, setDidMount] = useState(false);
+    const [featuredPost, setFeaturedPost] = useState(null);
+    const [loadingFeaturedPost, setLoadingFeaturedPost] = useState(false);
     const isContentEnabled = (contentName) =>
         enableContents.includes(contentName);
 
@@ -108,6 +120,38 @@ const Edit = (props) => {
             setAttributes({ enableThumbnailSort: false });
         }
     }, [preset]);
+
+    // Fetch featured post when featuredPostId changes
+    useEffect(() => {
+        if (showFeaturedPost && featuredPostId && featuredPostId.length > 0) {
+            try {
+                const selectedPost = JSON.parse(featuredPostId);
+                if (selectedPost && selectedPost.value) {
+                    setLoadingFeaturedPost(true);
+                    const namespace = queryData?.rest_namespace ? queryData.rest_namespace : "wp/v2";
+                    const restBase = queryData?.rest_base ? queryData.rest_base : "posts";
+
+                    apiFetch({
+                        path: `/${namespace}/${restBase}/${selectedPost.value}?_embed`,
+                    })
+                        .then((post) => {
+                            setFeaturedPost(post);
+                            setLoadingFeaturedPost(false);
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching featured post:", error);
+                            setFeaturedPost(null);
+                            setLoadingFeaturedPost(false);
+                        });
+                }
+            } catch (error) {
+                console.error("Error parsing featuredPostId:", error);
+                setFeaturedPost(null);
+            }
+        } else {
+            setFeaturedPost(null);
+        }
+    }, [showFeaturedPost, featuredPostId, queryData?.rest_namespace, queryData?.rest_base]);
 
     const paginationLinks = (options, perPage) => {
         const totalPages = Math.floor(options.totalPosts / perPage);
@@ -197,6 +241,24 @@ const Edit = (props) => {
         }
     }, [searchText, enableAjaxSearch]);
 
+    // Filter out featured post from query results to avoid duplication
+    const getFilteredQueryResults = () => {
+        if (!queryResults) {
+            return queryResults;
+        }
+
+        if (!showFeaturedPost || !featuredPost) {
+            return queryResults;
+        }
+
+        // Filter out the featured post from the results to avoid duplication
+        const filtered = queryResults.filter((post) => post.id !== featuredPost.id);
+
+        return filtered;
+    };
+
+    const filteredQueryResults = getFilteredQueryResults();
+
     return cover.length ? (
         <div>
             <img src={cover} alt="post grid" style={{ maxWidth: "100%" }} />
@@ -250,7 +312,7 @@ const Edit = (props) => {
                         </div>
                     )} */}
                             <div
-                                className={`eb-post-grid-wrapper ${blockId} ${preset}`}
+                                className={`eb-post-grid-wrapper ${blockId} ${preset} ${showFeaturedPost && featuredPost ? "has-featured-post" : ""}`}
                                 data-id={blockId}
                             >
                                 {queryResults !== false && (
@@ -311,33 +373,439 @@ const Edit = (props) => {
 
                                 {/* with version */}
                                 {version === "v2" && (
-                                    <div className="eb-post-grid-posts-wrapper">
-                                        {queryResults &&
-                                            typeof queryResults === "object" &&
-                                            queryResults.length > 0 &&
-                                            queryResults.map((post, index) => {
-                                                //Generate Featured Image
-                                                const {
-                                                    featuredImageInfo: {
-                                                        url: imageSourceUrl,
-                                                        alt: featuredImageAlt,
-                                                    } = {},
-                                                } = post;
-                                                const featuredImage = showThumbnail && (
-                                                    <img
-                                                        key={index}
-                                                        src={imageSourceUrl}
-                                                        alt={featuredImageAlt}
-                                                    />
-                                                );
+                                    <>
+                                        {/* Featured Post Wrapper */}
+                                        {showFeaturedPost && featuredPost && (
+                                            <div className="ebpg-featured-post-wrapper">
+                                                {(() => {
+                                                    const post = featuredPost;
+                                                    const index = 0;
+                                                    //Generate Featured Image
+                                                    const {
+                                                        featuredImageInfo: {
+                                                            url: imageSourceUrl,
+                                                            alt: featuredImageAlt,
+                                                        } = {},
+                                                    } = post;
+                                                    const featuredImage = showThumbnail && (
+                                                        <img
+                                                            key={index}
+                                                            src={imageSourceUrl}
+                                                            alt={featuredImageAlt}
+                                                        />
+                                                    );
 
-                                                //Generate Title
-                                                const title = post?.title?.rendered;
-                                                const titleWithLimitWords =
-                                                    titleLength >= 0
-                                                        ? title.trim().split(" ", titleLength).join(" ")
-                                                        : title;
-                                                const titleHTML = safeHTML(`
+                                                    //Generate Title
+                                                    const title = post?.title?.rendered;
+                                                    const titleWithLimitWords =
+                                                        titleLength >= 0
+                                                            ? title.trim().split(" ", titleLength).join(" ")
+                                                            : title;
+                                                    const titleHTML = safeHTML(`
+                                                        <${titleTag} class="ebpg-entry-title">
+                                                            <a class="ebpg-grid-post-link" href="#" title="">
+                                                                ${titleWithLimitWords}
+                                                            </a>
+                                                        </${titleTag}>
+                                                    `);
+
+                                                    //Generate Excerpt & Read More
+                                                    let excerpt = post?.excerpt?.rendered;
+                                                    const excerptElement = document.createElement("div");
+                                                    excerptElement.innerHTML = excerpt ? excerpt : "";
+                                                    excerpt =
+                                                        excerptElement.textContent ||
+                                                        excerptElement.innerText ||
+                                                        "";
+                                                    const excerptWithLimitWords =
+                                                        featuredExcerptLength >= 0
+                                                            ? excerpt.trim().split(" ", featuredExcerptLength).join(" ")
+                                                            : excerpt;
+
+                                                    const avatarUrl = (author) => {
+                                                        if (author.avatar_urls && author.avatar_urls[96]) {
+                                                            return author.avatar_urls[96];
+                                                        } else {
+                                                            return "http://1.gravatar.com/avatar/467ceabf70aaa0e555b7dd11c9729241?s=96&d=mm&r=g";
+                                                        }
+                                                    };
+                                                    const avatar = post?._embedded?.author ? (
+                                                        <div className="ebpg-author-avatar">
+                                                            <a href={"#"}>
+                                                                <img
+                                                                    alt={
+                                                                        post._embedded.author[0].name
+                                                                            ? post._embedded.author[0].name
+                                                                            : post._embedded.author[0].slug
+                                                                    }
+                                                                    src={avatarUrl(post._embedded.author[0])}
+                                                                />
+                                                            </a>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+                                                    const date = (
+                                                        <span className="ebpg-posted-on">
+                                                            <DynamicInputValueHandler
+                                                                value={datePrefix}
+                                                                tagName="span"
+                                                                onChange={(datePrefix) =>
+                                                                    setAttributes({
+                                                                        datePrefix,
+                                                                    })
+                                                                }
+                                                                readOnly={true}
+                                                            />{" "}
+                                                            <time dateTime={format("c", post.date_gmt)}>
+                                                                {dateI18n(dateFormat, post.date_gmt)}
+                                                            </time>
+                                                        </span>
+                                                    );
+                                                    const author = post?._embedded?.author ? (
+                                                        <span className="ebpg-posted-by">
+                                                            <DynamicInputValueHandler
+                                                                value={authorPrefix}
+                                                                tagName="span"
+                                                                onChange={(authorPrefix) =>
+                                                                    setAttributes({
+                                                                        authorPrefix,
+                                                                    })
+                                                                }
+                                                                readOnly={true}
+                                                            />{" "}
+                                                            <a
+                                                                href={"#"}
+                                                                title={
+                                                                    post._embedded.author[0].name
+                                                                        ? post._embedded.author[0].name
+                                                                        : post._embedded.author[0].slug
+                                                                }
+                                                                rel="author"
+                                                            >
+                                                                {post._embedded.author[0].name
+                                                                    ? post._embedded.author[0].name
+                                                                    : post._embedded.author[0].slug}
+                                                            </a>
+                                                        </span>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const postTermsVal = {};
+                                                    post._embedded &&
+                                                        post._embedded["wp:term"] &&
+                                                        post._embedded["wp:term"].length > 0 &&
+                                                        post._embedded["wp:term"].map((item) => {
+                                                            let termObj = {};
+                                                            let termName = "";
+                                                            item.length > 0 &&
+                                                                item.map((term) => {
+                                                                    termName = term.taxonomy;
+                                                                    termObj[term.slug] = {
+                                                                        name: term.name,
+                                                                        id: term.id,
+                                                                        link: term.link,
+                                                                        slug: term.slug,
+                                                                    };
+                                                                });
+                                                            postTermsVal[termName] = termObj;
+                                                        });
+
+                                                    const postTermsHtml = {};
+                                                    if (Object.keys(postTermsVal).length > 0) {
+                                                        Object.keys(postTermsVal).map((term) => {
+                                                            let termClass = term;
+                                                            if (term === "category") {
+                                                                termClass = "categories";
+                                                            } else if (term === "post_tag") {
+                                                                termClass = "tags";
+                                                            }
+                                                            let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
+                                                            Object.keys(postTermsVal[term]).length > 0 &&
+                                                                Object.keys(postTermsVal[term]).map(
+                                                                    (item, index) => {
+                                                                        markup += `
+                                                                            <a
+                                                                                key=${index}
+                                                                                href="#"
+                                                                                title=${postTermsVal[term][item].name}
+                                                                            >
+                                                                                ${postTermsVal[term][item].name}
+                                                                            </a>
+                                                                        `;
+                                                                    }
+                                                                );
+                                                            markup += `</div>`;
+                                                            postTermsHtml[term] = markup;
+                                                        });
+                                                    }
+
+                                                    const categories = postTermsVal.category ? (
+                                                        <div className="ebpg-meta ebpg-categories-meta">
+                                                            {Object.keys(postTermsVal.category).map(
+                                                                (item, index) => (
+                                                                    <a
+                                                                        key={index}
+                                                                        href={"#"}
+                                                                        title={postTermsVal.category[item].name}
+                                                                    >
+                                                                        {postTermsVal.category[item].name}
+                                                                    </a>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const tags = postTermsVal.post_tag ? (
+                                                        <div className="ebpg-meta ebpg-tags-meta">
+                                                            {Object.keys(postTermsVal.post_tag).map(
+                                                                (item, index) => (
+                                                                    <a
+                                                                        key={index}
+                                                                        href={"#"}
+                                                                        title={postTermsVal.post_tag[item].name}
+                                                                    >
+                                                                        {postTermsVal.post_tag[item].name}
+                                                                    </a>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const calcTime = ebReadingTime(post?.content?.rendered);
+                                                    const readtime = (
+                                                        <span className="ebpg-read-time">
+                                                            <i className={"fas fa-clock"}></i>
+                                                            {`${calcTime} ${calcTime > 1 ? "minutes" : "minute"
+                                                                } read`}
+                                                        </span>
+                                                    );
+
+                                                    const metaObject = {
+                                                        date,
+                                                        author,
+                                                        categories,
+                                                        tags,
+                                                        readtime,
+                                                    };
+
+                                                    const headerMetaItems = ebJsonStringCheck(headerMeta)
+                                                        ? JSON.parse(headerMeta).map((item) => item.value)
+                                                        : [];
+
+                                                    const featuredMetaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
+
+                                                    const filteredHeaderMetaItems = headerMetaItems.filter((item) => {
+                                                        return featuredMetaItemsObj[item] !== undefined ? featuredMetaItemsObj[item] : true;
+                                                    });
+
+                                                    const headerMetaHtml = showFeaturedPostMeta && showFeaturedHeaderMeta ? (
+                                                        <div className="ebpg-entry-meta ebpg-header-meta">
+                                                            {filteredHeaderMetaItems.includes("avatar") && avatar}
+                                                            <div className="ebpg-entry-meta-items">
+                                                                {filteredHeaderMetaItems.map((item) => {
+                                                                    if (metaObject.hasOwnProperty(item)) {
+                                                                        return metaObject[item];
+                                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
+                                                                        return parse(postTermsHtml[item]);
+                                                                    } else {
+                                                                        if (item === "avatar") {
+                                                                            return;
+                                                                        }
+                                                                        return applyFilters(
+                                                                            "essential_blocks_post_grid_dynamic_fields_markup",
+                                                                            "",
+                                                                            item
+                                                                        );
+                                                                    }
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const footerMetaItems = ebJsonStringCheck(footerMeta)
+                                                        ? JSON.parse(footerMeta).map((item) => item.value)
+                                                        : [];
+                                                    const filteredFooterMetaItems = footerMetaItems.filter((item) => {
+                                                        return featuredMetaItemsObj[item] !== undefined ? featuredMetaItemsObj[item] : true;
+                                                    });
+
+                                                    const footerMetaHtml = showFeaturedPostMeta && showFeaturedFooterMeta ? (
+                                                        <div className="ebpg-entry-meta ebpg-footer-meta">
+                                                            {filteredFooterMetaItems.includes("avatar") && avatar}
+                                                            <div className="ebpg-entry-meta-items">
+                                                                {filteredFooterMetaItems.map((item) => {
+                                                                    if (metaObject.hasOwnProperty(item)) {
+                                                                        return metaObject[item];
+                                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
+                                                                        return parse(postTermsHtml[item]);
+                                                                    } else {
+                                                                        if (item === "avatar") {
+                                                                            return;
+                                                                        }
+                                                                        return applyFilters(
+                                                                            "essential_blocks_post_grid_dynamic_fields_markup",
+                                                                            "",
+                                                                            item
+                                                                        );
+                                                                    }
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    return (
+                                                        <article
+                                                            className="ebpg-featured-post"
+                                                            data-id={post.id}
+                                                        >
+                                                            <div className="ebpg-grid-post-holder">
+                                                                <div className="ebpg-entry-media">
+                                                                    <div className="ebpg-entry-thumbnail">
+                                                                        {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
+                                                                                <img
+                                                                                    src={thumbnailImageUrl(
+                                                                                        post._embedded[
+                                                                                        "wp:featuredmedia"
+                                                                                        ][0]
+                                                                                    )}
+                                                                                    alt={post?.title?.alt_text}
+                                                                                />
+                                                                            )}
+                                                                        {post._embedded &&
+                                                                            !post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
+                                                                                <>
+                                                                                    {showFallbackImg &&
+                                                                                        fallbackImgUrl && (
+                                                                                            <img
+                                                                                                src={fallbackImgUrl}
+                                                                                                alt={`${fallbackImgAlt
+                                                                                                    ? fallbackImgAlt
+                                                                                                    : `No Thumbnail Available`
+                                                                                                    }`}
+                                                                                            />
+                                                                                        )}
+
+                                                                                    {(!showFallbackImg ||
+                                                                                        (showFallbackImg &&
+                                                                                            fallbackImgUrl ===
+                                                                                            undefined)) && (
+                                                                                            <img
+                                                                                                src={
+                                                                                                    EssentialBlocksLocalize?.placeholder_image
+                                                                                                }
+                                                                                                alt="No Thumbnail Available"
+                                                                                            />
+                                                                                        )}
+                                                                                </>
+                                                                            )}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="ebpg-entry-wrapper">
+                                                                    {showFeaturedPostTitle && (
+                                                                        <header
+                                                                            className="ebpg-entry-header"
+                                                                            dangerouslySetInnerHTML={{
+                                                                                __html: titleHTML,
+                                                                            }}
+                                                                        ></header>
+                                                                    )}
+
+                                                                    {/* Header Meta */}
+                                                                    {showFeaturedPostMeta && headerMetaHtml}
+
+                                                                    <div className="ebpg-entry-content">
+                                                                        {showFeaturedPostContent && (
+                                                                            <div className="ebpg-grid-post-excerpt">
+                                                                                <p>
+                                                                                    {excerptWithLimitWords}
+                                                                                    {__(expansionIndicator)}
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                        {showReadMore && (
+                                                                            <div className="ebpg-readmore-btn">
+                                                                                <a href={"#"}>
+                                                                                    {addIcon && iconPosition === "left" ? (
+                                                                                        <EBDisplayIconEdit
+                                                                                            icon={icon}
+                                                                                            className={
+                                                                                                "eb-button-icon eb-button-icon-left hvr-icon"
+                                                                                            }
+                                                                                        />
+                                                                                    ) : (
+                                                                                        ""
+                                                                                    )}
+                                                                                    <DynamicInputValueHandler
+                                                                                        value={readmoreText}
+                                                                                        tagName="span"
+                                                                                        onChange={(readmoreText) =>
+                                                                                            setAttributes({
+                                                                                                readmoreText,
+                                                                                            })
+                                                                                        }
+                                                                                        readOnly={true}
+                                                                                        postId={post?.id}
+                                                                                    />
+                                                                                    {addIcon && iconPosition === "right" ? (
+                                                                                        <i
+                                                                                            className={`${icon} eb-button-icon eb-button-icon-left hvr-icon`}
+                                                                                        ></i>
+                                                                                    ) : (
+                                                                                        ""
+                                                                                    )}
+                                                                                </a>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    {/* Footer Meta */}
+                                                                    {showFeaturedPostMeta && footerMetaHtml}
+                                                                </div>
+                                                            </div>
+                                                        </article>
+                                                    );
+                                                })()}
+                                            </div>
+                                        )}
+
+                                        {/* Regular Posts Wrapper */}
+                                        <div className="eb-post-grid-posts-wrapper">
+                                            {filteredQueryResults &&
+                                                typeof filteredQueryResults === "object" &&
+                                                filteredQueryResults.length > 0 &&
+                                                filteredQueryResults.map((post, index) => {
+                                                    //Generate Featured Image
+                                                    const {
+                                                        featuredImageInfo: {
+                                                            url: imageSourceUrl,
+                                                            alt: featuredImageAlt,
+                                                        } = {},
+                                                    } = post;
+                                                    const featuredImage = showThumbnail && (
+                                                        <img
+                                                            key={index}
+                                                            src={imageSourceUrl}
+                                                            alt={featuredImageAlt}
+                                                        />
+                                                    );
+
+                                                    //Generate Title
+                                                    const title = post?.title?.rendered;
+                                                    const titleWithLimitWords =
+                                                        titleLength >= 0
+                                                            ? title.trim().split(" ", titleLength).join(" ")
+                                                            : title;
+                                                    const titleHTML = safeHTML(`
 								<${titleTag} class="ebpg-entry-title">
 									<a class="ebpg-grid-post-link" href="#" title="">
 										${titleWithLimitWords}
@@ -345,123 +813,123 @@ const Edit = (props) => {
 								</${titleTag}>
 							`);
 
-                                                //Generate Excerpt & Read More
-                                                let excerpt = post?.excerpt?.rendered;
-                                                const excerptElement = document.createElement("div");
-                                                excerptElement.innerHTML = excerpt ? excerpt : "";
-                                                excerpt =
-                                                    excerptElement.textContent ||
-                                                    excerptElement.innerText ||
-                                                    "";
-                                                const excerptWithLimitWords =
-                                                    contentLength >= 0
-                                                        ? excerpt.trim().split(" ", contentLength).join(" ")
-                                                        : excerpt;
+                                                    //Generate Excerpt & Read More
+                                                    let excerpt = post?.excerpt?.rendered;
+                                                    const excerptElement = document.createElement("div");
+                                                    excerptElement.innerHTML = excerpt ? excerpt : "";
+                                                    excerpt =
+                                                        excerptElement.textContent ||
+                                                        excerptElement.innerText ||
+                                                        "";
+                                                    const excerptWithLimitWords =
+                                                        contentLength >= 0
+                                                            ? excerpt.trim().split(" ", contentLength).join(" ")
+                                                            : excerpt;
 
-                                                const avatarUrl = (author) => {
-                                                    if (author.avatar_urls && author.avatar_urls[96]) {
-                                                        return author.avatar_urls[96];
-                                                    } else {
-                                                        return "http://1.gravatar.com/avatar/467ceabf70aaa0e555b7dd11c9729241?s=96&d=mm&r=g";
-                                                    }
-                                                };
-                                                const avatar = post?._embedded?.author ? (
-                                                    <div className="ebpg-author-avatar">
-                                                        <a href={"#"}>
-                                                            <img
-                                                                alt={
+                                                    const avatarUrl = (author) => {
+                                                        if (author.avatar_urls && author.avatar_urls[96]) {
+                                                            return author.avatar_urls[96];
+                                                        } else {
+                                                            return "http://1.gravatar.com/avatar/467ceabf70aaa0e555b7dd11c9729241?s=96&d=mm&r=g";
+                                                        }
+                                                    };
+                                                    const avatar = post?._embedded?.author ? (
+                                                        <div className="ebpg-author-avatar">
+                                                            <a href={"#"}>
+                                                                <img
+                                                                    alt={
+                                                                        post._embedded.author[0].name
+                                                                            ? post._embedded.author[0].name
+                                                                            : post._embedded.author[0].slug
+                                                                    }
+                                                                    src={avatarUrl(post._embedded.author[0])}
+                                                                />
+                                                            </a>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+                                                    const date = (
+                                                        <span className="ebpg-posted-on">
+                                                            <DynamicInputValueHandler
+                                                                value={datePrefix}
+                                                                tagName="span"
+                                                                onChange={(datePrefix) =>
+                                                                    setAttributes({
+                                                                        datePrefix,
+                                                                    })
+                                                                }
+                                                                readOnly={true}
+                                                            />{" "}
+                                                            <time dateTime={format("c", post.date_gmt)}>
+                                                                {dateI18n(dateFormat, post.date_gmt)}
+                                                            </time>
+                                                        </span>
+                                                    );
+                                                    const author = post?._embedded?.author ? (
+                                                        <span className="ebpg-posted-by">
+                                                            <DynamicInputValueHandler
+                                                                value={authorPrefix}
+                                                                tagName="span"
+                                                                onChange={(authorPrefix) =>
+                                                                    setAttributes({
+                                                                        authorPrefix,
+                                                                    })
+                                                                }
+                                                                readOnly={true}
+                                                            />{" "}
+                                                            <a
+                                                                href={"#"}
+                                                                title={
                                                                     post._embedded.author[0].name
                                                                         ? post._embedded.author[0].name
                                                                         : post._embedded.author[0].slug
                                                                 }
-                                                                src={avatarUrl(post._embedded.author[0])}
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                ) : (
-                                                    ""
-                                                );
-                                                const date = (
-                                                    <span className="ebpg-posted-on">
-                                                        <DynamicInputValueHandler
-                                                            value={datePrefix}
-                                                            tagName="span"
-                                                            onChange={(datePrefix) =>
-                                                                setAttributes({
-                                                                    datePrefix,
-                                                                })
-                                                            }
-                                                            readOnly={true}
-                                                        />{" "}
-                                                        <time dateTime={format("c", post.date_gmt)}>
-                                                            {dateI18n(dateFormat, post.date_gmt)}
-                                                        </time>
-                                                    </span>
-                                                );
-                                                const author = post?._embedded?.author ? (
-                                                    <span className="ebpg-posted-by">
-                                                        <DynamicInputValueHandler
-                                                            value={authorPrefix}
-                                                            tagName="span"
-                                                            onChange={(authorPrefix) =>
-                                                                setAttributes({
-                                                                    authorPrefix,
-                                                                })
-                                                            }
-                                                            readOnly={true}
-                                                        />{" "}
-                                                        <a
-                                                            href={"#"}
-                                                            title={
-                                                                post._embedded.author[0].name
+                                                                rel="author"
+                                                            >
+                                                                {post._embedded.author[0].name
                                                                     ? post._embedded.author[0].name
-                                                                    : post._embedded.author[0].slug
+                                                                    : post._embedded.author[0].slug}
+                                                            </a>
+                                                        </span>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const postTermsVal = {};
+                                                    post._embedded &&
+                                                        post._embedded["wp:term"] &&
+                                                        post._embedded["wp:term"].length > 0 &&
+                                                        post._embedded["wp:term"].map((item) => {
+                                                            let termObj = {};
+                                                            let termName = "";
+                                                            item.length > 0 &&
+                                                                item.map((term) => {
+                                                                    termName = term.taxonomy;
+                                                                    termObj[term.slug] = {
+                                                                        name: term.name,
+                                                                        id: term.id,
+                                                                        link: term.link,
+                                                                        slug: term.slug,
+                                                                    };
+                                                                });
+                                                            postTermsVal[termName] = termObj;
+                                                        });
+
+                                                    const postTermsHtml = {};
+                                                    if (Object.keys(postTermsVal).length > 0) {
+                                                        Object.keys(postTermsVal).map((term) => {
+                                                            let termClass = term;
+                                                            if (term === "category") {
+                                                                termClass = "categories";
+                                                            } else if (term === "post_tag") {
+                                                                termClass = "tags";
                                                             }
-                                                            rel="author"
-                                                        >
-                                                            {post._embedded.author[0].name
-                                                                ? post._embedded.author[0].name
-                                                                : post._embedded.author[0].slug}
-                                                        </a>
-                                                    </span>
-                                                ) : (
-                                                    ""
-                                                );
-
-                                                const postTermsVal = {};
-                                                post._embedded &&
-                                                    post._embedded["wp:term"] &&
-                                                    post._embedded["wp:term"].length > 0 &&
-                                                    post._embedded["wp:term"].map((item) => {
-                                                        let termObj = {};
-                                                        let termName = "";
-                                                        item.length > 0 &&
-                                                            item.map((term) => {
-                                                                termName = term.taxonomy;
-                                                                termObj[term.slug] = {
-                                                                    name: term.name,
-                                                                    id: term.id,
-                                                                    link: term.link,
-                                                                    slug: term.slug,
-                                                                };
-                                                            });
-                                                        postTermsVal[termName] = termObj;
-                                                    });
-
-                                                const postTermsHtml = {};
-                                                if (Object.keys(postTermsVal).length > 0) {
-                                                    Object.keys(postTermsVal).map((term) => {
-                                                        let termClass = term;
-                                                        if (term === "category") {
-                                                            termClass = "categories";
-                                                        } else if (term === "post_tag") {
-                                                            termClass = "tags";
-                                                        }
-                                                        let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
-                                                        Object.keys(postTermsVal[term]).length > 0 &&
-                                                            Object.keys(postTermsVal[term]).map(
-                                                                (item, index) => {
-                                                                    markup += `
+                                                            let markup = `<div className="ebpg-meta ebpg-${termClass}-meta">`;
+                                                            Object.keys(postTermsVal[term]).length > 0 &&
+                                                                Object.keys(postTermsVal[term]).map(
+                                                                    (item, index) => {
+                                                                        markup += `
 											<a
 												key=${index}
 												href="#"
@@ -470,215 +938,149 @@ const Edit = (props) => {
 												${postTermsVal[term][item].name}
 											</a>
 										`;
-                                                                }
-                                                            );
-                                                        markup += `</div>`;
-                                                        postTermsHtml[term] = markup;
-                                                    });
-                                                }
-
-                                                const categories = postTermsVal.category ? (
-                                                    <div className="ebpg-meta ebpg-categories-meta">
-                                                        {Object.keys(postTermsVal.category).map(
-                                                            (item, index) => (
-                                                                <a
-                                                                    key={index}
-                                                                    href={"#"}
-                                                                    title={postTermsVal.category[item].name}
-                                                                >
-                                                                    {postTermsVal.category[item].name}
-                                                                </a>
-                                                            )
-                                                        )}
-                                                    </div>
-                                                ) : (
-                                                    ""
-                                                );
-
-                                                const tags = postTermsVal.post_tag ? (
-                                                    <div className="ebpg-meta ebpg-tags-meta">
-                                                        {Object.keys(postTermsVal.post_tag).map(
-                                                            (item, index) => (
-                                                                <a
-                                                                    key={index}
-                                                                    href={"#"}
-                                                                    title={postTermsVal.post_tag[item].name}
-                                                                >
-                                                                    {postTermsVal.post_tag[item].name}
-                                                                </a>
-                                                            )
-                                                        )}
-                                                    </div>
-                                                ) : (
-                                                    ""
-                                                );
-
-                                                const calcTime = ebReadingTime(post?.content?.rendered);
-                                                const readtime = (
-                                                    <span className="ebpg-read-time">
-                                                        <i className={"fas fa-clock"}></i>
-                                                        {`${calcTime} ${calcTime > 1 ? "minutes" : "minute"
-                                                            } read`}
-                                                    </span>
-                                                );
-
-                                                const metaObject = {
-                                                    date,
-                                                    author,
-                                                    categories,
-                                                    tags,
-                                                    readtime,
-                                                };
-
-                                                const headerMetaItems = ebJsonStringCheck(headerMeta)
-                                                    ? JSON.parse(headerMeta).map((item) => item.value)
-                                                    : [];
-
-                                                const headerMetaHtml = showMeta ? (
-                                                    <div className="ebpg-entry-meta ebpg-header-meta">
-                                                        {headerMetaItems.includes("avatar") && avatar}
-                                                        <div className="ebpg-entry-meta-items">
-                                                            {headerMetaItems.map((item) => {
-                                                                if (metaObject.hasOwnProperty(item)) {
-                                                                    return metaObject[item];
-                                                                } else if (postTermsHtml.hasOwnProperty(item)) {
-                                                                    return parse(postTermsHtml[item]);
-                                                                } else {
-                                                                    if (item === "avatar") {
-                                                                        return;
                                                                     }
-                                                                    return applyFilters(
-                                                                        "essential_blocks_post_grid_dynamic_fields_markup",
-                                                                        "",
-                                                                        item
-                                                                    );
-                                                                }
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    ""
-                                                );
+                                                                );
+                                                            markup += `</div>`;
+                                                            postTermsHtml[term] = markup;
+                                                        });
+                                                    }
 
-                                                const footerMetaItems = ebJsonStringCheck(footerMeta)
-                                                    ? JSON.parse(footerMeta).map((item) => item.value)
-                                                    : [];
-                                                const footerMetaHtml = showMeta ? (
-                                                    <div className="ebpg-entry-meta ebpg-footer-meta">
-                                                        {footerMetaItems.includes("avatar") && avatar}
-                                                        <div className="ebpg-entry-meta-items">
-                                                            {footerMetaItems.map((item) => {
-                                                                if (metaObject.hasOwnProperty(item)) {
-                                                                    return metaObject[item];
-                                                                } else if (postTermsHtml.hasOwnProperty(item)) {
-                                                                    return parse(postTermsHtml[item]);
-                                                                } else {
-                                                                    if (item === "avatar") {
-                                                                        return;
-                                                                    }
-                                                                    return applyFilters(
-                                                                        "essential_blocks_post_grid_dynamic_fields_markup",
-                                                                        "",
-                                                                        item
-                                                                    );
-                                                                }
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    ""
-                                                );
-
-                                                return (
-                                                    <article
-                                                        className="ebpg-grid-post ebpg-post-grid-column"
-                                                        data-id={post.id}
-                                                    >
-                                                        <div className="ebpg-grid-post-holder">
-                                                            {showThumbnail && !enableThumbnailSort && (
-                                                                <>
-                                                                    {preset === "style-5" && (
-                                                                        <a
-                                                                            className="ebpg-post-link-wrapper"
-                                                                            href="#"
-                                                                        ></a>
-                                                                    )}
-                                                                    <div className="ebpg-entry-media">
-                                                                        {showThumbnail && (
-                                                                            <div className="ebpg-entry-thumbnail">
-                                                                                {preset !== "style-5" && (
-                                                                                    <a
-                                                                                        className="ebpg-post-link-wrapper"
-                                                                                        href="#"
-                                                                                    ></a>
-                                                                                )}
-                                                                                {post._embedded &&
-                                                                                    post._embedded["wp:featuredmedia"] &&
-                                                                                    post._embedded["wp:featuredmedia"]
-                                                                                        .length > 0 && (
-                                                                                        <img
-                                                                                            src={thumbnailImageUrl(
-                                                                                                post._embedded[
-                                                                                                "wp:featuredmedia"
-                                                                                                ][0]
-                                                                                            )}
-                                                                                            alt={post?.title?.alt_text}
-                                                                                        />
-                                                                                    )}
-                                                                                {post._embedded &&
-                                                                                    !post._embedded[
-                                                                                    "wp:featuredmedia"
-                                                                                    ] && (
-                                                                                        <>
-                                                                                            {showFallbackImg &&
-                                                                                                fallbackImgUrl && (
-                                                                                                    <img
-                                                                                                        src={fallbackImgUrl}
-                                                                                                        alt={`${fallbackImgAlt
-                                                                                                            ? fallbackImgAlt
-                                                                                                            : `No Thumbnail Available`
-                                                                                                            }`}
-                                                                                                    />
-                                                                                                )}
-
-                                                                                            {(!showFallbackImg ||
-                                                                                                (showFallbackImg &&
-                                                                                                    fallbackImgUrl ===
-                                                                                                    undefined)) && (
-                                                                                                    <img
-                                                                                                        src={
-                                                                                                            EssentialBlocksLocalize?.placeholder_image
-                                                                                                        }
-                                                                                                        alt="No Thumbnail Available"
-                                                                                                    />
-                                                                                                )}
-                                                                                        </>
-                                                                                    )}
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
-                                                                </>
+                                                    const categories = postTermsVal.category ? (
+                                                        <div className="ebpg-meta ebpg-categories-meta">
+                                                            {Object.keys(postTermsVal.category).map(
+                                                                (item, index) => (
+                                                                    <a
+                                                                        key={index}
+                                                                        href={"#"}
+                                                                        title={postTermsVal.category[item].name}
+                                                                    >
+                                                                        {postTermsVal.category[item].name}
+                                                                    </a>
+                                                                )
                                                             )}
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
 
-                                                            <div className="ebpg-entry-wrapper">
-                                                                {(preset == "style-1" ||
-                                                                    preset == "style-2" ||
-                                                                    preset == "style-3") &&
-                                                                    showThumbnail &&
-                                                                    enableThumbnailSort && (
-                                                                        <>
-                                                                            <div className="ebpg-entry-media">
+                                                    const tags = postTermsVal.post_tag ? (
+                                                        <div className="ebpg-meta ebpg-tags-meta">
+                                                            {Object.keys(postTermsVal.post_tag).map(
+                                                                (item, index) => (
+                                                                    <a
+                                                                        key={index}
+                                                                        href={"#"}
+                                                                        title={postTermsVal.post_tag[item].name}
+                                                                    >
+                                                                        {postTermsVal.post_tag[item].name}
+                                                                    </a>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const calcTime = ebReadingTime(post?.content?.rendered);
+                                                    const readtime = (
+                                                        <span className="ebpg-read-time">
+                                                            <i className={"fas fa-clock"}></i>
+                                                            {`${calcTime} ${calcTime > 1 ? "minutes" : "minute"
+                                                                } read`}
+                                                        </span>
+                                                    );
+
+                                                    const metaObject = {
+                                                        date,
+                                                        author,
+                                                        categories,
+                                                        tags,
+                                                        readtime,
+                                                    };
+
+                                                    const headerMetaItems = ebJsonStringCheck(headerMeta)
+                                                        ? JSON.parse(headerMeta).map((item) => item.value)
+                                                        : [];
+
+                                                    const headerMetaHtml = showMeta ? (
+                                                        <div className="ebpg-entry-meta ebpg-header-meta">
+                                                            {headerMetaItems.includes("avatar") && avatar}
+                                                            <div className="ebpg-entry-meta-items">
+                                                                {headerMetaItems.map((item) => {
+                                                                    if (metaObject.hasOwnProperty(item)) {
+                                                                        return metaObject[item];
+                                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
+                                                                        return parse(postTermsHtml[item]);
+                                                                    } else {
+                                                                        if (item === "avatar") {
+                                                                            return;
+                                                                        }
+                                                                        return applyFilters(
+                                                                            "essential_blocks_post_grid_dynamic_fields_markup",
+                                                                            "",
+                                                                            item
+                                                                        );
+                                                                    }
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    const footerMetaItems = ebJsonStringCheck(footerMeta)
+                                                        ? JSON.parse(footerMeta).map((item) => item.value)
+                                                        : [];
+                                                    const footerMetaHtml = showMeta ? (
+                                                        <div className="ebpg-entry-meta ebpg-footer-meta">
+                                                            {footerMetaItems.includes("avatar") && avatar}
+                                                            <div className="ebpg-entry-meta-items">
+                                                                {footerMetaItems.map((item) => {
+                                                                    if (metaObject.hasOwnProperty(item)) {
+                                                                        return metaObject[item];
+                                                                    } else if (postTermsHtml.hasOwnProperty(item)) {
+                                                                        return parse(postTermsHtml[item]);
+                                                                    } else {
+                                                                        if (item === "avatar") {
+                                                                            return;
+                                                                        }
+                                                                        return applyFilters(
+                                                                            "essential_blocks_post_grid_dynamic_fields_markup",
+                                                                            "",
+                                                                            item
+                                                                        );
+                                                                    }
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ""
+                                                    );
+
+                                                    return (
+                                                        <article
+                                                            className="ebpg-grid-post ebpg-post-grid-column"
+                                                            data-id={post.id}
+                                                        >
+                                                            <div className="ebpg-grid-post-holder">
+                                                                {showThumbnail && !enableThumbnailSort && (
+                                                                    <>
+                                                                        {preset === "style-5" && (
+                                                                            <a
+                                                                                className="ebpg-post-link-wrapper"
+                                                                                href="#"
+                                                                            ></a>
+                                                                        )}
+                                                                        <div className="ebpg-entry-media">
+                                                                            {showThumbnail && (
                                                                                 <div className="ebpg-entry-thumbnail">
-                                                                                    <a
-                                                                                        className="ebpg-post-link-wrapper"
-                                                                                        href="#"
-                                                                                    ></a>
-                                                                                    {post._embedded &&
-                                                                                        post._embedded[
-                                                                                        "wp:featuredmedia"
-                                                                                        ] &&
-                                                                                        post._embedded["wp:featuredmedia"]
-                                                                                            .length > 0 && (
+                                                                                    {preset !== "style-5" && (
+                                                                                        <a
+                                                                                            className="ebpg-post-link-wrapper"
+                                                                                            href="#"
+                                                                                        ></a>
+                                                                                    )}
+                                                                                    {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                             <img
                                                                                                 src={thumbnailImageUrl(
                                                                                                     post._embedded[
@@ -689,9 +1091,7 @@ const Edit = (props) => {
                                                                                             />
                                                                                         )}
                                                                                     {post._embedded &&
-                                                                                        !post._embedded[
-                                                                                        "wp:featuredmedia"
-                                                                                        ] && (
+                                                                                        !post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                             <>
                                                                                                 {showFallbackImg &&
                                                                                                     fallbackImgUrl && (
@@ -718,83 +1118,140 @@ const Edit = (props) => {
                                                                                             </>
                                                                                         )}
                                                                                 </div>
-                                                                            </div>
-                                                                        </>
-                                                                    )}
-
-                                                                {showTitle && (
-                                                                    <header
-                                                                        className="ebpg-entry-header"
-                                                                        dangerouslySetInnerHTML={{
-                                                                            __html: titleHTML,
-                                                                        }}
-                                                                    ></header>
+                                                                            )}
+                                                                        </div>
+                                                                    </>
                                                                 )}
 
-                                                                {/* Header Meta */}
-                                                                {showMeta && headerMetaHtml}
+                                                                <div className="ebpg-entry-wrapper">
+                                                                    {(preset == "style-1" ||
+                                                                        preset == "style-2" ||
+                                                                        preset == "style-3") &&
+                                                                        showThumbnail &&
+                                                                        enableThumbnailSort && (
+                                                                            <>
+                                                                                <div className="ebpg-entry-media">
+                                                                                    <div className="ebpg-entry-thumbnail">
+                                                                                        <a
+                                                                                            className="ebpg-post-link-wrapper"
+                                                                                            href="#"
+                                                                                        ></a>
+                                                                                        {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
+                                                                                                <img
+                                                                                                    src={thumbnailImageUrl(
+                                                                                                        post._embedded[
+                                                                                                        "wp:featuredmedia"
+                                                                                                        ][0]
+                                                                                                    )}
+                                                                                                    alt={post?.title?.alt_text}
+                                                                                                />
+                                                                                            )}
+                                                                                        {post._embedded &&
+                                                                                            !post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
+                                                                                                <>
+                                                                                                    {showFallbackImg &&
+                                                                                                        fallbackImgUrl && (
+                                                                                                            <img
+                                                                                                                src={fallbackImgUrl}
+                                                                                                                alt={`${fallbackImgAlt
+                                                                                                                    ? fallbackImgAlt
+                                                                                                                    : `No Thumbnail Available`
+                                                                                                                    }`}
+                                                                                                            />
+                                                                                                        )}
 
-                                                                <div className="ebpg-entry-content">
-                                                                    {showContent && (
-                                                                        <div className="ebpg-grid-post-excerpt">
-                                                                            <p>
-                                                                                {excerptWithLimitWords}
-                                                                                {__(expansionIndicator)}
-                                                                            </p>
-                                                                        </div>
+                                                                                                    {(!showFallbackImg ||
+                                                                                                        (showFallbackImg &&
+                                                                                                            fallbackImgUrl ===
+                                                                                                            undefined)) && (
+                                                                                                            <img
+                                                                                                                src={
+                                                                                                                    EssentialBlocksLocalize?.placeholder_image
+                                                                                                                }
+                                                                                                                alt="No Thumbnail Available"
+                                                                                                            />
+                                                                                                        )}
+                                                                                                </>
+                                                                                            )}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </>
+                                                                        )}
+
+                                                                    {showTitle && (
+                                                                        <header
+                                                                            className="ebpg-entry-header"
+                                                                            dangerouslySetInnerHTML={{
+                                                                                __html: titleHTML,
+                                                                            }}
+                                                                        ></header>
                                                                     )}
-                                                                    {showReadMore && (
-                                                                        <div className="ebpg-readmore-btn">
-                                                                            <a href={"#"}>
-                                                                                {addIcon && iconPosition === "left" ? (
-                                                                                    <EBDisplayIconEdit
-                                                                                        icon={icon}
-                                                                                        className={
-                                                                                            "eb-button-icon eb-button-icon-left hvr-icon"
+
+                                                                    {/* Header Meta */}
+                                                                    {showMeta && headerMetaHtml}
+
+                                                                    <div className="ebpg-entry-content">
+                                                                        {showContent && (
+                                                                            <div className="ebpg-grid-post-excerpt">
+                                                                                <p>
+                                                                                    {excerptWithLimitWords}
+                                                                                    {__(expansionIndicator)}
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                        {showReadMore && (
+                                                                            <div className="ebpg-readmore-btn">
+                                                                                <a href={"#"}>
+                                                                                    {addIcon && iconPosition === "left" ? (
+                                                                                        <EBDisplayIconEdit
+                                                                                            icon={icon}
+                                                                                            className={
+                                                                                                "eb-button-icon eb-button-icon-left hvr-icon"
+                                                                                            }
+                                                                                        />
+                                                                                    ) : (
+                                                                                        ""
+                                                                                    )}
+                                                                                    <DynamicInputValueHandler
+                                                                                        value={readmoreText}
+                                                                                        tagName="span"
+                                                                                        onChange={(readmoreText) =>
+                                                                                            setAttributes({
+                                                                                                readmoreText,
+                                                                                            })
                                                                                         }
+                                                                                        readOnly={true}
+                                                                                        postId={post?.id}
                                                                                     />
-                                                                                ) : (
-                                                                                    ""
-                                                                                )}
-                                                                                <DynamicInputValueHandler
-                                                                                    value={readmoreText}
-                                                                                    tagName="span"
-                                                                                    onChange={(readmoreText) =>
-                                                                                        setAttributes({
-                                                                                            readmoreText,
-                                                                                        })
-                                                                                    }
-                                                                                    readOnly={true}
-                                                                                    postId={post?.id}
-                                                                                />
-                                                                                {addIcon && iconPosition === "right" ? (
-                                                                                    <i
-                                                                                        className={`${icon} eb-button-icon eb-button-icon-left hvr-icon`}
-                                                                                    ></i>
-                                                                                ) : (
-                                                                                    ""
-                                                                                )}
-                                                                            </a>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
+                                                                                    {addIcon && iconPosition === "right" ? (
+                                                                                        <i
+                                                                                            className={`${icon} eb-button-icon eb-button-icon-left hvr-icon`}
+                                                                                        ></i>
+                                                                                    ) : (
+                                                                                        ""
+                                                                                    )}
+                                                                                </a>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
 
-                                                                {/* Footer Meta */}
-                                                                {showMeta && footerMetaHtml}
+                                                                    {/* Footer Meta */}
+                                                                    {showMeta && footerMetaHtml}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </article>
-                                                );
-                                            })}
-                                    </div>
+                                                        </article>
+                                                    );
+                                                })}
+                                        </div>
+                                    </>
                                 )}
 
                                 {/* no version */}
                                 {!version &&
-                                    queryResults &&
-                                    typeof queryResults === "object" &&
-                                    queryResults.length > 0 &&
-                                    queryResults.map((post, index) => {
+                                    filteredQueryResults &&
+                                    typeof filteredQueryResults === "object" &&
+                                    filteredQueryResults.length > 0 &&
+                                    filteredQueryResults.map((post, index) => {
                                         //Generate Featured Image
                                         const {
                                             featuredImageInfo: {
@@ -1068,7 +1525,7 @@ const Edit = (props) => {
 
                                         return (
                                             <article
-                                                className="ebpg-grid-post ebpg-post-grid-column"
+                                                className={`ebpg-grid-post ebpg-post-grid-column${post._isFeaturedPost ? ' ebpg-featured-post' : ''}`}
                                                 data-id={post.id}
                                             >
                                                 <div className="ebpg-grid-post-holder">
@@ -1089,10 +1546,7 @@ const Edit = (props) => {
                                                                                 href="#"
                                                                             ></a>
                                                                         )}
-                                                                        {post._embedded &&
-                                                                            post._embedded["wp:featuredmedia"] &&
-                                                                            post._embedded["wp:featuredmedia"]
-                                                                                .length > 0 && (
+                                                                        {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                 <img
                                                                                     src={thumbnailImageUrl(
                                                                                         post._embedded[
@@ -1103,7 +1557,7 @@ const Edit = (props) => {
                                                                                 />
                                                                             )}
                                                                         {post._embedded &&
-                                                                            !post._embedded["wp:featuredmedia"] && (
+                                                                            !post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                 <>
                                                                                     {showFallbackImg &&
                                                                                         fallbackImgUrl && (
@@ -1148,10 +1602,7 @@ const Edit = (props) => {
                                                                                 className="ebpg-post-link-wrapper"
                                                                                 href="#"
                                                                             ></a>
-                                                                            {post._embedded &&
-                                                                                post._embedded["wp:featuredmedia"] &&
-                                                                                post._embedded["wp:featuredmedia"]
-                                                                                    .length > 0 && (
+                                                                            {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                     <img
                                                                                         src={thumbnailImageUrl(
                                                                                             post._embedded[
@@ -1162,7 +1613,7 @@ const Edit = (props) => {
                                                                                     />
                                                                                 )}
                                                                             {post._embedded &&
-                                                                                !post._embedded["wp:featuredmedia"] && (
+                                                                                !post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                                                                                     <>
                                                                                         {showFallbackImg &&
                                                                                             fallbackImgUrl && (

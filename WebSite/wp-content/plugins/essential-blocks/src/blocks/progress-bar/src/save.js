@@ -32,7 +32,7 @@ const save = ({ attributes }) => {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div className={`eb-progressbar-wrapper ${blockId}`}>
                     <div
                         className={`eb-progressbar-${CONTAINER_CLASS[layout]}-container ${wrapperAlign}`}

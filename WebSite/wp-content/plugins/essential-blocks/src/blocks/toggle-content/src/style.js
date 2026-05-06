@@ -237,10 +237,11 @@ export default function Style(props) {
 
     const liquidGlassBasicStyles = `
         ${switchLiquidGlass.enable ? `
-         .${blockId}.eb-toggle-wrapper .eb-toggle-slider.eb_liquid_glass_shadow-${switchLiquidGlass.shadowEffect} {
+         .${blockId}.eb-toggle-wrapper.switch-style-rounded .eb-toggle-slider.eb_liquid_glass_shadow-${switchLiquidGlass.shadowEffect} {
              ${switchLiquidGlassShadowEffectBorderStylesDesktop}
+             background: transparent;
          }
-        .${blockId}.eb-toggle-wrapper .eb-toggle-slider.eb_liquid_glass-${switchLiquidGlass.effect}{
+        .${blockId}.eb-toggle-wrapper.switch-style-rounded .eb-toggle-slider.eb_liquid_glass-${switchLiquidGlass.effect}{
              background-color: ${switchLiquidGlass.backgroundColor};
              ${switchLiquidGlass.effect === "effect1" ||
                 switchLiquidGlass.effect === "effect2"
@@ -255,7 +256,7 @@ export default function Style(props) {
     `;
 
     // Apply filter for pro liquid glass styles
-    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "switchLiquidGlass", `.${blockId}.eb-toggle-wrapper .eb-toggle-slider`);
+    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "switchLiquidGlass", `.${blockId}.eb-toggle-wrapper.switch-style-rounded .eb-toggle-slider`);
 
     const wrapperStylesDesktop = `
 	.${blockId}.eb-toggle-wrapper{

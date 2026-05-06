@@ -139,6 +139,8 @@ const Edit = (props) => {
                                     onChange={(newFormId) =>
                                         setAttributes({ formId: newFormId })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </Placeholder>
                         )}

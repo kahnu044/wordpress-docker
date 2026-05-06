@@ -4,13 +4,13 @@
 import { __ } from "@wordpress/i18n";
 import {
     PanelBody,
-    Button,
-    ButtonGroup,
     BaseControl,
     ToggleControl,
     SelectControl,
     RangeControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -70,42 +70,48 @@ function EBButton(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     <PanelBody title={__("General", "essential-blocks")}>
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={buttonAlign === item.value}
-                                        isSecondary={buttonAlign !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                buttonAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
-                        <BaseControl label={__("Width", "essential-blocks")}>
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {BUTTON_WIDTH.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={buttonWidth === item.value}
-                                        isSecondary={buttonWidth !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                buttonWidth: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={buttonAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <ToggleGroupControl
+                            label={__("Width", "essential-blocks")}
+
+                            value={buttonWidth}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonWidth: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {BUTTON_WIDTH.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         {buttonWidth === "fixed" && (
                             <ResponsiveRangeController
                                 baseLabel={__("Fixed Width", "essential-blocks")}
@@ -121,6 +127,7 @@ function EBButton(props) {
                             label={__("Add icon", "essential-blocks")}
                             checked={addIcon}
                             onChange={() => handleBlockDefault({ addIcon: !addIcon })}
+                            __nextHasNoMarginBottom
                         />
                         {addIcon && (
                             <>
@@ -128,34 +135,37 @@ function EBButton(props) {
                                     value={icon}
                                     onChange={(icon) => handleBlockDefault({ icon })}
                                 />
-                                <BaseControl label={__("Icon Postion", "essential-blocks")}>
-                                    <ButtonGroup id="eb-button-group-alignment">
-                                        {ICON_POSITION.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={iconPosition === item.value}
-                                                isSecondary={iconPosition !== item.value}
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        iconPosition: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Icon Postion", "essential-blocks")}
+
+                                    value={iconPosition}
+                                    onChange={(value) =>
+                                        handleBlockDefault({
+                                            iconPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {ICON_POSITION.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                                 <ResponsiveRangeController
                                     baseLabel={__("Size", "essential-blocks")}
                                     controlName={ICON_SIZE}
-                                    
+
                                     noUnits={true}
                                 />
                                 <ResponsiveRangeController
                                     baseLabel={__("Gap", "essential-blocks")}
                                     controlName={ICON_SPACE}
-                                    
+
                                     noUnits={true}
                                 />
                             </>
@@ -186,7 +196,7 @@ function EBButton(props) {
                                 }
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">{__("Background", "essential-blocks")}</h3>
                             </BaseControl>
                             <BackgroundControl
@@ -195,7 +205,7 @@ function EBButton(props) {
                                 noMainBgi={true}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                             </BaseControl>
                             <BorderShadowControl controlName={BUTTON_BORDER} />
@@ -211,7 +221,7 @@ function EBButton(props) {
                     // initialOpen={true}
                     >
                         <ResponsiveDimensionsControl
-                            
+
                             controlName={WRAPPER_MARGIN}
                             baseLabel={__("Margin", "essential-blocks")}
                         />
@@ -225,6 +235,8 @@ function EBButton(props) {
                                     hoverEffect: newHoverEffect,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {hoverEffect && (
                             <RangeControl
@@ -234,6 +246,8 @@ function EBButton(props) {
                                 step={0.01}
                                 min={0}
                                 max={5}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
                     </PanelBody>

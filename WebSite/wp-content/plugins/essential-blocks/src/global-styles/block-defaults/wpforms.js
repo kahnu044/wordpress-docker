@@ -111,6 +111,7 @@ function Wpforms(props) {
                             onChange={(showLabels) =>
                                 handleBlockDefault({ showLabels })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Placeholder", "essential-blocks")}
@@ -118,6 +119,7 @@ function Wpforms(props) {
                             onChange={(showPlaceholder) =>
                                 handleBlockDefault({ showPlaceholder })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Error Message", "essential-blocks")}
@@ -125,10 +127,12 @@ function Wpforms(props) {
                             onChange={(showErrorMessage) =>
                                 handleBlockDefault({ showErrorMessage })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <BaseControl
                             label={__("Alignment", "essential-blocks")}
                             id="eb-button-group-alignment"
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup id="eb-button-group-alignment">
                                 {FORM_ALIGNMENT.map((item, index) => (
@@ -184,7 +188,7 @@ function Wpforms(props) {
                         initialOpen={false}
                     >
                         <>
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <ButtonGroup>
                                     {[
                                         {
@@ -328,7 +332,7 @@ function Wpforms(props) {
                                 step={1}
                             />
                         </>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Border & Shadow", "essential-blocks")}
                             </h3>
@@ -361,6 +365,7 @@ function Wpforms(props) {
                             onChange={(customCheckboxStyle) =>
                                 handleBlockDefault({ customCheckboxStyle })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {customCheckboxStyle && (
                             <>
@@ -371,7 +376,7 @@ function Wpforms(props) {
                                     max={80}
                                     step={1}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <ButtonGroup>
                                         {[
                                             {
@@ -445,7 +450,7 @@ function Wpforms(props) {
                                                 })
                                             }
                                         />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Checkbox",
@@ -461,7 +466,7 @@ function Wpforms(props) {
                                             )}
                                         />
 
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Radio Buttons",
@@ -501,6 +506,7 @@ function Wpforms(props) {
                                 <BaseControl
                                     label={__("Alignment", "essential-blocks")}
                                     id="eb-button-group-alignment"
+                                    __nextHasNoMarginBottom
                                 >
                                     <ButtonGroup id="eb-button-group-alignment">
                                         {SUBMIT_BUTTON_POSITION.map(
@@ -538,6 +544,8 @@ function Wpforms(props) {
                                         btnWidthType: newBtnWidthType,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {btnWidthType === "custom" && (
                                 <ResponsiveRangeController
@@ -552,7 +560,7 @@ function Wpforms(props) {
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={typoPrefix_submit_btn}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <ButtonGroup>
                                     {[
                                         {
@@ -642,7 +650,7 @@ function Wpforms(props) {
                                 controlName={SUBMIT_BUTTON_MARGIN}
                                 baseLabel={__("Margin", "essential-blocks")}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Border & Shadow", "essential-blocks")}
                                 </h3>

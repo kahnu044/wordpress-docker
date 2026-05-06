@@ -95,6 +95,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         sortBy: newSortBy,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <RangeControl
                                 label={__(
@@ -109,6 +111,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 }}
                                 min={1}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                             <ResponsiveRangeController
                                 baseLabel={__(
@@ -132,6 +136,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         hasEqualImages,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </>
                     </InspectorPanel.PanelBody>
@@ -154,6 +159,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     layout: newLayout,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {layout === "overlay" && (
                             <SelectControl
@@ -168,6 +175,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         overlayStyle: newOverlayStyle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {layout === "card" && (
@@ -183,12 +192,14 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         cardStyle: newCardStyle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {layout === "card" && (
                             <>
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "User info",
@@ -209,6 +220,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showProfileImg,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {showProfileImg && !profileImg && (
                                     <MediaUpload
@@ -263,6 +275,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showProfileName,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {showProfileName && (
                                     <TextControl
@@ -278,6 +291,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 profileName: newProfileName,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -294,6 +309,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         showCaptions,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <ToggleControl
@@ -305,6 +321,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(enableLink) =>
                                 setAttributes({ enableLink })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {enableLink && (
                             <ToggleControl
@@ -318,6 +335,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         openInNewTab,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {overlayStyle !== "overlay__simple" && (
@@ -330,6 +348,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 onChange={(showMeta) =>
                                     setAttributes({ showMeta })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>
@@ -363,7 +382,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     attributeName={'overlayColor'}
                                 />
                             )}
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__(
                                         "Border",

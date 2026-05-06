@@ -4,7 +4,7 @@
   "name": "essential-blocks/pricing-table",
   "description": "The pricing table block will let you create an effective product pricing table with perfect styling to get more sales from your prospective buyers.",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

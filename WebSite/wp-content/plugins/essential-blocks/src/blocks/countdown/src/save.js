@@ -33,7 +33,7 @@ export default function Save({ attributes }) {
             attributes={attributes}
         >
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div className={`${blockId} eb-cd-wrapper ${preset}`}>
                     <div

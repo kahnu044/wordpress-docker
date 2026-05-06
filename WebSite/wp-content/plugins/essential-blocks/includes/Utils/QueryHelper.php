@@ -172,6 +172,16 @@ class QueryHelper
         }
 
         $posts = new \WP_Query( $args );
+
+        // WP_Query prepends sticky posts outside the normal pagination, which can
+        // push the result count above posts_per_page. Trim back so frontend count
+        // matches the editor preview.
+        $per_page = (int) $args[ 'posts_per_page' ];
+        if ( $per_page > 0 && \count( $posts->posts ) > $per_page ) {
+            $posts->posts      = \array_slice( $posts->posts, 0, $per_page );
+            $posts->post_count = $per_page;
+        }
+
         return $posts;
     }
 }

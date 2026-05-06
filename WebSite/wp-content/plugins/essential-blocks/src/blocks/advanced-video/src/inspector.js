@@ -6,12 +6,12 @@ import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     TextControl,
     PanelRow,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 
@@ -192,6 +192,7 @@ function Inspector(props) {
                                             },
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {videoConfig.autoplay && (
                                     <PanelRow>
@@ -213,6 +214,7 @@ function Inspector(props) {
                                             },
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -228,6 +230,7 @@ function Inspector(props) {
                                     },
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Controls", "essential-blocks")}
@@ -244,6 +247,7 @@ function Inspector(props) {
                                     });
                                 }, 100);
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showBar && selfhostVideo && (
@@ -253,6 +257,7 @@ function Inspector(props) {
                                 onChange={(showDownload) =>
                                     setAttributes({ showDownload })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -271,6 +276,7 @@ function Inspector(props) {
                                             imageOverlay,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {imageOverlay && (
@@ -301,82 +307,75 @@ function Inspector(props) {
                                                     customPlayIcon,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
 
                                         {customPlayIcon && (
                                             <>
-                                                <BaseControl
+                                                <ToggleGroupControl
                                                     label={__(
                                                         "Icon Type",
                                                         "essential-blocks",
                                                     )}
+
+                                                    value={placeholderCustomPlayIconType}
+                                                    onChange={(value) =>
+                                                        setAttributes({
+                                                            placeholderCustomPlayIconType: value,
+                                                        })
+                                                    }
+                                                    isBlock
+                                                    __next40pxDefaultSize
+                                                    __nextHasNoMarginBottom
                                                 >
-                                                    <ButtonGroup>
-                                                        {ICON_TYPE.map(
-                                                            (item) => (
-                                                                <Button
-                                                                    // isLarge
-                                                                    isPrimary={
-                                                                        placeholderCustomPlayIconType ===
-                                                                        item.value
-                                                                    }
-                                                                    isSecondary={
-                                                                        placeholderCustomPlayIconType !==
-                                                                        item.value
-                                                                    }
-                                                                    onClick={() =>
-                                                                        setAttributes(
-                                                                            {
-                                                                                placeholderCustomPlayIconType:
-                                                                                    item.value,
-                                                                            },
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {item.label}
-                                                                </Button>
-                                                            ),
-                                                        )}
-                                                    </ButtonGroup>
-                                                </BaseControl>
+                                                    {ICON_TYPE.map(
+                                                        (item) => (
+                                                            <ToggleGroupControlOption
+                                                                key={item.value}
+                                                                value={item.value}
+                                                                label={item.label}
+                                                            />
+                                                        ),
+                                                    )}
+                                                </ToggleGroupControl>
 
                                                 {placeholderCustomPlayIconType ===
                                                     "icon" && (
-                                                    <BaseControl>
-                                                        <EBIconPicker
-                                                            value={
-                                                                customPlayIconlib
-                                                            }
-                                                            attributeName={
-                                                                "customPlayIconlib"
-                                                            }
-                                                        />
-                                                    </BaseControl>
-                                                )}
+                                                        <BaseControl __nextHasNoMarginBottom>
+                                                            <EBIconPicker
+                                                                value={
+                                                                    customPlayIconlib
+                                                                }
+                                                                attributeName={
+                                                                    "customPlayIconlib"
+                                                                }
+                                                            />
+                                                        </BaseControl>
+                                                    )}
                                                 {placeholderCustomPlayIconType ===
                                                     "image" && (
-                                                    <ImageComponent.GeneralTab
-                                                        onSelect={({
-                                                            id,
-                                                            url,
-                                                        }) =>
-                                                            setAttributes({
-                                                                customPlayIconURL:
-                                                                    url,
-                                                                customPlayIconId:
-                                                                    id,
-                                                            })
-                                                        }
-                                                        value={
-                                                            customPlayIconURL
-                                                        }
-                                                        hasTag={false}
-                                                        hasCaption={false}
-                                                        hasStyle={false}
-                                                        hasLink={false}
-                                                        showInPanel={false}
-                                                    />
-                                                )}
+                                                        <ImageComponent.GeneralTab
+                                                            onSelect={({
+                                                                id,
+                                                                url,
+                                                            }) =>
+                                                                setAttributes({
+                                                                    customPlayIconURL:
+                                                                        url,
+                                                                    customPlayIconId:
+                                                                        id,
+                                                                })
+                                                            }
+                                                            value={
+                                                                customPlayIconURL
+                                                            }
+                                                            hasTag={false}
+                                                            hasCaption={false}
+                                                            hasStyle={false}
+                                                            hasLink={false}
+                                                            showInPanel={false}
+                                                        />
+                                                    )}
                                             </>
                                         )}
                                     </>
@@ -393,40 +392,36 @@ function Inspector(props) {
                             onChange={(videoOptions) =>
                                 setAttributes({ videoOptions })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {videoOptions == "eb-sticky" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__(
                                         "Sticky Position",
                                         "essential-blocks",
                                     )}
+
+                                    value={stickyPosition}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            stickyPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {STICKY_POSITION.map((item) => (
-                                            <Button
-                                                // isLarge
-                                                isPrimary={
-                                                    stickyPosition ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    stickyPosition !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        stickyPosition:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {STICKY_POSITION.map((item) => (
+                                        <ToggleGroupControlOption
+                                            key={item.value}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                                 <ResponsiveSelectController
                                     baseLabel={__(
                                         "Visibility",
@@ -469,43 +464,38 @@ function Inspector(props) {
                                             lightboxPlayIcon,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {lightboxPlayIcon && (
                                     <>
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Icon Type",
                                                 "essential-blocks",
                                             )}
+
+                                            value={lightboxPlayIconType}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    lightboxPlayIconType: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup>
-                                                {ICON_TYPE.map((item) => (
-                                                    <Button
-                                                        // isLarge
-                                                        isPrimary={
-                                                            lightboxPlayIconType ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            lightboxPlayIconType !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes({
-                                                                lightboxPlayIconType:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {ICON_TYPE.map((item) => (
+                                                <ToggleGroupControlOption
+                                                    key={item.value}
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            ))}
+                                        </ToggleGroupControl>
 
                                         {lightboxPlayIconType === "icon" && (
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <EBIconPicker
                                                     value={lightboxPlayIconlib}
                                                     attributeName={
@@ -553,33 +543,27 @@ function Inspector(props) {
                                     step={1}
                                     units={SIZE_UNIT_TYPES}
                                 />
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Alignment", "essential-blocks")}
+
+                                    value={videoAlignment}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            videoAlignment: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {ALIGNMENT.map((item) => (
-                                            <Button
-                                                // isLarge
-                                                isPrimary={
-                                                    videoAlignment ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    videoAlignment !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        videoAlignment:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ALIGNMENT.map((item) => (
+                                        <ToggleGroupControlOption
+                                            key={item.value}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
 
@@ -642,15 +626,15 @@ function Inspector(props) {
                             </>
                         )}
 
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Border", "essential-blocks")}
                             </h3>
                         </BaseControl>
                         <BorderShadowControl
                             controlName={VIDEO_BORDER_SHADOW}
-                            // noShadow
-                            // noBorder
+                        // noShadow
+                        // noBorder
                         />
                     </PanelBody>
 
@@ -720,7 +704,7 @@ function Inspector(props) {
                                 controlName={LIGHTBOX_BORDER_SHADOW}
                                 noShadow
                                 noBdrHover
-                                // noBorder
+                            // noBorder
                             />
 
                             <PanelRow>Close Icon</PanelRow>

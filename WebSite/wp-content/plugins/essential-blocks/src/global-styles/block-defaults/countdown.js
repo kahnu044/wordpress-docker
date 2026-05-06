@@ -8,11 +8,11 @@ import {
     SelectControl,
     ToggleControl,
     TextControl,
-    Button,
     BaseControl,
-    ButtonGroup,
     DateTimePicker,
     TabPanel,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -127,6 +127,7 @@ function Countdown(props) {
                             label={__("Display Days", "essential-blocks")}
                             checked={showDays}
                             onChange={() => handleBlockDefault({ showDays: !showDays })}
+                            __nextHasNoMarginBottom
                         />
 
                         {showDays && (
@@ -136,6 +137,8 @@ function Countdown(props) {
                                     value={daysLabel}
                                     type="text"
                                     onChange={(daysLabel) => handleBlockDefault({ daysLabel })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -152,6 +155,7 @@ function Countdown(props) {
                             label={__("Display Hours", "essential-blocks")}
                             checked={showHours}
                             onChange={() => handleBlockDefault({ showHours: !showHours })}
+                            __nextHasNoMarginBottom
                         />
 
                         {showHours && (
@@ -161,6 +165,8 @@ function Countdown(props) {
                                     value={hoursLabel}
                                     type="text"
                                     onChange={(hoursLabel) => handleBlockDefault({ hoursLabel })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -181,6 +187,7 @@ function Countdown(props) {
                                     showMinutes: !showMinutes,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showMinutes && (
@@ -190,6 +197,8 @@ function Countdown(props) {
                                     value={minutesLabel}
                                     type="text"
                                     onChange={(minutesLabel) => handleBlockDefault({ minutesLabel })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -210,6 +219,7 @@ function Countdown(props) {
                                     showSeconds: !showSeconds,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showSeconds && (
@@ -219,6 +229,8 @@ function Countdown(props) {
                                     value={secondsLabel}
                                     type="text"
                                     onChange={(secondsLabel) => handleBlockDefault({ secondsLabel })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -233,24 +245,27 @@ function Countdown(props) {
                     </PanelBody>
                     {/* Styles */}
                     <PanelBody title={__("Boxes Styles", "essential-blocks")}>
-                        <BaseControl label="Layout">
-                            <ButtonGroup>
-                                {LAYOUT_TYPES.map(({ value, label }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={flexDirection !== value}
-                                        isPrimary={flexDirection === value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                flexDirection: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label="Layout"
+
+                            value={flexDirection}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    flexDirection: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {LAYOUT_TYPES.map(({ value, label }, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ResponsiveRangeController
                             noUnits
                             baseLabel={__("Container Max Width", "essential-blocks")}
@@ -269,17 +284,19 @@ function Countdown(props) {
                             step={1}
                         />
 
-                        <BaseControl label={__("Contents Direction", "essential-blocks")}>
+                        <BaseControl label={__("Contents Direction", "essential-blocks")} __nextHasNoMarginBottom>
                             <SelectControl
                                 value={contentsDirection}
                                 options={FLEX_DIRECTIONS}
                                 onChange={(contentsDirection) => handleBlockDefault({ contentsDirection })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
 
                         {contentsDirection && contentsDirection.includes("row") && (
                             <>
-                                <BaseControl label={__("Contents Justify Position", "essential-blocks")}>
+                                <BaseControl label={__("Contents Justify Position", "essential-blocks")} __nextHasNoMarginBottom>
                                     <SelectControl
                                         value={contentsJustify}
                                         options={JUSTIFY_CONTENTS}
@@ -288,29 +305,34 @@ function Countdown(props) {
                                                 contentsJustify,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
                             </>
                         )}
 
-                        <BaseControl label={__("Contents Alignment", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ALIGN_ITEMS.map(({ value, label }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={contentsAlign !== value}
-                                        isPrimary={contentsAlign === value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentsAlign: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Contents Alignment", "essential-blocks")}
+
+                            value={contentsAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    contentsAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGN_ITEMS.map(({ value, label }, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
@@ -379,6 +401,7 @@ function Countdown(props) {
                                         showSeparator: !showSeparator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {showSeparator && (
@@ -392,6 +415,8 @@ function Countdown(props) {
                                                 separatorType,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
 
                                     <ResponsiveRangeController

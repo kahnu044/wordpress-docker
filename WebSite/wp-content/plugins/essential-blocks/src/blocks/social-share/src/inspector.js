@@ -7,10 +7,10 @@ import {
     SelectControl,
     ToggleControl,
     BaseControl,
-    Button,
-    ButtonGroup,
     TextControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import { TITLE_TYPOGRAPHY } from "./constants/typographyPrefixConstants";
@@ -207,6 +207,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showTitle: !showTitle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Floating", "essential-blocks")}
@@ -216,6 +217,7 @@ function Inspector({ attributes, setAttributes }) {
                                     isFloating: !isFloating,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                         <SortControl
@@ -245,28 +247,28 @@ function Inspector({ attributes, setAttributes }) {
                         title={__("Icons Styles", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Icon Shape", "essential-blocks")}
+
+                            value={iconShape}
+                            onChange={(value) => onShapeChange(value)}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {ICON_SHAPE.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={iconShape !== item.value}
-                                        isPrimary={iconShape === item.value}
-                                        onClick={() =>
-                                            onShapeChange(item.value)
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {ICON_SHAPE.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <BaseControl
                             id="eb-team-icons-alignments"
                             label="Social Icons Horizontal Alignments"
+                            __nextHasNoMarginBottom
                         >
                             <SelectControl
                                 value={iconsJustify}
@@ -276,6 +278,8 @@ function Inspector({ attributes, setAttributes }) {
                                         iconsJustify,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
 
@@ -418,6 +422,8 @@ function Inspector({ attributes, setAttributes }) {
                             onChange={(icnEffect) => {
                                 setAttributes({ icnEffect });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
 

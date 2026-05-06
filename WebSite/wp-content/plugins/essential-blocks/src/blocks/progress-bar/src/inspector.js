@@ -95,6 +95,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     layout: newLayout,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {(layout === "line" ||
                             layout === "line_rainbow") && (
@@ -109,6 +111,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showInline: !showInline,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             )}
                         <Divider />
@@ -151,6 +154,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     titleTag: newTitleTag,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                         <ButtonGroupControl
@@ -171,6 +176,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             step={1}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {valueType === 'absolute' && (
@@ -187,6 +194,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     step={1}
                                     min={0}
                                     max={valueType === 'percentage' ? 100 : 10000}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                                 <DynamicInputControl
                                     label={__(
@@ -215,6 +224,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     displayProgress: !displayProgress,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {(layout === "line" ||
@@ -232,6 +242,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 showStripe: !showStripe,
                                             });
                                         }}
+                                        __nextHasNoMarginBottom
                                     />
                                     {showStripe && (
                                         <SelectControl
@@ -265,6 +276,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     stripeAnimation,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                     )}
                                 </>
@@ -285,6 +298,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 prefix: newPrefix,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                     <TextControl
                                         label={__(
@@ -297,6 +312,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 suffix: newSuffix,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </>
                             )}
@@ -422,6 +439,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             step={100}
                             min={1000}
                             max={10000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
@@ -446,7 +465,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     />
                                     {layout !== "line_rainbow" && (
                                         <>
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <h3 className="eb-control-title">
                                                     {__(
                                                         "Fill Color",
@@ -467,6 +486,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                         isProgressGradient: !isProgressGradient,
                                                     });
                                                 }}
+                                                __nextHasNoMarginBottom
                                             />
                                             {isProgressGradient || (
                                                 <ColorControl
@@ -546,7 +566,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     color={backgroundColor}
                                     attributeName={'backgroundColor'}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Fill Color",
@@ -565,6 +585,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             isProgressGradient: !isProgressGradient,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {isProgressGradient || (
                                     <ColorControl

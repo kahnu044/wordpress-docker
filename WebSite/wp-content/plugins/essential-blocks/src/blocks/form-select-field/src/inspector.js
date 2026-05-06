@@ -95,6 +95,7 @@ function Inspector(props) {
                                     showLabel: !showLabel,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showLabel && (
@@ -133,6 +134,7 @@ function Inspector(props) {
                                     isRequired: !isRequired,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -145,6 +147,7 @@ function Inspector(props) {
                                     isIcon: !isIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isIcon && (

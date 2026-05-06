@@ -443,6 +443,14 @@ const attributes = {
         type: "string",
         default: "align-custom",
     },
+    allowConfigurablePrefix: {
+        type: "boolean",
+        default: false,
+    },
+    configurablePrefix: {
+        type: "string",
+        default: "eb-toc-",
+    },
 
     // //
     ...generateBackgroundAttributes(WrpBgConst, {

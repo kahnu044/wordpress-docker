@@ -106,8 +106,10 @@ function Taxonomy(props) {
                             onChange={(source) =>
                                 handleBlockDefault({ source })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl label={__("Display Style", "essential-blocks")}>
+                        <BaseControl label={__("Display Style", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {DISPLAY_STYLE.map((item, index) => (
                                     <Button
@@ -125,7 +127,7 @@ function Taxonomy(props) {
                                 ))}
                             </ButtonGroup>
                         </BaseControl>
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {ALIGNMENT.map((item, index) => (
                                     <Button
@@ -153,6 +155,8 @@ function Taxonomy(props) {
                             max={50}
                             step={1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ToggleControl
                             label={__("Display as Dropdown", "essential-blocks")}
@@ -160,6 +164,7 @@ function Taxonomy(props) {
                             onChange={(displayAsDropdown) =>
                                 handleBlockDefault({ displayAsDropdown })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Hierarchy", "essential-blocks")}
@@ -167,6 +172,7 @@ function Taxonomy(props) {
                             onChange={(showHierarchy) =>
                                 handleBlockDefault({ showHierarchy })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Post Counts", "essential-blocks")}
@@ -174,6 +180,7 @@ function Taxonomy(props) {
                             onChange={(showPostCounts) =>
                                 handleBlockDefault({ showPostCounts })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Empty", "essential-blocks")}
@@ -181,6 +188,7 @@ function Taxonomy(props) {
                             onChange={(showEmpty) =>
                                 handleBlockDefault({ showEmpty })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Separator", "essential-blocks")}
@@ -188,6 +196,7 @@ function Taxonomy(props) {
                             onChange={(showSeparator) =>
                                 handleBlockDefault({ showSeparator })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showSeparator && (
                             <>
@@ -221,10 +230,12 @@ function Taxonomy(props) {
                             onChange={(prefixType) =>
                                 handleBlockDefault({ prefixType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {prefixType !== "none" && (
                             <>
-                                <BaseControl label={__("Vertical Alignment", "essential-blocks")}>
+                                <BaseControl label={__("Vertical Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                                     <ButtonGroup>
                                         {VERTICAL_ALIGN.map((item, index) => (
                                             <Button
@@ -283,10 +294,12 @@ function Taxonomy(props) {
                             onChange={(suffixType) =>
                                 handleBlockDefault({ suffixType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {suffixType !== "none" && (
                             <>
-                                <BaseControl label={__("Vertical Alignment", "essential-blocks")}>
+                                <BaseControl label={__("Vertical Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                                     <ButtonGroup>
                                         {VERTICAL_ALIGN.map((item, index) => (
                                             <Button
@@ -342,7 +355,7 @@ function Taxonomy(props) {
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={TAXONOMIES_TYPOGRAPHY}
                         />
-                        <BaseControl label={__("Color", "essential-blocks")}>
+                        <BaseControl label={__("Color", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button

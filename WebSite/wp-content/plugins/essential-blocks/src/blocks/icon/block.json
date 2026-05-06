@@ -4,7 +4,7 @@
   "name": "essential-blocks/icon",
   "category": "essential-blocks",
   "description": "Icon Picker Block lets you choose any Font Awesome icon to customize your design as per your preference.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

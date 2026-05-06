@@ -89,6 +89,8 @@ const ColorPalletWrapper = (props) => {
                             className={'eb-custom-element__edit-input'}
                             value={color.name || ''}
                             onChange={(text) => editColorName(index, text)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <button
                             className={'eb-delete-item'}

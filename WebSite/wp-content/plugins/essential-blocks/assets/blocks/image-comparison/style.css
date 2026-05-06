@@ -1,1 +1,1 @@
-.eb-image-comparison-wrapper[data-vertical-mode=true] div[data-testid=container]{touch-action:pan-x}
+.eb-image-comparison-wrapper>div[data-testid=container]{position:relative}.eb-image-comparison-wrapper>div[data-testid=container]>img{display:block;height:auto;max-width:100%;width:100%}.eb-image-comparison-wrapper>div[data-testid=container]>img:not(:first-child){left:0;position:absolute;top:0}.eb-image-comparison-wrapper[data-vertical-mode=true] div[data-testid=container]{touch-action:pan-x}

@@ -47,7 +47,8 @@
                                     'productDescLength' => $productDescLength,
                                     'showDetailBtn' => $showDetailBtn,
                                     'detailBtnText' => $detailBtnText,
-                                    'titleTag' => $titleTag
+                                    'titleTag' => $titleTag,
+                                    'imageSize' => $imageSize
                                 ]
                             );
                         }

@@ -130,6 +130,7 @@ function FluentForms(props) {
                             onChange={(showLabels) =>
                                 handleBlockDefault({ showLabels })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Placeholder", "essential-blocks")}
@@ -137,6 +138,7 @@ function FluentForms(props) {
                             onChange={(showPlaceholder) =>
                                 handleBlockDefault({ showPlaceholder })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Error Message", "essential-blocks")}
@@ -144,6 +146,7 @@ function FluentForms(props) {
                             onChange={(showErrorMessage) =>
                                 handleBlockDefault({ showErrorMessage })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     {/* Style */}
@@ -170,7 +173,7 @@ function FluentForms(props) {
                         initialOpen={false}
                     >
                         <>
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <ButtonGroup>
                                     {[
                                         {
@@ -314,7 +317,7 @@ function FluentForms(props) {
                                 step={1}
                             />
                         </>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Border & Shadow", "essential-blocks")}
                             </h3>
@@ -347,6 +350,7 @@ function FluentForms(props) {
                             onChange={(customCheckboxStyle) =>
                                 handleBlockDefault({ customCheckboxStyle })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {customCheckboxStyle && (
                             <>
@@ -357,7 +361,7 @@ function FluentForms(props) {
                                     max={80}
                                     step={1}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <ButtonGroup>
                                         {[
                                             {
@@ -431,7 +435,7 @@ function FluentForms(props) {
                                                 })
                                             }
                                         />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Checkbox",
@@ -447,7 +451,7 @@ function FluentForms(props) {
                                             )}
                                         />
 
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Radio Buttons",
@@ -496,6 +500,7 @@ function FluentForms(props) {
                             <BaseControl
                                 label={__("Alignment", "essential-blocks")}
                                 id="eb-button-group-alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {SECTION_BREAK_POSITION.map(
@@ -524,7 +529,7 @@ function FluentForms(props) {
                                 </ButtonGroup>
                             </BaseControl>
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Label", "essential-blocks")}
                                 </h3>
@@ -551,7 +556,7 @@ function FluentForms(props) {
                                 baseLabel={__("Margin", "essential-blocks")}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Description", "essential-blocks")}
                                 </h3>
@@ -590,6 +595,7 @@ function FluentForms(props) {
                             <BaseControl
                                 label={__("Alignment", "essential-blocks")}
                                 id="eb-button-group-alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {SECTION_BREAK_POSITION.map(
@@ -650,6 +656,7 @@ function FluentForms(props) {
                                 <BaseControl
                                     label={__("Alignment", "essential-blocks")}
                                     id="eb-button-group-alignment"
+                                    __nextHasNoMarginBottom
                                 >
                                     <ButtonGroup id="eb-button-group-alignment">
                                         {SUBMIT_BUTTON_POSITION.map(
@@ -694,6 +701,8 @@ function FluentForms(props) {
                                         btnWidthType: newBtnWidthType,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {btnWidthType === "custom" && (
                                 <ResponsiveRangeController
@@ -708,7 +717,7 @@ function FluentForms(props) {
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={typoPrefix_submit_btn}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <ButtonGroup>
                                     {[
                                         {
@@ -808,7 +817,7 @@ function FluentForms(props) {
                                 max={1000}
                                 step={1}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Border & Shadow", "essential-blocks")}
                                 </h3>
@@ -894,6 +903,7 @@ function FluentForms(props) {
                             <BaseControl
                                 label={__("Alignment", "essential-blocks")}
                                 id="eb-button-group-alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="eb-button-group-alignment">
                                     {FORM_ALIGNMENT.map((item, index) => (
@@ -935,7 +945,7 @@ function FluentForms(props) {
                                 baseLabel={__("Margin", "essential-blocks")}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Border & Shadow", "essential-blocks")}
                                 </h3>

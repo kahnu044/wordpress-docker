@@ -42,6 +42,18 @@ class SocialShare extends Block
      */
     public function render_callback( $attributes, $content )
     {
+        // Sync translated iconText from socialDetails into profilesOnly.
+        // WPML may translate socialDetails but profilesOnly (which the
+        // view renders) stays stale. Merge translated values.
+        if ( ! empty( $attributes['socialDetails'] ) && ! empty( $attributes['profilesOnly'] ) ) {
+            foreach ( $attributes['profilesOnly'] as $i => &$profile ) {
+                if ( isset( $attributes['socialDetails'][ $i ]['iconText'] ) ) {
+                    $profile['iconText'] = $attributes['socialDetails'][ $i ]['iconText'];
+                }
+            }
+            unset( $profile );
+        }
+
         ob_start();
         Helper::views(
             'social-share',

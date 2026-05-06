@@ -6,11 +6,11 @@ import {
     PanelBody,
     ToggleControl,
     SelectControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     TextControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -161,22 +161,25 @@ const Inspector = ({ attributes, setAttributes }) => {
                         isTextarea={true}
                     />
                 )}
-                <BaseControl label={__("Icon Type", "essential-blocks")}>
-                    <ButtonGroup className="eb-featurelist-icon-type">
-                        {MEDIA_TYPES.map((item, index) => (
-                            <Button
-                                key={index}
-                                isPrimary={each.iconType === item.value}
-                                isSecondary={each.iconType !== item.value}
-                                onClick={() =>
-                                    onFeatureChange("iconType", item.value, i)
-                                }
-                            >
-                                {item.label}
-                            </Button>
-                        ))}
-                    </ButtonGroup>
-                </BaseControl>
+                <ToggleGroupControl
+                    label={__("Icon Type", "essential-blocks")}
+                    className="newtogglegroupcontrol eb-featurelist-icon-type"
+                    value={each.iconType}
+                    onChange={(value) =>
+                        onFeatureChange("iconType", value, i)
+                    }
+                    isBlock
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
+                >
+                    {MEDIA_TYPES.map((item, index) => (
+                        <ToggleGroupControlOption
+                            key={index}
+                            value={item.value}
+                            label={item.label}
+                        />
+                    ))}
+                </ToggleGroupControl>
                 {each.iconType !== "none" && (
                     <>
                         {each.iconType === "icon" && (
@@ -246,6 +249,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                     onChange={(value) =>
                         onFeatureChange("linkOpenNewTab", value.toString(), i)
                     }
+                    __nextHasNoMarginBottom
                 />
             </div>
         ));
@@ -293,6 +297,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 titleTag: newTitleTag,
                             })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <SelectControl
                         label={__("Icon Shape", "essential-blocks")}
@@ -303,6 +309,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 iconShape: newIconShape,
                             })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     {iconShape !== "none" && (
                         <SelectControl
@@ -314,50 +322,52 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     shapeView: newShapeView,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Feature Item Position", "essential-blocks")}
+                        className="newtogglegroupcontrol eb-featurelist-item-align"
+                        value={featureListAlign}
+                        onChange={(value) =>
+                            setAttributes({
+                                featureListAlign: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup className="eb-featurelist-item-align">
-                            {FEATURE_ITEM_POSITION.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={featureListAlign === item.value}
-                                    isSecondary={
-                                        featureListAlign !== item.value
-                                    }
-                                    onClick={() =>
-                                        setAttributes({
-                                            featureListAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
-                    <BaseControl
+                        {FEATURE_ITEM_POSITION.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
+                    <ToggleGroupControl
                         label={__("Icon Position", "essential-blocks")}
+                        className="newtogglegroupcontrol eb-featurelist-icon-align"
+                        value={iconPosition}
+                        onChange={(value) =>
+                            setAttributes({
+                                iconPosition: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup className="eb-featurelist-icon-align">
-                            {ICON_POSITION.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={iconPosition === item.value}
-                                    isSecondary={iconPosition !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            iconPosition: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {ICON_POSITION.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     <ToggleControl
                         label={__(
                             "Content Vertically Center",
@@ -369,6 +379,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 showContentVertical: !showContentVertical,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {!useInlineDesign && iconPosition != "top" && (
                         <ToggleControl
@@ -379,6 +390,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showConnector: !showConnector,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                     )}
                     <ToggleControl
@@ -392,6 +404,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 useInlineDesign: !useInlineDesign,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
 
                     {!showConnector && (
@@ -403,6 +416,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     designItemBox: !designItemBox,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                     )}
 
@@ -417,6 +431,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 }
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                 </InspectorPanel.PanelBody >
             </InspectorPanel.General >
@@ -473,7 +488,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                 >
                     {iconShape !== "none" && (
                         <>
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Background", "essential-blocks")}
                                 </h3>
@@ -540,7 +555,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                     title={__("Content", "essential-blocks")}
                     initialOpen={false}
                 >
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Title", "essential-blocks")}
                         </h3>
@@ -572,7 +587,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                     {!useInlineDesign && (
                         <>
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Description", "essential-blocks")}
                                 </h3>
@@ -587,7 +602,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 typographyPrefixConstant={typoPrefix_content}
                             />
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Content Box", "essential-blocks")}
                                 </h3>
@@ -640,8 +655,10 @@ const Inspector = ({ attributes, setAttributes }) => {
                             min={0}
                             max={100}
                             step={1}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Border & Shadow", "essential-blocks")}
                             </h3>
@@ -669,6 +686,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         connectorStyle: val,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <SelectControl
                                 label={__("Connector Type", "essential-blocks")}
@@ -679,6 +698,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         connectorType: val,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <ColorControl
                                 label={__("Color", "essential-blocks")}

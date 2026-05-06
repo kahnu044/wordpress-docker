@@ -4,7 +4,7 @@
   "name": "essential-blocks/breadcrumbs",
   "category": "essential-blocks",
   "description": "Make smooth navigation for your posts or pages by adding Breadcrumb",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true

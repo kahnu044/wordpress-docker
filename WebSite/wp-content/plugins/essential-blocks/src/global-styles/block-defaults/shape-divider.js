@@ -51,6 +51,8 @@ function ShapeDivider(props) {
                                     shapeDividerPosition: selected,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ShapeDividerControl
                             controlName={SHAPE_DIVIDER}

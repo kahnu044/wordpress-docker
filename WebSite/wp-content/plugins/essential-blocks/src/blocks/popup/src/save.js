@@ -68,7 +68,7 @@ const Save = ({ attributes }) => {
                     data-scroll-offset={scrollOffset}
                 >
                     <div
-                        className={`eb-popup-btn-wrapper eb-parent-${blockId} ${classHook}`}
+                        className={`eb-popup-btn-wrapper eb-parent-${blockId} ${classHook || ''}`}
                     >
                         {"btn_click" === trigger && (
                             <>

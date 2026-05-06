@@ -3,7 +3,7 @@
   "name": "essential-blocks/advanced-video",
   "category": "essential-blocks",
   "description": "Portray any attractive video content on your website and grow engagement",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

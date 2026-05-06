@@ -137,6 +137,8 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                         }
                         ref={searchRef}
                         onFocus={initSearch}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <TextControl
                         label={__("Latitude", "essential-blocks")}
@@ -144,6 +146,8 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                         onChange={(value) =>
                             onMarkerChange("latitude", value, position)
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <TextControl
                         label={__("Longitude", "essential-blocks")}
@@ -151,6 +155,8 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                         onChange={(value) =>
                             onMarkerChange("longitude", value, position)
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <TextControl
                         label={__("Title", "essential-blocks")}
@@ -158,6 +164,8 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                         onChange={(value) =>
                             onMarkerChange("title", value, position)
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <EBTextareaControl
                         label={__("Description", "essential-blocks")}
@@ -180,6 +188,7 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                                 position
                             );
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {marker.showCustomIcon === "true" && (
                         <ImageComponent.GeneralTab
@@ -229,6 +238,8 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                             onChange={(value) =>
                                 onMarkerChange("icon", value, position)
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                 </div>

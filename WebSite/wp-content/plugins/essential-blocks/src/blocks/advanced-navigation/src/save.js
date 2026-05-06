@@ -25,7 +25,7 @@ export default function save({ attributes }) {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div
                     className={`${blockId} eb-advanced-navigation-wrapper ${version} ${layout} ${layoutPreset} ${layout == "is-horizontal" ? navAlign : navVerticalAlign
                         }${showDropdownIcon ? "" : "remove-dropdown-icon"} ${navBtnType === true ? "responsive-icon" : "responsive-text"

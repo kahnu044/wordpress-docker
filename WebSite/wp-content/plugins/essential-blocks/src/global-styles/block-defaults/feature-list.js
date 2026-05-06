@@ -6,10 +6,10 @@ import {
     PanelBody,
     ToggleControl,
     SelectControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -95,12 +95,16 @@ function FeatureList(props) {
                             value={titleTag}
                             options={TITLE_TAG}
                             onChange={(newTitleTag) => handleBlockDefault({ titleTag: newTitleTag })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Icon Shape", "essential-blocks")}
                             value={iconShape}
                             options={ICON_SHAPE}
                             onChange={(newIconShape) => handleBlockDefault({ iconShape: newIconShape })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {iconShape !== "none" && (
                             <SelectControl
@@ -112,44 +116,52 @@ function FeatureList(props) {
                                         shapeView: newShapeView,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
-                        <BaseControl label={__("Feature Item Position", "essential-blocks")}>
-                            <ButtonGroup className="eb-featurelist-item-align">
-                                {FEATURE_ITEM_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={featureListAlign === item.value}
-                                        isSecondary={featureListAlign !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                featureListAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
-                        <BaseControl label={__("Icon Position", "essential-blocks")}>
-                            <ButtonGroup className="eb-featurelist-icon-align">
-                                {ICON_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={iconPosition === item.value}
-                                        isSecondary={iconPosition !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                iconPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Feature Item Position", "essential-blocks")}
+                            className="eb-featurelist-item-align newtogglegroupcontrol"
+                            value={featureListAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    featureListAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {FEATURE_ITEM_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <ToggleGroupControl
+                            label={__("Icon Position", "essential-blocks")}
+                            className="eb-featurelist-icon-align newtogglegroupcontrol"
+                            value={iconPosition}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    iconPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ICON_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ToggleControl
                             label={__("Content Vertically Center", "essentail-blocks")}
                             checked={showContentVertical}
@@ -158,6 +170,7 @@ function FeatureList(props) {
                                     showContentVertical: !showContentVertical,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {!useInlineDesign && iconPosition != "top" && (
                             <ToggleControl
@@ -168,6 +181,7 @@ function FeatureList(props) {
                                         showConnector: !showConnector,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <ToggleControl
@@ -178,6 +192,7 @@ function FeatureList(props) {
                                     useInlineDesign: !useInlineDesign,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody title={__("List", "essential-blocks")} initialOpen={false}>
@@ -204,7 +219,7 @@ function FeatureList(props) {
                     <PanelBody title={__("Icon", "essential-blocks")} initialOpen={false}>
                         {iconShape !== "none" && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Background", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <BackgroundControl
@@ -262,7 +277,7 @@ function FeatureList(props) {
                     </PanelBody>
 
                     <PanelBody title={__("Content", "essential-blocks")} initialOpen={false}>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Title", "essential-blocks")}</h3>
                         </BaseControl>
                         <ResponsiveRangeController
@@ -292,7 +307,7 @@ function FeatureList(props) {
                         {!useInlineDesign && (
                             <>
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Description", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <ColorControl
@@ -306,7 +321,7 @@ function FeatureList(props) {
                                     
                                 />
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Content Box", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <ResponsiveDimensionsControl
@@ -340,6 +355,8 @@ function FeatureList(props) {
                                             connectorStyle: val,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <SelectControl
                                     label={__("Connector Type", "essential-blocks")}
@@ -350,6 +367,8 @@ function FeatureList(props) {
                                             connectorType: val,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ColorControl
                                     label={__("Color", "essential-blocks")}

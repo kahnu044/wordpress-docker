@@ -1,4 +1,5 @@
 import { __ } from "@wordpress/i18n";
+import { Dashicon } from "@wordpress/components";
 import {
     DirectionRowIcon,
     DirectionColumnIcon,
@@ -119,9 +120,74 @@ export const FLEX_WRAPS = [
 
 // Container Alignment Options
 export const CONTENT_WIDTH_OPTIONS = [
-    { label: __("Boxed", "essential-blocks"), value: "boxed" },
     { label: __("Full Width", "essential-blocks"), value: "full" },
+    { label: __("Boxed", "essential-blocks"), value: "boxed" },
+    { label: __(<Dashicon icon="admin-generic" />), value: "variable", title: __("Variable (inherit from theme)", "essential-blocks") },
 ];
+
+// "Inherit from" dropdown options (matches Greenshift's 5 themes + Set Custom)
+export const INHERIT_THEME_OPTIONS = [
+    { label: __("Set Custom", "essential-blocks"), value: "" },
+    { label: __("Blocksy theme", "essential-blocks"), value: "blocksy" },
+    { label: __("Astra theme", "essential-blocks"), value: "astra" },
+    { label: __("Kadence theme", "essential-blocks"), value: "kadence" },
+    { label: __("Greenshift theme", "essential-blocks"), value: "greenshift" },
+    { label: __("Kalium theme", "essential-blocks"), value: "kalium" },
+];
+
+// Per-theme CSS variable map. Returns { admin, frontMax, frontWidth }.
+// Blocksy exposes different variable names between v1 and v2; we read
+// window.ct_localizations.theme_version (the same source Blocksy itself
+// localizes for its editor scripts) to pick the right set.
+export const getThemeWidthVars = (themeKey) => {
+    if (themeKey === "blocksy") {
+        const version = (typeof window !== "undefined" && window.ct_localizations && window.ct_localizations.theme_version) || "";
+        const isV2 = parseInt(String(version).charAt(0), 10) >= 2;
+        return isV2
+            ? {
+                admin: "--theme-container-width",
+                frontMax: "--theme-normal-container-max-width",
+                frontWidth: "--theme-container-width",
+            }
+            : {
+                admin: "--container-width",
+                frontMax: "--normal-container-max-width",
+                frontWidth: "--container-width",
+            };
+    }
+    if (themeKey === "astra") {
+        return {
+            admin: "--wp--custom--ast-content-width-size",
+            frontMax: "--wp--custom--ast-content-width-size",
+            frontWidth: "--wp--custom--ast-content-width-size",
+        };
+    }
+    if (themeKey === "kadence") {
+        return {
+            admin: "--global-content-width",
+            frontMax: "--global-calc-content-width",
+            frontWidth: "--global-calc-content-width",
+        };
+    }
+    if (themeKey === "greenshift") {
+        return {
+            admin: "--wp--style--global--wide-size",
+            frontMax: "--wp--style--global--wide-size",
+            frontWidth: "--wp--style--global--wide-size",
+        };
+    }
+    if (themeKey === "kalium") {
+        return {
+            admin: "--k-container-max-width",
+            frontMax: "--k-container-max-width",
+            frontWidth: "--k-container-max-width",
+        };
+    }
+    return { admin: "", frontMax: "", frontWidth: "" };
+};
+
+// Default fallback width (px) applied to `var(--name, <fallback>)`
+export const VARIABLE_WIDTH_FALLBACK = 1200;
 
 export const CONTAINER_WIDTH = [
     { label: __("Full", "essential-blocks"), value: "full" },

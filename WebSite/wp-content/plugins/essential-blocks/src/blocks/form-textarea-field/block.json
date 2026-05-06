@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "title": "Textarea Field",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "essential-blocks/form-textarea-field",
   "description": "Form Block Textarea Field",
   "category": "essential-blocks",

@@ -4,7 +4,6 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    ButtonGroup,
     Button,
     TextControl,
     RangeControl,
@@ -198,6 +197,7 @@ function Inspector(props) {
                                 enableTitle: !enableTitle,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {enableTitle && (
                         <>
@@ -210,6 +210,8 @@ function Inspector(props) {
                                         onChange={(selected) =>
                                             setAttributes({ captionType: selected })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                     {((captionType === 'file-caption' && lottieMediaCaption === '') ||
                                         (captionType === 'title-caption' && lottieMediaTitle === ''))
@@ -248,6 +250,7 @@ function Inspector(props) {
                                 reverse: !reverse,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {playOn !== 'scroll' && (
                         <RangeControl
@@ -266,6 +269,8 @@ function Inspector(props) {
                             step={.5}
                             allowReset
                             resetFallbackValue={1}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     )}
                     <RangeControl
@@ -284,6 +289,8 @@ function Inspector(props) {
                         step={1}
                         allowReset
                         resetFallbackValue={0}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <RangeControl
                         label={__(
@@ -301,6 +308,8 @@ function Inspector(props) {
                         step={1}
                         allowReset
                         resetFallbackValue={100}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
 
                     <SelectControl
@@ -314,6 +323,8 @@ function Inspector(props) {
                             })
                         }
                         help={__("Animation trigger will only work in the live preview", "essential-blocks")}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     {playOn === 'scroll' && (
@@ -334,6 +345,8 @@ function Inspector(props) {
                                 step={1}
                                 allowReset
                                 resetFallbackValue={0}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                             <RangeControl
                                 label={__(
@@ -351,6 +364,8 @@ function Inspector(props) {
                                 step={1}
                                 allowReset
                                 resetFallbackValue={0}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </>
                     )}
@@ -365,6 +380,7 @@ function Inspector(props) {
                                         loop: !loop,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                             {loop && (
                                 <>
@@ -384,6 +400,8 @@ function Inspector(props) {
                                         step={1}
                                         allowReset
                                         resetFallbackValue={0}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
 
                                     <RangeControl
@@ -403,6 +421,8 @@ function Inspector(props) {
                                         allowReset
                                         resetFallbackValue={0}
                                         help={__("Delay will only work in the live preview", "essential-blocks")}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                 </>
                             )}

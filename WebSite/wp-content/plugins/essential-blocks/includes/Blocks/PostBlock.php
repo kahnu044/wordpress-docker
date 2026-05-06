@@ -22,7 +22,16 @@ abstract class PostBlock extends Block
         'footerMeta'         => '[{"value":"avatar","label":"Author Avatar"},{"value":"author","label":"Author Name"},{"value":"date","label":"Published Date"}]',
         'authorPrefix'       => 'by',
         'datePrefix'         => 'on',
-        'showBlockContent'   => true
+        'showBlockContent'   => true,
+        'showFeaturedPost'   => false,
+        'featuredPostId'     => '',
+        'showFeaturedPostTitle' => true,
+        'showFeaturedPostContent' => false,
+        'showFeaturedPostMeta' => true,
+        'showFeaturedHeaderMeta' => true,
+        'showFeaturedFooterMeta' => true,
+        'featuredMetaItems' => '{}',
+        'featuredExcerptLength' => 10
      ];
 
     abstract public function get_default_attributes();

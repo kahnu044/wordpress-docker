@@ -11,7 +11,7 @@ const save = ({ attributes }) => {
     return (
         <>
             <BlockProps.Save attributes={attributes}>
-                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+                <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                     <div className={`eb-column-wrapper ${blockId}`}>
                         <div className="eb-column-inner">
                             <InnerBlocks.Content />

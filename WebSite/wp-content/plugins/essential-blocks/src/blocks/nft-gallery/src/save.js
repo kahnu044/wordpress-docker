@@ -33,7 +33,7 @@ const save = ({ attributes }) => {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div
                     className={`eb-nft-gallery-wrapper ${blockId}`}
                     data-id={blockId}

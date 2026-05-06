@@ -8,12 +8,12 @@ const { times } = lodash;
 import {
     PanelBody,
     BaseControl,
-    ButtonGroup,
-    Button,
     ToggleControl,
     RangeControl,
     PanelRow,
     SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -203,6 +203,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         onChange={() => {
                             handleDefaultActive(each.id);
                         }}
+                        __nextHasNoMarginBottom
                     />
                     <DynamicInputControl
                         label={__("Title Text", "essential-blocks")}
@@ -218,26 +219,29 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                     <PanelRow>
                         {__("Title Prefix", "essential-blocks")}
                     </PanelRow>
-                    <BaseControl id="eb-accordion-image-icon">
-                        <ButtonGroup id="eb-accordion-image-icon">
-                            {MEDIA_TYPES.map(({ label, value }, index) => (
-                                <Button
-                                    key={index}
-                                    isSecondary={each.titlePrefixType !== value}
-                                    isPrimary={each.titlePrefixType === value}
-                                    onClick={() =>
-                                        onAccordionChange(
-                                            "titlePrefixType",
-                                            value,
-                                            i,
-                                        )
-                                    }
-                                >
-                                    {label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Title Prefix", "essential-blocks")}
+
+                        value={each.titlePrefixType}
+                        onChange={(value) =>
+                            onAccordionChange(
+                                "titlePrefixType",
+                                value,
+                                i,
+                            )
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {MEDIA_TYPES.map(({ label, value }, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={value}
+                                label={label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     {each.titlePrefixType !== "none" && (
                         <>
                             {each.titlePrefixType === "icon" && (
@@ -337,26 +341,29 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                     <PanelRow>
                         {__("Title Suffix", "essential-blocks")}
                     </PanelRow>
-                    <BaseControl id="eb-accordion-image-icon">
-                        <ButtonGroup id="eb-accordion-image-icon">
-                            {MEDIA_TYPES.map(({ label, value }, index) => (
-                                <Button
-                                    key={index}
-                                    isSecondary={each.titleSuffixType !== value}
-                                    isPrimary={each.titleSuffixType === value}
-                                    onClick={() =>
-                                        onAccordionChange(
-                                            "titleSuffixType",
-                                            value,
-                                            i,
-                                        )
-                                    }
-                                >
-                                    {label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Title Suffix", "essential-blocks")}
+
+                        value={each.titleSuffixType}
+                        onChange={(value) =>
+                            onAccordionChange(
+                                "titleSuffixType",
+                                value,
+                                i,
+                            )
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {MEDIA_TYPES.map(({ label, value }, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={value}
+                                label={label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     {each.titleSuffixType !== "none" && (
                         <>
@@ -562,29 +569,30 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             onChange={(selected) =>
                                 setAttributes({ accordionType: selected })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Title HTML Tag", "essential-blocks")}
-                            id="eb-accordion-heading-alignment"
+                            className="newtogglegroupcontrol eb-accordion-heading-alignment eb-html-tag-buttongroup"
+                            value={tagName}
+                            onChange={(value) =>
+                                setAttributes({
+                                    tagName: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup className="eb-accordion-heading-alignment eb-html-tag-buttongroup">
-                                {HEADING.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={tagName === item.value}
-                                        isSecondary={tagName !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                tagName: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {HEADING.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         {accordionType === "horizontal" && (
                             <>
                                 <ResponsiveRangeController
@@ -609,6 +617,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                             titleOrientation: selected,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -620,6 +630,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                     faqSchema: !faqSchema,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {faqSchema && (
                             <PanelRow>
@@ -652,6 +663,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                 max={100}
                                 step={1}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </InspectorPanel.PanelBody>
                     )}
@@ -700,6 +713,8 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                             max={5}
                             step={0.1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ResponsiveRangeController
                             noUnits
@@ -722,6 +737,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                     displayIcon: !displayIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {displayIcon && (
                             <>
@@ -738,35 +754,30 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                     value={expandedIcon}
                                     attributeName={"expandedIcon"}
                                 />
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__(
                                         "Icon Position",
                                         "essential-blocks",
                                     )}
+
+                                    value={iconPosition}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            iconPosition: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-icon-pos-btgrp">
-                                        {ICON_POSITIONS.map((item, key) => (
-                                            <Button
-                                                key={key}
-                                                // isLarge
-                                                isSecondary={
-                                                    iconPosition !== item.value
-                                                }
-                                                isPrimary={
-                                                    iconPosition === item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        iconPosition:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ICON_POSITIONS.map((item, key) => (
+                                        <ToggleGroupControlOption
+                                            key={key}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 <ResponsiveRangeController
                                     noUnits
@@ -834,31 +845,27 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         title={__("Tab", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Title Align ", "essential-blocks")}
-                            id="eb-accoridon-title-align"
+
+                            value={titleAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    titleAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {TITLE_ALIGNMENT.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        isSecondary={
-                                            titleAlignment !== item.value
-                                        }
-                                        isPrimary={
-                                            titleAlignment === item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                titleAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {TITLE_ALIGNMENT.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <TypographyDropdown
                             baseLabel={__(
@@ -1122,29 +1129,27 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         title={__("Content ", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Alignment", "essential-blocks")}
+
+                            value={contentAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    contentAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {CONTENT_ALIGN.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isSecondary={
-                                            contentAlign !== item.value
-                                        }
-                                        isPrimary={contentAlign === item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                contentAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {CONTENT_ALIGN.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <TypographyDropdown
                             baseLabel={__(
                                 "Content Typography",

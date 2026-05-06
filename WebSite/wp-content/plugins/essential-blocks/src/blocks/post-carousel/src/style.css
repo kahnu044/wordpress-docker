@@ -224,14 +224,14 @@
   height: 100%;
 }
 
-.wp-admin .eb-post-carousel-wrapper.equal-height .slick-slide {
+.editor-styles-wrapper .eb-post-carousel-wrapper.equal-height .slick-slide {
   height: auto !important;
 }
 
-.wp-admin .eb-post-carousel-wrapper.equal-height .slick-slide > div {
+.editor-styles-wrapper .eb-post-carousel-wrapper.equal-height .slick-slide > div {
   height: 100%;
 }
 
-.wp-admin .eb-post-carousel-wrapper.equal-height .slick-slide > div > article {
+.editor-styles-wrapper .eb-post-carousel-wrapper.equal-height .slick-slide > div > article {
   height: 100%;
 }

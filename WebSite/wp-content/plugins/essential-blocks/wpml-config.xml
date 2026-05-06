@@ -51,8 +51,10 @@
 		</gutenberg-block>
 		<gutenberg-block type="essential-blocks/image-gallery" translate="1">
 			<key name="loadmoreBtnText" />
-			<xpath label="eb-img-gallery-loadmore">//button[@class="eb-img-gallery-loadmore"]</xpath>
+			<xpath label="eb-img-gallery-loadmore">//button[contains(@class,
+				"eb-img-gallery-loadmore")]</xpath>
 			<key name="filterAllTitle" />
+			<key name="notFoundText" />
 			<key name="filterItems">
 				<key name="*">
 					<key name="label" />
@@ -60,6 +62,18 @@
 			</key>
 			<xpath label="eb-img-gallery-filter-wrapper">//ul[contains(@class,
 				'eb-img-gallery-filter-wrapper')]//li</xpath>
+			<xpath>//*[contains(@class, "eb-gallery-img-caption")]</xpath>
+			<xpath>//*[contains(@class, "eb-gallery-img-description")]</xpath>
+			<xpath>//img[contains(@class, "eb-gallery-img")]/@alt</xpath>
+			<key name="sources">
+				<key name="*">
+					<key name="caption" />
+					<key name="alt" />
+					<key name="content" />
+					<key name="customLink" type="link" />
+					<key name="url" type="link" />
+				</key>
+			</key>
 		</gutenberg-block>
 		<gutenberg-block type="essential-blocks/woo-product-grid" translate="1">
 			<key name="simpleCartText" />
@@ -89,8 +103,112 @@
 			<key name="btnText" />
 			<xpath label="eb-popup-button-anchor">//a[@class="eb-popup-button-anchor"]//p</xpath>
 		</gutenberg-block>
-		<gutenberg-block type="essential-blocks/row" translate="0" />
-		<gutenberg-block type="essential-blocks/column" translate="0" />
-		<gutenberg-block type="essential-blocks/wrapper" translate="0" />
+		<gutenberg-block type="essential-blocks/parallax-slider" translate="1">
+			<xpath>//h2[contains(@class, "slide__headline")]</xpath>
+			<xpath>//button[contains(@class, "slide__action")]</xpath>
+			<xpath type="link">//button[contains(@class, 'slide__action')]/@data-link</xpath>
+			<key name="sliderData">
+				<key name="*">
+					<key name="title" />
+					<key name="btnText" />
+					<key name="link" type="link" />
+				</key>
+			</key>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/google-map" translate="1">
+			<key name="marker">
+				<key name="*">
+					<key name="title" />
+					<key name="content" />
+				</key>
+			</key>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/product-price" translate="1">
+			<key name="showPrefix" />
+			<key name="showSuffix" />
+			<key name="prefixText" />
+			<key name="suffixText" />
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/product-rating" translate="1">
+			<key name="singluarCaption" />
+			<key name="pluralCaption" />
+			<key name="beforeCaption" />
+			<key name="afterCaption" />
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/add-to-cart" translate="1">
+			<key name="cartBtnText" />
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/infobox" translate="1">
+			<key name="title" />
+			<key name="subTitle" />
+			<key name="description" />
+			<key name="buttonText" />
+			<key name="infoboxLink" type="link" />
+			<xpath>//*[contains(@class, "title")]</xpath>
+			<xpath>//*[contains(@class, "subtitle")]</xpath>
+			<xpath>//*[contains(@class, "description")]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/countdown" translate="1">
+			<key name="daysLabel" />
+			<key name="hoursLabel" />
+			<key name="minutesLabel" />
+			<key name="secondsLabel" />
+			<xpath>//*[contains(@class, "eb-cd-label")]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/image-comparison" translate="1">
+			<key name="beforeLabel" />
+			<key name="afterLabel" />
+			<xpath label="Before Label">//*[contains(@class,
+				"eb-image-comparison-before-label")]</xpath>
+			<xpath label="After Label">//*[contains(@class,
+				"eb-image-comparison-after-label")]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/call-to-action" translate="1">
+			<xpath>//h3[contains(@class, "eb-cia-title")]</xpath>
+			<xpath>//p[contains(@class, "eb-cia-description")]</xpath>
+			<xpath>//div[contains(@class, "eb-cia-button")]</xpath>
+			<xpath type="link">//a/@href</xpath>
+			<key name="title" />
+			<key name="description" />
+			<key name="buttonText" />
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/post-meta" translate="1">
+			<key name="authorLabel" />
+			<key name="dateLabel" />
+			<key name="productSkuLabel" />
+			<xpath>//*[contains(@class, "eb-post-metadata-label")]</xpath>
+			<xpath>//*[contains(@class, "eb-post-metadata-value")]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/post-meta" translate="1">
+			<key name="authorLabel" />
+			<key name="dateLabel" />
+			<key name="enableContents">
+				<key name="0" />
+				<key name="1" />
+			</key>
+			<key name="type" />
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/shape-divider" translate="1" />
+		<gutenberg-block type="essential-blocks/advanced-video" translate="1" />
+		<gutenberg-block type="essential-blocks/icon" translate="1" />
+		<gutenberg-block type="essential-blocks/social" translate="1" />
+		<gutenberg-block type="essential-blocks/social-share" translate="1">
+			<key name="socialDetails">
+				<key name="*">
+					<key name="iconText" />
+				</key>
+			</key>
+			<key name="profilesOnly">
+				<key name="*">
+					<key name="iconText" />
+				</key>
+			</key>
+		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/product-images" translate="1" />
+		<gutenberg-block type="essential-blocks/product-details" translate="1" />
+		<gutenberg-block type="essential-blocks/row" translate="1" />
+		<gutenberg-block type="essential-blocks/column" translate="1" />
+		<gutenberg-block type="essential-blocks/wrapper" translate="1" />
+		<gutenberg-block type="essential-blocks/flex-container" translate="1" />
 	</gutenberg-blocks>
 </wpml-config>

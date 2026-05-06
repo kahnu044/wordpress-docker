@@ -625,7 +625,7 @@ export default function Style(props) {
                 }
 
                 .eb-form-wrapper.${blockId} .eb-form.form-style-modern .eb-field-input-wrap textarea ~ label {
-                    top: calc(${fieldsPaddingTop}${fieldsPaddingUnit} + 7px);
+                    top: calc(${fieldsPaddingTop ?? 0}${fieldsPaddingUnit || 'px'} + 7px);
                 }
 
                 `
@@ -649,7 +649,7 @@ export default function Style(props) {
 
     const fieldsDesktop = `
         .eb-form-wrapper.${blockId} .eb-multistep-form .eb-form-multistep-wrapper,
-        .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
+        .editor-styles-wrapper .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
             ${rowGapStylesDesktop}
         }
@@ -690,7 +690,7 @@ export default function Style(props) {
                 }
                 .eb-form-wrapper.${blockId} .eb-field-wrapper.eb-textarea-field-wrapper .eb-input-icon {top: ${fieldsPaddingTop}${fieldsPaddingUnit};}
                 .eb-form-wrapper.${blockId} .eb-field-wrapper .eb-field-input {
-                    padding-left: calc(${inputIconSizeRange}px + (${fieldsPaddingLeft}${fieldsPaddingUnit} * 1.6));
+                    padding-left: calc(${inputIconSizeRange ?? 0}px + (${fieldsPaddingLeft ?? 0}${fieldsPaddingUnit || 'px'} * 1.6));
                 }`
             : ""
         }
@@ -698,7 +698,7 @@ export default function Style(props) {
 
 	`;
     const fieldsTab = `
-        .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
+        .editor-styles-wrapper .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
             ${rowGapStylesTab ? rowGapStylesTab : rowGapStylesDesktop}
         }
@@ -714,7 +714,7 @@ export default function Style(props) {
 	`;
 
     const fieldsMobile = `
-        .wp-admin .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
+        .editor-styles-wrapper .eb-form-wrapper.${blockId} .block-editor-block-list__layout,
         .eb-form-wrapper.${blockId} .eb-form-fields {
             ${rowGapStylesMobile ? rowGapStylesMobile : rowGapStylesDesktop}
         }
@@ -749,8 +749,8 @@ export default function Style(props) {
         }
 
         .eb-form-wrapper.${blockId} .eb-form-field input[type=radio]::before {
-            width: calc(${radioSizeRange}px / 2);
-            height: calc(${radioSizeRange}px / 2);
+            width: calc(${radioSizeRange ?? 0}px / 2);
+            height: calc(${radioSizeRange ?? 0}px / 2);
             background-color: ${radioBrCheckedColor};
         }
 	`;
@@ -766,8 +766,8 @@ export default function Style(props) {
             ${radioSpacingStylesTab}
         }
         .eb-form-wrapper.${blockId} .eb-form-field input[type=radio]::before {
-            width: calc(${TABradioSizeRange}px / 2);
-            height: calc(${TABradioSizeRange}px / 2);
+            width: calc(${TABradioSizeRange ?? 0}px / 2);
+            height: calc(${TABradioSizeRange ?? 0}px / 2);
         }
 	`;
     const radioMobile = `
@@ -782,8 +782,8 @@ export default function Style(props) {
             ${radioSpacingStylesMobile}
         }
         .eb-form-wrapper.${blockId} .eb-form-field input[type=radio]::before {
-            width: calc(${MOBradioSizeRange}px / 2);
-            height: calc(${MOBradioSizeRange}px / 2);
+            width: calc(${MOBradioSizeRange ?? 0}px / 2);
+            height: calc(${MOBradioSizeRange ?? 0}px / 2);
         }
 	`;
     const checkboxDesktop = `
@@ -806,7 +806,7 @@ export default function Style(props) {
         }
         .eb-form-wrapper.${blockId} .eb-field-wrapper input[type=checkbox]::before {
             color: ${checkboxBrCheckedColor};
-            font-size: calc(${checkboxSizeRange}px /2);
+            font-size: calc(${checkboxSizeRange ?? 0}px /2);
         }
 	`;
 
@@ -823,7 +823,7 @@ export default function Style(props) {
             ${checkboxSpacingStylesTab}
         }
         .eb-form-wrapper.${blockId} .eb-field-wrapper input[type=checkbox]::before {
-            font-size: calc(${TABcheckboxSizeRange}px /1.4);
+            font-size: calc(${TABcheckboxSizeRange ?? 0}px /1.4);
         }
 	`;
     const checkboxMobile = `
@@ -838,7 +838,7 @@ export default function Style(props) {
             ${checkboxSpacingStylesMobile}
         }
         .eb-form-wrapper.${blockId} .eb-field-wrapper input[type=checkbox]::before {
-            font-size: calc(${MOBcheckboxSizeRange}px /1.4);
+            font-size: calc(${MOBcheckboxSizeRange ?? 0}px /1.4);
         }
 	`;
 

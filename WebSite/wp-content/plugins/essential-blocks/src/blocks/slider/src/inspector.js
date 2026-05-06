@@ -6,12 +6,13 @@ import {
     PanelRow,
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
     RangeControl,
     TextControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
+import { applyFilters } from "@wordpress/hooks";
 
 /*
  * Internal depencencies
@@ -48,6 +49,8 @@ import {
     VERTICAL_ALIGN,
     TAGS_TYPE,
     SLIDER_BORDER_SHADOW,
+    IMAGE_WIDTH,
+    SLIDER_STYLE
 } from "./constants/constants";
 
 import {
@@ -74,6 +77,7 @@ import {
     sanitizeIconValue,
     ImageComponent,
     EBTextControl,
+    ProSelectControl
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -121,6 +125,8 @@ function Inspector(props) {
         showLightbox,
         enableLazyLoad,
         version,
+        sliderStyle,
+        slidesGapRange
     } = attributes;
 
     // Add this function to get the settings components for each slide
@@ -204,6 +210,7 @@ function Inspector(props) {
                                     setAttributes,
                                 )
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {each.showButton && (
@@ -283,6 +290,7 @@ function Inspector(props) {
                                             setAttributes,
                                         )
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <ToggleControl
@@ -300,6 +308,7 @@ function Inspector(props) {
                                             setAttributes,
                                         )
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {each.showSecondButton && (
@@ -319,18 +328,20 @@ function Inspector(props) {
                                                     setAttributes,
                                                 )
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
 
                                         {!isValidHtml(
                                             each.secondButtonText,
                                         ) && (
-                                            <PanelRow className="eb-instruction-row">
-                                                <div className="eb-instruction">
-                                                    <strong>Note:</strong>{" "}
-                                                    Invalid HTML Tag.
-                                                </div>
-                                            </PanelRow>
-                                        )}
+                                                <PanelRow className="eb-instruction-row">
+                                                    <div className="eb-instruction">
+                                                        <strong>Note:</strong>{" "}
+                                                        Invalid HTML Tag.
+                                                    </div>
+                                                </PanelRow>
+                                            )}
 
                                         <EBTextControl
                                             label={__(
@@ -385,6 +396,7 @@ function Inspector(props) {
                                                     setAttributes,
                                                 )
                                             }
+                                            __nextHasNoMarginBottom
                                         />
                                     </>
                                 )}
@@ -408,6 +420,7 @@ function Inspector(props) {
                                             setAttributes,
                                         )
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {each.enableContentLink && (
@@ -463,6 +476,7 @@ function Inspector(props) {
                                                     setAttributes,
                                                 )
                                             }
+                                            __nextHasNoMarginBottom
                                         />
                                     </>
                                 )}
@@ -512,6 +526,7 @@ function Inspector(props) {
                                     setAttributes,
                                 )
                             }
+                            __nextHasNoMarginBottom
                         />
                     </>
                 )}
@@ -534,8 +549,22 @@ function Inspector(props) {
                         title={__("General", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <SelectControl
+                        <ProSelectControl
                             label={__("Slider Type", "essential-blocks")}
+                            value={sliderStyle}
+                            options={SLIDER_STYLE}
+                            onChange={(value) =>
+                                setAttributes({
+                                    sliderStyle: value,
+                                    speed: value === 'default-slider' ? speed : .5,
+                                    enableLazyLoad: value === 'default-slider' ? enableLazyLoad : false,
+                                    slidesGapRange: value === 'default-slider' ? slidesGapRange : 20,
+                                })
+                            }
+                        />
+
+                        <SelectControl
+                            label={__("Slider Content Type", "essential-blocks")}
                             value={sliderType}
                             options={SLIDER_TYPE}
                             onChange={(value) =>
@@ -543,119 +572,139 @@ function Inspector(props) {
                                     sliderType: value,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
-                        <ToggleControl
-                            label={__("Show Arrows", "essential-blocks")}
-                            checked={arrows}
-                            onChange={() => {
-                                setAttributes({
-                                    arrows: !arrows,
-                                });
-                            }}
-                        />
-                        <ToggleControl
-                            label={__("Adaptive Height", "essential-blocks")}
-                            checked={adaptiveHeight}
-                            onChange={() => {
-                                setAttributes({
-                                    adaptiveHeight: !adaptiveHeight,
-                                });
-                            }}
-                        />
+                        {sliderStyle === 'default-slider' && (
+                            <>
+                                <ToggleControl
+                                    label={__("Show Arrows", "essential-blocks")}
+                                    checked={arrows}
+                                    onChange={() => {
+                                        setAttributes({
+                                            arrows: !arrows,
+                                        });
+                                    }}
+                                    __nextHasNoMarginBottom
+                                />
+                                <ToggleControl
+                                    label={__("Adaptive Height", "essential-blocks")}
+                                    checked={adaptiveHeight}
+                                    onChange={() => {
+                                        setAttributes({
+                                            adaptiveHeight: !adaptiveHeight,
+                                        });
+                                    }}
+                                    __nextHasNoMarginBottom
+                                />
 
-                        <ToggleControl
-                            label={__("Autoplay", "essential-blocks")}
-                            checked={autoplay}
-                            onChange={() => {
-                                autoplay
-                                    ? slider.current.slickPlay()
-                                    : slider.current.slickPause();
-                                setAttributes({
-                                    autoplay: !autoplay,
-                                });
-                            }}
-                        />
+                                <ToggleControl
+                                    label={__("Autoplay", "essential-blocks")}
+                                    checked={autoplay}
+                                    onChange={() => {
+                                        autoplay
+                                            ? slider.current.slickPlay()
+                                            : slider.current.slickPause();
+                                        setAttributes({
+                                            autoplay: !autoplay,
+                                        });
+                                    }}
+                                    __nextHasNoMarginBottom
+                                />
 
-                        <ToggleControl
-                            label={__("Dots", "essential-blocks")}
-                            checked={dots}
-                            onChange={() => setAttributes({ dots: !dots })}
-                        />
+                                <ToggleControl
+                                    label={__("Dots", "essential-blocks")}
+                                    checked={dots}
+                                    onChange={() => setAttributes({ dots: !dots })}
+                                    __nextHasNoMarginBottom
+                                />
 
-                        {!vertical && (
-                            <ToggleControl
-                                label={__("Fade", "essential-blocks")}
-                                checked={fade}
-                                onChange={() => setAttributes({ fade: !fade })}
-                            />
-                        )}
+                                {!vertical && (
+                                    <ToggleControl
+                                        label={__("Fade", "essential-blocks")}
+                                        checked={fade}
+                                        onChange={() => setAttributes({ fade: !fade })}
+                                        __nextHasNoMarginBottom
+                                    />
+                                )}
 
-                        <ToggleControl
-                            label={__("Infinite", "essential-blocks")}
-                            checked={infinite}
-                            onChange={() =>
-                                setAttributes({
-                                    infinite: !infinite,
-                                })
-                            }
-                        />
+                                <ToggleControl
+                                    label={__("Infinite", "essential-blocks")}
+                                    checked={infinite}
+                                    onChange={() =>
+                                        setAttributes({
+                                            infinite: !infinite,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
 
-                        <ToggleControl
-                            label={__("Vertical Slide", "essential-blocks")}
-                            checked={vertical}
-                            onChange={() =>
-                                setAttributes({
-                                    vertical: !vertical,
-                                })
-                            }
-                        />
+                                <ToggleControl
+                                    label={__("Vertical Slide", "essential-blocks")}
+                                    checked={vertical}
+                                    onChange={() =>
+                                        setAttributes({
+                                            vertical: !vertical,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
 
-                        {vertical && (
-                            <PanelRow>
-                                <em>
-                                    {__(
-                                        "Fade will disable if enable Vertical Slide",
+                                {vertical && (
+                                    <PanelRow>
+                                        <em>
+                                            {__(
+                                                "Fade will disable if enable Vertical Slide",
+                                                "essential-blocks",
+                                            )}
+                                        </em>
+                                    </PanelRow>
+                                )}
+
+                                <ToggleControl
+                                    label={__("Pause on Hover", "essential-blocks")}
+                                    checked={pauseOnHover}
+                                    onChange={() =>
+                                        setAttributes({
+                                            pauseOnHover: !pauseOnHover,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                                <ToggleControl
+                                    label={__(
+                                        "Enable Lazy Loading",
                                         "essential-blocks",
                                     )}
-                                </em>
-                            </PanelRow>
+                                    checked={enableLazyLoad}
+                                    onChange={() => {
+                                        setAttributes({
+                                            enableLazyLoad: !enableLazyLoad,
+                                        });
+                                    }}
+                                    __nextHasNoMarginBottom
+                                />
+
+                                <ToggleControl
+                                    label={__("Custom Height", "essential-blocks")}
+                                    checked={isCustomHeight}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isCustomHeight: !isCustomHeight,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                            </>
                         )}
 
-                        <ToggleControl
-                            label={__("Pause on Hover", "essential-blocks")}
-                            checked={pauseOnHover}
-                            onChange={() =>
-                                setAttributes({
-                                    pauseOnHover: !pauseOnHover,
-                                })
-                            }
-                        />
 
-                        <ToggleControl
-                            label={__(
-                                "Enable Lazy Loading",
-                                "essential-blocks",
-                            )}
-                            checked={enableLazyLoad}
-                            onChange={() => {
-                                setAttributes({
-                                    enableLazyLoad: !enableLazyLoad,
-                                });
-                            }}
-                        />
+                        {applyFilters("eb_slider_pro_marquee_controls", "", attributes, setAttributes)}
 
-                        <ToggleControl
-                            label={__("Custom Height", "essential-blocks")}
-                            checked={isCustomHeight}
-                            onChange={() =>
-                                setAttributes({
-                                    isCustomHeight: !isCustomHeight,
-                                })
-                            }
-                        />
-
-                        {isCustomHeight && (
+                        {sliderStyle === 'default-slider' && isCustomHeight && (
                             <ResponsiveRangeController
                                 baseLabel={__(
                                     "Image Height",
@@ -669,7 +718,7 @@ function Inspector(props) {
                             />
                         )}
 
-                        {!fade && (
+                        {sliderStyle === 'default-slider' && !fade && (
                             <ResponsiveRangeController
                                 baseLabel={__(
                                     "Slides to Show",
@@ -683,7 +732,7 @@ function Inspector(props) {
                             />
                         )}
 
-                        {autoplay && (
+                        {sliderStyle === 'default-slider' && autoplay && (
                             <RangeControl
                                 label={__("Autoplay Speed", "essential-blocks")}
                                 value={autoplaySpeed}
@@ -694,6 +743,8 @@ function Inspector(props) {
                                 }
                                 min={0}
                                 max={8000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -702,10 +753,13 @@ function Inspector(props) {
                             value={speed}
                             onChange={(speed) => setAttributes({ speed })}
                             min={0}
-                            max={3000}
+                            step={sliderStyle === 'default-slider' ? 1 : .1}
+                            max={sliderStyle === 'default-slider' ? 3000 : 1}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
-                        {arrows && (
+                        {sliderStyle === 'default-slider' && arrows && (
                             <>
                                 <EBIconPicker
                                     value={arrowPrevIcon}
@@ -744,7 +798,7 @@ function Inspector(props) {
                             </>
                         )}
 
-                        {version === "v2" && (
+                        {sliderStyle === 'default-slider' && (!version || version !== 'v2') && (
                             <>
                                 <Divider />
 
@@ -759,6 +813,7 @@ function Inspector(props) {
                                             showLightbox: !showLightbox,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -780,8 +835,11 @@ function Inspector(props) {
                                     onChange={(value) =>
                                         setAttributes({
                                             sliderContentType: value,
+                                            showLightbox: value === 'content-1' ? false : showLightbox,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <SelectControl
@@ -793,6 +851,8 @@ function Inspector(props) {
                                             titleTag,
                                         });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <SelectControl
                                     label={__(
@@ -806,6 +866,8 @@ function Inspector(props) {
                                             contentTag,
                                         });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <Divider />
@@ -858,62 +920,59 @@ function Inspector(props) {
                             )}
                         {sliderType === "content" && (
                             <>
-                                <PanelRow>Text Align</PanelRow>
-                                <ButtonGroup>
+                                <ToggleGroupControl
+                                    label="Text Align"
+
+                                    value={textAlign}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            textAlign: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
                                     {TEXT_ALIGN.map((item, index) => (
-                                        <Button
+                                        <ToggleGroupControlOption
                                             key={index}
-                                            isPrimary={textAlign === item.value}
-                                            isSecondary={
-                                                textAlign !== item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    textAlign: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
+                                            value={item.value}
+                                            label={item.label}
+                                        />
                                     ))}
-                                </ButtonGroup>
+                                </ToggleGroupControl>
 
                                 {sliderContentType != "content-2" && (
                                     <>
-                                        <PanelRow>Vertical Align</PanelRow>
-                                        <ButtonGroup>
+                                        <ToggleGroupControl
+                                            label="Vertical Align"
+
+                                            value={verticalAlign}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    verticalAlign: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        >
                                             {VERTICAL_ALIGN.map(
                                                 (item, index) => (
-                                                    <Button
+                                                    <ToggleGroupControlOption
                                                         key={index}
-                                                        isPrimary={
-                                                            verticalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            verticalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes({
-                                                                verticalAlign:
-                                                                    item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
                                                 ),
                                             )}
-                                        </ButtonGroup>
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                             </>
                         )}
 
                         <Divider />
-
-                        <PanelRow>Slider Border</PanelRow>
                         <BorderShadowControl
                             controlName={SLIDER_BORDER_SHADOW}
                             noBdrHover
@@ -975,26 +1034,26 @@ function Inspector(props) {
                                 title={__("Button", "essential-blocks")}
                                 initialOpen={false}
                             >
-                                <ButtonGroup className="eb-inspector-btn-group">
+                                <ToggleGroupControl
+                                    className="eb-inspector-btn-group newtogglegroupcontrol"
+                                    value={buttonColorType}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            buttonColorType: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
                                     {NORMAL_HOVER.map((item, index) => (
-                                        <Button
+                                        <ToggleGroupControlOption
                                             key={index}
-                                            isPrimary={
-                                                buttonColorType === item.value
-                                            }
-                                            isSecondary={
-                                                buttonColorType !== item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    buttonColorType: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
+                                            value={item.value}
+                                            label={item.label}
+                                        />
                                     ))}
-                                </ButtonGroup>
+                                </ToggleGroupControl>
 
                                 {buttonColorType === "normal" && (
                                     <>
@@ -1040,8 +1099,8 @@ function Inspector(props) {
                                 <PanelRow>Button Border & Shadow</PanelRow>
                                 <BorderShadowControl
                                     controlName={BUTTON_BORDER_SHADOW}
-                                    // noShadow
-                                    // noBorder
+                                // noShadow
+                                // noBorder
                                 />
                                 <TypographyDropdown
                                     baseLabel={__(
@@ -1066,29 +1125,26 @@ function Inspector(props) {
                                     )}
                                     initialOpen={false}
                                 >
-                                    <ButtonGroup className="eb-inspector-btn-group">
+                                    <ToggleGroupControl
+                                        className="eb-inspector-btn-group newtogglegroupcontrol"
+                                        value={secondButtonColorType}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                secondButtonColorType: value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
                                         {NORMAL_HOVER.map((item, index) => (
-                                            <Button
+                                            <ToggleGroupControlOption
                                                 key={index}
-                                                isPrimary={
-                                                    secondButtonColorType ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    secondButtonColorType !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        secondButtonColorType:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
+                                                value={item.value}
+                                                label={item.label}
+                                            />
                                         ))}
-                                    </ButtonGroup>
+                                    </ToggleGroupControl>
 
                                     {secondButtonColorType === "normal" && (
                                         <>
@@ -1142,8 +1198,8 @@ function Inspector(props) {
                                     <PanelRow>Button Border & Shadow</PanelRow>
                                     <BorderShadowControl
                                         controlName={BUTTON2_BORDER_SHADOW}
-                                        // noShadow
-                                        // noBorder
+                                    // noShadow
+                                    // noBorder
                                     />
                                     <TypographyDropdown
                                         baseLabel={__(
@@ -1167,31 +1223,31 @@ function Inspector(props) {
                         </>
                     )}
 
-                    {arrows && (
+                    {sliderStyle === 'default-slider' && arrows && (
                         <InspectorPanel.PanelBody
                             title={__("Arrow", "essential-blocks")}
                             initialOpen={false}
                         >
-                            <ButtonGroup className="eb-inspector-btn-group">
+                            <ToggleGroupControl
+                                className="eb-inspector-btn-group newtogglegroupcontrol"
+                                value={arrowColorType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        arrowColorType: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
                                 {NORMAL_HOVER.map((item, index) => (
-                                    <Button
+                                    <ToggleGroupControlOption
                                         key={index}
-                                        isPrimary={
-                                            arrowColorType === item.value
-                                        }
-                                        isSecondary={
-                                            arrowColorType !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                arrowColorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
+                                        value={item.value}
+                                        label={item.label}
+                                    />
                                 ))}
-                            </ButtonGroup>
+                            </ToggleGroupControl>
 
                             {arrowColorType === "normal" && (
                                 <ColorControl
@@ -1235,7 +1291,7 @@ function Inspector(props) {
                         </InspectorPanel.PanelBody>
                     )}
 
-                    {dots && (
+                    {sliderStyle === 'default-slider' && dots && (
                         <InspectorPanel.PanelBody
                             title={__("Dot", "essential-blocks")}
                             initialOpen={false}
@@ -1281,7 +1337,7 @@ function Inspector(props) {
                         </InspectorPanel.PanelBody>
                     )}
                 </InspectorPanel.Style>
-            </InspectorPanel>
+            </InspectorPanel >
         </>
     );
 }

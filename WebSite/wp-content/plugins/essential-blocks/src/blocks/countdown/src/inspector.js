@@ -6,10 +6,10 @@ import {
     SelectControl,
     ToggleControl,
     TextControl,
-    Button,
     BaseControl,
-    ButtonGroup,
     DateTimePicker,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { applyFilters } from "@wordpress/hooks";
 
@@ -171,6 +171,7 @@ function Inspector({ attributes, setAttributes }) {
                                     isEvergreenTimer: !isEvergreenTimer,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!isEvergreenTimer && (
                             <>
@@ -178,6 +179,7 @@ function Inspector({ attributes, setAttributes }) {
                                 <BaseControl
                                     label={__("Countdown Due Date", "essential-blocks")}
                                     className="customDatePickerStyle"
+                                    __nextHasNoMarginBottom
                                 >
                                     <DateTimePicker
                                         currentDate={endTimeStamp ? new Date(endTimeStamp) : new Date()}
@@ -198,6 +200,8 @@ function Inspector({ attributes, setAttributes }) {
                                             evergreenTimerHours,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__("Minutes", "essential-blocks")}
@@ -208,6 +212,8 @@ function Inspector({ attributes, setAttributes }) {
                                             evergreenTimerMinutes,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__("Recurring Countdown", "essential-blocks")}
@@ -221,6 +227,7 @@ function Inspector({ attributes, setAttributes }) {
                                         "Specify how much time it will take to restart the countdown. If you set 0, the countdown will restart immediately.",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 />
                                 {recurringCountdown && (
                                     <>
@@ -233,6 +240,8 @@ function Inspector({ attributes, setAttributes }) {
                                                     restartTime,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                         <style>{`.customDatePickerStyle .components-datetime__timezone{display:none;}`}</style>
                                         <BaseControl
@@ -241,6 +250,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 "essential-blocks"
                                             )}
                                             className="customDatePickerStyle"
+                                            __nextHasNoMarginBottom
                                         >
                                             <DateTimePicker
                                                 currentDate={
@@ -269,6 +279,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showDays: !showDays,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showDays && (
@@ -282,6 +293,8 @@ function Inspector({ attributes, setAttributes }) {
                                             daysLabel,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -302,6 +315,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showHours: !showHours,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showHours && (
@@ -315,6 +329,8 @@ function Inspector({ attributes, setAttributes }) {
                                             hoursLabel,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -335,6 +351,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showMinutes: !showMinutes,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showMinutes && (
@@ -348,6 +365,8 @@ function Inspector({ attributes, setAttributes }) {
                                             minutesLabel,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -368,6 +387,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showSeconds: !showSeconds,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showSeconds && (
@@ -381,6 +401,8 @@ function Inspector({ attributes, setAttributes }) {
                                             secondsLabel,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <p
@@ -398,24 +420,27 @@ function Inspector({ attributes, setAttributes }) {
             <InspectorPanel.Style>
                 <>
                     <InspectorPanel.PanelBody title={__("Boxes Styles", "essential-blocks")} initialOpen={true}>
-                        <BaseControl label={__("Layout", "essential-blocks")}>
-                            <ButtonGroup>
-                                {LAYOUT_TYPES.map(({ value, label }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={flexDirection !== value}
-                                        isPrimary={flexDirection === value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                flexDirection: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Layout", "essential-blocks")}
+
+                            value={flexDirection}
+                            onChange={(value) =>
+                                setAttributes({
+                                    flexDirection: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {LAYOUT_TYPES.map(({ value, label }, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <ResponsiveRangeController
                             noUnits
@@ -435,7 +460,7 @@ function Inspector({ attributes, setAttributes }) {
                             step={1}
                         />
 
-                        <BaseControl label={__("Contents Direction", "essential-blocks")}>
+                        <BaseControl label={__("Contents Direction", "essential-blocks")} __nextHasNoMarginBottom>
                             <SelectControl
                                 value={contentsDirection}
                                 options={FLEX_DIRECTIONS}
@@ -444,6 +469,8 @@ function Inspector({ attributes, setAttributes }) {
                                         contentsDirection,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
 
@@ -451,6 +478,7 @@ function Inspector({ attributes, setAttributes }) {
                             <>
                                 <BaseControl
                                     label={__("Contents Justify Position", "essential-blocks")}
+                                    __nextHasNoMarginBottom
                                 >
                                     <SelectControl
                                         value={contentsJustify}
@@ -460,29 +488,34 @@ function Inspector({ attributes, setAttributes }) {
                                                 contentsJustify,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
                             </>
                         )}
 
-                        <BaseControl label={__("Contents Alignment", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ALIGN_ITEMS.map(({ value, label }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={contentsAlign !== value}
-                                        isPrimary={contentsAlign === value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                contentsAlign: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Contents Alignment", "essential-blocks")}
+
+                            value={contentsAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    contentsAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGN_ITEMS.map(({ value, label }, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <InspectorPanel.PanelBody title={__("Background", "essential-blocks")} initialOpen={false}>
                             <BackgroundControl
@@ -560,6 +593,7 @@ function Inspector({ attributes, setAttributes }) {
                                         showSeparator: !showSeparator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {showSeparator && (
@@ -573,6 +607,8 @@ function Inspector({ attributes, setAttributes }) {
                                                 separatorType,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
 
                                     <ResponsiveRangeController

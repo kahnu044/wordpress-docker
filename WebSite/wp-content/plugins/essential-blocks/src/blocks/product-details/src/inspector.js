@@ -4,9 +4,8 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    BaseControl,
-    ButtonGroup,
-    Button
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -76,6 +75,7 @@ function Inspector(props) {
                                 showDescriptionTab: !showDescriptionTab,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Show Additional Info Tab")}
@@ -85,6 +85,7 @@ function Inspector(props) {
                                 showAdditionalTab: !showAdditionalTab,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Show Reviews Tab")}
@@ -94,6 +95,7 @@ function Inspector(props) {
                                 showReviewsTab: !showReviewsTab,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
@@ -111,33 +113,31 @@ function Inspector(props) {
                             typoTabTitle
                         }
                     />
-                    <BaseControl>
-                        <ButtonGroup id="eb-accordion-image-icon">
-                            {NORMAL_HOVER.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            tabTitleType !== value
-                                        }
-                                        isPrimary={
-                                            tabTitleType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                tabTitleType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+
+                        value={tabTitleType}
+                        onChange={(value) =>
+                            setAttributes({
+                                tabTitleType: value,
+                            })
+                        }
+                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                    >
+                        {NORMAL_HOVER.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {tabTitleType === "normal" && (
                         <>

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { PanelBody, ToggleControl, Button, ButtonGroup, BaseControl, PanelRow } from "@wordpress/components";
+import { PanelBody, ToggleControl, BaseControl, PanelRow, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from "@wordpress/components";
 
 /**
  * External depencencies
@@ -82,19 +82,21 @@ function Openverse(props) {
                             label={__("Auto Fit Image?", "essential-blocks")}
                             checked={autoFit}
                             onChange={(autoFit) => handleBlockDefault({ autoFit })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Display Attribution", "essential-blocks")}
                             checked={displayAttribution}
                             onChange={() => checkAttribution(!displayAttribution)}
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
 
                     <PanelBody title={__("Image Settings", "essential-blocks")} initialOpen={false}>
                         {!complexStyle && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <BorderShadowControl
@@ -139,24 +141,22 @@ function Openverse(props) {
 
                             {displayAttribution && (
                                 <>
-                                    <BaseControl label={__("Text Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {TEXT_ALIGN.map((item) => (
-                                                <Button
-                                                    // isLarge
-                                                    isPrimary={textAlign === item.value}
-                                                    isSecondary={textAlign !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            textAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Text Align", "essential-blocks")}
+
+                                        value={textAlign}
+                                        onChange={(value) => handleBlockDefault({ textAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {TEXT_ALIGN.map((item) => (
+                                            <ToggleGroupControlOption
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
 
                                     <ResponsiveDimensionsControl
                                         controlName={ATTRIBUTION_MARGIN}

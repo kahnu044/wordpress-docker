@@ -55,6 +55,7 @@ use EssentialBlocks\Blocks\InteractivePromo;
 use EssentialBlocks\Blocks\AdvancedNavigation;
 use EssentialBlocks\Blocks\LottieAnimation;
 use EssentialBlocks\Blocks\ImageHotspots;
+use EssentialBlocks\Blocks\Timeline;
 
 $testArr = array();
 
@@ -295,6 +296,18 @@ $free_blocks = array(
         'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/testimonial/',
         'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/testimonial/',
         'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/testimonial/icon.svg'
+    ),
+    'timeline' => array(
+        'label' => __( 'Timeline', 'essential-blocks' ),
+        'value' => 'timeline',
+        'visibility' => 'true',
+        'category' => 'content',
+        'status' => 'new',
+        'preferences' => array( 'basic', 'advanced' ),
+        'object' => Timeline::get_instance(),
+        'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/timeline/',
+        'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-timeline/',
+        'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/timeline/icon.svg'
     ),
     'toggle_content' => array(
         'label' => __( 'Toggle Content', 'essential-blocks' ),

@@ -56,64 +56,64 @@ function Edit(props) {
         titleTag
     } = attributes;
 
-    //
-    // useEffect(() => {
-    //     if (socialDetails.length === 0) {
-    //         const newSclDtails = [
-    //             {
-    //                 title: "Facebook",
-    //                 icon: "fab fa-facebook-f",
-    //                 color: "#fff",
-    //                 bgColor: "#A0A8BD",
-    //                 link: "",
-    //                 linkOpenNewTab: false,
-    //                 isExpanded: false,
-    //             },
-    //             {
-    //                 title: "Twitter",
-    //                 icon: "fab fa-x-twitter",
-    //                 color: "#fff",
-    //                 bgColor: "#A0A8BD",
-    //                 link: "",
-    //                 linkOpenNewTab: false,
-    //                 isExpanded: false,
-    //             },
-    //             {
-    //                 title: "LinkedIn",
-    //                 icon: "fab fa-linkedin-in",
-    //                 color: "#fff",
-    //                 bgColor: "#A0A8BD",
-    //                 link: "",
-    //                 linkOpenNewTab: false,
-    //                 isExpanded: false,
-    //             },
-    //             {
-    //                 title: "YouTube",
-    //                 icon: "fab fa-youtube",
-    //                 color: "#fff",
-    //                 bgColor: "#A0A8BD",
-    //                 link: "",
-    //                 linkOpenNewTab: false,
-    //                 isExpanded: false,
-    //             },
-    //         ];
 
-    //         setAttributes({ socialDetails: newSclDtails });
-    //     }
-    //     else {
-    //         const newProfiles = socialDetails.map((profile) => ({
-    //             ...profile,
-    //             isExpanded: false,
-    //         }));
-    //         setAttributes({ socialDetails: newProfiles });
-    //     }
+    useEffect(() => {
+        // if (socialDetails.length === 0) {
+        //     const newSclDtails = [
+        //         {
+        //             title: "Facebook",
+        //             icon: "fab fa-facebook-f",
+        //             color: "#fff",
+        //             bgColor: "#A0A8BD",
+        //             link: "",
+        //             linkOpenNewTab: false,
+        //             isExpanded: false,
+        //         },
+        //         {
+        //             title: "Twitter",
+        //             icon: "fab fa-x-twitter",
+        //             color: "#fff",
+        //             bgColor: "#A0A8BD",
+        //             link: "",
+        //             linkOpenNewTab: false,
+        //             isExpanded: false,
+        //         },
+        //         {
+        //             title: "LinkedIn",
+        //             icon: "fab fa-linkedin-in",
+        //             color: "#fff",
+        //             bgColor: "#A0A8BD",
+        //             link: "",
+        //             linkOpenNewTab: false,
+        //             isExpanded: false,
+        //         },
+        //         {
+        //             title: "YouTube",
+        //             icon: "fab fa-youtube",
+        //             color: "#fff",
+        //             bgColor: "#A0A8BD",
+        //             link: "",
+        //             linkOpenNewTab: false,
+        //             isExpanded: false,
+        //         },
+        //     ];
 
-    //     //Hanlde Deprecation for ImageURL
-    //     const imageUrlFromSource = imageUrl || imageNewClassUrl || ImgPlaceholder
-    //     if (!imageNewUrl) {
-    //         setAttributes({ imageNewUrl: imageUrlFromSource })
-    //     }
-    // }, []);
+        //     setAttributes({ socialDetails: newSclDtails });
+        // }
+        // else {
+        //     const newProfiles = socialDetails.map((profile) => ({
+        //         ...profile,
+        //         isExpanded: false,
+        //     }));
+        //     setAttributes({ socialDetails: newProfiles });
+        // }
+
+        //Hanlde Deprecation for ImageURL
+        const imageUrlFromSource = imageUrl || imageNewClassUrl || ImgPlaceholder
+        if (!imageNewUrl) {
+            setAttributes({ imageNewUrl: imageUrlFromSource })
+        }
+    }, []);
 
     // you must declare this variable
     const enhancedProps = {

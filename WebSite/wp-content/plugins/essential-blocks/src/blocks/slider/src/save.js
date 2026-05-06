@@ -31,6 +31,9 @@ const Save = ({ attributes }) => {
         version,
         showLightbox,
         enableLazyLoad,
+        sliderStyle,
+        reverseSlider,
+        slidesGapRange,
     } = attributes;
 
     //Slider Settings
@@ -68,6 +71,12 @@ const Save = ({ attributes }) => {
         ],
     };
 
+    const marqueeSettings = {
+        reverseSlider,
+        speed,
+        slidesGapRange
+    }
+
     const sliderTypeClass =
         sliderType === "content"
             ? "eb-slider-type-content"
@@ -76,16 +85,17 @@ const Save = ({ attributes }) => {
     return (
         <BlockProps.Save attributes={attributes}>
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div
-                    className={`eb-slider-wrapper ${blockId}`}
+                    className={`eb-slider-wrapper ${blockId} ${sliderStyle}`}
                     data-blockid={blockId}
                     data-version={version}
                     data-settings={btoa(JSON.stringify(settings))}
                     data-arrowNextIcon={sanitizeIconValue(arrowNextIcon)}
                     data-arrowPrevIcon={sanitizeIconValue(arrowPrevIcon)}
-                    data-lightbox={version === "v2" ? showLightbox : false}
+                    data-lightbox={!version || version !== 'v1' ? showLightbox : false}
+                    data-marquee={sliderStyle === 'marquee-slider' ? btoa(JSON.stringify(marqueeSettings)) : null}
                 >
                     <div className={`eb-slider-init ${sliderTypeClass}`}>
                         {images.map((image, index) => (

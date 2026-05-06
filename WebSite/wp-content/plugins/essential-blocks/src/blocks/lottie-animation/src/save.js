@@ -49,7 +49,7 @@ const Save = ({ attributes }) => {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`} >
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`} >
                 <div className={`eb-lottie-animation-wrapper ${blockId} ${version}`}
                     data-id={blockId}
                     data-settings={JSON.stringify(settings)}

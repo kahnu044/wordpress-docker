@@ -4,11 +4,10 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    BaseControl,
-    ButtonGroup,
-    Button,
     SelectControl,
     PanelRow,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -80,6 +79,7 @@ function Inspector(props) {
                                 showEmptyRating: !showEmptyRating,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Show Review Count")}
@@ -89,6 +89,7 @@ function Inspector(props) {
                                 showReviewCount: !showReviewCount,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Edit Link")}
@@ -98,6 +99,7 @@ function Inspector(props) {
                                 editLink: !editLink,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {editLink && (
                         <>
@@ -157,32 +159,38 @@ function Inspector(props) {
                         value={starsVariation}
                         options={STARS_VARIATION}
                         onChange={(starsVariation) => setAttributes({ starsVariation })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <SelectControl
                         label={__("Display Type", "essential-blocks")}
                         value={displayType}
                         options={DISPLAY_TYPES}
                         onChange={(displayType) => setAttributes({ displayType })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
-                    <BaseControl>
-                        <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
-                        <ButtonGroup>
-                            {ALIGNMENT.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={alignment === item.value}
-                                    isSecondary={alignment !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            alignment: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Alignment", "essential-blocks")}
+                        className="eb-control-title newtogglegroupcontrol"
+                        value={alignment}
+                        onChange={(value) =>
+                            setAttributes({
+                                alignment: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {ALIGNMENT.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     {showReviewCount && (
                         <>
@@ -212,35 +220,32 @@ function Inspector(props) {
                         </>
                     )}
 
-                    <PanelRow>{__("Stars", "essential-blocks")}</PanelRow>
+                    <ToggleGroupControl
+                        label={__("Stars", "essential-blocks")}
 
-                    <BaseControl>
-                        <ButtonGroup>
-                            {STAR_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            starsType !== value
-                                        }
-                                        isPrimary={
-                                            starsType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                starsType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                        value={starsType}
+                        onChange={(value) =>
+                            setAttributes({
+                                starsType: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {STAR_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {starsType === 'all' && (
                         <ColorControl

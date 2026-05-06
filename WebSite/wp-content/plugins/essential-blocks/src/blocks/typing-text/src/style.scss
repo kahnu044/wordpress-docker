@@ -48,6 +48,15 @@
 }
 
 // for background overlay
-.eb-typed-wrapper>* {
-	position: relative;
+.eb-typed-wrapper {
+	margin: 0;
+	font-size: initial;
+	font-weight: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	text-transform: none;
+
+	>* {
+		position: relative;
+	}
 }

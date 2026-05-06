@@ -314,7 +314,7 @@ export default function Style(props) {
 		}
 		.${blockId} .eb-avatar-style,
         .eb-testimonial-wrapper.${blockId}.layout-preset-2 .image-container .eb-avatar-style {
-			background-image: url(${imageUrl});
+			${imageUrl ? `background-image: url(${imageUrl});` : ''}
 			border-radius: ${borderRadius}%;
 			display: ${imageUrl ? "block" : "none"};
             ${imgWidthStylesDesktop}
@@ -334,8 +334,8 @@ export default function Style(props) {
         }
 
         .${blockId}.layout-preset-2 .image-container::before {
-            width: calc(${imgWidth_Range}${imgWidth_Unit} - (${img_Bdr_Left}${img_Bdr_Unit} + ${img_Bdr_Right}${img_Bdr_Unit}));
-            height: calc(${imgWidth_Range}${imgWidth_Unit} - (${img_Bdr_Top}${img_Bdr_Unit} + ${img_Bdr_Bottom}${img_Bdr_Unit}));
+            width: calc(${imgWidth_Range ?? 0}${imgWidth_Unit || 'px'} - (${img_Bdr_Left ?? 0}${img_Bdr_Unit || 'px'} + ${img_Bdr_Right ?? 0}${img_Bdr_Unit || 'px'}));
+            height: calc(${imgWidth_Range ?? 0}${imgWidth_Unit || 'px'} - (${img_Bdr_Top ?? 0}${img_Bdr_Unit || 'px'} + ${img_Bdr_Bottom ?? 0}${img_Bdr_Unit || 'px'}));
             background-color: ${imageOverlayColor};
         }
 
@@ -356,10 +356,8 @@ export default function Style(props) {
 		}
 
         .${blockId}.layout-preset-2 .image-container::before {
-            width: calc(${TABimgWidth_Range ? TABimgWidth_Range : imgWidth_Range}${TABimgWidth_Unit} - (${TABimg_Bdr_Left ? TABimg_Bdr_Left : img_Bdr_Left
-        }${TABimg_Bdr_Unit} + ${TABimg_Bdr_Right ? TABimg_Bdr_Right : img_Bdr_Right}${TABimg_Bdr_Unit}));
-            height: calc(${TABimgWidth_Range ? TABimgWidth_Range : imgWidth_Range}${TABimgWidth_Unit} - (${TABimg_Bdr_Top ? TABimg_Bdr_Top : img_Bdr_Top
-        }${TABimg_Bdr_Unit} + ${TABimg_Bdr_Bottom ? TABimg_Bdr_Bottom : img_Bdr_Bottom}${TABimg_Bdr_Unit}));
+            width: calc(${TABimgWidth_Range ? TABimgWidth_Range : (imgWidth_Range ?? 0)}${TABimgWidth_Unit || imgWidth_Unit || 'px'} - (${TABimg_Bdr_Left ? TABimg_Bdr_Left : (img_Bdr_Left ?? 0)}${TABimg_Bdr_Unit || img_Bdr_Unit || 'px'} + ${TABimg_Bdr_Right ? TABimg_Bdr_Right : (img_Bdr_Right ?? 0)}${TABimg_Bdr_Unit || img_Bdr_Unit || 'px'}));
+            height: calc(${TABimgWidth_Range ? TABimgWidth_Range : (imgWidth_Range ?? 0)}${TABimgWidth_Unit || imgWidth_Unit || 'px'} - (${TABimg_Bdr_Top ? TABimg_Bdr_Top : (img_Bdr_Top ?? 0)}${TABimg_Bdr_Unit || img_Bdr_Unit || 'px'} + ${TABimg_Bdr_Bottom ? TABimg_Bdr_Bottom : (img_Bdr_Bottom ?? 0)}${TABimg_Bdr_Unit || img_Bdr_Unit || 'px'}));
         }
 
 	`;
@@ -379,10 +377,8 @@ export default function Style(props) {
 		}
 
         .${blockId}.layout-preset-2 .image-container::before {
-            width: calc(${MOBimgWidth_Range ? MOBimgWidth_Range : imgWidth_Range}${MOBimgWidth_Unit} - (${MOBimg_Bdr_Left ? MOBimg_Bdr_Left : img_Bdr_Left
-        }${MOBimg_Bdr_Unit} + ${MOBimg_Bdr_Right ? MOBimg_Bdr_Right : img_Bdr_Right}${MOBimg_Bdr_Unit}));
-            height: calc(${MOBimgWidth_Range ? MOBimgWidth_Range : imgWidth_Range}${MOBimgWidth_Unit} - (${MOBimg_Bdr_Top ? MOBimg_Bdr_Top : img_Bdr_Top
-        }${MOBimg_Bdr_Unit} + ${MOBimg_Bdr_Bottom ? MOBimg_Bdr_Bottom : img_Bdr_Bottom}${MOBimg_Bdr_Unit}));
+            width: calc(${MOBimgWidth_Range ? MOBimgWidth_Range : (imgWidth_Range ?? 0)}${MOBimgWidth_Unit || imgWidth_Unit || 'px'} - (${MOBimg_Bdr_Left ? MOBimg_Bdr_Left : (img_Bdr_Left ?? 0)}${MOBimg_Bdr_Unit || img_Bdr_Unit || 'px'} + ${MOBimg_Bdr_Right ? MOBimg_Bdr_Right : (img_Bdr_Right ?? 0)}${MOBimg_Bdr_Unit || img_Bdr_Unit || 'px'}));
+            height: calc(${MOBimgWidth_Range ? MOBimgWidth_Range : (imgWidth_Range ?? 0)}${MOBimgWidth_Unit || imgWidth_Unit || 'px'} - (${MOBimg_Bdr_Top ? MOBimg_Bdr_Top : (img_Bdr_Top ?? 0)}${MOBimg_Bdr_Unit || img_Bdr_Unit || 'px'} + ${MOBimg_Bdr_Bottom ? MOBimg_Bdr_Bottom : (img_Bdr_Bottom ?? 0)}${MOBimg_Bdr_Unit || img_Bdr_Unit || 'px'}));
         }
 
 	`;

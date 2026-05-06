@@ -187,6 +187,11 @@ const attributes = {
         },
     },
 
+    effectStyle: {
+        type: "string",
+        default: "default",
+    },
+
     // typography attributes
     ...generateTypographyAttributes(typoPrefix_tgl),
 

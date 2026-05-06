@@ -1,5 +1,5 @@
 import {
-BlockProps
+    BlockProps
 } from "@essential-blocks/controls";
 const Save = ({ attributes }) => {
     const {
@@ -17,12 +17,14 @@ const Save = ({ attributes }) => {
         loop,
         showCursor,
         classHook,
+        tagName,
     } = attributes;
+    let TagName = tagName;
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                <div className={`eb-typed-wrapper ${blockId}`} data-id={blockId}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
+                <TagName className={`eb-typed-wrapper ${blockId}`} data-id={blockId}>
                     <div
                         className="eb-typed-content"
                         data-type-speed={typeSpeed}
@@ -44,7 +46,7 @@ const Save = ({ attributes }) => {
                         <span className="eb-typed-view" />
                         <span className="eb-typed-suffix">{suffix}</span>
                     </div>
-                </div>
+                </TagName>
             </div>
         </BlockProps.Save>
     );

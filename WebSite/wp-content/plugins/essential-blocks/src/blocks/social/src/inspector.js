@@ -9,9 +9,9 @@ import {
     ToggleControl,
     RangeControl,
     BaseControl,
-    Button,
-    ButtonGroup,
-    TextControl
+    TextControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -206,6 +206,7 @@ function Inspector({ attributes, setAttributes }) {
                         label={__("Open in New Tab", "essential-blocks")}
                         checked={each.linkOpenNewTab}
                         onChange={(value) => onProfileChange('linkOpenNewTab', value, i)}
+                        __nextHasNoMarginBottom
                     />
                 )}
             </div>
@@ -236,6 +237,7 @@ function Inspector({ attributes, setAttributes }) {
                                     socialDetails: [...socialDetails]
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <SortControl
                             items={socialDetails.map((each, i) => ({ ...each, label: ucFirst((each.icon || " ").replace(/^fa[bsr] fa-|^dashicons-/i, "")) }))}
@@ -262,24 +264,28 @@ function Inspector({ attributes, setAttributes }) {
                         title={__("Icons Styles", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl label={__("Icon Shape", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ICON_SHAPE.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={iconShape !== item.value}
-                                        isPrimary={iconShape === item.value}
-                                        onClick={() => onShapeChange(item.value)}
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Icon Shape", "essential-blocks")}
+
+                            value={iconShape}
+                            onChange={(value) => onShapeChange(value)}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ICON_SHAPE.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <BaseControl
                             id="eb-team-icons-alignments"
                             label="Social Icons Horizontal Alignments"
+                            __nextHasNoMarginBottom
                         >
                             <SelectControl
                                 // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -288,6 +294,8 @@ function Inspector({ attributes, setAttributes }) {
                                 onChange={(iconsJustify) =>
                                     setAttributes({ iconsJustify })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
 
@@ -348,6 +356,7 @@ function Inspector({ attributes, setAttributes }) {
                                     isIconsDevider: !isIconsDevider,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isIconsDevider && (
@@ -365,6 +374,8 @@ function Inspector({ attributes, setAttributes }) {
                                     step={1}
                                     min={1}
                                     max={50}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <RangeControl
@@ -374,6 +385,8 @@ function Inspector({ attributes, setAttributes }) {
                                     step={1}
                                     min={1}
                                     max={300}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ResponsiveRangeController
@@ -409,6 +422,8 @@ function Inspector({ attributes, setAttributes }) {
                             onChange={(icnEffect) => {
                                 setAttributes({ icnEffect });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
 
@@ -443,6 +458,8 @@ function Inspector({ attributes, setAttributes }) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
 
@@ -457,6 +474,8 @@ function Inspector({ attributes, setAttributes }) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
 
@@ -471,6 +490,8 @@ function Inspector({ attributes, setAttributes }) {
                                 }
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </ResetControl>
                     </InspectorPanel.PanelBody>

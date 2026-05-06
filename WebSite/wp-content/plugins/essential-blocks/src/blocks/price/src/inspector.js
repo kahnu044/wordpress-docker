@@ -3,13 +3,13 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-    Button,
-    ButtonGroup,
     BaseControl,
     SelectControl,
     TextControl,
     ToggleControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -75,11 +75,15 @@ function Inspector(props) {
                                     mainPrice: newPrice,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Price Period (per)")}
                             value={pricePeriod}
                             onChange={(pricePeriod) => setAttributes({ pricePeriod })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("On Sale?")}
@@ -89,6 +93,7 @@ function Inspector(props) {
                                     showOnSale: !showOnSale,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showOnSale && (
                             <>
@@ -100,6 +105,8 @@ function Inspector(props) {
                                             salePrice: newsalePrice,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__("Sale Price Period (per)")}
@@ -109,6 +116,8 @@ function Inspector(props) {
                                             salePricePeriod,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <Divider />
                             </>
@@ -121,6 +130,8 @@ function Inspector(props) {
                                     priceCurrency: newPriceCurrency,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Currency Placement", "essential-blocks")}
@@ -140,6 +151,8 @@ function Inspector(props) {
                                     currencyPlacement,
                                 });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <Divider />
                         <SelectControl
@@ -151,32 +164,36 @@ function Inspector(props) {
                                     priceView: newPriceView,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody title={__("Styles", "essential-blocks")} initialOpen={true}>
-                        <BaseControl>
-                            <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={priceAlignment === item.value}
-                                        isSecondary={priceAlignment !== item.value}
-                                        onClick={() =>
-                                            setAttributes({
-                                                priceAlignment: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+                            className="eb-control-title newtogglegroupcontrol"
+                            value={priceAlignment}
+                            onChange={(value) =>
+                                setAttributes({
+                                    priceAlignment: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Original Price", "essential-blocks")}
                             </h3>
@@ -191,7 +208,7 @@ function Inspector(props) {
                             typographyPrefixConstant={typoPrefix_original_price}
                         />
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__("Pricing Period", "essential-blocks")}
                             </h3>
@@ -208,7 +225,7 @@ function Inspector(props) {
                         {showOnSale && (
                             <>
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Sale Price", "essential-blocks")}
                                     </h3>
@@ -223,7 +240,7 @@ function Inspector(props) {
                                     typographyPrefixConstant={typoPrefix_saleprice}
                                 />
                                 <Divider />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Sale Pricing Period", "essential-blocks")}
                                     </h3>

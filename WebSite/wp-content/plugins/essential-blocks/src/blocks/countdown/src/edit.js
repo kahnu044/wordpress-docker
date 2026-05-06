@@ -97,20 +97,17 @@ function Edit(props) {
 
             if (secondsLeft < 0) {
                 clearInterval(intervalId);
-                daysRefUe.current.textContent = "00";
-                hoursRefUe.current.textContent = "00";
-                minutesRefUe.current.textContent = "00";
-                secondsRefUe.current.textContent = "00";
+                daysRefUe.current.textContent = String(0).padStart(2, '0');
+                hoursRefUe.current.textContent = String(0).padStart(2, '0');
+                minutesRefUe.current.textContent = String(0).padStart(2, '0');
+                secondsRefUe.current.textContent = String(0).padStart(2, '0');
                 return;
             }
 
-            daysRefUe.current.textContent = days < 10 ? `0${days}` : `${days}`;
-            hoursRefUe.current.textContent =
-                hours < 10 ? `0${hours}` : `${hours}`;
-            minutesRefUe.current.textContent =
-                minutes < 10 ? `0${minutes}` : `${minutes}`;
-            secondsRefUe.current.textContent =
-                seconds < 10 ? `0${seconds}` : `${seconds}`;
+            daysRefUe.current.textContent = String(days).padStart(2, '0');
+            hoursRefUe.current.textContent = String(hours).padStart(2, '0');
+            minutesRefUe.current.textContent = String(minutes).padStart(2, '0');
+            secondsRefUe.current.textContent = String(seconds).padStart(2, '0');
         };
 
         if (isEvergreenTimer) {

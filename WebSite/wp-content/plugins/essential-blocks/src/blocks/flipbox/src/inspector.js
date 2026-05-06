@@ -6,12 +6,12 @@ import { applyFilters } from "@wordpress/hooks";
 import {
     PanelRow,
     SelectControl,
-    Button,
     TextControl,
     RangeControl,
     ToggleControl,
-    ButtonGroup,
     BaseControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /*
@@ -169,26 +169,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                         title={__("Selected Side", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl>
-                            <ButtonGroup id="eb-flipbox-sides">
-                                {FLIPBOX_SIDES.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={selectedSide === item.value}
-                                        isSecondary={
-                                            selectedSide !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                selectedSide: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Selected Side", "essential-blocks")}
+
+                            value={selectedSide}
+                            onChange={(value) =>
+                                setAttributes({
+                                    selectedSide: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {FLIPBOX_SIDES.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__("Flipbox Settings", "essential-blocks")}
@@ -214,6 +215,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     )
                                     : ""
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {"click" === flipMode && (
                             <ToggleControl
@@ -227,33 +230,30 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         isMouseLeaveOn: !isMouseLeaveOn,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                         )}
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
+
+                            value={contentPosition}
+                            onChange={(value) =>
+                                setAttributes({
+                                    contentPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            contentPosition === item.value
-                                        }
-                                        isSecondary={
-                                            contentPosition !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                contentPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ResponsiveRangeController
                             baseLabel={__("Box Height", "essential-blocks")}
                             controlName={boxHeightAttr}
@@ -279,6 +279,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     flipType: newStyle,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <RangeControl
@@ -296,71 +298,59 @@ const Inspector = ({ attributes, setAttributes }) => {
                             min={0}
                             max={5000}
                             step={500}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {selectedSide === "front" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Icon Type", "essential-blocks")}
-                                    id="eb-flipbox-icon-type"
+
+                                    value={frontIconOrImage}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            frontIconOrImage: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-flipbox-icon-type">
-                                        {ICON_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    frontIconOrImage ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    frontIconOrImage !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        frontIconOrImage:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ICON_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
 
                         {selectedSide === "back" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Icon Type", "essential-blocks")}
-                                    id="eb-flipbox-icon-type"
+
+                                    value={backIconOrImage}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            backIconOrImage: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-flipbox-icon-type">
-                                        {ICON_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    backIconOrImage ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    backIconOrImage !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        backIconOrImage:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ICON_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                     </InspectorPanel.PanelBody>
@@ -472,6 +462,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showFrontTitle: !showFrontTitle,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {showFrontTitle && (
@@ -491,38 +482,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             }
                                         />
 
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Title Tag",
                                                 "essential-blocks",
                                             )}
+
+                                            value={frontTitleTag}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    frontTitleTag: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup>
-                                                {HEADER_TAGS.map(
-                                                    (header, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isSecondary={
-                                                                frontTitleTag !==
-                                                                header.value
-                                                            }
-                                                            isPrimary={
-                                                                frontTitleTag ===
-                                                                header.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    frontTitleTag:
-                                                                        header.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {header.label}
-                                                        </Button>
-                                                    ),
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {HEADER_TAGS.map(
+                                                (header, index) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={header.value}
+                                                        label={header.label}
+                                                    />
+                                                ),
+                                            )}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                                 <ToggleControl
@@ -536,6 +521,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showFrontContent: !showFrontContent,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {showFrontContent && (
                                     <DynamicInputControl
@@ -569,6 +555,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showBackTitle: !showBackTitle,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {showBackTitle && (
                                     <>
@@ -586,38 +573,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 })
                                             }
                                         />
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Title Tag",
                                                 "essential-blocks",
                                             )}
+
+                                            value={backTitleTag}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    backTitleTag: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup>
-                                                {HEADER_TAGS.map(
-                                                    (header, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            isSecondary={
-                                                                backTitleTag !==
-                                                                header.value
-                                                            }
-                                                            isPrimary={
-                                                                backTitleTag ===
-                                                                header.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    backTitleTag:
-                                                                        header.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {header.label}
-                                                        </Button>
-                                                    ),
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {HEADER_TAGS.map(
+                                                (header, index) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={header.value}
+                                                        label={header.label}
+                                                    />
+                                                ),
+                                            )}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                                 <ToggleControl
@@ -631,6 +612,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             showBackContent: !showBackContent,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 {showBackContent && (
                                     <DynamicInputControl
@@ -662,28 +644,28 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 )}
                             </em>
                         </PanelRow>
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Link Type", "essential-blocks")}
-                            id="eb-flipbox-link-type"
+
+                            value={linkType}
+                            onChange={(value) => {
+                                setAttributes({
+                                    linkType: value,
+                                });
+                                handleButtonStyle(buttonStyle);
+                            }}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-flipbox-link-type">
-                                {LINK_TYPE.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={linkType === item.value}
-                                        isSecondary={linkType !== item.value}
-                                        onClick={() => {
-                                            setAttributes({
-                                                linkType: item.value,
-                                            }),
-                                                handleButtonStyle(buttonStyle);
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {LINK_TYPE.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <EBTextControl
                             label={__("Link", "essential-blocks")}
                             fieldType="url"
@@ -709,6 +691,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     linkOpenNewTab: !linkOpenNewTab,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {linkType === "button" && (
@@ -724,6 +707,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             buttonText: newText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <SelectControl
                                     label={__(
@@ -735,6 +720,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     onChange={(newStyle) =>
                                         handleButtonStyle(newStyle)
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -742,28 +729,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody>
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Selected Side", "essential-blocks")}
+
+                            value={selectedSide}
+                            onChange={(value) =>
+                                setAttributes({
+                                    selectedSide: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-flipbox-sides">
-                                {FLIPBOX_SIDES.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={selectedSide === item.value}
-                                        isSecondary={
-                                            selectedSide !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                selectedSide: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {FLIPBOX_SIDES.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody
                         title={__("Flipbox Style", "essential-blocks")}
@@ -801,7 +787,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         "essential-blocks",
                                     )}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Front Side Background",
@@ -854,7 +840,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         "essential-blocks",
                                     )}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Back Side Background",
@@ -907,7 +893,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 }
                                             />
 
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <h3 className="eb-control-title">
                                                     {__(
                                                         "Margin & Padding",
@@ -931,7 +917,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                     "essential-blocks",
                                                 )}
                                             />
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <h3 className="eb-control-title">
                                                     {__(
                                                         "Border",
@@ -996,7 +982,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             attributeName={"backIconBackground"}
                                         />
 
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Margin & Padding",
@@ -1020,7 +1006,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 "essential-blocks",
                                             )}
                                         />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Border",
@@ -1091,7 +1077,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     min={20}
                                     max={600}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Padding", "essential-blocks")}
                                     </h3>
@@ -1104,7 +1090,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         "essential-blocks",
                                     )}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Border & Shadow",
@@ -1115,7 +1101,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 <BorderShadowControl
                                     controlName={borderShadowBtn}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Button Icon", "essential-blocks")}
                                     </h3>
@@ -1132,6 +1118,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 !displayButtonIcon,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {displayButtonIcon && (
                                     <EBIconPicker
@@ -1149,43 +1136,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 )}
                                 {displayButtonIcon && buttonIcon && (
                                     <>
-                                        <BaseControl
+                                        <ToggleGroupControl
                                             label={__(
                                                 "Icon Position",
                                                 "essential-blocks",
                                             )}
-                                            id="eb-flipbox-icon-pos"
+
+                                            value={buttonIconPos}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    buttonIconPos: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         >
-                                            <ButtonGroup id="eb-flipbox-icon-pos">
-                                                {ICON_POSITIONS.map(
-                                                    (item, index) => (
-                                                        <Button
-                                                            key={index}
-                                                            style={{
-                                                                zIndex: 0,
-                                                            }} // ? Add this style to fix icon list and primary button issue
-                                                            // isLarge
-                                                            isSecondary={
-                                                                buttonIconPos !==
-                                                                item.value
-                                                            }
-                                                            isPrimary={
-                                                                buttonIconPos ===
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                setAttributes({
-                                                                    buttonIconPos:
-                                                                        item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ),
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                            {ICON_POSITIONS.map(
+                                                (item, index) => (
+                                                    <ToggleGroupControlOption
+                                                        key={index}
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
+                                                ),
+                                            )}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                             </>

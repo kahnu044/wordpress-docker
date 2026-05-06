@@ -38,6 +38,21 @@ import {
     FILTER_ITEM_GAP,
     ICON_SIZE,
     ICON_SPACE,
+    FEATURED_POST_BORDER,
+    FEATURED_POST_PADDING,
+    FEATURED_TITLE_PADDING,
+    FEATURED_TITLE_MARGIN,
+    FEATURED_TITLE_BORDER,
+    FEATURED_EXCERPT_PADDING,
+    FEATURED_EXCERPT_MARGIN,
+    FEATURED_EXCERPT_BORDER,
+    FEATURED_META_PADDING,
+    FEATURED_META_MARGIN,
+    FEATURED_META_BORDER,
+    POST_MIN_HEIGHT,
+    POST_WIDTH,
+    LIST_POST_WIDTH,
+    FEATURED_AVATAR_RADIUS
 } from "./constants/constants";
 import {
     EBPG_TITLE_TYPOGRAPHY,
@@ -46,6 +61,9 @@ import {
     EBPG_META_TYPOGRAPHY,
     EBPG_LOAD_MORE_TYPOGRAPHY,
     FILTER_ITEM_TYPOGRAPHY,
+    FEATURED_TITLE_TYPO,
+    FEATURED_EXCERPT_TYPO,
+    FEATURED_META_TYPO,
 } from "./constants/typographyPrefixConstants";
 
 import {
@@ -133,6 +151,35 @@ export default function Style(props) {
         addIcon,
         iconPosition,
         enableContents,
+        featuredTitleColor,
+        featuredTitleHoverColor,
+        featuredExcerptColor,
+        featuredExcerptHoverColor,
+        // featuredMetaColor,
+        // featuredMetaHoverColor,
+        featuredPostBorderRadius,
+        featuredPostBottomSpacing,
+        featuredPostHorizontalAlign,
+        featuredPostVerticalAlign,
+        // featuredMetaBGColor,
+        // featuredMetaBGHoverColor,
+        featuredOverlayColor,
+        featuredPostMetaStatus,
+        featuredPostAuthorMetaColor,
+        featuredPostAuthorMetaHoverColor,
+        featuredPostDateMetaColor,
+        featuredPostCommonMetaColor,
+        featuredPostCommonMetaBgColor,
+        featuredPostCategoryMetaColor,
+        featuredPostCategoryMetaBgColor,
+        featuredPostTagMetaColor,
+        featuredPostTagMetaBgColor,
+        featuredPostReadTimeMetaColor,
+        featuredPostDynamicMetaColor,
+        featuredPostDynamicMetaBgColor,
+        postMinHeightRange,
+        TABpostMinHeightRange,
+        MOBpostMinHeightRange,
     } = attributes;
 
     useEffect(() => {
@@ -559,6 +606,132 @@ export default function Style(props) {
         attributes,
     });
 
+    const {
+        styesDesktop: featuredPostBdShadowDesktop,
+        styesTab: featuredPostBdShadowTab,
+        styesMobile: featuredPostBdShadowMobile,
+        stylesHoverDesktop: featuredPostBdShadowHoverDesktop,
+        stylesHoverTab: featuredPostBdShadowHoverTab,
+        stylesHoverMobile: featuredPostBdShadowHoverMobile,
+        transitionStyle: featuredPostBdShadowTransition,
+    } = generateBorderShadowStyles({
+        controlName: FEATURED_POST_BORDER,
+        attributes,
+    });
+
+    // Featured Post Title Typography
+    const {
+        typoStylesDesktop: featuredTitleTypoStylesDesktop,
+        typoStylesTab: featuredTitleTypoStylesTab,
+        typoStylesMobile: featuredTitleTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: FEATURED_TITLE_TYPO,
+        defaultFontSize: 32,
+    });
+
+    // Featured Post Excerpt Typography
+    const {
+        typoStylesDesktop: featuredExcerptTypoStylesDesktop,
+        typoStylesTab: featuredExcerptTypoStylesTab,
+        typoStylesMobile: featuredExcerptTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: FEATURED_EXCERPT_TYPO,
+        defaultFontSize: 16,
+    });
+
+    // Featured Post Meta Typography
+    const {
+        typoStylesDesktop: featuredMetaTypoStylesDesktop,
+        typoStylesTab: featuredMetaTypoStylesTab,
+        typoStylesMobile: featuredMetaTypoStylesMobile,
+    } = generateTypographyStyles({
+        attributes,
+        prefixConstant: FEATURED_META_TYPO,
+        defaultFontSize: 14,
+    });
+
+    // Featured Post Title Padding
+    const {
+        dimensionStylesDesktop: featuredTitlePaddingDesktop,
+        dimensionStylesTab: featuredTitlePaddingTab,
+        dimensionStylesMobile: featuredTitlePaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_TITLE_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+
+    // Featured Post Title Margin
+    const {
+        dimensionStylesDesktop: featuredTitleMarginDesktop,
+        dimensionStylesTab: featuredTitleMarginTab,
+        dimensionStylesMobile: featuredTitleMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_TITLE_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+
+    // Featured Post Excerpt Padding
+    const {
+        dimensionStylesDesktop: featuredExcerptPaddingDesktop,
+        dimensionStylesTab: featuredExcerptPaddingTab,
+        dimensionStylesMobile: featuredExcerptPaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_EXCERPT_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+
+    // Featured Post Excerpt Margin
+    const {
+        dimensionStylesDesktop: featuredExcerptMarginDesktop,
+        dimensionStylesTab: featuredExcerptMarginTab,
+        dimensionStylesMobile: featuredExcerptMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_EXCERPT_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+
+    // Featured Post Meta Padding
+    const {
+        dimensionStylesDesktop: featuredMetaPaddingDesktop,
+        dimensionStylesTab: featuredMetaPaddingTab,
+        dimensionStylesMobile: featuredMetaPaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_META_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+
+    // Featured Post Meta Margin
+    const {
+        dimensionStylesDesktop: featuredMetaMarginDesktop,
+        dimensionStylesTab: featuredMetaMarginTab,
+        dimensionStylesMobile: featuredMetaMarginMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_META_MARGIN,
+        styleFor: "margin",
+        attributes,
+    });
+
+    // Featured Post Meta Border Shadow
+    const {
+        styesDesktop: featuredMetaBdShadowDesktop,
+        styesTab: featuredMetaBdShadowTab,
+        styesMobile: featuredMetaBdShadowMobile,
+        stylesHoverDesktop: featuredMetaBdShadowHoverDesktop,
+        stylesHoverTab: featuredMetaBdShadowHoverTab,
+        stylesHoverMobile: featuredMetaBdShadowHoverMobile,
+        transitionStyle: featuredMetaBdShadowTransition,
+    } = generateBorderShadowStyles({
+        controlName: FEATURED_META_BORDER,
+        attributes,
+    });
+
     // button icon size
     const {
         rangeStylesDesktop: iconSizeDesktop,
@@ -593,6 +766,54 @@ export default function Style(props) {
         property: "margin-right",
         attributes,
         customUnit: "px",
+    });
+
+    const {
+        rangeStylesDesktop: featuredPostMinHeightDesktop,
+        rangeStylesTab: featuredPostMinHeightTab,
+        rangeStylesMobile: featuredPostMinHeightMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: POST_MIN_HEIGHT,
+        property: "height",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: postWidthDesktop,
+        rangeStylesTab: postWidthTab,
+        rangeStylesMobile: postWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: POST_WIDTH,
+        property: "width",
+        attributes,
+    });
+    const {
+        rangeStylesDesktop: listPostWidthDesktop,
+        rangeStylesTab: listPostWidthTab,
+        rangeStylesMobile: listPostWidthMobile,
+    } = generateResponsiveRangeStyles({
+        controlName: LIST_POST_WIDTH,
+        property: "width",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: featuredPostPaddingDesktop,
+        dimensionStylesTab: featuredPostPaddingTab,
+        dimensionStylesMobile: featuredPostPaddingMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_POST_PADDING,
+        styleFor: "padding",
+        attributes,
+    });
+
+    const {
+        dimensionStylesDesktop: featuredAvatarRadiusDesktop,
+        dimensionStylesTab: featuredAvatarRadiusTab,
+        dimensionStylesMobile: featuredAvatarRadiusMobile,
+    } = generateDimensionsControlStyles({
+        controlName: FEATURED_AVATAR_RADIUS,
+        styleFor: "border-radius",
+        attributes,
     });
 
     // wrapper styles css in strings ⬇
@@ -1372,6 +1593,204 @@ export default function Style(props) {
         }
 	`;
 
+    const featuredPostStylesDesktop = `
+        .eb-post-grid-wrapper.pro-style-7.has-featured-post .ebpg-featured-post-wrapper .ebpg-grid-post-holder {
+            ${featuredPostMinHeightDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper {
+            margin-bottom: ${featuredPostBottomSpacing}px;
+            ${featuredPostMinHeightDesktop}
+            border-radius: ${featuredPostBorderRadius}px;
+            ${featuredPostBdShadowDesktop}
+            transition: ${featuredPostBdShadowTransition};
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .ebpg-featured-post-wrapper{
+            ${postWidthDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .eb-post-grid-posts-wrapper{
+            ${listPostWidthDesktop}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-wrapper {
+            align-items: ${featuredPostHorizontalAlign};
+            ${(preset !== "pro-style-7" && preset !== "pro-style-8") ? `
+                ${featuredPostVerticalAlign === "center" ? `
+                    top: 50%;
+                    bottom: auto;
+                    transform: translateY(-50%);
+                ` : `
+                    ${featuredPostVerticalAlign === "flex-end" ? `
+                        top: auto;
+                        bottom: 0;
+                    ` : `
+                        top: 0;
+                        bottom: auto;
+                    `}
+                `}
+            ` : ``}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper:hover {
+            ${featuredPostBdShadowHoverDesktop}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img {
+            ${featuredPostMinHeightDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId}.pro-style-7 .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img {
+            height: calc(${postMinHeightRange}px / 1.5);
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img,
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail:after {
+            border-radius: ${featuredPostBorderRadius}px;
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail:after,
+        .eb-post-grid-wrapper.${blockId} .ebpg-grid-post-holder .ebpg-entry-thumbnail:hover:after,
+        .eb-post-grid-wrapper.${blockId}.style-5 .ebpg-grid-post-holder:hover .ebpg-entry-thumbnail:after {
+            background: ${featuredOverlayColor};
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-wrapper {
+            ${featuredPostPaddingDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-title a {
+            ${featuredTitleTypoStylesDesktop}
+            ${featuredTitlePaddingDesktop}
+            color: ${featuredTitleColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-title a:hover {
+            color: ${featuredTitleHoverColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-grid-post-excerpt p {
+            color: ${featuredExcerptColor};
+            ${featuredExcerptTypoStylesDesktop}
+            ${featuredExcerptPaddingDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-grid-post-excerpt p:hover {
+            color: ${featuredExcerptHoverColor};
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta {
+            ${featuredMetaPaddingDesktop}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a {
+            ${featuredMetaTypoStylesDesktop}
+            ${featuredMetaBdShadowDesktop}
+            transition: ${featuredMetaBdShadowTransition};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a:hover {
+            ${featuredMetaBdShadowHoverDesktop}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-by {
+            color: ${featuredPostAuthorMetaColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-by a {
+            color: ${featuredPostAuthorMetaColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-by a:hover {
+            color: ${featuredPostAuthorMetaHoverColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-on {
+            color: ${featuredPostDateMetaColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-meta a {
+            color: ${featuredPostCommonMetaColor};
+            background-color: ${featuredPostCommonMetaBgColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-categories-meta a {
+            color: ${featuredPostCategoryMetaColor};
+            background-color: ${featuredPostCategoryMetaBgColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-tags-meta a {
+            color: ${featuredPostTagMetaColor};
+            background-color: ${featuredPostTagMetaBgColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-read-time {
+            color: ${featuredPostReadTimeMetaColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-meta.ebpg-dynamic-values {
+            color: ${featuredPostDynamicMetaColor};
+            background-color: ${featuredPostDynamicMetaBgColor};
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-author-avatar a img {
+            ${featuredAvatarRadiusDesktop}
+        }
+    `;
+    const featuredPostStylesTab = `
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper {
+            ${featuredPostBdShadowTab}
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .ebpg-featured-post-wrapper{
+            ${postWidthTab}
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .eb-post-grid-posts-wrapper{
+            ${listPostWidthTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-wrapper {
+            ${featuredPostPaddingTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-title a {
+            ${featuredTitleTypoStylesTab}
+            ${featuredTitlePaddingTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-grid-post-excerpt p {
+            ${featuredExcerptTypoStylesTab}
+            ${featuredExcerptPaddingTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta {
+            ${featuredMetaPaddingTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a {
+            ${featuredMetaTypoStylesTab}
+            ${featuredMetaBdShadowTab}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a:hover {
+            ${featuredMetaBdShadowHoverTab}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-by {
+            ${featuredAvatarRadiusTab}
+        }
+    `;
+    const featuredPostStylesMobile = `
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper {
+            ${featuredPostBdShadowMobile}
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .ebpg-featured-post-wrapper{
+            ${postWidthMobile}
+        }
+        .eb-post-grid-wrapper.${blockId}.has-featured-post.style-4 .eb-post-grid-posts-wrapper{
+            ${listPostWidthMobile}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-wrapper {
+            ${featuredPostPaddingMobile}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-title a{
+            ${featuredTitleTypoStylesMobile}
+            ${featuredTitlePaddingMobile}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-grid-post-excerpt p {
+            ${featuredExcerptTypoStylesMobile}
+            ${featuredExcerptPaddingMobile}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta {
+            ${featuredMetaPaddingMobile}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a {
+            ${featuredMetaTypoStylesMobile}
+            ${featuredMetaBdShadowMobile}
+        }
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-meta a:hover {
+            ${featuredMetaBdShadowHoverMobile}
+        }
+
+        .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-posted-by {
+            ${featuredAvatarRadiusMobile}
+        }
+    `;
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
@@ -1392,6 +1811,7 @@ export default function Style(props) {
 		${footerMetaDesktop}
 		${loadMoreStylesDesktop}
 		${filterStylesDesktop}
+		${featuredPostStylesDesktop}
 	`);
 
     // all css styles for Tab in strings ⬇
@@ -1414,6 +1834,7 @@ export default function Style(props) {
 		${footerMetaTab}
 		${loadMoreStylesTab}
 		${filterStylesTab}
+		${featuredPostStylesTab}
 	`);
 
     // all css styles for Mobile in strings ⬇
@@ -1436,6 +1857,7 @@ export default function Style(props) {
 		${footerMetaMobile}
 		${loadMoreStylesMobile}
 		${filterStylesMobile}
+		${featuredPostStylesMobile}
 	`);
 
     return (

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { useEffect, createRef, memo } from "@wordpress/element";
+import { useEffect, createRef, memo, useRef } from "@wordpress/element";
 import {
     MediaUpload,
     BlockControls,
@@ -43,6 +43,7 @@ import {
  */
 import Slider from "react-slick";
 import { SliderIcon } from "./icon";
+import { applyFilters } from "@wordpress/hooks";
 
 const Edit = (props) => {
     const { attributes, setAttributes, className, clientId, isSelected, name } =
@@ -76,7 +77,17 @@ const Edit = (props) => {
         slideToShowRange,
         MOBslideToShowRange,
         TABslideToShowRange,
+        sliderStyle,
+        imageWidthRange,
+        reverseSlider,
+        slidesGapRange
     } = attributes;
+
+    const slider = createRef();
+    const hasImages = !!images.length;
+
+    const marqueeSliderRef = useRef();
+    const marqueeSliderAnimation = useRef(null);
 
     // this useEffect is for creating a unique id for each block's unique className by a random unique number
     useEffect(() => {
@@ -117,6 +128,40 @@ const Edit = (props) => {
     useEffect(() => {
         vertical ? setAttributes({ fade: false }) : null;
     }, [vertical]);
+
+    useEffect(() => {
+        if (sliderStyle !== 'marquee-slider') {
+            if (marqueeSliderAnimation.current?.kill) {
+                marqueeSliderAnimation.current.kill();
+                marqueeSliderAnimation.current = null;
+            }
+            return;
+        }
+
+        // Clean up existing animation before creating new one
+        if (marqueeSliderAnimation.current?.kill) {
+            marqueeSliderAnimation.current.kill();
+            marqueeSliderAnimation.current = null;
+        }
+
+        // Use requestAnimationFrame to ensure DOM is ready and styles are applied
+        const timeoutId = setTimeout(() => {
+            if (marqueeSliderRef.current && marqueeSliderRef.current.children.length > 0) {
+                applyFilters("eb-slider-pro-marquee-editor-animation", marqueeSliderRef, marqueeSliderAnimation, attributes);
+            }
+        }, 100);
+
+        return () => {
+            // Clean up timeout
+            clearTimeout(timeoutId);
+
+            // Clean up animation when component unmounts or dependencies change
+            if (marqueeSliderAnimation.current?.kill) {
+                marqueeSliderAnimation.current.kill();
+                marqueeSliderAnimation.current = null;
+            }
+        };
+    }, [sliderStyle, speed, reverseSlider, slidesGapRange, images]);
 
     // you must declare this variable
     const enhancedProps = {
@@ -189,11 +234,8 @@ const Edit = (props) => {
         ],
     };
 
-    const slider = createRef();
-    const hasImages = !!images.length;
-
     useEffect(() => {
-        if (images.length > 0) {
+        if (images.length > 0 && slider.current) {
             slider.current.slickGoTo(initialSlide);
         }
     }, [initialSlide]);
@@ -297,7 +339,7 @@ const Edit = (props) => {
                 isAppender={hasImages}
                 dropZoneUIOnly={hasImages && !isSelected}
                 labels={{
-                    title: !hasImages && __("Images", "essential-blocks"),
+                    title: !hasImages && __("Slider Images", "essential-blocks"),
                     instructions:
                         !hasImages &&
                         __(
@@ -381,183 +423,187 @@ const Edit = (props) => {
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
-                    <div className={`eb-slider-wrapper ${blockId}`}>
-                        <Slider
-                            ref={slider}
-                            {...settings}
-                            key={`${autoplay}-${adaptiveHeight}`}
-                            className={sliderTypeClass}
-                        >
-                            {images.map((image, index) => (
-                                <div
-                                    className={`eb-slider-item ${sliderContentType}`}
-                                    key={index}
-                                >
-                                    <div>
-                                        <img
-                                            className="eb-slider-image"
-                                            src={image.url}
-                                        />
-                                    </div>
-                                    {sliderType === "content" && (
-                                        <div
-                                            className={`eb-slider-content align-${textAlign}`}
-                                        >
-                                            {image.title &&
-                                                image.title.length > 0 && (
-                                                    <>
-                                                        <RichText
-                                                            tagName={titleTag}
-                                                            className="eb-slider-title"
-                                                            value={sanitizeHtml(
-                                                                image.title,
-                                                            )}
-                                                            // value={image.title}
-                                                            allowedFormats={[
-                                                                "core/bold",
-                                                                "core/italic",
-                                                                "core/text-color",
-                                                                "core/underline",
-                                                                "core/link",
-                                                            ]}
-                                                            onChange={(text) =>
-                                                                handleTitle(
-                                                                    text,
-                                                                    index,
-                                                                    images,
-                                                                    setAttributes,
-                                                                )
-                                                            }
-                                                        />
-                                                    </>
-                                                )}
-                                            {image.subtitle &&
-                                                image.subtitle.length > 0 && (
-                                                    <>
-                                                        <RichText
-                                                            tagName={contentTag}
-                                                            className="eb-slider-subtitle"
-                                                            value={sanitizeHtml(
-                                                                image.subtitle,
-                                                            )}
-                                                            allowedFormats={[
-                                                                "core/bold",
-                                                                "core/italic",
-                                                                "core/text-color",
-                                                                "core/underline",
-                                                                "core/link",
-                                                            ]}
-                                                            onChange={(text) =>
-                                                                handleSubtitle(
-                                                                    text,
-                                                                    index,
-                                                                    images,
-                                                                    setAttributes,
-                                                                )
-                                                            }
-                                                        />
-                                                    </>
-                                                )}
-
-                                            <div className="eb-slider-button-wrapper">
-                                                {image.showButton &&
-                                                    image.buttonText &&
-                                                    image.buttonText.length >
-                                                    0 && (
-                                                        <>
-                                                            <a
-                                                                href={
-                                                                    image.buttonUrl &&
-                                                                        image.isValidUrl
-                                                                        ? sanitizeURL(
-                                                                            image.buttonUrl,
-                                                                        )
-                                                                        : "#"
-                                                                }
-                                                                className="eb-slider-button"
-                                                                target={
-                                                                    image.openNewTab
-                                                                        ? "_blank"
-                                                                        : "_self"
-                                                                }
-                                                                rel="noopener"
-                                                            >
-                                                                <RichText
-                                                                    value={sanitizeHtml(
-                                                                        image.buttonText,
-                                                                    )}
-                                                                    allowedFormats={[
-                                                                        "core/bold",
-                                                                        "core/italic",
-                                                                        "core/text-color",
-                                                                        "core/underline",
-                                                                    ]}
-                                                                    onChange={(
-                                                                        text,
-                                                                    ) =>
-                                                                        handleButtonText(
-                                                                            text,
-                                                                            index,
-                                                                            images,
-                                                                            setAttributes,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </a>
-                                                        </>
-                                                    )}
-                                                {image.showSecondButton &&
-                                                    image.secondButtonText &&
-                                                    image.secondButtonText
-                                                        .length > 0 && (
-                                                        <>
-                                                            <a
-                                                                href={
-                                                                    image.secondButtonUrl &&
-                                                                        image.isValidUrl
-                                                                        ? sanitizeURL(
-                                                                            image.secondButtonUrl,
-                                                                        )
-                                                                        : "#"
-                                                                }
-                                                                className="eb-slider-second-button"
-                                                                target={
-                                                                    image.secondButtonopenNewTab
-                                                                        ? "_blank"
-                                                                        : "_self"
-                                                                }
-                                                                rel="noopener"
-                                                            >
-                                                                <RichText
-                                                                    value={sanitizeHtml(
-                                                                        image.secondButtonText,
-                                                                    )}
-                                                                    allowedFormats={[
-                                                                        "core/bold",
-                                                                        "core/italic",
-                                                                        "core/text-color",
-                                                                        "core/underline",
-                                                                    ]}
-                                                                    onChange={(
-                                                                        text,
-                                                                    ) =>
-                                                                        handleSecondButtonText(
-                                                                            text,
-                                                                            index,
-                                                                            images,
-                                                                            setAttributes,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </a>
-                                                        </>
-                                                    )}
-                                            </div>
+                    <div className={`eb-slider-wrapper ${blockId} ${sliderStyle}`}>
+                        {sliderStyle === 'default-slider' && (
+                            <Slider
+                                ref={slider}
+                                {...settings}
+                                key={`${autoplay}-${adaptiveHeight}`}
+                                className={sliderTypeClass}
+                            >
+                                {images.map((image, index) => (
+                                    <div
+                                        className={`eb-slider-item ${sliderContentType}`}
+                                        key={index}
+                                    >
+                                        <div>
+                                            <img
+                                                className="eb-slider-image"
+                                                src={image.url}
+                                            />
                                         </div>
-                                    )}
-                                </div>
-                            ))}
-                        </Slider>
+                                        {sliderType === "content" && (
+                                            <div
+                                                className={`eb-slider-content align-${textAlign}`}
+                                            >
+                                                {image.title &&
+                                                    image.title.length > 0 && (
+                                                        <>
+                                                            <RichText
+                                                                tagName={titleTag}
+                                                                className="eb-slider-title"
+                                                                value={sanitizeHtml(
+                                                                    image.title,
+                                                                )}
+                                                                // value={image.title}
+                                                                allowedFormats={[
+                                                                    "core/bold",
+                                                                    "core/italic",
+                                                                    "core/text-color",
+                                                                    "core/underline",
+                                                                    "core/link",
+                                                                ]}
+                                                                onChange={(text) =>
+                                                                    handleTitle(
+                                                                        text,
+                                                                        index,
+                                                                        images,
+                                                                        setAttributes,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                {image.subtitle &&
+                                                    image.subtitle.length > 0 && (
+                                                        <>
+                                                            <RichText
+                                                                tagName={contentTag}
+                                                                className="eb-slider-subtitle"
+                                                                value={sanitizeHtml(
+                                                                    image.subtitle,
+                                                                )}
+                                                                allowedFormats={[
+                                                                    "core/bold",
+                                                                    "core/italic",
+                                                                    "core/text-color",
+                                                                    "core/underline",
+                                                                    "core/link",
+                                                                ]}
+                                                                onChange={(text) =>
+                                                                    handleSubtitle(
+                                                                        text,
+                                                                        index,
+                                                                        images,
+                                                                        setAttributes,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+
+                                                <div className="eb-slider-button-wrapper">
+                                                    {image.showButton &&
+                                                        image.buttonText &&
+                                                        image.buttonText.length >
+                                                        0 && (
+                                                            <>
+                                                                <a
+                                                                    href={
+                                                                        image.buttonUrl &&
+                                                                            image.isValidUrl
+                                                                            ? sanitizeURL(
+                                                                                image.buttonUrl,
+                                                                            )
+                                                                            : "#"
+                                                                    }
+                                                                    className="eb-slider-button"
+                                                                    target={
+                                                                        image.openNewTab
+                                                                            ? "_blank"
+                                                                            : "_self"
+                                                                    }
+                                                                    rel="noopener"
+                                                                >
+                                                                    <RichText
+                                                                        value={sanitizeHtml(
+                                                                            image.buttonText,
+                                                                        )}
+                                                                        allowedFormats={[
+                                                                            "core/bold",
+                                                                            "core/italic",
+                                                                            "core/text-color",
+                                                                            "core/underline",
+                                                                        ]}
+                                                                        onChange={(
+                                                                            text,
+                                                                        ) =>
+                                                                            handleButtonText(
+                                                                                text,
+                                                                                index,
+                                                                                images,
+                                                                                setAttributes,
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </a>
+                                                            </>
+                                                        )}
+                                                    {image.showSecondButton &&
+                                                        image.secondButtonText &&
+                                                        image.secondButtonText
+                                                            .length > 0 && (
+                                                            <>
+                                                                <a
+                                                                    href={
+                                                                        image.secondButtonUrl &&
+                                                                            image.isValidUrl
+                                                                            ? sanitizeURL(
+                                                                                image.secondButtonUrl,
+                                                                            )
+                                                                            : "#"
+                                                                    }
+                                                                    className="eb-slider-second-button"
+                                                                    target={
+                                                                        image.secondButtonopenNewTab
+                                                                            ? "_blank"
+                                                                            : "_self"
+                                                                    }
+                                                                    rel="noopener"
+                                                                >
+                                                                    <RichText
+                                                                        value={sanitizeHtml(
+                                                                            image.secondButtonText,
+                                                                        )}
+                                                                        allowedFormats={[
+                                                                            "core/bold",
+                                                                            "core/italic",
+                                                                            "core/text-color",
+                                                                            "core/underline",
+                                                                        ]}
+                                                                        onChange={(
+                                                                            text,
+                                                                        ) =>
+                                                                            handleSecondButtonText(
+                                                                                text,
+                                                                                index,
+                                                                                images,
+                                                                                setAttributes,
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </a>
+                                                            </>
+                                                        )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </Slider>
+                        )}
+
+                        {applyFilters("eb-slider-pro-maquee-editor-markup", "", marqueeSliderRef, sliderTypeClass, attributes, setAttributes)}
                     </div>
                 </div>
             </BlockProps.Edit >

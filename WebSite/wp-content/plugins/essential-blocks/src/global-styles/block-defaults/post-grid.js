@@ -14,6 +14,8 @@ import {
     BaseControl,
     TabPanel,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { select, useSelect, withSelect } from "@wordpress/data";
 
@@ -218,6 +220,7 @@ function PostGrid(props) {
                                     showThumbnail: !showThumbnail,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showThumbnail && (
@@ -252,6 +255,7 @@ function PostGrid(props) {
                             <BaseControl
                                 label={__("Content Vertical Alignment", "essential-blocks")}
                                 id="essential-blocks"
+                                __nextHasNoMarginBottom
                             >
                                 <ButtonGroup id="essential-blocks">
                                     {VERTICAL_POSITION.map((item, index) => (
@@ -279,6 +283,7 @@ function PostGrid(props) {
                             onChange={() => {
                                 handleBlockDefault({ showTitle: !showTitle });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showTitle && (
@@ -290,6 +295,8 @@ function PostGrid(props) {
                                     onChange={(value) => {
                                         handleBlockDefault({ titleTag: value });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <RangeControl
@@ -303,6 +310,8 @@ function PostGrid(props) {
                                     min={-1}
                                     max={100}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -315,6 +324,7 @@ function PostGrid(props) {
                                     showContent: !showContent,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showContent && (
@@ -330,6 +340,8 @@ function PostGrid(props) {
                                     min={-1}
                                     max={100}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <TextControl
@@ -341,6 +353,8 @@ function PostGrid(props) {
                                             expansionIndicator: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -353,6 +367,7 @@ function PostGrid(props) {
                                     showReadMore: !showReadMore,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showReadMore && (
@@ -366,6 +381,8 @@ function PostGrid(props) {
                                             readmoreText: text,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -376,6 +393,7 @@ function PostGrid(props) {
                             onChange={() => {
                                 handleBlockDefault({ showMeta: !showMeta });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         {showMeta && (
@@ -507,7 +525,7 @@ function PostGrid(props) {
                                     }
                                 />
                             )}
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks" __nextHasNoMarginBottom>
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
@@ -543,7 +561,7 @@ function PostGrid(props) {
                                 color={contentColor}
                                 onChange={(color) => handleBlockDefault({ contentColor: color })}
                             />
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks" __nextHasNoMarginBottom>
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
@@ -637,7 +655,7 @@ function PostGrid(props) {
                                     />
                                 </>
                             )}
-                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks">
+                            <BaseControl label={__("Alignment", "essential-blocks")} id="essential-blocks" __nextHasNoMarginBottom>
                                 <ButtonGroup id="essential-blocks">
                                     {TEXT_ALIGN.map((item, index) => (
                                         <Button
@@ -672,7 +690,7 @@ function PostGrid(props) {
                     )}
                     {showMeta && (
                         <PanelBody title={__("Meta Styles", "essential-blocks")} initialOpen={false}>
-                            <BaseControl label={__("Header Meta Alignment", "essential-blocks")} id="essential-blocks">
+                            <BaseControl label={__("Header Meta Alignment", "essential-blocks")} id="essential-blocks" __nextHasNoMarginBottom>
                                 <ButtonGroup id="essential-blocks">
                                     {CONTENT_POSITION.map((item, index) => (
                                         <Button
@@ -704,7 +722,7 @@ function PostGrid(props) {
                                 baseLabel="Header Meta Margin"
                             />
 
-                            <BaseControl label={__("Footer Meta Alignment", "essential-blocks")} id="essential-blocks">
+                            <BaseControl label={__("Footer Meta Alignment", "essential-blocks")} id="essential-blocks" __nextHasNoMarginBottom>
                                 <ButtonGroup id="essential-blocks">
                                     {CONTENT_POSITION.map((item, index) => (
                                         <Button
@@ -946,7 +964,7 @@ function PostGrid(props) {
 
                                 {/* If load More type "Pagination" */}
                                 {loadMoreOptions.loadMoreType === "2" && (
-                                    <BaseControl label={__("", "essential-blocks")} id="eb-advance-heading-alignment">
+                                    <BaseControl label={__("", "essential-blocks")} id="eb-advance-heading-alignment" __nextHasNoMarginBottom>
                                         <ButtonGroup id="eb-advance-heading-alignment">
                                             {NORMAL_HOVER_ACTIVE.map((item, index) => (
                                                 <Button

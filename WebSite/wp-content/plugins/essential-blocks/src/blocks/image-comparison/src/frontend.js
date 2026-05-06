@@ -1,4 +1,4 @@
-import { render } from "@wordpress/element";
+import { createRoot } from "@wordpress/element";
 import ReactCompareImage from "react-compare-image";
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -12,8 +12,13 @@ window.addEventListener("DOMContentLoaded", () => {
 		const verticalMode = wrapper.getAttribute("data-vertical-mode");
 		const hoverAttr = wrapper.getAttribute("data-hover");
 		const showLabels = wrapper.getAttribute("data-show-label");
-		const beforeLabel = wrapper.getAttribute("data-left-label");
-		const afterLabel = wrapper.getAttribute("data-right-label");
+
+		// Read labels from span elements (WPML-translatable) with
+		// fallback to data attributes for backward compatibility.
+		const beforeLabelEl = wrapper.querySelector(".eb-image-comparison-before-label");
+		const afterLabelEl = wrapper.querySelector(".eb-image-comparison-after-label");
+		const beforeLabel = beforeLabelEl ? beforeLabelEl.textContent : wrapper.getAttribute("data-left-label");
+		const afterLabel = afterLabelEl ? afterLabelEl.textContent : wrapper.getAttribute("data-right-label");
 		const sliderPosition = wrapper.getAttribute("data-slider-position");
 		const sliderLineWidth = wrapper.getAttribute("data-line-width");
 		const sliderLineColor = wrapper.getAttribute("data-line-color");
@@ -25,7 +30,8 @@ window.addEventListener("DOMContentLoaded", () => {
 		const sliderLineWidthNum = sliderLineWidth ? parseInt(sliderLineWidth, 10) : 0;
 		const sliderPositionPct = sliderPosition ? Number(sliderPosition) / 100 : 0.5;
 
-		render(
+		const root = createRoot(wrapper);
+		root.render(
 			<ReactCompareImage
 				leftImage={leftImage}
 				rightImage={rightImage}
@@ -37,8 +43,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				sliderPositionPercentage={sliderPositionPct}
 				sliderLineWidth={sliderLineWidthNum}
 				sliderLineColor={sliderLineColor || "#ffffff"}
-			/>,
-			wrapper
+			/>
 		);
 	}
 });

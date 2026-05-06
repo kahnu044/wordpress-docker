@@ -189,6 +189,8 @@ function Inspector(props) {
                                             step={0.1}
                                             min={1}
                                             max={100}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </WithResponsiveOptions>
                                 </>
@@ -209,6 +211,8 @@ function Inspector(props) {
                                         step={0.1}
                                         min={1}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                 </WithResponsiveOptions>
                             )}
@@ -228,6 +232,8 @@ function Inspector(props) {
                                         step={0.1}
                                         min={1}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                 </WithResponsiveOptions>
                             )}
@@ -236,6 +242,7 @@ function Inspector(props) {
 
                     <BaseControl
                         label={__("Vertical Align", "essential-blocks")}
+                        __nextHasNoMarginBottom
                     >
                         <SelectControl
                             // label={__("Design Preset", "essential-blocks")}
@@ -245,6 +252,8 @@ function Inspector(props) {
                             onChange={(colAli) => {
                                 setAttributes({ colAli });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </BaseControl>
 

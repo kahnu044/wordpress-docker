@@ -87,6 +87,8 @@ function GoogleMap(props) {
                                 },
                             ]}
                             onChange={(value) => changeMapType(value)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <RangeControl
@@ -96,6 +98,8 @@ function GoogleMap(props) {
                             min={0}
                             max={20}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         <RangeControl
@@ -109,6 +113,8 @@ function GoogleMap(props) {
                             min={100}
                             max={1400}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </PanelBody>
                     <PanelBody

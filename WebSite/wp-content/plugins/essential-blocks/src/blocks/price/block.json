@@ -4,7 +4,7 @@
   "name": "essential-blocks/price",
   "category": "essential-blocks",
   "description": "Price Block lets you add both the regular price and a discounted price for your pricing package.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "parent": ["essential-blocks/pro-pricing-cell"],
   "supports": {

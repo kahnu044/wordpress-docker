@@ -62,17 +62,17 @@ function ebRunCountDown() {
 
             if (secondsLeft < 0) {
                 clearInterval(intervalId);
-                daySpan.textContent = "00";
-                hourSpan.textContent = "00";
-                minuteSpan.textContent = "00";
-                secondSpan.textContent = "00";
+                daySpan.textContent = String(0).padStart(2, '0');
+                hourSpan.textContent = String(0).padStart(2, '0');
+                minuteSpan.textContent = String(0).padStart(2, '0');
+                secondSpan.textContent = String(0).padStart(2, '0');
                 return;
             }
 
-            daySpan.textContent = days < 10 ? `0${days}` : `${days}`;
-            hourSpan.textContent = hours < 10 ? `0${hours}` : `${hours}`;
-            minuteSpan.textContent = minutes < 10 ? `0${minutes}` : `${minutes}`;
-            secondSpan.textContent = seconds < 10 ? `0${seconds}` : `${seconds}`;
+            daySpan.textContent = String(days).padStart(2, '0');
+            hourSpan.textContent = String(hours).padStart(2, '0');
+            minuteSpan.textContent = String(minutes).padStart(2, '0');
+            secondSpan.textContent = String(seconds).padStart(2, '0');
         };
 
         if ("true" === evergreenTimer) {

@@ -7,9 +7,6 @@ class ImageGallery extends Block
 {
     protected $frontend_scripts = [
         'essential-blocks-image-gallery-frontend',
-        'essential-blocks-tweenMaxjs',
-        'essential-blocks-gsap-scrolltrigger',
-        'essential-blocks-splittype'
      ];
 
     protected $frontend_styles = [ 'essential-blocks-fontawesome' ];
@@ -35,7 +32,7 @@ class ImageGallery extends Block
             'image-gallery-frontend',
             $this->path() . '/frontend.js'
         );
-        $this->assets_manager->register( 'tweenMaxjs', 'js/TweenMax.min.js' );
+        // $this->assets_manager->register( 'tweenMaxjs', 'js/TweenMax.min.js' );
     }
 
     /**

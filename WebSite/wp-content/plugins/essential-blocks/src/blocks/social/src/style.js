@@ -26,7 +26,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     StyleComponent
- } from "@essential-blocks/controls";
+} from "@essential-blocks/controls";
 
 export default function Style(props) {
     const { attributes, setAttributes, name } = props;
@@ -78,7 +78,6 @@ export default function Style(props) {
     });
 
     const svgSizeDesktop = iconSizeDesktop.match(/[\d.]+px/);
-    console.log(svgSizeDesktop)
     const svgSizeTab = iconSizeTab.match(/[\d.]+px/);
     const svgSizeMobile = iconSizeMobile.match(/[\d.]+px/);
 

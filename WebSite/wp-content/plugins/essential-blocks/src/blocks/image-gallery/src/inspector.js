@@ -5,13 +5,12 @@ import { __ } from "@wordpress/i18n";
 import {
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
     TextControl,
     PanelRow,
     RangeControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { useState, useEffect } from "@wordpress/element";
 import { select } from "@wordpress/data";
@@ -854,6 +853,8 @@ function Inspector(props) {
                     label={__("Text", "essential-blocks")}
                     value={each.label}
                     onChange={(value) => onFeatureChange("label", value, i)}
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
                 />
             </div>
         ))
@@ -914,6 +915,8 @@ function Inspector(props) {
                                 sources,
                                 setAttributes
                             )}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                 )}
 
@@ -930,6 +933,8 @@ function Inspector(props) {
                                 setAttributes
                             )
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                 )}
 
@@ -953,6 +958,8 @@ function Inspector(props) {
                                     setAttributes
                                 )
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {each.url &&
                             each.url
@@ -977,6 +984,7 @@ function Inspector(props) {
                                     setAttributes
                                 )
                             }
+                            __nextHasNoMarginBottom
                         />
                     </>
                 )}
@@ -1015,6 +1023,8 @@ function Inspector(props) {
                                             disableIsotope: layouts === 'masonry' ? false : disableIsotope,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {layouts == 'masonry' && (
                                     <ToggleControl
@@ -1028,6 +1038,7 @@ function Inspector(props) {
                                                 unevenWidth: !unevenWidth,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -1055,6 +1066,8 @@ function Inspector(props) {
                                     onChange={(styleNumber) =>
                                         changeStyle(styleNumber)
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {styleNumber === "2" && (
@@ -1070,6 +1083,8 @@ function Inspector(props) {
                                                 overlayStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -1115,6 +1130,7 @@ function Inspector(props) {
                                     displayCaption: !displayCaption,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -1128,6 +1144,7 @@ function Inspector(props) {
                                     displayDescription: !displayDescription,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {presets == 'default' && displayCaption && styleNumber === "0" && (
                             <ToggleControl
@@ -1141,6 +1158,7 @@ function Inspector(props) {
                                         captionOnHover: !captionOnHover,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -1157,6 +1175,7 @@ function Inspector(props) {
                                             disableLightBox: !disableLightBox,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {presets !== 'default' && !disableLightBox && (
                                     <EBIconPicker
@@ -1179,6 +1198,7 @@ function Inspector(props) {
                                     label={__("Add custom link?", "essential-blocks")}
                                     checked={addCustomLink}
                                     onChange={() => setAttributes({ addCustomLink: !addCustomLink })}
+                                    __nextHasNoMarginBottom
                                 />
                                 {presets !== 'default' && addCustomLink && (
                                     <EBIconPicker
@@ -1203,6 +1223,7 @@ function Inspector(props) {
                                     })
                                 }
                                 help={__("Some of the functions will not work if you disable Isotope, such as load more, filter, and search.", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -1229,6 +1250,7 @@ function Inspector(props) {
                                     enableFilter: !enableFilter,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {applyFilters(
@@ -1250,6 +1272,7 @@ function Inspector(props) {
                                         enableFilterAll: !enableFilterAll,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -1265,6 +1288,8 @@ function Inspector(props) {
                                         filterAllTitle: newtitle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
 
                         )}
@@ -1281,6 +1306,8 @@ function Inspector(props) {
                                     onChange={(selected) =>
                                         setAttributes({ defaultFilter: selected })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <TextControl
                                     label={__(
@@ -1293,6 +1320,8 @@ function Inspector(props) {
                                             notFoundText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <Divider />
@@ -1370,6 +1399,7 @@ function Inspector(props) {
                             onChange={(enableLoadMore) =>
                                 handleLoadMore(enableLoadMore)
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {enableLoadMore && (
@@ -1385,6 +1415,7 @@ function Inspector(props) {
                                             enableInfiniteScroll: !enableInfiniteScroll,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 /> */}
                                 {/* <DynamicInputControl
                                     label={__("Button Text", "essential-blocks")}
@@ -1407,6 +1438,8 @@ function Inspector(props) {
                                     min={1}
                                     max={sources?.length - 1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                                 <EBButton.GeneralTab
                                     label={__("Button", "essential-blocks")}
@@ -1435,83 +1468,32 @@ function Inspector(props) {
                         {layouts === "grid" && (
                             <>
                                 {!enableFilter && (
-                                    <BaseControl
-                                        label={__(
-                                            "Alignment",
-                                            "essential-blocks"
-                                        )}
+                                    <ToggleGroupControl
+                                        label={__("Alignment", "essential-blocks")}
+                                        value={imageAlignment}
+                                        onChange={(value) => setAttributes({ imageAlignment: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {FLEX_ALIGN.map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        isPrimary={
-                                                            imageAlignment ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            imageAlignment !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    imageAlignment:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {FLEX_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
 
-                                <BaseControl
-                                    label={__(
-                                        "Image Size",
-                                        "essential-blocks"
-                                    )}
+                                <ToggleGroupControl
+                                    label={__("Image Size", "essential-blocks")}
+                                    value={imageSizeType}
+                                    onChange={(value) => setAttributes({ imageSizeType: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {IMAGE_SIZE_TYPE.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        imageSizeType ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        imageSizeType !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                imageSizeType:
-                                                                    item.value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {IMAGE_SIZE_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 {imageSizeType === "fixed" && (
                                     <>
@@ -1640,34 +1622,19 @@ function Inspector(props) {
                                 />
                             )}
 
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {NORMAL_HOVER.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    iconType ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    iconType !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            iconType:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={iconType}
+                                onChange={(value) => setAttributes({ iconType: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {NORMAL_HOVER.map((item, index) => (
+                                    <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                ))}
+                            </ToggleGroupControl>
 
                                 {iconType === "normal" && (
                                     <>
@@ -1718,7 +1685,6 @@ function Inspector(props) {
                                         />
                                     </>
                                 )}
-                            </BaseControl>
 
                             <RangeControl
                                 label={__(
@@ -1734,6 +1700,8 @@ function Inspector(props) {
                                 min={10}
                                 max={200}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                             <RangeControl
                                 label={__(
@@ -1749,6 +1717,8 @@ function Inspector(props) {
                                 min={5}
                                 max={100}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
 
                             <InspectorPanel.PanelBody
@@ -1806,178 +1776,62 @@ function Inspector(props) {
                                         step={1}
                                     />
 
-                                    <BaseControl
-                                        label={__(
-                                            "Text Align",
-                                            "essential-blocks"
-                                        )}
+                                    <ToggleGroupControl
+                                        label={__("Text Align", "essential-blocks")}
+                                        value={textAlign}
+                                        onChange={(value) => setAttributes({ textAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {TEXT_ALIGN.map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        isPrimary={
-                                                            textAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            textAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    textAlign:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {TEXT_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
 
-                                    <BaseControl
-                                        label={__(
-                                            "Horizontal Align",
-                                            "essential-blocks"
-                                        )}
+                                    <ToggleGroupControl
+                                        label={__("Horizontal Align", "essential-blocks")}
+                                        value={horizontalAlign}
+                                        onChange={(value) => setAttributes({ horizontalAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {HORIZONTAL_ALIGN.map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        isPrimary={
-                                                            horizontalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            horizontalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    horizontalAlign:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {HORIZONTAL_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
 
-                                    <BaseControl
-                                        label={__(
-                                            "Vertical Align",
-                                            "essential-blocks"
-                                        )}
+                                    <ToggleGroupControl
+                                        label={__("Vertical Align", "essential-blocks")}
+                                        value={verticalAlign}
+                                        onChange={(value) => setAttributes({ verticalAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {VERTICAL_ALIGN.map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        isPrimary={
-                                                            verticalAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            verticalAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    verticalAlign:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {VERTICAL_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                 </>
                             )}
 
                             {presets !== 'default' && presets !== 'pro-preset-6' && (
                                 <>
 
-                                    <BaseControl
-                                        label={__(
-                                            "Alignment",
-                                            "essential-blocks"
-                                        )}
+                                    <ToggleGroupControl
+                                        label={__("Alignment", "essential-blocks")}
+                                        value={contentAlign}
+                                        onChange={(value) => setAttributes({ contentAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
-                                        <ButtonGroup>
-                                            {HORIZONTAL_ALIGN.map(
-                                                (
-                                                    item,
-                                                    index
-                                                ) => (
-                                                    <Button
-                                                        key={
-                                                            index
-                                                        }
-                                                        isPrimary={
-                                                            contentAlign ===
-                                                            item.value
-                                                        }
-                                                        isSecondary={
-                                                            contentAlign !==
-                                                            item.value
-                                                        }
-                                                        onClick={() =>
-                                                            setAttributes(
-                                                                {
-                                                                    contentAlign:
-                                                                        item.value,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item.label
-                                                        }
-                                                    </Button>
-                                                )
-                                            )}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        {HORIZONTAL_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                        ))}
+                                    </ToggleGroupControl>
                                     <ResponsiveDimensionsControl
                                         controlName={CONTENT_PADDING}
                                         baseLabel={__("Padding", "essential-blocks")}
@@ -2161,34 +2015,19 @@ function Inspector(props) {
                                         FILTER_TYPOGRAPHY
                                     }
                                 />
-                                <BaseControl>
-                                    <ButtonGroup>
-                                        {NORMAL_HOVER_ACTIVE.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        filterColorType ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        filterColorType !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                filterColorType:
-                                                                    item.value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
+                                <ToggleGroupControl
+                                    label=""
+                                    hideLabelFromVision
+                                    value={filterColorType}
+                                    onChange={(value) => setAttributes({ filterColorType: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {NORMAL_HOVER_ACTIVE.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
 
                                     {filterColorType ===
                                         "normal" && (
@@ -2267,8 +2106,6 @@ function Inspector(props) {
                                                 />
                                             </>
                                         )}
-                                </BaseControl>
-
                                 <ResponsiveDimensionsControl
                                     controlName={FILTER_PADDING}
                                     baseLabel={__("Padding", "essential-blocks")}

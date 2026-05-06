@@ -5,11 +5,10 @@ import { __ } from "@wordpress/i18n";
 import {
     PanelRow,
     ToggleControl,
-    Button,
-    ButtonGroup,
     RangeControl,
     TextControl,
-    BaseControl
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 /**
  * Internal dependencies
@@ -105,6 +104,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(intensity) => setAttributes({ intensity })}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <ToggleControl
                             label={__("Custom Height", "essential-blocks")}
@@ -114,6 +115,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     isCustomHeight: !isCustomHeight,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isCustomHeight && (
@@ -135,38 +137,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                             max={200}
                             step={1}
                         />
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__(
                                 "Slide Title Tag",
                                 "essential-blocks"
                             )}
+
+                            value={slideTitleTag}
+                            onChange={(value) =>
+                                setAttributes({
+                                    slideTitleTag: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup>
-                                {HEADER_TAGS.map(
-                                    (header, index) => (
-                                        <Button
-                                            key={index}
-                                            isSecondary={
-                                                slideTitleTag !==
-                                                header.value
-                                            }
-                                            isPrimary={
-                                                slideTitleTag ===
-                                                header.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    slideTitleTag:
-                                                        header.value,
-                                                })
-                                            }
-                                        >
-                                            {header.label}
-                                        </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {HEADER_TAGS.map(
+                                (header, index) => (
+                                    <ToggleGroupControlOption
+                                        key={index}
+                                        value={header.value}
+                                        label={header.label}
+                                    />
+                                )
+                            )}
+                        </ToggleGroupControl>
                     </InspectorPanel.PanelBody>
 
                     <InspectorPanel.PanelBody title={__("Slides", "essential-blocks")} initialOpen={false}>
@@ -214,6 +210,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     onChange={() =>
                                         handleTextChange("openNewTab", !slide.openNewTab, index)
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </InspectorPanel.PanelBody>
                         ))}
@@ -221,41 +218,49 @@ const Inspector = ({ attributes, setAttributes }) => {
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody title={__("Slides Style", "essential-blocks")} initialOpen={true}>
-                        <PanelRow>Content Horizontal Align</PanelRow>
-                        <ButtonGroup>
-                            {HORIZONTAL_ALIGN.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={horizontalAlign === item.value}
-                                    isSecondary={horizontalAlign !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            horizontalAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
+                        <ToggleGroupControl
+                            label="Content Horizontal Align"
 
-                        <PanelRow>Content Vertical Align</PanelRow>
-                        <ButtonGroup className="eb-margin-bottom-20">
-                            {VERTICAL_ALIGN.map((item, index) => (
-                                <Button
+                            value={horizontalAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    horizontalAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {HORIZONTAL_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
                                     key={index}
-                                    isPrimary={verticalAlign === item.value}
-                                    isSecondary={verticalAlign !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            verticalAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
+                                    value={item.value}
+                                    label={item.label}
+                                />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
+
+                        <ToggleGroupControl
+                            label="Content Vertical Align"
+                            className="eb-margin-bottom-20 newtogglegroupcontrol"
+                            value={verticalAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    verticalAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {VERTICAL_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         <ResponsiveDimensionsControl
                             controlName={CONTENTS_PADDING}
@@ -295,22 +300,27 @@ const Inspector = ({ attributes, setAttributes }) => {
                     </InspectorPanel.PanelBody>
 
                     <InspectorPanel.PanelBody title={__("Button Styles", "essential-blocks")} initialOpen={false}>
-                        <ButtonGroup className="eb-inspector-btn-group">
+                        <ToggleGroupControl
+                            label={__("Button Color Type", "essential-blocks")}
+                            className="eb-inspector-btn-group newtogglegroupcontrol"
+                            value={buttonColorType}
+                            onChange={(value) =>
+                                setAttributes({
+                                    buttonColorType: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
                             {NORMAL_HOVER.map((item, index) => (
-                                <Button
+                                <ToggleGroupControlOption
                                     key={index}
-                                    isPrimary={buttonColorType === item.value}
-                                    isSecondary={buttonColorType !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            buttonColorType: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
+                                    value={item.value}
+                                    label={item.label}
+                                />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
 
                         {buttonColorType === "normal" && (
                             <>

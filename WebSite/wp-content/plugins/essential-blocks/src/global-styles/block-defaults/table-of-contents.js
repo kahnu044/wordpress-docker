@@ -157,6 +157,7 @@ function TableOfContents(props) {
                                         collapsible: !collapsible,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -172,6 +173,7 @@ function TableOfContents(props) {
                                         initialCollapse: !initialCollapse,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -184,6 +186,7 @@ function TableOfContents(props) {
                             onChange={() =>
                                 handleBlockDefault({ isSticky: !isSticky })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isSticky && (
@@ -204,6 +207,8 @@ function TableOfContents(props) {
                                     onChange={(stickyPosition) =>
                                         handleBlockDefault({ stickyPosition })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <ToggleControl
@@ -217,6 +222,7 @@ function TableOfContents(props) {
                                             hideOnMobile: !hideOnMobile,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <div className="eb-reset-button-margin-fix">
@@ -244,6 +250,8 @@ function TableOfContents(props) {
                                             }
                                             min={0}
                                             max={1000}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </ResetControl>
                                 </div>
@@ -259,6 +267,8 @@ function TableOfContents(props) {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </PanelBody>
                         )}
@@ -272,6 +282,7 @@ function TableOfContents(props) {
                                         displayTitle: !displayTitle,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -283,6 +294,7 @@ function TableOfContents(props) {
                                 <BaseControl
                                     label={__("Align", "essential-blocks")}
                                     className="eb-base-control"
+                                    __nextHasNoMarginBottom
                                 >
                                     <ButtonGroup>
                                         {ALIGNS.map((align, index) => (
@@ -351,6 +363,7 @@ function TableOfContents(props) {
                                         seperator: !seperator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -373,6 +386,8 @@ function TableOfContents(props) {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ColorControl
@@ -396,6 +411,8 @@ function TableOfContents(props) {
                                     onChange={(seperatorStyle) =>
                                         handleBlockDefault({ seperatorStyle })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </PanelBody>
                         )}
@@ -413,6 +430,7 @@ function TableOfContents(props) {
                                     hasUnderline: !hasUnderline,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <RangeControl
@@ -421,6 +439,8 @@ function TableOfContents(props) {
                             onChange={(indent) =>
                                 handleBlockDefault({ indent })
                             }
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         <UnitControl
@@ -444,6 +464,8 @@ function TableOfContents(props) {
                             min={0}
                             max={CONTENT_GAP_MAX}
                             step={CONTENT_GAP_STEP}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         <ColorControl
@@ -489,6 +511,7 @@ function TableOfContents(props) {
                                     showListSeparator: !showListSeparator,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <TextControl
@@ -498,6 +521,8 @@ function TableOfContents(props) {
                                 handleBlockDefault({ topOffset: value })
                             }
                             type="number"
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {showListSeparator && (
@@ -514,6 +539,8 @@ function TableOfContents(props) {
                                             listSeperatorStyle,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <ColorControl
@@ -542,6 +569,8 @@ function TableOfContents(props) {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -557,6 +586,7 @@ function TableOfContents(props) {
                             onChange={() =>
                                 handleBlockDefault({ isSmooth: !isSmooth })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -567,6 +597,7 @@ function TableOfContents(props) {
                                     scrollToTop: !scrollToTop,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {scrollToTop && (
@@ -582,6 +613,8 @@ function TableOfContents(props) {
                                         onChange={(scrollTarget) =>
                                             handleBlockDefault({ scrollTarget })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 <RangeControl
@@ -595,6 +628,8 @@ function TableOfContents(props) {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <RangeControl
@@ -608,6 +643,8 @@ function TableOfContents(props) {
                                     }
                                     min={0}
                                     max={100}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
 
                                 <ColorControl

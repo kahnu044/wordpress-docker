@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "title": "Checkbox Field",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "essential-blocks/form-checkbox-field",
   "description": "Form Block Checkbox Field",
   "category": "essential-blocks",

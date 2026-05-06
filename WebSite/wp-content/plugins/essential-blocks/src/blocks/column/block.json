@@ -4,7 +4,7 @@
   "name": "essential-blocks/column",
   "description": "A single column within a Row block.",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "parent": ["essential-blocks/row"],
   "supports": {

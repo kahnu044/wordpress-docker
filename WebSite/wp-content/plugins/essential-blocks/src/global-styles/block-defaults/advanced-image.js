@@ -6,12 +6,12 @@ import { useEffect, useState } from "@wordpress/element";
 import {
     PanelBody,
     ToggleControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     TextControl,
     PanelRow,
     SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -92,6 +92,7 @@ function AdvancedImage(props) {
                                     displayCaption: !displayCaption,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {/* {displayCaption && (
@@ -100,6 +101,8 @@ function AdvancedImage(props) {
 								value={captionStyle}
 								options={CAPTION_STYLES}
 								onChange={(captionStyle) => changCaptionStyle(captionStyle)}
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
 							/>
 						)} */}
 
@@ -125,12 +128,14 @@ function AdvancedImage(props) {
                             label={__("Auto Fit Image?", "essential-blocks")}
                             checked={autoFit}
                             onChange={(autoFit) => handleBlockDefault({ autoFit })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Enable Link?", "essential-blocks")}
                             checked={enableLink}
                             onChange={(enableLink) => handleBlockDefault({ enableLink })}
+                            __nextHasNoMarginBottom
                         />
 
                         {enableLink && (
@@ -138,6 +143,8 @@ function AdvancedImage(props) {
                                 label={__("Link", "essential-blocks")}
                                 value={imageLink}
                                 onChange={(link) => handleBlockDefault({ imageLink: link })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {enableLink && (
@@ -145,6 +152,7 @@ function AdvancedImage(props) {
                                 label={__("Open in New Tab", "essential-blocks")}
                                 checked={openInNewTab}
                                 onChange={(openInNewTab) => handleBlockDefault({ openInNewTab })}
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -153,17 +161,19 @@ function AdvancedImage(props) {
                             value={hoverEffect}
                             options={HOVER_EFFECT}
                             onChange={(hoverEffect) => handleBlockDefault({ hoverEffect })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody title={__("Image Styles", "essential-blocks")} initialOpen={false}>
                         {!complexStyle && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                                 </BaseControl>
                                 <BorderShadowControl
                                     controlName={IMAGE_BORDER_SHADOW}
-                                    
+
                                 // noShadow
                                 // noBorder
                                 />
@@ -202,13 +212,13 @@ function AdvancedImage(props) {
                             <TypographyDropdown
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={CAPTION_TYPOGRAPHY}
-                                
+
                             />
 
                             <ResponsiveRangeController
                                 baseLabel={__("Width", "essential-blocks")}
                                 controlName={CAPTION_WIDTH}
-                                
+
                                 units={UNIT_TYPES}
                                 min={0}
                                 max={300}
@@ -217,96 +227,104 @@ function AdvancedImage(props) {
 
                             {displayCaption && (
                                 <>
-                                    <BaseControl label={__("Text Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {TEXT_ALIGN.map((item) => (
-                                                <Button
-                                                    // isLarge
-                                                    isPrimary={textAlign === item.value}
-                                                    isSecondary={textAlign !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            textAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Text Align", "essential-blocks")}
+
+                                        value={textAlign}
+                                        onChange={(value) =>
+                                            handleBlockDefault({
+                                                textAlign: value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {TEXT_ALIGN.map((item) => (
+                                            <ToggleGroupControlOption
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
 
                                     {captionStyle === "caption-style-1" && (
                                         <>
-                                            <BaseControl label={__("Horizontal Align", "essential-blocks")}>
-                                                <ButtonGroup>
-                                                    {HORIZONTAL_ALIGN.map((item) => (
-                                                        <Button
-                                                            // isLarge
-                                                            isPrimary={horizontalAlign === item.value}
-                                                            isSecondary={horizontalAlign !== item.value}
-                                                            onClick={() =>
-                                                                handleBlockDefault({
-                                                                    horizontalAlign: item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ))}
-                                                </ButtonGroup>
-                                            </BaseControl>
+                                            <ToggleGroupControl
+                                                label={__("Horizontal Align", "essential-blocks")}
 
-                                            <BaseControl label={__("Vertical Align", "essential-blocks")}>
-                                                <ButtonGroup>
-                                                    {VERTICAL_ALIGN.map((item) => (
-                                                        <Button
-                                                            // isLarge
-                                                            isPrimary={verticalAlign === item.value}
-                                                            isSecondary={verticalAlign !== item.value}
-                                                            onClick={() =>
-                                                                handleBlockDefault({
-                                                                    verticalAlign: item.value,
-                                                                })
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ))}
-                                                </ButtonGroup>
-                                            </BaseControl>
+                                                value={horizontalAlign}
+                                                onChange={(value) =>
+                                                    handleBlockDefault({
+                                                        horizontalAlign: value,
+                                                    })
+                                                }
+                                                isBlock
+                                                __next40pxDefaultSize
+                                                __nextHasNoMarginBottom
+                                            >
+                                                {HORIZONTAL_ALIGN.map((item) => (
+                                                    <ToggleGroupControlOption
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
+                                                ))}
+                                            </ToggleGroupControl>
+
+                                            <ToggleGroupControl
+                                                label={__("Vertical Align", "essential-blocks")}
+
+                                                value={verticalAlign}
+                                                onChange={(value) =>
+                                                    handleBlockDefault({
+                                                        verticalAlign: value,
+                                                    })
+                                                }
+                                                isBlock
+                                                __next40pxDefaultSize
+                                                __nextHasNoMarginBottom
+                                            >
+                                                {VERTICAL_ALIGN.map((item) => (
+                                                    <ToggleGroupControlOption
+                                                        value={item.value}
+                                                        label={item.label}
+                                                    />
+                                                ))}
+                                            </ToggleGroupControl>
                                         </>
                                     )}
 
                                     {captionStyle === "caption-style-2" && (
-                                        <BaseControl label={__("Vertical Align", "essential-blocks")}>
-                                            <ButtonGroup>
-                                                {VERTICAL_ALIGN_CAP_2.map((item) => (
-                                                    <Button
-                                                        // isLarge
-                                                        isPrimary={verticalAlignCap2 === item.value}
-                                                        isSecondary={verticalAlignCap2 !== item.value}
-                                                        onClick={() =>
-                                                            handleBlockDefault({
-                                                                verticalAlignCap2: item.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ))}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                        <ToggleGroupControl
+                                            label={__("Vertical Align", "essential-blocks")}
+
+                                            value={verticalAlignCap2}
+                                            onChange={(value) =>
+                                                handleBlockDefault({
+                                                    verticalAlignCap2: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        >
+                                            {VERTICAL_ALIGN_CAP_2.map((item) => (
+                                                <ToggleGroupControlOption
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            ))}
+                                        </ToggleGroupControl>
                                     )}
 
                                     <ResponsiveDimensionsControl
-                                        
+
                                         controlName={CAPTION_MARGIN}
                                         baseLabel="Margin"
                                     />
 
                                     <ResponsiveDimensionsControl
-                                        
+
                                         controlName={CAPTION_PADDING}
                                         baseLabel="Padding"
                                     />
@@ -326,7 +344,7 @@ function AdvancedImage(props) {
                         />
                     </PanelBody>
                     <PanelBody title={__("Wrapper Background", "essential-blocks")} initialOpen={false}>
-                        <BackgroundControl controlName={WRAPPER_BG}  noOverlay />
+                        <BackgroundControl controlName={WRAPPER_BG} noOverlay />
                     </PanelBody>
                     <PanelBody title={__("Wrapper Border & Shadow")} initialOpen={false}>
                         <BorderShadowControl

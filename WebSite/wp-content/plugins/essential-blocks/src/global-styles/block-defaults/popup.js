@@ -5,13 +5,13 @@ import { __ } from "@wordpress/i18n";
 import {
     PanelBody,
     BaseControl,
-    ButtonGroup,
-    Button,
     TextControl,
     SelectControl,
     ToggleControl,
     TabPanel,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -123,6 +123,8 @@ function Popup(props) {
                             onChange={(newTrigger) =>
                                 handleBlockDefault({ trigger: newTrigger })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {"btn_click" === trigger && (
                             <>
@@ -131,6 +133,7 @@ function Popup(props) {
                                         "Button Settings",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 >
                                     <SelectControl
                                         label={__("Type", "essential-blocks")}
@@ -156,6 +159,8 @@ function Popup(props) {
                                                 btnType: newBtnType,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
                                 {"button" === btnType && (
@@ -171,6 +176,8 @@ function Popup(props) {
                                                     btnText: newBtnText,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                         <EBIconPicker
                                             value={btnIcon}
@@ -181,41 +188,11 @@ function Popup(props) {
                                             }
                                             title={__("Select Icon", "essential-blocks")}
                                         />
-                                        <BaseControl
-                                            label={__(
-                                                "Icon Position",
-                                                "essential-blocks"
-                                            )}
-                                            id="eb-button-icon-position"
-                                        >
-                                            <ButtonGroup id="eb-icon-position-btgrp">
-                                                {ICON_POSITIONS.map(
-                                                    (item, key) => (
-                                                        <Button
-                                                            key={key}
-                                                            isSecondary={
-                                                                iconPosition !==
-                                                                item.value
-                                                            }
-                                                            isPrimary={
-                                                                iconPosition ===
-                                                                item.value
-                                                            }
-                                                            onClick={() =>
-                                                                handleBlockDefault(
-                                                                    {
-                                                                        iconPosition:
-                                                                            item.value,
-                                                                    }
-                                                                )
-                                                            }
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    )
-                                                )}
-                                            </ButtonGroup>
-                                        </BaseControl>
+                                        <ToggleGroupControl label={__("Icon Position", "essential-blocks")} value={iconPosition} onChange={(value) => handleBlockDefault({ iconPosition: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                            {ICON_POSITIONS.map((item, key) => (
+                                                <ToggleGroupControlOption key={key} value={item.value} label={item.label} />
+                                            ))}
+                                        </ToggleGroupControl>
                                     </>
                                 )}
                                 {"icon" === btnType && (
@@ -231,37 +208,16 @@ function Popup(props) {
                                         />
                                     </>
                                 )}
-                                <BaseControl
-                                    label={__("Alignment ", "essential-blocks")}
-                                    id="eb-popup-button-alignment"
-                                >
-                                    <ButtonGroup>
-                                        {BUTTON_ALIGNMENT.map((item, key) => (
-                                            <Button
-                                                key={key}
-                                                isSecondary={
-                                                    btnAlignment !== item.value
-                                                }
-                                                isPrimary={
-                                                    btnAlignment === item.value
-                                                }
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        btnAlignment:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl label={__("Alignment ", "essential-blocks")} value={btnAlignment} onChange={(value) => handleBlockDefault({ btnAlignment: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                    {BUTTON_ALIGNMENT.map((item, key) => (
+                                        <ToggleGroupControlOption key={key} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                         {"page_load" === trigger && (
                             <>
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3>
                                         {__(
                                             "Page Load Settings",
@@ -280,6 +236,8 @@ function Popup(props) {
                                             pageLoadDelay: newPageLoadDelay,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -292,6 +250,7 @@ function Popup(props) {
                                             useCookies: !useCookies,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {useCookies && (
                                     <TextControl
@@ -309,6 +268,8 @@ function Popup(props) {
                                             "Leave blank if you want to delete cookie after browser closed.",
                                             "essential-blocks"
                                         )}
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -327,11 +288,13 @@ function Popup(props) {
                                         "You can also use class identifier such as .open-popup",
                                         "essential-blocks"
                                     )}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
                         <Divider />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3>{__("Exit Settings", "essential-blocks")}</h3>
                         </BaseControl>
                         <ToggleControl
@@ -342,6 +305,7 @@ function Popup(props) {
                                     displayCloseIcon: !displayCloseIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Esc to Exit", "essential-blocks")}
@@ -353,6 +317,7 @@ function Popup(props) {
                                 "Close the modal box by pressing the Esc key",
                                 "essential-blocks"
                             )}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Click to Exit", "essential-blocks")}
@@ -366,6 +331,7 @@ function Popup(props) {
                                 "Close the modal box by clicking anywhere outside the modal window",
                                 "essential-blocks"
                             )}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Auto Exit", "essential-blocks")}
@@ -373,6 +339,7 @@ function Popup(props) {
                             onChange={() =>
                                 handleBlockDefault({ autoExit: !autoExit })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {autoExit && (
                             <TextControl
@@ -386,6 +353,8 @@ function Popup(props) {
                                         autoExitTime: newAutoExitTime,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -401,6 +370,7 @@ function Popup(props) {
                                     popupFullWidth: !popupFullWidth,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!popupFullWidth && (
                             <>
@@ -420,6 +390,7 @@ function Popup(props) {
                             onChange={() =>
                                 handleBlockDefault({ autoHeight: !autoHeight })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {!autoHeight && (
                             <>
@@ -494,6 +465,8 @@ function Popup(props) {
                             onChange={(newPosition) =>
                                 handleBlockDefault({ position: newPosition })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody
@@ -509,6 +482,7 @@ function Popup(props) {
                                         useCloseIcon: !useCloseIcon,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             {!useCloseIcon && (
                                 <TextControl
@@ -519,10 +493,12 @@ function Popup(props) {
                                             closeBtnText: newCloseBtnText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             )}
                             <Divider />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3>
                                     {__("Icon Position", "essential-blocks")}
                                 </h3>

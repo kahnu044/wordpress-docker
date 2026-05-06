@@ -8,11 +8,10 @@ import {
     ToggleControl,
     TextControl,
     TextareaControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
     TabPanel,
     ColorPicker,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -87,44 +86,48 @@ function AdvancedHeading(props) {
             {isDefaultSet && (
                 <div className="eb-panel-control">
                     <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
-                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-advance-heading-alignment">
-                            <ButtonGroup id="eb-advance-heading-alignment">
-                                {TEXT_ALIGN.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={align === item.value}
-                                        isSecondary={align !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                align: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
-                        <BaseControl label={__("Title Level", "essential-blocks")} id="eb-advance-heading-alignment">
-                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                {HEADING.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={tagName === item.value}
-                                        isSecondary={tagName !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                tagName: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={align}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    align: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TEXT_ALIGN.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <ToggleGroupControl
+                            label={__("Title Level", "essential-blocks")}
+                            className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                            value={tagName}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    tagName: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {HEADING.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ToggleControl
                             label={__("Display Subtitle", "essential-blocks")}
                             checked={displaySubtitle}
@@ -133,31 +136,31 @@ function AdvancedHeading(props) {
                                     displaySubtitle: !displaySubtitle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {displaySubtitle && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Subtitle Level", "essential-blocks")}
-                                    id="eb-advance-heading-alignment"
+                                    className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                                    value={subtitleTagName}
+                                    onChange={(value) =>
+                                        handleBlockDefault({
+                                            subtitleTagName: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                        {HEADING.map((item, key) => (
-                                            <Button
-                                                key={key}
-                                                // isLarge
-                                                isPrimary={subtitleTagName === item.value}
-                                                isSecondary={subtitleTagName !== item.value}
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        subtitleTagName: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {HEADING.map((item, key) => (
+                                        <ToggleGroupControlOption
+                                            key={key}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                         <ToggleControl
@@ -168,6 +171,7 @@ function AdvancedHeading(props) {
                                     displaySeperator: !displaySeperator,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody title={__("Title Styles", "essential-blocks")} initialOpen={true}>
@@ -229,29 +233,30 @@ function AdvancedHeading(props) {
                                 value={seperatorPosition}
                                 options={SEPARATOR_POSITION}
                                 onChange={(seperatorPosition) => handleBlockDefault({ seperatorPosition })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Separator Type", "essential-blocks")}
-                                id="eb-advance-heading-alignment"
+
+                                value={seperatorType}
+                                onChange={(value) =>
+                                    handleBlockDefault({
+                                        seperatorType: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="eb-advance-heading-alignment">
-                                    {SEPARATOR_TYPE.map((item, key) => (
-                                        <Button
-                                            key={key}
-                                            // isLarge
-                                            isPrimary={seperatorType === item.value}
-                                            isSecondary={seperatorType !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    seperatorType: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {SEPARATOR_TYPE.map((item, key) => (
+                                    <ToggleGroupControlOption
+                                        key={key}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
 
                             {seperatorType === "line" && (
                                 <>
@@ -264,6 +269,8 @@ function AdvancedHeading(props) {
                                                 seperatorStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                     <ResponsiveRangeController
                                         baseLabel={__("Separator Height", "essential-blocks")}

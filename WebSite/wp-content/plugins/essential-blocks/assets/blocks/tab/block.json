@@ -3,7 +3,7 @@
   "title": "Tab",
   "name": "essential-blocks/tab",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "inserter": false,

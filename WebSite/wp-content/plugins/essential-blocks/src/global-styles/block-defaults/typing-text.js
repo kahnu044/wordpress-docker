@@ -59,18 +59,23 @@ function TypingText(props) {
                             placeholder={__("Add prefix text", "essential-blocks")}
                             value={prefix}
                             onChange={(prefix) => handleBlockDefault({ prefix })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Suffix Text", "essential-blocks")}
                             placeholder={__("Add suffix text", "essential-blocks")}
                             value={suffix}
                             onChange={(suffix) => handleBlockDefault({ suffix })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Loop", "essential-blocks")}
                             checked={loop}
                             onChange={() => handleBlockDefault({ loop: !loop })}
+                            __nextHasNoMarginBottom
                         />
 
                         {!fadeOut && (
@@ -82,6 +87,7 @@ function TypingText(props) {
                                         smartBackspace: !smartBackspace,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -89,12 +95,14 @@ function TypingText(props) {
                             label={__("Show Cursor", "essential-blocks")}
                             checked={showCursor}
                             onChange={() => handleBlockDefault({ showCursor: !showCursor })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Fade Out", "essential-blocks")}
                             checked={fadeOut}
                             onChange={() => handleBlockDefault({ fadeOut: !fadeOut })}
+                            __nextHasNoMarginBottom
                         />
 
                         <RangeControl
@@ -103,6 +111,8 @@ function TypingText(props) {
                             onChange={(typeSpeed) => handleBlockDefault({ typeSpeed })}
                             min={0}
                             max={5000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         <RangeControl
@@ -111,6 +121,8 @@ function TypingText(props) {
                             onChange={(startDelay) => handleBlockDefault({ startDelay })}
                             min={0}
                             max={1000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {!fadeOut && (
@@ -120,6 +132,8 @@ function TypingText(props) {
                                 onChange={(backSpeed) => handleBlockDefault({ backSpeed })}
                                 min={0}
                                 max={5000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -130,6 +144,8 @@ function TypingText(props) {
                                 onChange={(backDelay) => handleBlockDefault({ backDelay })}
                                 min={0}
                                 max={10000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -140,6 +156,8 @@ function TypingText(props) {
                                 onChange={(fadeOutDelay) => handleBlockDefault({ fadeOutDelay })}
                                 min={0}
                                 max={5000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
                     </PanelBody>

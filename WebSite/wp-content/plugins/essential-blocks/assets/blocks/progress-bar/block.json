@@ -4,7 +4,7 @@
   "name": "essential-blocks/progress-bar",
   "category": "essential-blocks",
   "description": "Make your website interactive with stunning progress bars.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

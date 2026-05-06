@@ -7,11 +7,11 @@ import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    Button,
     RangeControl,
     BaseControl,
-    ButtonGroup,
     TabPanel,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -117,6 +117,8 @@ function AdvancedTabs(props) {
                                 },
                             ]}
                             onChange={(layout) => handleBlockDefault({ layout: layout })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {layout === "horizontal" && (
@@ -129,6 +131,7 @@ function AdvancedTabs(props) {
                                             isFillTitle: !isFillTitle,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -137,6 +140,7 @@ function AdvancedTabs(props) {
                             label={__("Enable Icon", "essential-blocks")}
                             checked={isMediaOn}
                             onChange={() => handleBlockDefault({ isMediaOn: !isMediaOn })}
+                            __nextHasNoMarginBottom
                         />
                         {isMediaOn && (
                             <>
@@ -154,35 +158,33 @@ function AdvancedTabs(props) {
                                         },
                                     ]}
                                     onChange={(mediaPositon) => handleBlockDefault({ mediaPositon })}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {mediaPositon === "inline" && (
                                     <>
-                                        <ButtonGroup id="eb-advTabs-type-btgrp">
-                                            {[
-                                                {
-                                                    label: __("Left", "essential-blocks"),
-                                                    value: "left",
-                                                },
-                                                {
-                                                    label: __("Right", "essential-blocks"),
-                                                    value: "right",
-                                                },
-                                            ].map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    // isLarge
-                                                    isSecondary={mediaAlign !== item.value}
-                                                    isPrimary={mediaAlign === item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            mediaAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
+                                        <ToggleGroupControl
+                                            label={__("Icon Position", "essential-blocks")}
+
+                                            value={mediaAlign}
+                                            onChange={(value) =>
+                                                handleBlockDefault({
+                                                    mediaAlign: value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        >
+                                            <ToggleGroupControlOption
+                                                value="left"
+                                                label={__("Left", "essential-blocks")}
+                                            />
+                                            <ToggleGroupControlOption
+                                                value="right"
+                                                label={__("Right", "essential-blocks")}
+                                            />
+                                        </ToggleGroupControl>
 
                                         <label style={{ display: "block" }}>
                                             <i>Set icon position before/after the tab title.</i>
@@ -240,30 +242,24 @@ function AdvancedTabs(props) {
                         />
 
                         <PanelBody title={__("Colors", "essential-blocks")} initialOpen={false}>
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __("Normal", "essential-blocks"),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __("Hover", "essential-blocks"),
-                                            value: "hover",
-                                        },
-                                    ].map(({ value, label }, index) => (
-                                        <Button
-                                            key={index}
-                                            // isLarge
-                                            isPrimary={colorSwitcher === value}
-                                            isSecondary={colorSwitcher !== value}
-                                            onClick={() => setColorSwitcher(value)}
-                                        >
-                                            {label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Color State", "essential-blocks")}
+
+                                value={colorSwitcher}
+                                onChange={(value) => setColorSwitcher(value)}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption
+                                    value="normal"
+                                    label={__("Normal", "essential-blocks")}
+                                />
+                                <ToggleGroupControlOption
+                                    value="hover"
+                                    label={__("Hover", "essential-blocks")}
+                                />
+                            </ToggleGroupControl>
 
                             {colorSwitcher === "normal" && (
                                 <>
@@ -309,6 +305,8 @@ function AdvancedTabs(props) {
                                         step={0.1}
                                         min={0}
                                         max={5}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                 </>
                             )}
@@ -332,31 +330,24 @@ function AdvancedTabs(props) {
                         </PanelBody>
 
                         <PanelBody title={__("Active Colors", "essential-blocks")} initialOpen={false}>
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __("Normal", "essential-blocks"),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __("Hover", "essential-blocks"),
-                                            value: "hover",
-                                        },
-                                    ].map(({ value, label }, index) => (
-                                        <Button
-                                            key={index}
-                                            // isSmall
-                                            // isLarge
-                                            isPrimary={activeColorSwitcher === value}
-                                            isSecondary={activeColorSwitcher !== value}
-                                            onClick={() => setActiveColorSwitcher(value)}
-                                        >
-                                            {label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Active Color State", "essential-blocks")}
+
+                                value={activeColorSwitcher}
+                                onChange={(value) => setActiveColorSwitcher(value)}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption
+                                    value="normal"
+                                    label={__("Normal", "essential-blocks")}
+                                />
+                                <ToggleGroupControlOption
+                                    value="hover"
+                                    label={__("Hover", "essential-blocks")}
+                                />
+                            </ToggleGroupControl>
 
                             {activeColorSwitcher === "normal" && (
                                 <>
@@ -400,7 +391,7 @@ function AdvancedTabs(props) {
                                         }
                                     />
 
-                                    <BaseControl label={__("Transition", "essential-blocks")}>
+                                    <BaseControl label={__("Transition", "essential-blocks")} __nextHasNoMarginBottom>
                                         <RangeControl
                                             value={actColorTransition}
                                             onChange={(actColorTransition) =>
@@ -411,6 +402,8 @@ function AdvancedTabs(props) {
                                             step={0.1}
                                             min={0}
                                             max={5}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </BaseControl>
                                 </>
@@ -497,6 +490,7 @@ function AdvancedTabs(props) {
                             label={__("Show Caret on Active Tab", "essential-blocks")}
                             checked={showCaret}
                             onChange={() => handleBlockDefault({ showCaret: !showCaret })}
+                            __nextHasNoMarginBottom
                         />
 
                         {showCaret && (

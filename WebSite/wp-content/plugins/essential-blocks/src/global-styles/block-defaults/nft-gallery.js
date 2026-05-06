@@ -10,8 +10,8 @@ import {
     TextControl,
     RangeControl,
     BaseControl,
-    ButtonGroup,
-    Button,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -131,6 +131,7 @@ function NftGallery(props) {
                                     displayImage: !displayImage,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Title?", "essential-blocks")}
@@ -140,6 +141,7 @@ function NftGallery(props) {
                                     displayTitle: !displayTitle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -152,6 +154,7 @@ function NftGallery(props) {
                                     displayOwner: !displayOwner,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Creator?", "essential-blocks")}
@@ -161,6 +164,7 @@ function NftGallery(props) {
                                     displayCreator: !displayCreator,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Price?", "essential-blocks")}
@@ -170,6 +174,7 @@ function NftGallery(props) {
                                     displayPrice: !displayPrice,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Last Sale?", "essential-blocks")}
@@ -179,6 +184,7 @@ function NftGallery(props) {
                                     displayLastSale: !displayLastSale,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Button?", "essential-blocks")}
@@ -188,6 +194,7 @@ function NftGallery(props) {
                                     displayButton: !displayButton,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody
@@ -218,39 +225,11 @@ function NftGallery(props) {
                     >
                         {layout === "list" && (
                             <>
-                                <BaseControl
-                                    label={__(
-                                        "Vertical Alignment",
-                                        "essential-blocks"
-                                    )}
-                                    id="eb-button-group-alignment"
-                                >
-                                    <ButtonGroup id="eb-button-group-alignment">
-                                        {VERTICAL_ALIGNMENT.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        listVerticalAlignment ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        listVerticalAlignment !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            listVerticalAlignment:
-                                                                item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl label={__("Vertical Alignment", "essential-blocks")} value={listVerticalAlignment} onChange={(value) => handleBlockDefault({ listVerticalAlignment: value })} isBlock __next40pxDefaultSize __nextHasNoMarginBottom>
+                                    {VERTICAL_ALIGNMENT.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                         <PanelBody title={__("Background")} initialOpen={true}>
@@ -355,6 +334,7 @@ function NftGallery(props) {
                                     showOwnerText: !showOwnerText,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Image?", "essential-blocks")}
@@ -364,6 +344,7 @@ function NftGallery(props) {
                                     showOwnerImage: !showOwnerImage,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <TypographyDropdown
                             baseLabel="Typography"
@@ -376,6 +357,8 @@ function NftGallery(props) {
                                 onChange={(text) =>
                                     handleBlockDefault({ creatorLabel: text })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {displayOwner && (
@@ -385,6 +368,8 @@ function NftGallery(props) {
                                 onChange={(text) =>
                                     handleBlockDefault({ ownerLabel: text })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <ColorControl
@@ -458,6 +443,8 @@ function NftGallery(props) {
                             onChange={(text) =>
                                 handleBlockDefault({ buttonText: text })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TypographyDropdown
                             baseLabel="Typography"

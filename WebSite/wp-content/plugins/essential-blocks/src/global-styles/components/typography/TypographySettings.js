@@ -85,6 +85,8 @@ const UnitRangeControl = ({ label, unitTypes, itemKey, data, step, setTypo, devi
                     step={step ? step : unit === "em" ? 0.1 : 1}
                     min={0}
                     max={unit === "em" ? 10 : 300}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 />
             </ResetControl>
         </>
@@ -136,6 +138,8 @@ const TypographyOptions = ({ element, typography, setTypography, setIsChanged, h
                 value={typography[element]?.fontWeight}
                 options={optionsFontWeights}
                 onChange={(fontWeight) => setTypo('fontWeight', fontWeight)}
+                __next40pxDefaultSize
+                __nextHasNoMarginBottom
             />
 
             <SelectControl
@@ -143,6 +147,8 @@ const TypographyOptions = ({ element, typography, setTypography, setIsChanged, h
                 value={typography[element]?.fontStyle}
                 options={optionsFontStyles}
                 onChange={(fontStyle) => setTypo('fontStyle', fontStyle)}
+                __next40pxDefaultSize
+                __nextHasNoMarginBottom
             />
 
             <SelectControl
@@ -150,6 +156,8 @@ const TypographyOptions = ({ element, typography, setTypography, setIsChanged, h
                 value={typography[element]?.textTransform}
                 options={optionsTextTransforms}
                 onChange={(textTransform) => setTypo('textTransform', textTransform)}
+                __next40pxDefaultSize
+                __nextHasNoMarginBottom
             />
 
             <SelectControl
@@ -157,6 +165,8 @@ const TypographyOptions = ({ element, typography, setTypography, setIsChanged, h
                 value={typography[element]?.textDecoration}
                 options={optionsTextDecorations}
                 onChange={(textDecoration) => setTypo('textDecoration', textDecoration)}
+                __next40pxDefaultSize
+                __nextHasNoMarginBottom
             />
 
             <WithResButtons
@@ -335,6 +345,7 @@ const TypographySettings = (props) => {
                                                             value={selectedHeading}
                                                             hideLabelFromVision={true}
                                                             onChange={(value) => setSelectedHeading(value)}
+                                                            __next40pxDefaultSize
                                                         >
                                                             {TypographyHeadingElements && Object.keys(TypographyHeadingElements).map((heading, headingIndex) => (
                                                                 <ToggleGroupControlOption
@@ -449,6 +460,8 @@ const TypographySettings = (props) => {
                                                         label="Typography Name"
                                                         value={customTypography[item]?.name}
                                                         onChange={(value) => changeCustomTypoName(item, value)}
+                                                        __next40pxDefaultSize
+                                                        __nextHasNoMarginBottom
                                                     />
 
                                                     <div

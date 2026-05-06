@@ -5,10 +5,10 @@ import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
     BaseControl,
-    ButtonGroup,
-    Button,
     SelectControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -106,6 +106,8 @@ function Inspector(props) {
                             "Note: This option is only to see how different types of products would look in your Single Product page.",
                             "essential-blocks"
                         )}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Show Quantity")}
@@ -115,6 +117,7 @@ function Inspector(props) {
                                 showQuantity: !showQuantity,
                             });
                         }}
+                        __nextHasNoMarginBottom
                     />
                     {showQuantity && (
                         <SelectControl
@@ -129,6 +132,8 @@ function Inspector(props) {
                                     displayType: type,
                                 });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                     <DynamicInputControl
@@ -173,33 +178,31 @@ function Inspector(props) {
                                 />
                             </InspectorPanel.PanelBody>
 
-                            <BaseControl >
-                                <ButtonGroup>
-                                    {PRICE_TYPES.map(
-                                        (
-                                            { label, value },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isSecondary={
-                                                    priceType !== value
-                                                }
-                                                isPrimary={
-                                                    priceType === value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        priceType: value,
-                                                    })
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+
+                                value={priceType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        priceType: value,
+                                    })
+                                }
+                                isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                            >
+                                {PRICE_TYPES.map(
+                                    (
+                                        { label, value },
+                                        index
+                                    ) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={value}
+                                            label={label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
 
                             {priceType === 'regular' && (
                                 <>
@@ -305,7 +308,7 @@ function Inspector(props) {
                                 />
                             </InspectorPanel.PanelBody>
 
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__(
                                         "Border",
@@ -347,51 +350,46 @@ function Inspector(props) {
                         }
                     />
 
-                    <BaseControl>
-                        <ButtonGroup>
-                            {[
-                                {
-                                    label: __(
-                                        "Normal",
-                                        "essential-blocks"
-                                    ),
-                                    value: "normal",
-                                },
-                                {
-                                    label: __(
-                                        "Active",
-                                        "essential-blocks"
-                                    ),
-                                    value: "active",
-                                },
-                            ].map(
-                                (
-                                    { value, label },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={
-                                            quantitySwitcher ===
-                                            value
-                                        }
-                                        isSecondary={
-                                            quantitySwitcher !==
-                                            value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                quantitySwitcher: value
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+
+                        value={quantitySwitcher}
+                        onChange={(value) =>
+                            setAttributes({
+                                quantitySwitcher: value
+                            })
+                        }
+                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                    >
+                        {[
+                            {
+                                label: __(
+                                    "Normal",
+                                    "essential-blocks"
+                                ),
+                                value: "normal",
+                            },
+                            {
+                                label: __(
+                                    "Active",
+                                    "essential-blocks"
+                                ),
+                                value: "active",
+                            },
+                        ].map(
+                            (
+                                { value, label },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {quantitySwitcher == 'normal' && (
                         <>
@@ -449,7 +447,7 @@ function Inspector(props) {
                             "essential-blocks"
                         )}
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__(
                                 "Border",
@@ -488,58 +486,53 @@ function Inspector(props) {
                         }
                     />
 
-                    <BaseControl>
-                        <ButtonGroup>
-                            {[
-                                {
-                                    label: __(
-                                        "Normal",
-                                        "essential-blocks"
-                                    ),
-                                    value: "normal",
-                                },
-                                {
-                                    label: __(
-                                        "Hover",
-                                        "essential-blocks"
-                                    ),
-                                    value: "hover",
-                                },
-                                {
-                                    label: __(
-                                        "Disable",
-                                        "essential-blocks"
-                                    ),
-                                    value: "disable",
-                                },
-                            ].map(
-                                (
-                                    { value, label },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        // isLarge
-                                        isPrimary={
-                                            buttonSwitcher ===
-                                            value
-                                        }
-                                        isSecondary={
-                                            buttonSwitcher !==
-                                            value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                buttonSwitcher: value
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+
+                        value={buttonSwitcher}
+                        onChange={(value) =>
+                            setAttributes({
+                                buttonSwitcher: value
+                            })
+                        }
+                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                    >
+                        {[
+                            {
+                                label: __(
+                                    "Normal",
+                                    "essential-blocks"
+                                ),
+                                value: "normal",
+                            },
+                            {
+                                label: __(
+                                    "Hover",
+                                    "essential-blocks"
+                                ),
+                                value: "hover",
+                            },
+                            {
+                                label: __(
+                                    "Disable",
+                                    "essential-blocks"
+                                ),
+                                value: "disable",
+                            },
+                        ].map(
+                            (
+                                { value, label },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {buttonSwitcher === "normal" && (
                         <>
@@ -609,7 +602,7 @@ function Inspector(props) {
                             "essential-blocks"
                         )}
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__(
                                 "Border",

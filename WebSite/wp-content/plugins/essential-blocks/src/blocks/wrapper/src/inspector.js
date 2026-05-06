@@ -5,10 +5,9 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    BaseControl,
-    ButtonGroup,
-    Button,
     SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 /**
  * Internal dependencies
@@ -67,38 +66,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                             )}
                             initialOpen={true}
                         >
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__(
                                     "Wrapper Width",
                                     "essential-blocks"
                                 )}
+
+                                value={align}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        align: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="eb-button-group-alignment">
-                                    {WRAPPER_ALIGN.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    align ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    align !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        align:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {WRAPPER_ALIGN.map(
+                                    (item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
 
                             <ResponsiveRangeController
                                 baseLabel={__(
@@ -122,6 +115,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         isWrapperWidth: !isWrapperWidth,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__(
@@ -134,6 +128,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         useCustomHeight: !useCustomHeight,
                                     });
                                 }}
+                                __nextHasNoMarginBottom
                             />
                             {useCustomHeight && (
                                 <>
@@ -160,6 +155,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 contentAlign: selected,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </>
                             )}
@@ -172,34 +169,28 @@ const Inspector = ({ attributes, setAttributes }) => {
                         )}
                         initialOpen={true}
                     >
-                        <BaseControl>
-                            <ButtonGroup>
-                                {SHAPE_DIVIDER_POSITIONS.map(
-                                    (item, key) => (
-                                        <Button
-                                            key={key}
-                                            // isLarge
-                                            isPrimary={
-                                                shapeDividerPosition ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                shapeDividerPosition !==
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    shapeDividerPosition:
-                                                        item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+
+                            value={shapeDividerPosition}
+                            onChange={(value) =>
+                                setAttributes({
+                                    shapeDividerPosition: value,
+                                })
+                            }
+                            isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                        >
+                            {SHAPE_DIVIDER_POSITIONS.map(
+                                (item, key) => (
+                                    <ToggleGroupControlOption
+                                        key={key}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                )
+                            )}
+                        </ToggleGroupControl>
                         {shapeDividerPosition == "top" && (
                             <ShapeDividerControl
                                 position="top"

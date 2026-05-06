@@ -8,9 +8,9 @@ import {
     SelectControl,
     ToggleControl,
     TextControl,
-    Button,
-    ButtonGroup,
     BaseControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import {
@@ -88,28 +88,33 @@ function DualButton(props) {
                 <div className="eb-panel-control">
                     {/*  General */}
                     <PanelBody title={__("General", "essential-blocks")} initialOpen={true}>
-                        <BaseControl label={__("Alignment", "essential-blocks")} id="eb-button-group-alignment">
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={contentPosition === item.value}
-                                        isSecondary={contentPosition !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={contentPosition}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    contentPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <TextControl
                             label={__("Button One Text", "essential-blocks")}
                             value={buttonTextOne}
                             onChange={(text) => handleBlockDefault({ buttonTextOne: text })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {buttonURLOne && (
@@ -121,6 +126,7 @@ function DualButton(props) {
                                         buttonOneNewWindow: !buttonOneNewWindow,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -128,6 +134,8 @@ function DualButton(props) {
                             label={__("Button Two Text", "essential-blocks")}
                             value={buttonTextTwo}
                             onChange={(text) => handleBlockDefault({ buttonTextTwo: text })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {buttonURLTwo && (
@@ -139,11 +147,12 @@ function DualButton(props) {
                                         buttonTwoNewWindow: !buttonTwoNewWindow,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
                     <PanelBody title={__("Buttons Settings", "essential-blocks")} initialOpen={true}>
-                        <BaseControl label={__("Button Width Type", "essential-blocks")}>
+                        <BaseControl label={__("Button Width Type", "essential-blocks")} __nextHasNoMarginBottom>
                             <SelectControl
                                 value={buttonsWidthType}
                                 options={BUTTON_WIDTH_TYPE}
@@ -152,6 +161,8 @@ function DualButton(props) {
                                         buttonsWidthType: value,
                                     });
                                 }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
                         {buttonsWidthType === "custom" && (
@@ -174,24 +185,27 @@ function DualButton(props) {
                             step={1}
                         />
 
-                        <BaseControl label={__("Text Align", "essential-blocks")} id="eb-button-group-text-align">
-                            <ButtonGroup id="eb-button-group-text-align">
-                                {TEXT_ALIGN.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={buttonTextAlign === item.value}
-                                        isSecondary={buttonTextAlign !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                buttonTextAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Text Align", "essential-blocks")}
+
+                            value={buttonTextAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonTextAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TEXT_ALIGN.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </PanelBody>
                     <PanelBody title={__("Connector Settings", "essential-blocks")} initialOpen={true}>
                         <ToggleControl
@@ -202,27 +216,31 @@ function DualButton(props) {
                                     showConnector: !showConnector,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {showConnector && (
                             <>
-                                <BaseControl label={__("Connector Type", "essential-blocks")}>
-                                    <ButtonGroup id="eb-button-group-connector-type">
-                                        {CONNECTOR_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={connectorType === item.value}
-                                                isSecondary={connectorType !== item.value}
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        connectorType: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Connector Type", "essential-blocks")}
+
+                                    value={connectorType}
+                                    onChange={(value) =>
+                                        handleBlockDefault({
+                                            connectorType: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {CONNECTOR_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 {connectorType === "icon" && (
                                     <PanelBody title={__("Icon Settings", "essential-blocks")} initialOpen={true}>
@@ -255,6 +273,8 @@ function DualButton(props) {
                                                 innerButtonText: text,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
 
@@ -276,7 +296,7 @@ function DualButton(props) {
                             typographyPrefixConstant={BUTTONS_TYPOGRAPHY}
                         />
 
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Button One Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl
@@ -285,7 +305,7 @@ function DualButton(props) {
                             noMainBgi={true}
                         />
 
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Button Two Background", "essential-blocks")}</h3>
                         </BaseControl>
                         <BackgroundControl
@@ -294,26 +314,27 @@ function DualButton(props) {
                             noMainBgi={true}
                         />
 
-                        <BaseControl>
-                            <h3 className="eb-control-title">{__("Text Color", "essential-blocks")}</h3>
-                        </BaseControl>
-
-                        <ButtonGroup className="eb-inspector-btn-group">
+                        <ToggleGroupControl
+                            label={__("Text Color", "essential-blocks")}
+                            className="eb-inspector-btn-group newtogglegroupcontrol"
+                            value={buttonsColorType}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    buttonsColorType: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
                             {NORMAL_HOVER.map((item, index) => (
-                                <Button
+                                <ToggleGroupControlOption
                                     key={index}
-                                    isPrimary={buttonsColorType === item.value}
-                                    isSecondary={buttonsColorType !== item.value}
-                                    onClick={() =>
-                                        handleBlockDefault({
-                                            buttonsColorType: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
+                                    value={item.value}
+                                    label={item.label}
+                                />
                             ))}
-                        </ButtonGroup>
+                        </ToggleGroupControl>
 
                         {buttonsColorType === "normal" && (
                             <>

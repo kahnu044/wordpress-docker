@@ -4,7 +4,7 @@
   "name": "essential-blocks/advanced-heading",
   "category": "essential-blocks",
   "description": "Create advanced heading with title, subtitle and separator controls",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true

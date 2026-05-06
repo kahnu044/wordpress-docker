@@ -57,6 +57,7 @@ function Wrapper(props) {
                                     isWrapperWidth: !isWrapperWidth,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody

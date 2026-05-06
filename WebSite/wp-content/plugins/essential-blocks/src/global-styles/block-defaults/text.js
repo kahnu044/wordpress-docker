@@ -75,14 +75,18 @@ function Text(props) {
                             value={source}
                             options={SOURCE}
                             onChange={(source) => handleBlockDefault({ source })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("HTML Tag", "essential-blocks")}
                             value={tagName}
                             options={HEADING}
                             onChange={(tagName) => handleBlockDefault({ tagName })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl label={__("Text Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Text Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {TEXT_ALIGN.map((item, index) => (
                                     <Button
@@ -110,6 +114,8 @@ function Text(props) {
                                 min={1}
                                 max={100}
                                 step={1}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
                     </PanelBody>
@@ -164,6 +170,8 @@ function Text(props) {
                             onChange={(columnRuleStyle) =>
                                 handleBlockDefault({ columnRuleStyle })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {columnRuleStyle !== "none" && (
                             <>

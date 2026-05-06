@@ -4,7 +4,7 @@
   "name": "essential-blocks/flipbox",
   "category": "essential-blocks",
   "description": "Deliver your content beautifully to grab site visitor's attention.",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true

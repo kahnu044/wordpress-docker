@@ -97,6 +97,7 @@ function ProductRating(props) {
                             onChange={(showEmptyRating) =>
                                 handleBlockDefault({ showEmptyRating })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Review Count", "essential-blocks")}
@@ -104,6 +105,7 @@ function ProductRating(props) {
                             onChange={(showReviewCount) =>
                                 handleBlockDefault({ showReviewCount })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Edit Link", "essential-blocks")}
@@ -111,6 +113,7 @@ function ProductRating(props) {
                             onChange={(editLink) =>
                                 handleBlockDefault({ editLink })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {editLink && (
                             <DynamicInputControl
@@ -130,8 +133,10 @@ function ProductRating(props) {
                             onChange={(displayType) =>
                                 handleBlockDefault({ displayType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {ALIGNMENT_OPTIONS.map((item, index) => (
                                     <Button
@@ -156,6 +161,8 @@ function ProductRating(props) {
                             onChange={(starsType) =>
                                 handleBlockDefault({ starsType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <SelectControl
                             label={__("Stars Variation", "essential-blocks")}
@@ -164,6 +171,8 @@ function ProductRating(props) {
                             onChange={(starsVariation) =>
                                 handleBlockDefault({ starsVariation })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody

@@ -110,7 +110,9 @@ $_list_sequence = apply_filters('eb_woo_product_grid_list_sequence', $list_seque
                     <?php
                 endif;
 
-                echo wp_kses_post($product->get_image('woocommerce_thumbnail'));
+                // Use imageSize if provided, otherwise fallback to 'woocommerce_thumbnail'
+                $image_size = isset($imageSize) && !empty($imageSize) ? $imageSize : 'woocommerce_thumbnail';
+                echo wp_kses_post($product->get_image($image_size));
 
                 if ($showSaleBadge && $product->is_on_sale()) {
                     echo wp_kses_post('<span class="eb-woo-product-ribbon ' . $saleBadgeAlign . '">' . $saleText . '</span>');

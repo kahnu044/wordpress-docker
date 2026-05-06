@@ -591,12 +591,12 @@ export default function Style(props) {
 
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .grid-sizer,
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content {
-			margin: calc(${imageGapRange}px / 2);
-            width: calc(100% / ${gridColumnsDesktop} - ${imageMasonryGapStyleDesktop}px);
+			margin: calc(${imageGapRange ?? 0}px / 2);
+            width: calc(100% / ${gridColumnsDesktop ?? 1} - ${imageMasonryGapStyleDesktop ?? 0}px);
 		}
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content.wide {
-			margin: calc(${imageGapRange}px / 2);
-            width: calc(100% *2/ ${gridColumnsDesktop} - ${imageMasonryGapStyleDesktop}px);
+			margin: calc(${imageGapRange ?? 0}px / 2);
+            width: calc(100% *2/ ${gridColumnsDesktop ?? 1} - ${imageMasonryGapStyleDesktop ?? 0}px);
 		}
 
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-gallery-img-description {
@@ -651,16 +651,16 @@ export default function Style(props) {
             background: ${maskColor};
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::before {
-            top: calc(-${imgBorderShadowRds_Top}px * 2);
-            height: calc(${imgBorderShadowRds_Top}px * 2);
+            top: calc(-${imgBorderShadowRds_Top ?? 0}px * 2);
+            height: calc(${imgBorderShadowRds_Top ?? 0}px * 2);
             width: ${imgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${imgBorderShadowRds_Top}px;
             box-shadow: 0px ${imgBorderShadowRds_Top}px 0 0 ${maskColor};
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::after {
             bottom: 0;
-            left: calc(-${imgBorderShadowRds_Top}px * 2);
-            width: calc(${imgBorderShadowRds_Top}px * 2);
+            left: calc(-${imgBorderShadowRds_Top ?? 0}px * 2);
+            width: calc(${imgBorderShadowRds_Top ?? 0}px * 2);
             height: ${imgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${imgBorderShadowRds_Top}px;
             box-shadow: ${imgBorderShadowRds_Top}px 0px 0 0 ${maskColor};
@@ -702,12 +702,12 @@ export default function Style(props) {
 		}
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .grid-sizer,
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content {
-            margin: calc(${TABimageGapRange}px / 2);
-            width: calc(100% / ${gridColumnsTab} - ${imageMasonryGapStyleTab}px);
+            margin: calc(${TABimageGapRange ?? 0}px / 2);
+            width: calc(100% / ${gridColumnsTab ?? 1} - ${imageMasonryGapStyleTab ?? 0}px);
 		}
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content.wide {
-			margin: calc(${TABimageGapRange}px / 2);
-            width: calc(100% *2/ ${gridColumnsTab} - ${imageMasonryGapStyleTab}px);
+			margin: calc(${TABimageGapRange ?? 0}px / 2);
+            width: calc(100% *2/ ${gridColumnsTab ?? 1} - ${imageMasonryGapStyleTab ?? 0}px);
 		}
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-gallery-img-description {
 			${descMarginTab}
@@ -735,16 +735,16 @@ export default function Style(props) {
             border-radius: ${TABimgBorderShadowRds_Top}${TABimgBorderShadowRds_Unit} 0;
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::before {
-            top: calc(-${TABimgBorderShadowRds_Top}px * 2);
-            height: calc(${TABimgBorderShadowRds_Top}px * 2);
+            top: calc(-${TABimgBorderShadowRds_Top ?? 0}px * 2);
+            height: calc(${TABimgBorderShadowRds_Top ?? 0}px * 2);
             width: ${TABimgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${TABimgBorderShadowRds_Top}px;
             box-shadow: 0px ${TABimgBorderShadowRds_Top}px 0 0 ${maskColor};
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::after {
             bottom: 0;
-            left: calc(-${TABimgBorderShadowRds_Top}px * 2);
-            width: calc(${TABimgBorderShadowRds_Top}px * 2);
+            left: calc(-${TABimgBorderShadowRds_Top ?? 0}px * 2);
+            width: calc(${TABimgBorderShadowRds_Top ?? 0}px * 2);
             height: ${TABimgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${TABimgBorderShadowRds_Top}px;
             box-shadow: ${TABimgBorderShadowRds_Top}px 0px 0 0 ${maskColor};
@@ -787,12 +787,12 @@ export default function Style(props) {
 		}
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .grid-sizer,
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content {
-            margin: calc(${MOBimageGapRange}px / 2);
-            width: calc(100% / ${gridColumnsMobile} - ${imageMasonryGapStyleMobile}px);
+            margin: calc(${MOBimageGapRange ?? 0}px / 2);
+            width: calc(100% / ${gridColumnsMobile ?? 1} - ${imageMasonryGapStyleMobile ?? 0}px);
 		}
         .eb-gallery-img-wrapper.${blockId}.enable-isotope .eb-gallery-img-content.wide {
-			margin: calc(${TABimageGapRange}px / 2);
-            width: calc(100% *2/ ${gridColumnsTab} - ${imageMasonryGapStyleTab}px);
+			margin: calc(${TABimageGapRange ?? 0}px / 2);
+            width: calc(100% *2/ ${gridColumnsTab ?? 1} - ${imageMasonryGapStyleTab ?? 0}px);
 		}
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-gallery-img-description {
 			${descMarginMobile}
@@ -820,16 +820,16 @@ export default function Style(props) {
             border-radius: ${MOBimgBorderShadowRds_Top}${MOBimgBorderShadowRds_Unit} 0;
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::before {
-            top: calc(-${MOBimgBorderShadowRds_Top}px * 2);
-            height: calc(${MOBimgBorderShadowRds_Top}px * 2);
+            top: calc(-${MOBimgBorderShadowRds_Top ?? 0}px * 2);
+            height: calc(${MOBimgBorderShadowRds_Top ?? 0}px * 2);
             width: ${MOBimgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${MOBimgBorderShadowRds_Top}px;
             box-shadow: 0px ${MOBimgBorderShadowRds_Top}px 0 0 ${maskColor};
         }
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-actions::after {
             bottom: 0;
-            left: calc(-${MOBimgBorderShadowRds_Top}px * 2);
-            width: calc(${MOBimgBorderShadowRds_Top}px * 2);
+            left: calc(-${MOBimgBorderShadowRds_Top ?? 0}px * 2);
+            width: calc(${MOBimgBorderShadowRds_Top ?? 0}px * 2);
             height: ${MOBimgBorderShadowRds_Top}px;
             border-bottom-right-radius: ${MOBimgBorderShadowRds_Top}px;
             box-shadow: ${MOBimgBorderShadowRds_Top}px 0px 0 0 ${maskColor};
@@ -868,8 +868,8 @@ export default function Style(props) {
             ${filterBDShadowHoverDesktop}
 		}
 		.eb-gallery-img-wrapper.${blockId}.eb-filterable-img-gallery .eb-gallery-img-content {
-			margin: calc(${imageGapRange}px / 2);
-            width: calc(99.99% / ${gridColumnsDesktop} - ${imageMasonryGapStyleDesktop}px);
+			margin: calc(${imageGapRange ?? 0}px / 2);
+            width: calc(99.99% / ${gridColumnsDesktop ?? 1} - ${imageMasonryGapStyleDesktop ?? 0}px);
 		}
 	`;
 

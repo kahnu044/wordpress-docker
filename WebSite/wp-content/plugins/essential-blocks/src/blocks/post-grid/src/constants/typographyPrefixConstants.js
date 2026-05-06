@@ -9,3 +9,7 @@ export const INPUT_TYPOGRAPHY = "ebpg_search_input";
 export const CONTENT_TYPOGRAPHY = "ebpg_searchContent";
 export const TITLE_TYPOGRAPHY = "ebpg_searchTitle";
 export const NOT_FOUND_TYPOGRAPHY = "notFound";
+export const FEATURED_TITLE_TYPO = "featuredTitle";
+export const FEATURED_EXCERPT_TYPO = "featuredExcerpt";
+export const FEATURED_META_TYPO = "featuredMeta";
+export const FEATURED_READMORE_TYPO = "featuredReadmore";

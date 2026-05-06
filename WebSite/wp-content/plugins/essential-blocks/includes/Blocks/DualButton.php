@@ -5,6 +5,8 @@ use EssentialBlocks\Core\Block;
 
 class DualButton extends Block
 {
+    protected $frontend_styles = [ 'essential-blocks-fontawesome' ];
+
     /**
      * Unique name of the block.
      *
@@ -13,20 +15,5 @@ class DualButton extends Block
     public function get_name()
     {
         return 'dual-button';
-    }
-
-    /**
-     * Render callback
-     */
-    public function render_callback( $attributes, $content )
-    {
-        if ( ! is_admin() && isset( $attributes[ 'connectorType' ] ) && $attributes[ 'connectorType' ] === 'icon' ) {
-            $this->assets_manager->enqueue(
-                'fontawesome-frontend',
-                'css/font-awesome5.css'
-            );
-        }
-
-        return $content;
     }
 }

@@ -1,6 +1,8 @@
 import {
     loadGoogleFontEditor,
-    softMinifyCssStrings
+    softMinifyCssStrings,
+    getEditorDocument,
+    injectEditorStyle,
 } from "@essential-blocks/controls";
 
 export const getGlobalSettings = (select) => {
@@ -135,12 +137,7 @@ const generateCSSStyles = (selector, styles, deviceType = 'Desktop', varPrefix =
 
 export const applyTypographyCSS = (cssString) => {
     setTimeout(() => {
-        let rootDocument = document
-        const iframe = document.querySelector('[name="editor-canvas"]');
-        if (iframe) {
-            rootDocument = iframe.contentDocument || iframe.contentWindow.document;
-        }
-
+        const rootDocument = getEditorDocument();
         const styleTag = rootDocument.createElement('style');
         styleTag.type = 'text/css';
         styleTag.innerHTML = cssString;

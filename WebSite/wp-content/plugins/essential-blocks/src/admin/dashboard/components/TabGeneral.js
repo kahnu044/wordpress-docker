@@ -277,29 +277,22 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 5.9.1", "essential-blocks")}
+                                    {__("Version: 6.1.3", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("24/12/2025", "essential-blocks")}
+                                        {__("20/05/2026", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Fixed: Quick Setup showing blank page",
+                                            "Added: WordPress 7.0 Compatibility",
                                             "essential-blocks"
                                         )}
 
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Slider | Images getting cropped for Custom Height",
-                                            "essential-blocks"
-                                        )}
-
-                                    </li>
-                                    <li>
-                                        {__(
-                                            "Fixed: Interactive Animation | Animation fails to trigger in frontend",
+                                            "Fixed: Advanced Image | Caption Styles and Alignment Issues",
                                             "essential-blocks"
                                         )}
 

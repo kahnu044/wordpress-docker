@@ -105,6 +105,8 @@ function ToggleContent(props) {
                             value={switchStyle}
                             onChange={(switchStyle) => handleBlockDefault({ switchStyle })}
                             options={SWITCH_STYLES}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {(switchStyle === "rounded" || switchStyle === "reactangle") && (
@@ -113,6 +115,8 @@ function ToggleContent(props) {
                                 value={switchSize}
                                 options={SWITCH_SIZE}
                                 onChange={(switchSize) => handleBlockDefault({ switchSize })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -143,6 +147,8 @@ function ToggleContent(props) {
                                 value={seperatorType}
                                 options={SEPERATOR_TYPE}
                                 onChange={(seperatorType) => handleBlockDefault({ seperatorType })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -169,6 +175,8 @@ function ToggleContent(props) {
                                     label={__("Label Space", "essential-blocks")}
                                     value={labelSpace}
                                     onChange={(labelSpace) => handleBlockDefault({ labelSpace })}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -223,6 +231,7 @@ function ToggleContent(props) {
                                         backgroundType: backgroundType === "solid" ? "gradient" : "solid",
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {backgroundType === "solid" && (
@@ -265,6 +274,7 @@ function ToggleContent(props) {
                                         controllerType: controllerType === "solid" ? "gradient" : "solid",
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {controllerType === "solid" && (
@@ -303,6 +313,8 @@ function ToggleContent(props) {
                             value={borderStyle}
                             options={BORDER_STYLES}
                             onChange={(borderStyle) => handleBlockDefault({ borderStyle })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <ColorControl
@@ -317,6 +329,8 @@ function ToggleContent(props) {
                             onChange={(borderWidth) => handleBlockDefault({ borderWidth })}
                             min={0}
                             max={17}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {switchStyle === "text" && (
@@ -326,6 +340,8 @@ function ToggleContent(props) {
                                 onChange={(borderRadius) => handleBlockDefault({ borderRadius })}
                                 min={0}
                                 max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
                     </PanelBody>
@@ -345,6 +361,8 @@ function ToggleContent(props) {
                                     onChange={(hOffset) => handleBlockDefault({ hOffset })}
                                     min={0}
                                     max={10}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </ResetControl>
 
@@ -355,6 +373,8 @@ function ToggleContent(props) {
                                     onChange={(vOffset) => handleBlockDefault({ vOffset })}
                                     min={0}
                                     max={10}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </ResetControl>
 
@@ -365,6 +385,8 @@ function ToggleContent(props) {
                                     onChange={(blur) => handleBlockDefault({ blur })}
                                     min={0}
                                     max={10}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </ResetControl>
 
@@ -375,6 +397,8 @@ function ToggleContent(props) {
                                     onChange={(spread) => handleBlockDefault({ spread })}
                                     min={0}
                                     max={10}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </ResetControl>
 
@@ -382,6 +406,7 @@ function ToggleContent(props) {
                                 label={__("Inset", "essential-blocks")}
                                 checked={inset}
                                 onChange={() => handleBlockDefault({ inset: !inset })}
+                                __nextHasNoMarginBottom
                             />
                         </PanelBody>
                     )}

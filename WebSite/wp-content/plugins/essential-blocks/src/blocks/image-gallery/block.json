@@ -4,7 +4,7 @@
   "name": "essential-blocks/image-gallery",
   "description": "Impress your audience with high-resolution images",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

@@ -83,6 +83,7 @@ const Edit = (props) => {
                 icon: "fas fa-check",
                 text: "Unlimited Calls",
                 color: "var(--eb-global-primary-color)",
+                textColor: "",
                 clickable: "false",
                 link: "",
             },
@@ -90,6 +91,7 @@ const Edit = (props) => {
                 icon: "fas fa-check",
                 text: "Free Hosting",
                 color: "var(--eb-global-primary-color)",
+                textColor: "",
                 clickable: "false",
                 link: "",
             },
@@ -97,6 +99,7 @@ const Edit = (props) => {
                 icon: "fas fa-check",
                 text: "500MB Free Storage",
                 color: "var(--eb-global-primary-color)",
+                textColor: "",
                 clickable: "false",
                 link: "",
             },
@@ -104,6 +107,7 @@ const Edit = (props) => {
                 icon: "fas fa-check",
                 text: "24/7 Support",
                 color: "var(--eb-global-primary-color)",
+                textColor: "",
                 clickable: "false",
                 link: "",
             },
@@ -257,6 +261,7 @@ const Edit = (props) => {
                                                                             icon,
                                                                             text,
                                                                             color,
+                                                                            textColor,
                                                                             clickable,
                                                                             link,
                                                                         },
@@ -270,6 +275,9 @@ const Edit = (props) => {
                                                                             }
                                                                             data-color={
                                                                                 color
+                                                                            }
+                                                                            data-text-color={
+                                                                                textColor
                                                                             }
                                                                             data-clickable={
                                                                                 clickable
@@ -289,9 +297,10 @@ const Edit = (props) => {
                                                                                         <EBDisplayIconEdit
                                                                                             className={`eb-pricebox-icon`}
                                                                                             icon={icon}
+                                                                                            style={{ color: color }}
                                                                                         />
                                                                                     )}
-                                                                                    <span className="eb-pricebox-feature-text">
+                                                                                    <span className="eb-pricebox-feature-text" style={{ color: textColor }}>
                                                                                         {
                                                                                             text
                                                                                         }
@@ -303,9 +312,10 @@ const Edit = (props) => {
                                                                                         <EBDisplayIconEdit
                                                                                             className={`eb-pricebox-icon`}
                                                                                             icon={icon}
+                                                                                            style={{ color: color }}
                                                                                         />
                                                                                     )}
-                                                                                    <span className="eb-pricebox-feature-text">
+                                                                                    <span className="eb-pricebox-feature-text" style={{ color: textColor }}>
                                                                                         {
                                                                                             text
                                                                                         }
@@ -468,6 +478,7 @@ const Edit = (props) => {
                                                                                 icon,
                                                                                 text,
                                                                                 color,
+                                                                                textColor,
                                                                                 clickable,
                                                                                 link,
                                                                             },
@@ -479,6 +490,9 @@ const Edit = (props) => {
                                                                                 data-icon={icon}
                                                                                 data-color={
                                                                                     color
+                                                                                }
+                                                                                data-text-color={
+                                                                                    textColor
                                                                                 }
                                                                                 data-clickable={
                                                                                     clickable
@@ -498,7 +512,7 @@ const Edit = (props) => {
                                                                                             />
                                                                                         )}
 
-                                                                                        <span className="eb-pricebox-feature-text">
+                                                                                        <span className="eb-pricebox-feature-text" style={{ color: textColor }}>
                                                                                             {
                                                                                                 text
                                                                                             }
@@ -514,7 +528,7 @@ const Edit = (props) => {
                                                                                             />
                                                                                         )}
 
-                                                                                        <span className="eb-pricebox-feature-text">
+                                                                                        <span className="eb-pricebox-feature-text" style={{ color: textColor }}>
                                                                                             {
                                                                                                 text
                                                                                             }

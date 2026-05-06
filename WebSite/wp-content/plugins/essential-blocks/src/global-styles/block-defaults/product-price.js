@@ -122,8 +122,10 @@ function ProductPrice(props) {
                             onChange={(pricePlacement) =>
                                 handleBlockDefault({ pricePlacement })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl label={__("Price Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Price Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {ALIGNMENT_OPTIONS.map((item, index) => (
                                     <Button
@@ -147,6 +149,7 @@ function ProductPrice(props) {
                             onChange={(showPrefix) =>
                                 handleBlockDefault({ showPrefix })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showPrefix && (
                             <>
@@ -157,6 +160,8 @@ function ProductPrice(props) {
                                     onChange={(prefixType) =>
                                         handleBlockDefault({ prefixType })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {prefixType === "text" && (
                                     <DynamicInputControl
@@ -186,6 +191,7 @@ function ProductPrice(props) {
                             onChange={(showSuffix) =>
                                 handleBlockDefault({ showSuffix })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showSuffix && (
                             <>
@@ -196,6 +202,8 @@ function ProductPrice(props) {
                                     onChange={(suffixType) =>
                                         handleBlockDefault({ suffixType })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {suffixType === "text" && (
                                     <DynamicInputControl
@@ -265,7 +273,7 @@ function ProductPrice(props) {
                         title={__("Currency Styles", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl label={__("Currency Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Currency Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {CURRENCY_ALIGN.map((item, index) => (
                                     <Button
@@ -283,7 +291,7 @@ function ProductPrice(props) {
                                 ))}
                             </ButtonGroup>
                         </BaseControl>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {PRICE_TYPES.map(({ label, value }, index) => (
                                     <Button
@@ -320,6 +328,8 @@ function ProductPrice(props) {
                                     max={1000}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -342,6 +352,8 @@ function ProductPrice(props) {
                                     max={1000}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}

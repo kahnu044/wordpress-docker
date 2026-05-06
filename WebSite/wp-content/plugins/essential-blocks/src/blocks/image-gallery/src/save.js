@@ -78,7 +78,7 @@ const Save = ({ attributes }) => {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 {enableFilter && !enableSearch && (
                     <ul
                         className={`eb-img-gallery-filter-wrapper filter-wrapper-${blockId} ${presets}`}

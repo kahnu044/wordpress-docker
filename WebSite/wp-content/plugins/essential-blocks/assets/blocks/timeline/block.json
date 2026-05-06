@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "title": "Timeline",
+  "name": "essential-blocks/timeline",
+  "description": "Create visually engaging and fully customizable content timelines in WordPress to showcase your stories.",
+  "category": "essential-blocks",
+  "apiVersion": 3,
+  "textdomain": "essential-blocks",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true
+  },
+  "editorScript": "essential-blocks-editor-script"
+}

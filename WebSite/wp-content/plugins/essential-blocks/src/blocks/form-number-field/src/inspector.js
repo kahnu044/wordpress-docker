@@ -97,6 +97,7 @@ function Inspector(props) {
                                     showLabel: !showLabel,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showLabel && (
@@ -143,6 +144,8 @@ function Inspector(props) {
                                     minNumber: parseInt(value),
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TextControl
                             label={__("Max Value", "essential-blocks")}
@@ -153,6 +156,8 @@ function Inspector(props) {
                                     maxNumber: parseInt(value),
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Required?", "essential-blocks")}
@@ -162,6 +167,7 @@ function Inspector(props) {
                                     isRequired: !isRequired,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Icon?", "essential-blocks")}
@@ -171,6 +177,7 @@ function Inspector(props) {
                                     isIcon: !isIcon,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {isIcon && (
                             <>
@@ -256,6 +263,8 @@ function Inspector(props) {
                             onChange={(value) =>
                                 setAttributes({ numberValidationType: value })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {numberValidationType === "minmax" && (
                             <>

@@ -204,6 +204,8 @@ function Inspector({
                                 onChange={(number) => onHotspotChange("number", number, index)}
                                 min={1}
                                 max={999}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
                     </>
@@ -217,6 +219,8 @@ function Inspector({
                             onChange={(x) => onHotspotChange("x", x, index)}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <RangeControl
                             label={__("Y Position", "essential-blocks")}
@@ -224,6 +228,8 @@ function Inspector({
                             onChange={(y) => onHotspotChange("y", y, index)}
                             min={0}
                             max={100}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </>
                 )}
@@ -234,6 +240,7 @@ function Inspector({
                             label={__("Enable Tooltip", "essential-blocks")}
                             checked={hotspot.enableTooltip}
                             onChange={(enableTooltip) => onHotspotChange("enableTooltip", enableTooltip, index)}
+                            __nextHasNoMarginBottom
                         />
                         {hotspot.enableTooltip && (
                             <>
@@ -314,11 +321,13 @@ function Inspector({
                             label={__("Open in New Tab", "essential-blocks")}
                             checked={hotspot.linkNewTab}
                             onChange={(linkNewTab) => onHotspotChange("linkNewTab", linkNewTab, index)}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Add nofollow", "essential-blocks")}
                             checked={hotspot.addNofollow}
                             onChange={(addNofollow) => onHotspotChange("addNofollow", addNofollow, index)}
+                            __nextHasNoMarginBottom
                         />
                     </>
                 )}
@@ -415,6 +424,7 @@ function Inspector({
                             label={__("Show Arrow", "essential-blocks")}
                             checked={tooltipShowArrow}
                             onChange={(tooltipShowArrow) => setAttributes({ tooltipShowArrow })}
+                            __nextHasNoMarginBottom
                         />
                     )}
 
@@ -423,12 +433,15 @@ function Inspector({
                         value={globalTooltipPosition}
                         options={TOOLTIP_POSITIONS}
                         onChange={(globalTooltipPosition) => setAttributes({ globalTooltipPosition })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     <ToggleControl
                         label={__("Always Visible Tooltip", "essential-blocks")}
                         checked={alwaysVisibleTooltip}
                         onChange={(alwaysVisibleTooltip) => setAttributes({ alwaysVisibleTooltip })}
+                        __nextHasNoMarginBottom
                     />
 
                     {!alwaysVisibleTooltip && (
@@ -485,7 +498,7 @@ function Inspector({
                         color={globalMarkerColor}
                         onChange={(globalMarkerColor) => setAttributes({ globalMarkerColor })}
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                     </BaseControl>
                     <BorderShadowControl
@@ -601,6 +614,8 @@ function Inspector({
                         step={1}
                         allowReset
                         resetFallbackValue={10}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <RangeControl
                         label={__("Icon Size", "essential-blocks")}
@@ -611,6 +626,8 @@ function Inspector({
                         step={1}
                         allowReset
                         resetFallbackValue={30}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <ColorControl
                         label={__("Icon Color", "essential-blocks")}

@@ -49,7 +49,11 @@ function Edit(props) {
         controllerColor,
         controllerGradient,
         controllerColorSecondary,
-        switchLiquidGlass
+        switchLiquidGlass,
+        effectStyle,
+        primaryLabelColor,
+        secondaryLabelColor,
+        activeColor,
     } = attributes;
 
     const [isPrimary, setPrimary] = useState(
@@ -62,6 +66,8 @@ function Edit(props) {
     const secondaryTextRef = useRef(null);
     const primaryRef = useRef(null);
     const secondaryRef = useRef(null);
+    const primarySwitchNameRef = useRef(null);
+    const secondarySwitchNameRef = useRef(null);
 
     // you must declare this variable
     const enhancedProps = {
@@ -180,15 +186,24 @@ function Edit(props) {
                 setPrimary(false),
             );
 
-        primaryTextRef.current &&
-            primaryTextRef.current.addEventListener("click", () =>
-                setPrimary(true),
-            );
+        // For toggle style, attach click to .eb-switch-name container instead of RichText
+        primarySwitchNameRef.current &&
+            primarySwitchNameRef.current.addEventListener("click", (e) => {
+                // Only trigger if not clicking directly on RichText for editing
+                if (!e.target.classList.contains('eb-toggle-primary-label-text') &&
+                    !e.target.closest('.block-editor-rich-text__editable')) {
+                    setPrimary(true);
+                }
+            });
 
-        secondaryTextRef.current &&
-            secondaryTextRef.current.addEventListener("click", () =>
-                setPrimary(false),
-            );
+        secondarySwitchNameRef.current &&
+            secondarySwitchNameRef.current.addEventListener("click", (e) => {
+                // Only trigger if not clicking directly on RichText for editing
+                if (!e.target.classList.contains('eb-toggle-secondary-label-text') &&
+                    !e.target.closest('.block-editor-rich-text__editable')) {
+                    setPrimary(false);
+                }
+            });
     };
 
     const onSwitchClick = (e) => {
@@ -269,7 +284,7 @@ function Edit(props) {
             </BlockControls>
             <BlockProps.Edit {...enhancedProps}>
                 <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
-                    <div className={`${blockId} eb-toggle-wrapper ${isPrimary ? 'eb-toggle-primary' : 'eb-toggle-secondary'}`}>
+                    <div className={`${blockId} eb-toggle-wrapper ${effectStyle === "default" ? `switch-style-${switchStyle}` : ''} eb-toggle-effect-${effectStyle} ${isPrimary ? 'eb-toggle-primary' : 'eb-toggle-secondary'}`}>
                         <div
                             className="eb-toggle-heading"
                             style={{
@@ -296,36 +311,54 @@ function Edit(props) {
                                             }}
                                         ></div>
                                         <div className="eb-switch-names">
-                                            <RichText
-                                                tagName="span"
-                                                className="eb-toggle-primary-label-text"
-                                                ref={primaryTextRef}
-                                                // placeholder={__("First", "essential-blocks")}
-                                                // style={primaryLabelStyle}
-                                                value={primaryLabelText}
-                                                onChange={(primaryLabelText) =>
-                                                    setAttributes({
-                                                        primaryLabelText,
-                                                    })
-                                                }
-                                            />
+                                            <div className="eb-switch-name primary" ref={primarySwitchNameRef}>
+                                                {effectStyle !== "default" && (
+                                                    applyFilters("eb_toggle_content_pro_icon_primary_edit", "", attributes)
+                                                )}
+                                                <RichText
+                                                    tagName="span"
+                                                    className="eb-toggle-primary-label-text"
+                                                    ref={primaryTextRef}
+                                                    // placeholder={__("First", "essential-blocks")}
+                                                    style={{
+                                                        color: isPrimary ? activeColor : primaryLabelColor,
+                                                    }}
+                                                    value={primaryLabelText}
+                                                    onChange={(primaryLabelText) =>
+                                                        setAttributes({
+                                                            primaryLabelText,
+                                                        })
+                                                    }
+                                                />
+                                            </div>
 
-                                            <RichText
-                                                tagName="span"
-                                                className="eb-toggle-secondary-label-text"
-                                                ref={secondaryTextRef}
-                                                // placeholder={__("Second", "essential-blocks")}
-                                                // style={secondaryLabelStyle}
-                                                value={secondaryLabelText}
-                                                onChange={(
-                                                    secondaryLabelText,
-                                                ) =>
-                                                    setAttributes({
+                                            <div className="eb-switch-name secondary" ref={secondarySwitchNameRef}>
+                                                {effectStyle !== "default" && (
+                                                    applyFilters("eb_toggle_content_pro_icon_secondary_edit", "", attributes)
+                                                )}
+                                                <RichText
+                                                    tagName="span"
+                                                    className="eb-toggle-secondary-label-text"
+                                                    ref={secondaryTextRef}
+                                                    // placeholder={__("Second", "essential-blocks")}
+                                                    style={{
+                                                        color: !isPrimary ? activeColor : secondaryLabelColor,
+                                                    }}
+                                                    value={secondaryLabelText}
+                                                    onChange={(
                                                         secondaryLabelText,
-                                                    })
-                                                }
-                                            />
+                                                    ) =>
+                                                        setAttributes({
+                                                            secondaryLabelText,
+                                                        })
+                                                    }
+                                                />
+                                            </div>
                                         </div>
+
+                                        {effectStyle !== "default" && (
+                                            applyFilters("eb_toggle_content_pro_effect_html", "", attributes, isPrimary)
+                                        )}
                                     </label>
                                 </div>
                             </div>
@@ -348,6 +381,9 @@ function Edit(props) {
                                 onChange={(primaryLabelText) =>
                                     setAttributes({ primaryLabelText })
                                 }
+                                style={{
+                                    color: isPrimary ? activeColor : primaryLabelColor,
+                                }}
                             />
                             <label
                                 className={`eb-toggle-switch toggle-${switchSize}`}
@@ -358,18 +394,36 @@ function Edit(props) {
                                     checked={isPrimary}
                                     onChange={(e) => onSwitchClick(e)}
                                 />
+                                {effectStyle !== "default" && (
+                                    <div className="eb-toggle-effect-icons">
+                                        <span className="icon-wrapper">
+                                            {applyFilters("eb_toggle_content_pro_icon_primary_edit", "", attributes)}
+                                        </span>
+                                        <span className="icon-wrapper">
+                                            {applyFilters("eb_toggle_content_pro_icon_secondary_edit", "", attributes)}
+                                        </span>
+                                    </div>
+                                )}
                                 <span
                                     className="eb-toggle-controller"
                                     style={{
                                         transform: getTransform(),
                                         borderRadius: getRadius(),
                                     }}
+
                                 />
+
                                 <span
                                     className={`eb-toggle-slider ${switchLiquidGlass.enable ? 'eb_liquid_glass-' + switchLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + switchLiquidGlass.shadowEffect : ''}`}
                                 // style={sliderStyle}
                                 />
-                                {applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")}
+                                {effectStyle === "default" && (
+                                    applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")
+                                )}
+
+                                {effectStyle !== "default" && (
+                                    applyFilters("eb_toggle_content_pro_effect_html", "", attributes)
+                                )}
                             </label>
 
                             <span
@@ -386,6 +440,9 @@ function Edit(props) {
                                 onChange={(secondaryLabelText) =>
                                     setAttributes({ secondaryLabelText })
                                 }
+                                style={{
+                                    color: !isPrimary ? activeColor : secondaryLabelColor,
+                                }}
                             />
                         </div>
                         <div

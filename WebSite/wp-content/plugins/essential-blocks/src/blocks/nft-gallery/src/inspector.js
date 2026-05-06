@@ -7,9 +7,8 @@ import {
     SelectControl,
     TextControl,
     RangeControl,
-    BaseControl,
-    ButtonGroup,
-    Button,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -149,6 +148,8 @@ function Inspector(props) {
                                     onChange={(value) =>
                                         updateSettings("opensea", "type", value)
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {settings?.opensea?.type === "items" && (
                                     <>
@@ -169,6 +170,8 @@ function Inspector(props) {
                                                     value
                                                 )
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
 
                                         <RangeControl
@@ -181,6 +184,8 @@ function Inspector(props) {
                                             max={100}
                                             step={1}
                                             allowReset={true}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </>
                                 )}
@@ -196,6 +201,8 @@ function Inspector(props) {
                                                     value
                                                 )
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                         <RangeControl
                                             label="Limit"
@@ -211,6 +218,8 @@ function Inspector(props) {
                                             max={100}
                                             step={1}
                                             allowReset={true}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </>
                                 )}
@@ -226,6 +235,8 @@ function Inspector(props) {
                             value={layout}
                             options={LAYOUT_TYPE}
                             onChange={(value) => changeLayout(value)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         {layout === "grid" && (
@@ -236,6 +247,8 @@ function Inspector(props) {
                                 onChange={(value) =>
                                     setAttributes({ gridPreset: value })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -247,6 +260,8 @@ function Inspector(props) {
                                 onChange={(value) =>
                                     setAttributes({ listPreset: value })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         <ResponsiveRangeController
@@ -263,6 +278,7 @@ function Inspector(props) {
                             onChange={() =>
                                 setAttributes({ displayImage: !displayImage })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Title?", "essential-blocks")}
@@ -270,6 +286,7 @@ function Inspector(props) {
                             onChange={() =>
                                 setAttributes({ displayTitle: !displayTitle })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {settings?.opensea?.type === "items" && (
@@ -280,6 +297,7 @@ function Inspector(props) {
                                     onChange={() =>
                                         setAttributes({ displayButton: !displayButton })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -316,29 +334,27 @@ function Inspector(props) {
                     >
                         {layout === "list" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Vertical Alignment", "essential-blocks")}
-                                    id="eb-button-group-alignment"
+
+                                    value={listVerticalAlignment}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            listVerticalAlignment: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-button-group-alignment">
-                                        {VERTICAL_ALIGNMENT.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={listVerticalAlignment === item.value}
-                                                isSecondary={
-                                                    listVerticalAlignment !== item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        listVerticalAlignment: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {VERTICAL_ALIGNMENT.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                         <InspectorPanel.PanelBody title={__("Background", "essential-blocks")} initialOpen={true}>
@@ -427,6 +443,8 @@ function Inspector(props) {
                             label={__("Button Text", "essential-blocks")}
                             value={buttonText}
                             onChange={(text) => setAttributes({ buttonText: text })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <TypographyDropdown
                             baseLabel={__("Typography", "essential-blocks")}

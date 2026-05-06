@@ -492,6 +492,8 @@ const WriteAIButton = () => {
                                     }}
                                     placeholder={__("Enter a descriptive title for your post, page or custom post type.", "essential-blocks")}
                                     className="eb-write-ai-topic"
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <TextControl
@@ -508,6 +510,8 @@ const WriteAIButton = () => {
                                     }}
                                     placeholder={__("Add keywords to generate precise & relevant content (comma-separated).", "essential-blocks")}
                                     className="eb-write-ai-keywords"
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <TextareaControl
@@ -524,6 +528,7 @@ const WriteAIButton = () => {
                                     rows={6}
                                     className="eb-write-ai-prompt"
                                     help={__("Ensure you include a clear and detailed prompt to receive the best possible output. Follow the provided guidelines for optimal results.", "essential-blocks")}
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <SelectControl
@@ -545,6 +550,8 @@ const WriteAIButton = () => {
                                         }
                                     }}
                                     className="eb-write-ai-tone"
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <SelectControl
@@ -565,6 +572,8 @@ const WriteAIButton = () => {
                                         }
                                     }}
                                     className="eb-write-ai-length"
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {!isBlank && (
@@ -574,6 +583,7 @@ const WriteAIButton = () => {
                                         onChange={(value) => setOverwriteContent(value)}
                                         help={__("If enabled, all existing content will be removed before inserting the generated content.", "essential-blocks")}
                                         className="eb-write-ai-overwrite"
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
 

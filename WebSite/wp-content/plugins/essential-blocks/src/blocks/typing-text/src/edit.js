@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef, useState, memo } from "@wordpress/element";
+import { useEffect, useRef, memo } from "@wordpress/element";
 import {
     BlockControls,
     AlignmentToolbar,
@@ -53,9 +53,12 @@ function Edit(props) {
         suffix,
         textAlign,
         classHook,
+        tagName,
     } = attributes;
     const block = useRef(null);
-    const [typed, setTyped] = useState(null);
+    const typedInstance = useRef(null);
+    const isInitialized = useRef(false);
+    let TagName = tagName;
 
     const generateOptions = () => {
         // Generate options for Typed instance
@@ -98,36 +101,19 @@ function Edit(props) {
         return strings;
     };
 
+    // Single useEffect to handle both initialization and updates
     useEffect(() => {
-        if (typed) {
-            typed.destroy();
-            setTyped(new Typed(block.current, generateOptions()));
-        }
-    }, [
-        typedText,
-        typeSpeed,
-        startDelay,
-        smartBackspace,
-        backSpeed,
-        backDelay,
-        fadeOut,
-        fadeOutDelay,
-        loop,
-        showCursor,
-    ]);
+        // Cleanup function to remove cursor elements
+        const cleanupCursors = () => {
+            const wrapperNode = block.current?.parentNode;
+            if (wrapperNode) {
+                const cursors = wrapperNode.querySelectorAll('.typed-cursor');
+                cursors.forEach(cursor => cursor.remove());
+            }
+        };
 
-    // you must declare this variable
-    const enhancedProps = {
-        ...props,
-        blockPrefix: 'eb-typing-text',
-        style: <Style {...props} />
-    };
-
-
-    // this useEffect is for creating an unique id for each block's unique className by a random unique number
-    useEffect(() => {
-        //Set Default "typedText"
-        if (typedText.length === 0) {
+        //Set Default "typedText" on first mount
+        if (!isInitialized.current && typedText.length === 0) {
             const defaultTypedText = [
                 {
                     text: "first string",
@@ -140,18 +126,48 @@ function Edit(props) {
             setAttributes({ typedText: defaultTypedText });
             setAttributes({ prefix: "This is the " });
             setAttributes({ suffix: "of the sentence." });
+            return; // Exit early, will re-run after attributes are set
         }
 
-        //Init Typed class execute
-        const new_typed = new Typed(block.current, generateOptions());
-        setTyped(new_typed);
+        // Destroy existing instance if it exists
+        if (typedInstance.current) {
+            typedInstance.current.destroy();
+            cleanupCursors();
+        }
+
+        // Create new instance
+        if (block.current) {
+            typedInstance.current = new Typed(block.current, generateOptions());
+            isInitialized.current = true;
+        }
+
+        // Cleanup on unmount
         return () => {
-            // Destroy Typed instance
-            if (typed) {
-                typed.destroy();
+            if (typedInstance.current) {
+                typedInstance.current.destroy();
+                cleanupCursors();
             }
         };
-    }, []);
+    }, [
+        typedText,
+        typeSpeed,
+        startDelay,
+        smartBackspace,
+        backSpeed,
+        backDelay,
+        fadeOut,
+        fadeOutDelay,
+        loop,
+        showCursor,
+        tagName,
+    ]);
+
+    // you must declare this variable
+    const enhancedProps = {
+        ...props,
+        blockPrefix: 'eb-typing-text',
+        style: <Style {...props} />
+    };
 
     // Return if there is no typed text
     if (!typedText) return <div />;
@@ -174,14 +190,14 @@ function Edit(props) {
                 <div
                     className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
                 >
-                    <div
+                    <TagName
                         className={`eb-typed-wrapper ${blockId}`}
                         data-id={blockId}
                     >
                         <span className="eb-typed-prefix">{prefix}</span>
                         <span className="eb-typed-text" ref={block} />
                         <span className="eb-typed-suffix">{suffix}</span>
-                    </div>
+                    </TagName>
                 </div>
             </BlockProps.Edit>
         </>

@@ -4,7 +4,7 @@
   "name": "essential-blocks/wrapper",
   "description": "This is a wrapper block for other blocks within it.",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "align": [

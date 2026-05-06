@@ -3,7 +3,7 @@
   "title": "Accordion Item",
   "name": "essential-blocks/accordion-item",
   "category": "essential-blocks",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "inserter": false,

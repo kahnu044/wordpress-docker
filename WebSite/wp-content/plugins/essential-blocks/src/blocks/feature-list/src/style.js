@@ -458,7 +458,7 @@ export default function Style(props) {
 			 ${titleBottomMarginDesktop}
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon {
 			 ${iconShape !== "none"
             ? `
 				 height: ${iconAreaSizeDesktop.replace(/\D/g, "")}px;
@@ -470,7 +470,7 @@ export default function Style(props) {
 			 ${iconPaddingDesktop}
 			 color: ${iconGlobalColor};
 		 }
-         ${iconFontSizeDesktop && `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon img {
+         ${iconFontSizeDesktop && `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon img {
 			 height: ${iconFontSizeDesktop.replace(/\D/g, "")}px;
 			 width: ${iconFontSizeDesktop.replace(/\D/g, "")}px;
 		 }`}
@@ -634,7 +634,7 @@ export default function Style(props) {
 			 ${titleBottomMarginTab}
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon {
 			 ${iconShape !== "none"
             ? `
 				 height: ${iconAreaSizeTab.replace(/\D/g, "")}px;
@@ -646,7 +646,7 @@ export default function Style(props) {
 			 ${iconPaddingTab}
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon img {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon img {
 			 height: ${iconFontSizeTab.replace(/\D/g, "")}px;
 			 width: ${iconFontSizeTab.replace(/\D/g, "")}px;
 		 }
@@ -762,7 +762,7 @@ export default function Style(props) {
 			 ${titleBottomMarginMobile}
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon {
 			 ${iconShape !== "none"
             ? `
 				 height: ${iconAreaSizeMobile.replace(/\D/g, "")}px;
@@ -774,7 +774,7 @@ export default function Style(props) {
 			 ${iconPaddingMobile}
 		 }
 
-		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon img {
+		 .${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-item .eb-feature-list-icon-box .eb-feature-list-icon img {
 			 height: ${iconFontSizeMobile.replace(/\D/g, "")}px;
 			 width: ${iconFontSizeMobile.replace(/\D/g, "")}px;
 		 }

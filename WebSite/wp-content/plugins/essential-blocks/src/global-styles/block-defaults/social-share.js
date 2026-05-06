@@ -132,6 +132,7 @@ function SocialShare(props) {
                                         showTitle: !showTitle,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <ToggleControl
                                 label={__("Floating", "essential-blocks")}
@@ -141,6 +142,7 @@ function SocialShare(props) {
                                         isFloating: !isFloating,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                             <Divider />
                         </>
@@ -151,6 +153,7 @@ function SocialShare(props) {
                     >
                         <BaseControl
                             label={__("Icon Shape", "essential-blocks")}
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup>
                                 {ICON_SHAPE.map((item, index) => (
@@ -171,6 +174,7 @@ function SocialShare(props) {
                         <BaseControl
                             id="eb-team-icons-alignments"
                             label="Social Icons Horizontal Alignments"
+                            __nextHasNoMarginBottom
                         >
                             <SelectControl
                                 value={iconsJustify}
@@ -178,6 +182,8 @@ function SocialShare(props) {
                                 onChange={(iconsJustify) =>
                                     handleBlockDefault({ iconsJustify })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         </BaseControl>
                         {showTitle && (
@@ -314,6 +320,8 @@ function SocialShare(props) {
                             onChange={(icnEffect) => {
                                 handleBlockDefault({ icnEffect });
                             }}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody

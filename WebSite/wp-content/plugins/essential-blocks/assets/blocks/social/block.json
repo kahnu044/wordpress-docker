@@ -4,7 +4,7 @@
   "name": "essential-blocks/social",
   "category": "essential-blocks",
   "description": "Add icon links to your social media profiles and grow your audience with animated social icons",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "textdomain": "essential-blocks",
   "supports": {
     "anchor": true,

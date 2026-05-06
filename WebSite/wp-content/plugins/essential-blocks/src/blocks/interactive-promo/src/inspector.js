@@ -5,12 +5,13 @@ import { __ } from "@wordpress/i18n";
 import { MediaUpload } from "@wordpress/block-editor";
 import {
     Button,
-    ButtonGroup,
     BaseControl,
     TextControl,
     TextareaControl,
     ToggleControl,
     SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -71,7 +72,7 @@ const Inspector = ({ attributes, setAttributes }) => {
         }}>
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody initialOpen={true}>
-                    <BaseControl label={__("Background Image", "essential-blocks")}>
+                    <BaseControl label={__("Background Image", "essential-blocks")} __nextHasNoMarginBottom>
                         <MediaUpload
                             onSelect={(media) =>
                                 setAttributes({
@@ -128,38 +129,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                         value={header}
                         onChange={(header) => setAttributes({ header })}
                     />
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__(
                             "Header Tag",
                             "essential-blocks"
                         )}
+
+                        value={titleTag}
+                        onChange={(value) =>
+                            setAttributes({
+                                titleTag: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup>
-                            {HEADER_TAGS.map(
-                                (header, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            titleTag !==
-                                            header.value
-                                        }
-                                        isPrimary={
-                                            titleTag ===
-                                            header.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                titleTag:
-                                                    header.value,
-                                            })
-                                        }
-                                    >
-                                        {header.label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {HEADER_TAGS.map(
+                            (header, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={header.value}
+                                    label={header.label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
                     <EBTextareaControl
                         label={__("Content", "essential-blocks")}
                         value={content}
@@ -182,28 +177,29 @@ const Inspector = ({ attributes, setAttributes }) => {
                         label={__("Open in New Tab", "essential-blocks")}
                         checked={newWindow}
                         onChange={() => setAttributes({ newWindow: !newWindow })}
+                        __nextHasNoMarginBottom
                     />
-                    <BaseControl>
-                        <h3 className="eb-control-title">
-                            {__("Alignment", "essential-blocks")}
-                        </h3>
-                        <ButtonGroup>
-                            {ALIGNMENT.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={imageAlignment === item.value}
-                                    isSecondary={imageAlignment !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            imageAlignment: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Alignment", "essential-blocks")}
+
+                        value={imageAlignment}
+                        onChange={(value) =>
+                            setAttributes({
+                                imageAlignment: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {ALIGNMENT.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
                     <SelectControl
                         label={__("Promo Effect", "essential-blocks")}
                         value={effectName}
@@ -211,6 +207,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                         onChange={(newEffect) =>
                             setAttributes({ effectName: newEffect })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
@@ -228,6 +226,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     isBackgroundGradient: !isBackgroundGradient,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         {isBackgroundGradient || (
                             <ColorControl

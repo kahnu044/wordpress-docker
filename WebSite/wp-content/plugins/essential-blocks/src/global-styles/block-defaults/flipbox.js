@@ -8,12 +8,14 @@ import {
     PanelRow,
     SelectControl,
     Button,
+    ButtonGroup,
     TextControl,
     RangeControl,
     ToggleControl,
-    ButtonGroup,
     BaseControl,
     TabPanel,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /*
@@ -145,58 +147,53 @@ function Flipbox(props) {
                         title={__("Flibbox Side", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Selected Side", "essential-blocks")}
+
+                            value={selectedSide}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    selectedSide: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-flipbox-sides">
-                                {FLIPBOX_SIDES.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={selectedSide === item.value}
-                                        isSecondary={
-                                            selectedSide !== item.value
-                                        }
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                selectedSide: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {FLIPBOX_SIDES.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                     </PanelBody>
                     <PanelBody
                         title={__("Flipbox Settings", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Alignment", "essential-blocks")}
-                            id="eb-button-group-alignment"
+
+                            value={contentPosition}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    contentPosition: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-button-group-alignment">
-                                {CONTENT_POSITION.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            contentPosition === item.value
-                                        }
-                                        isSecondary={
-                                            contentPosition !== item.value
-                                        }
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                contentPosition: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {CONTENT_POSITION.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ResponsiveRangeController
                             baseLabel={__("Box Height", "essential-blocks")}
                             controlName={boxHeightAttr}
@@ -222,6 +219,8 @@ function Flipbox(props) {
                             onChange={(newStyle) =>
                                 handleBlockDefault({ flipType: newStyle })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <RangeControl
@@ -237,71 +236,59 @@ function Flipbox(props) {
                             min={0}
                             max={5000}
                             step={500}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
 
                         {selectedSide === "front" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Icon Type", "essential-blocks")}
-                                    id="eb-flipbox-icon-type"
+
+                                    value={frontIconOrImage}
+                                    onChange={(value) =>
+                                        handleBlockDefault({
+                                            frontIconOrImage: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-flipbox-icon-type">
-                                        {ICON_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    frontIconOrImage ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    frontIconOrImage !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        frontIconOrImage:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ICON_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
 
                         {selectedSide === "back" && (
                             <>
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Icon Type", "essential-blocks")}
-                                    id="eb-flipbox-icon-type"
+
+                                    value={backIconOrImage}
+                                    onChange={(value) =>
+                                        handleBlockDefault({
+                                            backIconOrImage: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-flipbox-icon-type">
-                                        {ICON_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    backIconOrImage ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    backIconOrImage !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        backIconOrImage:
-                                                            item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {ICON_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
                             </>
                         )}
                     </PanelBody>
@@ -346,6 +333,7 @@ function Flipbox(props) {
                             <BaseControl
                                 label={__("Flipbox Image", "essential-blocks")}
                                 id="eb-flipbox-front-image"
+                                __nextHasNoMarginBottom
                             >
                                 {frontImageUrl ? (
                                     <>
@@ -446,6 +434,7 @@ function Flipbox(props) {
                         >
                             <BaseControl
                                 label={__("Flipbox Image", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 {backImageUrl ? (
                                     <>
@@ -524,6 +513,7 @@ function Flipbox(props) {
                                             showFrontTitle: !showFrontTitle,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -536,6 +526,7 @@ function Flipbox(props) {
                                             showFrontContent: !showFrontContent,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -552,6 +543,7 @@ function Flipbox(props) {
                                             showBackTitle: !showBackTitle,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label={__(
@@ -564,6 +556,7 @@ function Flipbox(props) {
                                             showBackContent: !showBackContent,
                                         });
                                     }}
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -583,6 +576,7 @@ function Flipbox(props) {
                         <BaseControl
                             label={__("Link Type", "essential-blocks")}
                             id="eb-flipbox-link-type"
+                            __nextHasNoMarginBottom
                         >
                             <ButtonGroup id="eb-flipbox-link-type">
                                 {LINK_TYPE.map((item, index) => (
@@ -610,6 +604,8 @@ function Flipbox(props) {
                             onChange={(newLink) =>
                                 handleBlockDefault({ link: newLink })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Open in New Tab", "essential-blocks")}
@@ -619,6 +615,7 @@ function Flipbox(props) {
                                     linkOpenNewTab: !linkOpenNewTab,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {linkType === "button" && (
@@ -634,6 +631,8 @@ function Flipbox(props) {
                                             buttonText: newText,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <SelectControl
                                     label={__(
@@ -645,6 +644,8 @@ function Flipbox(props) {
                                     onChange={(newStyle) =>
                                         handleButtonStyle(newStyle)
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </>
                         )}
@@ -685,7 +686,7 @@ function Flipbox(props) {
                                     controlName={frontContentPadding}
                                     baseLabel="Padding"
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Front Side Background",
@@ -733,7 +734,7 @@ function Flipbox(props) {
                                     controlName={backContentPadding}
                                     baseLabel="Padding"
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Back Side Background",
@@ -785,7 +786,7 @@ function Flipbox(props) {
                                             }
                                         />
 
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Margin & Padding",
@@ -803,7 +804,7 @@ function Flipbox(props) {
                                             controlName={frontIconPadding}
                                             baseLabel="Padding"
                                         />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Border",
@@ -867,7 +868,7 @@ function Flipbox(props) {
                                             }
                                         />
 
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Margin & Padding",
@@ -885,7 +886,7 @@ function Flipbox(props) {
                                             controlName={backIconPadding}
                                             baseLabel="Padding"
                                         />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "Border",
@@ -957,7 +958,7 @@ function Flipbox(props) {
                                     min={20}
                                     max={600}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Padding", "essential-blocks")}
                                     </h3>
@@ -967,7 +968,7 @@ function Flipbox(props) {
                                     controlName={buttonPadding}
                                     baseLabel="Padding"
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__(
                                             "Border & Shadow",
@@ -978,7 +979,7 @@ function Flipbox(props) {
                                 <BorderShadowControl
                                     controlName={borderShadowBtn}
                                 />
-                                <BaseControl>
+                                <BaseControl __nextHasNoMarginBottom>
                                     <h3 className="eb-control-title">
                                         {__("Button Icon", "essential-blocks")}
                                     </h3>
@@ -994,6 +995,7 @@ function Flipbox(props) {
                                             displayButtonIcon: !displayButtonIcon,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {displayButtonIcon && (
                                     <EBIconPicker
@@ -1012,6 +1014,7 @@ function Flipbox(props) {
                                                 "essential-blocks"
                                             )}
                                             id="eb-flipbox-icon-pos"
+                                            __nextHasNoMarginBottom
                                         >
                                             <ButtonGroup id="eb-flipbox-icon-pos">
                                                 {ICON_POSITIONS.map(

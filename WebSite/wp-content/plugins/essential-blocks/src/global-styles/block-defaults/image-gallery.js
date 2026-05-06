@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { PanelBody, ToggleControl, Button, ButtonGroup, BaseControl, PanelRow } from "@wordpress/components";
+import { PanelBody, ToggleControl, BaseControl, PanelRow, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from "@wordpress/components";
 
 /**
  * External depencencies
@@ -95,6 +95,7 @@ function ImageGallery(props) {
                                     displayCaption: !displayCaption,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {displayCaption && styleNumber === "0" && (
@@ -106,6 +107,7 @@ function ImageGallery(props) {
                                         captionOnHover: !captionOnHover,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -135,6 +137,7 @@ function ImageGallery(props) {
                                     disableLightBox: !disableLightBox,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody title={__("Filter", "essential-blocks")} initialOpen={false}>
@@ -146,6 +149,7 @@ function ImageGallery(props) {
                                     enableFilter: !enableFilter,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     {/* Styles */}
@@ -153,44 +157,42 @@ function ImageGallery(props) {
                         {layouts === "grid" && (
                             <>
                                 {!enableFilter && (
-                                    <BaseControl label={__("Alignment", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {FLEX_ALIGN.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={imageAlignment === item.value}
-                                                    isSecondary={imageAlignment !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            imageAlignment: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Alignment", "essential-blocks")}
+
+                                        value={imageAlignment}
+                                        onChange={(value) => handleBlockDefault({ imageAlignment: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {FLEX_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
                                 )}
 
-                                <BaseControl label={__("Image Size", "essential-blocks")}>
-                                    <ButtonGroup>
-                                        {IMAGE_SIZE_TYPE.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={imageSizeType === item.value}
-                                                isSecondary={imageSizeType !== item.value}
-                                                onClick={() =>
-                                                    handleBlockDefault({
-                                                        imageSizeType: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label={__("Image Size", "essential-blocks")}
+
+                                    value={imageSizeType}
+                                    onChange={(value) => handleBlockDefault({ imageSizeType: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {IMAGE_SIZE_TYPE.map((item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </ToggleGroupControl>
 
                                 {imageSizeType === "fixed" && (
                                     <>
@@ -292,62 +294,59 @@ function ImageGallery(props) {
 
                             {displayCaption && (
                                 <>
-                                    <BaseControl label={__("Text Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {TEXT_ALIGN.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={textAlign === item.value}
-                                                    isSecondary={textAlign !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            textAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Text Align", "essential-blocks")}
 
-                                    <BaseControl label={__("Horizontal Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {HORIZONTAL_ALIGN.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={horizontalAlign === item.value}
-                                                    isSecondary={horizontalAlign !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            horizontalAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                        value={textAlign}
+                                        onChange={(value) => handleBlockDefault({ textAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {TEXT_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
 
-                                    <BaseControl label={__("Vertical Align", "essential-blocks")}>
-                                        <ButtonGroup>
-                                            {VERTICAL_ALIGN.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={verticalAlign === item.value}
-                                                    isSecondary={verticalAlign !== item.value}
-                                                    onClick={() =>
-                                                        handleBlockDefault({
-                                                            verticalAlign: item.value,
-                                                        })
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            ))}
-                                        </ButtonGroup>
-                                    </BaseControl>
+                                    <ToggleGroupControl
+                                        label={__("Horizontal Align", "essential-blocks")}
+
+                                        value={horizontalAlign}
+                                        onChange={(value) => handleBlockDefault({ horizontalAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {HORIZONTAL_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
+
+                                    <ToggleGroupControl
+                                        label={__("Vertical Align", "essential-blocks")}
+
+                                        value={verticalAlign}
+                                        onChange={(value) => handleBlockDefault({ verticalAlign: value })}
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {VERTICAL_ALIGN.map((item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        ))}
+                                    </ToggleGroupControl>
 
                                     <ResponsiveDimensionsControl
                                         controlName={CAPTION_MARGIN}
@@ -377,23 +376,23 @@ function ImageGallery(props) {
                                 baseLabel={__("Typography", "essential-blocks")}
                                 typographyPrefixConstant={FILTER_TYPOGRAPHY}
                             />
-                            <BaseControl>
-                                <ButtonGroup>
+                            <BaseControl __nextHasNoMarginBottom>
+                                <ToggleGroupControl
+
+                                    value={filterColorType}
+                                    onChange={(value) => handleBlockDefault({ filterColorType: value })}
+                                    isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                                >
                                     {NORMAL_HOVER.map((item, index) => (
-                                        <Button
+                                        <ToggleGroupControlOption
                                             key={index}
-                                            isPrimary={filterColorType === item.value}
-                                            isSecondary={filterColorType !== item.value}
-                                            onClick={() =>
-                                                handleBlockDefault({
-                                                    filterColorType: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
+                                            value={item.value}
+                                            label={item.label}
+                                        />
                                     ))}
-                                </ButtonGroup>
+                                </ToggleGroupControl>
 
                                 {filterColorType === "normal" && (
                                     <>

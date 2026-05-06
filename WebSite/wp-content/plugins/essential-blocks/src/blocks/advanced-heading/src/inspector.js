@@ -6,10 +6,9 @@ import {
     PanelBody,
     SelectControl,
     ToggleControl,
-    Button,
-    ButtonGroup,
-    BaseControl,
     RangeControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
@@ -73,8 +72,8 @@ function Inspector(props) {
     // Check if block is inside Loop Builder context
     const isInLoopBuilder = Boolean(
         context &&
-            context.hasOwnProperty("essential-blocks/postId") &&
-            context.hasOwnProperty("essential-blocks/postType"),
+        context.hasOwnProperty("essential-blocks/postId") &&
+        context.hasOwnProperty("essential-blocks/postType"),
     );
     const {
         resOption,
@@ -261,6 +260,8 @@ function Inspector(props) {
                             value={source}
                             options={SOURCE}
                             onChange={(selected) => changeSource(selected)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     )}
                     <SelectControl
@@ -271,6 +272,8 @@ function Inspector(props) {
                             PRESETS,
                         )}
                         onChange={(selected) => changePreset(selected)}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <SelectControl
                         label={__("Effects", "essential-blocks")}
@@ -282,6 +285,8 @@ function Inspector(props) {
                         onChange={(selected) =>
                             setAttributes({ effects: selected })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     {effects === "marquee" && (
@@ -296,6 +301,8 @@ function Inspector(props) {
                                 onChange={(value) =>
                                     setAttributes({ marqueeSpeed: value })
                                 }
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
 
                             <ToggleControl
@@ -310,6 +317,7 @@ function Inspector(props) {
                                             !marqueePauseOnHover,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </>
                     )}
@@ -321,26 +329,24 @@ function Inspector(props) {
                         resOption={resOption}
                     />
 
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Title Level", "essential-blocks")}
-                        id="eb-advance-heading-alignment"
+                        value={tagName}
+                        onChange={(value) =>
+                            setAttributes({ tagName: value })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                            {HEADING.map((item, key) => (
-                                <Button
-                                    key={key}
-                                    // isLarge
-                                    isPrimary={tagName === item.value}
-                                    isSecondary={tagName !== item.value}
-                                    onClick={() =>
-                                        setAttributes({ tagName: item.value })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {HEADING.map((item, key) => (
+                            <ToggleGroupControlOption
+                                key={key}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     {source == "custom" && (
                         <>
@@ -388,38 +394,33 @@ function Inspector(props) {
                                         displaySubtitle: !displaySubtitle,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         </>
                     )}
 
                     {source == "custom" && displaySubtitle && (
                         <>
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__("Subtitle Level", "essential-blocks")}
-                                id="eb-advance-heading-alignment"
+                                value={subtitleTagName}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        subtitleTagName: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                    {HEADING.map((item, key) => (
-                                        <Button
-                                            key={key}
-                                            // isLarge
-                                            isPrimary={
-                                                subtitleTagName === item.value
-                                            }
-                                            isSecondary={
-                                                subtitleTagName !== item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    subtitleTagName: item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {HEADING.map((item, key) => (
+                                    <ToggleGroupControlOption
+                                        key={key}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                ))}
+                            </ToggleGroupControl>
                             <DynamicInputControl
                                 label="Subtitle Text"
                                 attrName="subtitleText"
@@ -440,6 +441,7 @@ function Inspector(props) {
                                 displaySeperator: !displaySeperator,
                             })
                         }
+                        __nextHasNoMarginBottom
                     />
 
                     <ToggleControl
@@ -449,6 +451,7 @@ function Inspector(props) {
                         )}
                         checked={enableLink}
                         onChange={(enableLink) => setAttributes({ enableLink })}
+                        __nextHasNoMarginBottom
                     />
 
                     {source === "custom" && enableLink && (
@@ -493,6 +496,7 @@ function Inspector(props) {
                                     openInNewTab,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     )}
                     {isInLoopBuilder && (
@@ -509,6 +513,8 @@ function Inspector(props) {
                                 min={1}
                                 max={200}
                                 step={1}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </>
                     )}
@@ -724,31 +730,29 @@ function Inspector(props) {
                             onChange={(seperatorPosition) =>
                                 setAttributes({ seperatorPosition })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__("Separator Type", "essential-blocks")}
-                            id="eb-advance-heading-alignment"
+                            value={seperatorType}
+                            onChange={(value) =>
+                                setAttributes({
+                                    seperatorType: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-advance-heading-alignment">
-                                {SEPARATOR_TYPE.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={seperatorType === item.value}
-                                        isSecondary={
-                                            seperatorType !== item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                seperatorType: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {SEPARATOR_TYPE.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
 
                         {seperatorType === "line" && (
                             <>
@@ -762,6 +766,8 @@ function Inspector(props) {
                                     onChange={(seperatorStyle) =>
                                         setAttributes({ seperatorStyle })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 <ResponsiveRangeController
                                     baseLabel={__(

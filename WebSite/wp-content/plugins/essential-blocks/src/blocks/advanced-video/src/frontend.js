@@ -106,6 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let playerOptions = advVideoWrapper.getElementsByClassName("eb-player-option");
         let playerOption = playerOptions[0];
+        // Skip when the player shell is missing — e.g. block is behind Protected
+        // Content, so the wrapper renders but its inner DOM is the password card.
+        if (!playerOption) {
+            continue;
+        }
         let imageOverlay = playerOption.getAttribute("data-overlay") === "true" ? true : false;
 
         // sticky

@@ -548,3 +548,31 @@
 		margin: 0px !important;
 	}
 }
+
+
+// Responsive Styles
+@media only screen and (max-width: 767px) {
+	.eb-block-default-popup {
+		.components-popover__content {
+			flex-direction: column-reverse;
+			justify-content: flex-end;
+
+			.eb-block-default {
+				width: 100%;
+				min-width: unset;
+			}
+
+			.eb-block-default-preveiw-wrapper {
+				max-height: 50%;
+				height: 500px;
+
+				.block-editor-block-preview__container {
+					width: 100%;
+					left: 0;
+					top: 60px;
+					transform: none;
+				}
+			}
+		}
+	}
+}

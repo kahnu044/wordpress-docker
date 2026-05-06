@@ -225,12 +225,6 @@ export default function Style(props) {
 		}
 	`;
 
-    const elementList = enableContents.map((item) => {
-        return `.eb-post-meta-wrapper.${blockId} .eb-post-metadata-${item} {
-            ${isContentEnabled(item) && `order: ${enableContents.indexOf(item) + 1}`};
-        }`;
-    });
-
     const metaLabelDesktop = `
         .eb-post-meta-wrapper.${blockId} .eb-post-metadata .eb-post-metadata-label {
             color: ${metaLabelColor};
@@ -405,7 +399,6 @@ export default function Style(props) {
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
-        ${elementList.join('\n')}
         ${wrapperStylesDesktop}
         ${metaLabelDesktop}
         ${metaValueDesktop}

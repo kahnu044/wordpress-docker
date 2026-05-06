@@ -9,6 +9,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
     for (let lottieElement of lottieElements) {
         let containerWrap = lottieElement.querySelector(`.eb-lottie-animation`);
 
+        // Skip when the lottie shell or its data-settings is missing — e.g.
+        // block is behind Protected Content, wrapper renders but its inner
+        // DOM is the password card / blur preview.
+        const settingsAttr = lottieElement.getAttribute("data-settings");
+        if (!containerWrap || !settingsAttr) {
+            continue;
+        }
+
         // Check if containerWrap is a canvas element and replace it with a div if needed
         if (containerWrap && containerWrap.tagName.toLowerCase() === 'canvas') {
             // Create a new div element to replace the canvas
@@ -45,7 +53,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             containerWrap = newContainer;
         }
 
-        let settings = JSON.parse(lottieElement.getAttribute("data-settings"));
+        let settings = JSON.parse(settingsAttr);
 
         // Determine if we should use DotLottie based on file extension
         const isLottieFile = settings.lottieURl.toLowerCase().endsWith('.lottie');

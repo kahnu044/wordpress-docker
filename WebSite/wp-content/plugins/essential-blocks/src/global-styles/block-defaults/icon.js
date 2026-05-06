@@ -71,7 +71,7 @@ function Icon(props) {
                             value={icon}
                             onChange={(icon) => handleBlockDefault({ icon })}
                         />
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
+                        <BaseControl label={__("Alignment", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {ICON_ALIGN.map((item, index) => (
                                     <Button
@@ -98,6 +98,8 @@ function Icon(props) {
                                     iconView,
                                 })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {iconView !== "default" && (
                             <SelectControl
@@ -109,6 +111,8 @@ function Icon(props) {
                                         iconShape,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </PanelBody>
@@ -116,7 +120,7 @@ function Icon(props) {
                         title={__("Icon Style", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {NORMAL_HOVER.map((item, index) => (
                                     <Button
@@ -197,6 +201,8 @@ function Icon(props) {
                             max={100}
                             step={1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         {iconView === "framed" && (
                             <ResponsiveDimensionsControl

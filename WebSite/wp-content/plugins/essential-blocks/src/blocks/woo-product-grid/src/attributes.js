@@ -324,7 +324,7 @@ const attributes = {
     },
     contentLists: {
         type: "array",
-        default: [ "rating", "category", "title", "price", "sold_count"],
+        default: ["rating", "category", "title", "price", "sold_count"],
     },
     enableContents: {
         type: "array",
@@ -367,11 +367,16 @@ const attributes = {
         default: "h3",
     },
     catColor: {
-		type: "string",
-	},
-	catHoverColor: {
-		type: "string",
-	},
+        type: "string",
+    },
+    catHoverColor: {
+        type: "string",
+    },
+
+    imageSize: {
+        type: "string",
+        default: "full",
+    },
 
     ...generateTypographyAttributes(typoPrefix_title),
     ...generateTypographyAttributes(typoPrefix_price),

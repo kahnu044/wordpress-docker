@@ -27,7 +27,9 @@ import {
 
 import {
     BlockProps, BrowseTemplate,
-    withBlockContext, EBButton, EBDisplayIconEdit
+    withBlockContext, EBButton, EBDisplayIconEdit,
+    editorQuerySelector,
+    patchIsotopeForIframe,
 } from "@essential-blocks/controls";
 
 import { NotFoundImg, gridGapCal } from './helpers';
@@ -301,8 +303,11 @@ function Edit(props) {
         }
 
         const initializeIsotope = () => {
-            const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
+            const imageGallery = editorQuerySelector(`.${blockId}.enable-isotope`);
             if (!imageGallery) return;
+
+            // Patch Isotope to work with iframe elements (one-time)
+            patchIsotopeForIframe();
 
             imagesLoaded(imageGallery, () => {
                 // Destroy existing instance
@@ -392,7 +397,7 @@ function Edit(props) {
             return;
         }
 
-        const imageGallery = document.querySelector(`.${blockId}.enable-isotope`);
+        const imageGallery = editorQuerySelector(`.${blockId}.enable-isotope`);
         const parentWrapper = imageGallery?.closest(".eb-parent-wrapper");
         const notFoundDiv = parentWrapper?.querySelector('#eb-img-gallery-not-found');
 

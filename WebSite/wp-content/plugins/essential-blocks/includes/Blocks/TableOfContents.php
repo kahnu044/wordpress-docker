@@ -159,7 +159,7 @@ class TableOfContents extends Block
     /**
      * Generate headers from content
      */
-    public function getHeadersFromContent( $visibleHeaders, $postContent )
+    public function getHeadersFromContent( $visibleHeaders, $postContent, $allowConfigurablePrefix = false, $configurablePrefix = 'eb-toc-' )
     {
         if ( empty( $postContent ) ) {
             return [  ];
@@ -199,7 +199,7 @@ class TableOfContents extends Block
         if ( ! $this->areAllFalse( $visibleHeaders ) ) {
             $xpath           = new \DOMXpath( $dom );
             $headingElements = iterator_to_array( $xpath->query( $queryString ) );
-            return $this->getHeadingsFromHeadingElements( $headingElements );
+            return $this->getHeadingsFromHeadingElements( $headingElements, $allowConfigurablePrefix, $configurablePrefix );
         }
 
         return [  ];
@@ -208,9 +208,11 @@ class TableOfContents extends Block
     /**
      * generate heading from headings elements
      */
-    public function getHeadingsFromHeadingElements( $headingElements )
+    public function getHeadingsFromHeadingElements( $headingElements, $allowConfigurablePrefix = false, $configurablePrefix = 'eb-toc-' )
     {
         $headings = [  ];
+        $usedIds = [  ]; // Track used IDs to handle duplicates
+
         foreach ( $headingElements as $index => $heading ) {
             $level = null;
             switch ( $heading->tagName ) {
@@ -238,11 +240,37 @@ class TableOfContents extends Block
             $value          = empty( $value ) ? $heading->textContent : $value;
             $heading_string = $this->parseTocSlug( wp_strip_all_tags( $value ) );
 
+            // Generate base link based on prefix settings
+            if ( $allowConfigurablePrefix && ! empty( $configurablePrefix ) ) {
+                $baseLink = $configurablePrefix . ( ! empty( $heading_string ) ? $heading_string : $index );
+            } else {
+                $baseLink = preg_match( '/^[A-Za-z0-9\-\_]+$/', $heading_string ) === 1 ? $heading_string : "eb-table-content-$index";
+            }
+
+            // Handle duplicate IDs by appending a numeric suffix
+            $link = $baseLink;
+            if ( isset( $usedIds[ $baseLink ] ) ) {
+                // This ID has been used before, append a counter
+                $counter = $usedIds[ $baseLink ] + 1;
+                $link = $baseLink . '-' . $counter;
+                $usedIds[ $baseLink ] = $counter;
+
+                // Ensure the new link with counter is also unique
+                while ( isset( $usedIds[ $link ] ) ) {
+                    $counter++;
+                    $link = $baseLink . '-' . $counter;
+                }
+                $usedIds[ $link ] = 0; // Mark this specific link as used
+            } else {
+                // First occurrence of this ID
+                $usedIds[ $baseLink ] = 1;
+            }
+
             $headings[  ] = [
                 "level"   => $level,
                 "content" => $value,
                 "text"    => $value,
-                "link"    => preg_match( '/^[A-Za-z0-9\-\_]+$/', $heading_string ) === 1 ? $heading_string : "eb-table-content-$index"
+                "link"    => $link
              ];
         }
 
@@ -337,12 +365,14 @@ class TableOfContents extends Block
         $hideOnDesktop      = $attributes[ 'hideOnDesktop' ] ? 'true' : 'false';
         $hideOnTab          = $attributes[ 'hideOnTab' ] ? 'true' : 'false';
         $hideOnMobile       = $attributes[ 'hideOnMobile' ] ? 'true' : 'false';
-        $visibleHeaders     = isset( $attributes[ 'visibleHeaders' ] ) ? $attributes[ 'visibleHeaders' ] : array_fill( 0, 6, true );
-        $content            = html_entity_decode( preg_replace( "~<!--(.*?)-->~s", "", $the_post->post_content ) );
-        $headers            = $this->getHeadersFromContent( $visibleHeaders, wp_kses_post( $content ) );
-        $enableHighlight    = $attributes[ 'enableHighlight' ] ? 'true' : 'false';
-        $deleteHeaderList   = isset( $attributes[ 'deleteHeaderList' ] ) ? $attributes[ 'deleteHeaderList' ] : [  ];
-        $classHook          = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';
+        $visibleHeaders          = isset( $attributes[ 'visibleHeaders' ] ) ? $attributes[ 'visibleHeaders' ] : array_fill( 0, 6, true );
+        $allowConfigurablePrefix = isset( $attributes[ 'allowConfigurablePrefix' ] ) ? $attributes[ 'allowConfigurablePrefix' ] : false;
+        $configurablePrefix      = isset( $attributes[ 'configurablePrefix' ] ) ? $attributes[ 'configurablePrefix' ] : 'eb-toc-';
+        $content                 = html_entity_decode( preg_replace( "~<!--(.*?)-->~s", "", $the_post->post_content ) );
+        $headers                 = $this->getHeadersFromContent( $visibleHeaders, wp_kses_post( $content ), $allowConfigurablePrefix, $configurablePrefix );
+        $enableHighlight         = $attributes[ 'enableHighlight' ] ? 'true' : 'false';
+        $deleteHeaderList        = isset( $attributes[ 'deleteHeaderList' ] ) ? $attributes[ 'deleteHeaderList' ] : [  ];
+        $classHook               = isset( $attributes[ 'classHook' ] ) ? $attributes[ 'classHook' ] : '';
 
         $container_class     = [  ];
         $container_class[  ] = 'eb-toc-container ' . $blockId;

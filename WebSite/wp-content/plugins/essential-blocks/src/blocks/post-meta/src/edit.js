@@ -36,11 +36,37 @@ function Edit(props) {
         skuIcon,
         showMetaIcon,
         showAuthor,
+        showDate,
+        showProductSku,
         showAuthorPicture,
-        authorPictureLink
+        authorPictureLink,
+        customFields,
+        metaItems
     } = attributes;
 
-    // Get post data from Loop Builder context
+    const parsedCustomFields = (() => {
+        try {
+            const parsed = customFields ? JSON.parse(customFields) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    })();
+
+    const parsedMetaItems = (() => {
+        try {
+            const parsed = metaItems ? JSON.parse(metaItems) : null;
+            return Array.isArray(parsed) ? parsed : null;
+        } catch (e) {
+            return null;
+        }
+    })();
+
+    const isBuiltinKey = (key) =>
+        key === "author" || key === "date" || key === "product_sku";
+
+    // Get post data from Loop Builder context (declared before effectiveItems
+    // so the legacy fallback can gate product_sku on the live loop type).
     const loopPostId = context?.["essential-blocks/postId"];
     const loopPostType = context?.["essential-blocks/postType"];
 
@@ -53,6 +79,30 @@ function Edit(props) {
                 (context.hasOwnProperty("essential-blocks/postId") &&
                     context.hasOwnProperty("essential-blocks/postType"))),
     );
+
+    const effectiveItems = (() => {
+        // Once `metaItems` has been touched (even cleared to []), treat it as
+        // canonical. Only fall through to legacy when never set (parses to null).
+        if (parsedMetaItems !== null) {
+            return parsedMetaItems;
+        }
+        const legacy = [];
+        (enableContents || []).forEach((key) => {
+            if (key === "author" && showAuthor) {
+                legacy.push({ value: "author" });
+            } else if (key === "date" && showDate) {
+                legacy.push({ value: "date" });
+            } else if (
+                key === "product_sku" &&
+                showProductSku &&
+                ((isInLoopBuilder ? loopPostType : type) === "product")
+            ) {
+                legacy.push({ value: "product_sku" });
+            }
+        });
+        parsedCustomFields.forEach((field) => legacy.push(field));
+        return legacy;
+    })();
 
     const postType = select("core/editor").getCurrentPostType();
     const isContentEnabled = (contentName) => enableContents.includes(contentName);
@@ -244,7 +294,7 @@ function Edit(props) {
     const renderMetaItem = (contentType) => {
         switch (contentType) {
             case 'author':
-                if (!isContentEnabled("author") || !shouldShowAuthor()) return null;
+                if (!shouldShowAuthor()) return null;
 
                 if (metaDisplay === "stacked") {
                     // For stacked layout, return the author content part only
@@ -290,7 +340,6 @@ function Edit(props) {
                 }
 
             case 'date':
-                if (!isContentEnabled("date")) return null;
 
                 if (metaDisplay === "stacked") {
                     // For stacked layout, return the date content part only
@@ -316,8 +365,14 @@ function Edit(props) {
                     );
                 }
 
-            case 'product_sku':
-                if (!isContentEnabled("product_sku") || type !== 'product') return null;
+            case 'product_sku': {
+                // Gate on the live post type (Loop Builder iteration) when in a
+                // loop, otherwise the block's saved `type` attribute. Saved
+                // `type` is the editor host post type and goes stale across loop
+                // iterations of mixed types.
+                const gateType = isInLoopBuilder ? effectivePostType : type;
+                if (gateType !== 'product') return null;
+            }
 
                 return (
                     <div key="product_sku" className="eb-post-metadata-item eb-post-metadata-product_sku">
@@ -334,10 +389,40 @@ function Edit(props) {
         }
     };
 
-    // Check if we have author and date for stacked layout
-    const hasAuthorForStacked = isContentEnabled("author") && shouldShowAuthor();
-    const hasDateForStacked = isContentEnabled("date");
-    const shouldShowStackedLayout = metaDisplay === "stacked" && (hasAuthorForStacked || hasDateForStacked);
+    // Stacked layout triggers whenever the user picked stacked AND there's at
+    // least one item to render — works for builtin (author/date) and ACF items.
+    const hasAuthorForStacked = effectiveItems.some(item => item?.value === "author") && shouldShowAuthor();
+    const shouldShowStackedLayout = metaDisplay === "stacked" && effectiveItems.length > 0;
+
+    const renderEffectiveItem = (item, idx) => {
+        if (!item || !item.value) return null;
+        if (isBuiltinKey(item.value)) {
+            return renderMetaItem(item.value);
+        }
+        const customLabel = item.customLabel || "";
+        const customIcon = item.icon || "";
+        return (
+            <div
+                key={`custom-${idx}-${item.value}`}
+                className="eb-post-metadata-item eb-post-metadata-custom"
+            >
+                {showMetaIcon && customIcon && (
+                    <EBDisplayIconEdit
+                        icon={customIcon}
+                        className={`eb-post-metadata-icon`}
+                    />
+                )}
+                {customLabel && (
+                    <span className="eb-post-metadata-label">
+                        {customLabel}{" "}
+                    </span>
+                )}
+                <span className="eb-post-metadata-value ebpg-dynamic-values ebpg-acf">
+                    {item.label || item.value}
+                </span>
+            </div>
+        );
+    };
 
     return (
         <>
@@ -347,8 +432,8 @@ function Edit(props) {
                     <div className={`eb-post-meta-wrapper ${blockId}`} data-id={blockId}>
                         <div className={`eb-post-metadata eb-post-meta-${metaDisplay}`}>
                             {shouldShowStackedLayout ? (
-                                // Stacked layout: Picture on left, author name and date stacked on right
-                                <div className="eb-post-metadata-item eb-post-metadata-author eb-author-stacked-layout">
+                                // Stacked layout: Picture on left, items stacked on right.
+                                <div className={`eb-post-metadata-item eb-author-stacked-layout${hasAuthorForStacked ? " eb-post-metadata-author" : ""}`}>
                                     {hasAuthorForStacked && showAuthorPicture && (
                                         <div className="eb-author-picture">
                                             {authorPictureLink ? (
@@ -369,12 +454,12 @@ function Edit(props) {
                                         </div>
                                     )}
                                     <div className="eb-author-meta-content">
-                                        {enableContents.map(contentType => renderMetaItem(contentType)).filter(Boolean)}
+                                        {effectiveItems.map((item, idx) => renderEffectiveItem(item, idx)).filter(Boolean)}
                                     </div>
                                 </div>
                             ) : (
-                                // Inline layout: Render items in sorted order
-                                enableContents.map(contentType => renderMetaItem(contentType)).filter(Boolean)
+                                // Inline layout: Render items in selection order
+                                effectiveItems.map((item, idx) => renderEffectiveItem(item, idx)).filter(Boolean)
                             )}
                         </div>
                     </div>

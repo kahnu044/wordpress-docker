@@ -72,7 +72,7 @@ class AddToCart extends Block
 
         $root_attributes = get_block_wrapper_attributes(
             [
-                'class' => 'root-' . $attributes[ 'blockId' ]
+                'class' => 'root-' . sanitize_html_class( $attributes[ 'blockId' ] )
              ]
         );
 
@@ -115,9 +115,9 @@ class AddToCart extends Block
             </div>
         </div>',
             $root_attributes,
-            implode( ' ', $_parent_classes ),
-            implode( ' ', $_wrapper_classes ),
-            $attributes[ 'blockId' ],
+            esc_attr( implode( ' ', $_parent_classes ) ),
+            esc_attr( implode( ' ', $_wrapper_classes ) ),
+            esc_attr( $attributes[ 'blockId' ] ),
             $add_to_cart_markup,
         );
 

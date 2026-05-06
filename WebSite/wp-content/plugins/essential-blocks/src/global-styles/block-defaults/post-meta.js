@@ -105,7 +105,7 @@ function PostMeta(props) {
                             controlName={META_ALIGNMENT}
                             options={TEXT_ALIGN}
                         />
-                        <BaseControl label={__("Display", "essential-blocks")}>
+                        <BaseControl label={__("Display", "essential-blocks")} __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {META_DISPLAY.map((item, index) => (
                                     <Button
@@ -129,6 +129,7 @@ function PostMeta(props) {
                             onChange={(showMetaIcon) =>
                                 handleBlockDefault({ showMetaIcon })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showMetaIcon && (
                             <>
@@ -149,6 +150,8 @@ function PostMeta(props) {
                                     max={100}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -161,6 +164,7 @@ function PostMeta(props) {
                             label={__("Show Author", "essential-blocks")}
                             checked={enableContents?.includes("author")}
                             onChange={(isChecked) => toggleContent("author", isChecked)}
+                            __nextHasNoMarginBottom
                         />
                         {enableContents?.includes("author") && (
                             <>
@@ -186,6 +190,7 @@ function PostMeta(props) {
                                     onChange={(showAuthorPicture) =>
                                         handleBlockDefault({ showAuthorPicture })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {showAuthorPicture && (
                                     <>
@@ -195,6 +200,7 @@ function PostMeta(props) {
                                             onChange={(authorPictureLink) =>
                                                 handleBlockDefault({ authorPictureLink })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
                                         <RangeControl
                                             label={__("Border Radius", "essential-blocks")}
@@ -206,6 +212,8 @@ function PostMeta(props) {
                                             max={100}
                                             step={1}
                                             allowReset={true}
+                                            __nextHasNoMarginBottom
+                                            __next40pxDefaultSize
                                         />
                                     </>
                                 )}
@@ -215,6 +223,7 @@ function PostMeta(props) {
                             label={__("Show Date", "essential-blocks")}
                             checked={enableContents?.includes("date")}
                             onChange={(isChecked) => toggleContent("date", isChecked)}
+                            __nextHasNoMarginBottom
                         />
                         {enableContents?.includes("date") && (
                             <>
@@ -240,6 +249,7 @@ function PostMeta(props) {
                             label={__("Show Product SKU", "essential-blocks")}
                             checked={enableContents?.includes("product_sku")}
                             onChange={(isChecked) => toggleContent("product_sku", isChecked)}
+                            __nextHasNoMarginBottom
                         />
                         {enableContents?.includes("product_sku") && (
                             <>

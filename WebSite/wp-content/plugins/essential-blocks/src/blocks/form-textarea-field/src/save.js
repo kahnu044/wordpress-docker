@@ -24,7 +24,7 @@ const save = ({ attributes }) => {
     return (
         <BlockProps.Save attributes={attributes} rootClass={"eb-form-field"}>
             <div
-                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}
+                className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}
             >
                 <div
                     className={`${blockId} eb-textarea-field-wrapper eb-field-wrapper`}

@@ -231,6 +231,11 @@ const attributes = {
         default: false,
     },
 
+    sliderStyle: {
+        type: "string",
+        default: "default-slider",
+    },
+
     // typography attributes ⬇
     ...generateTypographyAttributes(TITLE_TYPOGRAPHY, {
         fontSize: 24,
@@ -378,6 +383,7 @@ const attributes = {
     }),
 
     ...generateBorderShadowAttributes(SLIDER_BORDER_SHADOW),
+
 };
 
 export default attributes;

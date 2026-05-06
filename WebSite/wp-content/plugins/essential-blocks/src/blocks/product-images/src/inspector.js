@@ -108,6 +108,7 @@ export default function Inspector(props) {
                                 disableNavArrow: !disableNavArrow,
                             })
                         }
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__(
@@ -120,6 +121,7 @@ export default function Inspector(props) {
                                 enableZoom: !enableZoom,
                             })
                         }
+                        __nextHasNoMarginBottom
                     />
                 </InspectorPanel.PanelBody>
             </InspectorPanel.General>
@@ -136,6 +138,7 @@ export default function Inspector(props) {
                                 useAdaptiveHeight: !useAdaptiveHeight,
                             })
                         }
+                        __nextHasNoMarginBottom
                     />
                     {!useAdaptiveHeight && (
                         <>
@@ -163,6 +166,7 @@ export default function Inspector(props) {
                                     { value: 'scale-down', label: 'Scale Down' },
                                 ]}
                                 __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         </>
                     )}
@@ -186,7 +190,7 @@ export default function Inspector(props) {
                         controlName={FEATURE_IMG_MARGIN}
                         baseLabel="Margin"
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Border", "essential-blocks")}
                         </h3>
@@ -199,7 +203,7 @@ export default function Inspector(props) {
                     />
                 </InspectorPanel.PanelBody>
                 <InspectorPanel.PanelBody title={__("Thumbnails", "essential-blocks")}>
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Thumbnails Border", "essential-blocks")}
                         </h3>
@@ -210,7 +214,7 @@ export default function Inspector(props) {
                             THUMBNAILS_IMAGE_BORDER
                         }
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">
                             {__("Active Thumbnails Border", "essential-blocks")}
                         </h3>

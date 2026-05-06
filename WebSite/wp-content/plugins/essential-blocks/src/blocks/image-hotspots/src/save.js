@@ -129,7 +129,7 @@ export default function save({ attributes }) {
 
     return (
         <BlockProps.Save attributes={attributes}>
-            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
                 <div
                     className={`eb-image-hotspots-wrapper ${blockId}`}
                     data-tooltip-animation={globalTooltipAnimation}

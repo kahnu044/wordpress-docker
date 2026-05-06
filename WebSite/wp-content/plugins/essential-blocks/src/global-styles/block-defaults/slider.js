@@ -112,6 +112,8 @@ function Slider(props) {
                             value={sliderType}
                             options={SLIDER_TYPE}
                             onChange={(value) => handleBlockDefault({ sliderType: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -120,6 +122,7 @@ function Slider(props) {
                             onChange={() => {
                                 handleBlockDefault({ arrows: !arrows });
                             }}
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Adaptive Height", "essential-blocks")}
@@ -129,6 +132,7 @@ function Slider(props) {
                                     adaptiveHeight: !adaptiveHeight,
                                 });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -138,30 +142,35 @@ function Slider(props) {
                                 autoplay ? slider.current.slickPlay() : slider.current.slickPause();
                                 handleBlockDefault({ autoplay: !autoplay });
                             }}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Dots", "essential-blocks")}
                             checked={dots}
                             onChange={() => handleBlockDefault({ dots: !dots })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Fade", "essential-blocks")}
                             checked={fade}
                             onChange={() => handleBlockDefault({ fade: !fade })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Infinite", "essential-blocks")}
                             checked={infinite}
                             onChange={() => handleBlockDefault({ infinite: !infinite })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
                             label={__("Vertical Slide", "essential-blocks")}
                             checked={vertical}
                             onChange={() => handleBlockDefault({ vertical: !vertical })}
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -172,6 +181,7 @@ function Slider(props) {
                                     pauseOnHover: !pauseOnHover,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -182,6 +192,7 @@ function Slider(props) {
                                     isCustomHeight: !isCustomHeight,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {isCustomHeight && (
@@ -213,6 +224,8 @@ function Slider(props) {
                                 onChange={(autoplaySpeed) => handleBlockDefault({ autoplaySpeed })}
                                 min={0}
                                 max={8000}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -222,6 +235,8 @@ function Slider(props) {
                             onChange={(speed) => handleBlockDefault({ speed })}
                             min={0}
                             max={3000}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </PanelBody>
                     <PanelBody title={__("Settings", "essential-blocks")} initialOpen={false}>

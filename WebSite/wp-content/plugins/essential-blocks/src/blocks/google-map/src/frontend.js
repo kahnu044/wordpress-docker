@@ -25,19 +25,31 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let markersAttribute = map.getAttribute("data-marker");
         let markers;
 
+        // Skip when the marker data is missing — e.g. block is behind Protected
+        // Content, so the wrapper renders but data-marker has been stripped.
+        // Without this guard, atob(null) → InvalidCharacterError, then
+        // decodeURIComponent on the result throws URIError: URI malformed.
+        if (!markersAttribute) {
+            continue;
+        }
+
         try {
             let parsedData = JSON.parse(markersAttribute);
             if (Array.isArray(parsedData)) {
                 markers = parsedData;
             } else {
                 let decodedData = decodeURIComponent(escape(atob(markersAttribute)));
-                
+
                 markers = JSON.parse(decodedData);
             }
         } catch (e) {
-            let decodedData = decodeURIComponent(escape(atob(markersAttribute)));
-            
-            markers = JSON.parse(decodedData);
+            try {
+                let decodedData = decodeURIComponent(escape(atob(markersAttribute)));
+                markers = JSON.parse(decodedData);
+            } catch (e2) {
+                // Both decoders failed — skip this wrapper instead of crashing.
+                continue;
+            }
         }
 
         const googleMap = new window.google.maps.Map(map, {

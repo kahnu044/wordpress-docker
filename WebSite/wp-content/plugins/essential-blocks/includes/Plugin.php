@@ -31,10 +31,11 @@ use EssentialBlocks\Utils\SvgSanitizer;
 use EssentialBlocks\Admin\QuickSetup;
 use EssentialBlocks\Integrations\BlockUsage;
 use EssentialBlocks\Utils\LiquidGlassRenderer;
+use EssentialBlocks\Utils\Helper;
 
 final class Plugin {
     use HasSingletone;
-                        public $version = '5.9.1';
+                                        public $version = '6.1.3';
 
     public $admin;
     /**
@@ -147,6 +148,9 @@ final class Plugin {
              * Register all blocks dynamically
              */
             self::$blocks->register_blocks( $this->assets );
+
+            // Add allowed HTML filter for essential-blocks
+            add_filter( 'wp_kses_allowed_html', array( new Helper(), 'eb_common_allowed_html' ), 99, 2 );
         } );
 
         add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
@@ -230,7 +234,7 @@ final class Plugin {
         //Those flags needs to update if notice
         $this->define( 'EB_PROMOTION_FLAG', 13 );
         $this->define( 'EB_ADMIN_MENU_FLAG', 13 );
-        $this->define( 'EB_SHOW_WHATS_NEW_NOTICE', 0 );
+        $this->define('EB_SHOW_WHATS_NEW_NOTICE', 0);
 
         //Table Name constants
         global $wpdb;
@@ -319,6 +323,12 @@ final class Plugin {
      * @return string
      */
     public function filter_pro_blocks_frontend( $block_content, $block ) {
+
+        // // Add allowed HTML filter for essential-blocks
+        // if ( isset( $block[ 'blockName' ] ) && strpos( $block[ 'blockName' ], 'essential-blocks' ) === 0 ) {
+        //     add_filter( 'wp_kses_allowed_html', array( new Helper(), 'eb_common_allowed_html' ), 99, 2 );
+        // }
+
         // Only filter in frontend, not in admin or REST requests
         if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
             return $block_content;

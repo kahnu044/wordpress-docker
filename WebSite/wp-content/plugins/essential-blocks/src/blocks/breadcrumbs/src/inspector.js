@@ -3,12 +3,12 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-    Button,
-    ButtonGroup,
     BaseControl,
     ToggleControl,
     RangeControl,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -84,6 +84,7 @@ function Inspector(props) {
                         label={__("Show Home Page", "essential-blocks")}
                         checked={showHomePage}
                         onChange={() => setAttributes({ showHomePage: !showHomePage })}
+                        __nextHasNoMarginBottom
                     />
                     {showHomePage && (
                         <DynamicInputControl
@@ -102,36 +103,36 @@ function Inspector(props) {
                         label={__("Show Prefix", "essential-blocks")}
                         checked={showPrefix}
                         onChange={() => setAttributes({ showPrefix: !showPrefix })}
+                        __nextHasNoMarginBottom
                     />
                     {showPrefix === true && (
                         <>
-                            <BaseControl label={__("Prefix Type", "essential-blocks")}>
-                                <ButtonGroup>
-                                    {PREFIX_TYPES.map(
-                                        (
-                                            { label, value },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isSecondary={
-                                                    prefixType !== value
-                                                }
-                                                isPrimary={
-                                                    prefixType === value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        prefixType: value,
-                                                    })
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label={__("Prefix Type", "essential-blocks")}
+
+                                value={prefixType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        prefixType: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                {PREFIX_TYPES.map(
+                                    (
+                                        { label, value },
+                                        index
+                                    ) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={value}
+                                            label={label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
 
                             {prefixType === "icon" && (
                                 <EBIconPicker
@@ -158,33 +159,32 @@ function Inspector(props) {
                         </>
                     )}
 
-                    <BaseControl label={__("Separator Type", "essential-blocks")} >
-                        <ButtonGroup>
-                            {PREFIX_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            separatorType !== value
-                                        }
-                                        isPrimary={
-                                            separatorType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                separatorType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Separator Type", "essential-blocks")}
+
+                        value={separatorType}
+                        onChange={(value) =>
+                            setAttributes({
+                                separatorType: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {PREFIX_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {separatorType === "icon" && (
                         <EBIconPicker
@@ -215,25 +215,27 @@ function Inspector(props) {
                     title={__("Styles", "essential-blocks")}
                     initialOpen={true}
                 >
-                    <BaseControl>
-                        <h3 className="eb-control-title">{__("Alignment", "essential-blocks")}</h3>
-                        <ButtonGroup>
-                            {ALIGNMENT.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={breadcrumbAlign === item.value}
-                                    isSecondary={breadcrumbAlign !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            breadcrumbAlign: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+                        label={__("Alignment", "essential-blocks")}
+
+                        value={breadcrumbAlign}
+                        onChange={(value) =>
+                            setAttributes({
+                                breadcrumbAlign: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {ALIGNMENT.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     <RangeControl
                         label={__(
@@ -250,38 +252,38 @@ function Inspector(props) {
                         max={500}
                         step={1}
                         allowReset={true}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <TypographyDropdown
                         baseLabel={__("Typography", "essential-blocks")}
                         typographyPrefixConstant={BREADCRUMB_TYPO}
                     />
-                    <BaseControl >
-                        <ButtonGroup>
-                            {BREADCRUMB_TYPES.map(
-                                (
-                                    { label, value },
-                                    index
-                                ) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={
-                                            breadcrumbType !== value
-                                        }
-                                        isPrimary={
-                                            breadcrumbType === value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                breadcrumbType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                    <ToggleGroupControl
+
+                        value={breadcrumbType}
+                        onChange={(value) =>
+                            setAttributes({
+                                breadcrumbType: value,
+                            })
+                        }
+                        isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                    >
+                        {BREADCRUMB_TYPES.map(
+                            (
+                                { label, value },
+                                index
+                            ) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
                     {breadcrumbType === 'normal' && (
                         <>
                             <ColorControl
@@ -315,7 +317,7 @@ function Inspector(props) {
                         controlName={BREADCRUMB_PADDING}
                         baseLabel="Padding"
                     />
-                    <BaseControl>
+                    <BaseControl __nextHasNoMarginBottom>
                         <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                     </BaseControl>
                     <BorderShadowControl
@@ -411,6 +413,8 @@ function Inspector(props) {
                             max={500}
                             step={1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </InspectorPanel.PanelBody>
                 )}

@@ -7,13 +7,14 @@ import { applyFilters } from "@wordpress/hooks";
 import {
     SelectControl,
     BaseControl,
-    ButtonGroup,
     Button,
     RangeControl,
     Card,
     CardBody,
     ExternalLink,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import SortableMarker from "./marker";
@@ -256,6 +257,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                             onChange={(value) =>
                                 changeMapType(value)
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {marker.length <= 1 && (
                             <RangeControl
@@ -270,6 +273,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                 min={0}
                                 max={20}
                                 allowReset={true}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
                             />
                         )}
 
@@ -289,6 +294,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                             min={100}
                             max={1400}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <RangeControl
                             label={__(
@@ -304,43 +311,37 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                             min={0}
                             max={200}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         <Divider />
 
-                        <BaseControl
+                        <ToggleGroupControl
                             label={__(
                                 "Theme Source",
                                 "essential-blocks"
                             )}
-                            id="eb-advance-heading-alignment"
+
+                            value={themeSource}
+                            onChange={(value) =>
+                                setAttributes({
+                                    themeSource: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup id="eb-advance-heading-alignment">
-                                {THEME_SOURCES.map(
-                                    (item, key) => (
-                                        <Button
-                                            key={key}
-                                            // isLarge
-                                            isPrimary={
-                                                themeSource ===
-                                                item.value
-                                            }
-                                            isSecondary={
-                                                themeSource !==
-                                                item.value
-                                            }
-                                            onClick={() =>
-                                                setAttributes({
-                                                    themeSource:
-                                                        item.value,
-                                                })
-                                            }
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    )
-                                )}
-                            </ButtonGroup>
-                        </BaseControl>
+                            {THEME_SOURCES.map(
+                                (item, key) => (
+                                    <ToggleGroupControlOption
+                                        key={key}
+                                        value={item.value}
+                                        label={item.label}
+                                    />
+                                )
+                            )}
+                        </ToggleGroupControl>
                         {"google_theme" === themeSource && (
                             <SelectControl
                                 label={__(
@@ -357,6 +358,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                         googleMapStyle: newGoogleMapStyle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                         {"snazzy_theme" === themeSource && (
@@ -375,6 +378,8 @@ const Inspector = ({ attributes, setAttributes, map }) => {
                                         snazzyMapStyle: newSnazzyMapStyle,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>

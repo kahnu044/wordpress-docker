@@ -54,6 +54,7 @@ function Notice(props) {
                                     dismissible: !dismissible,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         <ToggleControl
@@ -64,6 +65,7 @@ function Notice(props) {
                                     showAfterDismiss: !showAfterDismiss,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     {/* Style */}

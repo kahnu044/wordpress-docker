@@ -7,9 +7,9 @@ import {
     SelectControl,
     ToggleControl,
     RangeControl,
-    Button,
-    ButtonGroup,
     BaseControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -85,30 +85,34 @@ function Breadcrumbs(props) {
                         title={__("General Settings", "essential-blocks")}
                         initialOpen={true}
                     >
-                        <BaseControl label={__("Alignment", "essential-blocks")}>
-                            <ButtonGroup>
-                                {ALIGNMENT.map((item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={breadcrumbAlign === item.value}
-                                        isSecondary={breadcrumbAlign !== item.value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                breadcrumbAlign: item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+
+                            value={breadcrumbAlign}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    breadcrumbAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {ALIGNMENT.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ToggleControl
                             label={__("Show Home Page", "essential-blocks")}
                             checked={showHomePage}
                             onChange={(showHomePage) =>
                                 handleBlockDefault({ showHomePage })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showHomePage && (
                             <DynamicInputControl
@@ -127,6 +131,7 @@ function Breadcrumbs(props) {
                             onChange={(showPrefix) =>
                                 handleBlockDefault({ showPrefix })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {showPrefix && (
                             <>
@@ -137,6 +142,8 @@ function Breadcrumbs(props) {
                                     onChange={(prefixType) =>
                                         handleBlockDefault({ prefixType })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {prefixType === "text" && (
                                     <DynamicInputControl
@@ -168,6 +175,8 @@ function Breadcrumbs(props) {
                                     max={500}
                                     step={1}
                                     allowReset={true}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 />
                             </>
                         )}
@@ -183,6 +192,8 @@ function Breadcrumbs(props) {
                             onChange={(separatorType) =>
                                 handleBlockDefault({ separatorType })
                             }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         {separatorType === "text" && (
                             <DynamicInputControl
@@ -221,6 +232,8 @@ function Breadcrumbs(props) {
                             max={500}
                             step={1}
                             allowReset={true}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                         {separatorType === "text" && (
                             <TypographyDropdown
@@ -246,24 +259,27 @@ function Breadcrumbs(props) {
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={BREADCRUMB_TYPO}
                         />
-                        <BaseControl>
-                            <ButtonGroup>
-                                {BREADCRUMB_TYPES.map(({ label, value }, index) => (
-                                    <Button
-                                        key={index}
-                                        isSecondary={breadcrumbType !== value}
-                                        isPrimary={breadcrumbType === value}
-                                        onClick={() =>
-                                            handleBlockDefault({
-                                                breadcrumbType: value,
-                                            })
-                                        }
-                                    >
-                                        {label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Breadcrumb State", "essential-blocks")}
+
+                            value={breadcrumbType}
+                            onChange={(value) =>
+                                handleBlockDefault({
+                                    breadcrumbType: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {BREADCRUMB_TYPES.map(({ label, value }, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={value}
+                                    label={label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         {breadcrumbType === 'normal' && (
                             <>
                                 <ColorControl
@@ -304,7 +320,7 @@ function Breadcrumbs(props) {
                             controlName={BREADCRUMB_PADDING}
                             baseLabel={__("Padding", "essential-blocks")}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">{__("Border", "essential-blocks")}</h3>
                         </BaseControl>
                         <BorderShadowControl

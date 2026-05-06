@@ -93,7 +93,7 @@ export default function Style(props) {
         alignStylesMobile: imageAlignMobile,
     } = generateResponsiveAlignStyles({
         controlName: IMAGE_ALIGNMENT,
-        property: "justify-content",
+        property: "align-items",
         attributes,
     });
 
@@ -208,8 +208,8 @@ export default function Style(props) {
 		    .eb-advanced-image-wrapper.${blockId} .image-wrapper img{
                 transition: transform 0.5s, ${imageBDShadowTransitionStyle};
                 ${autoFit ? `object-fit: ${fitStyles};` : ""}
-                ${imageWidthDesktop ? `width ${imageWidthDesktop};` : ""}
-                ${autoHeight ? `height: auto;` : `height${imageHeightDesktop}`};
+                ${imageWidthDesktop ? `width: ${imageWidthDesktop};` : ""}
+                ${autoHeight ? `height: auto;` : `height: ${imageHeightDesktop};`}
 		    }
                 `
             : ``
@@ -230,8 +230,8 @@ export default function Style(props) {
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthTab ? `width${imageWidthTab};` : ""}
-			${autoHeight ? `height: auto;` : `height${imageHeightTab}`};
+            ${imageWidthTab ? `width: ${imageWidthTab};` : ""}
+			${autoHeight ? `height: auto;` : `height: ${imageHeightTab};`}
 		}
                 `
             : ``
@@ -251,8 +251,8 @@ export default function Style(props) {
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
-            ${imageWidthMobile ? `width${imageWidthMobile};` : ""}
-			${autoHeight ? `height: auto;` : `height${imageHeightMobile}`};
+            ${imageWidthMobile ? `width: ${imageWidthMobile};` : ""}
+			${autoHeight ? `height: auto;` : `height: ${imageHeightMobile};`}
 		}
                 `
             : ``

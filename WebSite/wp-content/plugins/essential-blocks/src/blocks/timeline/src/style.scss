@@ -1,0 +1,1422 @@
+// Timeline Block Styles
+.eb-timeline-wrapper {
+	position: relative;
+	padding-left: 0;
+
+	// Timeline Line - positioned to align with dots
+	&::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		z-index: 1;
+		background-color: #e0e0e0;
+		transform: translateX(-50%);
+	}
+
+	&.layout-preset-2 {
+		.eb-timeline-item {
+			>.eb-timeline-date-section .eb-timeline-date {
+				display: none;
+			}
+
+			.eb-timeline-content {
+				.eb-timeline-date-section {
+					text-align: left;
+					padding: 0;
+					display: flex;
+					flex-direction: row;
+				}
+			}
+		}
+	}
+
+	// Hide default timeline line for style-two (SVG zigzag)
+	&.eb-timeline-line-style-one {
+		&::before {
+			display: none;
+		}
+
+		.eb-timeline-progress-line {
+			display: none;
+		}
+
+		// SVG Zigzag Timeline Styles
+		.eb-timeline-svg-zigzag {
+			position: absolute;
+			left: 50%;
+			top: 0;
+			transform: translateX(-50%);
+			z-index: 1;
+			pointer-events: none;
+
+			// Smooth animation for the gradient path
+			.eb-timeline-animated-path {
+				transition: stroke-dashoffset 0.3s ease-in-out;
+			}
+
+			// Hide animation on reduced motion preference
+			@media (prefers-reduced-motion: reduce) {
+				.eb-timeline-animated-path {
+					animation: none;
+					transition: none;
+				}
+			}
+		}
+
+		.eb-timeline-date-section {
+			min-height: 108px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: flex-end;
+		}
+
+		&.alternating-layout {
+			.eb-timeline-item:nth-child(even) .eb-timeline-date-section {
+				align-items: flex-start;
+			}
+		}
+
+		&.right-layout {
+			.eb-timeline-date-section {
+				align-items: flex-start;
+			}
+		}
+
+		// Adjust timeline dots for better alignment with SVG
+		.eb-timeline-dot {
+			background-color: transparent !important;
+			border: none !important;
+			width: 20px !important;
+			height: 20px !important;
+			top: 40px;
+			z-index: 3; // Ensure dots appear above SVG
+			border-radius: 0 !important;
+
+			.eb-timeline-dot-inner {
+				border: none;
+				border-radius: 0 !important;
+
+				svg {
+					width: 20px;
+					height: 20px;
+				}
+
+				.eb-timeline-dot-icon {
+					color: #dcdcdc;
+					font-size: 20px !important;
+					left: 8px;
+					position: absolute;
+					border-radius: 0 !important;
+
+					svg {
+						width: 20px !important;
+						height: 20px !important;
+					}
+				}
+			}
+
+			&.completed {
+				// border-color: var(--eb-global-primary-color, #3b82f6);
+				// background-color: var(--eb-global-primary-color, #3b82f6);
+
+				.eb-timeline-dot-inner {
+					border: none;
+					background: transparent;
+				}
+
+				.eb-timeline-dot-icon {
+					// color: #000 !important;
+				}
+			}
+		}
+	}
+
+	// Style Two: Animated Gradient Progress Line (Clerk-inspired)
+	&.eb-timeline-line-style-two {
+		&::before {
+			background: linear-gradient(180deg, #e0e0e0 0%, #f0f0f0 100%);
+		}
+
+		.eb-timeline-progress-line {
+			.eb-timeline-progress-fill {
+				background: transparent;
+				// background-size: 100% 200%;
+				// animation: gradient-flow 2s ease-in-out infinite;
+				position: relative;
+
+				// Add a shimmer overlay effect
+				&::after {
+					content: '';
+					position: absolute;
+					top: auto;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					height: 85px;
+					border-radius: 25px;
+					background: linear-gradient(180deg,
+							rgba(241, 241, 241, 0.073) 0%,
+							rgb(4, 3, 3) 100%);
+					background-size: 100% 200%;
+					// make it faster
+					animation: gradient-flow 1s ease-in-out;
+				}
+
+			}
+		}
+
+		.eb-timeline-dot {
+			transition: all 0.3s ease;
+
+			&.completed {
+				animation: pulse-glow 2s ease-in-out infinite;
+			}
+		}
+	}
+
+	// Keyframe animations for style-two
+	@keyframes gradient-flow {
+
+		0%,
+		100% {
+			background-position: 0% 0%;
+		}
+
+		50% {
+			background-position: 0% 100%;
+		}
+	}
+
+	@keyframes shimmer {
+
+		0%,
+		100% {
+			background-position: 0% 0%;
+			opacity: 0.5;
+		}
+
+		50% {
+			background-position: 0% 100%;
+			opacity: 1;
+		}
+	}
+
+	@keyframes pulse-glow {
+
+		0%,
+		100% {
+			transform: translateX(-50%) scale(1);
+		}
+
+		50% {
+			transform: translateX(-50%) scale(1.05);
+		}
+	}
+
+	&.eb-timeline-line-style-three {
+		.eb-timeline-item[data-index="0"] .eb-timeline-dot {
+			top: 9px;
+		}
+
+		&::before {
+			width: 38px !important;
+			border: 1px solid #e0e0e0;
+			border-radius: 25px;
+			background: transparent !important;
+			box-sizing: border-box;
+		}
+
+		.eb-timeline-progress-line {
+			width: 30px;
+			border-radius: 25px;
+			margin: 4px 0;
+
+			.eb-timeline-progress-fill {
+				border-radius: 25px;
+			}
+		}
+
+		.eb-timeline-dot {
+			width: 24px;
+			height: 24px;
+			background: #fff;
+			border: 1px solid #e0e0e0;
+			border-radius: 50%;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+			.eb-timeline-dot-inner {
+				border: none;
+				background: transparent;
+
+				.eb-timeline-dot-icon {
+					font-size: 16px;
+					font-weight: 600;
+					color: #666;
+					background: transparent;
+				}
+			}
+
+			// Hide check icon by default
+			.eb-timeline-complete-icon {
+				display: none;
+				transition: all 0.3s ease;
+			}
+
+			&.completed {
+				// border-color: #3b82f6;
+				// background: #3b82f6;
+
+				// Show check icon when completed
+				.eb-timeline-complete-icon {
+					display: block;
+				}
+
+				// Hide number icon when completed
+				.eb-timeline-dot-icon:not(.eb-timeline-complete-icon) {
+					display: none;
+				}
+
+				.eb-timeline-dot-inner {
+					.eb-timeline-dot-icon {
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
+
+	// &.eb-timeline-line-style-four {
+	// 	.eb-timeline-dot {
+	// 		.eb-timeline-complete-icon {
+	// 			display: none;
+	// 			transition: all 0.3s ease;
+	// 		}
+
+	// 		&.completed {
+	// 			.eb-timeline-complete-icon {
+	// 				display: block;
+	// 			}
+
+	// 			.eb-timeline-dot-icon:not(.eb-timeline-complete-icon) {
+	// 				display: none;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	&.eb-timeline-line-style-four {
+
+		// Dashed timeline line style
+		&::before {
+			background: none !important;
+			border-left: 1px dashed #e0e0e0;
+			width: 0;
+		}
+
+		.eb-timeline-progress-line {
+			.eb-timeline-progress-fill {
+				background: none;
+				border-left: 1px dashed #3b82f6;
+				width: 0;
+			}
+		}
+
+		.eb-timeline-dot {
+			width: 40px;
+			height: 40px;
+			background: #fff;
+			border: 1px dashed #e0e0e0;
+			border-radius: 50%;
+			// box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+			.eb-timeline-dot-inner {
+				border: none;
+				background: transparent;
+
+				.eb-timeline-dot-icon {
+					font-size: 16px;
+					font-weight: 600;
+					color: #666;
+					background: transparent;
+
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				span.eb-timeline-dot-icon {
+					// display: flex;
+					// align-items: center;
+					// justify-content: center;
+				}
+			}
+
+			// Hide check icon by default
+			.eb-timeline-complete-icon {
+				display: none !important;
+				transition: all 0.3s ease;
+			}
+
+			&.completed {
+				// border-color: #3b82f6;
+				// background: #3b82f6;
+
+				// Show check icon when completed
+				.eb-timeline-complete-icon {
+					display: flex !important;
+				}
+
+				// Hide number icon when completed
+				.eb-timeline-dot-icon:not(.eb-timeline-complete-icon) {
+					display: none;
+				}
+
+				.eb-timeline-dot-inner {
+					.eb-timeline-dot-icon {
+						// color: #fff;
+					}
+				}
+			}
+		}
+	}
+
+	// Progress Line
+	.eb-timeline-progress-line {
+		position: absolute;
+		left: 50%;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		z-index: 2;
+		overflow: hidden;
+		transform: translateX(-50%);
+
+		.eb-timeline-progress-fill {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 0%;
+			background-color: #3b82f6;
+			transition: height 0.3s ease-in-out;
+		}
+	}
+
+	.eb-timeline-item {
+		position: relative;
+		// margin-bottom: 160px;
+		display: flex;
+		align-items: flex-start;
+		box-sizing: border-box;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		// Default layout: Date left, Content right, Timeline center
+		.eb-timeline-date-section {
+			order: 1;
+			flex: 0 0 calc(50% - 40px);
+			text-align: right;
+			padding-right: 40px;
+			margin-top: 0; // Align with dot and content
+			padding-top: 0; // Ensure top alignment
+
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+
+			.eb-timeline-date {
+				font-weight: 600;
+				color: #3b82f6;
+				font-size: 14px;
+				margin-bottom: 5px;
+				margin-top: 0; // Remove any default margin
+			}
+
+			.eb-timeline-subheading {
+				font-size: 12px;
+				color: #666;
+				padding: 2px 4px;
+				width: fit-content;
+			}
+		}
+
+		.eb-timeline-item-content {
+			order: 3;
+			flex: 0 0 calc(50% - 40px);
+			margin-left: 40px;
+			margin-top: 0; // Align with dot and date
+			text-align: left;
+			padding-top: 0; // Ensure top alignment
+			overflow: hidden;
+
+			.eb-timeline-content {
+				min-height: 100px;
+
+
+
+			}
+
+			.eb-timeline-date-section {
+				display: none;
+			}
+		}
+	}
+
+	// Timeline Dots - positioned to align with central line
+	.eb-timeline-dot {
+		position: absolute;
+		left: 50%;
+		top: 0px; // Align with date and content sections
+		width: 20px;
+		height: 20px;
+		z-index: 3;
+		transform: translateX(-50%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.eb-timeline-dot-inner {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.eb-timeline-dot-icon {
+				// background-color: #fff;
+				font-size: 12px;
+				// color: #3b82f6;
+				line-height: 1;
+				// border-radius: 100%;
+				transition: all 0.3s ease;
+				border: none !important;
+			}
+		}
+	}
+
+	// Timeline Dot States and Hover Effects
+	.eb-timeline-dot {
+		&:hover .eb-timeline-dot-inner {
+			border-color: var(--eb-timeline-icon-border-hover-color,
+					var(--eb-global-primary-color, #3b82f6));
+
+			.eb-timeline-dot-icon {
+				color: #3b82f6;
+			}
+		}
+
+		&.completed .eb-timeline-dot-inner {
+			// border-color: #3b82f6;
+			// background-color: #3b82f6;
+
+			.eb-timeline-dot-icon {
+				color: #fff;
+			}
+		}
+	}
+
+	// Center layout is the default (date left, content right, timeline center)
+	// Alternating layout option
+	&.alternating-layout {
+		// .eb-timeline-item {
+		// 	&:nth-child(odd) {
+		// 		background-color: red;
+
+		// 		// Left side content for alternating layout
+		// 		.eb-timeline-date-section {
+		// 			order: 1;
+		// 			flex: 0 0 calc(50% - 40px);
+		// 			text-align: right;
+		// 			padding-right: 40px;
+		// 			padding-left: 0;
+		// 			margin-top: 0; // Align with dot and content
+		// 			padding-top: 0;
+		// 		}
+
+		// 		.eb-timeline-item-content {
+		// 			order: 3;
+		// 			flex: 0 0 calc(50% - 40px);
+		// 			margin-left: 40px;
+		// 			margin-right: 0;
+		// 			margin-top: 0; // Align with dot and date
+		// 			text-align: left;
+		// 			padding-top: 0;
+		// 		}
+		// 	}
+
+		// 	&:nth-child(even) {
+
+		// 		// Right side content for alternating layout
+		// 		.eb-timeline-item-content {
+		// 			order: 1;
+		// 			flex: 0 0 calc(50% - 40px);
+		// 			margin-right: 40px;
+		// 			margin-left: 0;
+		// 			margin-top: 0; // Align with dot and date
+		// 			text-align: left;
+		// 			padding-top: 0;
+		// 		}
+
+		// 		.eb-timeline-date-section {
+		// 			order: 3;
+		// 			flex: 0 0 calc(50% - 40px);
+		// 			text-align: left;
+		// 			padding-left: 40px;
+		// 			margin-top: 0; // Align with dot and content
+		// 			padding-top: 0;
+		// 			padding-right: 0;
+		// 		}
+
+		// 		.eb-timeline-item-content {
+		// 			order: 3;
+		// 			flex: 0 0 calc(50% - 40px);
+		// 			margin-left: 40px;
+		// 			margin-top: 0; // Align with dot and date
+		// 			text-align: left;
+		// 			padding-top: 0; // Ensure top alignment
+		// 		}
+		// 	}
+		// }
+
+		&.no-meta {
+			.eb-timeline-item:nth-child(odd) {
+				justify-content: flex-end;
+			}
+		}
+
+		.eb-timeline-item {
+			&:nth-child(odd) {
+
+				// Left side content for alternating layout
+				.eb-timeline-date-section {
+					order: 1;
+					flex: 0 0 calc(50% - 40px);
+					text-align: right;
+					padding-right: 40px;
+					padding-left: 0;
+					margin-top: 0; // Align with dot and content
+					padding-top: 0;
+				}
+
+				.eb-timeline-item-content {
+					order: 3;
+					flex: 0 0 calc(50% - 40px);
+					margin-left: 40px;
+					margin-right: 0;
+					margin-top: 0; // Align with dot and date
+					text-align: left;
+					padding-top: 0;
+				}
+			}
+
+			&:nth-child(even) {
+
+				// Right side content for alternating layout
+				.eb-timeline-item-content {
+					order: 1;
+					flex: 0 0 calc(50% - 40px);
+					margin-right: 40px;
+					margin-left: 0;
+					margin-top: 0; // Align with dot and date
+					text-align: left;
+					padding-top: 0;
+
+				}
+
+				.eb-timeline-date-section {
+					order: 3;
+					flex: 0 0 calc(50% - 40px);
+					text-align: left;
+					padding-left: 40px;
+					margin-top: 0; // Align with dot and content
+					padding-top: 0;
+					padding-right: 0;
+					align-items: flex-start;
+				}
+			}
+		}
+	}
+
+	// Left-aligned layout (date | dot | content from left side)
+	&.left-layout {
+		&.no-meta {
+			&::before {
+				left: 0;
+				transform: translateX(0);
+			}
+
+			.eb-timeline-progress-line {
+				left: 0;
+				transform: translateX(0);
+			}
+
+			&.eb-timeline-line-style-one {
+				.eb-timeline-svg-zigzag {
+					left: 0;
+					// transform: translateX(0);
+				}
+			}
+
+			.eb-timeline-dot {
+				left: 0;
+				// transform: translateX(-50);
+			}
+
+			.eb-timeline-item {
+				.eb-timeline-date-section {
+					flex: 0 0 calc(100% - 40px);
+				}
+
+				.eb-timeline-item-content {
+					flex: 0 0 calc(100% - 40px);
+				}
+			}
+		}
+
+		// Move timeline line to left position (not edge, but left of center)
+		&::before {
+			left: 25%;
+			transform: translateX(-50%);
+		}
+
+		.eb-timeline-progress-line {
+			left: 25%;
+			transform: translateX(-50%);
+		}
+
+		// SVG zigzag timeline adjustments for left layout
+		&.eb-timeline-line-style-one {
+			.eb-timeline-svg-zigzag {
+				left: 25%;
+				transform: translateX(-50%);
+			}
+		}
+
+		.eb-timeline-item {
+
+			// Date section - left side of timeline
+			.eb-timeline-date-section {
+				order: 1;
+				flex: 0 0 calc(25% - 40px);
+				text-align: right;
+				padding-right: 40px;
+				padding-left: 0;
+				margin-top: 0;
+				padding-top: 0;
+			}
+
+			.eb-timeline-item-content {
+				order: 3;
+				flex: 0 0 calc(75% - 40px);
+				margin-left: 40px;
+				margin-right: 0;
+				margin-top: 0;
+				text-align: left;
+				padding-top: 0;
+			}
+		}
+
+		// Position timeline dots on the left timeline
+		.eb-timeline-dot {
+			left: 25%;
+			transform: translateX(-50%);
+		}
+	}
+
+	// Right-aligned layout (content | dot | date from right side)
+	&.right-layout {
+
+		&.no-meta {
+			&::before {
+				left: 100%;
+				transform: translateX(-100%);
+			}
+
+			.eb-timeline-progress-line {
+				left: 100%;
+				transform: translateX(-100%);
+			}
+
+			&.eb-timeline-line-style-one {
+				.eb-timeline-svg-zigzag {
+					left: 100%;
+				}
+			}
+
+			.eb-timeline-dot {
+				left: 100%;
+				transform: translateX(-50%);
+			}
+
+			.eb-timeline-item {
+				.eb-timeline-date-section {
+					flex: 0 0 calc(100% - 40px);
+				}
+
+				.eb-timeline-item-content {
+					flex: 0 0 calc(100% - 40px);
+				}
+			}
+		}
+
+		// Move timeline line to right position (not edge, but right of center)
+		&::before {
+			left: 75%;
+			transform: translateX(-50%);
+		}
+
+		.eb-timeline-progress-line {
+			left: 75%;
+			transform: translateX(-50%);
+		}
+
+		// SVG zigzag timeline adjustments for right layout
+		&.eb-timeline-line-style-one {
+			.eb-timeline-svg-zigzag {
+				left: 75%;
+				transform: translateX(-50%);
+			}
+		}
+
+		.eb-timeline-item {
+
+			// Content section - left side of timeline
+			.eb-timeline-item-content {
+				order: 1;
+				flex: 0 0 calc(75% - 40px);
+				margin-right: 40px;
+				margin-left: 0;
+				margin-top: 0;
+				text-align: left;
+				padding-top: 0;
+			}
+
+			// Date section - right side of timeline
+			.eb-timeline-date-section {
+				order: 3;
+				flex: 0 0 calc(25% - 40px);
+				// text-align: left;
+				padding-left: 40px;
+				padding-right: 0;
+				margin-top: 0;
+				padding-top: 0;
+				align-items: flex-start;
+			}
+		}
+
+		// Position timeline dots on the right timeline
+		.eb-timeline-dot {
+			left: 75%;
+			transform: translateX(-50%);
+		}
+	}
+
+	// Timeline Content Styling
+	.eb-timeline-content {
+		// background: #fff;
+		// padding: 20px;
+		// border-radius: 8px;
+		// box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		// border: 1px solid #e0e0e0;
+
+		.eb-timeline-title {
+			margin: 0 0 15px 0;
+			color: #333;
+			font-weight: 600;
+		}
+
+		.eb-timeline-excerpt {
+			color: #666;
+			line-height: 1.6;
+			// margin-bottom: 15px;
+
+			p {
+				margin: 0 0 10px 0;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+
+			strong {
+				font-weight: 600;
+			}
+		}
+
+		.eb-timeline-read-more {
+			// color: #3b82f6;
+			font-weight: 500;
+			text-decoration: none;
+			display: inline-block;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+
+		// Timeline Labels
+		.eb-timeline-labels {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			margin-top: 12px;
+			margin-bottom: 8px;
+
+			.eb-timeline-label {
+				display: inline-block;
+				padding: 4px 8px;
+				// border-radius: 12px;
+				// font-size: 12px;
+				// font-weight: 500;
+				// line-height: 1.2;
+				transition: all 0.3s ease;
+				// border: 1px solid transparent;
+				cursor: default;
+
+				// &:hover {
+				// 	transform: translateY(-1px);
+				// 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				// }
+			}
+		}
+	}
+
+	// Timeline Image
+	.eb-timeline-image {
+		margin-bottom: 15px;
+
+		img {
+			width: 100%;
+			height: auto;
+			border-radius: 4px;
+		}
+	}
+
+	// Timeline Icon
+	.eb-timeline-icon {
+		margin-bottom: 15px;
+		font-size: 24px;
+		color: #3b82f6;
+		display: inline-block;
+	}
+
+	// Responsive Design
+	// @media (max-width: 767px) {
+
+	// 	// Switch to mobile layout - single column with left-aligned timeline
+	// 	&::before {
+	// 		left: 30px;
+	// 		transform: none;
+	// 	}
+
+	// 	.eb-timeline-progress-line {
+	// 		left: 30px;
+	// 		transform: none;
+	// 	}
+
+	// 	.eb-timeline-dot {
+	// 		left: 30px;
+	// 		top: 0px; // Align with date and content sections
+	// 		transform: translateX(-50%);
+	// 	}
+
+	// 	.eb-timeline-item {
+	// 		flex-direction: column;
+	// 		align-items: flex-start;
+	// 		margin-bottom: 40px;
+
+	// 		.eb-timeline-date-section {
+	// 			order: 1;
+	// 			flex: none;
+	// 			text-align: left;
+	// 			// padding-right: 0;
+	// 			// padding-left: 60px;
+	// 			// padding-top: 0; // Align with dot
+	// 			margin-bottom: 10px;
+	// 			margin-top: 0;
+
+	// 			.eb-timeline-date {
+	// 				font-size: 13px;
+	// 			}
+
+	// 			.eb-timeline-subheading {
+	// 				font-size: 11px;
+	// 			}
+	// 		}
+
+	// 		.eb-timeline-item-content {
+	// 			order: 2;
+	// 			flex: none;
+	// 			margin-left: 60px;
+	// 			margin-right: 0;
+	// 			margin-top: 0; // Align with dot
+	// 			padding-top: 0;
+	// 			width: calc(100% - 60px);
+	// 		}
+	// 	}
+
+	// 	// Alternating layout adjustments for mobile
+	// 	&.alternating-layout {
+	// 		.eb-timeline-item {
+
+	// 			&:nth-child(odd),
+	// 			&:nth-child(even) {
+	// 				.eb-timeline-date-section {
+	// 					order: 1;
+	// 					text-align: left;
+	// 					padding-left: 60px;
+	// 					padding-right: 0;
+	// 				}
+
+	// 				.eb-timeline-item-content {
+	// 					order: 2;
+	// 					margin-left: 60px;
+	// 					margin-right: 0;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	// @media (max-width: 480px) {
+	// 	&::before {
+	// 		left: 20px;
+	// 	}
+
+	// 	.eb-timeline-progress-line {
+	// 		left: 20px;
+	// 	}
+
+	// 	.eb-timeline-dot {
+	// 		left: 20px;
+	// 		top: 0px; // Align with date and content sections
+	// 		transform: translateX(-50%);
+	// 	}
+
+	// 	.eb-timeline-item {
+	// 		margin-bottom: 30px;
+
+	// 		.eb-timeline-date-section {
+	// 			// padding-left: 45px;
+	// 			// padding-top: 0; // Align with dot
+	// 			margin-top: 0;
+
+	// 			.eb-timeline-date {
+	// 				font-size: 12px;
+	// 			}
+	// 		}
+
+	// 		.eb-timeline-item-content {
+	// 			margin-left: 45px;
+	// 			margin-top: 0; // Align with dot
+	// 			padding-top: 0;
+	// 			width: calc(100% - 45px);
+
+	// 			.eb-timeline-content {
+	// 				padding: 15px;
+
+	// 				.eb-timeline-title {
+	// 					font-size: 16px;
+	// 					margin-bottom: 10px;
+	// 				}
+
+	// 				.eb-timeline-excerpt {
+	// 					font-size: 14px;
+	// 					margin-bottom: 10px;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Timeline Image
+	// 	.eb-timeline-image {
+	// 		margin-bottom: 15px;
+
+	// 		img {
+	// 			width: 100%;
+	// 			height: auto;
+	// 			border-radius: 4px;
+	// 		}
+	// 	}
+
+	// 	// Timeline Icon
+	// 	.eb-timeline-icon {
+	// 		margin-bottom: 15px;
+	// 		font-size: 24px;
+	// 		color: var(--eb-global-primary-color, #3b82f6);
+	// 	}
+	// }
+
+	// // Responsive Design
+	@media (max-width: 767px) {
+
+		// Switch to mobile layout - single column with left-aligned timeline
+		&::before {
+			left: 30px;
+			transform: none;
+		}
+
+		.eb-timeline-progress-line {
+			left: 30px;
+			transform: none;
+		}
+
+		.eb-timeline-dot {
+			left: 30px;
+			top: 0px; // Align with date and content sections
+			transform: translateX(-50%);
+		}
+
+		// Mobile styles for SVG zigzag timeline
+		&.eb-timeline-line-style-one {
+			.eb-timeline-svg-zigzag {
+				left: 0;
+				transform: translateX(-50%);
+			}
+
+			.eb-timeline-dot {
+				left: 30px;
+				transform: translateX(-50%);
+			}
+		}
+
+		&.eb-timeline-line-style-three {
+
+			&.left-layout,
+			&.alternating-layout {
+				&::before {
+					left: 0;
+					transform: none;
+				}
+
+				.eb-timeline-progress-line {
+					left: 4px;
+					transform: none;
+				}
+
+				.eb-timeline-dot {
+					left: 18px;
+				}
+
+			}
+
+			&.right-layout {
+				&::before {
+					left: auto;
+					right: 0;
+					transform: none;
+				}
+
+				.eb-timeline-progress-line {
+					left: auto;
+					right: 4px;
+					transform: none;
+				}
+
+				.eb-timeline-dot {
+					left: auto;
+					right: 18px;
+				}
+			}
+
+		}
+
+		.eb-timeline-item {
+			flex-direction: column;
+			align-items: flex-start;
+			margin-bottom: 40px;
+
+			.eb-timeline-date-section {
+				order: 1;
+				flex: none;
+				text-align: left;
+				// padding: 0;
+				// margin-top: 0;
+
+				.eb-timeline-date {
+					font-size: 13px;
+				}
+
+				.eb-timeline-subheading {
+					font-size: 11px;
+				}
+			}
+
+			.eb-timeline-item-content {
+				order: 2;
+				flex: none;
+				margin-left: 60px;
+				margin-right: 0;
+				margin-top: 0; // Align with dot
+				padding-top: 0;
+				width: calc(100% - 60px);
+			}
+		}
+
+		// Left layout adjustments for mobile (maintain date | dot | content structure)
+		&.left-layout {
+
+			// Keep timeline line at 30px for mobile
+			&::before {
+				left: 30px;
+				transform: none;
+			}
+
+			.eb-timeline-progress-line {
+				left: 30px;
+				transform: none;
+			}
+
+			&.eb-timeline-line-style-one {
+				.eb-timeline-svg-zigzag {
+					left: 30px;
+					transform: translateX(-50%);
+				}
+			}
+
+			.eb-timeline-dot {
+				left: 30px;
+				transform: translateX(-50%);
+			}
+
+			.eb-timeline-item {
+				// Switch to mobile layout but maintain left positioning
+				flex-direction: column;
+				align-items: flex-start;
+
+				.eb-timeline-date-section {
+					order: 1;
+					flex: none;
+					text-align: left;
+					align-items: flex-start;
+					// padding: 0;
+					// margin-bottom: 10px;
+					width: auto;
+				}
+
+				.eb-timeline-item-content {
+					order: 2;
+					flex: none;
+					margin-left: 60px;
+					margin-right: 0;
+					width: calc(100% - 60px);
+				}
+			}
+		}
+
+		// Right layout adjustments for mobile (maintain content | dot | date structure)
+		&.right-layout {
+
+			// Keep timeline line at right side for mobile
+			&::before {
+				left: auto;
+				right: 30px;
+				transform: none;
+			}
+
+			.eb-timeline-progress-line {
+				left: auto;
+				right: 30px;
+				transform: none;
+			}
+
+			&.eb-timeline-line-style-one {
+				.eb-timeline-svg-zigzag {
+					left: auto;
+					right: 30px;
+					transform: translateX(50%);
+				}
+			}
+
+			.eb-timeline-dot {
+				left: auto;
+				right: 30px;
+				transform: translateX(50%);
+			}
+
+			.eb-timeline-item {
+				// Switch to mobile layout but maintain right positioning
+				flex-direction: column;
+				align-items: flex-end;
+
+				.eb-timeline-item-content {
+					order: 1;
+					flex: none;
+					text-align: right;
+					padding: 0;
+					margin-right: 0;
+					margin-left: 0;
+					margin-bottom: 10px;
+					width: calc(100% - 60px);
+				}
+
+				.eb-timeline-date-section {
+					order: 2;
+					flex: none;
+					text-align: right;
+					// padding-right: 60px;
+					// padding-left: 0;
+					width: auto;
+				}
+			}
+		}
+
+		// Alternating layout adjustments for mobile
+		&.alternating-layout {
+			.eb-timeline-item {
+
+				&:nth-child(odd),
+				&:nth-child(even) {
+					.eb-timeline-date-section {
+						order: 1;
+						text-align: left;
+						padding-left: 0 !important;
+						padding-right: 0 !important;
+						align-items: flex-start;
+					}
+
+					.eb-timeline-item-content {
+						order: 2;
+						margin-left: 60px;
+						margin-right: 0;
+					}
+				}
+			}
+		}
+	}
+
+	// @media (max-width: 480px) {
+	// 	&::before {
+	// 		left: 20px;
+	// 	}
+
+	// 	.eb-timeline-progress-line {
+	// 		left: 20px;
+	// 	}
+
+	// 	.eb-timeline-dot {
+	// 		left: 20px;
+	// 		top: 0px; // Align with date and content sections
+	// 		transform: translateX(-50%);
+	// 	}
+
+	// 	.eb-timeline-item {
+	// 		margin-bottom: 30px;
+
+	// 		.eb-timeline-date-section {
+	// 			padding-left: 45px;
+	// 			padding-top: 0; // Align with dot
+	// 			margin-top: 0;
+
+	// 			.eb-timeline-date {
+	// 				font-size: 12px;
+	// 			}
+	// 		}
+
+	// 		.eb-timeline-item-content {
+	// 			margin-left: 45px;
+	// 			margin-top: 0; // Align with dot
+	// 			padding-top: 0;
+	// 			width: calc(100% - 45px);
+
+	// 			.eb-timeline-content {
+	// 				padding: 15px;
+
+	// 				.eb-timeline-title {
+	// 					font-size: 16px;
+	// 					margin-bottom: 10px;
+	// 				}
+
+	// 				.eb-timeline-excerpt {
+	// 					font-size: 14px;
+	// 					margin-bottom: 10px;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Left layout adjustments for small mobile
+	// 	&.left-layout {
+
+	// 		// Keep timeline line at 20px for small mobile
+	// 		&::before {
+	// 			left: 20px;
+	// 		}
+
+	// 		.eb-timeline-progress-line {
+	// 			left: 20px;
+	// 		}
+
+	// 		.eb-timeline-dot {
+	// 			left: 20px;
+	// 		}
+
+	// 		.eb-timeline-item {
+	// 			.eb-timeline-date-section {
+	// 				padding-left: 45px;
+	// 			}
+
+	// 			.eb-timeline-item-content {
+	// 				margin-left: 45px;
+	// 				width: calc(100% - 45px);
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Right layout adjustments for small mobile
+	// 	&.right-layout {
+
+	// 		// Keep timeline line at 20px from right for small mobile
+	// 		&::before {
+	// 			left: auto;
+	// 			right: 20px;
+	// 		}
+
+	// 		.eb-timeline-progress-line {
+	// 			left: auto;
+	// 			right: 20px;
+	// 		}
+
+	// 		.eb-timeline-dot {
+	// 			left: auto;
+	// 			right: 20px;
+	// 		}
+
+	// 		.eb-timeline-item {
+	// 			.eb-timeline-item-content {
+	// 				padding-right: 45px;
+	// 				width: calc(100% - 45px);
+	// 			}
+
+	// 			.eb-timeline-date-section {
+	// 				padding-right: 45px;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Alternating layout adjustments for small mobile
+	// 	&.alternating-layout {
+	// 		.eb-timeline-item {
+
+	// 			&:nth-child(odd),
+	// 			&:nth-child(even) {
+	// 				.eb-timeline-date-section {
+	// 					padding-left: 45px;
+	// 					padding-right: 0;
+	// 				}
+
+	// 				.eb-timeline-item-content {
+	// 					margin-left: 45px;
+	// 					margin-right: 0;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+}

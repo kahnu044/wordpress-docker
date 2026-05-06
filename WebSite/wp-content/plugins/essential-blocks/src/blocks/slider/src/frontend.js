@@ -14,8 +14,6 @@ const {
     generateArrowHTML
 } = window.eb_frontend;
 
-
-
 domReady(function () {
     //Execute after DOM loads.
     const wrappers = document.getElementsByClassName("eb-slider-wrapper");
@@ -37,8 +35,6 @@ domReady(function () {
             let ContentTag = wrapper.getAttribute("data-contentTag") || "p";
 
             const slider = createRef();
-
-            console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
 
             const SampleNextArrow = (props) => {
                 const { className, style, onClick, arrowNextIcon } = props;
@@ -239,8 +235,6 @@ domReady(function () {
             let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
             let showLightbox = wrapper.getAttribute("data-lightbox");
-console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
-
 
             settings.prevArrow = generateArrowHTML(arrowPrevIcon, 'prev');
             settings.nextArrow = generateArrowHTML(arrowNextIcon, 'next');
@@ -264,6 +258,8 @@ console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
             }
         }
         if (version === "v3" || version === "v4") {
+
+            let isMarquee = wrapper.classList.contains("marquee-slider");
             let settingsData = atob(wrapper.getAttribute("data-settings"));
             let settings = JSON.parse(settingsData);
 
@@ -285,75 +281,76 @@ console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
             let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
             let showLightbox = wrapper.getAttribute("data-lightbox");
 
-            let slickType = wrapper.querySelector(".eb-slider-init");
+            if (!isMarquee) {
+                let slickType = wrapper.querySelector(".eb-slider-init");
 
-            const isRTL = document.documentElement.dir === "rtl";
+                const isRTL = document.documentElement.dir === "rtl";
 
-            const $slick = jQuery(slickType);
+                const $slick = jQuery(slickType);
 
-console.log('EBRenderIconWithSVG', EBRenderIconWithSVG(arrowNextIcon));
 
-            $slick.slick({
-                lazyLoad: "progressive",
-                arrows,
-                adaptiveHeight,
-                autoplay,
-                autoplaySpeed,
-                dots,
-                fade,
-                infinite,
-                pauseOnHover,
-                slidesToShow: slideToShowRange,
-                speed,
-                vertical,
-                rtl: isRTL,
-                prevArrow: generateArrowHTML(arrowPrevIcon, 'prev'),
-                nextArrow: generateArrowHTML(arrowNextIcon, 'next'),
-                responsive: [...responsive],
-                cssEase: "linear",
-            });
-
-            // Load SVG icons for v3/v4
-            setTimeout(() => {
-                loadSvgIcons(wrapper);
-            }, 100);
-
-            // ✅ Recalculate layout when image is lazy-loaded
-            $slick.on(
-                "lazyLoaded",
-                function (event, slick, image, imageSource) {
-                    slick.$slider.slick("setPosition");
-
-                    // Force height recalculation for adaptiveHeight
-                    if (adaptiveHeight) {
-                        setTimeout(function () {
-                            slick.$slider.slick("setPosition");
-                        }, 50);
-                    }
-                },
-            );
-
-            // Force height calculation after initialization for adaptiveHeight
-            if (adaptiveHeight) {
-                setTimeout(function () {
-                    $slick.slick("setPosition");
-                }, 100);
-            }
-
-            // Recalculate on slide change for adaptiveHeight
-            $slick.on('afterChange', function (event, slick, currentSlide) {
-                if (adaptiveHeight) {
-                    slick.$slider.slick('setPosition');
-                }
-            });
-
-            if (showLightbox == "true") {
-                $slick.slickLightbox({
-                    src: "data-src",
-                    itemSelector: ".eb-slider-item",
-                    navigateByKeyboard: true,
-                    imageMaxHeight: 0.7,
+                $slick.slick({
+                    lazyLoad: "progressive",
+                    arrows,
+                    adaptiveHeight,
+                    autoplay,
+                    autoplaySpeed,
+                    dots,
+                    fade,
+                    infinite,
+                    pauseOnHover,
+                    slidesToShow: slideToShowRange,
+                    speed,
+                    vertical,
+                    rtl: isRTL,
+                    prevArrow: generateArrowHTML(arrowPrevIcon, 'prev'),
+                    nextArrow: generateArrowHTML(arrowNextIcon, 'next'),
+                    responsive: [...responsive],
+                    cssEase: "linear",
                 });
+
+                // Load SVG icons for v3/v4
+                setTimeout(() => {
+                    loadSvgIcons(wrapper);
+                }, 100);
+
+                // ✅ Recalculate layout when image is lazy-loaded
+                $slick.on(
+                    "lazyLoaded",
+                    function (event, slick, image, imageSource) {
+                        slick.$slider.slick("setPosition");
+
+                        // Force height recalculation for adaptiveHeight
+                        if (adaptiveHeight) {
+                            setTimeout(function () {
+                                slick.$slider.slick("setPosition");
+                            }, 50);
+                        }
+                    },
+                );
+
+                // Force height calculation after initialization for adaptiveHeight
+                if (adaptiveHeight) {
+                    setTimeout(function () {
+                        $slick.slick("setPosition");
+                    }, 100);
+                }
+
+                // Recalculate on slide change for adaptiveHeight
+                $slick.on('afterChange', function (event, slick, currentSlide) {
+                    if (adaptiveHeight) {
+                        slick.$slider.slick('setPosition');
+                    }
+                });
+
+                if (showLightbox == "true") {
+                    $slick.slickLightbox({
+                        src: "data-src",
+                        itemSelector: ".eb-slider-item",
+                        navigateByKeyboard: true,
+                        imageMaxHeight: 0.7,
+                    });
+                }
             }
         }
     }

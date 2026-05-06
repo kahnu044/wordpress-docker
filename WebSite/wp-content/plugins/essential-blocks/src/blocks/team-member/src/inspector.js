@@ -6,12 +6,14 @@ import { useEffect } from "@wordpress/element";
 import {
     SelectControl,
     ToggleControl,
-    Button,
     RangeControl,
     BaseControl,
-    ButtonGroup,
     TextControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from "@wordpress/components";
+import { alignLeft, alignCenter, alignRight } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
 
 /**
@@ -19,9 +21,6 @@ import { applyFilters } from "@wordpress/hooks";
  */
 
 import {
-    LeftAlignIcon,
-    RightAlignIcon,
-    CenterAlignIcon,
     TypographyDropdown,
     ResponsiveDimensionsControl,
     ResponsiveRangeController,
@@ -252,6 +251,7 @@ function Inspector({ attributes, setAttributes }) {
                         label={__("Open in New Tab", "essential-blocks")}
                         checked={each.linkOpenNewTab}
                         onChange={(value) => onProfileChange('linkOpenNewTab', value, i)}
+                        __nextHasNoMarginBottom
                     />
                 )}
             </div>
@@ -282,6 +282,7 @@ function Inspector({ attributes, setAttributes }) {
                                             isP9reverse: !isP9reverse,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 <ResponsiveRangeController
@@ -300,6 +301,8 @@ function Inspector({ attributes, setAttributes }) {
                                 value={hoverPreset}
                                 options={HOVER_ALIGN}
                                 onChange={(hoverPreset) => setAttributes({ hoverPreset })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -315,6 +318,7 @@ function Inspector({ attributes, setAttributes }) {
                                         isContentOverlay: !isContentOverlay,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
 
@@ -329,6 +333,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showDesignation: !showDesignation,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -341,6 +346,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showDescs: !showDescs,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -353,6 +359,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showSocials: !showSocials,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
 
@@ -362,6 +369,7 @@ function Inspector({ attributes, setAttributes }) {
                     >
                         <ImageComponent.GeneralTab
                             onSelect={({ id, url, alt }) => setAttributes({ imageNewUrl: url, imageId: id, imageAlt: alt })}
+                            onRemove={() => setAttributes({ imageNewUrl: '', imageId: null, imageAlt: '' })}
                             value={imageNewUrl}
                             hasTag={false}
                             hasCaption={false}
@@ -450,6 +458,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 newWindow: !newWindow,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </>
@@ -476,6 +485,7 @@ function Inspector({ attributes, setAttributes }) {
                                                 socialDetails: [...socialDetails]
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
 
                                     <SortControl
@@ -514,6 +524,7 @@ function Inspector({ attributes, setAttributes }) {
                                     showCSeparator: !showCSeparator,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
 
                         {showSocials && "preset3" !== preset && (
@@ -525,6 +536,7 @@ function Inspector({ attributes, setAttributes }) {
                                         showSSeparator: !showSSeparator,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
                         )}
                     </InspectorPanel.PanelBody>
@@ -580,47 +592,35 @@ function Inspector({ attributes, setAttributes }) {
                                                 preset ===
                                                 "new-preset1" && (
                                                     <>
-                                                        <BaseControl
-                                                            id="eb-team-content-vertical-alignments"
+                                                        <ToggleGroupControl
                                                             label="Vertical alignments"
+
+                                                            value={conVtAlign}
+                                                            onChange={(value) =>
+                                                                setAttributes({
+                                                                    conVtAlign: value,
+                                                                })
+                                                            }
+                                                            isBlock
+                                                            __next40pxDefaultSize
+                                                            __nextHasNoMarginBottom
                                                         >
-                                                            <ButtonGroup id="eb-team-content-vertical-alignments">
-                                                                {ContentsVerticalAligns.map(
-                                                                    (
-                                                                        {
-                                                                            value,
-                                                                            label,
-                                                                        },
-                                                                        index
-                                                                    ) => (
-                                                                        <Button
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            isSecondary={
-                                                                                conVtAlign !==
-                                                                                value
-                                                                            }
-                                                                            isPrimary={
-                                                                                conVtAlign ===
-                                                                                value
-                                                                            }
-                                                                            onClick={() =>
-                                                                                setAttributes(
-                                                                                    {
-                                                                                        conVtAlign: value,
-                                                                                    }
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                label
-                                                                            }
-                                                                        </Button>
-                                                                    )
-                                                                )}
-                                                            </ButtonGroup>
-                                                        </BaseControl>
+                                                            {ContentsVerticalAligns.map(
+                                                                (
+                                                                    {
+                                                                        value,
+                                                                        label,
+                                                                    },
+                                                                    index
+                                                                ) => (
+                                                                    <ToggleGroupControlOption
+                                                                        key={index}
+                                                                        value={value}
+                                                                        label={label}
+                                                                    />
+                                                                )
+                                                            )}
+                                                        </ToggleGroupControl>
                                                     </>
                                                 )}
 
@@ -640,6 +640,7 @@ function Inspector({ attributes, setAttributes }) {
                                         "Background",
                                         "essential-blocks"
                                     )}
+                                    __nextHasNoMarginBottom
                                 ></BaseControl>
                                 <ToggleControl
                                     label={__(
@@ -652,6 +653,7 @@ function Inspector({ attributes, setAttributes }) {
                                             isConBgGradient: !isConBgGradient,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {isConBgGradient ? (
@@ -730,6 +732,7 @@ function Inspector({ attributes, setAttributes }) {
                             <BaseControl
                                 id="eb-team-avatar-vertical-alignments"
                                 label="Avatar/Content Vertical Alignment"
+                                __nextHasNoMarginBottom
                             >
                                 <SelectControl
                                     // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -740,127 +743,44 @@ function Inspector({ attributes, setAttributes }) {
                                             imgCnVtAlign,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                         ) : (
-                            <BaseControl
-                                id="eb-team-image-alignments"
-                                label="Avatar Horizontal Alignments"
+                            <ToggleGroupControl
+                                label={__("Avatar Horizontal Alignments", "essential-blocks")}
+                                value={imageAlign}
+                                onChange={(value) => setAttributes({ imageAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup className="eb-btngrp-align">
-                                    <Button
-                                        icon={() => (
-                                            <LeftAlignIcon
-                                                color={
-                                                    imageAlign ===
-                                                    "left" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                imageAlign: "left",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <CenterAlignIcon
-                                                color={
-                                                    imageAlign ===
-                                                    "center" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                imageAlign: "center",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <RightAlignIcon
-                                                color={
-                                                    imageAlign ===
-                                                    "right" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                imageAlign: "right",
-                                            })
-                                        }
-                                    />
-                                </ButtonGroup>
-                            </BaseControl>
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
                         )}
 
-                        <BaseControl
-                            id="eb-team-contents-alignments"
-                            label="Contents Horizontal Alignments"
+                        <ToggleGroupControl
+                            label={__("Contents Horizontal Alignments", "essential-blocks")}
+                            value={contentsAlign}
+                            onChange={(value) => setAttributes({ contentsAlign: value })}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         >
-                            <ButtonGroup className="eb-btngrp-align">
-                                <Button
-                                    icon={() => (
-                                        <LeftAlignIcon
-                                            color={
-                                                contentsAlign ===
-                                                "left" &&
-                                                "#6c40f7"
-                                            }
-                                        />
-                                    )}
-                                    onClick={() =>
-                                        setAttributes({
-                                            contentsAlign: "left",
-                                        })
-                                    }
-                                />
-                                <Button
-                                    icon={() => (
-                                        <CenterAlignIcon
-                                            color={
-                                                contentsAlign ===
-                                                "center" &&
-                                                "#6c40f7"
-                                            }
-                                        />
-                                    )}
-                                    onClick={() =>
-                                        setAttributes({
-                                            contentsAlign: "center",
-                                        })
-                                    }
-                                />
-                                <Button
-                                    icon={() => (
-                                        <RightAlignIcon
-                                            color={
-                                                contentsAlign ===
-                                                "right" &&
-                                                "#6c40f7"
-                                            }
-                                        />
-                                    )}
-                                    onClick={() =>
-                                        setAttributes({
-                                            contentsAlign: "right",
-                                        })
-                                    }
-                                />
-                            </ButtonGroup>
-                        </BaseControl>
+                            <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                            <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                            <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                        </ToggleGroupControl>
 
                         {showSocials && (
                             <>
                                 <BaseControl
                                     id="eb-team-icons-alignments"
                                     label="Social Icons Horizontal Alignments"
+                                    __nextHasNoMarginBottom
                                 >
                                     <SelectControl
                                         // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -871,6 +791,8 @@ function Inspector({ attributes, setAttributes }) {
                                                 iconsJustify,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 </BaseControl>
 
@@ -878,6 +800,7 @@ function Inspector({ attributes, setAttributes }) {
                                     <BaseControl
                                         id="eb-team-icons-alignments"
                                         label="Social Icons Vertical Alignments"
+                                        __nextHasNoMarginBottom
                                     >
                                         <SelectControl
                                             // label={__("Icons Horizontal Alignment", "essential-blocks")}
@@ -888,6 +811,8 @@ function Inspector({ attributes, setAttributes }) {
                                                     iconsVAlign,
                                                 })
                                             }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
                                         />
                                     </BaseControl>
                                 )}
@@ -895,133 +820,36 @@ function Inspector({ attributes, setAttributes }) {
                         )}
 
                         {showCSeparator && (
-                            <BaseControl
-                                id="eb-team-contents-alignments"
-                                label="Content Separator Alignment"
+                            <ToggleGroupControl
+                                label={__("Content Separator Alignment", "essential-blocks")}
+                                value={cSepAlign}
+                                onChange={(value) => setAttributes({ cSepAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup className="eb-btngrp-align">
-                                    <Button
-                                        icon={() => (
-                                            <LeftAlignIcon
-                                                color={
-                                                    cSepAlign ===
-                                                    "left" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                cSepAlign: "left",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <CenterAlignIcon
-                                                color={
-                                                    cSepAlign ===
-                                                    "center" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                cSepAlign: "center",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <RightAlignIcon
-                                                color={
-                                                    cSepAlign ===
-                                                    "right" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                cSepAlign: "right",
-                                            })
-                                        }
-                                    />
-                                </ButtonGroup>
-                            </BaseControl>
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
                         )}
 
                         {showSocials && showSSeparator && (
-                            <BaseControl
-                                id="eb-team-contents-alignments"
-                                label="Social Separator Alignment"
+                            <ToggleGroupControl
+                                label={__("Social Separator Alignment", "essential-blocks")}
+                                value={sSepAlign}
+                                onChange={(value) => setAttributes({ sSepAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup className="eb-btngrp-align">
-                                    <Button
-                                        icon={() => (
-                                            <LeftAlignIcon
-                                                color={
-                                                    sSepAlign ===
-                                                    "left" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                sSepAlign: "left",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <CenterAlignIcon
-                                                color={
-                                                    sSepAlign ===
-                                                    "center" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                sSepAlign: "center",
-                                            })
-                                        }
-                                    />
-                                    <Button
-                                        icon={() => (
-                                            <RightAlignIcon
-                                                color={
-                                                    sSepAlign ===
-                                                    "right" &&
-                                                    "#6c40f7"
-                                                }
-                                            />
-                                        )}
-                                        onClick={() =>
-                                            setAttributes({
-                                                sSepAlign: "right",
-                                            })
-                                        }
-                                    />
-                                </ButtonGroup>
-                            </BaseControl>
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
                         )}
                     </InspectorPanel.PanelBody>
                     <InspectorPanel.PanelBody title={__("Avatar", "essential-blocks")} initialOpen={false}>
-                        <ImageComponent.GeneralTab
-                            onSelect={({ id, url }) => setAttributes({
-                                imageNewUrl: url, imageId: id, imageAlt: alt
-                            })}
-                            value={imageNewUrl}
-                            hasTag={false}
-                            hasCaption={false}
-                            hasStyle={false}
-                            hasLink={false}
-                            showInPanel={false}
-                        />
                         {imageNewUrl && (
                             <>
                                 <ResponsiveRangeController
@@ -1038,6 +866,7 @@ function Inspector({ attributes, setAttributes }) {
                                             isImgHeightAuto: !isImgHeightAuto,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {!isImgHeightAuto && (
@@ -1073,6 +902,7 @@ function Inspector({ attributes, setAttributes }) {
                                             imgBeforeEl: !imgBeforeEl,
                                         })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
 
                                 {imgBeforeEl && (
@@ -1101,23 +931,25 @@ function Inspector({ attributes, setAttributes }) {
                         title={__("Name", "essential-blocks")}
                         initialOpen={false}
                     >
-                        <BaseControl label={__("Tag", "essential-blocks")}>
-                            <ButtonGroup className="eb-advance-heading-alignment eb-html-tag-buttongroup">
-                                {TITLE_TAGS.map((item, key) => (
-                                    <Button
-                                        key={key}
-                                        // isLarge
-                                        isPrimary={titleTag === item.value}
-                                        isSecondary={titleTag !== item.value}
-                                        onClick={() =>
-                                            setAttributes({ titleTag: item.value })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
-                        </BaseControl>
+                        <ToggleGroupControl
+                            label={__("Tag", "essential-blocks")}
+                            className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                            value={titleTag}
+                            onChange={(value) =>
+                                setAttributes({ titleTag: value })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TITLE_TAGS.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
                         <ColorControl
                             label={__("Color", "essential-blocks")}
                             color={nameColor}
@@ -1248,6 +1080,7 @@ function Inspector({ attributes, setAttributes }) {
                                         isIconsDevider: !isIconsDevider,
                                     })
                                 }
+                                __nextHasNoMarginBottom
                             />
 
                             {isIconsDevider && (
@@ -1269,6 +1102,8 @@ function Inspector({ attributes, setAttributes }) {
                                         step={1}
                                         min={1}
                                         max={50}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
 
                                     <RangeControl
@@ -1282,6 +1117,8 @@ function Inspector({ attributes, setAttributes }) {
                                         step={1}
                                         min={1}
                                         max={300}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
 
                                     <ResponsiveRangeController
@@ -1304,6 +1141,8 @@ function Inspector({ attributes, setAttributes }) {
                                         icnEffect,
                                     });
                                 }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
 
                             <InspectorPanel.PanelBody
@@ -1370,7 +1209,7 @@ function Inspector({ attributes, setAttributes }) {
                                 step={1}
                             />
 
-                            <BaseControl label={__("Separator Type", "essential-blocks")}>
+                            <BaseControl label={__("Separator Type", "essential-blocks")} __nextHasNoMarginBottom>
                                 <SelectControl
                                     // label={__("Design Preset", "essential-blocks")}
                                     value={cSepType}
@@ -1381,6 +1220,8 @@ function Inspector({ attributes, setAttributes }) {
                                             cSepType,
                                         });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                         </InspectorPanel.PanelBody>
@@ -1412,7 +1253,7 @@ function Inspector({ attributes, setAttributes }) {
                                 step={1}
                             />
 
-                            <BaseControl label={__("Separator Type", "essential-blocks")}>
+                            <BaseControl label={__("Separator Type", "essential-blocks")} __nextHasNoMarginBottom>
                                 <SelectControl
                                     // label={__("Design Preset", "essential-blocks")}
                                     value={sSepType}
@@ -1423,6 +1264,8 @@ function Inspector({ attributes, setAttributes }) {
                                             sSepType,
                                         });
                                     }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                         </InspectorPanel.PanelBody>

@@ -103,6 +103,8 @@ function InstagramFeed(props) {
                                                 sortBy: newSortBy,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                     <RangeControl
                                         label={__(
@@ -117,6 +119,8 @@ function InstagramFeed(props) {
                                         }}
                                         min={1}
                                         max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
                                     />
                                     <ResponsiveRangeController
                                         baseLabel={__(
@@ -140,6 +144,7 @@ function InstagramFeed(props) {
                                                 hasEqualImages,
                                             })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 </>
                             </PanelBody>
@@ -159,6 +164,8 @@ function InstagramFeed(props) {
                                             layout: newLayout,
                                         })
                                     }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                                 {layout === "overlay" && (
                                     <SelectControl
@@ -173,6 +180,8 @@ function InstagramFeed(props) {
                                                 overlayStyle: newOverlayStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 {layout === "card" && (
@@ -188,12 +197,14 @@ function InstagramFeed(props) {
                                                 cardStyle: newCardStyle,
                                             })
                                         }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 {layout === "card" && (
                                     <>
                                         <Divider />
-                                        <BaseControl>
+                                        <BaseControl __nextHasNoMarginBottom>
                                             <h3 className="eb-control-title">
                                                 {__(
                                                     "User info",
@@ -212,6 +223,7 @@ function InstagramFeed(props) {
                                                     showProfileImg,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
                                         {showProfileImg && !profileImg && (
                                             <MediaUpload
@@ -259,6 +271,7 @@ function InstagramFeed(props) {
                                                     showProfileName,
                                                 })
                                             }
+                                            __nextHasNoMarginBottom
                                         />
                                         {showProfileName && (
                                             <TextControl
@@ -272,6 +285,8 @@ function InstagramFeed(props) {
                                                         profileName: newProfileName,
                                                     })
                                                 }
+                                                __next40pxDefaultSize
+                                                __nextHasNoMarginBottom
                                             />
                                         )}
                                     </>
@@ -286,6 +301,7 @@ function InstagramFeed(props) {
                                         onChange={(showCaptions) =>
                                             handleBlockDefault({ showCaptions })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 <ToggleControl
@@ -294,6 +310,7 @@ function InstagramFeed(props) {
                                     onChange={(enableLink) =>
                                         handleBlockDefault({ enableLink })
                                     }
+                                    __nextHasNoMarginBottom
                                 />
                                 {enableLink && (
                                     <ToggleControl
@@ -305,6 +322,7 @@ function InstagramFeed(props) {
                                         onChange={(openInNewTab) =>
                                             handleBlockDefault({ openInNewTab })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 {overlayStyle !== "overlay__simple" && (
@@ -317,6 +335,7 @@ function InstagramFeed(props) {
                                         onChange={(showMeta) =>
                                             handleBlockDefault({ showMeta })
                                         }
+                                        __nextHasNoMarginBottom
                                     />
                                 )}
                             </PanelBody>
@@ -345,7 +364,7 @@ function InstagramFeed(props) {
                                     }
                                 />
                             )}
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__("Border", "essential-blocks")}
                                 </h3>

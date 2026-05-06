@@ -122,6 +122,8 @@ const Inspector = (props) => {
                         onChange={(type) =>
                             changeType(type)
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     </InspectorPanel.PanelBody>
                 <EBButton.GeneralTab isDynamic={isInLoopBuilder} dynamicPermalink={postPermalink} />

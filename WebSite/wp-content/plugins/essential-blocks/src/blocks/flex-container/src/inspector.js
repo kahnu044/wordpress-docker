@@ -4,11 +4,12 @@
 import { __ } from "@wordpress/i18n";
 import {
     ToggleControl,
-    Button,
-    ButtonGroup,
     BaseControl,
     __experimentalDivider as Divider,
     SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    TextControl
 } from "@wordpress/components";
 
 
@@ -36,6 +37,7 @@ import {
     CONTAINER_WIDTH,
     CONTENT_WIDTH,
     CONTENT_HEIGHT,
+    INHERIT_THEME_OPTIONS,
     getJustifyContentsOptions,
     getAlignItemsOptions,
 } from "./constants";
@@ -53,6 +55,10 @@ const Inspector = ({ attributes, setAttributes }) => {
         containerWidth,
         isContainerCustomWidth,
         contentWidth,
+        inheritTheme,
+        adminWidthVar,
+        frontMaxWidthVar,
+        frontWidthVar,
         htmlTag,
         overflow,
         flexDirection,
@@ -112,30 +118,31 @@ const Inspector = ({ attributes, setAttributes }) => {
                     )}
                     initialOpen={true}
                 >
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__(
                             "Container Width",
                             "essential-blocks"
                         )}
+
+                        value={containerWidth}
+                        onChange={(value) => {
+                            setAttributes({
+                                containerWidth: value,
+                            });
+                            handleContainerWidth(value);
+                        }}
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup>
-                            {CONTAINER_WIDTH.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={containerWidth === item.value}
-                                    isSecondary={containerWidth !== item.value}
-                                    onClick={() => {
-                                        setAttributes({
-                                            containerWidth: item.value,
-                                        });
-                                        handleContainerWidth(item.value);
-                                    }}
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {CONTAINER_WIDTH.map((item, index) => (
+                            <ToggleGroupControlOption
+                                key={index}
+                                value={item.value}
+                                label={item.label}
+                            />
+                        ))}
+                    </ToggleGroupControl>
 
                     {isContainerCustomWidth && (
                         <ResponsiveRangeController
@@ -155,38 +162,32 @@ const Inspector = ({ attributes, setAttributes }) => {
                         />
                     )}
 
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__(
                             "Content Width",
                             "essential-blocks"
                         )}
+
+                        value={contentWidth}
+                        onChange={(value) =>
+                            setAttributes({
+                                contentWidth: value,
+                            })
+                        }
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup id="eb-button-group-alignment">
-                            {CONTENT_WIDTH_OPTIONS.map(
-                                (item, index) => (
-                                    <Button
-                                        key={index}
-                                        isPrimary={
-                                            contentWidth ===
-                                            item.value
-                                        }
-                                        isSecondary={
-                                            contentWidth !==
-                                            item.value
-                                        }
-                                        onClick={() =>
-                                            setAttributes({
-                                                contentWidth:
-                                                    item.value,
-                                            })
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                )
-                            )}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {CONTENT_WIDTH_OPTIONS.map(
+                            (item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            )
+                        )}
+                    </ToggleGroupControl>
 
                     {contentWidth === "boxed" && (
                         <>
@@ -205,6 +206,72 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 max={1500}
                                 step={1}
                             />
+                        </>
+                    )}
+
+                    {contentWidth === "variable" && (
+                        <>
+                            <SelectControl
+                                label={__(
+                                    "Inherit from",
+                                    "essential-blocks"
+                                )}
+                                value={inheritTheme}
+                                options={INHERIT_THEME_OPTIONS}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        inheritTheme: value,
+                                    })
+                                }
+                            />
+                            {inheritTheme === "" && (
+                                <>
+                                    <TextControl
+                                        label={__(
+                                            "Admin Container width",
+                                            "essential-blocks"
+                                        )}
+                                        value={adminWidthVar}
+                                        help={__(
+                                            "If your theme uses css variables for container width, you can place here css names of these variables",
+                                            "essential-blocks"
+                                        )}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                adminWidthVar: value,
+                                            })
+                                        }
+                                    />
+                                    <TextControl
+                                        label={__(
+                                            "Frontend Container Max width",
+                                            "essential-blocks"
+                                        )}
+                                        value={frontMaxWidthVar}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                frontMaxWidthVar: value,
+                                            })
+                                        }
+                                    />
+                                    <TextControl
+                                        label={__(
+                                            "Frontend Container width",
+                                            "essential-blocks"
+                                        )}
+                                        value={frontWidthVar}
+                                        help={__(
+                                            "Optional",
+                                            "essential-blocks"
+                                        )}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                frontWidthVar: value,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
                         </>
                     )}
 
@@ -237,6 +304,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 htmlTag: newHtmlTag,
                             })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                     {/* overflow */}
@@ -252,6 +321,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 overflow: newOverflow,
                             })
                         }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
 
                 </InspectorPanel.PanelBody>

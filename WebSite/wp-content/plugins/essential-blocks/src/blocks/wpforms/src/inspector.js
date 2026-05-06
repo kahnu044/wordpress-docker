@@ -6,9 +6,9 @@ import {
     ToggleControl,
     SelectControl,
     BaseControl,
-    ButtonGroup,
-    Button,
     __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 import objAttributes from "./attributes";
@@ -117,6 +117,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             onChange={(showLabels) =>
                                 setAttributes({ showLabels })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -129,6 +130,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showPlaceholder,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__(
@@ -141,6 +143,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     showErrorMessage,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </InspectorPanel.PanelBody>
                 </>
@@ -186,52 +189,33 @@ const Inspector = ({ attributes, setAttributes }) => {
                         initialOpen={false}
                     >
                         <>
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __(
-                                                "NORMAL",
-                                                "essential-blocks"
-                                            ),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __(
-                                                "FOCUS",
-                                                "essential-blocks"
-                                            ),
-                                            value: "focus",
-                                        },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    inputHoverType ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    inputHoverType !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            inputHoverType: value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
+                            <ToggleGroupControl
+
+                                value={inputHoverType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        inputHoverType: value,
+                                    })
+                                }
+                                isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption
+                                    value="normal"
+                                    label={__(
+                                        "NORMAL",
+                                        "essential-blocks"
                                     )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                />
+                                <ToggleGroupControlOption
+                                    value="focus"
+                                    label={__(
+                                        "FOCUS",
+                                        "essential-blocks"
+                                    )}
+                                />
+                            </ToggleGroupControl>
                             {inputHoverType === "normal" && (
                                 <>
                                     <ColorControl
@@ -353,7 +337,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 step={1}
                             />
                         </>
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <h3 className="eb-control-title">
                                 {__(
                                     "Border & Shadow",
@@ -401,6 +385,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     customCheckboxStyle,
                                 })
                             }
+                            __nextHasNoMarginBottom
                         />
                         {customCheckboxStyle && (
                             <>
@@ -414,56 +399,22 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     max={80}
                                     step={1}
                                 />
-                                <BaseControl>
-                                    <ButtonGroup>
-                                        {[
-                                            {
-                                                label: __(
-                                                    "NORMAL",
-                                                    "essential-blocks"
-                                                ),
-                                                value: "normal",
-                                            },
-                                            {
-                                                label: __(
-                                                    "CHECKED",
-                                                    "essential-blocks"
-                                                ),
-                                                value:
-                                                    "checked",
-                                            },
-                                        ].map(
-                                            (
-                                                {
-                                                    value,
-                                                    label,
-                                                },
-                                                index
-                                            ) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        btnHoverType ===
-                                                        value
-                                                    }
-                                                    isSecondary={
-                                                        btnHoverType !==
-                                                        value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                checkboxSwitcher: value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                <ToggleGroupControl
+                                    label=""
+                                    hideLabelFromVision
+                                    value={checkboxSwitcher}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            checkboxSwitcher: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    <ToggleGroupControlOption value="normal" label={__("NORMAL", "essential-blocks")} />
+                                    <ToggleGroupControlOption value="checked" label={__("CHECKED", "essential-blocks")} />
+                                </ToggleGroupControl>
                                 {checkboxSwitcher ===
                                     "normal" && (
                                         <>
@@ -500,7 +451,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 }
                                                 attributeName={'checkboxBorderColor'}
                                             />
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <h3 className="eb-control-title">
                                                     {__(
                                                         "Checkbox",
@@ -518,7 +469,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                                 )}
                                             />
 
-                                            <BaseControl>
+                                            <BaseControl __nextHasNoMarginBottom>
                                                 <h3 className="eb-control-title">
                                                     {__(
                                                         "Radio Buttons",
@@ -559,41 +510,31 @@ const Inspector = ({ attributes, setAttributes }) => {
                     >
                         <>
                             {btnWidthType === "custom" && (
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__(
                                         "Alignment",
                                         "essential-blocks"
                                     )}
-                                    id="eb-button-group-alignment"
+                                    value={btnAlignment}
+                                    onChange={(value) =>
+                                        setAttributes({
+                                            btnAlignment: value,
+                                        })
+                                    }
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup id="eb-button-group-alignment">
-                                        {SUBMIT_BUTTON_POSITION.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    isPrimary={
-                                                        btnAlignment ===
-                                                        item.value
-                                                    }
-                                                    isSecondary={
-                                                        btnAlignment !==
-                                                        item.value
-                                                    }
-                                                    onClick={() =>
-                                                        setAttributes(
-                                                            {
-                                                                btnAlignment:
-                                                                    item.value,
-                                                            }
-                                                        )
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </Button>
-                                            )
-                                        )}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {SUBMIT_BUTTON_POSITION.map(
+                                        (item, index) => (
+                                            <ToggleGroupControlOption
+                                                key={index}
+                                                value={item.value}
+                                                label={item.label}
+                                            />
+                                        )
+                                    )}
+                                </ToggleGroupControl>
                             )}
                             <SelectControl
                                 label={__(
@@ -607,6 +548,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                                         btnWidthType: newBtnWidthType,
                                     })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {btnWidthType === "custom" && (
                                 <ResponsiveRangeController
@@ -631,52 +574,22 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     typoPrefix_submit_btn
                                 }
                             />
-                            <BaseControl>
-                                <ButtonGroup>
-                                    {[
-                                        {
-                                            label: __(
-                                                "NORMAL",
-                                                "essential-blocks"
-                                            ),
-                                            value: "normal",
-                                        },
-                                        {
-                                            label: __(
-                                                "HOVER",
-                                                "essential-blocks"
-                                            ),
-                                            value: "hover",
-                                        },
-                                    ].map(
-                                        (
-                                            { value, label },
-                                            index
-                                        ) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    btnHoverType ===
-                                                    value
-                                                }
-                                                isSecondary={
-                                                    btnHoverType !==
-                                                    value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            btnHoverType: value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={btnHoverType}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        btnHoverType: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption value="normal" label={__("NORMAL", "essential-blocks")} />
+                                <ToggleGroupControlOption value="hover" label={__("HOVER", "essential-blocks")} />
+                            </ToggleGroupControl>
                             {btnHoverType === "normal" && (
                                 <>
                                     <ColorControl
@@ -740,7 +653,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                                     "essential-blocks"
                                 )}
                             />
-                            <BaseControl>
+                            <BaseControl __nextHasNoMarginBottom>
                                 <h3 className="eb-control-title">
                                     {__(
                                         "Border & Shadow",
@@ -847,41 +760,31 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 color={formBackgroundColor}
                                 attributeName={'formBackgroundColor'}
                             />
-                            <BaseControl
+                            <ToggleGroupControl
                                 label={__(
                                     "Alignment",
                                     "essential-blocks"
                                 )}
-                                id="eb-button-group-alignment"
+                                value={formAlignment}
+                                onChange={(value) =>
+                                    setAttributes({
+                                        formAlignment: value,
+                                    })
+                                }
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
-                                <ButtonGroup id="eb-button-group-alignment">
-                                    {FORM_ALIGNMENT.map(
-                                        (item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    formAlignment ===
-                                                    item.value
-                                                }
-                                                isSecondary={
-                                                    formAlignment !==
-                                                    item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes(
-                                                        {
-                                                            formAlignment:
-                                                                item.value,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        )
-                                    )}
-                                </ButtonGroup>
-                            </BaseControl>
+                                {FORM_ALIGNMENT.map(
+                                    (item, index) => (
+                                        <ToggleGroupControlOption
+                                            key={index}
+                                            value={item.value}
+                                            label={item.label}
+                                        />
+                                    )
+                                )}
+                            </ToggleGroupControl>
                             <ResponsiveRangeController
                                 baseLabel={__(
                                     "Form Max Width",

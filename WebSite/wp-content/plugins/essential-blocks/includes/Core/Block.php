@@ -263,7 +263,11 @@ abstract class Block
                 // Inline SVG placeholders before returning content
                 $content = $this->inline_svg_icons_via_regex($content);
 
-                return $this->render_callback($attributes, $content, $block);
+                $output = $this->render_callback($attributes, $content, $block);
+
+                // Also inline SVGs in the render_callback output (dynamic blocks
+                // generate HTML with SVG placeholders that aren't in $content).
+                return $this->inline_svg_icons_via_regex($output);
             };
         }
 

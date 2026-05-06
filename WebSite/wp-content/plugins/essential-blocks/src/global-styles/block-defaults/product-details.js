@@ -80,6 +80,7 @@ function ProductDetails(props) {
                             onChange={(showDescriptionTab) =>
                                 handleBlockDefault({ showDescriptionTab })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Additional Info Tab", "essential-blocks")}
@@ -87,6 +88,7 @@ function ProductDetails(props) {
                             onChange={(showAdditionalTab) =>
                                 handleBlockDefault({ showAdditionalTab })
                             }
+                            __nextHasNoMarginBottom
                         />
                         <ToggleControl
                             label={__("Show Reviews Tab", "essential-blocks")}
@@ -94,6 +96,7 @@ function ProductDetails(props) {
                             onChange={(showReviewsTab) =>
                                 handleBlockDefault({ showReviewsTab })
                             }
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                     <PanelBody
@@ -104,7 +107,7 @@ function ProductDetails(props) {
                             baseLabel={__("Typography", "essential-blocks")}
                             typographyPrefixConstant={typoTabTitle}
                         />
-                        <BaseControl>
+                        <BaseControl __nextHasNoMarginBottom>
                             <ButtonGroup>
                                 {NORMAL_HOVER.map(({ label, value }, index) => (
                                     <Button

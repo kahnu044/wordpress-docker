@@ -7,8 +7,8 @@ import {
     ToggleControl,
     RangeControl,
     TextControl,
-    ButtonGroup,
-    Button,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 
 /**
@@ -78,6 +78,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         {leftImageURL && (
                             <BaseControl
                                 label={__("Left Image", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 <ImageAvatar
                                     imageUrl={leftImageURL}
@@ -91,6 +92,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         {rightImageURL && (
                             <BaseControl
                                 label={__("Right Image", "essential-blocks")}
+                                __nextHasNoMarginBottom
                             >
                                 <ImageAvatar
                                     imageUrl={rightImageURL}
@@ -101,31 +103,23 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                             </BaseControl>
                         )}
                     </>
-                    <BaseControl
+                    <ToggleGroupControl
                         label={__("Alignment", "essential-blocks")}
-                        id="eb-button-group-alignment"
+                        value={contentPosition}
+                        onChange={(value) => setAttributes({ contentPosition: value })}
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     >
-                        <ButtonGroup id="eb-button-group-alignment">
-                            {CONTENT_POSITION.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    isPrimary={contentPosition === item.value}
-                                    isSecondary={contentPosition !== item.value}
-                                    onClick={() =>
-                                        setAttributes({
-                                            contentPosition: item.value,
-                                        })
-                                    }
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </BaseControl>
+                        {CONTENT_POSITION.map((item, index) => (
+                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                        ))}
+                    </ToggleGroupControl>
                     <ToggleControl
                         label={__("Full Width", "essential-blocks")}
                         checked={fullWidth}
                         onChange={() => setAttributes({ fullWidth: !fullWidth })}
+                        __nextHasNoMarginBottom
                     />
                     {!fullWidth && (
                         <>
@@ -143,6 +137,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         label={__("Move on Hover", "essential-blocks")}
                         checked={hover}
                         onChange={() => setAttributes({ hover: !hover })}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Vertical Mode", "essential-blocks")}
@@ -150,6 +145,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         onChange={() =>
                             setAttributes({ verticalMode: !verticalMode })
                         }
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("Show Labels", "essential-blocks")}
@@ -157,6 +153,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         onChange={() =>
                             setAttributes({ showLabels: !showLabels })
                         }
+                        __nextHasNoMarginBottom
                     />
                     {showLabels && (
                         <>
@@ -166,6 +163,8 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                                 onChange={(beforeLabel) =>
                                     setAttributes({ beforeLabel })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             <TextControl
                                 label={__("After Label", "essential-blocks")}
@@ -173,58 +172,36 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                                 onChange={(afterLabel) =>
                                     setAttributes({ afterLabel })
                                 }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             />
                             {verticalMode && (
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Label Position", "essential-blocks")}
+                                    value={verticalLabelPosition}
+                                    onChange={(value) => setAttributes({ verticalLabelPosition: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {VERTICAL_LABEL_POSITION.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    verticalLabelPosition === item.value
-                                                }
-                                                isSecondary={
-                                                    verticalLabelPosition !== item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        verticalLabelPosition: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {VERTICAL_LABEL_POSITION.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
                             )}
                             {!verticalMode && (
-                                <BaseControl
+                                <ToggleGroupControl
                                     label={__("Label Position", "essential-blocks")}
+                                    value={horizontalLabelPosition}
+                                    onChange={(value) => setAttributes({ horizontalLabelPosition: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 >
-                                    <ButtonGroup>
-                                        {HORIZONTAL_LABEL_POSITION.map((item, index) => (
-                                            <Button
-                                                key={index}
-                                                isPrimary={
-                                                    horizontalLabelPosition === item.value
-                                                }
-                                                isSecondary={
-                                                    horizontalLabelPosition !== item.value
-                                                }
-                                                onClick={() =>
-                                                    setAttributes({
-                                                        horizontalLabelPosition: item.value,
-                                                    })
-                                                }
-                                            >
-                                                {item.label}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
-                                </BaseControl>
+                                    {HORIZONTAL_LABEL_POSITION.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
                             )}
                         </>
                     )}
@@ -232,11 +209,13 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                         label={__("Swap Images", "essential-blocks")}
                         checked={swap}
                         onChange={() => onImageSwap()}
+                        __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label={__("No Handle", "essential-blocks")}
                         checked={noHandle}
                         onChange={() => setAttributes({ noHandle: !noHandle })}
+                        __nextHasNoMarginBottom
                     />
                     <ResetControl
                         onReset={() =>
@@ -255,6 +234,8 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                                 "Update & reload to see effect in backend",
                                 "image-comparison"
                             )}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </ResetControl>
                     <ResetControl
@@ -270,6 +251,8 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                             onChange={(lineWidth) => setAttributes({ lineWidth })}
                             min={0}
                             max={10}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </ResetControl>
                 </InspectorPanel.PanelBody>
