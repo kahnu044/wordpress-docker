@@ -62,6 +62,10 @@ class GenerateBlocks_Dynamic_Tag_Callbacks extends GenerateBlocks_Singleton {
 
 				break;
 			case 'author_email':
+				if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! current_user_can( 'list_users' ) ) {
+					break;
+				}
+
 				$user_id = get_post_field( 'post_author', $id );
 				$url     = 'mailto:' . get_the_author_meta( 'user_email', $user_id );
 				break;

@@ -266,6 +266,10 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 			}
 
 			if ( 'get_post_meta' === $callable ) {
+				if ( is_numeric( $id ) && ! current_user_can( 'read_post', (int) $id ) ) {
+					return '';
+				}
+
 				if ( is_protected_meta( $key, 'post' ) ) {
 					return '';
 				}
@@ -469,6 +473,17 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 					'invalid_user_id',
 					__( 'A valid user ID is required.', 'generateblocks' ),
 					array( 'status' => 400 )
+				)
+			);
+		}
+
+		// Require list_users capability to access other users' meta.
+		if ( $id !== $current_id && ! current_user_can( 'list_users' ) ) {
+			return rest_ensure_response(
+				new WP_Error(
+					'rest_forbidden',
+					__( 'Sorry, you are not allowed to access this user\'s meta.', 'generateblocks' ),
+					array( 'status' => rest_authorization_required_code() )
 				)
 			);
 		}

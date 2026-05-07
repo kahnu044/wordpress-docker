@@ -67,6 +67,14 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 	public function get_user_query( WP_REST_Request $request ) {
 		$args = $request->get_param( 'args' ) ?? [];
 
+		// Sanitize dangerous query args for users without list_users capability.
+		if ( ! current_user_can( 'list_users' ) ) {
+			unset( $args['meta_query'] );
+			unset( $args['meta_key'] );
+			unset( $args['meta_value'] );
+			unset( $args['meta_compare'] );
+		}
+
 		if ( ! isset( $args['number'] ) ) {
 			$args['number'] = 150;
 		}
@@ -86,6 +94,10 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 					// Remove sensitive values for non-admin users.
 					unset( $user->data->user_login );
 					unset( $user->data->user_email );
+
+					// Remove capability data to prevent role enumeration.
+					unset( $user->caps );
+					unset( $user->allcaps );
 				}
 
 				return $user;
