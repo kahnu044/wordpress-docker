@@ -163,9 +163,10 @@ class CustomCSSandJS_AdminConfig {
         return array_merge( $defaults, array( 
             'ccj_htmlentities'      => false, 
             'ccj_htmlentities2'     => false,
-			'ccj_autocomplete'		=> true,
+            'ccj_autocomplete'      => true,
             'add_role'              => false,
             'remove_comments'       => false,
+            'remove_file_comments'  => false
         ) );
     }
 
@@ -215,6 +216,8 @@ class CustomCSSandJS_AdminConfig {
 
         $remove_comments_help = __('In your page\'s HTML there is a comment added before and after the internal CSS or JS in order to help you locate your custom code. Enable this option in order to remove that comment.', 'custom-css-js');
 
+        $remove_file_comments_help = __('Every externally linked custom code will have a 3-lines comment added at the beginning of the file. Enable this option in order to stop adding that comment to the externaly linked custom codes', 'custom-css-js');
+
         ?>
 
         <h2><?php echo __('Editor Settings', 'custom-css-js'); ?></h2>
@@ -255,8 +258,13 @@ class CustomCSSandJS_AdminConfig {
         <?php endif; ?>
         <table class="form-table">
         <tr>
-        <th scope="row"><label for="remove_comments"><?php _e('Remove the comments from HTML', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $remove_comments_help; ?>"></span></label></th>
+        <th scope="row"><label for="remove_comments"><?php _e('Remove comments for internal custom codes', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $remove_comments_help; ?>"></span></label></th>
         <td><input type="checkbox" name="remove_comments" id = "remove_comments" value="1" <?php checked($settings['remove_comments'], true); ?> />
+        </td>
+        </tr>
+        <tr>
+        <th scope="row"><label for="remove_file_comments"><?php _e('Remove comments from externally linked custom codes', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $remove_file_comments_help; ?>"></span></label></th>
+        <td><input type="checkbox" name="remove_file_comments" id = "remove_file_comments" value="1" <?php checked($settings['remove_file_comments'], true); ?> />
         </td>
         </tr>
         </table>

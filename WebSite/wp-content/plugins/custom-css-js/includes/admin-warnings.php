@@ -20,11 +20,6 @@ class CustomCSSandJS_Warnings {
      * Constructor
      */
     public function __construct() {
-
-        if ( ! function_exists( 'is_plugin_active' ) ) {
-            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-        } 
-
         add_action( 'wp_ajax_ccj_dismiss', array( $this, 'notice_dismiss' ) );
     }
 
