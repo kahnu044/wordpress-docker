@@ -158,7 +158,7 @@ class Sidebar_Configurations {
 		if ( ! empty( $last_message_tone ) ) {
 			$current_options['last_used']['changeTone'] = [
 				'value' => $last_message_tone,
-				'label' => __( ucfirst( $last_message_tone ), 'ultimate-addons-for-gutenberg' ), //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+				'label' => self::get_tone_label( $last_message_tone ),
 			];
 		}
 
@@ -440,7 +440,7 @@ class Sidebar_Configurations {
 		}
 
 		// Get the ID based on the current URL - this will avoid incorrectly getting popups as the page.
-		$current_url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$current_url = esc_url_raw( home_url( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ) );
 		$post_id     = url_to_postid( set_url_scheme( $current_url ) );
 		// If this is an editor page, this won't work - so if it doesn't, try getting the ID.
 		if ( empty( $post_id ) ) {
@@ -509,7 +509,7 @@ class Sidebar_Configurations {
 
 		wp_enqueue_style(
 			'zip-ai-sidebar-fonts',
-			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Courier+Prime:wght@400&display=swap',
+			ZIP_AI_URL . 'assets/fonts/fonts.css',
 			array(),
 			ZIP_AI_VERSION
 		);
@@ -750,7 +750,34 @@ class Sidebar_Configurations {
 	}
 
 	/**
-	 * A small private function to take in any given content, and return a formatted array for OpenAI as a system message.
+	 * Get a translatable label for a message tone value.
+	 *
+	 * @since 2.0.9
+	 *
+	 * @param string $tone The tone key (e.g. 'formal', 'casual').
+	 * @return string Translated tone label, or escaped ucfirst fallback.
+	 */
+	private static function get_tone_label( $tone ) {
+		$labels = array(
+			'formal'       => __( 'Formal', 'ultimate-addons-for-gutenberg' ),
+			'casual'       => __( 'Casual', 'ultimate-addons-for-gutenberg' ),
+			'friendly'     => __( 'Friendly', 'ultimate-addons-for-gutenberg' ),
+			'informative'  => __( 'Informative', 'ultimate-addons-for-gutenberg' ),
+			'professional' => __( 'Professional', 'ultimate-addons-for-gutenberg' ),
+			'playful'      => __( 'Playful', 'ultimate-addons-for-gutenberg' ),
+			'serious'      => __( 'Serious', 'ultimate-addons-for-gutenberg' ),
+			'humorous'     => __( 'Humorous', 'ultimate-addons-for-gutenberg' ),
+			'polite'       => __( 'Polite', 'ultimate-addons-for-gutenberg' ),
+			'emotional'    => __( 'Emotional', 'ultimate-addons-for-gutenberg' ),
+		);
+
+		// Safety net for legacy or unknown tone values (e.g. stale DB entries from older plugin versions).
+		// Not translatable by design — add new tones to $labels above instead.
+		return isset( $labels[ $tone ] ) ? $labels[ $tone ] : esc_html( ucfirst( $tone ) );
+	}
+
+	/**
+	 * Format content as a system role message for OpenAI.
 	 *
 	 * @param string $content The content to be put as the message.
 	 * @param string $role    The role of the message, as per OpenAI standards.

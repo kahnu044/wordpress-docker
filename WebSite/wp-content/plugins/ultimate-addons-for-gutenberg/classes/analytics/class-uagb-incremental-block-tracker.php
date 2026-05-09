@@ -170,11 +170,6 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 		 * @return void
 		 */
 		public function track_block_changes_on_save( $post_id, $post ) {
-			// Skip if analytics is not enabled.
-			if ( get_option( 'spectra_analytics_optin', 'no' ) !== 'yes' ) {
-				return;
-			}
-
 			// Skip autosaves and revisions.
 			if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
 				return;
@@ -208,6 +203,17 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 
 			// Store current block counts for next comparison.
 			update_post_meta( $post_id, '_uagb_previous_block_counts', $current_blocks );
+
+			// Maintain the O(1) sitewide pages-with-Spectra counter. The counter only
+			// moves when the post crosses the has-spectra / does-not-have-spectra
+			// boundary; steady-state saves leave it untouched. Replaces the 180-day
+			// postmeta scan formerly used for `active_pages_180d`.
+			$had_spectra = $this->has_spectra_blocks( $previous_blocks );
+			$has_spectra = $this->has_spectra_blocks( $current_blocks );
+
+			if ( $had_spectra !== $has_spectra && class_exists( 'UAGB_Daily_KPI_Counters' ) ) {
+				UAGB_Daily_KPI_Counters::adjust_pages_with_spectra( $has_spectra ? 1 : -1 );
+			}
 		}
 
 		/**
@@ -218,11 +224,6 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 		 * @return void
 		 */
 		public function track_block_removal_on_delete( $post_id ) {
-			// Skip if analytics is not enabled.
-			if ( get_option( 'spectra_analytics_optin', 'no' ) !== 'yes' ) {
-				return;
-			}
-
 			$post = get_post( $post_id );
 			if ( ! $post ) {
 				return;
@@ -252,6 +253,11 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 			if ( ! empty( $block_diff ) ) {
 				$this->update_global_stats( $block_diff );
 			}
+
+			// Deleting a post with Spectra blocks drops the sitewide page count by one.
+			if ( $this->has_spectra_blocks( $previous_blocks ) && class_exists( 'UAGB_Daily_KPI_Counters' ) ) {
+				UAGB_Daily_KPI_Counters::adjust_pages_with_spectra( -1 );
+			}
 		}
 
 		/**
@@ -273,11 +279,6 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 		 * @return void
 		 */
 		public function track_block_addition_on_untrash( $post_id ) {
-			// Skip if analytics is not enabled.
-			if ( get_option( 'spectra_analytics_optin', 'no' ) !== 'yes' ) {
-				return;
-			}
-
 			$post = get_post( $post_id );
 			if ( ! $post ) {
 				return;
@@ -298,6 +299,11 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 
 			// Store current block counts for future comparisons.
 			update_post_meta( $post_id, '_uagb_previous_block_counts', $current_blocks );
+
+			// Restoring a Spectra-bearing post brings it back into the sitewide page count.
+			if ( $this->has_spectra_blocks( $current_blocks ) && class_exists( 'UAGB_Daily_KPI_Counters' ) ) {
+				UAGB_Daily_KPI_Counters::adjust_pages_with_spectra( 1 );
+			}
 		}
 
 		/**
@@ -363,7 +369,7 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 		 */
 		private function update_global_stats_correctly( $previous_blocks, $current_blocks ) {
 			// Get existing analytics data.
-			$analytics_data = get_option( 'uagb_block_analytics_data', array() );
+			$analytics_data = get_option( 'uagb_block_usage_data', array() );
 
 			if ( ! is_array( $analytics_data ) ) {
 				$analytics_data = array();
@@ -402,7 +408,7 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 			$analytics_data['last_updated'] = time();
 
 			// Save the updated analytics data.
-			update_option( 'uagb_block_analytics_data', $analytics_data );
+			update_option( 'uagb_block_usage_data', $analytics_data );
 		}
 
 		/**
@@ -414,7 +420,7 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 		 */
 		private function update_global_stats( $block_diff ) {
 			// Get existing analytics data.
-			$analytics_data = get_option( 'uagb_block_analytics_data', array() );
+			$analytics_data = get_option( 'uagb_block_usage_data', array() );
 
 			if ( ! is_array( $analytics_data ) ) {
 				$analytics_data = array();
@@ -443,20 +449,21 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 			$analytics_data['last_updated'] = time();
 
 			// Save the updated analytics data.
-			update_option( 'uagb_block_analytics_data', $analytics_data );
+			update_option( 'uagb_block_usage_data', $analytics_data );
 		}
 
 		/**
 		 * Initialize tracking for existing posts (one-time setup).
-		 * This method populates the _uagb_previous_block_counts meta for existing posts.
+		 * This method populates the _uagb_previous_block_counts meta for existing
+		 * posts and seeds the sitewide `uagb_pages_with_spectra_count` counter.
 		 *
 		 * @since 2.19.13
 		 * @return void
 		 */
 		public function initialize_existing_posts() {
-			// Get all posts that don't have block counts stored yet.
 			$post_types = get_post_types( array( 'public' => true ), 'names' );
 
+			// Posts without _uagb_previous_block_counts (new installs / new posts).
 			$posts = get_posts(
 				array(
 					'post_type'      => $post_types,
@@ -472,14 +479,40 @@ if ( ! class_exists( 'UAGB_Incremental_Block_Tracker' ) ) {
 				)
 			);
 
+			$newly_added_pages = 0;
+
 			foreach ( $posts as $post_id ) {
 				$post = get_post( $post_id );
 				if ( is_object( $post ) && has_blocks( $post->post_content ) ) {
 					$block_counts   = $this->count_blocks_in_post( $post->post_content );
 					$actual_post_id = is_object( $post_id ) ? $post_id->ID : (int) $post_id;
 					update_post_meta( $actual_post_id, '_uagb_previous_block_counts', $block_counts );
+
+					if ( $this->has_spectra_blocks( $block_counts ) ) {
+						++$newly_added_pages;
+					}
 				}
 			}
+
+			if ( $newly_added_pages > 0 && class_exists( 'UAGB_Daily_KPI_Counters' ) ) {
+				UAGB_Daily_KPI_Counters::adjust_pages_with_spectra( $newly_added_pages );
+			}
+		}
+
+		/**
+		 * Check if block counts contain any Spectra blocks.
+		 *
+		 * @param array $block_counts Array of block counts.
+		 * @since 2.19.19
+		 * @return bool True if any Spectra blocks are present, false otherwise.
+		 */
+		private function has_spectra_blocks( $block_counts ) {
+			foreach ( $block_counts as $block_name => $count ) {
+				if ( $count > 0 && in_array( $block_name, $this->spectra_blocks, true ) ) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**

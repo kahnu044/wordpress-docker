@@ -192,7 +192,7 @@ $selectors = array(
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['prefixRightMargin'], $attr['prefixSpaceUnit'] ),
 	),
 	// Title Style.
-	'.wp-block-uagb-info-box .uagb-ifb-title'             => array(
+	' .uagb-ifb-title'                                    => array(
 		'color'         => $attr['headingColor'],
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['headSpace'], $attr['headSpaceUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['headTopMargin'], $attr['headSpaceUnit'] ),
@@ -200,7 +200,7 @@ $selectors = array(
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['headRightMargin'], $attr['headSpaceUnit'] ),
 	),
 	// Description Style.
-	'.wp-block-uagb-info-box .uagb-ifb-desc'              => array(
+	' .uagb-ifb-desc'                                     => array(
 		'color'         => $attr['subHeadingColor'],
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['subHeadSpace'], $attr['subHeadSpaceUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['subHeadTopMargin'], $attr['subHeadSpaceUnit'] ),
@@ -331,13 +331,13 @@ $m_selectors = array(
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['prefixMarginLeftMobile'], $attr['prefixMobileMarginUnit'] ),
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['prefixMarginRightMobile'], $attr['prefixMobileMarginUnit'] ),
 	),
-	'.wp-block-uagb-info-box .uagb-ifb-title'              => array(
+	' .uagb-ifb-title'                                     => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['headMobileSpace'], $attr['headMobileMarginUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['headMarginTopMobile'], $attr['headMobileMarginUnit'] ),
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['headMarginLeftMobile'], $attr['headMobileMarginUnit'] ),
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['headMarginRightMobile'], $attr['headMobileMarginUnit'] ),
 	),
-	'.wp-block-uagb-info-box .uagb-ifb-desc'               => array(
+	' .uagb-ifb-desc'                                      => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['subHeadMobileSpace'], $attr['subHeadMobileMarginUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['subHeadMarginTopMobile'], $attr['subHeadMobileMarginUnit'] ),
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['subHeadMarginLeftMobile'], $attr['subHeadMobileMarginUnit'] ),
@@ -495,13 +495,13 @@ $t_selectors = array(
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['prefixMarginLeftTablet'], $attr['prefixTabletMarginUnit'] ),
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['prefixMarginRightTablet'], $attr['prefixTabletMarginUnit'] ),
 	),
-	'.wp-block-uagb-info-box .uagb-ifb-title'              => array(
+	' .uagb-ifb-title'                                     => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['headTabletSpace'], $attr['headTabletMarginUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['headMarginTopTablet'], $attr['headTabletMarginUnit'] ),
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['headMarginLeftTablet'], $attr['headTabletMarginUnit'] ),
 		'margin-right'  => UAGB_Helper::get_css_value( $attr['headMarginRightTablet'], $attr['headTabletMarginUnit'] ),
 	),
-	'.wp-block-uagb-info-box .uagb-ifb-desc'               => array(
+	' .uagb-ifb-desc'                                      => array(
 		'margin-bottom' => UAGB_Helper::get_css_value( $attr['subHeadTabletSpace'], $attr['subHeadTabletMarginUnit'] ),
 		'margin-top'    => UAGB_Helper::get_css_value( $attr['subHeadMarginTopTablet'], $attr['subHeadTabletMarginUnit'] ),
 		'margin-left'   => UAGB_Helper::get_css_value( $attr['subHeadMarginLeftTablet'], $attr['subHeadTabletMarginUnit'] ),

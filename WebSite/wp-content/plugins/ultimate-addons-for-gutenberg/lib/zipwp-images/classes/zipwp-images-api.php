@@ -8,6 +8,10 @@
 
 namespace ZipWP_Images\Classes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Ai_Builder
  */
@@ -198,6 +202,10 @@ class Zipwp_Images_Api {
 				$post_data['filter'] = 'popular' === $post_data['filter'] ? 'popular' : 'latest';
 				break;
 
+			case 'unsplash':
+				// order_by=popular or latest.
+				$post_data['filter'] = 'popular' === $post_data['filter'] ? 'popular' : 'latest';
+				break;
 		}
 
 		$request_args = array(
@@ -261,23 +269,28 @@ class Zipwp_Images_Api {
 			wp_send_json_error( __( 'You are not allowed to perform this action', 'ultimate-addons-for-gutenberg' ) );
 		}
 
-		$url      = isset( $_POST['url'] ) ? sanitize_url( $_POST['url'] ) : false; // phpcs:ignore -- We need to remove this ignore once the WPCS has released this issue fix - https://github.com/WordPress/WordPress-Coding-Standards/issues/2189.
-		$name     = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : false;
-		$desc     = isset( $_POST['description'] ) ? sanitize_text_field( $_POST['description'] ) : '';
-		$photo_id = isset( $_POST['id'] ) ? absint( sanitize_key( $_POST['id'] ) ) : 0;
+		$url      = isset( $_POST['url'] ) ? sanitize_url( $_POST['url'] ) : ''; // phpcs:ignore -- We need to remove this ignore once the WPCS has released this issue fix - https://github.com/WordPress/WordPress-Coding-Standards/issues/2189.
+		$name     = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : false;
+		$desc     = isset( $_POST['description'] ) ? sanitize_text_field( wp_unslash( $_POST['description'] ) ) : '';
+		$photo_id = isset( $_POST['id'] ) ? sanitize_key( wp_unslash( $_POST['id'] ) ) : 0;
+
+		// For unsplash images, photo_id can be alphanumeric.
+		if ( strpos( $url, 'unsplash.com' ) === false ) {
+			$photo_id = absint( $photo_id );
+		}
 
 		if ( 0 === $photo_id ) {
 			wp_send_json_error( __( 'Need to send photo ID', 'ultimate-addons-for-gutenberg' ) );
 		}
 
-		if ( false === $url ) {
+		if ( empty( $url ) ) {
 			wp_send_json_error( __( 'Need to send URL of the image to be downloaded', 'ultimate-addons-for-gutenberg' ) );
 		}
 
 		$image  = '';
 		$result = array();
 
-		$name  = preg_replace( '/\.[^.]+$/', '', (string) $name ) . '-' . $photo_id . '.jpg';
+		$name  = pathinfo( (string) $name, PATHINFO_FILENAME ) . '-' . $photo_id . '.jpg';
 		$image = $this->create_image_from_url( $url, $name, (string) $photo_id, $desc );
 
 		if ( empty( $image ) ) {
@@ -320,9 +333,15 @@ class Zipwp_Images_Api {
 	 * @return mixed
 	 */
 	public function create_image_from_url( $url, $name, $photo_id, $description = '' ) {
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/image.php';
+		if ( ! function_exists( 'media_handle_sideload' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+		}
+		if ( ! function_exists( 'wp_handle_sideload' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+		}
 		$file_array         = array();
 		$file_array['name'] = wp_basename( $name );
 
@@ -339,7 +358,7 @@ class Zipwp_Images_Api {
 
 		// If error storing permanently, unlink.
 		if ( is_wp_error( $id ) ) {
-			@unlink( $file_array['tmp_name'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink -- Deleting the file from temp location.
+			wp_delete_file( $file_array['tmp_name'] );
 			return $id;
 		}
 
@@ -467,8 +486,13 @@ class Zipwp_Images_Api {
 	 * @return array<string, array<string, string>|string>
 	 */
 	public function get_image_dimensions( $url ) {
-		$clean_url = esc_url_raw( $url );
-		parse_str( explode( '?', $clean_url )[1], $query_params );
+		$clean_url    = esc_url_raw( $url );
+		$query_params = array();
+		$query_string = explode( '?', $clean_url );
+		if ( isset( $query_string[1] ) ) {
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- parse_str used safely into separate array
+			parse_str( $query_string[1], $query_params );
+		}
 		return array(
 			'width'  => $query_params['w'] ?? '',
 			'height' => $query_params['h'] ?? '',

@@ -8,6 +8,10 @@
 
 namespace ZipWP_Images\Classes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Ai_Builder
  */
@@ -88,11 +92,11 @@ class Zipwp_Images_Script {
 		}
 		$current_screen = get_current_screen();
 
-		if ( ! is_object( $current_screen ) ) {
-			return;
-		}
-
-		if ( in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
+		if ( is_object( $current_screen ) ) {
+			if ( in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
+				return;
+			}
+		} elseif ( ! isset( $_GET['fl_builder'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fetching GET parameter, no nonce associated with this action.
 			return;
 		}
 
@@ -118,6 +122,7 @@ class Zipwp_Images_Script {
 				'validating'           => __( 'Validating...', 'ultimate-addons-for-gutenberg' ),
 				'_ajax_nonce'          => wp_create_nonce( 'zipwp-images' ),
 				'rest_api_nonce'       => current_user_can( 'edit_posts' ) ? wp_create_nonce( 'wp_rest' ) : '',
+				'image_engines'        => self::get_images_engines(),
 			)
 		);
 
@@ -130,28 +135,17 @@ class Zipwp_Images_Script {
 
 		// Enqueue CSS.
 		wp_enqueue_style( 'zipwp-images-style', ZIPWP_IMAGES_URL . 'dist/style-main.css', array(), ZIPWP_IMAGES_VER );
-		wp_enqueue_style( 'zipwp-images-google-fonts', $this->google_fonts_url(), array(), 'all' );
+		wp_enqueue_style( 'zipwp-images-fonts', ZIPWP_IMAGES_URL . 'assets/fonts/figtree.css', array(), ZIPWP_IMAGES_VER );
 	}
 
 	/**
-	 * Generate and return the Google fonts url.
+	 * Get Images Engines
 	 *
-	 * @since 1.0.0
-	 * @return string
+	 * @since 1.0.20
+	 * @return array<string> Image Engine.s
 	 */
-	public function google_fonts_url() {
-
-		$fonts_url     = '';
-		$font_families = array(
-			'Figtree:400,500,600,700',
-		);
-
-		$query_args = array(
-			'family' => rawurlencode( implode( '|', $font_families ) ),
-			'subset' => rawurlencode( 'latin,latin-ext' ),
-		);
-
-		return add_query_arg( $query_args, '//fonts.googleapis.com/css' );
+	public static function get_images_engines() {
+		return [ 'pexels', 'pixabay' ];
 	}
 }
 

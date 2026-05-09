@@ -52,6 +52,9 @@ class UAGB_Init_Blocks {
 		// Hook: Editor assets.
 		add_action( 'enqueue_block_editor_assets', array( $this, 'editor_assets' ) );
 
+		// Hook: Editor styles via enqueue_block_assets so they load inside the iframe editor (apiVersion 3 / WP 7.0+).
+		add_action( 'enqueue_block_assets', array( $this, 'editor_iframe_styles' ) );
+
 		if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
 			add_filter( 'block_categories_all', array( $this, 'register_block_category' ), 999999, 2 );
 		} else {
@@ -87,6 +90,8 @@ class UAGB_Init_Blocks {
 
 		add_action( 'init', array( $this, 'register_popup_builder' ) );
 		add_filter( 'srfm_enable_redirect_activation', '__return_false' );
+
+		add_filter( 'admin_body_class', array( $this, 'add_wp_compat_body_class' ) );
 
 		add_action( 'wp_ajax_uagb_sureforms', array( $this, 'sureforms_plugin_activator' ) );
 		add_action( 'wp_ajax_uagb_surecart', array( $this, 'surecart_plugin_activator' ) );
@@ -133,6 +138,7 @@ class UAGB_Init_Blocks {
 			'show_in_admin_bar' => true,
 			'show_ui'           => true,
 			'show_in_rest'      => true,
+			'rest_base'         => 'spectra-popup',
 			'template_lock'     => 'all',
 			'template'          => array(
 				array( 'uagb/popup-builder', array() ),
@@ -159,24 +165,42 @@ class UAGB_Init_Blocks {
 			'single'        => true,
 			'type'          => 'string',
 			'default'       => 'unset',
-			'auth_callback' => '__return_true',
-			'show_in_rest'  => true,
+			'auth_callback' => function() {
+				return current_user_can( 'manage_options' );
+			},
+			'show_in_rest'  => array(
+				'schema' => array(
+					'type' => 'string',
+				),
+			),
 		);
 
 		$meta_args_popup_enabled = array(
 			'single'        => true,
 			'type'          => 'boolean',
 			'default'       => false,
-			'auth_callback' => '__return_true',
-			'show_in_rest'  => true,
+			'auth_callback' => function() {
+				return current_user_can( 'manage_options' );
+			},
+			'show_in_rest'  => array(
+				'schema' => array(
+					'type' => 'boolean',
+				),
+			),
 		);
 
 		$meta_args_popup_repetition = array(
 			'single'        => true,
 			'type'          => 'number',
 			'default'       => 1,
-			'auth_callback' => '__return_true',
-			'show_in_rest'  => true,
+			'auth_callback' => function() {
+				return current_user_can( 'manage_options' );
+			},
+			'show_in_rest'  => array(
+				'schema' => array(
+					'type' => 'number',
+				),
+			),
 		);
 
 		register_post_type( 'spectra-popup', $type_args );
@@ -195,6 +219,105 @@ class UAGB_Init_Blocks {
 
 		add_filter( 'manage_spectra-popup_posts_columns', array( $spectra_popup_dashboard, 'popup_builder_admin_headings' ) );
 		add_action( 'manage_spectra-popup_posts_custom_column', array( $spectra_popup_dashboard, 'popup_builder_admin_content' ), 10, 2 );
+
+		// Add REST API access control for spectra-popup post type.
+		add_filter( 'rest_spectra-popup_query', array( __CLASS__, 'filter_rest_popup_query' ), 10, 2 );
+		add_filter( 'rest_prepare_spectra-popup', array( __CLASS__, 'filter_rest_popup_response' ), 10, 3 );
+		add_filter( 'rest_authentication_errors', array( __CLASS__, 'restrict_popup_rest_access' ), 99 );
+	}
+
+	/**
+	 * Restrict REST API access to spectra-popup for non-authenticated users.
+	 *
+	 * @param WP_Error|null|bool $result Error from another authentication handler, null if not errors, true if authenticated.
+	 * @return WP_Error|null|bool Modified result.
+	 *
+	 * @since 2.19.18
+	 */
+	public static function restrict_popup_rest_access( $result ) {
+		// If there's already an error, return it.
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		// Only apply to spectra-popup endpoints.
+		$route = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( false === strpos( $route, '/wp/v2/spectra-popup' ) ) {
+			return $result;
+		}
+
+		// Allow authenticated admin users with manage_options.
+		if ( is_user_logged_in() && current_user_can( 'manage_options' ) ) {
+			return $result;
+		}
+
+		// Block unauthenticated users and non-admin users.
+		return new WP_Error(
+			'rest_forbidden',
+			__( 'Sorry, you are not allowed to access popups.', 'ultimate-addons-for-gutenberg' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
+	/**
+	 * Filter REST API query to only include enabled popups for non-admin users.
+	 *
+	 * @param array           $args    Array of query arguments.
+	 * @param WP_REST_Request $request REST request object.
+	 * @return array Modified query arguments.
+	 *
+	 * @since 2.19.18
+	 */
+	public static function filter_rest_popup_query( $args, $request ) {
+		// Allow admin users with manage_options to see all popups.
+		if ( current_user_can( 'manage_options' ) ) {
+			return $args;
+		}
+
+		// For non-admin users, only show enabled popups.
+		if ( ! isset( $args['meta_query'] ) ) {
+			$args['meta_query'] = array(); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		}
+
+		$args['meta_query'][] = array(
+			'key'     => 'spectra-popup-enabled',
+			'value'   => true,
+			'compare' => '=',
+			'type'    => 'BOOLEAN',
+		);
+
+		return $args;
+	}
+
+	/**
+	 * Filter REST API response to hide disabled popups from non-admin users.
+	 *
+	 * @param WP_REST_Response $response Response object.
+	 * @param WP_Post          $post     Post object.
+	 * @param WP_REST_Request  $request  Request object.
+	 * @return WP_REST_Response|WP_Error Modified response or error.
+	 *
+	 * @since 2.19.18
+	 */
+	public static function filter_rest_popup_response( $response, $post, $request ) {
+		// Allow admin users with manage_options to see all popups.
+		if ( current_user_can( 'manage_options' ) ) {
+			return $response;
+		}
+
+		// Check if popup is enabled.
+		$popup_enabled = get_post_meta( $post->ID, 'spectra-popup-enabled', true );
+
+		// If popup is not enabled, return 403 error.
+		if ( ! $popup_enabled ) {
+			return new WP_Error(
+				'rest_forbidden',
+				__( 'You do not have permission to view this popup.', 'ultimate-addons-for-gutenberg' ),
+				array( 'status' => 403 )
+			);
+		}
+
+		return $response;
 	}
 
 	/**
@@ -212,7 +335,7 @@ class UAGB_Init_Blocks {
 			$registry = WP_Block_Type_Registry::get_instance();
 			// Only register if the block is NOT already registered.
 			if ( ! $registry->is_registered( $block['blockName'] ) ) {
-				$registry->register( $block['blockName'], $block['attrs'] );
+				$registry->register( $block['blockName'], array() );
 			}
 		}
 
@@ -558,6 +681,9 @@ class UAGB_Init_Blocks {
 		check_ajax_referer( 'uagb_ajax_nonce', 'nonce' );
 		// security validation done in later stage.
 		$value = isset( $_POST['value'] ) ? json_decode( wp_unslash( $_POST['value'] ), true ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
 
 		\UAGB_Admin_Helper::update_admin_settings_option( 'uag_recaptcha_secret_key_v2', sanitize_text_field( $value['reCaptchaSecretKeyV2'] ) );
 		\UAGB_Admin_Helper::update_admin_settings_option( 'uag_recaptcha_secret_key_v3', sanitize_text_field( $value['reCaptchaSecretKeyV3'] ) );
@@ -916,6 +1042,81 @@ class UAGB_Init_Blocks {
 	}
 
 	/**
+	 * Enqueue editor styles via enqueue_block_assets so they are injected into the
+	 * iframe editor canvas (apiVersion 3 / WordPress 7.0+). Using enqueue_block_editor_assets
+	 * for styles causes a console warning in WP 7.0 because that hook targets the outer
+	 * admin shell, not the iframe.
+	 *
+	 * @since 2.19.27
+	 * @return void
+	 */
+	public function editor_iframe_styles() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		if ( UAGB_Admin_Helper::should_exclude_assets_for_cpt() ) {
+			return;
+		}
+
+		// Common editor style.
+		wp_enqueue_style(
+			'uagb-block-common-editor-css',
+			UAGB_URL . 'dist/common-editor.css',
+			array( 'wp-edit-blocks' ),
+			UAGB_VER
+		);
+
+		// Block base styles.
+		UAGB_Scripts_Utils::enqueue_blocks_styles();
+
+		// RTL styles.
+		UAGB_Scripts_Utils::enqueue_blocks_rtl_styles();
+
+		// Block dependency CSS (e.g. block positioning).
+		$block_assets = UAGB_Block_Module::get_block_dependencies();
+		foreach ( $block_assets as $handle => $asset ) {
+			if ( isset( $asset['type'] ) && 'css' === $asset['type'] ) {
+				if ( ! wp_style_is( $handle, 'registered' ) ) {
+					wp_register_style(
+						$handle,
+						$asset['src'],
+						isset( $asset['dep'] ) ? $asset['dep'] : array(),
+						UAGB_VER
+					);
+				}
+				wp_enqueue_style( $handle );
+			}
+		}
+	}
+
+	/**
+	 * Add a version-independent body class for WP >= 6.9 compat CSS.
+	 *
+	 * Replaces version-specific body classes (version-6-9, version-6-9-1)
+	 * with a single class that persists across future WordPress updates.
+	 *
+	 * @since 2.19.22
+	 *
+	 * @param string $classes Admin body classes.
+	 * @return string Modified admin body classes.
+	 */
+	public function add_wp_compat_body_class( $classes ) {
+		// Add class for WordPress 6.9+.
+		if ( version_compare( get_bloginfo( 'version' ), '6.9', '>=' ) ) {
+			$classes .= ' spectra-wp-gte-6-9';
+		}
+
+		// Add class for WordPress 7.0+ for animation dropdown height fix.
+		// Check both '7.0' and '7.0.x' formats (including RC/Beta versions).
+		$wp_version = get_bloginfo( 'version' );
+		if ( version_compare( $wp_version, '7.0', '>=' ) || strpos( $wp_version, '7.0' ) === 0 ) {
+			$classes .= ' spectra-wp-gte-7-0';
+		}
+		return $classes;
+	}
+
+	/**
 	 * Enqueue Gutenberg block assets for backend editor.
 	 *
 	 * @since 1.0.0
@@ -960,14 +1161,6 @@ class UAGB_Init_Blocks {
 		);
 
 		wp_set_script_translations( 'uagb-block-editor-js', 'ultimate-addons-for-gutenberg' );
-
-		// Common Editor style.
-		wp_enqueue_style(
-			'uagb-block-common-editor-css', // Handle.
-			UAGB_URL . 'dist/common-editor.css', // Block editor CSS.
-			array( 'wp-edit-blocks' ), // Dependency to include the CSS after it.
-			UAGB_VER
-		);
 
 		wp_localize_script( 'uagb-block-editor-js', 'uag_react', array( 'pro_plugin_status' => self::get_plugin_status( 'spectra-pro/spectra-pro.php' ) ) );
 
@@ -1131,8 +1324,8 @@ class UAGB_Init_Blocks {
 			'container_elements_gap'                  => $container_elements_gap,
 			'recaptcha_site_key_v2'                   => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_site_key_v2', '' ),
 			'recaptcha_site_key_v3'                   => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_site_key_v3', '' ),
-			'recaptcha_secret_key_v2'                 => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_secret_key_v2', '' ),
-			'recaptcha_secret_key_v3'                 => UAGB_Admin_Helper::get_admin_settings_option( 'uag_recaptcha_secret_key_v3', '' ),
+			'recaptcha_secret_key_v2'                 => '', // Secret keys removed from client-side — used server-side only.
+			'recaptcha_secret_key_v3'                 => '', // Secret keys removed from client-side — used server-side only.
 			'blocks_editor_spacing'                   => apply_filters( 'uagb_default_blocks_editor_spacing', UAGB_Admin_Helper::get_admin_settings_option( 'uag_blocks_editor_spacing', 0 ) ),
 			'load_font_awesome_5'                     => UAGB_Admin_Helper::get_admin_settings_option( 'uag_load_font_awesome_5' ),
 			'auto_block_recovery'                     => UAGB_Admin_Helper::get_admin_settings_option( 'uag_auto_block_recovery' ),
@@ -1185,12 +1378,8 @@ class UAGB_Init_Blocks {
 		);
 
 		// To match the editor with frontend.
-		// Scripts Dependency.
+		// Scripts Dependency (JS only; CSS is enqueued via editor_iframe_styles on enqueue_block_assets).
 		UAGB_Scripts_Utils::enqueue_blocks_dependency_both();
-		// Style.
-		UAGB_Scripts_Utils::enqueue_blocks_styles();
-		// RTL Styles.
-		UAGB_Scripts_Utils::enqueue_blocks_rtl_styles();
 
 		// Add svg icons in chunks.
 		$this->add_svg_icon_assets();
