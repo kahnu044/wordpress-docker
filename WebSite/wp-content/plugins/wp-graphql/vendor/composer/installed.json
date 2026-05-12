@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "appsero/client",
-            "version": "v2.0.4",
-            "version_normalized": "2.0.4.0",
+            "version": "v2.0.6",
+            "version_normalized": "2.0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Appsero/client.git",
-                "reference": "12ff65b9770286d21edf314e7acfcd26fdde3315"
+                "reference": "2e553be6a47b387a7b05496f6a6e8d8595dd0d08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Appsero/client/zipball/12ff65b9770286d21edf314e7acfcd26fdde3315",
-                "reference": "12ff65b9770286d21edf314e7acfcd26fdde3315",
+                "url": "https://api.github.com/repos/Appsero/client/zipball/2e553be6a47b387a7b05496f6a6e8d8595dd0d08",
+                "reference": "2e553be6a47b387a7b05496f6a6e8d8595dd0d08",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
                 "tareq1988/wp-php-cs-fixer": "dev-master",
                 "wp-coding-standards/wpcs": "dev-develop"
             },
-            "time": "2024-11-25T05:58:23+00:00",
+            "time": "2026-02-24T04:46:05+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -53,7 +53,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Appsero/client/issues",
-                "source": "https://github.com/Appsero/client/tree/v2.0.4"
+                "source": "https://github.com/Appsero/client/tree/v2.0.6"
             },
             "install-path": "../appsero/client"
         },
@@ -107,17 +107,17 @@
         },
         {
             "name": "webonyx/graphql-php",
-            "version": "v15.24.0",
-            "version_normalized": "15.24.0.0",
+            "version": "v15.32.3",
+            "version_normalized": "15.32.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "030a04d22d52d7fc07049d0e3b683d2b40f90457"
+                "reference": "993bf0bea17f870412ad8a90f60c41cb8d5f1145"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/030a04d22d52d7fc07049d0e3b683d2b40f90457",
-                "reference": "030a04d22d52d7fc07049d0e3b683d2b40f90457",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/993bf0bea17f870412ad8a90f60c41cb8d5f1145",
+                "reference": "993bf0bea17f870412ad8a90f60c41cb8d5f1145",
                 "shasum": ""
             },
             "require": {
@@ -126,33 +126,35 @@
                 "php": "^7.4 || ^8"
             },
             "require-dev": {
-                "amphp/amp": "^2.6",
-                "amphp/http-server": "^2.1",
+                "amphp/amp": "^2.6 || ^3",
+                "amphp/http-server": "^2.1 || ^3",
                 "dms/phpunit-arraysubset-asserts": "dev-master",
                 "ergebnis/composer-normalize": "^2.28",
-                "friendsofphp/php-cs-fixer": "3.86.0",
-                "mll-lab/php-cs-fixer-config": "5.11.0",
+                "friendsofphp/php-cs-fixer": "3.95.1",
+                "mll-lab/php-cs-fixer-config": "5.13.0",
                 "nyholm/psr7": "^1.5",
                 "phpbench/phpbench": "^1.2",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "2.1.22",
-                "phpstan/phpstan-phpunit": "2.0.7",
-                "phpstan/phpstan-strict-rules": "2.0.6",
+                "phpstan/phpstan": "2.1.51",
+                "phpstan/phpstan-phpunit": "2.0.16",
+                "phpstan/phpstan-strict-rules": "2.0.10",
                 "phpunit/phpunit": "^9.5 || ^10.5.21 || ^11",
                 "psr/http-message": "^1 || ^2",
                 "react/http": "^1.6",
                 "react/promise": "^2.0 || ^3.0",
                 "rector/rector": "^2.0",
                 "symfony/polyfill-php81": "^1.23",
-                "symfony/var-exporter": "^5 || ^6 || ^7",
-                "thecodingmachine/safe": "^1.3 || ^2 || ^3"
+                "symfony/var-exporter": "^5 || ^6 || ^7 || ^8",
+                "thecodingmachine/safe": "^1.3 || ^2 || ^3",
+                "ticketswap/phpstan-error-formatter": "1.3.0"
             },
             "suggest": {
+                "amphp/amp": "To leverage async resolving on AMPHP platform (v3 with AmpFutureAdapter, v2 with AmpPromiseAdapter)",
                 "amphp/http-server": "To leverage async resolving with webserver on AMPHP platform",
                 "psr/http-message": "To use standard GraphQL server",
                 "react/promise": "To leverage async resolving on React PHP platform"
             },
-            "time": "2025-08-20T10:09:37+00:00",
+            "time": "2026-04-24T13:49:35+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -172,9 +174,13 @@
             ],
             "support": {
                 "issues": "https://github.com/webonyx/graphql-php/issues",
-                "source": "https://github.com/webonyx/graphql-php/tree/v15.24.0"
+                "source": "https://github.com/webonyx/graphql-php/tree/v15.32.3"
             },
             "funding": [
+                {
+                    "url": "https://github.com/spawnia",
+                    "type": "github"
+                },
                 {
                     "url": "https://opencollective.com/webonyx-graphql-php",
                     "type": "open_collective"

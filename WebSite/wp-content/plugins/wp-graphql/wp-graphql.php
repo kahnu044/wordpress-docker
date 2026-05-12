@@ -2,16 +2,14 @@
 /**
  * Plugin Name: WPGraphQL
  * Plugin URI: https://github.com/wp-graphql/wp-graphql
- * GitHub Plugin URI: https://github.com/wp-graphql/wp-graphql
- * Release Asset: true
  * Description: GraphQL API for WordPress
  * Author: WPGraphQL
  * Author URI: http://www.wpgraphql.com
- * Version: 2.5.4
+ * Version: 2.14.1
  * Text Domain: wp-graphql
  * Domain Path: /languages/
  * Requires at least: 6.0
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * Requires PHP: 7.4
  * License: GPL-3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -19,7 +17,7 @@
  * @package  WPGraphQL
  * @category Core
  * @author   WPGraphQL
- * @version  2.5.4
+ * @version  2.14.1
  */
 
 // Exit if accessed directly.
@@ -153,10 +151,6 @@ function graphql_cannot_load_admin_notice_callback(): void {
 	);
 }
 
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	require_once plugin_dir_path( __FILE__ ) . 'cli/wp-cli.php';
-}
-
 /**
  * Initialize the plugin tracker.
  */
@@ -195,3 +189,47 @@ function graphql_init_appsero_telemetry(): void {
 }
 
 graphql_init_appsero_telemetry();
+
+/**
+ * Mirror the Appsero API requests to our own telemetry server.
+ *
+ * @param bool|\WP_Error $preempt Whether to preempt the request.
+ * @param array          $args    The arguments for the request.
+ * @param string         $url     The URL for the request.
+ * @return bool|\WP_Error Whether to preempt the request.
+ */
+add_filter(
+	'pre_http_request',
+	static function ( $preempt, $args, $url ) {
+		if ( strpos( $url, 'api.appsero.com' ) === false ) {
+			return $preempt;
+		}
+
+		// Scope: only mirror this plugin's payloads, not other Appsero plugins on the site.
+		$body = is_array( $args['body'] ?? null ) ? $args['body'] : [];
+		if ( ( $body['hash'] ?? null ) !== 'cd0d1172-95a0-4460-a36a-2c303807c9ef' ) {
+			return $preempt;
+		}
+
+		$mirror = str_replace(
+			'https://api.appsero.com/',
+			'https://telemetry.wpgraphql.com/api/appsero/',
+			$url
+		);
+
+		wp_remote_post(
+			$mirror,
+			array_merge(
+				$args,
+				[
+					'blocking' => false,
+					'timeout'  => 3,
+				]
+			)
+		);
+
+		return $preempt; // let the real Appsero request proceed
+	},
+	10,
+	3
+);
