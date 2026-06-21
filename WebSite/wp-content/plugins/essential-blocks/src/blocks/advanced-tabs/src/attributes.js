@@ -37,6 +37,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -380,6 +381,16 @@ const attributes = {
     ...generateDimensionsAttributes(prefixTtlWrpMargin),
     ...generateDimensionsAttributes(prefixTtlWrpPadding),
     ...generateDimensionsAttributes(prefixIconPadding),
+
+    // Image masking attributes (per QA report TC for AdvancedTabs)
+    // Block has per-tab image slots; for v1 masking is shared across tabs.
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

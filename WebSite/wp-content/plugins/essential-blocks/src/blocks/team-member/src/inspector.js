@@ -33,6 +33,7 @@ import {
     EBIconPicker,
     InspectorPanel,
     ImageComponent,
+    MaskingPanel,
     EBTextControl
 } from "@essential-blocks/controls";
 
@@ -540,6 +541,7 @@ function Inspector({ attributes, setAttributes }) {
                             />
                         )}
                     </InspectorPanel.PanelBody>
+                    <MaskingPanel />
                 </>
             </InspectorPanel.General>
             <InspectorPanel.Style>

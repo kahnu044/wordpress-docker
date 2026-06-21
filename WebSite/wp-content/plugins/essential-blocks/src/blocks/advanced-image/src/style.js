@@ -83,7 +83,7 @@ export default function Style(props) {
         rangeStylesMobile: imageWidthMobile,
     } = generateResponsiveRangeStyles({
         controlName: IMAGE_WIDTH,
-        property: "",
+        property: null,
         attributes,
     });
 
@@ -104,7 +104,7 @@ export default function Style(props) {
         rangeStylesMobile: imageHeightMobile,
     } = generateResponsiveRangeStyles({
         controlName: IMAGE_HEIGHT,
-        property: "",
+        property: null,
         attributes,
     });
 
@@ -205,6 +205,9 @@ export default function Style(props) {
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowDesktop : ""}
             }
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper a {
+                ${imageWidthDesktop ? `width: ${imageWidthDesktop};` : ""}
+            }
 		    .eb-advanced-image-wrapper.${blockId} .image-wrapper img{
                 transition: transform 0.5s, ${imageBDShadowTransitionStyle};
                 ${autoFit ? `object-fit: ${fitStyles};` : ""}
@@ -227,6 +230,9 @@ export default function Style(props) {
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowTab : ""}
             }
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper a {
+                ${imageWidthTab ? `width: ${imageWidthTab};` : ""}
+            }
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
 			${autoFit ? `object-fit: ${fitStyles};` : ""}
@@ -247,6 +253,9 @@ export default function Style(props) {
             .eb-advanced-image-wrapper.${blockId} .image-wrapper,
             .eb-advanced-image-wrapper.${blockId} .image-wrapper img {
                 ${!complexStyle ? imageBDShadowMobile : ""}
+            }
+            .eb-advanced-image-wrapper.${blockId} .image-wrapper a {
+                ${imageWidthMobile ? `width: ${imageWidthMobile};` : ""}
             }
 		.eb-advanced-image-wrapper.${blockId} .image-wrapper img{
 			transition: transform 0.5s, ${imageBDShadowTransitionStyle};
@@ -270,7 +279,11 @@ export default function Style(props) {
         height: IMAGE_HEIGHT, // height
         border: IMAGE_BORDER_SHADOW, // border
         hasFilter: false,
-        useImageAlign: true
+        useImageAlign: true,
+        // .eb-image-wrapper is `flex-direction: column` (see style.scss),
+        // so horizontal alignment lives on `align-items`, not the default
+        // `justify-content` (which would shift the image vertically).
+        imageAlignProperty: "align-items"
     });
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇

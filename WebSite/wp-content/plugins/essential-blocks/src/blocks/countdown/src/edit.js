@@ -72,12 +72,16 @@ function Edit(props) {
 
     // this useEffect is for the countdown animation effect
     useEffect(() => {
-        const fakeElement = { current: { textContent: "3e" } };
-
-        const daysRefUe = daysRef.current ? daysRef : fakeElement;
-        const hoursRefUe = hoursRef.current ? hoursRef : fakeElement;
-        const minutesRefUe = minutesRef.current ? minutesRef : fakeElement;
-        const secondsRefUe = secondsRef.current ? secondsRef : fakeElement;
+        // Read each ref live on every tick. In the WP 7.0 iframed editor
+        // canvas the digit spans mount a tick after this effect first runs,
+        // so snapshotting `daysRef.current ? daysRef : fake` here would lock
+        // onto a ref whose `.current` is still null and throw
+        // "Cannot set properties of null (setting 'textContent')".
+        const setDigit = (ref, value) => {
+            if (ref && ref.current) {
+                ref.current.textContent = String(value).padStart(2, "0");
+            }
+        };
 
         const MINUTE_IN_SECONDS = 60;
         const HOUR_IN_SECONDS = 60 * MINUTE_IN_SECONDS;
@@ -97,17 +101,17 @@ function Edit(props) {
 
             if (secondsLeft < 0) {
                 clearInterval(intervalId);
-                daysRefUe.current.textContent = String(0).padStart(2, '0');
-                hoursRefUe.current.textContent = String(0).padStart(2, '0');
-                minutesRefUe.current.textContent = String(0).padStart(2, '0');
-                secondsRefUe.current.textContent = String(0).padStart(2, '0');
+                setDigit(daysRef, 0);
+                setDigit(hoursRef, 0);
+                setDigit(minutesRef, 0);
+                setDigit(secondsRef, 0);
                 return;
             }
 
-            daysRefUe.current.textContent = String(days).padStart(2, '0');
-            hoursRefUe.current.textContent = String(hours).padStart(2, '0');
-            minutesRefUe.current.textContent = String(minutes).padStart(2, '0');
-            secondsRefUe.current.textContent = String(seconds).padStart(2, '0');
+            setDigit(daysRef, days);
+            setDigit(hoursRef, hours);
+            setDigit(minutesRef, minutes);
+            setDigit(secondsRef, seconds);
         };
 
         if (isEvergreenTimer) {

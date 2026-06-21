@@ -60,7 +60,7 @@ class GoogleMap extends Block
             if ( is_admin() ) {
                 $this->assets_manager->enqueue(
                     'google-map-script-editor',
-                    'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
+                    'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places,marker&cache=' . wp_rand( 10, 1000 ),
                     [  ],
                     [
                         'is_js' => true
@@ -70,7 +70,7 @@ class GoogleMap extends Block
             // For frontend
             $this->assets_manager->register(
                 'google-map-script',
-                'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places&cache=' . wp_rand( 10, 1000 ),
+                'https://maps.googleapis.com/maps/api/js?key=' . $this->api_key . '&callback=Function.prototype&libraries=places,marker&cache=' . wp_rand( 10, 1000 ),
                 [  ],
                 [
                     'is_js' => true

@@ -12,6 +12,14 @@ class List extends Component {
             deleteHeaderList,
         } = this.props.attributes;
 
+        const escapeAttr = (value) =>
+            String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
         function ebGenerateTOC(data) {
             let toc = '<ul class="eb-toc__list">';
             let stack = [];
@@ -27,7 +35,7 @@ class List extends Component {
                     toc += "</li></ul>";
                 }
 
-                toc += `<li><a href="#${link}">${content}</a>`;
+                toc += `<li><a href="#${escapeAttr(link)}">${content}</a>`;
 
                 if (i < data.length - 1 && data[i + 1].level > level) {
                     toc += '<ul class="eb-toc__list">';

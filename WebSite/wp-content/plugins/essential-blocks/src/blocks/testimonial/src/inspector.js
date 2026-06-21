@@ -44,7 +44,8 @@ import {
     ResponsiveRangeController,
     ColorControl,
     InspectorPanel,
-    ImageComponent
+    ImageComponent,
+    MaskingPanel
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -671,6 +672,7 @@ function Inspector(props) {
                             </InspectorPanel.PanelBody>
                         )}
                     </InspectorPanel.PanelBody>
+                    <MaskingPanel />
                 </>
             </InspectorPanel.General>
             <InspectorPanel.Style>

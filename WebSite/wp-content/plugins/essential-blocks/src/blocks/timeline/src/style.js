@@ -59,6 +59,7 @@ import {
     generateBackgroundControlStyles,
     StyleComponent,
     ImageComponent,
+    generateMaskStyles,
 } from "@essential-blocks/controls";
 
 export default function Style(props) {
@@ -1068,11 +1069,34 @@ export default function Style(props) {
 		}
     `;
 
+    // Image masking — block-level shared mask across timeline items. The
+    // prefixed (timelineImage*) Style() call above still emits its own CSS;
+    // it just won't see the un-prefixed mask attrs that MaskingPanel writes.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-timeline-image {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-timeline-item:hover .eb-timeline-image {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 			${desktopStyles}
             ${iconDesktopStyles}
 			${metaDesktopStyles}
+            ${maskStyles}
 	`);
 
     // all css styles for Tab in strings ⬇

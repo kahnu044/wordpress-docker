@@ -530,6 +530,19 @@ const attributes = {
         },
     }),
 
+    // Block-level masking attrs (unprefixed canonical names) for the shared
+    // <MaskingPanel />. The prefixed call above scopes ImageComponent's image
+    // attrs under "timelineImage", so the canonical names the panel reads
+    // wouldn't otherwise resolve — no shape tile would show as selected by
+    // default. style.js's generateMaskStyles({ attributes }) also reads the
+    // canonical names, so both UI and CSS emission line up.
+    ...ImageComponent.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

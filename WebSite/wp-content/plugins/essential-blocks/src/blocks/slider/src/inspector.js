@@ -76,6 +76,7 @@ import {
     SortControl,
     sanitizeIconValue,
     ImageComponent,
+    MaskingPanel,
     EBTextControl,
     ProSelectControl
 } from "@essential-blocks/controls";
@@ -138,6 +139,17 @@ function Inspector(props) {
                     onSelect={(value) =>
                         handleImage(value, i, images, setAttributes)
                     }
+                    onRemove={() => {
+                        const newImages = [...images];
+                        newImages[i] = {
+                            ...newImages[i],
+                            id: null,
+                            url: "",
+                            alt: "",
+                            caption: "",
+                        };
+                        setAttributes({ images: newImages });
+                    }}
                     value={
                         !each.url || each.url.startsWith("data:image/")
                             ? each.id
@@ -892,6 +904,12 @@ function Inspector(props) {
                             hasAddButton={false}
                         />
                     </InspectorPanel.PanelBody>
+
+                    {/* Block-level masking — applies to every slide image.
+                        Per-slide masking would need a `mask` field inside
+                        each images[] item plus a deprecation entry against
+                        the 16 existing save markup variants (deferred). */}
+                    <MaskingPanel />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody

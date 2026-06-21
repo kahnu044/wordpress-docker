@@ -4,6 +4,7 @@ namespace EssentialBlocks\Admin;
 
 use PriyoMukul\WPNotice\Notices;
 use EssentialBlocks\Utils\Helper;
+use EssentialBlocks\Utils\ImageValidator;
 use EssentialBlocks\Utils\Settings;
 use PriyoMukul\WPNotice\Utils\CacheBank;
 use EssentialBlocks\Traits\HasSingletone;
@@ -906,7 +907,7 @@ class Admin {
             }
 
             // Security: Validate image content and size
-            if ( ! $this->is_valid_image_content( $image_body ) ) {
+            if ( ! ImageValidator::is_valid( $image_body ) ) {
                 wp_send_json_error( array(
                     'message' => __( 'Invalid image content provided.', 'essential-blocks' )
                 ) );
@@ -1012,57 +1013,6 @@ class Admin {
     }
 
     /**
-     * Validate image content for security
-     *
-     * @param string $image_data The image data to validate
-     * @return bool True if valid, false otherwise
-     */
-    private function is_valid_image_content( $image_data ) {
-        if ( empty( $image_data ) ) {
-            return false;
-        }
-
-        // Check file size (max 10MB)
-        $max_size = 10 * 1024 * 1024; // 10MB
-        if ( strlen( $image_data ) > $max_size ) {
-            return false;
-        }
-
-        // Validate image using getimagesizefromstring
-        $image_info = getimagesizefromstring( $image_data );
-        if ( ! $image_info ) {
-            return false;
-        }
-
-        // Check image dimensions (reasonable limits)
-        $max_width  = 4096;
-        $max_height = 4096;
-        if ( $image_info[ 0 ] > $max_width || $image_info[ 1 ] > $max_height ) {
-            return false;
-        }
-
-        // Additional security: Check for suspicious content patterns
-        // Look for common file signatures that shouldn't be in images
-        $suspicious_patterns = array(
-            '<?php', // PHP code
-            '<script', // JavaScript
-            'javascript:', // JavaScript protocol
-            'data:text/', // Text data URLs
-            '<html', // HTML content
-            '#!/bin/' // Shell scripts
-        );
-
-        $data_start = substr( $image_data, 0, 1024 ); // Check first 1KB
-        foreach ( $suspicious_patterns as $pattern ) {
-            if ( stripos( $data_start, $pattern ) !== false ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * update menu notice flag
      */
     public function eb_show_admin_menu_notice() {
@@ -1110,7 +1060,7 @@ class Admin {
         $changelog_url = esc_url( 'https://essential-blocks.com/changelog/' );
 
         $message_template = __(
-            "<p><i>📣</i> Introducing Protected Content in <strong>Essential Blocks Pro 2.9.0</strong> - You can now password-protect any block or section directly in WordPress to show it to the right audience! For more details, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
+            "<p><i>📣</i> Introducing Image Masking & Morphing in <strong>Essential Blocks 6.2.0</strong> - Create stunning visual effects with creative image masks and seamless morphing animations in WordPress! For more details, check out this <strong><a target='_blank' href='%s'>changelog</a></strong>.</p>",
             "essential-blocks"
         );
 
@@ -1134,7 +1084,7 @@ class Admin {
         if ( get_transient( 'essential_block_whats_new_notice' ) === true ) {
             delete_transient( 'essential_block_whats_new_notice' );
 
-            $view_path = ESSENTIAL_BLOCKS_DIR_PATH . 'includes/admin/whats-new-notice.php';
+            $view_path = ESSENTIAL_BLOCKS_DIR_PATH . 'includes/Admin/whats-new-notice.php';
 
             if ( file_exists( $view_path ) ) {
                 include $view_path;

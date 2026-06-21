@@ -83,7 +83,8 @@ import {
     EBButton,
     EBIconPicker,
     ProSelectControl,
-    ImageComponent
+    ImageComponent,
+    MaskingPanel
 } from "@essential-blocks/controls";
 
 function Inspector(props) {
@@ -867,6 +868,18 @@ function Inspector(props) {
                 </PanelRow>
                 <ImageComponent.GeneralTab
                     onSelect={(value) => handleImage(value, i, sources, setAttributes)}
+                    onRemove={() => {
+                        const newSources = [...sources];
+                        newSources[i] = {
+                            ...newSources[i],
+                            id: null,
+                            url: "",
+                            alt: "",
+                            caption: "",
+                            content: "",
+                        };
+                        setAttributes({ sources: newSources });
+                    }}
                     value={(!each.url || each.url.startsWith('data:image/')) ? each.id : each.url}
                     hasTag={false}
                     hasCaption={false}
@@ -1454,6 +1467,9 @@ function Inspector(props) {
 
 
                     </InspectorPanel.PanelBody>
+
+                    {/* Block-level masking — applies to every gallery image. */}
+                    <MaskingPanel />
                 </>
             </InspectorPanel.General>
             <InspectorPanel.Style>

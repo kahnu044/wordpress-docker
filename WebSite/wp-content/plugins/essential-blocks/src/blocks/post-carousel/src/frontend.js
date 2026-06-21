@@ -3,10 +3,11 @@
  */
 import apiFetch from "@wordpress/api-fetch";
 
-const {
-    generateArrowHTML,
-    loadSvgIcons
-} = window.eb_frontend;
+// Fall back to no-ops if the controls frontend bundle didn't load
+// (e.g. blocked by a firewall/optimizer) so the carousel still initializes.
+const ebFrontend = window.eb_frontend || {};
+const generateArrowHTML = ebFrontend.generateArrowHTML || (() => "");
+const loadSvgIcons = ebFrontend.loadSvgIcons || (() => {});
 
 const rootURL = EssentialBlocksLocalize
     ? EssentialBlocksLocalize.rest_rootURL

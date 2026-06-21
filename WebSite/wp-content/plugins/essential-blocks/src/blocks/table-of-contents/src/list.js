@@ -70,6 +70,18 @@ const List = (props) => {
         }
     }, [headers]);
 
+    // Escape characters that would let the attacker break out of an HTML
+    // attribute. The link is concatenated into href="#..." and the server-side
+    // configurablePrefix sanitization is the primary defense — this is a
+    // belt-and-braces guard for the editor preview.
+    const escapeAttr = (value) =>
+        String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
     const ebGenerateTOC = (data) => {
         let toc = `<${listStyle} class="eb-toc__list">`;
         let stack = [];
@@ -86,7 +98,7 @@ const List = (props) => {
             // Use the dynamic value from the state
             const dynamicValue = dynamicValues[content] || "";
 
-            toc += `<li><a href="#${link}">${dynamicValue}</a> `;
+            toc += `<li><a href="#${escapeAttr(link)}">${dynamicValue}</a> `;
 
             if (i < data.length - 1 && data[i + 1].level > level) {
                 if (itemCollapsed && !stack.length) {

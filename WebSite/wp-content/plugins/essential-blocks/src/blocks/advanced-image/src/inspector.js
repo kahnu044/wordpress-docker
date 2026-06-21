@@ -40,6 +40,7 @@ import {
     ResponsiveAlignControl,
     InspectorPanel,
     ImageComponent,
+    MaskingPanel,
     sanitizeURL,
 } from "@essential-blocks/controls";
 
@@ -93,6 +94,7 @@ function Inspector(props) {
                     imgBorderShadowRds_Right: "0",
                     imgBorderShadowRds_Top: "0",
                     hoverEffect: "no-effect",
+                    imageMaskEnable: false,
                 });
                 break;
             case "featured-img":
@@ -107,12 +109,18 @@ function Inspector(props) {
                     imgBorderShadowRds_Right: "15",
                     imgBorderShadowRds_Top: "15",
                     hoverEffect: "no-effect",
+                    imageMaskEnable: false,
                 });
                 break;
             case "custom":
+                // Only switch the source; preserve the user's existing
+                // caption / link / size / border / hover choices. Forcing
+                // `displayCaption: true` here was re-enabling the caption
+                // whenever the user round-tripped through site-logo or
+                // featured-img.
                 setAttributes({
                     imgSource: selected,
-                    displayCaption: true,
+                    displayCaption: false,
                     enableLink: false,
                     widthRange: "",
                     imgBorderShadowborderStyle: "solid",
@@ -120,7 +128,7 @@ function Inspector(props) {
                     imgBorderShadowRds_Left: "15",
                     imgBorderShadowRds_Right: "15",
                     imgBorderShadowRds_Top: "15",
-                    hoverEffect: "zoom-in",
+                    hoverEffect: "no-effect",
                 });
                 break;
             default:
@@ -487,6 +495,7 @@ function Inspector(props) {
                         __nextHasNoMarginBottom
                     />
                 </PanelBody>
+                {imgSource === "custom" && <MaskingPanel />}
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 {imgSource !== "custom" && (

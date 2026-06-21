@@ -13,9 +13,22 @@ class QueryHelper
      */
     public static function get_posts( $queryData, $isAjax = false )
     {
+        // Default every key this method reads. Callers (PostGrid /
+        // PostCarousel) may hand us an empty array when the block has no
+        // saved `queryData` attribute; without these guards each access
+        // below raises a PHP 8.x undefined-index notice (5 per block,
+        // cascading on WP 7.0).
+        $queryData = is_array( $queryData ) ? $queryData : [];
 
-        $queryData[ 'source' ]  = $queryData[ 'source' ] === 'posts' ? 'post' : $queryData[ 'source' ];
-        $queryData[ 'orderby' ] = $queryData[ 'orderby' ] === 'id' ? 'ID' : $queryData[ 'orderby' ];
+        $queryData[ 'source' ]   = isset( $queryData[ 'source' ] )
+            ? ( $queryData[ 'source' ] === 'posts' ? 'post' : $queryData[ 'source' ] )
+            : 'post';
+        $queryData[ 'orderby' ]  = isset( $queryData[ 'orderby' ] )
+            ? ( $queryData[ 'orderby' ] === 'id' ? 'ID' : $queryData[ 'orderby' ] )
+            : 'date';
+        $queryData[ 'per_page' ] = isset( $queryData[ 'per_page' ] ) ? (int) $queryData[ 'per_page' ] : 10;
+        $queryData[ 'order' ]    = isset( $queryData[ 'order' ] )  ? $queryData[ 'order' ]  : 'desc';
+        $queryData[ 'offset' ]   = isset( $queryData[ 'offset' ] ) ? $queryData[ 'offset' ] : 0;
 
         // Set Orderby to Default if Pro Orderby is selected and Pro isn't active
         $proOrderby = [ 'rand', 'menu_order', 'comment_count' ];

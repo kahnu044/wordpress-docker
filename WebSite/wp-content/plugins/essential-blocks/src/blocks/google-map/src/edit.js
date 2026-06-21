@@ -102,6 +102,22 @@ function Edit(props) {
         setAttributes({ marker: defaultMarker });
     }, []);
 
+    // Resolve the user's chosen inline-styles array. Used both to style the
+    // map and to decide whether we can opt into AdvancedMarkerElement (which
+    // requires a mapId, and mapId disables inline styles).
+    const getCustomStyles = () =>
+        "google_theme" === themeSource
+            ? GOOGLE_MAP_STYLES[googleMapStyle]
+            : SNAZZY_MAP_STYLES[snazzyMapStyle];
+
+    const canUseAdvancedMarker = () => {
+        const styles = getCustomStyles();
+        return (
+            !!window?.google?.maps?.marker?.AdvancedMarkerElement &&
+            (!styles || styles.length === 0)
+        );
+    };
+
     // initialize map
     const initMap = () => {
         const editor = getEditorDocument();
@@ -109,7 +125,13 @@ function Edit(props) {
             setIsMapInit(false);
             return;
         }
-        mapRef.current = window?.google?.maps && new window.google.maps.Map(editor.getElementById(blockId), {
+
+        if (!window?.google?.maps) {
+            return;
+        }
+
+        const useAdvancedMarker = canUseAdvancedMarker();
+        const mapOptions = {
             center: {
                 lat: Number(marker[0]?.latitude) || Number(latitude),
                 lng: Number(marker[0]?.longitude) || Number(longitude),
@@ -117,54 +139,97 @@ function Edit(props) {
             gestureHandling: "cooperative",
             zoom: marker.length === 1 ? parseInt(mapZoom) || "13" : 0,
             mapTypeId: mapType,
-            styles:
-                "google_theme" === themeSource ? GOOGLE_MAP_STYLES[googleMapStyle] : SNAZZY_MAP_STYLES[snazzyMapStyle],
-        });
+        };
+
+        if (useAdvancedMarker) {
+            mapOptions.mapId = "EB_GOOGLE_MAP";
+        } else {
+            mapOptions.styles = getCustomStyles();
+        }
+
+        mapRef.current = new window.google.maps.Map(
+            editor.getElementById(blockId),
+            mapOptions
+        );
+
         if (marker.length > 0) {
-            multipleMarkers(marker);
+            multipleMarkers(marker, useAdvancedMarker);
         }
     };
 
-    const multipleMarkers = (locations) => {
+    const multipleMarkers = (locations, useAdvancedMarker) => {
         if (Object.keys(locations).length > 0) {
             var infowindow = new google.maps.InfoWindow();
             var imageSizeNew = imageSize ? imageSize : 32;
             var marker, i;
             var bounds = new google.maps.LatLngBounds();
+            const AdvancedMarkerElement =
+                window?.google?.maps?.marker?.AdvancedMarkerElement;
+
             for (i = 0; i < locations.length; i++) {
                 let iconUrl = "true" == locations[i].showCustomIcon ? locations[i].imageUrl : locations[i].icon;
-                let icon = {
-                    url: iconUrl || "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                    scaledSize: new google.maps.Size(imageSizeNew, imageSizeNew),
-                };
+                const iconSrc =
+                    iconUrl || "https://maps.google.com/mapfiles/ms/icons/red-dot.png";
+                const position = new google.maps.LatLng(
+                    locations[i].latitude || latitude,
+                    locations[i].longitude || longitude
+                );
 
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(
-                        locations[i].latitude || latitude,
-                        locations[i].longitude || longitude
-                    ),
-                    title: locations[i].title,
-                    icon: icon,
-                    map: mapRef.current,
-                });
+                if (useAdvancedMarker && AdvancedMarkerElement) {
+                    const img = document.createElement("img");
+                    img.src = iconSrc;
+                    img.style.width = imageSizeNew + "px";
+                    img.style.height = imageSizeNew + "px";
+                    marker = new AdvancedMarkerElement({
+                        position,
+                        title: locations[i].title,
+                        content: img,
+                        map: mapRef.current,
+                    });
+                } else {
+                    marker = new google.maps.Marker({
+                        position,
+                        title: locations[i].title,
+                        icon: {
+                            url: iconSrc,
+                            scaledSize: new google.maps.Size(
+                                imageSizeNew,
+                                imageSizeNew
+                            ),
+                        },
+                        map: mapRef.current,
+                    });
+                }
 
                 const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${locations[i].title
                     }</h6><div class="eb-google-map-overview-content">${locations[i].content ? `<p>${locations[i].content}</p>` : ""
                     }</div></div>`;
-                bounds.extend(marker.getPosition());
+                bounds.extend(position);
                 if (i == 0) {
                     infowindow.setContent(contentString);
-                    infowindow.open(mapRef.current, marker);
+                    if (useAdvancedMarker) {
+                        infowindow.open({ anchor: marker, map: mapRef.current });
+                    } else {
+                        infowindow.open(mapRef.current, marker);
+                    }
                 }
+                const clickEvent = useAdvancedMarker ? "gmp-click" : "click";
                 google.maps.event.addListener(
                     marker,
-                    "click",
-                    (function (marker, i) {
+                    clickEvent,
+                    (function (marker) {
                         return function () {
                             infowindow.setContent(contentString);
-                            infowindow.open(mapRef.current, marker);
+                            if (useAdvancedMarker) {
+                                infowindow.open({
+                                    anchor: marker,
+                                    map: mapRef.current,
+                                });
+                            } else {
+                                infowindow.open(mapRef.current, marker);
+                            }
                         };
-                    })(marker, i)
+                    })(marker)
                 );
             }
             if (locations.length > 1) {

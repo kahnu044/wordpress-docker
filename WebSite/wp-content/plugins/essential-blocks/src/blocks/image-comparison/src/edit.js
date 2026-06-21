@@ -18,8 +18,12 @@ import defaultAttributes from "./attributes";
 import {
     BlockProps,
     withBlockContext,
-    EBMediaPlaceholder,
+    ImageComponent,
+    useResolvedImageUrl,
 } from "@essential-blocks/controls";
+
+const leftImageProps  = { imageUrl: "leftImageURL" };
+const rightImageProps = { imageUrl: "rightImageURL" };
 
 function Edit(props) {
     const { attributes, setAttributes, className, clientId, isSelected, name } =
@@ -48,6 +52,12 @@ function Edit(props) {
 
     const hiddenImg = useRef(null);
 
+    // Editor preview only — resolves eb-dynamic-tags/… URLs so the comparison
+    // preview shows the real image. Saved attrs keep the raw tag string so the
+    // frontend filter (ImageComparison.php) re-resolves on every render.
+    const resolvedLeftURL = useResolvedImageUrl(leftImageURL);
+    const resolvedRightURL = useResolvedImageUrl(rightImageURL);
+
     // you must declare this variable
     const enhancedProps = {
         ...props,
@@ -60,6 +70,9 @@ function Edit(props) {
         : ` eb-label-horizontal-${horizontalLabelPosition}`;
 
     const hasBothImages = leftImageURL && rightImageURL;
+    // Only mount ReactCompareImage once both URLs are usable — dynamic tags
+    // resolve asynchronously and the library doesn't handle src changes well.
+    const hasBothResolved = resolvedLeftURL && resolvedRightURL;
     const alignmentClass =
         contentPosition === "center"
             ? " eb-image-comparison-align-center"
@@ -98,15 +111,15 @@ function Edit(props) {
                     <div
                         className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
                     >
-                        {hasBothImages ? (
+                        {hasBothImages && hasBothResolved ? (
                             <>
                                 <div
                                     className="eb-image-comparison-hide"
                                     ref={hiddenImg}
                                 >
                                     <ReactCompareImage
-                                        leftImage={leftImageURL}
-                                        rightImage={rightImageURL}
+                                        leftImage={resolvedLeftURL}
+                                        rightImage={resolvedRightURL}
                                         {...(verticalMode
                                             ? { vertical: "vertical" }
                                             : {})}
@@ -133,51 +146,47 @@ function Edit(props) {
                         ) : (
                             <div className="eb-image-comparison-placeholder">
                                 {!leftImageURL && (
-                                    <EBMediaPlaceholder
-                                        onSelect={(media) =>
-                                            setAttributes({
-                                                leftImageURL: media.url,
-                                            })
-                                        }
-                                        allowTypes={["image"]}
+                                    <ImageComponent.Upload
+                                        attrPrefix="left"
+                                        imageAttrProps={leftImageProps}
                                         labels={{
                                             title: __(
                                                 "Left Image",
                                                 "essential-blocks",
                                             ),
-                                            instructions:
+                                            instructions: __(
                                                 "Drag media file, upload or select files from your library.",
+                                                "essential-blocks",
+                                            ),
                                         }}
                                     />
                                 )}
-                                {leftImageURL && (
+                                {leftImageURL && resolvedLeftURL && (
                                     <img
                                         className="eb-image-comparison-image"
-                                        src={leftImageURL}
+                                        src={resolvedLeftURL}
                                     />
                                 )}
                                 {!rightImageURL && (
-                                    <EBMediaPlaceholder
-                                        onSelect={(media) =>
-                                            setAttributes({
-                                                rightImageURL: media.url,
-                                            })
-                                        }
-                                        allowTypes={["image"]}
+                                    <ImageComponent.Upload
+                                        attrPrefix="right"
+                                        imageAttrProps={rightImageProps}
                                         labels={{
                                             title: __(
                                                 "Right Image",
                                                 "essential-blocks",
                                             ),
-                                            instructions:
+                                            instructions: __(
                                                 "Drag media file, upload or select files from your library.",
+                                                "essential-blocks",
+                                            ),
                                         }}
                                     />
                                 )}
-                                {rightImageURL && (
+                                {rightImageURL && resolvedRightURL && (
                                     <img
                                         className="eb-image-comparison-image"
-                                        src={rightImageURL}
+                                        src={resolvedRightURL}
                                     />
                                 )}
                             </div>

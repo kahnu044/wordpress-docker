@@ -6,6 +6,8 @@ const Save = ({ attributes }) => {
         blockId,
         leftImageURL,
         rightImageURL,
+        leftImageAlt,
+        rightImageAlt,
         hover,
         verticalMode,
         showLabels,
@@ -51,12 +53,12 @@ const Save = ({ attributes }) => {
                             <>
                                 <div data-testid="container">
                                     <img
-                                        alt="Left Image"
+                                        alt={leftImageAlt || "Left Image"}
                                         src={leftImageURL}
                                         data-testid="left-image"
                                     />
                                     <img
-                                        alt="Right Image"
+                                        alt={rightImageAlt || "Right Image"}
                                         src={rightImageURL}
                                         data-testid="right-image"
                                     />

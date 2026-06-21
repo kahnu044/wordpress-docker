@@ -57,26 +57,6 @@ window.addEventListener("DOMContentLoaded", () => {
             // window.addEventListener('resize', clearResponsiveProps);
             // window.addEventListener('load', clearResponsiveProps);
 
-            window.addEventListener('load', function () {
-                /**
-                 * menu indicator height
-                 */
-                element.querySelectorAll('.eb-menu-indicator').forEach(function (indicator) {
-                    indicator?.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        // Find the parent li element and its corresponding anchor tag
-                        const parentLi = this.parentNode;
-                        const anchor = parentLi.querySelector('a');
-                        const anchorHeight = anchor.getBoundingClientRect().height;
-                        const indecatorHeight = 25;
-                        const elementTop = anchorHeight - indecatorHeight;
-                        // Set the height of the indicator to match the height of the anchor
-                        // this.style.height = anchor.getBoundingClientRect().height + 'px';
-                        this.style.top = elementTop / 2 + 'px';
-                    });
-                });
-            });
-
             // Add event listener for menu indicators
             element.addEventListener('click', function (e) {
                 if (e.target.classList.contains('eb-menu-indicator')) {
@@ -101,12 +81,15 @@ window.addEventListener("DOMContentLoaded", () => {
             ".wp-block-navigation-item__content"
         );
 
-        const mediaQuery = window.matchMedia("(max-width: 767px)");
-        // if (mediaQuery.matches) {
         anchors.forEach((anchor) => {
             anchor?.addEventListener("click", function (e) {
                 const href = this.getAttribute("href");
-                if (anchor.hash !== "" && href && href !== "#") {
+                if (
+                    anchor.hash !== "" &&
+                    href &&
+                    href !== "#" &&
+                    !href.startsWith("javascript:")
+                ) {
                     e.preventDefault();
                     advNav
                         .querySelector(
@@ -118,7 +101,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             });
         });
-        // }
 
         // anchor nav active class
         anchors.forEach((anchor) => {
@@ -152,6 +134,12 @@ window.addEventListener("DOMContentLoaded", () => {
         hamburgerClose?.addEventListener("click", function (e) {
             advNav.querySelectorAll('.eb-menu-indicator').forEach((indicator) => {
                 indicator.style.display = 'none';
+                // Reset expanded submenu state so reopening the drawer doesn't
+                // show submenus already open while indicators read as closed.
+                indicator.classList.remove('eb-menu-indicator-open');
+                if (indicator.previousElementSibling) {
+                    indicator.previousElementSibling.style.display = '';
+                }
             });
         });
     }
@@ -159,4 +147,23 @@ window.addEventListener("DOMContentLoaded", () => {
     // Call once after the per-wrapper setup so we don't process every wrapper
     // N times (the selector inside ebResponsiveNav re-queries the whole DOM).
     ebResponsiveNav('.eb-advanced-navigation-wrapper');
+
+    // Single window.load listener for all wrappers (instead of one per wrapper)
+    // positions each indicator vertically against its sibling anchor.
+    window.addEventListener('load', function () {
+        document
+            .querySelectorAll('.eb-advanced-navigation-wrapper .eb-menu-indicator')
+            .forEach(function (indicator) {
+                indicator.addEventListener('click', function () {
+                    // Parent <li> may use a <button> instead of <a> (rare core
+                    // navigation variant) — bail without crashing if so.
+                    const anchor = this.parentNode.querySelector('a');
+                    if (!anchor) return;
+                    const indicatorHeight = 25;
+                    const elementTop =
+                        anchor.getBoundingClientRect().height - indicatorHeight;
+                    this.style.top = elementTop / 2 + 'px';
+                });
+            });
+    });
 });

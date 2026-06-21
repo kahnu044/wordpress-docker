@@ -231,7 +231,6 @@ export default function Style(props) {
     } = generateBorderShadowStyles({
         controlName: switchLiquidGlassShadowEffectBorder,
         attributes,
-        noShadow: true,
     });
     // styles related to liquid glass border shadow styles End
 

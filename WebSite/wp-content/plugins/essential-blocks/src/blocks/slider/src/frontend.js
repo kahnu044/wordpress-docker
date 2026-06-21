@@ -6,13 +6,14 @@ import domReady from "@wordpress/dom-ready";
 import Slider from "react-slick";
 
 /**
- * Get SVG functions from global eb_frontend
+ * Get SVG functions from global eb_frontend.
+ * Fall back to no-ops if the controls frontend bundle didn't load
+ * (e.g. blocked by a firewall/optimizer) so the slider still initializes.
  */
-const {
-    EBRenderIconWithSVG,
-    loadSvgIcons,
-    generateArrowHTML
-} = window.eb_frontend;
+const ebFrontend = window.eb_frontend || {};
+const EBRenderIconWithSVG = ebFrontend.EBRenderIconWithSVG || (() => "");
+const loadSvgIcons = ebFrontend.loadSvgIcons || (() => {});
+const generateArrowHTML = ebFrontend.generateArrowHTML || (() => "");
 
 domReady(function () {
     //Execute after DOM loads.

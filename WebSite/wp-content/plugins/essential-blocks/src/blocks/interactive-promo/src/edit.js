@@ -25,9 +25,11 @@ import {
     sanitizeURL,
     BlockProps,
     withBlockContext,
-    EBMediaPlaceholder
+    ImageComponent,
+    DynamicImageHandler,
 } from "@essential-blocks/controls";
 import { ImageComparison } from "./icon";
+import { IMG_ATTR_PROPS } from "./constants";
 function Edit(props) {
     const { isSelected, attributes, setAttributes } = props;
     const {
@@ -48,23 +50,17 @@ function Edit(props) {
 
     if (!imageURL) {
         return (
-            <>
-                <EBMediaPlaceholder
-                    onSelect={(media) =>
-                        setAttributes({
-                            imageURL: media.url,
-                            imageID: media.id,
-                        })
-                    }
-                    allowTypes={["image"]}
-                    labels={{
-                        title: __("Interactive Promo", "essential-blocks"),
-                        instructions:
-                            "Drag media file, upload or select files from your library.",
-                    }}
-                    icon={ImageComparison}
-                />
-            </>
+            <ImageComponent.Upload
+                imageAttrProps={IMG_ATTR_PROPS}
+                labels={{
+                    title: __("Interactive Promo", "essential-blocks"),
+                    instructions: __(
+                        "Drag media file, upload or select files from your library.",
+                        "essential-blocks"
+                    ),
+                }}
+                icon={ImageComparison}
+            />
         );
     }
 
@@ -123,7 +119,7 @@ function Edit(props) {
                         >
                             <div className="eb-interactive-promo hover-effect">
                                 <figure className={`effect-${effectName}`}>
-                                    <img src={imageURL} alt={imageAltTag} />
+                                    <DynamicImageHandler src={imageURL} alt={imageAltTag} />
                                     <figcaption>
                                         <TitleTag className="eb-interactive-promo-header">
                                             {header}

@@ -408,6 +408,17 @@ const attributes = {
             },
         }
     ),
+    // Block-level masking attrs (unprefixed canonical names) for the shared
+    // <MaskingPanel />. Front/back image attrs above are prefixed, so the
+    // panel's reads/writes wouldn't resolve without these. Style.js already
+    // emits the mask CSS for `.eb-flipbox-front-image, .eb-flipbox-back-image`.
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

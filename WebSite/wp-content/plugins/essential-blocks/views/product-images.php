@@ -5,6 +5,16 @@
 
     if(! $product ) return;
 
+    // These come from the merged attribute array via Helper::views();
+    // guard them so a missing attribute does not raise a PHP 8.x
+    // "undefined variable" warning on WP 7.0.
+    $blockId         = isset( $blockId ) ? $blockId : '';
+    $classHook       = isset( $classHook ) ? $classHook : '';
+    $enableZoom      = isset( $enableZoom ) ? $enableZoom : false;
+    $galleryPosition = isset( $galleryPosition ) ? $galleryPosition : 'bottom';
+    $settings        = isset( $settings ) ? $settings : [];
+    $nav_settings    = isset( $nav_settings ) ? $nav_settings : [];
+
     $wrapper_attributes = get_block_wrapper_attributes(
 		[
 			'class' => 'root-' . $blockId,

@@ -5,9 +5,18 @@
  */
 import domReady from "@wordpress/dom-ready";
 
-const { getDataAttribute, sanitizeTarget, sanitize, sanitizeAttribute } = window.eb_frontend;
-
 domReady(function () {
+    // Bail if the controls frontend bundle didn't load (e.g. blocked by a
+    // firewall/optimizer) — without its sanitizers, clickable mode must stay off.
+    if (!window.eb_frontend) {
+        console.warn(
+            "[Essential Blocks] eb_frontend is not available; clickable infobox is disabled.",
+        );
+        return;
+    }
+    const { getDataAttribute, sanitizeTarget, sanitize, sanitizeAttribute } =
+        window.eb_frontend;
+
     // Handle clickable infobox functionality
     const clickableInfoboxes = document.querySelectorAll(
         '.eb-infobox-wrapper[data-clickable="true"]',

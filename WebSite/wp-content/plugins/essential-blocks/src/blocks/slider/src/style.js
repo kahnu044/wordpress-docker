@@ -35,6 +35,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
+    generateMaskStyles,
     StyleComponent
 } from "@essential-blocks/controls";
 
@@ -404,6 +405,28 @@ export default function Style(props) {
 
 
 
+    // Image masking — per QA report CONCERN A path B (block-level shared mask).
+    // Slider doesn't use ImageComponent's `.eb-image-wrapper` markup, so we
+    // pull just the mask declarations and splice them onto our own selector.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const sliderMaskStyles = maskEnabled
+        ? `
+        .eb-slider-wrapper.${blockId} .eb-slider-item img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .eb-slider-wrapper.${blockId} .eb-slider-item:hover img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // wrapper styles css in strings ⬇
     const wrapperStylesDesktop = `
 		.eb-slider-wrapper.${blockId}{
@@ -417,6 +440,7 @@ export default function Style(props) {
             ${wrapperHoverBackgroundStylesDesktop}
 			${wrapperBDShadowHoverDesktop}
 		}
+        ${sliderMaskStyles}
 	`;
     const wrapperStylesTab = `
 		.eb-slider-wrapper.${blockId}{

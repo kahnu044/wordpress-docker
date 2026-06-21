@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     let SetEqualHeightOfMultiColumnBlock = false;
-    if (window?.eb_frontend && window?.eb_frontend.SetEqualHeightOfMultiColumnBlock === 'function') {
+    if (window?.eb_frontend && typeof window.eb_frontend.SetEqualHeightOfMultiColumnBlock === 'function') {
         SetEqualHeightOfMultiColumnBlock = window.eb_frontend.SetEqualHeightOfMultiColumnBlock
     }
     let toggleBlocks = document.querySelectorAll(".eb-toggle-wrapper");

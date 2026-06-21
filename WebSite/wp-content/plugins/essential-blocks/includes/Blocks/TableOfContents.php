@@ -213,6 +213,16 @@ class TableOfContents extends Block
         $headings = [  ];
         $usedIds = [  ]; // Track used IDs to handle duplicates
 
+        // Strip everything but HTML-ID-safe characters from the configurable
+        // prefix. The frontend script later writes the resulting anchor id
+        // into innerHTML, so an unsanitized prefix becomes a stored XSS.
+        if ( $allowConfigurablePrefix ) {
+            $configurablePrefix = preg_replace( '/[^A-Za-z0-9_\-]/', '', (string) $configurablePrefix );
+            if ( '' === $configurablePrefix ) {
+                $configurablePrefix = 'eb-toc-';
+            }
+        }
+
         foreach ( $headingElements as $index => $heading ) {
             $level = null;
             switch ( $heading->tagName ) {

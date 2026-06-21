@@ -5,7 +5,8 @@ import {
     generateTypographyAttributes,
     generateResponsiveRangeAttributes,
     generateDimensionsAttributes,
- } from "@essential-blocks/controls";
+    ImageComponent,
+} from "@essential-blocks/controls";
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -29,6 +30,26 @@ const attributes = {
     id: {
         type: "string",
     },
+    // ImageComponent attributes for left image (id, alt, size, filters, etc.)
+    // hasBorder/Padding/Margin/Width/Height/Radius all disabled — the comparison
+    // library owns the DOM, those controls don't apply per-side.
+    ...ImageComponent.addAttributes({
+        attrName: "left",
+        attrObject: { imageUrl: "leftImageURL" }, // alias — overridden below to keep source binding
+        hasBorder: false, hasPadding: false, hasMargin: false,
+        hasWidth:  false, hasHeight:  false, hasRadius: false,
+    }),
+    // ImageComponent attributes for right image
+    ...ImageComponent.addAttributes({
+        attrName: "right",
+        attrObject: { imageUrl: "rightImageURL" },
+        hasBorder: false, hasPadding: false, hasMargin: false,
+        hasWidth:  false, hasHeight:  false, hasRadius: false,
+    }),
+
+    // Re-declared AFTER the spreads so the source: "attribute" binding is preserved.
+    // The comparison library's frontend.js reads these from data-* attributes on the
+    // wrapper — losing the binding would break every existing saved block.
     leftImageURL: {
         type: "string",
         source: "attribute",

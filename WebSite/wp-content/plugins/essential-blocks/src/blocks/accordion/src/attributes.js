@@ -66,6 +66,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -336,6 +337,15 @@ const attributes = {
     ...generateDimensionsAttributes(titleSuffixPadding),
 
     // dimensions Control related Attributes ends
+
+    // Image masking attributes (per QA report TC22)
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

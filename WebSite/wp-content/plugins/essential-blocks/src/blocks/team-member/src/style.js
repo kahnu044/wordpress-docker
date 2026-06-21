@@ -59,6 +59,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
+    generateMaskStyles,
     StyleComponent,
 } from "@essential-blocks/controls";
 
@@ -1395,9 +1396,30 @@ export default function Style(props) {
 
 	 `;
 
+    // Image masking — per QA report TC20 (Path B retrofit)
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-team-member-image img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-team-member-image:hover img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		 ${wrapperStylesDesktop}
+         ${maskStyles}
 
 
 	 `);

@@ -3,7 +3,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import {
-    BaseControl,
     ToggleControl,
     RangeControl,
     TextControl,
@@ -17,14 +16,17 @@ import {
 import objAttributes from "./attributes";
 
 import {
-    ImageAvatar,
     ResetControl,
     ColorControl,
     ResponsiveRangeController,
     ResponsiveDimensionsControl,
     TypographyDropdown,
-    InspectorPanel
+    InspectorPanel,
+    ImageComponent,
 } from "@essential-blocks/controls";
+
+const leftImageProps  = { imageUrl: "leftImageURL" };
+const rightImageProps = { imageUrl: "rightImageURL" };
 
 import {
     CONTENT_POSITION,
@@ -40,8 +42,6 @@ import { typoPrefix_label } from "./constants/typographyConstants";
 const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
     const {
         resOption,
-        leftImageURL,
-        rightImageURL,
         hover,
         verticalMode,
         showLabels,
@@ -75,33 +75,28 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
                     initialOpen={true}
                 >
                     <>
-                        {leftImageURL && (
-                            <BaseControl
-                                label={__("Left Image", "essential-blocks")}
-                                __nextHasNoMarginBottom
-                            >
-                                <ImageAvatar
-                                    imageUrl={leftImageURL}
-                                    onDeleteImage={() =>
-                                        setAttributes({ leftImageURL: null })
-                                    }
-                                />
-                            </BaseControl>
-                        )}
-
-                        {rightImageURL && (
-                            <BaseControl
-                                label={__("Right Image", "essential-blocks")}
-                                __nextHasNoMarginBottom
-                            >
-                                <ImageAvatar
-                                    imageUrl={rightImageURL}
-                                    onDeleteImage={() =>
-                                        setAttributes({ rightImageURL: null })
-                                    }
-                                />
-                            </BaseControl>
-                        )}
+                        <ImageComponent.GeneralTab
+                            attrPrefix="left"
+                            imageAttrProps={leftImageProps}
+                            label={__("Left Image", "essential-blocks")}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            useImageAlign={false}
+                            hasAltText={true}
+                        />
+                        <ImageComponent.GeneralTab
+                            attrPrefix="right"
+                            imageAttrProps={rightImageProps}
+                            label={__("Right Image", "essential-blocks")}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            useImageAlign={false}
+                            hasAltText={true}
+                        />
                     </>
                     <ToggleGroupControl
                         label={__("Alignment", "essential-blocks")}

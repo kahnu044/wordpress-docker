@@ -37,6 +37,7 @@ import {
     generateBorderShadowStyles,
     generateTypographyStyles,
     generateResponsiveRangeStyles,
+    generateMaskStyles,
     StyleComponent,
 } from "@essential-blocks/controls";
 import { applyFilters } from "@wordpress/hooks";
@@ -867,12 +868,38 @@ export default function Style(props) {
         ` : ""}
     `;
 
-    // Apply filter for pro liquid glass styles
-    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "iconLiquidGlass", `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner`);
+    // Apply filter for pro liquid glass styles. `|| ""` guards against any
+    // hooked filter that returns undefined — interpolating `${undefined}`
+    // into the CSS string leaves the literal text "undefined" stuck onto
+    // the next selector, breaking it in the editor (frontend is saved via
+    // blockMeta which is sanitized; editor renders the raw string).
+    const liquidGlassProStyles = applyFilters("eb_liquid_glass_effect_pro_style", attributes, "iconLiquidGlass", `.${blockId}.eb-feature-list-wrapper .eb-feature-list-items .eb-feature-list-icon-box .eb-feature-list-icon-inner`) || "";
+
+    // Image masking — per QA report Path B retrofit (shared block-level mask).
+    // Per-feature masking would need migration into the features[] array.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-feature-list-img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-feature-list-item:hover .eb-feature-list-img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
 
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		   ${desktopStyles}
+           ${maskStyles}
 		   ${liquidGlassBasicStyles}
 		   ${liquidGlassProStyles}
 	   `);

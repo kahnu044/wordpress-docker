@@ -37,7 +37,8 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
-    EBButton
+    EBButton,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -499,6 +500,16 @@ const attributes = {
             }
         }
     ),
+
+    // Image masking attributes (per QA report TC57)
+    // Block has per-image sources[] array; for v1 masking is shared across all images.
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

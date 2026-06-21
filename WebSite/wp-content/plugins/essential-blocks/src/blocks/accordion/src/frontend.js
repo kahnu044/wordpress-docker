@@ -1,10 +1,11 @@
 /**
- * Get icon functions from global eb_frontend
+ * Get icon functions from global eb_frontend.
+ * Fall back to no-ops if the controls frontend bundle didn't load
+ * (e.g. blocked by a firewall/optimizer) so the accordion still works.
  */
-const {
-    EBRenderIconWithSVG,
-    loadSvgIcons
-} = window.eb_frontend;
+const ebFrontend = window.eb_frontend || {};
+const EBRenderIconWithSVG = ebFrontend.EBRenderIconWithSVG || (() => "");
+const loadSvgIcons = ebFrontend.loadSvgIcons || (() => {});
 document.addEventListener("DOMContentLoaded", function (event) {
 
     let accordions = document.querySelectorAll(

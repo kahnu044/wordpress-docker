@@ -27,6 +27,7 @@ import {
     EBTextControl,
     EBTextareaControl,
     ImageComponent,
+    MaskingPanel,
     SortControl,
     ButtonGroupControl,
     DynamicInputControl,
@@ -470,6 +471,7 @@ function Inspector({
                         </>
                     )}
                 </InspectorPanel.PanelBody>
+                <MaskingPanel />
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <ImageComponent.StyleTab

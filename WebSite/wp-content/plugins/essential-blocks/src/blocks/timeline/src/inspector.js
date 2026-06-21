@@ -82,7 +82,8 @@ import {
     InspectorPanel,
     EBTextControl,
     ButtonGroupControl,
-    ImageComponent
+    ImageComponent,
+    MaskingPanel
 } from "@essential-blocks/controls";
 
 import Select2 from "react-select";
@@ -321,6 +322,18 @@ function Inspector(props) {
                                             "timelineImageTitle",
                                         ],
                                         [id, url, alt, title],
+                                        i,
+                                    );
+                                }}
+                                onRemove={() => {
+                                    onTimelineChange(
+                                        [
+                                            "timelineImageId",
+                                            "timelineImage",
+                                            "timelineImageAlt",
+                                            "timelineImageTitle",
+                                        ],
+                                        [null, "", "", ""],
                                         i,
                                     );
                                 }}
@@ -943,6 +956,7 @@ function Inspector(props) {
                         </InspectorPanel.PanelBody>
                     )}
                 </>
+                <MaskingPanel />
             </InspectorPanel.General>
 
             <InspectorPanel.Style>

@@ -262,7 +262,7 @@ class Product extends Base
                     $query_args[ 'orderby' ]  = 'meta_value_num';
                     $query_args[ 'order' ]    = 'desc';
                     break;
-                case 'rating';
+                case 'rating':
                     $query_args[ 'meta_key' ] = '_wc_average_rating';
                     $query_args[ 'orderby' ]  = 'meta_value_num';
                     break;

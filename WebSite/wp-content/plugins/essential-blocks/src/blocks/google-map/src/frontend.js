@@ -52,7 +52,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
-        const googleMap = new window.google.maps.Map(map, {
+        const customStyles =
+            "google_theme" === themeSource
+                ? GOOGLE_MAP_STYLES[googleMapStyle]
+                : SNAZZY_MAP_STYLES[snazzyMapStyle];
+
+        // mapId and inline styles are mutually exclusive: when a mapId is set,
+        // Google ignores inline styles. So we only opt into AdvancedMarkerElement
+        // (which requires a mapId) when the user has not picked a custom theme.
+        const AdvancedMarkerElement =
+            window.google.maps.marker &&
+            window.google.maps.marker.AdvancedMarkerElement;
+        const useAdvancedMarker =
+            !!AdvancedMarkerElement &&
+            (!customStyles || customStyles.length === 0);
+
+        const mapOptions = {
             center: {
                 lat: Number(markers[0].latitude) || Number(latitude),
                 lng: Number(markers[0].longitude) || Number(longitude),
@@ -61,11 +76,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
             zoom: markers.length === 1 ? parseInt(mapZoom) : 0,
             mapTypeId: mapType,
             zoomControl: mapZoom,
-            styles:
-                "google_theme" === themeSource
-                    ? GOOGLE_MAP_STYLES[googleMapStyle]
-                    : SNAZZY_MAP_STYLES[snazzyMapStyle],
-        });
+        };
+
+        if (useAdvancedMarker) {
+            mapOptions.mapId = "EB_GOOGLE_MAP";
+        } else {
+            mapOptions.styles = customStyles;
+        }
+
+        const googleMap = new window.google.maps.Map(map, mapOptions);
 
         if (markers && 0 < markers.length) {
             let bounds = new google.maps.LatLngBounds();
@@ -82,15 +101,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 let icon =
                     iconUrl ||
                     "https://maps.google.com/mapfiles/ms/icons/red-dot.png";
-                const mark = new window.google.maps.Marker({
-                    position,
-                    map: googleMap,
-                    title: marker.title,
-                    icon: {
-                        url: icon,
-                        scaledSize: new google.maps.Size(imageSize, imageSize),
-                    },
-                });
+
+                let mark;
+                if (useAdvancedMarker) {
+                    const img = document.createElement("img");
+                    img.src = icon;
+                    img.style.width = imageSize + "px";
+                    img.style.height = imageSize + "px";
+                    mark = new AdvancedMarkerElement({
+                        position,
+                        map: googleMap,
+                        title: marker.title,
+                        content: img,
+                    });
+                } else {
+                    mark = new window.google.maps.Marker({
+                        position,
+                        map: googleMap,
+                        title: marker.title,
+                        icon: {
+                            url: icon,
+                            scaledSize: new google.maps.Size(
+                                imageSize,
+                                imageSize
+                            ),
+                        },
+                    });
+                }
 
                 if (marker.title || marker.content) {
                     const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${marker.title
@@ -103,11 +140,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     });
 
                     if (index == 0) {
-                        infowindow.open(googleMap, mark);
+                        if (useAdvancedMarker) {
+                            infowindow.open({ anchor: mark, map: googleMap });
+                        } else {
+                            infowindow.open(googleMap, mark);
+                        }
                     }
-                    mark.addListener("click", () => {
-                        infowindow.open(googleMap, mark);
-                    });
+                    if (useAdvancedMarker) {
+                        // AdvancedMarkerElement clicks need `gmp-click` and the
+                        // anchor passed via the options bag, not the marker arg.
+                        mark.addListener("gmp-click", () => {
+                            infowindow.open({ anchor: mark, map: googleMap });
+                        });
+                    } else {
+                        mark.addListener("click", () => {
+                            infowindow.open(googleMap, mark);
+                        });
+                    }
                     if (markers.length > 1) {
                         googleMap.fitBounds(bounds);
                     }

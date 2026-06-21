@@ -79,7 +79,7 @@ class PostCarousel extends PostBlock
             return;
         }
 
-        $queryData = $attributes[ 'queryData' ];
+        $queryData = isset( $attributes[ 'queryData' ] ) ? $attributes[ 'queryData' ] : [];
 
         $attributes = wp_parse_args( $attributes, $this->get_default_attributes() );
 
@@ -136,6 +136,7 @@ class PostCarousel extends PostBlock
             array_merge(
                 $attributes,
                 [
+                    'queryData'      => $queryData,
                     'essentialAttr'  => $_essential_attrs,
                     'sliderSettings' => $_slider_settings,
                     'classHook'      => $classHook,

@@ -176,6 +176,7 @@ const Edit = (props) => {
                                                 html={embedHtml}
                                                 title={__('Video Preview', 'essential-blocks')}
                                                 type={`embed eb-sandbox-video ${blockId} wp-embed-aspect-16-9 wp-has-aspect-ratio`}
+                                                allowSameOrigin
                                             />
                                         )}
                                         {preview && (

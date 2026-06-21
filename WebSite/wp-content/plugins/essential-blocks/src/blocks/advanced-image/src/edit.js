@@ -111,7 +111,13 @@ const Edit = (props) => {
     }, [isInLoopBuilder, loopPostId, loopPostType]);
 
     // Get only urls
-    const oldImageData = wp.data.select("core").getMedia(image.id);
+    // `getMedia` is deprecated since WP 6.9 — use the generic entity record
+    // selector for the `attachment` post type instead.
+    const oldImageData = wp.data
+        .select("core")
+        .getEntityRecord("postType", "attachment", image.id, {
+            context: "view",
+        });
     const prevImageSize = useRef(imageSize);
 
     // site logo
@@ -138,12 +144,14 @@ const Edit = (props) => {
         const _siteIconId = siteSettings?.site_icon;
         const mediaItem =
             _siteLogoId &&
-            select(coreStore).getMedia(_siteLogoId, {
+            getEntityRecord("postType", "attachment", _siteLogoId, {
                 context: "view",
             });
         const _isRequestingMediaItem =
             _siteLogoId &&
-            !select(coreStore).hasFinishedResolution("getMedia", [
+            !select(coreStore).hasFinishedResolution("getEntityRecord", [
+                "postType",
+                "attachment",
                 _siteLogoId,
                 { context: "view" },
             ]);
@@ -278,13 +286,13 @@ const Edit = (props) => {
 
     const { media, postType, postPermalink } = useSelect(
         (select) => {
-            const { getMedia, getPostType, getEditedEntityRecord } =
+            const { getEntityRecord, getPostType, getEditedEntityRecord } =
                 select(coreStore);
 
             return {
                 media:
                     featuredImage &&
-                    getMedia(featuredImage, {
+                    getEntityRecord("postType", "attachment", featuredImage, {
                         context: "view",
                     }),
                 postType: effectivePostType && getPostType(effectivePostType),

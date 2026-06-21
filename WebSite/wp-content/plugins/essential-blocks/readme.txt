@@ -4,7 +4,7 @@ Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Gener
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.1.3
+Stable tag: 6.2.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -79,6 +79,9 @@ Instantly add engaging transform effects to your Gutenberg blocks and create int
 
 ##🔒 PASSWORD PROTECT CONTENT & BLOCKS (PRO)
 Secure any Gutenberg block, section, or content with password protection and control who gets access. Easily restrict premium resources, exclusive content, private pages, or client-only sections directly from the block editor without writing a single line of code.
+
+##🎨 IMAGE MASKING & MORPHING (FREEMIUM)
+Transform ordinary images into captivating visual experiences with advanced masking and morphing effects. Easily apply creative shapes, seamless transitions, and dynamic image transformations to highlight products, showcase portfolios, or create engaging website sections—all directly within the Gutenberg editor without writing a single line of code.
 
 ##🖼️ READY GUTENBERG PATTERNS BUILT WITH BLOCKS
 Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
@@ -276,6 +279,30 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+= 6.2.1 - 18/06/2026 =
+- Improved: Liquid Glass in Individual Blocks
+- Improved: Improved Free block rendering and frontend stability (infobox)
+- Improved : Image Masking Hover Clip-Path & Clip Morphing
+- Fixed: AI popup not showing Edit with AI option in Image component
+- Fixed: Advanced Menu interactivity module issue in Gutenberg
+- Few minor bug fixes & improvements
+
+
+= 6.2.0 - 08/06/2026 =
+- Added: New Feature | Image Masking and Morphing
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
+
+
+= 6.1.4 - 04/06/2026 =
+- Improved: Enhanced compatibility with WordPress 7.0.
+- Improved: Security enhancements.
+- Fixed: Advanced Video editor UI issues.
+- Fixed: Advanced Image Site Logo issue.
+- Fixed: Remove Image button issue.
+- Few minor bug fixes & improvements
+
+
 = 6.1.3 - 20/05/2026 =
 - Added: WordPress 7.0 Compatibility
 - Fixed: Advanced Image | Caption Styles and Alignment Issues

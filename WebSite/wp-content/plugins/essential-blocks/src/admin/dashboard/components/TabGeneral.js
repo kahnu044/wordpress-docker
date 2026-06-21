@@ -277,22 +277,43 @@ export default function TabGeneral() {
                         >
                             <div className="changelog-wrapper">
                                 <div className="changelog-title">
-                                    {__("Version: 6.1.3", "essential-blocks")}
+                                    {__("Version: 6.2.1", "essential-blocks")}
                                     <span className="changelog-date">
-                                        {__("20/05/2026", "essential-blocks")}
+                                        {__("18/06/2026", "essential-blocks")}
                                     </span>
                                 </div>
                                 <ul className="changelog-content">
                                     <li>
                                         {__(
-                                            "Added: WordPress 7.0 Compatibility",
+                                            "Improved: Liquid Glass in Individual Blocks",
                                             "essential-blocks"
                                         )}
 
                                     </li>
                                     <li>
                                         {__(
-                                            "Fixed: Advanced Image | Caption Styles and Alignment Issues",
+                                            "Improved: Improved Free block rendering and frontend stability (infobox)",
+                                            "essential-blocks"
+                                        )}
+
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Improved : Image Masking Hover Clip-Path & Clip Morphing",
+                                            "essential-blocks"
+                                        )}
+
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Fixed: AI popup not showing Edit with AI option in Image component",
+                                            "essential-blocks"
+                                        )}
+
+                                    </li>
+                                    <li>
+                                        {__(
+                                            "Fixed: Advanced Menu interactivity module issue in Gutenberg",
                                             "essential-blocks"
                                         )}
 

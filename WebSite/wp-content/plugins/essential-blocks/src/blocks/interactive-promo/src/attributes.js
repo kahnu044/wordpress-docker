@@ -9,7 +9,29 @@ import {
     generateTypographyAttributes,
     generateBorderShadowAttributes,
     generateDimensionsAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
+
+// Pull in ImageComponent's auxiliary attributes (image size, filters, link,
+// fit, caption, etc.) but drop the three name-conflicts: Promo stores URL /
+// ID / Alt under legacy keys (imageURL / imageID / imageAltTag) that have
+// HTML source bindings on the saved markup and must not be redefined.
+// Width / height / border are handled by the existing range and border-shadow
+// attributes below, so we disable those generators here to avoid duplicate
+// declarations with possibly-different defaults.
+const {
+    imageUrl: _kitImageUrl,
+    imageId: _kitImageId,
+    imageAlt: _kitImageAlt,
+    ...imageKitAttributes
+} = ImageComponent.addAttributes({
+    hasBorder: false,
+    hasPadding: false,
+    hasMargin: false,
+    hasWidth: false,
+    hasHeight: false,
+    hasRadius: false,
+});
 
 const attributes = {
     // the following 4 attributes is must required for responsive options and asset generation for frontend
@@ -117,6 +139,8 @@ const attributes = {
     ...generateDimensionsAttributes(wrapperPadding),
     // border & shadow attributes
     ...generateBorderShadowAttributes(imageBorderShadow),
+    // ImageComponent kit attrs (alt, link/fit/filter etc) sans conflicts
+    ...imageKitAttributes,
 };
 
 export default attributes;

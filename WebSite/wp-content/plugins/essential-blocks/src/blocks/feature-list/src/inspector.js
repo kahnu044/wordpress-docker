@@ -67,6 +67,7 @@ import {
     InspectorPanel,
     SortControl,
     ImageComponent,
+    MaskingPanel,
     EBIconPicker,
     LiquidGlassEffectControl,
     EBTextControl,
@@ -201,6 +202,18 @@ const Inspector = ({ attributes, setAttributes }) => {
                                             "featureImageTitle",
                                         ],
                                         [id, url, alt, title],
+                                        i,
+                                    );
+                                }}
+                                onRemove={() => {
+                                    onFeatureChange(
+                                        [
+                                            "featureImageId",
+                                            "featureImage",
+                                            "featureImageAlt",
+                                            "featureImageTitle",
+                                        ],
+                                        [null, "", "", ""],
                                         i,
                                     );
                                 }}
@@ -434,6 +447,9 @@ const Inspector = ({ attributes, setAttributes }) => {
                         __nextHasNoMarginBottom
                     />
                 </InspectorPanel.PanelBody >
+
+                {/* Block-level masking — applies to every feature image. */}
+                <MaskingPanel />
             </InspectorPanel.General >
             <InspectorPanel.Style>
                 <InspectorPanel.PanelBody

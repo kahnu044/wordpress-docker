@@ -7,6 +7,7 @@ import {
     generateTypographyStyles,
     generateResponsiveRangeStyles,
     generateBorderShadowStyles,
+    generateMaskStyles,
     StyleComponent
 } from "@essential-blocks/controls";
 
@@ -314,13 +315,26 @@ export default function Style(props) {
 		}
 		.${blockId} .eb-avatar-style,
         .eb-testimonial-wrapper.${blockId}.layout-preset-2 .image-container .eb-avatar-style {
-			${imageUrl ? `background-image: url(${imageUrl});` : ''}
 			border-radius: ${borderRadius}%;
 			display: ${imageUrl ? "block" : "none"};
             ${imgWidthStylesDesktop}
             ${imgHeightStylesDesktop}
             ${imgShadowStyesDesktop}
             ${imgShadowTransitionStyle}
+		}
+		/* Legacy empty-div avatar (deprecated #4) — new saves render the
+		   <img> inside .eb-avatar-style and don't need this background. */
+		.${blockId} .eb-avatar-style:empty,
+        .eb-testimonial-wrapper.${blockId}.layout-preset-2 .image-container .eb-avatar-style:empty {
+			${imageUrl ? `background-image: url(${imageUrl});` : ''}
+		}
+		/* New img fills the avatar box with cover-fit, matching the prior
+		   background-size:cover / background-position:center visual. */
+		.${blockId} .eb-avatar-style img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
 		}
 		.${blockId} .eb-avatar-style:hover,
         .eb-testimonial-wrapper.${blockId}.layout-preset-2 .image-container .eb-avatar-style:hover {
@@ -537,10 +551,33 @@ export default function Style(props) {
 		}
 	`;
 
+    // Image masking — per QA report TC19 (Path B retrofit).
+    // Testimonial's avatar is a CSS-background <div> (.eb-avatar-style),
+    // not an <img>. Mask CSS applies to any element, so the same decls work.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-avatar-style {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .image-container:hover .eb-avatar-style {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     const desktopAllStyles = softMinifyCssStrings(`
 		${containerStyle}
 		${avatarContainerStyle}
 		${imageContainerStyle}
+		${maskStyles}
 		${userInfoStyle}
 		${userNameStyle}
 		${companyNameStyle}

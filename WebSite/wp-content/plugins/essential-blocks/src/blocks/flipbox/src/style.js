@@ -58,6 +58,7 @@ import {
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
     generateBorderShadowStyles,
+    generateMaskStyles,
     StyleComponent,
     ImageComponent,
 } from "@essential-blocks/controls";
@@ -1172,6 +1173,30 @@ export default function Style(props) {
 		 `;
     }
 
+    // Image masking — block-level shared mask for both front and back images.
+    // (Per-side independent masking would require keeping the prefixed
+    // attrs/CSS path; v1 collapses to one block-level config.)
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-flipbox-front-image,
+        .${blockId} .eb-flipbox-back-image {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-flipbox-front:hover .eb-flipbox-front-image,
+        .${blockId} .eb-flipbox-back:hover .eb-flipbox-back-image {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		 ${itemsContainerStyle}
@@ -1180,6 +1205,7 @@ export default function Style(props) {
 		 ${contentStylesDesktop}
 		 ${flipperStyle}
 		 ${frontStyleDesktop}
+         ${maskStyles}
 		 ${frontImageStyleDesktop}
 		 ${frontIconStyleDesktop}
 		 ${backIconStyleDesktop}

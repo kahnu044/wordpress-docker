@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
     let SetEqualHeightOfMultiColumnBlock = false;
-    if (window?.eb_frontend && window?.eb_frontend.SetEqualHeightOfMultiColumnBlock === 'function') {
+    if (window?.eb_frontend && typeof window.eb_frontend.SetEqualHeightOfMultiColumnBlock === 'function') {
         SetEqualHeightOfMultiColumnBlock = window.eb_frontend.SetEqualHeightOfMultiColumnBlock
     }
 

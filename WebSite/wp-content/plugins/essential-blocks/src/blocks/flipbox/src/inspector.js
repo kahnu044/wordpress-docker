@@ -45,6 +45,7 @@ import {
     EBIconPicker,
     InspectorPanel,
     ImageComponent,
+    MaskingPanel,
     EBTextControl,
 } from "@essential-blocks/controls";
 
@@ -726,6 +727,7 @@ const Inspector = ({ attributes, setAttributes }) => {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
+                    <MaskingPanel />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     <InspectorPanel.PanelBody>

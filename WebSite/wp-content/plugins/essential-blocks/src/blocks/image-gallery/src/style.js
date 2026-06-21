@@ -41,6 +41,7 @@ import {
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
     generateBackgroundControlStyles,
+    generateMaskStyles,
     useBlockAttributes,
     StyleComponent,
     EBButton
@@ -956,6 +957,27 @@ export default function Style(props) {
         LOADMORE_PADDING
     );
 
+    // Image masking — per QA report TC57 (Path B retrofit).
+    // Shared block-level mask across all gallery images.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-gallery-img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-gallery-img-content:hover .eb-gallery-img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
@@ -964,6 +986,7 @@ export default function Style(props) {
 		${loadmoreStylesDesktop}
 		${btnLoadmoreDesktopStyle}
 		${notFoundStyleDesktop}
+        ${maskStyles}
 	`);
 
     // all css styles for Tab in strings ⬇

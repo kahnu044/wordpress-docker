@@ -9,6 +9,7 @@ import {
     generateDimensionsAttributes,
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 import {
     connectorWidth,
@@ -404,6 +405,17 @@ const attributes = {
             right: 24,
             left: 24,
         },
+    }),
+
+    // Image masking attributes (per QA report TC for FeatureList)
+    // Note: per-item masking would require migrating into the `features` array;
+    // for v1 these are block-level (shared across all feature items).
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
     }),
 };
 

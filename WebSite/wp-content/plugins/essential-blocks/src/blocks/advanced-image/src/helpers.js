@@ -108,13 +108,6 @@ export const SiteLogo = ({
         imageWidthWithinContainer = exceedMaxWidth ? clientWidth : naturalWidth;
     }
 
-    if (!isResizable || !imageWidthWithinContainer) {
-        return <div className='test-wrap'>{imgWrapper}</div>;
-    }
-
-    const canEditImage =
-        logoId && naturalWidth && naturalHeight && imageEditing;
-
     const imgEdit =
         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
             <figure
@@ -127,6 +120,13 @@ export const SiteLogo = ({
             </figure>
         </div>
         ;
+
+    if (!isResizable || !imageWidthWithinContainer) {
+        return imgEdit;
+    }
+
+    const canEditImage =
+        logoId && naturalWidth && naturalHeight && imageEditing;
 
 
     // Support the previous location for the Site Icon settings. To be removed

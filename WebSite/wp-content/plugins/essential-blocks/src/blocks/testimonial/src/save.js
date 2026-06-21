@@ -44,7 +44,16 @@ const Save = ({ attributes }) => {
                         <div className={`eb-avatar-container ${avatarInline ? "avatar-inline" : "avatar-basic"} `}>
                             {imageUrl && (
                                 <div className="image-container">
-                                    <div className="eb-avatar-style" />
+                                    {/* Render the avatar as a real <img>
+                                        (was a CSS background on an empty
+                                        div) so Pro's morphing runtime can
+                                        wrap/animate it. The bg-image CSS
+                                        for `.eb-avatar-style:empty` still
+                                        renders the avatar for legacy
+                                        un-resaved posts. */}
+                                    <div className="eb-avatar-style">
+                                        <img src={imageUrl} alt="" />
+                                    </div>
                                 </div>
                             )}
 

@@ -31,6 +31,7 @@ import {
     InspectorPanel,
     EBButton,
     ImageComponent,
+    MaskingPanel,
     EBTextControl
 } from "@essential-blocks/controls";
 
@@ -671,6 +672,7 @@ function Inspector(props) {
                         </>
                     )}
                 </>
+                <MaskingPanel />
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <>

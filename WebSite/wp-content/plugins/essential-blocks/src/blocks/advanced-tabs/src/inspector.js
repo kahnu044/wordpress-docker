@@ -30,6 +30,7 @@ import {
     InspectorPanel,
     SortControl,
     ImageComponent,
+    MaskingPanel,
     EBIconPicker,
     EBTextControl,
     ProSelectControl
@@ -232,6 +233,7 @@ __nextHasNoMarginBottom
                 {each.media === "image" && (
                     <ImageComponent.GeneralTab
                         onSelect={({ id, url }) => { onTabChange(["imgId", "imgUrl"], [id, url], i) }}
+                        onRemove={() => { onTabChange(["imgId", "imgUrl"], [null, ""], i) }}
                         value={each.imgUrl}
                         hasTag={false}
                         hasCaption={false}
@@ -532,6 +534,9 @@ __nextHasNoMarginBottom
                             </>
                         )}
                     </InspectorPanel.PanelBody>
+
+                    {/* Block-level masking — applies to every tab nav image. */}
+                    <MaskingPanel />
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     {applyFilters(

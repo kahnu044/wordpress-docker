@@ -2,12 +2,8 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { MediaUpload } from "@wordpress/block-editor";
 import {
-    Button,
     BaseControl,
-    TextControl,
-    TextareaControl,
     ToggleControl,
     SelectControl,
     __experimentalToggleGroupControl as ToggleGroupControl,
@@ -25,7 +21,8 @@ import {
     wrapperMargin,
     wrapperPadding,
     imageBorderShadow,
-    HEADER_TAGS
+    HEADER_TAGS,
+    IMG_ATTR_PROPS,
 } from "./constants";
 import {
     typoPrefix_header,
@@ -33,14 +30,14 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 import {
-    ImageAvatar,
     ColorControl,
     ResponsiveRangeController,
     TypographyDropdown,
     GradientColorControl,
     InspectorPanel,
     EBTextControl,
-    EBTextareaControl
+    EBTextareaControl,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -50,8 +47,6 @@ const Inspector = ({ attributes, setAttributes }) => {
         header,
         content,
         link,
-        imageURL,
-        imageAltTag,
         newWindow,
         headerColor,
         contentColor,
@@ -73,33 +68,15 @@ const Inspector = ({ attributes, setAttributes }) => {
             <InspectorPanel.General>
                 <InspectorPanel.PanelBody initialOpen={true}>
                     <BaseControl label={__("Background Image", "essential-blocks")} __nextHasNoMarginBottom>
-                        <MediaUpload
-                            onSelect={(media) =>
-                                setAttributes({
-                                    imageURL: media.url,
-                                })
-                            }
-                            type="image"
-                            value={imageURL}
-                            render={({ open }) =>
-                                !imageURL && (
-                                    <Button
-                                        className="eb-cia-upload-button"
-                                        label={__("Upload Image", "essential-blocks")}
-                                        icon="format-image"
-                                        onClick={open}
-                                    />
-                                )
-                            }
+                        <ImageComponent.GeneralTab
+                            imageAttrProps={IMG_ATTR_PROPS}
+                            showInPanel={false}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            hasAltText={true}
                         />
-                        {imageURL && (
-                            <ImageAvatar
-                                imageUrl={imageURL}
-                                onDeleteImage={() =>
-                                    setAttributes({ imageURL: null })
-                                }
-                            />
-                        )}
                     </BaseControl>
                     <ResponsiveRangeController
                         baseLabel={__("Height", "essential-blocks")}
@@ -116,13 +93,6 @@ const Inspector = ({ attributes, setAttributes }) => {
                         max={1000}
                         step={1}
                         noUnits
-                    />
-                    <EBTextControl
-                        label={__("Image alt tag", "essential-blocks")}
-                        value={imageAltTag}
-                        onChange={(newValue) =>
-                            setAttributes({ imageAltTag: newValue })
-                        }
                     />
                     <EBTextControl
                         label={__("Header", "essential-blocks")}

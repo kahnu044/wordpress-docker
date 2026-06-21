@@ -42,7 +42,8 @@ import {
     SortControl,
     DynamicInputControl,
     ImageAvatar,
-    ImageComponent
+    ImageComponent,
+    MaskingPanel
 } from "@essential-blocks/controls";
 import { deleteAccordion } from "./helpers";
 
@@ -327,6 +328,17 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                             i,
                                         );
                                     }}
+                                    onRemove={() => {
+                                        onAccordionChange(
+                                            [
+                                                "titlePrefixImgUrl",
+                                                "titlePrefixImgId",
+                                                "titlePrefixImgAlt",
+                                            ],
+                                            ["", null, ""],
+                                            i,
+                                        );
+                                    }}
                                     value={each.titlePrefixImgUrl}
                                     hasTag={false}
                                     hasCaption={false}
@@ -450,6 +462,17 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                             i,
                                         );
                                     }}
+                                    onRemove={() => {
+                                        onAccordionChange(
+                                            [
+                                                "titleSuffixImgUrl",
+                                                "titleSuffixImgId",
+                                                "titleSuffixImgAlt",
+                                            ],
+                                            ["", null, ""],
+                                            i,
+                                        );
+                                    }}
                                     value={each.titleSuffixImgUrl}
                                     hasTag={false}
                                     hasCaption={false}
@@ -474,6 +497,17 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                                             "imageAlt",
                                         ],
                                         [url, id, alt],
+                                        i,
+                                    );
+                                }}
+                                onRemove={() => {
+                                    onAccordionChange(
+                                        [
+                                            "imageUrl",
+                                            "imageId",
+                                            "imageAlt",
+                                        ],
+                                        ["", null, ""],
                                         i,
                                     );
                                 }}
@@ -694,6 +728,7 @@ const Inspector = ({ attributes, setAttributes, clientId, addAccordion }) => {
                         ></SortControl>
                     </InspectorPanel.PanelBody>
                 </>
+                <MaskingPanel />
             </InspectorPanel.General>
             <InspectorPanel.Style>
                 <>

@@ -377,10 +377,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     container &&
                     container.getAttribute("data-highlight-scroll");
 
-                let copyLinkHtml = enableCopyLink
-                    ? `<span class="eb-tooltip dashicons dashicons-clipboard"><span class="eb-tooltiptext">Copied!</span></span></span>`
-                    : "";
-
                 let node = document.querySelector(".eb-toc-wrapper");
 
                 if (node) {
@@ -445,14 +441,23 @@ window.addEventListener("DOMContentLoaded", function () {
                                             if (isValidHtmlId(element.link)) {
                                                 new ClipboardJS(`#${element.link}`);
                                             }
-                                            item.innerHTML = `${item.innerHTML
-                                                }<span id="${element.link}"
-                                        class="eb-toc__heading-anchor" data-clipboard-text="${location.protocol +
-                                                "//" +
-                                                location.host +
-                                                location.pathname +
-                                                (location.search ? location.search : "")
-                                                }#${element.link}">${copyLinkHtml}</span>`;
+                                            const anchorSpan = document.createElement("span");
+                                            anchorSpan.id = element.link;
+                                            anchorSpan.className = "eb-toc__heading-anchor";
+                                            anchorSpan.setAttribute(
+                                                "data-clipboard-text",
+                                                `${location.protocol}//${location.host}${location.pathname}${location.search ? location.search : ""}#${element.link}`,
+                                            );
+                                            if (enableCopyLink) {
+                                                const tooltip = document.createElement("span");
+                                                tooltip.className = "eb-tooltip dashicons dashicons-clipboard";
+                                                const tooltipText = document.createElement("span");
+                                                tooltipText.className = "eb-tooltiptext";
+                                                tooltipText.textContent = "Copied!";
+                                                tooltip.appendChild(tooltipText);
+                                                anchorSpan.appendChild(tooltip);
+                                            }
+                                            item.appendChild(anchorSpan);
                                         }
                                         matchCount++;
                                     }
@@ -472,7 +477,10 @@ window.addEventListener("DOMContentLoaded", function () {
                                     ) {
                                         // Check if this is the correct occurrence of this heading
                                         if (matchCount === processedHeadings.get(element_text)) {
-                                            item.innerHTML = `<span id="${element.link}" class="eb-toc__heading-anchor"></span>${item.innerHTML}`;
+                                            const anchorSpan = document.createElement("span");
+                                            anchorSpan.id = element.link;
+                                            anchorSpan.className = "eb-toc__heading-anchor";
+                                            item.insertBefore(anchorSpan, item.firstChild);
                                         }
                                         matchCount++;
                                     }

@@ -172,6 +172,28 @@ class CSSParser
     {
         $block_styles = $style_object;
 
+        /**
+         * CSS injection guard for auto-generated block CSS.
+         *
+         * The desktop/tab/mobile sections come from the JS StyleComponent and
+         * are expected to be balanced `selector{…}` rule blocks. A poisoned
+         * attribute value (e.g. a custom clip-path containing `}`) would let
+         * its rule prematurely close and inject new rules targeting the rest
+         * of the page. Enforce that opening and closing brace counts match
+         * per section; if they don't, drop the section rather than write
+         * malformed CSS. `customCss` is left untouched on purpose — users
+         * write rule blocks there intentionally.
+         */
+        $sanitize_auto_css = static function ( $style ) {
+            if ( ! is_string( $style ) || $style === '' ) {
+                return '';
+            }
+            if ( substr_count( $style, '{' ) !== substr_count( $style, '}' ) ) {
+                return '';
+            }
+            return $style;
+        };
+
         $css = '';
         foreach ( $block_styles as $block_style_key => $block_style ) {
             if ( ! empty( $block_css = (array) $block_style ) ) {
@@ -179,16 +201,16 @@ class CSSParser
                 foreach ( $block_css as $media => $style ) {
                     switch ( $media ) {
                         case "desktop":
-                            $css .= preg_replace( '/\s+/', ' ', $style );
+                            $css .= preg_replace( '/\s+/', ' ', $sanitize_auto_css( $style ) );
                             break;
                         case "tab":
                             $css .= ' @media(max-width: ' . self::get_responsive_breakpoints( 'tablet' ) . 'px){';
-                            $css .= preg_replace( '/\s+/', ' ', $style );
+                            $css .= preg_replace( '/\s+/', ' ', $sanitize_auto_css( $style ) );
                             $css .= '}';
                             break;
                         case "mobile":
                             $css .= ' @media(max-width: ' . self::get_responsive_breakpoints( 'mobile' ) . 'px){';
-                            $css .= preg_replace( '/\s+/', ' ', $style );
+                            $css .= preg_replace( '/\s+/', ' ', $sanitize_auto_css( $style ) );
                             $css .= '}';
                             break;
                         case "customCss":

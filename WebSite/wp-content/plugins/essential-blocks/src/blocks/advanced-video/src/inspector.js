@@ -288,6 +288,12 @@ function Inspector(props) {
                                                     previewImageId: id,
                                                 })
                                             }
+                                            onRemove={() =>
+                                                setAttributes({
+                                                    previewImage: "",
+                                                    previewImageId: null,
+                                                })
+                                            }
                                             value={previewImage}
                                             hasTag={false}
                                             hasCaption={false}
@@ -364,6 +370,12 @@ function Inspector(props) {
                                                                         url,
                                                                     customPlayIconId:
                                                                         id,
+                                                                })
+                                                            }
+                                                            onRemove={() =>
+                                                                setAttributes({
+                                                                    customPlayIconURL: "",
+                                                                    customPlayIconId: null,
                                                                 })
                                                             }
                                                             value={
@@ -444,6 +456,12 @@ function Inspector(props) {
                                             placeholderImageId: id,
                                         })
                                     }
+                                    onRemove={() =>
+                                        setAttributes({
+                                            placeholderImage: "",
+                                            placeholderImageId: null,
+                                        })
+                                    }
                                     value={placeholderImage}
                                     hasTag={false}
                                     hasCaption={false}
@@ -513,6 +531,12 @@ function Inspector(props) {
                                                             url,
                                                         placeholderPlayIconId:
                                                             id,
+                                                    })
+                                                }
+                                                onRemove={() =>
+                                                    setAttributes({
+                                                        placeholderPlayIconURL: "",
+                                                        placeholderPlayIconId: null,
                                                     })
                                                 }
                                                 value={placeholderPlayIconURL}

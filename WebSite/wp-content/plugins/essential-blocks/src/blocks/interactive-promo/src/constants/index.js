@@ -68,3 +68,12 @@ export const wrapperPadding = "wrpPadding";
 // border & shadow
 export const wrapperBorderShadow = "wrpBrdShdw";
 export const imageBorderShadow = "imgBrdShdw";
+
+// Maps ImageComponent's canonical attribute names to Promo's legacy ones.
+// Promo's imageURL/imageID/imageAltTag exist on disk and have HTML source
+// bindings that must keep working — we cannot rename them.
+export const IMG_ATTR_PROPS = {
+    imageUrl: "imageURL",
+    imageId: "imageID",
+    imageAlt: "imageAltTag",
+};

@@ -71,6 +71,7 @@ import {
     generateTypographyStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
+    generateMaskStyles,
     StyleComponent,
 } from "@essential-blocks/controls";
 
@@ -1395,12 +1396,38 @@ ${
         }
     `;
 
+    // Image masking — per QA report TC22 (Path B retrofit).
+    // Covers all 3 image slots: titlePrefix, titleSuffix, body image.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .eb-accordion-image-container img,
+        .${blockId} .eb-accordion-title-prefix-img,
+        .${blockId} .eb-accordion-title-suffix-img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .eb-accordion-image-container:hover img,
+        .${blockId} .eb-accordion-title-wrapper:hover .eb-accordion-title-prefix-img,
+        .${blockId} .eb-accordion-title-wrapper:hover .eb-accordion-title-suffix-img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${wrapperStylesDesktop}
         ${imageContainerStylesDesktop}
         ${singleAccordionStylesDesktop}
         ${horizontalAccordionStylesDesktop}
+        ${maskStyles}
 	`);
 
     // all css styles for Tab in strings ⬇

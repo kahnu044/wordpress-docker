@@ -34,6 +34,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -384,6 +385,17 @@ const attributes = {
 
     ...generateBorderShadowAttributes(SLIDER_BORDER_SHADOW),
 
+    // Image masking attributes (per QA report TC21 / CONCERN A)
+    // Block-level mask config — shared across all slides for v1.
+    // Per-slide masking would require a `mask` field inside each images[] item
+    // plus a deprecated entry against the 16 existing save markup variants.
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
+    }),
 };
 
 export default attributes;

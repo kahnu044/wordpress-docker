@@ -16,6 +16,7 @@ import defaultAttributes from './attributes';
 import {
     BlockProps,
     BrowseTemplate,
+    useResolvedImageUrl,
     withBlockContext
 } from "@essential-blocks/controls";
 
@@ -51,6 +52,16 @@ const Edit = (props) => {
     attributes.className = replaceString(attributes.className, "eb-testimonial-wrapper", "");
     attributes.className = replaceString(attributes.className, blockId, "");
 
+    // Editor preview only — resolves eb-dynamic-tags/… URLs to real attachment
+    // URLs so the avatar's CSS background-image renders correctly in the editor.
+    // The raw dynamic-tag string stays in blockMeta so frontend rendering can
+    // re-resolve per page load (see Testimonial.php).
+    const resolvedAvatarUrl = useResolvedImageUrl(imageUrl);
+    const isDynamicAvatar =
+        typeof imageUrl === "string" &&
+        imageUrl &&
+        resolvedAvatarUrl !== imageUrl;
+
     // you must declare this variable
     const enhancedProps = {
         ...props,
@@ -71,12 +82,24 @@ const Edit = (props) => {
                 />
                 {showBlockContent && (
                     <>
+                        {isDynamicAvatar && resolvedAvatarUrl && (
+                            <style>
+                                {`.eb-testimonial-wrapper.${blockId} .eb-avatar-style,.eb-testimonial-wrapper.${blockId}.layout-preset-2 .image-container .eb-avatar-style{background-image:url(${resolvedAvatarUrl}) !important;display:block !important;}`}
+                            </style>
+                        )}
                         <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
                             <div className={`eb-testimonial-wrapper ${blockId} ${layoutPreset}`} data-id={blockId}>
                                 <div className="eb-testimonial-container">
                                     <div className="eb-avatar-container">
                                         <div className="image-container">
-                                            <div className="eb-avatar-style" />
+                                            <div className="eb-avatar-style">
+                                                {imageUrl && (
+                                                    <img
+                                                        src={resolvedAvatarUrl || imageUrl}
+                                                        alt=""
+                                                    />
+                                                )}
+                                            </div>
                                             <MediaUpload
                                                 onSelect={(media) =>
                                                     setAttributes({

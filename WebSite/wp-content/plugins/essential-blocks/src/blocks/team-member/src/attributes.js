@@ -46,6 +46,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 const attributes = {
@@ -540,6 +541,14 @@ const attributes = {
         // top: 10,
         // bottom: 20,
         // isLinked: false,
+    }),
+    // Image masking attributes (per QA report TC19/20/21/22/57)
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
     }),
 };
 

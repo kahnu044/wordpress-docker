@@ -3,6 +3,7 @@
 namespace EssentialBlocks\Integrations\AI;
 
 use EssentialBlocks\Integrations\ThirdPartyIntegration;
+use EssentialBlocks\Utils\ImageValidator;
 use EssentialBlocks\Utils\Settings;
 
 /**
@@ -167,14 +168,27 @@ class AI extends ThirdPartyIntegration
 
             // Handle URL format
             if ( $image_url ) {
-                // Download the image from OpenAI URL
-                $image_data = wp_remote_get( $image_url, [
-                    'timeout' => 60
+                // Download the image using the safe variant (blocks private/loopback/link-local IPs)
+                $image_data = wp_safe_remote_get( $image_url, [
+                    'timeout'     => 60,
+                    'redirection' => 3,
+                    'user-agent'  => 'Essential Blocks/' . ESSENTIAL_BLOCKS_VERSION,
+                    'headers'     => [
+                        'Accept' => 'image/*'
+                     ]
                  ] );
 
                 if ( is_wp_error( $image_data ) ) {
                     wp_send_json_error( [
                         'message' => __( 'Failed to download image from OpenAI.', 'essential-blocks' )
+                     ] );
+                    return;
+                }
+
+                $response_code = wp_remote_retrieve_response_code( $image_data );
+                if ( 200 !== $response_code ) {
+                    wp_send_json_error( [
+                        'message' => __( 'Invalid response from image URL.', 'essential-blocks' )
                      ] );
                     return;
                 }
@@ -201,9 +215,39 @@ class AI extends ThirdPartyIntegration
                 return;
             }
 
+            // Security: validate image content (size, dimensions, suspicious payloads)
+            if ( ! ImageValidator::is_valid( $image_body ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Invalid image content provided.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
             // Detect image format and set appropriate extension and MIME type
             $image_info = getimagesizefromstring( $image_body );
-            $mime_type  = $image_info ? $image_info[ 'mime' ] : 'image/png';
+            if ( ! $image_info ) {
+                wp_send_json_error( [
+                    'message' => __( 'Unable to determine image format.', 'essential-blocks' )
+                 ] );
+                return;
+            }
+
+            $mime_type = $image_info[ 'mime' ];
+
+            // Security: only allow specific image MIME types
+            $allowed_mime_types = [
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+                'image/gif'
+             ];
+
+            if ( ! in_array( $mime_type, $allowed_mime_types, true ) ) {
+                wp_send_json_error( [
+                    'message' => __( 'Unsupported image format.', 'essential-blocks' )
+                 ] );
+                return;
+            }
 
             // Determine file extension based on MIME type
             $extension = 'png'; // default
@@ -309,4 +353,5 @@ class AI extends ThirdPartyIntegration
             'data'    => $updated
          ];
     }
+
 }

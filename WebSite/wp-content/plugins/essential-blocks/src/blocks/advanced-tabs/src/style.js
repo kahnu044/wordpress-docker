@@ -47,6 +47,7 @@ import {
     generateTypographyStyles,
     generateBorderShadowStyles,
     generateResponsiveRangeStyles,
+    generateMaskStyles,
     StyleComponent
 } from "@essential-blocks/controls";
 
@@ -1021,9 +1022,30 @@ export default function Style(props) {
 
 	`);
 
+    // Image masking — per QA report Path B retrofit. Targets per-tab nav images.
+    const {
+        enabled: maskEnabled,
+        baseDecls: maskBaseDecls,
+        hoverDecls: maskHoverDecls,
+        transition: maskTransition,
+    } = generateMaskStyles({ attributes });
+
+    const maskStyles = maskEnabled
+        ? `
+        .${blockId} .tabTitles li img {
+            ${maskBaseDecls}
+            ${maskTransition}
+        }
+        .${blockId} .tabTitles li:hover img {
+            ${maskHoverDecls}
+        }
+    `
+        : "";
+
     // all css styles for large screen width (desktop/laptop) in strings ⬇
     const desktopAllStyles = softMinifyCssStrings(`
 		${desktopAllStylesCommon}
+        ${maskStyles}
 
 	`);
 

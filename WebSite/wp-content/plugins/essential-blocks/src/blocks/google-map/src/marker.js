@@ -193,6 +193,7 @@ const SortableItem = ({ marker, map, position, onTitleClick, clickedIndex, onDel
                     {marker.showCustomIcon === "true" && (
                         <ImageComponent.GeneralTab
                             onSelect={({ id, url }) => onMarkerChange("imageUrl", url, position)}
+                            onRemove={() => onMarkerChange("imageUrl", "", position)}
                             value={marker.imageUrl}
                             hasTag={false}
                             hasCaption={false}

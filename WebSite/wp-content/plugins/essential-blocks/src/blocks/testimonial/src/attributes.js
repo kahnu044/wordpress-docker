@@ -5,6 +5,7 @@ import {
     generateBackgroundAttributes,
     generateBorderShadowAttributes,
     generateResponsiveRangeAttributes,
+    ImageComponent,
 } from "@essential-blocks/controls";
 
 import {
@@ -267,6 +268,14 @@ const attributes = {
     }),
     ...generateBorderShadowAttributes(ImgBdShadow, {
         // noBorderRadius,
+    }),
+    // Image masking attributes (per QA report TC19)
+    ...ImageComponent?.addAttributes({
+        hasBorder: false,
+        hasPadding: false,
+        hasMargin: false,
+        hasWidth: false,
+        hasHeight: false,
     }),
 };
 

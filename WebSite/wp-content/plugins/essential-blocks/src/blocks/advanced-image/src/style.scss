@@ -8,9 +8,12 @@
 .eb-advanced-image-wrapper {
 	margin: 0;
 
-	.eb-image-wrapper .eb-image-wrapper-inner,
-	.image-wrapper a {
+	.eb-image-wrapper .eb-image-wrapper-inner {
 		width: 100%;
+	}
+
+	.image-wrapper a {
+		max-width: 100%;
 	}
 
 	&.img-style-triangle .eb-image-wrapper,
@@ -125,9 +128,7 @@
 		max-width: 100%;
 		display: flex;
 		align-items: center;
-	}
-
-	.image-wrapper {
+		justify-content: center;
 		flex-direction: column;
 	}
 

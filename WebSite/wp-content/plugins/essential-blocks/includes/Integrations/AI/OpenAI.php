@@ -1129,7 +1129,9 @@ class OpenAI
      */
     private function get_remote_image_data( $image_url )
     {
-        $response = wp_remote_get( $image_url, [
+        // wp_safe_remote_get sets reject_unsafe_urls, blocking loopback/private/link-local
+        // ranges so an attacker-supplied reference_image_url cannot probe internal hosts.
+        $response = wp_safe_remote_get( $image_url, [
             'timeout'    => 30,
             'user-agent' => 'Essential Blocks Image Converter'
          ] );
