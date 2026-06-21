@@ -651,6 +651,20 @@ function generateblocks_get_background_image_css( $type, $settings ) {
 }
 
 /**
+ * Determine whether an HTML attribute name holds a URL value.
+ *
+ * @since 2.3.0
+ *
+ * @param string $name The attribute name.
+ * @return bool True when the attribute should be treated as a URL.
+ */
+function generateblocks_is_url_attribute( $name ) {
+	$url_attributes = array( 'href', 'src', 'action' );
+
+	return in_array( strtolower( (string) $name ), $url_attributes, true );
+}
+
+/**
  * Build list of attributes into a string and apply contextual filter on string.
  *
  * The contextual filter is of the form `generateblocks_attr_{context}_output`.
@@ -678,7 +692,13 @@ function generateblocks_attr( $context, $attributes = array(), $settings = array
 		if ( true === $value ) {
 			$output .= esc_html( $key ) . ' ';
 		} else {
-			$output .= sprintf( '%s="%s" ', esc_html( $key ), esc_attr( $value ) );
+			$is_url_attribute = generateblocks_is_url_attribute( $key );
+
+			$escaped_value = $is_url_attribute
+				? esc_url( do_shortcode( $value ) )
+				: esc_attr( $value );
+
+			$output .= sprintf( '%s="%s" ', esc_html( $key ), $escaped_value );
 		}
 	}
 
@@ -1263,7 +1283,7 @@ function generateblocks_maybe_add_block_css( $content = '', $data = [] ) {
 		// Add inline <style> elements if we don't have access to wp_head.
 		$content = sprintf(
 			'<style>%s</style>',
-			$css
+			wp_strip_all_tags( $css )
 		) . $content;
 	} else {
 		// Add our CSS to the pool of existing CSS in wp_head.
@@ -1327,7 +1347,7 @@ function generateblocks_maybe_add_legacy_block_css( $content = '', $data = [] ) 
 			if ( $compiled_css ) {
 				$content = sprintf(
 					'<style>%s</style>',
-					$compiled_css
+					wp_strip_all_tags( $compiled_css )
 				) . $content;
 			}
 		} else {
@@ -2085,15 +2105,10 @@ function generateblocks_get_block_classes( $block_slug, $block_attributes, $with
 function generateblocks_get_backup_html_attributes( $block_slug, $attributes ) {
 	$classes = generateblocks_get_block_classes( $block_slug, $attributes );
 
-	$html_attributes = generateblocks_with_html_attributes(
-		[
-			'id'    => $attributes['anchor'] ?? null,
-			'class' => implode( ' ', $classes ),
-		],
-		$attributes
-	);
-
-	return $html_attributes;
+	return [
+		'id'    => $attributes['anchor'] ?? null,
+		'class' => implode( ' ', $classes ),
+	];
 }
 
 /**
@@ -2128,8 +2143,7 @@ function generateblocks_get_processed_html_attributes( $html ) {
  * @param string $value The raw attribute value.
  */
 function generateblocks_get_escaped_html_attribute( $name, $value ) {
-	$url_fields   = [ 'src', 'href' ];
-	$is_url_field = in_array( $name, $url_fields, true );
+	$is_url_field = generateblocks_is_url_attribute( $name );
 
 	if ( $is_url_field && ! empty( $value ) ) {
 		$value = do_shortcode( $value ); // esc_url() escapes shortcodes, so we need to do this first.

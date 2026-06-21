@@ -807,7 +807,7 @@ class GenerateBlocks_Block_Headline {
 		if ( $dynamic_link ) {
 			$dynamic_content = sprintf(
 				'<a href="%s">%s</a>',
-				$dynamic_link,
+				esc_url( $dynamic_link ),
 				$dynamic_content
 			);
 		}

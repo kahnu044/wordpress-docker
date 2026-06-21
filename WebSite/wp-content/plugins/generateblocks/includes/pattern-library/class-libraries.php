@@ -91,13 +91,23 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 		// Get saved library data.
 		$saved_libraries = get_option( 'generateblocks_pattern_libraries', [] );
 
+		if ( ! is_array( $saved_libraries ) ) {
+			$saved_libraries = [];
+		}
+
 		// Create library instances for any remote sites that provide the complete set of data.
 		$remote_libraries = array_map(
 			[ $this, 'create' ],
 			array_filter(
 				$saved_libraries,
 				function( $saved_library ) {
-					return isset( $saved_library['isLocal'] ) && ! $saved_library['isLocal'];
+					return is_array( $saved_library ) &&
+						isset( $saved_library['isLocal'] ) &&
+						! rest_sanitize_boolean( $saved_library['isLocal'] ) &&
+						! empty( $saved_library['id'] ) &&
+						is_scalar( $saved_library['id'] ) &&
+						! empty( $saved_library['domain'] ) &&
+						is_string( $saved_library['domain'] );
 				}
 			)
 		);
@@ -106,6 +116,17 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 		$libraries = apply_filters(
 			'generateblocks_pattern_libraries',
 			$remote_libraries
+		);
+
+		if ( ! is_array( $libraries ) ) {
+			$libraries = [];
+		}
+
+		$libraries = array_filter(
+			$libraries,
+			function( $library ) {
+				return $this->is_valid_library( $library );
+			}
 		);
 
 		// Add our default library at the start of the list.
@@ -117,8 +138,12 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 		// Loop our libraries and set their status based on their saved value.
 		foreach ( $libraries as $key => $library ) {
 			$saved_data = array_filter(
-				get_option( 'generateblocks_pattern_libraries', [] ),
+				$saved_libraries,
 				function( $saved_library ) use ( $library ) {
+					if ( ! is_array( $saved_library ) || ! isset( $saved_library['id'] ) ) {
+						return false;
+					}
+
 					return $saved_library['id'] === $library->id;
 				}
 			);
@@ -126,7 +151,7 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			$saved_data = array_values( $saved_data );
 
 			if ( isset( $saved_data[0]['isEnabled'] ) ) {
-				$library->setStatus( $saved_data[0]['isEnabled'] );
+				$library->setStatus( $this->normalize_boolean_value( $saved_data[0]['isEnabled'] ) );
 			}
 		}
 
@@ -173,14 +198,87 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 	 * @return GenerateBlocks_Library_DTO
 	 */
 	public function create( array $data ): GenerateBlocks_Library_DTO {
+		$data = wp_parse_args(
+			$data,
+			array(
+				'id' => '',
+				'name' => '',
+				'domain' => '',
+				'publicKey' => '',
+				'isEnabled' => false,
+				'isDefault' => false,
+				'isLocal' => false,
+			)
+		);
+
 		return ( new GenerateBlocks_Library_DTO() )
-			->set( 'id', $data['id'] )
-			->set( 'name', $data['name'] )
-			->set( 'domain', $data['domain'] )
-			->set( 'public_key', $data['publicKey'] )
-			->set( 'is_enabled', $data['isEnabled'] )
-			->set( 'is_default', $data['isDefault'] )
-			->set( 'is_local', $data['isLocal'] );
+			->set( 'id', $this->normalize_string_value( $data['id'] ) )
+			->set( 'name', $this->normalize_string_value( $data['name'] ) )
+			->set( 'domain', $this->normalize_string_value( $data['domain'] ) )
+			->set( 'public_key', $this->normalize_string_value( $data['publicKey'] ) )
+			->set( 'is_enabled', $this->normalize_boolean_value( $data['isEnabled'] ) )
+			->set( 'is_default', $this->normalize_boolean_value( $data['isDefault'] ) )
+			->set( 'is_local', $this->normalize_boolean_value( $data['isLocal'] ) );
+	}
+
+	/**
+	 * Normalize values that are expected to be strings.
+	 *
+	 * @param mixed $value The value to normalize.
+	 * @return string
+	 */
+	private function normalize_string_value( $value ): string {
+		if ( ! is_scalar( $value ) ) {
+			return '';
+		}
+
+		return (string) $value;
+	}
+
+	/**
+	 * Normalize values that are expected to be booleans.
+	 *
+	 * @param mixed $value The value to normalize.
+	 * @return bool
+	 */
+	private function normalize_boolean_value( $value ): bool {
+		if ( ! is_scalar( $value ) ) {
+			return false;
+		}
+
+		return rest_sanitize_boolean( $value );
+	}
+
+	/**
+	 * Check that a library has values safe to access through the DTO.
+	 *
+	 * @param mixed $library The library object to validate.
+	 * @return bool
+	 */
+	private function is_valid_library( $library ): bool {
+		if ( ! $library instanceof GenerateBlocks_Library_DTO ) {
+			return false;
+		}
+
+		$data = $library->serialize();
+
+		if ( empty( $data['id'] ) || ! is_scalar( $data['id'] ) ) {
+			return false;
+		}
+
+		foreach ( array( 'name', 'domain', 'publicKey' ) as $key ) {
+			if ( isset( $data[ $key ] ) && ! is_scalar( $data[ $key ] ) ) {
+				return false;
+			}
+		}
+
+		foreach ( array( 'isEnabled', 'isDefault', 'isLocal' ) as $key ) {
+			if ( isset( $data[ $key ] ) && ! is_scalar( $data[ $key ] ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -279,6 +377,10 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			$cached_data = array_filter(
 				$cached_data,
 				function( $data ) use ( $query_args ) {
+					if ( ! isset( $data['categories'] ) || ! is_array( $data['categories'] ) ) {
+						return false;
+					}
+
 					return in_array( $query_args['categoryId'], $data['categories'] );
 				}
 			);
@@ -288,6 +390,10 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			$cached_data = array_filter(
 				$cached_data,
 				function( $data ) use ( $query_args ) {
+					if ( ! is_array( $data ) ) {
+						return false;
+					}
+
 					foreach ( $data as $key => $value ) {
 						if ( is_string( $value ) && stripos( $value, $query_args['search'] ) !== false ) {
 							return true;
@@ -324,9 +430,15 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			return;
 		}
 
+		if ( ! is_array( $data ) ) {
+			return;
+		}
+
 		$expiration = self::get_cache_expiry();
 
 		if ( 'patterns' === $collection ) {
+			self::delete_cached_data( $cache_key, $collection );
+
 			if ( ! empty( $data ) ) {
 				$chunks = array_chunk( $data, 20, true );
 
@@ -339,6 +451,30 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			}
 		} else {
 			set_transient( $cache_key, $data, $expiration );
+		}
+	}
+
+	/**
+	 * Delete cached library data by collection.
+	 *
+	 * @param string $cache_key The key to delete.
+	 * @param string $collection The collection to delete.
+	 */
+	public static function delete_cached_data( $cache_key = '', $collection = '' ) {
+		if ( ! $cache_key ) {
+			return;
+		}
+
+		if ( 'patterns' !== $collection ) {
+			delete_transient( $cache_key );
+			return;
+		}
+
+		$index = 0;
+
+		while ( false !== get_transient( $cache_key . '_' . $index ) ) {
+			delete_transient( $cache_key . '_' . $index );
+			$index++;
 		}
 	}
 
@@ -385,6 +521,10 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 	 * @return bool
 	 */
 	public function hide_admin_bar( $show_admin_bar ) {
+		if ( ! isset( $GLOBALS['wp_query'] ) ) {
+			return $show_admin_bar;
+		}
+
 		if ( false !== get_query_var( 'gb-template-viewer', false ) ) {
 			$show_admin_bar = false;
 		}

@@ -773,7 +773,7 @@ class GenerateBlocks_Dynamic_Content {
 
 				if ( $image_id && ! is_numeric( $image_id ) ) {
 					// Our image ID isn't a number - must be a static URL.
-					return $image_id;
+					return is_string( $image_id ) ? esc_url_raw( $image_id ) : '';
 				}
 			} else {
 				$image_id = ! empty( $attributes['mediaId'] ) ? $attributes['mediaId'] : false;
@@ -889,12 +889,14 @@ class GenerateBlocks_Dynamic_Content {
 			}
 		}
 
-		return apply_filters(
+		$url = apply_filters(
 			'generateblocks_dynamic_url_output',
 			$url,
 			$attributes,
 			$block
 		);
+
+		return is_string( $url ) ? esc_url_raw( $url ) : '';
 	}
 
 	/**

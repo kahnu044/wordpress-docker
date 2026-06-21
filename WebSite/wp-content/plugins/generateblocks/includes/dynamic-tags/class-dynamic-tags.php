@@ -502,7 +502,12 @@ class GenerateBlocks_Dynamic_Tags extends GenerateBlocks_Singleton {
 		$content      = $request->get_param( 'content' );
 		$context      = $request->get_param( 'context' );
 		$client_id    = $request->get_param( 'clientId' );
-		$post_id      = absint( $context['postId'] ?? 0 );
+		$post_id      = absint( is_array( $context ) ? ( $context['postId'] ?? 0 ) : 0 );
+
+		// Bail if the content isn't a string we can scan for dynamic tags.
+		if ( ! is_string( $content ) ) {
+			return rest_ensure_response( [] );
+		}
 
 		// Verify the current user can read the context post.
 		if ( $post_id && ! current_user_can( 'read_post', $post_id ) ) {

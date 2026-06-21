@@ -67,30 +67,45 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 	public function get_user_query( WP_REST_Request $request ) {
 		$args = $request->get_param( 'args' ) ?? [];
 
+		if ( ! is_array( $args ) ) {
+			$args = [];
+		}
+
+		$args['number'] = min( max( 1, absint( $args['number'] ?? 150 ) ), 150 );
+		$args['paged']  = max( 1, (int) ( $args['paged'] ?? 1 ) );
+		$args['fields'] = 'all';
+
+		$can_list_users     = current_user_can( 'list_users' );
+		$can_manage_options = current_user_can( 'manage_options' );
+
 		// Sanitize dangerous query args for users without list_users capability.
-		if ( ! current_user_can( 'list_users' ) ) {
+		if ( ! $can_list_users ) {
 			unset( $args['meta_query'] );
 			unset( $args['meta_key'] );
 			unset( $args['meta_value'] );
 			unset( $args['meta_compare'] );
-		}
+			unset( $args['role'] );
+			unset( $args['role__in'] );
+			unset( $args['role__not_in'] );
+			unset( $args['capability'] );
+			unset( $args['capability__in'] );
+			unset( $args['capability__not_in'] );
 
-		if ( ! isset( $args['number'] ) ) {
-			$args['number'] = 150;
+			$args['has_published_posts'] = true;
 		}
 
 		$number    = $args['number'];
 		$query     = new WP_User_Query( $args );
-		$max_pages = round( $query->get_total() / $number );
+		$max_pages = (int) ceil( $query->get_total() / $number );
 
 		// Filter sensitive data from user objects while maintaining structure.
 		$users = array_map(
-			function( $user ) {
+			function( $user ) use ( $can_manage_options, $can_list_users ) {
 				// Always remove critical security fields.
 				unset( $user->data->user_pass );
 				unset( $user->data->user_activation_key );
 
-				if ( ! current_user_can( 'manage_options' ) ) {
+				if ( ! $can_manage_options ) {
 					// Remove sensitive values for non-admin users.
 					unset( $user->data->user_login );
 					unset( $user->data->user_email );
@@ -98,6 +113,11 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 					// Remove capability data to prevent role enumeration.
 					unset( $user->caps );
 					unset( $user->allcaps );
+				}
+
+				if ( ! $can_list_users ) {
+					unset( $user->roles );
+					unset( $user->cap_key );
 				}
 
 				return $user;
@@ -123,7 +143,9 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 	 */
 	public function get_wp_query( $request ) {
 		$args           = $request->get_param( 'args' );
+		$args           = is_array( $args ) ? $args : [];
 		$page           = $args['paged'] ?? $request->get_param( 'page' ) ?? 1;
+		$page           = is_scalar( $page ) ? (int) $page : 1;
 		$attributes     = $request->get_param( 'attributes' ) ?? [];
 		$current_post   = $request->get_param( 'postId' ) ?? null;
 		$current_author = $request->get_param( 'authorId' ) ?? null;
@@ -208,7 +230,7 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 			$args['paged'] = $page;
 		}
 
-		if ( isset( $args['tax_query'] ) ) {
+		if ( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) ) {
 			if ( count( $args['tax_query'] ) > 1 ) {
 				$args['tax_query']['relation'] = 'AND';
 			}
