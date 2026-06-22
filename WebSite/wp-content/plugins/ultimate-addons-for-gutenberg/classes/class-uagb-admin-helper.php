@@ -57,7 +57,6 @@ if ( ! class_exists( 'UAGB_Admin_Helper' ) ) {
 			$content_width = self::get_global_content_width();
 
 			$options = array(
-				'uagb_beta'                         => self::get_admin_settings_option( 'uagb_beta', 'no' ),
 				'uag_enable_legacy_blocks'          => self::get_admin_settings_option( 'uag_enable_legacy_blocks' ),
 				'_uagb_allow_file_generation'       => self::get_admin_settings_option( '_uagb_allow_file_generation', 'enabled' ),
 				'uag_enable_templates_button'       => self::get_admin_settings_option( 'uag_enable_templates_button', 'yes' ),
