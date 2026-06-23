@@ -347,8 +347,14 @@ function bodhi_svgs_sanitize_svg($file) {
 		}
 	}
 
-	// Now we know it's an SVG, continue with security checks
-	if (!defined('REST_REQUEST') && !wp_verify_nonce(
+	// Detect programmatic sideloads (e.g. media_handle_sideload()), which run
+	// through wp_handle_sideload_prefilter rather than a browser upload form.
+	$is_sideload = ( current_filter() === 'wp_handle_sideload_prefilter' );
+
+	// Now we know it's an SVG, continue with security checks.
+	// Sideloads are server-initiated and have no media form nonce, so the
+	// anti-CSRF nonce check only applies to standard browser uploads.
+	if (!$is_sideload && !defined('REST_REQUEST') && !wp_verify_nonce(
 		sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'] ?? '')), 
 		'media-form'
 	)) {
@@ -367,8 +373,9 @@ function bodhi_svgs_sanitize_svg($file) {
 	// Check if the user has the capability to upload SVGs
 	$can_upload_files = current_user_can('upload_files');
 
-	// Force sanitize unless user is in roles that bypass sanitization
-	if ($can_upload_files && empty($no_sanitize_needed)) {
+	// Always sanitize sideloaded files (they may run with no interactive user);
+	// otherwise force sanitize unless the user is in a role that bypasses it.
+	if ($is_sideload || ($can_upload_files && empty($no_sanitize_needed))) {
 		global $sanitizer;
 		
 		// Read file contents
@@ -398,6 +405,8 @@ function bodhi_svgs_sanitize_svg($file) {
 }
 // Add filter to handle upload pre-filtering for sanitization
 add_filter('wp_handle_upload_prefilter', 'bodhi_svgs_sanitize_svg');
+// Also sanitize SVGs added programmatically via media_handle_sideload()
+add_filter('wp_handle_sideload_prefilter', 'bodhi_svgs_sanitize_svg');
 
 /**
  * Fix for image widget PHP warnings related to metadata.

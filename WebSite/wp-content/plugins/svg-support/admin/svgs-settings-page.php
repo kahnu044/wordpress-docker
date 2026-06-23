@@ -481,7 +481,7 @@
 							<p>
 								<?php esc_html_e( 'Follow Benbodhi on:', 'svg-support' ); ?><br/>
 								<a target="_blank" href="https://twitter.com/benbodhi"><?php esc_html_e( 'Twitter', 'svg-support' ); ?></a> | 
-								<a target="_blank" href="https://warpcast.com/benbodhi"><?php esc_html_e( 'Warpcast', 'svg-support' ); ?></a>
+								<a target="_blank" href="https://farcaster.xyz/benbodhi"><?php esc_html_e( 'Farcaster', 'svg-support' ); ?></a>
 							</p>
 							<p>&copy; <?php esc_html_e( 'Benbodhi', 'svg-support' ); ?> | <a target="_blank" href="https://benbodhi.com/">Benbodhi.com</a></p>
 							<p>

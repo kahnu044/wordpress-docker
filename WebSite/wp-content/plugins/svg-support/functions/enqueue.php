@@ -81,7 +81,7 @@ function bodhi_svgs_frontend_js() {
 
 	if ( ! empty( $bodhi_svgs_options['sanitize_svg_front_end'] ) && $bodhi_svgs_options['sanitize_svg_front_end'] === 'on' && bodhi_svgs_advanced_mode() === true ) {
 		$bodhi_svgs_js_footer = ! empty( $bodhi_svgs_options['js_foot_choice'] );
-		wp_enqueue_script( 'bodhi-dompurify-library', BODHI_SVGS_PLUGIN_URL . 'vendor/DOMPurify/DOMPurify.min.js', array(), '2.5.8', $bodhi_svgs_js_footer );
+		wp_enqueue_script( 'bodhi-dompurify-library', BODHI_SVGS_PLUGIN_URL . 'vendor/DOMPurify/DOMPurify.min.js', array(), '2.5.9', $bodhi_svgs_js_footer );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'bodhi_svgs_frontend_js', 9 );

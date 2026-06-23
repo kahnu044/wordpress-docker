@@ -3,7 +3,7 @@
 Plugin Name: 	SVG Support
 Plugin URI:		http://wordpress.org/plugins/svg-support/
 Description: 	Upload SVG files to the Media Library and render SVG files inline for direct styling/animation of an SVG's internal elements using CSS/JS.
-Version: 		2.5.14
+Version: 		2.5.16
 Author URI: 	https://benbodhi.com
 Text Domain: 	svg-support
 Domain Path:	/languages

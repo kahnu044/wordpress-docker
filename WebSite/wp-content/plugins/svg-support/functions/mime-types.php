@@ -96,6 +96,28 @@ function bodhi_svgs_allow_svg_upload( $data, $file, $filename, $mimes ) {
 }
 add_filter( 'wp_check_filetype_and_ext', 'bodhi_svgs_allow_svg_upload', 10, 4 );
 
+/**
+ * Allow SVG uploads on WordPress 6.8+
+ *
+ * WordPress 6.8 introduced the wp_prevent_unsupported_mime_type_uploads filter,
+ * which blocks uploads of image types the server can't generate responsive sizes
+ * for. SVGs are vector files and don't need raster sub-sizes, so we opt them out
+ * to keep SVG uploads working. Sanitization still runs on every upload.
+ *
+ * @param bool        $check_mime Whether to prevent uploads of unsupported image types.
+ * @param string|null $mime_type  The mime type of the file being uploaded (if available).
+ *
+ * @return bool Whether to prevent the upload.
+ */
+function bodhi_svgs_allow_unsupported_svg_upload( $check_mime, $mime_type = null ) {
+	if ( in_array( $mime_type, array( 'image/svg+xml', 'image/svg' ), true ) ) {
+		return false;
+	}
+
+	return $check_mime;
+}
+add_filter( 'wp_prevent_unsupported_mime_type_uploads', 'bodhi_svgs_allow_unsupported_svg_upload', 10, 2 );
+
 function bodhi_svgs_multisite_settings($mimes) {
     // Check if this is a multisite installation
     if (is_multisite()) {
