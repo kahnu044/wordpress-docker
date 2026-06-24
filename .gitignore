@@ -6,7 +6,6 @@
 .DS_Store
 error_log.log
 .vscode
-WebSite/pMa*
 WebSite/.vscode
 WebSite/.htaccess
 WebSite/error_log
