@@ -35,8 +35,9 @@ LocalGoogle WordPress WebSite.
    ```bash
    docker-compose up -d
    ```
-   - First run will take time as it performs `npm install` and sets up phpMyAdmin
-   - You can check status by running `docker-compose logs --f app`
+   - First run will download WordPress core and configure the database
+   - You can check status by running `docker-compose logs -f app`
+   - Database manager (Adminer) is accessible at `http://localhost:8080` (Server: `db`, Username/Password as configured in `.env`)
 5. Activate Local Docker Compose Environment Inside Repository Directory:
    ```bash
    source activate
