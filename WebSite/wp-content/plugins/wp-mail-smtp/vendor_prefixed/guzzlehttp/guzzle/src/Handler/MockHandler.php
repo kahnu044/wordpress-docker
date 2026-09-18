@@ -7,7 +7,6 @@ use WPMailSMTP\Vendor\GuzzleHttp\HandlerStack;
 use WPMailSMTP\Vendor\GuzzleHttp\Promise as P;
 use WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface;
 use WPMailSMTP\Vendor\GuzzleHttp\TransferStats;
-use WPMailSMTP\Vendor\GuzzleHttp\Utils;
 use WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface;
 use WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface;
 use WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface;
@@ -131,7 +130,7 @@ class MockHandler implements \Countable
             if ($value instanceof ResponseInterface || $value instanceof \Throwable || $value instanceof PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \get_debug_type($value));
             }
         }
     }

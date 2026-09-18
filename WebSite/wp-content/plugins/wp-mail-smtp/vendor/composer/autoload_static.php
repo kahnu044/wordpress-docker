@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
+class ComposerStaticInitecb31ae240a2e999f170017c2e56814c
 {
     public static $files = array (
         '2bb094e40611cb5eccea789f32aff634' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-mbstring/bootstrap.php',
@@ -14,22 +14,22 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WPMailSMTP\\' => 11,
         ),
-        'C' => 
+        'C' =>
         array (
             'Composer\\Installers\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WPMailSMTP\\' => 
+        'WPMailSMTP\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Composer\\Installers\\' => 
+        'Composer\\Installers\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
@@ -136,6 +136,10 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
         'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
+        'WPMailSMTP\\Abilities\\AbilityInterface' => __DIR__ . '/../..' . '/src/Abilities/AbilityInterface.php',
+        'WPMailSMTP\\Abilities\\AbilityRegistrar' => __DIR__ . '/../..' . '/src/Abilities/AbilityRegistrar.php',
+        'WPMailSMTP\\Abilities\\AbstractAbility' => __DIR__ . '/../..' . '/src/Abilities/AbstractAbility.php',
+        'WPMailSMTP\\Abilities\\DebugEvents\\GetDebugEventsAbility' => __DIR__ . '/../..' . '/src/Abilities/DebugEvents/GetDebugEventsAbility.php',
         'WPMailSMTP\\AbstractConnection' => __DIR__ . '/../..' . '/src/AbstractConnection.php',
         'WPMailSMTP\\Admin\\AdminBarMenu' => __DIR__ . '/../..' . '/src/Admin/AdminBarMenu.php',
         'WPMailSMTP\\Admin\\Area' => __DIR__ . '/../..' . '/src/Admin/Area.php',
@@ -148,6 +152,8 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Admin\\DebugEvents\\Table' => __DIR__ . '/../..' . '/src/Admin/DebugEvents/Table.php',
         'WPMailSMTP\\Admin\\DomainChecker' => __DIR__ . '/../..' . '/src/Admin/DomainChecker.php',
         'WPMailSMTP\\Admin\\Education' => __DIR__ . '/../..' . '/src/Admin/Education.php',
+        'WPMailSMTP\\Admin\\EmailSendingErrors\\EmailSendingErrors' => __DIR__ . '/../..' . '/src/Admin/EmailSendingErrors/EmailSendingErrors.php',
+        'WPMailSMTP\\Admin\\EmailSendingErrors\\Registry' => __DIR__ . '/../..' . '/src/Admin/EmailSendingErrors/Registry.php',
         'WPMailSMTP\\Admin\\FlyoutMenu' => __DIR__ . '/../..' . '/src/Admin/FlyoutMenu.php',
         'WPMailSMTP\\Admin\\Notifications' => __DIR__ . '/../..' . '/src/Admin/Notifications.php',
         'WPMailSMTP\\Admin\\PageAbstract' => __DIR__ . '/../..' . '/src/Admin/PageAbstract.php',
@@ -156,13 +162,16 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Admin\\Pages\\AboutTab' => __DIR__ . '/../..' . '/src/Admin/Pages/AboutTab.php',
         'WPMailSMTP\\Admin\\Pages\\ActionSchedulerTab' => __DIR__ . '/../..' . '/src/Admin/Pages/ActionSchedulerTab.php',
         'WPMailSMTP\\Admin\\Pages\\AdditionalConnectionsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/AdditionalConnectionsTab.php',
+        'WPMailSMTP\\Admin\\Pages\\AiMcpTab' => __DIR__ . '/../..' . '/src/Admin/Pages/AiMcpTab.php',
         'WPMailSMTP\\Admin\\Pages\\AlertsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/AlertsTab.php',
         'WPMailSMTP\\Admin\\Pages\\AuthTab' => __DIR__ . '/../..' . '/src/Admin/Pages/AuthTab.php',
+        'WPMailSMTP\\Admin\\Pages\\CodeSnippetsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/CodeSnippetsTab.php',
         'WPMailSMTP\\Admin\\Pages\\ControlTab' => __DIR__ . '/../..' . '/src/Admin/Pages/ControlTab.php',
         'WPMailSMTP\\Admin\\Pages\\DebugEventsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/DebugEventsTab.php',
         'WPMailSMTP\\Admin\\Pages\\EmailReports' => __DIR__ . '/../..' . '/src/Admin/Pages/EmailReports.php',
         'WPMailSMTP\\Admin\\Pages\\EmailReportsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/EmailReportsTab.php',
         'WPMailSMTP\\Admin\\Pages\\ExportTab' => __DIR__ . '/../..' . '/src/Admin/Pages/ExportTab.php',
+        'WPMailSMTP\\Admin\\Pages\\GetProTab' => __DIR__ . '/../..' . '/src/Admin/Pages/GetProTab.php',
         'WPMailSMTP\\Admin\\Pages\\Logs' => __DIR__ . '/../..' . '/src/Admin/Pages/Logs.php',
         'WPMailSMTP\\Admin\\Pages\\LogsTab' => __DIR__ . '/../..' . '/src/Admin/Pages/LogsTab.php',
         'WPMailSMTP\\Admin\\Pages\\MiscTab' => __DIR__ . '/../..' . '/src/Admin/Pages/MiscTab.php',
@@ -170,11 +179,20 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Admin\\Pages\\SmartRoutingTab' => __DIR__ . '/../..' . '/src/Admin/Pages/SmartRoutingTab.php',
         'WPMailSMTP\\Admin\\Pages\\TestTab' => __DIR__ . '/../..' . '/src/Admin/Pages/TestTab.php',
         'WPMailSMTP\\Admin\\Pages\\Tools' => __DIR__ . '/../..' . '/src/Admin/Pages/Tools.php',
-        'WPMailSMTP\\Admin\\Pages\\VersusTab' => __DIR__ . '/../..' . '/src/Admin/Pages/VersusTab.php',
         'WPMailSMTP\\Admin\\ParentPageAbstract' => __DIR__ . '/../..' . '/src/Admin/ParentPageAbstract.php',
         'WPMailSMTP\\Admin\\PluginsInstallSkin' => __DIR__ . '/../..' . '/src/Admin/PluginsInstallSkin.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Migration' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Migration.php',
+        'WPMailSMTP\\Admin\\Recommendations\\PageAbstract' => __DIR__ . '/../..' . '/src/Admin/Recommendations/PageAbstract.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\ActiveLayer' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/ActiveLayer.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\Duplicator' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/Duplicator.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\Universally' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/Universally.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\WPCode' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/WPCode.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\WPConsent' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/WPConsent.php',
+        'WPMailSMTP\\Admin\\Recommendations\\Pages\\WPVibe' => __DIR__ . '/../..' . '/src/Admin/Recommendations/Pages/WPVibe.php',
+        'WPMailSMTP\\Admin\\Recommendations\\RecommendedPlugins' => __DIR__ . '/../..' . '/src/Admin/Recommendations/RecommendedPlugins.php',
         'WPMailSMTP\\Admin\\Review' => __DIR__ . '/../..' . '/src/Admin/Review.php',
         'WPMailSMTP\\Admin\\SetupWizard' => __DIR__ . '/../..' . '/src/Admin/SetupWizard.php',
+        'WPMailSMTP\\Admin\\WooCommerceActiveLayerEducation' => __DIR__ . '/../..' . '/src/Admin/WooCommerceActiveLayerEducation.php',
         'WPMailSMTP\\Compatibility\\Compatibility' => __DIR__ . '/../..' . '/src/Compatibility/Compatibility.php',
         'WPMailSMTP\\Compatibility\\Plugin\\Admin2020' => __DIR__ . '/../..' . '/src/Compatibility/Plugin/Admin2020.php',
         'WPMailSMTP\\Compatibility\\Plugin\\PluginAbstract' => __DIR__ . '/../..' . '/src/Compatibility/Plugin/PluginAbstract.php',
@@ -193,12 +211,16 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Core' => __DIR__ . '/../..' . '/src/Core.php',
         'WPMailSMTP\\DBRepair' => __DIR__ . '/../..' . '/src/DBRepair.php',
         'WPMailSMTP\\Debug' => __DIR__ . '/../..' . '/src/Debug.php',
+        'WPMailSMTP\\EmailSendingDebug' => __DIR__ . '/../..' . '/src/EmailSendingDebug.php',
         'WPMailSMTP\\Geo' => __DIR__ . '/../..' . '/src/Geo.php',
         'WPMailSMTP\\Helpers\\Crypto' => __DIR__ . '/../..' . '/src/Helpers/Crypto.php',
         'WPMailSMTP\\Helpers\\DB' => __DIR__ . '/../..' . '/src/Helpers/DB.php',
+        'WPMailSMTP\\Helpers\\Data' => __DIR__ . '/../..' . '/src/Helpers/Data.php',
         'WPMailSMTP\\Helpers\\Helpers' => __DIR__ . '/../..' . '/src/Helpers/Helpers.php',
         'WPMailSMTP\\Helpers\\PluginImportDataRetriever' => __DIR__ . '/../..' . '/src/Helpers/PluginImportDataRetriever.php',
         'WPMailSMTP\\Helpers\\UI' => __DIR__ . '/../..' . '/src/Helpers/UI.php',
+        'WPMailSMTP\\Integrations\\WPCode\\RegisterLibrary' => __DIR__ . '/../..' . '/src/Integrations/WPCode/RegisterLibrary.php',
+        'WPMailSMTP\\Integrations\\WPCode\\SnippetsProvider' => __DIR__ . '/../..' . '/src/Integrations/WPCode/SnippetsProvider.php',
         'WPMailSMTP\\MailCatcher' => __DIR__ . '/../..' . '/src/MailCatcher.php',
         'WPMailSMTP\\MailCatcherInterface' => __DIR__ . '/../..' . '/src/MailCatcherInterface.php',
         'WPMailSMTP\\MailCatcherTrait' => __DIR__ . '/../..' . '/src/MailCatcherTrait.php',
@@ -208,6 +230,11 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Migrations' => __DIR__ . '/../..' . '/src/Migrations.php',
         'WPMailSMTP\\OptimizedEmailSending' => __DIR__ . '/../..' . '/src/OptimizedEmailSending.php',
         'WPMailSMTP\\Options' => __DIR__ . '/../..' . '/src/Options.php',
+        'WPMailSMTP\\Pro\\Abilities\\AbstractEmailLogAbility' => __DIR__ . '/../..' . '/src/Pro/Abilities/AbstractEmailLogAbility.php',
+        'WPMailSMTP\\Pro\\Abilities\\EmailLogResponseFormatter' => __DIR__ . '/../..' . '/src/Pro/Abilities/EmailLogResponseFormatter.php',
+        'WPMailSMTP\\Pro\\Abilities\\EmailLogs\\GetEmailLogAbility' => __DIR__ . '/../..' . '/src/Pro/Abilities/EmailLogs/GetEmailLogAbility.php',
+        'WPMailSMTP\\Pro\\Abilities\\EmailLogs\\ListEmailLogsAbility' => __DIR__ . '/../..' . '/src/Pro/Abilities/EmailLogs/ListEmailLogsAbility.php',
+        'WPMailSMTP\\Pro\\Abilities\\Stats\\GetEmailStatsAbility' => __DIR__ . '/../..' . '/src/Pro/Abilities/Stats/GetEmailStatsAbility.php',
         'WPMailSMTP\\Pro\\AdditionalConnections\\AdditionalConnections' => __DIR__ . '/../..' . '/src/Pro/AdditionalConnections/AdditionalConnections.php',
         'WPMailSMTP\\Pro\\AdditionalConnections\\Admin\\SettingsTab' => __DIR__ . '/../..' . '/src/Pro/AdditionalConnections/Admin/SettingsTab.php',
         'WPMailSMTP\\Pro\\AdditionalConnections\\Admin\\TestTab' => __DIR__ . '/../..' . '/src/Pro/AdditionalConnections/Admin/TestTab.php',
@@ -216,11 +243,13 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Pro\\Admin\\Area' => __DIR__ . '/../..' . '/src/Pro/Admin/Area.php',
         'WPMailSMTP\\Pro\\Admin\\DashboardWidget' => __DIR__ . '/../..' . '/src/Pro/Admin/DashboardWidget.php',
         'WPMailSMTP\\Pro\\Admin\\Pages\\MiscTab' => __DIR__ . '/../..' . '/src/Pro/Admin/Pages/MiscTab.php',
+        'WPMailSMTP\\Pro\\Admin\\Pages\\TestTab' => __DIR__ . '/../..' . '/src/Pro/Admin/Pages/TestTab.php',
         'WPMailSMTP\\Pro\\Admin\\PluginsList' => __DIR__ . '/../..' . '/src/Pro/Admin/PluginsList.php',
         'WPMailSMTP\\Pro\\Alerts\\AbstractOptions' => __DIR__ . '/../..' . '/src/Pro/Alerts/AbstractOptions.php',
         'WPMailSMTP\\Pro\\Alerts\\Admin\\SettingsTab' => __DIR__ . '/../..' . '/src/Pro/Alerts/Admin/SettingsTab.php',
         'WPMailSMTP\\Pro\\Alerts\\Alert' => __DIR__ . '/../..' . '/src/Pro/Alerts/Alert.php',
         'WPMailSMTP\\Pro\\Alerts\\Alerts' => __DIR__ . '/../..' . '/src/Pro/Alerts/Alerts.php',
+        'WPMailSMTP\\Pro\\Alerts\\Handlers\\CanValidateWebhookUrlTrait' => __DIR__ . '/../..' . '/src/Pro/Alerts/Handlers/CanValidateWebhookUrlTrait.php',
         'WPMailSMTP\\Pro\\Alerts\\Handlers\\HandlerInterface' => __DIR__ . '/../..' . '/src/Pro/Alerts/Handlers/HandlerInterface.php',
         'WPMailSMTP\\Pro\\Alerts\\Loader' => __DIR__ . '/../..' . '/src/Pro/Alerts/Loader.php',
         'WPMailSMTP\\Pro\\Alerts\\Notifier' => __DIR__ . '/../..' . '/src/Pro/Alerts/Notifier.php',
@@ -374,6 +403,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Pro\\Emails\\Logs\\Webhooks\\Webhooks' => __DIR__ . '/../..' . '/src/Pro/Emails/Logs/Webhooks/Webhooks.php',
         'WPMailSMTP\\Pro\\Emails\\RateLimiting\\RateLimiting' => __DIR__ . '/../..' . '/src/Pro/Emails/RateLimiting/RateLimiting.php',
         'WPMailSMTP\\Pro\\Emails\\TestEmail' => __DIR__ . '/../..' . '/src/Pro/Emails/TestEmail.php',
+        'WPMailSMTP\\Pro\\License\\BundledLicense' => __DIR__ . '/../..' . '/src/Pro/License/BundledLicense.php',
         'WPMailSMTP\\Pro\\License\\License' => __DIR__ . '/../..' . '/src/Pro/License/License.php',
         'WPMailSMTP\\Pro\\License\\Updater' => __DIR__ . '/../..' . '/src/Pro/License/Updater.php',
         'WPMailSMTP\\Pro\\MailCatcher' => __DIR__ . '/../..' . '/src/Pro/MailCatcher.php',
@@ -445,6 +475,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Pro\\Tasks\\NotifierTask' => __DIR__ . '/../..' . '/src/Pro/Tasks/NotifierTask.php',
         'WPMailSMTP\\Pro\\Translations' => __DIR__ . '/../..' . '/src/Pro/Translations.php',
         'WPMailSMTP\\Pro\\Upgrade' => __DIR__ . '/../..' . '/src/Pro/Upgrade.php',
+        'WPMailSMTP\\Pro\\WPCLI\\Options\\Registry' => __DIR__ . '/../..' . '/src/Pro/WPCLI/Options/Registry.php',
         'WPMailSMTP\\Processor' => __DIR__ . '/../..' . '/src/Processor.php',
         'WPMailSMTP\\Providers\\AmazonSES\\Options' => __DIR__ . '/../..' . '/src/Providers/AmazonSES/Options.php',
         'WPMailSMTP\\Providers\\AuthAbstract' => __DIR__ . '/../..' . '/src/Providers/AuthAbstract.php',
@@ -494,6 +525,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Providers\\Sendlayer\\Mailer' => __DIR__ . '/../..' . '/src/Providers/Sendlayer/Mailer.php',
         'WPMailSMTP\\Providers\\Sendlayer\\Options' => __DIR__ . '/../..' . '/src/Providers/Sendlayer/Options.php',
         'WPMailSMTP\\Providers\\Sendlayer\\QuickConnect' => __DIR__ . '/../..' . '/src/Providers/Sendlayer/QuickConnect.php',
+        'WPMailSMTP\\Providers\\Sendlayer\\QuickConnectUsage' => __DIR__ . '/../..' . '/src/Providers/Sendlayer/QuickConnectUsage.php',
         'WPMailSMTP\\Providers\\SparkPost\\Mailer' => __DIR__ . '/../..' . '/src/Providers/SparkPost/Mailer.php',
         'WPMailSMTP\\Providers\\SparkPost\\Options' => __DIR__ . '/../..' . '/src/Providers/SparkPost/Options.php',
         'WPMailSMTP\\Providers\\Zoho\\Options' => __DIR__ . '/../..' . '/src/Providers/Zoho/Options.php',
@@ -513,6 +545,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Tasks\\Reports\\SummaryEmailTask' => __DIR__ . '/../..' . '/src/Tasks/Reports/SummaryEmailTask.php',
         'WPMailSMTP\\Tasks\\Task' => __DIR__ . '/../..' . '/src/Tasks/Task.php',
         'WPMailSMTP\\Tasks\\Tasks' => __DIR__ . '/../..' . '/src/Tasks/Tasks.php',
+        'WPMailSMTP\\TestEmail\\TestEmail' => __DIR__ . '/../..' . '/src/TestEmail/TestEmail.php',
         'WPMailSMTP\\Upgrade' => __DIR__ . '/../..' . '/src/Upgrade.php',
         'WPMailSMTP\\Uploads' => __DIR__ . '/../..' . '/src/Uploads.php',
         'WPMailSMTP\\UsageTracking\\ErrorStats' => __DIR__ . '/../..' . '/src/UsageTracking/ErrorStats.php',
@@ -697,10 +730,13 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\CurlFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/CurlFactoryInterface.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\CurlHandler' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/CurlHandler.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\CurlMultiHandler' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/CurlMultiHandler.php',
+        'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\CurlShareHandleState' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/CurlShareHandleState.php',
+        'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\CurlVersion' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/CurlVersion.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\EasyHandle' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/EasyHandle.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\HeaderProcessor' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/HeaderProcessor.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\MockHandler' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/MockHandler.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\Proxy' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/Proxy.php',
+        'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\ProxyEnvironment' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/ProxyEnvironment.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Handler\\StreamHandler' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Handler/StreamHandler.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\MessageFormatter' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/MessageFormatter.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\MessageFormatterInterface' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/MessageFormatterInterface.php',
@@ -743,6 +779,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Query' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Query.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Request' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Request.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Response' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Response.php',
+        'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Rfc3986' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Rfc3986.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Rfc7230' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Rfc7230.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\ServerRequest' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/ServerRequest.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Psr7\\Stream' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/psr7/src/Stream.php',
@@ -758,6 +795,7 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Vendor\\GuzzleHttp\\RequestOptions' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/RequestOptions.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/RetryMiddleware.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\TransferStats' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/TransferStats.php',
+        'WPMailSMTP\\Vendor\\GuzzleHttp\\TransportSharing' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/TransportSharing.php',
         'WPMailSMTP\\Vendor\\GuzzleHttp\\Utils' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Utils.php',
         'WPMailSMTP\\Vendor\\ParagonIE\\ConstantTime\\Base32' => __DIR__ . '/../..' . '/vendor_prefixed/paragonie/constant_time_encoding/src/Base32.php',
         'WPMailSMTP\\Vendor\\ParagonIE\\ConstantTime\\Base32Hex' => __DIR__ . '/../..' . '/vendor_prefixed/paragonie/constant_time_encoding/src/Base32Hex.php',
@@ -808,6 +846,14 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
         'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Intl\\Idn\\Resources\\unidata\\Regex' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-intl-idn/Resources/unidata/Regex.php',
         'WPMailSMTP\\Vendor\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/polyfill-mbstring/Mbstring.php',
         'WPMailSMTP\\WP' => __DIR__ . '/../..' . '/src/WP.php',
+        'WPMailSMTP\\WPCLI\\Bootstrap' => __DIR__ . '/../..' . '/src/WPCLI/Bootstrap.php',
+        'WPMailSMTP\\WPCLI\\Commands\\Manage' => __DIR__ . '/../..' . '/src/WPCLI/Commands/Manage.php',
+        'WPMailSMTP\\WPCLI\\Commands\\Option' => __DIR__ . '/../..' . '/src/WPCLI/Commands/Option.php',
+        'WPMailSMTP\\WPCLI\\Commands\\Setup' => __DIR__ . '/../..' . '/src/WPCLI/Commands/Setup.php',
+        'WPMailSMTP\\WPCLI\\Commands\\Test' => __DIR__ . '/../..' . '/src/WPCLI/Commands/Test.php',
+        'WPMailSMTP\\WPCLI\\Options\\Help' => __DIR__ . '/../..' . '/src/WPCLI/Options/Help.php',
+        'WPMailSMTP\\WPCLI\\Options\\Registry' => __DIR__ . '/../..' . '/src/WPCLI/Options/Registry.php',
+        'WPMailSMTP\\WPCLI\\Options\\Writer' => __DIR__ . '/../..' . '/src/WPCLI/Options/Writer.php',
         'WPMailSMTP\\WPMailArgs' => __DIR__ . '/../..' . '/src/WPMailArgs.php',
         'WPMailSMTP\\WPMailInitiator' => __DIR__ . '/../..' . '/src/WPMailInitiator.php',
     );
@@ -815,9 +861,9 @@ class ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcff0bec3e1c1cc5d8ab7965adacb1549::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitecb31ae240a2e999f170017c2e56814c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitecb31ae240a2e999f170017c2e56814c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitecb31ae240a2e999f170017c2e56814c::$classMap;
 
         }, null, ClassLoader::class);
     }
