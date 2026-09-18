@@ -1,11 +1,13 @@
 <?php
 namespace WPGraphQL\Type\InterfaceType;
 
+use GraphQLRelay\Relay;
 use WPGraphQL\Data\Connection\ContentTypeConnectionResolver;
 use WPGraphQL\Data\Connection\EnqueuedScriptsConnectionResolver;
 use WPGraphQL\Data\Connection\EnqueuedStylesheetConnectionResolver;
 use WPGraphQL\Model\Post;
 use WPGraphQL\Registry\TypeRegistry;
+use WPGraphQL\Type\Connection\EnqueuedAssets;
 
 class ContentNode {
 
@@ -52,16 +54,18 @@ class ContentNode {
 						'oneToOne' => true,
 					],
 					'enqueuedScripts'     => [
-						'toType'  => 'EnqueuedScript',
-						'resolve' => static function ( $source, $args, $context, $info ) {
+						'toType'         => 'EnqueuedScript',
+						'connectionArgs' => EnqueuedAssets::get_connection_args(),
+						'resolve'        => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedScriptsConnectionResolver( $source, $args, $context, $info );
 
 							return $resolver->get_connection();
 						},
 					],
 					'enqueuedStylesheets' => [
-						'toType'  => 'EnqueuedStylesheet',
-						'resolve' => static function ( $source, $args, $context, $info ) {
+						'toType'         => 'EnqueuedStylesheet',
+						'connectionArgs' => EnqueuedAssets::get_connection_args(),
+						'resolve'        => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedStylesheetConnectionResolver( $source, $args, $context, $info );
 							return $resolver->get_connection();
 						},
@@ -147,7 +151,7 @@ class ContentNode {
 						'slug'                      => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'The uri slug for the post. This is equivalent to the WP_Post->post_name field and the post_name column in the database for the "post_objects" table.', 'wp-graphql' );
+								return __( 'The URL-friendly, human-readable identifier for the content node, used in its permalink.', 'wp-graphql' );
 							},
 						],
 						'modified'                  => [
@@ -165,7 +169,7 @@ class ContentNode {
 						'guid'                      => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'The global unique identifier for this post. This currently matches the value stored in WP_Post->guid and the guid column in the "post_objects" database table.', 'wp-graphql' );
+								return __( 'The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.', 'wp-graphql' );
 							},
 						],
 						'desiredSlug'               => [
@@ -187,21 +191,37 @@ class ContentNode {
 							},
 						],
 						'isPreview'                 => [
-							'type'        => 'Boolean',
-							'description' => static function () {
+							'type'           => 'Boolean',
+							'description'    => static function () {
 								return __( 'Whether the object is a node in the preview state', 'wp-graphql' );
+							},
+							// When an authorized preview targets this node, report whether previewed
+							// values are actually being overlaid (an autosave to overlay from, or a
+							// previewed featured image), so a client can render a truthful preview
+							// state: "authorized but nothing to preview" resolves false, exactly
+							// like a request without preview context.
+							'previewResolve' => static function ( $source, $args, $context, $info, array $preview ) {
+								return ! empty( $preview['revisionDatabaseId'] ) || isset( $preview['featuredImageDatabaseId'] );
 							},
 						],
 						'previewRevisionDatabaseId' => [
-							'type'        => 'Int',
-							'description' => static function () {
+							'type'           => 'Int',
+							'description'    => static function () {
 								return __( 'The database id of the preview node', 'wp-graphql' );
+							},
+							// Under preview context, expose the actual overlay source (the autosave
+							// resolved for this request) rather than the latest revision.
+							'previewResolve' => static function ( $source, $args, $context, $info, array $preview ) {
+								return ! empty( $preview['revisionDatabaseId'] ) ? (int) $preview['revisionDatabaseId'] : null;
 							},
 						],
 						'previewRevisionId'         => [
-							'type'        => 'ID',
-							'description' => static function () {
-								return __( 'Whether the object is a node in the preview state', 'wp-graphql' );
+							'type'           => 'ID',
+							'description'    => static function () {
+								return __( 'The globally unique ID of the preview node', 'wp-graphql' );
+							},
+							'previewResolve' => static function ( $source, $args, $context, $info, array $preview ) {
+								return ! empty( $preview['revisionDatabaseId'] ) ? Relay::toGlobalId( 'post', (string) $preview['revisionDatabaseId'] ) : null;
 							},
 						],
 					];

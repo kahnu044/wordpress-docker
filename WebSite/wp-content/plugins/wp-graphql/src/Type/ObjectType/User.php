@@ -8,6 +8,7 @@ use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\Data\Connection\UserRoleConnectionResolver;
 use WPGraphQL\Data\DataSource;
 use WPGraphQL\Model\User as UserModel;
+use WPGraphQL\Type\Connection\EnqueuedAssets;
 use WPGraphQL\Type\Connection\PostObjects;
 
 /**
@@ -33,16 +34,18 @@ class User {
 				'interfaces'  => [ 'Node', 'UniformResourceIdentifiable', 'Commenter', 'DatabaseIdentifier' ],
 				'connections' => [
 					'enqueuedScripts'     => [
-						'toType'  => 'EnqueuedScript',
-						'resolve' => static function ( $source, $args, $context, $info ) {
+						'toType'         => 'EnqueuedScript',
+						'connectionArgs' => EnqueuedAssets::get_connection_args(),
+						'resolve'        => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedScriptsConnectionResolver( $source, $args, $context, $info );
 
 							return $resolver->get_connection();
 						},
 					],
 					'enqueuedStylesheets' => [
-						'toType'  => 'EnqueuedStylesheet',
-						'resolve' => static function ( $source, $args, $context, $info ) {
+						'toType'         => 'EnqueuedStylesheet',
+						'connectionArgs' => EnqueuedAssets::get_connection_args(),
+						'resolve'        => static function ( $source, $args, $context, $info ) {
 							$resolver = new EnqueuedStylesheetConnectionResolver( $source, $args, $context, $info );
 
 							return $resolver->get_connection();
@@ -118,7 +121,7 @@ class User {
 						'email'                        => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'Email address of the user. This is equivalent to the WP_User->user_email property.', 'wp-graphql' );
+								return __( 'Email address of the user.', 'wp-graphql' );
 							},
 						],
 						'extraCapabilities'            => [
@@ -126,32 +129,32 @@ class User {
 								'list_of' => 'String',
 							],
 							'description' => static function () {
-								return __( 'A complete list of capabilities including capabilities inherited from a role. This is equivalent to the array keys of WP_User->allcaps.', 'wp-graphql' );
+								return __( 'A complete list of capabilities including capabilities inherited from a role.', 'wp-graphql' );
 							},
 						],
 						'firstName'                    => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'First name of the user. This is equivalent to the WP_User->user_first_name property.', 'wp-graphql' );
+								return __( 'First name of the user.', 'wp-graphql' );
 							},
 						],
 						'lastName'                     => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'Last name of the user. This is equivalent to the WP_User->user_last_name property.', 'wp-graphql' );
+								return __( 'Last name of the user.', 'wp-graphql' );
 							},
 						],
 
 						'username'                     => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'Username for the user. This field is equivalent to WP_User->user_login.', 'wp-graphql' );
+								return __( 'Username for the user. This is the unique identifier the user provides to log in.', 'wp-graphql' );
 							},
 						],
 						'name'                         => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'Display name of the user. This is equivalent to the WP_User->display_name property.', 'wp-graphql' );
+								return __( 'Display name of the user.', 'wp-graphql' );
 							},
 						],
 						'registeredDate'               => [
@@ -175,13 +178,13 @@ class User {
 						'slug'                         => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'The slug for the user. This field is equivalent to WP_User->user_nicename', 'wp-graphql' );
+								return __( 'The url friendly identifier for the user.', 'wp-graphql' );
 							},
 						],
 						'nicename'                     => [
 							'type'        => 'String',
 							'description' => static function () {
-								return __( 'The nicename for the user. This field is equivalent to WP_User->user_nicename', 'wp-graphql' );
+								return __( 'The url friendly name for the user, used to reference the user in a public url.', 'wp-graphql' );
 							},
 						],
 						'locale'                       => [
@@ -193,7 +196,7 @@ class User {
 						'userId'                       => [
 							'type'              => 'Int',
 							'description'       => static function () {
-								return __( 'The Id of the user. Equivalent to WP_User->ID', 'wp-graphql' );
+								return __( 'The unique numeric identifier for the user.', 'wp-graphql' );
 							},
 							'deprecationReason' => static function () {
 								return __( 'Deprecated in favor of the databaseId field', 'wp-graphql' );

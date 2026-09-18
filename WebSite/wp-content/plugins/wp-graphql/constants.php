@@ -1,5 +1,16 @@
 <?php
 /**
+ * Constant definitions for WPGraphQL.
+ *
+ * @package WPGraphQL
+ */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * Sets up constants for use throughout the plugin and by other extending plugins.
  *
  * This is in its own file so that it can be used via the autoloaded classes, but also
@@ -18,7 +29,7 @@ function graphql_setup_constants() {
 
 	// Plugin version.
 	if ( ! defined( 'WPGRAPHQL_VERSION' ) ) {
-		define( 'WPGRAPHQL_VERSION', '2.16.0' );
+		define( 'WPGRAPHQL_VERSION', '2.23.0' );
 	}
 
 	// Plugin Folder Path.

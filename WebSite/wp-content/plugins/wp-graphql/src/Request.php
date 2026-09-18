@@ -13,7 +13,9 @@ use WPGraphQL\Server\ValidationRules\QueryDepth;
 use WPGraphQL\Server\ValidationRules\RequireAuthentication;
 use WPGraphQL\Server\WPHelper;
 use WPGraphQL\Utils\DebugLog;
+use WPGraphQL\Utils\Preview;
 use WPGraphQL\Utils\QueryAnalyzer;
+use WPGraphQL\Utils\StructuredFields;
 
 /**
  * Class Request
@@ -152,6 +154,12 @@ class Request {
 		 * occur in the context of a GraphQL Request. The base class hooks into this action to
 		 * kick off the schema creation, so types are not set up until this action has run!
 		 */
+		/**
+		 * Action – intentionally with no context – to indicate a GraphQL Request has started.
+		 *
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.32
+		 */
 		do_action( 'init_graphql_request' );
 
 		// Start tracking debug log messages
@@ -210,6 +218,8 @@ class Request {
 		 *
 		 * @param array<string,\GraphQL\Validator\Rules\ValidationRule> $validation_rules The validation rules to use in the request
 		 * @param \WPGraphQL\Request                                        $request          The Request instance
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		return apply_filters( 'graphql_validation_rules', $validation_rules, $this );
 	}
@@ -230,6 +240,8 @@ class Request {
 		 *
 		 * @param mixed|RootValueResolver $root_value The root value the Schema should use to resolve with. Default null.
 		 * @param \WPGraphQL\Request      $request    The Request instance
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		return apply_filters( 'graphql_root_value', $root_value, $this );
 	}
@@ -293,6 +305,27 @@ class Request {
 		$this->app_context->viewer = wp_get_current_user();
 
 		/**
+		 * Set the preview context for the request, if provided (the `X-GraphQL-Preview`
+		 * header, or the `preview` object in the request `extensions`). This carries the
+		 * request-scoped preview params (the post being previewed, and the previewed
+		 * featured image), mirroring the query params WordPress core uses for front-end
+		 * previews.
+		 */
+		$this->app_context->preview = $this->get_preview_context();
+
+		/**
+		 * If a preview was requested for a post the current user is not allowed to preview,
+		 * surface a debug-only notice (visible under GRAPHQL_DEBUG). The request still
+		 * resolves the published data, so this never exposes unpublished content.
+		 */
+		if ( is_array( $this->app_context->preview ) && ! Preview::viewer_can_preview( (int) $this->app_context->preview['databaseId'] ) ) {
+			graphql_debug(
+				__( 'Preview context was provided for a post the current user is not allowed to preview. The published data was resolved instead.', 'wp-graphql' ),
+				[ 'type' => 'PREVIEW_CONTEXT_IGNORED' ]
+			);
+		}
+
+		/**
 		 * If the request is a batch request it will come back as an array
 		 */
 		if ( is_array( $this->params ) ) {
@@ -317,6 +350,8 @@ class Request {
 			 * Execute batch queries
 			 *
 			 * @param \GraphQL\Server\OperationParams[] $params The operation params of the batch request
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 			 */
 			do_action( 'graphql_execute_batch_queries', $this->params );
 
@@ -333,8 +368,238 @@ class Request {
 		 * This action runs before execution of a GraphQL request (regardless if it's a single or batch request)
 		 *
 		 * @param \WPGraphQL\Request $request The instance of the Request being executed
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		do_action( 'graphql_before_execute', $this );
+	}
+
+	/**
+	 * Parses and normalizes the preview context for the request.
+	 *
+	 * The context mirrors the query params WordPress core uses for front-end previews
+	 * (`preview_id`, `_thumbnail_id`, `preview_nonce`). Each transport uses its native
+	 * structured form:
+	 *
+	 *   - The `X-GraphQL-Preview` request header (an RFC 8941 Structured Field dictionary, with
+	 *     lowercase keys) is the primary source, because a headers UI exists in every GraphQL IDE:
+	 *
+	 *         X-GraphQL-Preview: database_id=123, featured_image_database_id=456, nonce="abc"
+	 *
+	 *   - The same context may instead be sent as a JSON `preview` object in the request
+	 *     `extensions` as a fallback (for example to keep it inside the operation body):
+	 *
+	 *         "extensions": { "preview": { "databaseId": 123, "featuredImageDatabaseId": 456 } }
+	 *
+	 * The header takes precedence when both are present.
+	 *
+	 * The presence of a valid `databaseId` marks the request as a preview of that post.
+	 * Authorization is enforced where the context is consumed (capability checks relative to
+	 * the post), not here. The `nonce` is accepted but not verified, so clients can
+	 * forward core's preview URL params wholesale; no verification is planned, since a
+	 * nonce is session-bound and cannot authorize a different viewer. See the nonce
+	 * contract in docs/previews.md, pinned by
+	 * PreviewTest::testNonceIsAcceptedButNotVerifiedToday.
+	 *
+	 * @return array{databaseId:int,revisionDatabaseId:int,featuredImageDatabaseId:?int,nonce:?string}|null
+	 */
+	private function get_preview_context(): ?array {
+		$preview = $this->get_preview_input();
+
+		if ( null === $preview ) {
+			return null;
+		}
+
+		$database_id = $this->get_positive_int_input( $preview['databaseId'] ?? null );
+
+		// Without a post id there is nothing to preview.
+		if ( empty( $database_id ) ) {
+			return null;
+		}
+
+		// Resolve the revision to overlay from, mirroring how WordPress core previews a
+		// post (`_set_preview()`): the post's newest autosave holds the in-progress,
+		// unsaved edits the "Preview" button shows. As in core, the newest autosave is
+		// used regardless of author, so a preview link shared with another user who can
+		// edit the post shows the same preview. Only look it up when the current user can
+		// preview the post, which avoids the query for unauthorized requests and is a
+		// defense-in-depth complement to the capability checks at the point of overlay.
+		$revision_database_id = 0;
+		if ( Preview::viewer_can_preview( $database_id ) ) {
+			$autosave             = wp_get_post_autosave( $database_id );
+			$revision_database_id = $autosave instanceof \WP_Post ? (int) $autosave->ID : 0;
+		}
+
+		return [
+			'databaseId'              => $database_id,
+			// The post's newest autosave (a revision) to overlay previewable fields from.
+			'revisionDatabaseId'      => $revision_database_id,
+			// A `featuredImageDatabaseId` of 0 is meaningful (the featured image was removed
+			// in the preview), so only an absent or invalid value means "no override".
+			'featuredImageDatabaseId' => $this->get_non_negative_int_input( $preview['featuredImageDatabaseId'] ?? null ),
+			'nonce'                   => isset( $preview['nonce'] ) && is_string( $preview['nonce'] ) ? sanitize_text_field( $preview['nonce'] ) : null,
+		];
+	}
+
+	/**
+	 * Normalizes a client-supplied ID to a positive integer, rejecting invalid input
+	 * rather than coercing it. `absint()` would silently flip a negative ID into a
+	 * different, valid-looking positive ID, so a negative or malformed value must be
+	 * treated as absent instead.
+	 *
+	 * @param mixed $value The raw client-supplied value.
+	 *
+	 * @return int The positive integer, or 0 when the value is absent or invalid.
+	 */
+	private function get_positive_int_input( $value ): int {
+		if ( is_int( $value ) && $value > 0 ) {
+			return $value;
+		}
+
+		if ( is_string( $value ) && ctype_digit( $value ) && (int) $value > 0 ) {
+			return (int) $value;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Like get_positive_int_input(), but 0 is a meaningful value (the previewed
+	 * featured image was removed), so it is preserved rather than rejected.
+	 *
+	 * @param mixed $value The raw client-supplied value.
+	 *
+	 * @return ?int The non-negative integer, or null when the value is absent or invalid.
+	 */
+	private function get_non_negative_int_input( $value ): ?int {
+		if ( is_int( $value ) && $value >= 0 ) {
+			return $value;
+		}
+
+		if ( is_string( $value ) && ctype_digit( $value ) ) {
+			return (int) $value;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Resolves the raw `preview` input for the request, keyed like the JSON `extensions.preview`
+	 * object (`databaseId`, `featuredImageDatabaseId`, `nonce`).
+	 *
+	 * The `X-GraphQL-Preview` header (an RFC 8941 Structured Field dictionary) is the primary
+	 * source, since a headers UI is available in every GraphQL IDE. When the header is absent,
+	 * the same context is accepted as a JSON `preview` object in the request `extensions`.
+	 *
+	 * @return array<string,mixed>|null The raw (unnormalized) preview input, or null when none.
+	 */
+	private function get_preview_input(): ?array {
+		// Primary: the `X-GraphQL-Preview` header (a structured-field dictionary).
+		if ( ! empty( $_SERVER['HTTP_X_GRAPHQL_PREVIEW'] ) ) {
+			$parsed = $this->parse_preview_header( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_GRAPHQL_PREVIEW'] ) ) );
+
+			if ( ! empty( $parsed ) ) {
+				return $parsed;
+			}
+		}
+
+		// Fallback: the JSON `preview` object in the request extensions.
+		if ( $this->params instanceof OperationParams ) {
+			$extensions = $this->params->extensions;
+
+			if ( is_array( $extensions ) && ! empty( $extensions['preview'] ) && is_array( $extensions['preview'] ) ) {
+				return $extensions['preview'];
+			}
+		}
+
+		// Batch requests: `extensions.preview` is per-operation, while the preview
+		// overlay is request-level, so it is not supported in a batch; only the header
+		// (which applies to every operation in the batch) carries preview context.
+		// Surface a debug notice rather than ignoring it silently.
+		if ( is_array( $this->params ) ) {
+			foreach ( $this->params as $operation ) {
+				if ( $operation instanceof OperationParams && is_array( $operation->extensions ) && ! empty( $operation->extensions['preview'] ) ) {
+					graphql_debug(
+						__( 'The `extensions.preview` object is not supported in batch requests and was ignored. Send the `X-GraphQL-Preview` header instead; it applies to every operation in the batch.', 'wp-graphql' ),
+						[ 'type' => 'PREVIEW_CONTEXT_IGNORED' ]
+					);
+					break;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Parses the `X-GraphQL-Preview` header as an RFC 8941 Structured Field dictionary.
+	 *
+	 * Example: `database_id=123, featured_image_database_id=456, nonce="abc"`.
+	 *
+	 * The full dictionary syntax is parsed (see Utils\StructuredFields), and the preview
+	 * profile is applied on top: only the keys this feature defines are recognized, and
+	 * their members must be Integers or Strings; members of any other type, and unknown
+	 * keys, are ignored. The recognized keys are mapped to the same shape as the JSON
+	 * `extensions.preview` object so both transports normalize identically.
+	 *
+	 * As RFC 8941 requires, a value that fails to parse is discarded in its entirety,
+	 * in which case (as with an empty parse) the `extensions.preview` fallback applies.
+	 * A discarded or key-less header surfaces a debug notice under GRAPHQL_DEBUG, so
+	 * the silent fallback is still diagnosable.
+	 *
+	 * @param string $header The raw header value.
+	 *
+	 * @return array<string,mixed> The parsed preview input, keyed like `extensions.preview`.
+	 */
+	private function parse_preview_header( string $header ): array {
+		// Map the header's lowercase structured-field keys to the JSON `preview` object keys.
+		$key_map = [
+			'database_id'                => 'databaseId',
+			'featured_image_database_id' => 'featuredImageDatabaseId',
+			'nonce'                      => 'nonce',
+		];
+
+		$dictionary = StructuredFields::parse_dictionary( $header );
+
+		// As RFC 8941 requires, a value that fails to parse is discarded in its
+		// entirety. Surface why under GRAPHQL_DEBUG rather than discarding silently.
+		if ( null === $dictionary ) {
+			graphql_debug(
+				__( 'The `X-GraphQL-Preview` header could not be parsed as an RFC 8941 dictionary and was discarded entirely, as the RFC requires. Common causes: a trailing comma, or camelCase keys (dictionary keys must be lowercase, e.g. `database_id`, not `databaseId`). The `extensions.preview` fallback applies if present.', 'wp-graphql' ),
+				[ 'type' => 'PREVIEW_CONTEXT_MALFORMED' ]
+			);
+			return [];
+		}
+
+		if ( empty( $dictionary ) ) {
+			return [];
+		}
+
+		$parsed = [];
+
+		foreach ( $dictionary as $key => $member ) {
+			if ( ! isset( $key_map[ $key ] ) ) {
+				continue;
+			}
+
+			// The preview profile accepts Integer and String members only.
+			if ( ! in_array( $member['type'], [ 'integer', 'string' ], true ) ) {
+				continue;
+			}
+
+			$parsed[ $key_map[ $key ] ] = $member['value'];
+		}
+
+		// A parseable header that carries none of the recognized keys is almost always
+		// a key-name mistake; say so instead of ignoring it silently.
+		if ( empty( $parsed ) ) {
+			graphql_debug(
+				__( 'The `X-GraphQL-Preview` header parsed as a valid dictionary but contained none of the recognized keys (`database_id`, `featured_image_database_id`, `nonce`) and was ignored. The `extensions.preview` fallback applies if present.', 'wp-graphql' ),
+				[ 'type' => 'PREVIEW_CONTEXT_UNRECOGNIZED' ]
+			);
+		}
+
+		return $parsed;
 	}
 
 	/**
@@ -375,6 +640,8 @@ class Request {
 		 *
 		 * @param bool $authentication_errors Whether there are authentication errors with the request
 		 * @param \WPGraphQL\Request $request Instance of the Request
+		 * @hookGroup authentication
+		 * @since 0.0.5
 		 */
 		return apply_filters( 'graphql_authentication_errors', $authentication_errors, $this );
 	}
@@ -439,6 +706,8 @@ class Request {
 		 *
 		 * @param mixed[]            $filtered_response The response of the entire operation. Could be a single operation or a batch operation
 		 * @param \WPGraphQL\Request $request           Instance of the Request being executed
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		do_action( 'graphql_after_execute', $filtered_response, $this );
 
@@ -488,7 +757,8 @@ class Request {
 		 * @param ?array<string,mixed>             $variables Variables to passed to your GraphQL query
 		 * @param \WPGraphQL\Request               $request   Instance of the Request
 		 *
-		 * @since 0.0.4
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.6
 		 */
 		do_action( 'graphql_execute', $response, $this->schema, $operation, $query, $variables, $this );
 
@@ -526,6 +796,7 @@ class Request {
 		 * @param \WPGraphQL\Request               $request   Instance of the Request
 		 * @param ?string                          $query_id  The query id that GraphQL executed
 		 *
+		 * @hookGroup request-lifecycle
 		 * @since 0.0.5
 		 */
 		$filtered_response = apply_filters( 'graphql_request_results', $response, $this->schema, $operation, $query, $variables, $this, $query_id );
@@ -542,6 +813,8 @@ class Request {
 		 * @param ?array<string,mixed>             $variables         Variables to passed to your GraphQL query
 		 * @param \WPGraphQL\Request               $request           Instance of the Request
 		 * @param ?string                          $query_id          The query id that GraphQL executed
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		do_action( 'graphql_return_response', $filtered_response, $response, $this->schema, $operation, $query, $variables, $this, $query_id );
 
@@ -568,6 +841,8 @@ class Request {
 		 * @param ?array<string,mixed>            $variables Variables to be passed to your GraphQL request
 		 * @param \GraphQL\Server\OperationParams $params    The Operation Params. This includes any extra params,
 		 *                                                   such as extensions or any other modifications to the request body
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.6
 		 */
 		do_action( 'do_graphql_request', $params->query, $params->operation, $params->variables, $params );
 	}
@@ -640,8 +915,10 @@ class Request {
 		/**
 		 * Filter this to be anything other than null to short-circuit the request.
 		 *
-		 * @param ?SerializableResult $response
-		 * @param self               $request
+		 * @param ?SerializableResult $response The response to return early. Null continues execution.
+		 * @param self               $request  The request instance being executed.
+		 * @hookGroup request-lifecycle
+		 * @since 1.6.6
 		 */
 		$response = apply_filters( 'pre_graphql_execute_request', null, $this );
 
@@ -654,8 +931,10 @@ class Request {
 			/**
 			 * Allow the query string to be determined by a filter. Ex, when params->queryId is present, query can be retrieved.
 			 *
-			 * @param string                          $query
-			 * @param \GraphQL\Server\OperationParams $params
+			 * @param string                          $query  The query string to execute.
+			 * @param \GraphQL\Server\OperationParams $params Operation params for the request.
+			 * @hookGroup request-lifecycle
+			 * @since 0.0.5
 			 */
 			$query = apply_filters(
 				'graphql_execute_query_params',
@@ -740,6 +1019,14 @@ class Request {
 		/**
 		 * Get the response.
 		 */
+		/**
+		 * Filter this to be anything other than null to short-circuit HTTP execution.
+		 *
+		 * @param mixed|null $response The response to return early. Null continues execution.
+		 * @param self       $request  The request instance being executed.
+		 * @hookGroup request-lifecycle
+		 * @since 1.6.6
+		 */
 		$response = apply_filters( 'pre_graphql_execute_request', null, $this );
 
 		/**
@@ -774,6 +1061,7 @@ class Request {
 		 * @param bool $is_valid Whether the content type is valid
 		 * @param string $content_type The content type header value that was received
 		 *
+		 * @hookGroup request-lifecycle
 		 * @since 2.1.0
 		 */
 		return (bool) apply_filters( 'graphql_is_valid_http_content_type', $is_valid, $content_type );
@@ -807,6 +1095,8 @@ class Request {
 		 *
 		 * @param int    $status_code The status code to return. Default 415.
 		 * @param string $content_type The content type header value that was received.
+		 * @hookGroup request-lifecycle
+		 * @since 2.1.0
 		 */
 		$filtered_status_code = apply_filters( 'graphql_invalid_content_type_status_code', 415, $content_type );
 
@@ -871,6 +1161,8 @@ class Request {
 		 *
 		 * @param bool                                                              $batch_queries_enabled Whether Batch Queries should be enabled
 		 * @param \GraphQL\Server\OperationParams|\GraphQL\Server\OperationParams[] $params Request operation params
+		 * @hookGroup request-lifecycle
+		 * @since 0.0.5
 		 */
 		return (bool) apply_filters( 'graphql_is_batch_queries_enabled', $batch_queries_enabled, $this->params );
 	}
@@ -905,6 +1197,7 @@ class Request {
 		 * @param \GraphQL\Server\ServerConfig                                      $config Server config
 		 * @param \GraphQL\Server\OperationParams|\GraphQL\Server\OperationParams[] $params Request operation params
 		 *
+		 * @hookGroup request-lifecycle
 		 * @since 0.2.0
 		 */
 		do_action( 'graphql_server_config', $config, $this->params );
