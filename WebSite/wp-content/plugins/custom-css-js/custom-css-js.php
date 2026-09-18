@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI:  https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version:     3.53
+ * Version:     3.54
  * Author:      SilkyPress.com
  * Author URI:  https://www.silkypress.com
  * License:     GPLv3
@@ -100,7 +100,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					add_action( 'wp_enqueue_scripts', 'CustomCSSandJS::wp_enqueue_scripts' );
 				}
 
-				add_action( 'enqueue_block_assets', 'CustomCSSandJS::enqueue_block_assets' );
+				add_action( 'enqueue_block_editor_assets', 'CustomCSSandJS::enqueue_block_editor_assets' );
 			}
 		}
 
@@ -199,11 +199,6 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					}
 				}
 
-				if ( 'internal' === $where && ! strstr( $_filename, 'css' ) && ! strstr( $_filename, 'js' ) ) {
-					$post = get_post( $_filename );
-					echo $before . $post->post_content . $after;
-				}
-
 				if ( 'external' === $where && 'js' === $type ) {
 					echo PHP_EOL . "<script{$type_attr} src='{$upload_url}{$_filename}'></script>" . PHP_EOL;
 				}
@@ -213,10 +208,11 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					echo PHP_EOL . "<link rel='stylesheet' id='{$shortfilename}-css' href='{$upload_url}{$_filename}'{$type_attr} media='all' />" . PHP_EOL;
 				}
 
-				if ( 'external' === $where && 'html' === $type ) {
-					$_filename = str_replace( '.html', '', $_filename );
-					$post      = get_post( $_filename );
-					echo $post->post_content . PHP_EOL;
+				if ( 'html' === $type ) {
+					$post = get_post( intval( $_filename ) );
+					if ( isset( $post->post_content ) && ! empty( $post->post_content ) ) {
+						echo $post->post_content;
+					}
 				}
 			}
 		}
@@ -233,11 +229,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		/**
 		 * Load the CSS/JS custom codes to the Block editor.
 		 */
-		public static function enqueue_block_assets() {
-
-			if ( ! is_admin() ) {
-				return;
-			}
+		public static function enqueue_block_editor_assets() {
 
 			$search_tree = get_option( 'custom-css-js-tree', array() );
 
@@ -272,9 +264,11 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 			// 		therefore the internal custom codes are saved in the block_js.js and block_css.css files
 			// 		and then loaded in the block editor as externally linked files.
 			if ( isset( $search_tree['block-css-footer-internal'] ) || isset( $search_tree['block-css-header-internal'] ) ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
 				wp_enqueue_style( 'ccj-block_css', CCJ_UPLOAD_URL . '/block_css.css', [], rand(1, 1000) );
 			}
 			if ( isset( $search_tree['block-js-footer-internal'] ) || isset( $search_tree['block-js-header-internal'] ) ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
 				wp_enqueue_script( 'ccj-block_js',  CCJ_UPLOAD_URL . '/block_js.js', $js_dependency, rand(1, 1000) );
 			}
 
@@ -287,7 +281,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.53',
+				'CCJ_VERSION'     => '3.54',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,

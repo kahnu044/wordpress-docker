@@ -969,7 +969,7 @@ End of comment */ ',
 
 			<div class="ccj_only_premium ccj_only_premium-right">
 				<div>
-				<a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e( 'Available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js' ); ?></a>
+				<a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e( 'This section is available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js' ); ?></a>
 				</div>
 			</div>
 

@@ -3,9 +3,9 @@ Created: 06/12/2015
 Contributors: diana_burduja
 Email: diana@burduja.eu
 Tags: custom CSS, custom JS, site css, add style, customize theme 
-Requires at least: 3.0.1
-Tested up to: 7.0 
-Stable tag: 3.53
+Requires at least: 4.2
+Tested up to: 7.1 
+Stable tag: 3.54
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -101,6 +101,11 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 4. Add/Edit HTML 
 
 == Changelog ==
+
+= 3.54 =
+* 08/20/2026
+* Compatibility with WP 7.1 (solved bug https://wordpress.org/support/topic/bug-fix-for-wordpress-7-1-html-snippets-returning-empty-in-__call/ )
+* Change: update the minimum WP requirement to 4.2
 
 = 3.53 =
 * 05/20/2026
