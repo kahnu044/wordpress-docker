@@ -346,13 +346,13 @@ class Admin_Menu {
 
 		// Add the Spectra Menu.
 		add_menu_page(
-			__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
-			__( 'Spectra', 'ultimate-addons-for-gutenberg' ),
+			__( 'Spectra Legacy', 'ultimate-addons-for-gutenberg' ),
+			__( 'Spectra Legacy', 'ultimate-addons-for-gutenberg' ),
 			$capability,
 			$menu_slug,
 			array( $this, 'render' ),
 			$icon,
-			30
+			31
 		);
 
 		// Add the Dashboard Submenu.

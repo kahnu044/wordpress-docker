@@ -82,7 +82,16 @@ class UAGB_Init_Blocks {
 
 			// For Spectra Global Block Styles.
 			add_filter( 'render_block', array( $this, 'add_gbs_class' ), 10, 2 );
+
+			// Re-apply Info Box root props for content saved during the apiVersion 3 transition (2.19.27 - 2.19.28).
+			add_filter( 'render_block', array( $this, 'info_box_apiversion_compat' ), 10, 2 );
 		}
+
+		// uagb/container stores `layout` as a bare string ("flex"/"grid"). WP core's
+		// wp_add_parent_layout_to_parsed_block() (priority 10) propagates it to child
+		// blocks as parentLayout, then layout.php:600 calls array_intersect_key() on it
+		// and fatals. Runs at priority 11 to normalise after WP core sets parentLayout.
+		add_filter( 'render_block_data', array( $this, 'fix_non_array_parent_layout' ), 11 );
 
 		if ( current_user_can( 'edit_posts' ) ) {
 			add_action( 'wp_ajax_uagb_svg_confirmation', array( $this, 'confirm_svg_upload' ) );
@@ -97,7 +106,6 @@ class UAGB_Init_Blocks {
 		add_action( 'wp_ajax_uagb_surecart', array( $this, 'surecart_plugin_activator' ) );
 
 	}
-
 
 	/**
 	 * Register the Popup Builder CPT.
@@ -318,6 +326,24 @@ class UAGB_Init_Blocks {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Prevent a PHP fatal when uagb/container's string `layout` attribute is
+	 * propagated to child blocks as parentLayout by WP core. Core's layout.php
+	 * calls array_intersect_key() on parentLayout and expects an array; if it
+	 * receives a string the call fatals. We unset parentLayout on any block
+	 * where it is not an array so core's layout support degrades gracefully.
+	 *
+	 * @param array $parsed_block The parsed block data from render_block_data.
+	 * @since 2.20.1
+	 * @return array The parsed block data with parentLayout normalised.
+	 */
+	public function fix_non_array_parent_layout( $parsed_block ) {
+		if ( isset( $parsed_block['parentLayout'] ) && ! is_array( $parsed_block['parentLayout'] ) ) {
+			unset( $parsed_block['parentLayout'] );
+		}
+		return $parsed_block;
 	}
 
 	/**
@@ -956,7 +982,7 @@ class UAGB_Init_Blocks {
 			array(
 				array(
 					'slug'  => 'uagb',
-					'title' => __( 'Spectra', 'ultimate-addons-for-gutenberg' ),
+					'title' => __( 'Spectra Legacy', 'ultimate-addons-for-gutenberg' ),
 				),
 			),
 			$categories
@@ -1060,11 +1086,14 @@ class UAGB_Init_Blocks {
 		}
 
 		// Common editor style.
+		// Version by file mtime so CDN/edge caches (e.g. Cloudflare) bust when the
+		// compiled CSS changes without a plugin version bump; falls back to UAGB_VER.
+		$common_editor_css_path = dirname( UAGB_FILE ) . '/dist/common-editor.css';
 		wp_enqueue_style(
 			'uagb-block-common-editor-css',
 			UAGB_URL . 'dist/common-editor.css',
 			array( 'wp-edit-blocks' ),
-			UAGB_VER
+			file_exists( $common_editor_css_path ) ? (string) filemtime( $common_editor_css_path ) : UAGB_VER
 		);
 
 		// Block base styles.
@@ -1152,11 +1181,17 @@ class UAGB_Init_Blocks {
 
 		// Scripts.
 		$blocks_script = file_exists( UAGB_DIR . 'dist/blocks.min.js' ) ? 'blocks.min.js' : 'blocks.js';
+		// Version the editor bundle by file mtime so CDN/edge + browser caches bust
+		// when dist/blocks.min.js is rebuilt without a plugin version bump; falls back
+		// to the asset-file version. Prevents a stale editor bundle (which can inject
+		// dynamic styles outside the iframe canvas) from lingering after an update.
+		$blocks_script_path = UAGB_DIR . 'dist/' . $blocks_script;
+		$blocks_script_ver  = file_exists( $blocks_script_path ) ? (string) filemtime( $blocks_script_path ) : $script_info['version'];
 		wp_enqueue_script(
 			'uagb-block-editor-js', // Handle.
 			UAGB_URL . 'dist/' . $blocks_script,
 			$script_dep, // Dependencies, defined above.
-			$script_info['version'], // UAGB_VER.
+			$blocks_script_ver, // File mtime (cache-bust) or asset version.
 			true // Enqueue the script in the footer.
 		);
 
@@ -1338,7 +1373,7 @@ class UAGB_Init_Blocks {
 				'ultimate-addons-for-gutenberg'
 			),
 			'is_rtl'                                  => is_rtl(),
-			'insta_linked_accounts'                   => UAGB_Admin_Helper::get_admin_settings_option( 'uag_insta_linked_accounts', array() ),
+			'insta_linked_accounts'                   => current_user_can( 'manage_options' ) ? UAGB_Admin_Helper::get_admin_settings_option( 'uag_insta_linked_accounts', array() ) : array(),
 			'insta_all_users_media'                   => apply_filters( 'uag_instagram_transients', array() ),
 			'is_site_editor'                          => $screen->id,
 			'current_post_id'                         => get_the_ID(),
@@ -1532,6 +1567,86 @@ class UAGB_Init_Blocks {
 		$html               = str_replace( $block_id, $replacement_string, $block_content );
 
 		return $html;
+	}
+
+	/**
+	 * Re-apply Info Box root element props on the frontend.
+	 *
+	 * Info Box moved to apiVersion 3 in 2.19.27, but its save() did not call
+	 * useBlockProps.save() until a later release. For apiVersion 2+ blocks
+	 * WordPress only applies the block-supports and `blocks.getSaveContent.extraProps`
+	 * props (generated class, custom className, anchor id, uag-hide-* classes)
+	 * through useBlockProps.save(), so Info Box content saved in between is
+	 * missing them on the root element. This re-applies those props from the
+	 * stored attributes at render time, so existing content is corrected on the
+	 * frontend without requiring a re-save. New saves already contain them and
+	 * re-applying is idempotent.
+	 *
+	 * @param mixed                $block_content The block default content.
+	 * @param array<string, mixed> $block         The full block, including name and attributes.
+	 *
+	 * @since 2.19.29
+	 * @return mixed The filtered block content.
+	 */
+	public function info_box_apiversion_compat( $block_content, $block ) {
+		if (
+			empty( $block['blockName'] ) ||
+			'uagb/info-box' !== $block['blockName'] ||
+			! is_string( $block_content ) ||
+			'' === trim( $block_content ) ||
+			! class_exists( 'WP_HTML_Tag_Processor' )
+		) {
+			return $block_content;
+		}
+
+		$attrs     = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+		$processor = new WP_HTML_Tag_Processor( $block_content );
+
+		// Bail if the markup has no root tag to update.
+		if ( ! $processor->next_tag() ) {
+			return $block_content;
+		}
+
+		// Generated block class (WordPress adds this automatically only for apiVersion 1 blocks).
+		$processor->add_class( 'wp-block-uagb-info-box' );
+
+		// Additional CSS Class(es).
+		if ( ! empty( $attrs['className'] ) && is_string( $attrs['className'] ) ) {
+			$class_names = preg_split( '/\s+/', trim( $attrs['className'] ) );
+
+			if ( is_array( $class_names ) ) {
+				foreach ( $class_names as $class_name ) {
+					if ( '' !== $class_name ) {
+						$processor->add_class( $class_name );
+					}
+				}
+			}
+		}
+
+		// HTML Anchor.
+		if ( ! empty( $attrs['anchor'] ) && is_string( $attrs['anchor'] ) ) {
+			$processor->set_attribute( 'id', $attrs['anchor'] );
+		}
+
+		// Responsive-visibility classes (mirrors ApplyExtraClass in the advanced-settings extension).
+		$display_conditions   = isset( $attrs['UAGDisplayConditions'] ) ? $attrs['UAGDisplayConditions'] : '';
+		$responsive_condition = ! empty( $attrs['UAGResponsiveConditions'] );
+
+		if ( 'responsiveVisibility' === $display_conditions || $responsive_condition ) {
+			if ( ! empty( $attrs['UAGHideDesktop'] ) ) {
+				$processor->add_class( 'uag-hide-desktop' );
+			}
+
+			if ( ! empty( $attrs['UAGHideTab'] ) ) {
+				$processor->add_class( 'uag-hide-tab' );
+			}
+
+			if ( ! empty( $attrs['UAGHideMob'] ) ) {
+				$processor->add_class( 'uag-hide-mob' );
+			}
+		}
+
+		return $processor->get_updated_html();
 	}
 
 	/**
