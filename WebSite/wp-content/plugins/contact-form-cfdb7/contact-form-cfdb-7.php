@@ -8,8 +8,10 @@ Author URI: http://ciphercoin.com/
 Text Domain: contact-form-cfdb7
 License: GPL v2 or later
 Domain Path: /languages/
-Version: 1.3.6
+Version: 1.4.0
 */
+
+define('CFDB7_PLUGIN_FILE', __FILE__ );
 
 function cfdb7_create_table(){
 
@@ -214,6 +216,7 @@ function cfdb7_init(){
         require_once 'inc/admin-subpage.php';
         require_once 'inc/admin-form-details.php';
         require_once 'inc/export-csv.php';
+        require_once 'inc/settings.php';
 
         do_action( 'cfdb7_admin_init' );
 
@@ -226,7 +229,8 @@ function cfdb7_init(){
 
             $csv->download_csv_file();
         }
-        new Cfdb7_Wp_Main_Page();
+        Cfdb7_Wp_Main_Page::getInstance();
+        CFDB7_Settings::getInstance();
     }
 }
 

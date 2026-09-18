@@ -54,7 +54,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 class CFDB7_List_Table extends WP_List_Table
 {
     private $form_post_id;
-    private $column_titles;
+    private $column_titles = array();
 
     public function __construct() {
 

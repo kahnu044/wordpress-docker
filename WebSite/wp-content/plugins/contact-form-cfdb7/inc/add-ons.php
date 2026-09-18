@@ -2,13 +2,19 @@
 
 if (!defined( 'ABSPATH')) exit;
 
-add_submenu_page(
-	'cfdb7-list.php', 
-	__( 'Extensions', 'contact-form-cfdb7' ), 
-	'<span style="color:#f18500">' . esc_html__( 'Addons', 'contact-form-cfdb7' ) . '</span>',
-	'manage_options', 'cfdb7-extensions',  
-	'cfdb7_extensions' 
-);
+add_action('admin_menu', 'register_addon_submenu', 99);
+
+function register_addon_submenu(){
+
+	add_submenu_page(
+		'cfdb7-list.php', 
+		__( 'Extensions', 'contact-form-cfdb7' ), 
+		'<span style="color:#f18500">' . esc_html__( 'Addons', 'contact-form-cfdb7' ) . '</span>',
+		'manage_options', 'cfdb7-extensions',  
+		'cfdb7_extensions',
+	);
+
+}
 
 /**
  * Extensions page

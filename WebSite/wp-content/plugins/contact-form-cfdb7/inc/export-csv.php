@@ -7,6 +7,17 @@ if (!defined( 'ABSPATH')) exit;
 
 class CFDB7_Export_CSV{
 
+    public function __construct(){
+        add_filter('cfdb7_csv_delimiter', array($this, 'set_delimiter'));
+    }
+
+    public function set_delimiter( $delimiter ){
+        
+        $delimiter = get_option('cfdb7_csv_delimiter', ',');
+
+        return $delimiter;
+    }
+
     /**
      * Download csv file
      * @param  String $filename
@@ -30,7 +41,6 @@ class CFDB7_Export_CSV{
     /**
      * Convert array to csv format
      * @param  array  &$array
-     * @return file csv format
      */
     public function array2csv(array &$array, $df){
 
