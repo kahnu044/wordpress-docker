@@ -7,6 +7,7 @@ function bodhi_svgs_cleanup_duplicate_meta() {
     global $wpdb;
     
     // Delete all but the latest inline_featured_image meta per post
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time maintenance cleanup of plugin meta; a direct query is required and object caching is not applicable.
     $wpdb->query("
         DELETE pm FROM {$wpdb->postmeta} pm
         JOIN (
@@ -21,8 +22,9 @@ function bodhi_svgs_cleanup_duplicate_meta() {
     ");
 
     // Delete all inline_featured_image meta entries that aren't explicitly set to 1
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time maintenance cleanup of plugin meta; a direct query is required and object caching is not applicable.
     $wpdb->query("
-        DELETE FROM {$wpdb->postmeta} 
+        DELETE FROM {$wpdb->postmeta}
         WHERE meta_key = 'inline_featured_image' 
         AND (meta_value = '' OR meta_value = '0' OR meta_value IS NULL)
     ");

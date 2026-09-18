@@ -3,7 +3,7 @@
 Plugin Name: 	SVG Support
 Plugin URI:		http://wordpress.org/plugins/svg-support/
 Description: 	Upload SVG files to the Media Library and render SVG files inline for direct styling/animation of an SVG's internal elements using CSS/JS.
-Version: 		2.5.16
+Version: 		2.6.1
 Author URI: 	https://benbodhi.com
 Text Domain: 	svg-support
 Domain Path:	/languages
@@ -48,8 +48,29 @@ include( BODHI_SVGS_PLUGIN_PATH . 'vendor/autoload.php' );
 // interfaces to enable custom whitelisting of svg tags and attributes
 include( BODHI_SVGS_PLUGIN_PATH . 'includes/svg-tags.php' );
 include( BODHI_SVGS_PLUGIN_PATH . 'includes/svg-attributes.php' );
-// initialize sanitizer
+// initialize sanitizer — explicitly in the global scope: WP-CLI includes
+// wp-settings.php from inside a method, so a bare top-level assignment in a
+// plugin file never reaches global scope there, and every sanitize-on-upload
+// (wp media import, migrations, hosting tooling) fataled on a null sanitizer.
+global $sanitizer;
 $sanitizer = new Sanitizer();
+
+/**
+ * The shared sanitizer instance, rebuilt defensively if the global is missing
+ * in whatever loading context we find ourselves in. All consumers go through
+ * this instead of trusting `global $sanitizer` directly.
+ *
+ * @return \enshrined\svgSanitize\Sanitizer
+ */
+function bodhi_svgs_sanitizer() {
+	global $sanitizer;
+
+	if ( ! $sanitizer instanceof Sanitizer ) {
+		$sanitizer = new Sanitizer();
+	}
+
+	return $sanitizer;
+}
 
 /**
  * Includes - keeping it modular
@@ -60,7 +81,6 @@ include( BODHI_SVGS_PLUGIN_PATH . 'functions/mime-types.php' );				// setup mime
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/thumbnail-display.php' );		// make SVG thumbnails display correctly in media library
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/attachment.php' );				// make SVG thumbnails display correctly in attachment modals and generate attachment sizes
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/enqueue.php' );				// enqueue js & css for inline replacement & admin
-include( BODHI_SVGS_PLUGIN_PATH . 'functions/localization.php' );			// setup localization & languages
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/attribute-control.php' );		// auto set SVG class & remove dimensions during insertion
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/featured-image.php' );			// allow inline SVG for featured images
 include( BODHI_SVGS_PLUGIN_PATH . 'functions/meta-cleanup.php' );			// cleanup duplicate meta entries

@@ -79,6 +79,33 @@ function bodhi_svgs_settings_sanitize($input) {
 }
 
 /**
+ * Auto-save settings via AJAX (settings screen)
+ * Runs the same sanitize callback as the classic options.php flow.
+ */
+function bodhi_svgs_autosave_settings() {
+
+	check_ajax_referer( 'bodhi_svgs_autosave', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => esc_html__( 'You can\'t play with this.', 'svg-support' ) ), 403 );
+	}
+
+	$raw = isset( $_POST['bodhi_svgs_settings'] ) ? wp_unslash( $_POST['bodhi_svgs_settings'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized below via map_deep + settings sanitize callback.
+
+	if ( ! is_array( $raw ) ) {
+		wp_send_json_error( array( 'message' => esc_html__( 'Invalid settings payload.', 'svg-support' ) ), 400 );
+	}
+
+	$clean = bodhi_svgs_settings_sanitize( map_deep( $raw, 'sanitize_text_field' ) );
+
+	update_option( 'bodhi_svgs_settings', $clean );
+
+	wp_send_json_success();
+
+}
+add_action( 'wp_ajax_bodhi_svgs_autosave', 'bodhi_svgs_autosave_settings' );
+
+/**
  * Register settings in the database
  */
 function bodhi_svgs_register_settings() {

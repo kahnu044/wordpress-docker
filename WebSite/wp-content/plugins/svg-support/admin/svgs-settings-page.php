@@ -2,502 +2,358 @@
 /**
  * Settings Page Markup
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+if ( ! function_exists( 'bodhi_svgs_icon' ) ) {
+	/**
+	 * Render a Lucide icon from the bundled sprite.
+	 */
+	function bodhi_svgs_icon( $name, $size = 16 ) {
+		printf(
+			'<svg class="svgs-icon" width="%1$d" height="%1$d" aria-hidden="true" focusable="false"><use href="%2$s#%3$s"></use></svg>',
+			absint( $size ),
+			esc_url( plugins_url( 'admin/img/icons.svg', BODHI_SVGS_PLUGIN_FILE ) ),
+			esc_attr( $name )
+		);
+	}
+}
+
+if ( ! function_exists( 'bodhi_svgs_toggle_row' ) ) {
+	/**
+	 * Render one switch row. Field name/id and checked state are passed in so
+	 * POST semantics stay identical to the classic checkboxes.
+	 */
+	function bodhi_svgs_toggle_row( $key, $label, $desc, $is_checked, $value = '' ) {
+		$field = 'bodhi_svgs_settings[' . $key . ']';
+		?>
+		<div class="svgs-row">
+			<label class="svgs-toggle-row" for="<?php echo esc_attr( $field ); ?>">
+				<input id="<?php echo esc_attr( $field ); ?>" name="<?php echo esc_attr( $field ); ?>" type="checkbox" class="svgs-switch-input"<?php echo $value !== '' ? ' value="' . esc_attr( $value ) . '"' : ''; ?> <?php checked( $is_checked ); ?> />
+				<span class="svgs-switch" aria-hidden="true"></span>
+				<span class="svgs-toggle-text">
+					<span class="svgs-toggle-label"><?php echo esc_html( $label ); ?></span>
+					<span class="svgs-toggle-desc"><?php echo wp_kses( $desc, array( 'code' => array(), 'strong' => array(), 'em' => array() ) ); ?></span>
+				</span>
+			</label>
+		</div>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'bodhi_svgs_role_chips' ) ) {
+	/**
+	 * Render a role picker as accessible checkbox chips.
+	 * Posts the same bodhi_svgs_settings[<key>][] array the old multiselect did.
+	 */
+	function bodhi_svgs_role_chips( $key, $selected_roles ) {
+		global $wp_roles;
+		$selected_roles = (array) $selected_roles;
+		echo '<div class="svgs-chips">';
+		foreach ( $wp_roles->roles as $role => $details ) {
+			$slug = esc_attr( $role );
+			$name = translate_user_role( $details['name'] );
+			?>
+			<label class="svgs-chip">
+				<input type="checkbox" name="bodhi_svgs_settings[<?php echo esc_attr( $key ); ?>][]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $selected_roles, true ) ); ?> />
+				<span class="svgs-chip-check"><?php bodhi_svgs_icon( 'check', 13 ); ?></span>
+				<span><?php echo esc_html( $name ); ?></span>
+			</label>
+			<?php
+		}
+		echo '</div>';
+	}
+}
+
+$bodhi_svgs_options = is_array( $bodhi_svgs_options ) ? $bodhi_svgs_options : array();
+$bodhi_svgs_restrict_roles = isset( $bodhi_svgs_options['restrict'] ) ? (array) $bodhi_svgs_options['restrict'] : array();
+$bodhi_svgs_bypass_roles   = isset( $bodhi_svgs_options['sanitize_on_upload_roles'] ) ? (array) $bodhi_svgs_options['sanitize_on_upload_roles'] : array();
 ?>
 
-<div class="wrap">
+<div class="wrap svgs-ds">
 
-	<div id="icon-upload" class="icon32"></div>
-	<h2><?php esc_html_e( 'SVG Support Settings and Usage', 'svg-support' ); ?><span class="svgs-version">Version <?php echo esc_attr(BODHI_SVGS_VERSION); ?></span></h2>
+	<div class="svgs-header">
+		<img src="<?php echo esc_url( plugins_url( 'admin/img/logo.svg', BODHI_SVGS_PLUGIN_FILE ) ); ?>" width="30" height="30" alt="" />
+		<h1><?php esc_html_e( 'SVG Support', 'svg-support' ); ?> <span class="svgs-version">v<?php echo esc_html( BODHI_SVGS_VERSION ); ?></span></h1>
+		<span class="svgs-savestate" id="svgs-savestate" data-state="idle">
+			<?php bodhi_svgs_icon( 'cloud', 16 ); ?>
+			<span><?php esc_html_e( 'All changes saved', 'svg-support' ); ?></span>
+		</span>
+	</div>
+	<hr class="wp-header-end">
 
-	<div id="poststuff">
+	<div class="svgs-callout">
+		<?php bodhi_svgs_icon( 'info', 18 ); ?>
+		<div>
+			<strong><?php esc_html_e( 'Style SVGs with CSS — easily.', 'svg-support' ); ?></strong>
+			<p>
+				<?php esc_html_e( 'Enable Advanced Mode to embed your full SVG inline via a simple', 'svg-support' ); ?>
+				<code>style-svg</code>
+				<?php esc_html_e( 'class, then target its internal elements with plain CSS. For help, check the Help tab (top right) or the tutorials at', 'svg-support' ); ?>
+				<a href="https://svg.support/tutorials/" target="_blank">svg.support</a>.
+			</p>
+		</div>
+	</div>
 
-		<div class="meta-box-sortables ui-sortable">
+	<div class="svgs-layout">
 
-			<div class="postbox">
+		<div class="svgs-main">
 
-				<h3><span><?php esc_html_e( 'Introduction', 'svg-support' ); ?></span></h3>
-				<div class="inside">
+			<form name="bodhi_svgs_settings_form" id="svgs-settings-form" method="post" action="options.php">
 
-				<p>
-					<?php esc_html_e( 'When using SVG images on your WordPress site, it can be hard to style elements within the SVG using CSS.', 'svg-support' ); ?>
-					<strong><?php esc_html_e( 'Now you can, easily!', 'svg-support' ); ?></strong>
-				</p>
-				<p>
-					<?php esc_html_e( 'When you enable advanced mode, this plugin not only provides SVG Support like the name says, it also allows you to easily embed your full SVG file\'s code using a simple IMG tag. By adding the class', 'svg-support' ); ?>
-					<code><?php esc_html_e( 'style-svg', 'svg-support' ); ?></code>
-					<?php esc_html_e( 'to your IMG elements, this plugin dynamically replaces any IMG elements containing the', 'svg-support' ); ?>
-					<code><?php esc_html_e( 'style-svg', 'svg-support' ); ?></code>
-					<?php esc_html_e( 'class with your complete SVG.', 'svg-support' ); ?>
-				</p>
-				<p>
-					<?php esc_html_e( 'The main purpose of this is to allow styling of SVG elements. Usually your styling options are restricted when using', 'svg-support' ); ?>
-					<code><?php esc_html_e( 'embed', 'svg-support' ); ?></code>,
-					<code><?php esc_html_e( 'object', 'svg-support' ); ?></code>,
-					<?php esc_html_e( 'or', 'svg-support' ); ?>
-					<code><?php esc_html_e( 'img', 'svg-support' ); ?></code>
-					<?php esc_html_e( 'tags alone.', 'svg-support' ); ?>
-				</p>
-				<p>
-					<strong><?php esc_html_e( 'For help and more information, please check the help tab (top right of your screen).', 'svg-support' ); ?></strong>
-				</p>
+				<?php settings_fields( 'bodhi_svgs_settings_group' ); ?>
 
-				</div> <!-- .inside -->
+				<section class="svgs-panel">
+					<header class="svgs-panel-head">
+						<div>
+							<h2><?php esc_html_e( 'General', 'svg-support' ); ?></h2>
+							<p><?php esc_html_e( 'Uploads, sanitization and performance.', 'svg-support' ); ?></p>
+						</div>
+					</header>
+					<div class="svgs-panel-body">
 
-			</div> <!-- .postbox -->
+						<div class="svgs-row">
+							<div class="svgs-field-label"><?php esc_html_e( 'Restrict SVG uploads to', 'svg-support' ); ?></div>
+							<?php bodhi_svgs_role_chips( 'restrict', $bodhi_svgs_restrict_roles ); ?>
+							<p class="svgs-hint"><?php esc_html_e( 'Select the user roles that are allowed to upload SVG files. Only give upload permission to roles you trust.', 'svg-support' ); ?></p>
+						</div>
 
-		</div> <!-- .meta-box-sortables .ui-sortable -->
-
-		<div class="meta-box-sortables ui-sortable">
-
-			<div class="postbox">
-
-				<h3><span><?php esc_html_e( 'Send Some Love', 'svg-support' ); ?></span></h3>
-				<div class="inside">
-
-					<p><?php esc_html_e( 'SVG Support has grown to be installed on 1,000,000+ active websites. That\'s insane! It\'s developed and maintained by one person alone. If you find it useful, please consider donating to help keep it going. I truly appreciate any contribution.', 'svg-support' ); ?></p>
-					<p><strong>
-						<?php esc_html_e( 'BTC: 1qF8r2HkTLifND7WLGfWmvxfXc9ze55DZ', 'svg-support' ); ?><br/>
-						<?php esc_html_e( 'ETH: 0x599695Eb51aFe2e5a0DAD60aD9c89Bc8f10B54f4', 'svg-support' ); ?>
-					</strong></p>
-					<p><?php esc_html_e( 'You can also', 'svg-support' ); ?> <a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Z9R7JERS82EQQ&source=url"><?php esc_html_e( 'Donate using PayPal', 'svg-support' ); ?></a></p>
-
-				</div> <!-- .inside -->
-
-			</div> <!-- .postbox -->
-
-		</div> <!-- .meta-box-sortables .ui-sortable -->
-
-		<div id="post-body" class="metabox-holder columns-2">
-
-			<!-- main content -->
-			<div id="post-body-content">
-
-				<div class="meta-box-sortables ui-sortable">
-
-					<div class="postbox">
-
-						<h3><span><?php esc_html_e( 'Settings', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-
-							<form name="bodhi_svgs_settings_form" method="post" action="options.php">
-
-								<?php settings_fields('bodhi_svgs_settings_group'); ?>
-
-								<table class="form-table svg-settings">
-
-									<tr valign="top">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Restrict SVG Uploads to?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<div class="upload_allowed_roles">
-												<?php $allowed_roles_array = $bodhi_svgs_options['restrict']; ?>
-												<select style="display:none" name="bodhi_svgs_settings[restrict][]" multiple>
-												<?php
-													global $wp_roles;
-													$all_roles = $wp_roles->roles;
-													foreach ($all_roles as $role => $details) {
-														$user_role_slug = esc_attr($role);
-														$user_role_name = translate_user_role($details['name']);
-														$role_selected = in_array($user_role_slug, $allowed_roles_array) ? 'selected' : '';
-													?>
-													<option value="<?php echo esc_attr($user_role_slug); ?>" <?php echo esc_attr($role_selected); ?>><?php echo esc_html($user_role_name); ?></option>
-												<?php } ?>
-												</select>
-											</div>
-											<small class="description"><?php esc_html_e('Select the user roles that are allowed to upload SVG files.', 'svg-support' ); ?></small>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Do not sanitize for these roles', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<div class="sanitize_on_upload_roles">
-												<?php
-													global $wp_roles;
-													$all_roles = $wp_roles->roles;  // Fetch all available roles
-													$sanitize_roles_array = $bodhi_svgs_options['sanitize_on_upload_roles'];
-												?>
-												<select name="bodhi_svgs_settings[sanitize_on_upload_roles][]" multiple>
-												<?php
-													foreach ($all_roles as $role => $details) {
-														$user_role_slug = esc_attr($role);
-														$user_role_name = translate_user_role($details['name']);
-														$role_selected = in_array($user_role_slug, $sanitize_roles_array) ? 'selected' : '';
-												?>
-													<option value="<?php echo esc_attr($user_role_slug); ?>" <?php echo esc_attr($role_selected); ?>><?php echo esc_html($user_role_name); ?></option>
-												<?php } ?>
-												</select>
-											</div>
-											<small class="description"><?php esc_html_e('Select the user roles that should bypass SVG sanitization.', 'svg-support' ); ?></small>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Sanitize SVG on Front-end', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[sanitize_svg_front_end]">
-												<input id="bodhi_svgs_settings[sanitize_svg_front_end]" name="bodhi_svgs_settings[sanitize_svg_front_end]" type="checkbox" <?php checked( $bodhi_svgs_options['sanitize_svg_front_end'], 'on' ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Enhance security by sanitizing svg images on Front-end. This will help to prevent XSS and Injection attacks.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
-											<label for="bodhi_svgs_settings[minify_svg]"><strong><?php esc_html_e( 'Minify SVG', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[minify_svg]">
-												<input id="bodhi_svgs_settings[minify_svg]" name="bodhi_svgs_settings[minify_svg]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['minify_svg'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Enabling this option will auto-minify all svg uploads.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Load frontend CSS?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[frontend_css]">
-												<input id="bodhi_svgs_settings[frontend_css]" name="bodhi_svgs_settings[frontend_css]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['frontend_css'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('A very small piece of code that helps with displaying SVGs on the frontend in some cases.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Enable Advanced Mode?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[advanced_mode]">
-												<input id="bodhi_svgs_settings[advanced_mode]" name="bodhi_svgs_settings[advanced_mode]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['advanced_mode'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('You don\'t need to enable this to simply use SVG files as images. Enabling this will trigger advanced options and SVG functionality such as inline rendering.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<h3 class="inner-title"><?php esc_html_e( 'Advanced', 'svg-support' ); ?></h3>
-										</th>
-										<td>
-											<hr>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'CSS Class to target', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[css_target]">
-												<input id="bodhi_svgs_settings[css_target]" class="all-options code" name="bodhi_svgs_settings[css_target]" type="text" value="<?php echo isset( $bodhi_svgs_options['css_target'] ) ? esc_attr($bodhi_svgs_options['css_target']) : ''; ?>"><br />
-												<small class="description">
-													<?php esc_html_e( 'The default target class is', 'svg-support' ); ?>
-													<code><?php echo esc_html( 'style-svg' ); ?></code>.
-													<?php esc_html_e( 'You can change it to your own class such as', 'svg-support' ); ?>
-													<code><?php echo esc_html( 'my-class' ); ?></code>
-													<?php esc_html_e( 'by typing it here. Leave blank to use the default class.', 'svg-support' ); ?>
-													<br>
-													<em><?php esc_html_e( 'Plugin can now go any level down to find your SVG! It will keep looking as long as the element with the target class has children. If it finds any IMG tags with .svg in the src URL, it will replace the IMG tag with your SVG code.', 'svg-support' ); ?></em>
-												</small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Skip Nested SVGs', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[skip_nested_svg]">
-												<input id="bodhi_svgs_settings[skip_nested_svg]" name="bodhi_svgs_settings[skip_nested_svg]" type="checkbox" value="1" <?php checked( isset( $bodhi_svgs_options['skip_nested_svg'] ) && $bodhi_svgs_options['skip_nested_svg'] == 1 ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?>
-												<br><small class="description"><?php esc_html_e( 'When enabled, only the first SVG in a .style-svg container will be inlined. Useful for Gutenberg Cover blocks with nested SVG images.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Output JS in Footer?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[js_foot_choice]">
-												<input id="bodhi_svgs_settings[js_foot_choice]" name="bodhi_svgs_settings[js_foot_choice]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['js_foot_choice'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Normally, scripts are placed in head of the HTML document. If "Yes" is selected, the script is placed before the closing body tag. This requires the theme to have the wp_footer() template tag in the appropriate place.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Use Vanilla JS?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[use_vanilla_js]">
-												<input id="bodhi_svgs_settings[use_vanilla_js]" name="bodhi_svgs_settings[use_vanilla_js]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['use_vanilla_js'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Checking this will use vanilla JS file instead of the jQuery.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Use Expanded JS?', 'svg-support' ); ?></strong>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[use_expanded_js]">
-												<input id="bodhi_svgs_settings[use_expanded_js]" name="bodhi_svgs_settings[use_expanded_js]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['use_expanded_js'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Checking this will use the expanded JS file instead of the minified JS file. Useful if you want to minify this externally using a caching plugin or similar.', 'svg-support' ); ?></small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<h3 class="inner-title"><?php esc_html_e( 'Legacy Settings', 'svg-support' ); ?></h3>
-										</th>
-										<td>
-											<hr>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Force Inline SVG?', 'svg-support' ); ?></strong></label>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[force_inline_svg]">
-												<input id="bodhi_svgs_settings[force_inline_svg]" name="bodhi_svgs_settings[force_inline_svg]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['force_inline_svg'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br />
-												<small class="description">
-													<strong><?php esc_html_e( 'Use with caution!', 'svg-support' ); ?></strong>
-													<?php esc_html_e( 'Checking this will automatically add the SVG class to ALL image tags containing SVG file sources in the rendered HTML via javascript and will therefore render all of your SVG files inline.', 'svg-support' ); ?>
-													<br />
-													<em><?php esc_html_e( 'Use case scenario: When using a visual builder such as in the Divi Theme or The Divi Builder, the class is not automatically added with the "Automatically insert class?" option selected or the builder module doesn\'t give you the option to manually add a CSS class directly to your image.', 'svg-support' ); ?></em>
-												</small>
-											</label>
-										</td>
-									</tr>
-
-									<tr valign="top" class="svgs-advanced">
-										<th scope="row">
-											<strong><?php esc_html_e( 'Automatically insert class?', 'svg-support' ); ?></strong></label>
-										</th>
-										<td>
-											<label for="bodhi_svgs_settings[auto_insert_class]">
-												<input id="bodhi_svgs_settings[auto_insert_class]" name="bodhi_svgs_settings[auto_insert_class]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['auto_insert_class'] ), true ); ?> />
-												<?php esc_html_e( 'Yes', 'svg-support' ); ?><br />
-												<small class="description">
-													<?php esc_html_e('(Classic Editor Only) Checking this will make sure that either the default class or the custom one you set in "CSS Class to target" option will be inserted into the style attributes of img tags when you insert SVG images into a post. Additionally, it will remove all of the default WordPress classes. It will leave normal image types as default and only affect SVG files.', 'svg-support' ); ?>
-												</small>
-											</label>
-										</td>
-									</tr>
-
-								</table>
-
-								<div class="postbox">
-									<h3><span><?php esc_html_e( 'Danger Zone', 'svg-support' ); ?></span></h3>
-									<div class="inside">
-										<table class="form-table">
-											<tr valign="top">
-												<th scope="row">
-													<label for="bodhi_svgs_settings[del_plugin_data]"><strong><?php esc_html_e( 'Delete Plugin Data', 'svg-support' ); ?></strong></label>
-												</th>
-												<td>
-													<label for="bodhi_svgs_settings[del_plugin_data]">
-														<input id="bodhi_svgs_settings[del_plugin_data]" name="bodhi_svgs_settings[del_plugin_data]" type="checkbox" <?php checked( isset( $bodhi_svgs_options['del_plugin_data'] ), true ); ?> />
-														<?php esc_html_e( 'Yes', 'svg-support' ); ?><br /><small class="description"><?php esc_html_e('Delete all plugin\'s data during uninstallation process.', 'svg-support' ); ?></small>
-													</label>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</div>
-
-								<p>
-									<input class="button-primary" type="submit" name="bodhi_svgs_settings_submit" value="<?php esc_html_e( 'Save Changes', 'svg-support' ); ?>" />
-								</p>
-
-							</form>
-
-						</div> <!-- .inside -->
-
-					</div> <!-- .postbox -->
-
-					<div class="postbox">
+						<div class="svgs-row">
+							<div class="svgs-field-label"><?php esc_html_e( 'Do not sanitize for these roles', 'svg-support' ); ?></div>
+							<?php bodhi_svgs_role_chips( 'sanitize_on_upload_roles', $bodhi_svgs_bypass_roles ); ?>
+							<p class="svgs-hint"><?php esc_html_e( 'Select the user roles that should bypass SVG sanitization on upload. Leave empty unless you fully trust a role\'s uploads.', 'svg-support' ); ?></p>
+						</div>
 
 						<?php
+						bodhi_svgs_toggle_row(
+							'sanitize_svg_front_end',
+							__( 'Sanitize SVG on front-end', 'svg-support' ),
+							__( 'Enhance security by sanitizing SVG images on the front-end. This helps prevent XSS and injection attacks.', 'svg-support' ),
+							isset( $bodhi_svgs_options['sanitize_svg_front_end'] ) && 'on' === $bodhi_svgs_options['sanitize_svg_front_end']
+						);
 
-						if ( empty( $bodhi_svgs_options['advanced_mode'] ) ) {
-							echo '<h3><span>';
-							esc_html_e( 'Usage', 'svg-support' );
-							echo '</span></h3>';
-						} else {
-							echo '<h3><span>';
-							 esc_html_e( 'Advanced Usage', 'svg-support' );
-							 echo '</span></h3>';
-						}
+						bodhi_svgs_toggle_row(
+							'minify_svg',
+							__( 'Minify SVG', 'svg-support' ),
+							__( 'Auto-minify all SVG uploads to keep file sizes small.', 'svg-support' ),
+							isset( $bodhi_svgs_options['minify_svg'] )
+						);
 
+						bodhi_svgs_toggle_row(
+							'frontend_css',
+							__( 'Load front-end CSS', 'svg-support' ),
+							__( 'A very small piece of CSS that helps with displaying SVGs on the front-end in some cases.', 'svg-support' ),
+							isset( $bodhi_svgs_options['frontend_css'] )
+						);
 						?>
 
-						<div class="inside">
+					</div>
+				</section>
 
-							<p><?php esc_html_e( 'You can simply upload SVG files to your media library like any other image. Make sure to select "Restrict to Administrators" if you only want to allow admins to upload SVG files.', 'svg-support' ); ?></p>
+				<section class="svgs-panel" id="svgs-advanced-panel">
+					<header class="svgs-panel-head">
+						<div>
+							<h2><?php esc_html_e( 'Advanced Mode', 'svg-support' ); ?></h2>
+							<p><?php esc_html_e( 'Inline rendering, styling and animation. Adds a small JS file to your front-end.', 'svg-support' ); ?></p>
+						</div>
+						<div class="svgs-head-right">
+							<label class="svgs-toggle-row" for="bodhi_svgs_settings[advanced_mode]">
+								<input id="bodhi_svgs_settings[advanced_mode]" name="bodhi_svgs_settings[advanced_mode]" type="checkbox" class="svgs-switch-input" aria-label="<?php esc_attr_e( 'Enable Advanced Mode', 'svg-support' ); ?>" <?php checked( isset( $bodhi_svgs_options['advanced_mode'] ) ); ?> />
+								<span class="svgs-switch" aria-hidden="true"></span>
+							</label>
+						</div>
+					</header>
+					<div class="svgs-panel-body">
 
-							<div class="svgs-advanced">
-								<p>
-									<?php
-									esc_html_e( 'Now, embed your SVG image like a standard image with the addition of adding the class', 'svg-support' );
-									?>
-									<code><?php echo esc_html( 'style-svg' ); ?></code>
-									<?php
-									esc_html_e( '(or your custom class from above) to any IMG tags that you want this plugin to swap out with your actual SVG code.', 'svg-support' );
-									?>
-									<br />
-									<?php esc_html_e( 'You can even use the class on an outer container and it will traverse all child elements to find all of the IMG tags with SVG files in the src and replace them.', 'svg-support' ); ?>
+						<div class="svgs-locked">
+							<?php bodhi_svgs_icon( 'lock', 17 ); ?>
+							<?php esc_html_e( 'Turn on Advanced Mode to unlock inline rendering, styling and animation options.', 'svg-support' ); ?>
+						</div>
+
+						<div class="svgs-advanced">
+
+							<div class="svgs-row">
+								<div class="svgs-field-label"><?php esc_html_e( 'CSS class to target', 'svg-support' ); ?></div>
+								<input id="bodhi_svgs_settings[css_target]" class="svgs-input" name="bodhi_svgs_settings[css_target]" type="text" placeholder="style-svg" value="<?php echo isset( $bodhi_svgs_options['css_target'] ) ? esc_attr( $bodhi_svgs_options['css_target'] ) : ''; ?>" />
+								<p class="svgs-hint">
+									<?php esc_html_e( 'The default target class is', 'svg-support' ); ?>
+									<code>style-svg</code>.
+									<?php esc_html_e( 'Set your own class here, or leave blank to use the default. The plugin traverses any depth below an element carrying the class and replaces child IMG tags with SVG sources.', 'svg-support' ); ?>
 								</p>
-
-								<p>
-									<?php esc_html_e( 'For example:', 'svg-support' ); ?>
-									<pre><code>&lt;img class="style-svg" alt="alt-text" src="image-source.svg" /&gt;</code></pre>
-									<?php esc_html_e( 'or', 'svg-support' ); ?>
-									<pre><code>&lt;img class="your-custom-class" alt="alt-text" src="image-source.svg" /&gt;</code></pre>
-								</p>
-
-								<p>
-									<?php esc_html_e( 'The whole IMG tag element will now be dynamically replaced by the actual code of your SVG, making the inner content targetable.', 'svg-support' ); ?><br />
-									<?php esc_html_e( 'This allows you to target elements within your SVG using CSS.', 'svg-support' ); ?>
-								</p>
-
-								<p><em><?php esc_html_e( 'Please Note:', 'svg-support' ); ?></em>
-								<br><em><?php esc_html_e( '- You will need to set your own height and width in your CSS for SVG files to display correctly.', 'svg-support' ); ?></em>
-								<br><em><?php esc_html_e( '- Your uploaded image needs to be an SVG file for this plugin to replace the img tag with the inline SVG code. It will not create SVG files for you.', 'svg-support' ); ?></em>
-								<br><em><?php esc_html_e( '- You can set this target class on any element and the script will traverse all children of that target element looking for IMG tags with SVG in the src to replace.', 'svg-support' ); ?></em></p>
+								<div class="svgs-code">
+									<div class="svgs-code-bar">
+										<span><?php esc_html_e( 'in your content', 'svg-support' ); ?></span>
+										<span class="svgs-code-lang">html</span>
+									</div>
+									<pre>&lt;img class="<span class="svgs-tok">style-svg</span>" src="graphic.svg" /&gt;</pre>
+								</div>
 							</div>
 
-						</div> <!-- .inside -->
-
-					</div> <!-- .postbox -->
-
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'Compress and Optimize Images with ShortPixel', 'svg-support' ); ?></span></h3>
-						<div class="inside">
 							<?php
-							printf(
-								'<a target="_blank" class="shortpixel-logo" href="https://shortpixel.com/h/af/OLKMLXE207471"><img src="%s" alt="%s" /></a>',
-								esc_url(plugins_url('admin/img/shortpixel.png', BODHI_SVGS_PLUGIN_FILE)),
-								esc_attr__('ShortPixel logo', 'svg-support')
+							bodhi_svgs_toggle_row(
+								'skip_nested_svg',
+								__( 'Skip nested SVGs', 'svg-support' ),
+								__( 'Only inline the first SVG in a target container — useful for Gutenberg Cover blocks with nested SVG images.', 'svg-support' ),
+								isset( $bodhi_svgs_options['skip_nested_svg'] ) && 1 == $bodhi_svgs_options['skip_nested_svg'],
+								'1'
+							);
+
+							bodhi_svgs_toggle_row(
+								'js_foot_choice',
+								__( 'Output JS in footer', 'svg-support' ),
+								__( 'Place the inline-rendering script before the closing body tag instead of in the head. Requires your theme to call wp_footer().', 'svg-support' ),
+								isset( $bodhi_svgs_options['js_foot_choice'] )
+							);
+
+							bodhi_svgs_toggle_row(
+								'use_vanilla_js',
+								__( 'Use vanilla JS', 'svg-support' ),
+								__( 'Load the dependency-free script instead of the jQuery version.', 'svg-support' ),
+								isset( $bodhi_svgs_options['use_vanilla_js'] )
+							);
+
+							bodhi_svgs_toggle_row(
+								'use_expanded_js',
+								__( 'Use expanded JS', 'svg-support' ),
+								__( 'Load the readable, non-minified script — useful if a caching plugin minifies your scripts externally.', 'svg-support' ),
+								isset( $bodhi_svgs_options['use_expanded_js'] )
 							);
 							?>
-							<p><?php esc_html_e( 'Now that you\'ve set up SVG Support on your site, it\'s time to look at optimizing your existing images (jpg & png).', 'svg-support' ); ?></p>
-							<p><?php esc_html_e( 'ShortPixel improves website performance by reducing the size of your images. The results are no different in quality from the original, plus your originals are stored in a backup folder for you.', 'svg-support' ); ?></p>
-							<p><?php esc_html_e( 'If you upgrade to a paid plan, I\'ll receive a small commission... And that\'s really nice!', 'svg-support' ); ?></p>
-							<p><a class="shortpixel-button button-primary" href="https://shortpixel.com/h/af/OLKMLXE207471"><?php esc_html_e( 'Try ShortPixel WordPress Plugin for FREE', 'svg-support' ); ?></a></p>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
 
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'Animate and Optimize your SVG files using these open source projects', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-							<p><a href="https://maxwellito.github.io/vivus-instant/" target="_blank">Vivus Instant for SVG animation</a> <?php esc_html_e( 'Upload your SVG files and use the tools provided to animate strokes.', 'svg-support' ); ?></p>
-							<p><a href="https://jakearchibald.github.io/svgomg/" target="_blank">SVGOMG for SVG optimisation</a> <?php esc_html_e( 'An online tool to optimize your SVG files.', 'svg-support' ); ?></p>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
+							<p class="svgs-subhead"><?php esc_html_e( 'Legacy settings', 'svg-support' ); ?></p>
 
-				</div> <!-- .meta-box-sortables .ui-sortable -->
+							<?php
+							bodhi_svgs_toggle_row(
+								'force_inline_svg',
+								__( 'Force inline SVG', 'svg-support' ),
+								__( '<strong>Use with caution!</strong> Automatically adds the target class to ALL image tags with SVG sources, rendering every SVG on your site inline. Useful when a page builder won\'t let you add a CSS class to an image.', 'svg-support' ),
+								isset( $bodhi_svgs_options['force_inline_svg'] )
+							);
 
-			</div> <!-- post-body-content -->
+							bodhi_svgs_toggle_row(
+								'auto_insert_class',
+								__( 'Automatically insert class', 'svg-support' ),
+								__( '(Classic Editor only) Inserts the target class into IMG tags when you embed an SVG in a post, and strips the default WordPress classes. Only affects SVG files.', 'svg-support' ),
+								isset( $bodhi_svgs_options['auto_insert_class'] )
+							);
+							?>
 
-			<!-- sidebar -->
-			<div id="postbox-container-1" class="postbox-container">
+						</div>
 
-				<div class="meta-box-sortables">
+					</div>
+				</section>
 
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'Ratings & Reviews', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-							<p>
-								<?php esc_html_e( 'If you like', 'svg-support' ); ?>
-								<strong><?php esc_html_e( 'SVG Support', 'svg-support' ); ?></strong>
-								<?php esc_html_e( 'please consider leaving a', 'svg-support' ); ?>
-								<a href="https://wordpress.org/support/view/plugin-reviews/svg-support?filter=5#postform" target="_blank" class="svgs-rating-link">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
-								<?php esc_html_e( 'rating.', 'svg-support' ); ?>
-								<br />
-								<?php esc_html_e( 'A huge thanks in advance!', 'svg-support' ); ?>
-							</p>
-							<p><a href="https://wordpress.org/support/view/plugin-reviews/svg-support?filter=5#postform" target="_blank" class="button-primary">Leave a rating</a></p>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
+				<section class="svgs-panel">
+					<header class="svgs-panel-head">
+						<div>
+							<h2><?php esc_html_e( 'Danger zone', 'svg-support' ); ?></h2>
+						</div>
+					</header>
+					<div class="svgs-panel-body">
+						<div class="svgs-danger-row">
+							<?php bodhi_svgs_icon( 'triangle-alert', 20 ); ?>
+							<div class="svgs-danger-text">
+								<span class="svgs-toggle-label"><?php esc_html_e( 'Delete plugin data on uninstall', 'svg-support' ); ?></span>
+								<span class="svgs-toggle-desc"><?php esc_html_e( 'Removes all settings and metadata when the plugin is deleted. This cannot be undone.', 'svg-support' ); ?></span>
+							</div>
+							<label class="svgs-toggle-row" for="bodhi_svgs_settings[del_plugin_data]">
+								<input id="bodhi_svgs_settings[del_plugin_data]" name="bodhi_svgs_settings[del_plugin_data]" type="checkbox" class="svgs-switch-input" aria-label="<?php esc_attr_e( 'Delete plugin data on uninstall', 'svg-support' ); ?>" <?php checked( isset( $bodhi_svgs_options['del_plugin_data'] ) ); ?> />
+								<span class="svgs-switch" aria-hidden="true"></span>
+							</label>
+						</div>
+					</div>
+				</section>
 
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'Having Issues?', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-							<p><?php esc_html_e( 'I\'m always happy to help out!', 'svg-support' ); ?>
-								<br><?php esc_html_e( 'Support is handled exclusively through WordPress.org by my one man team - me.', 'svg-support' ); ?></p>
-							<p><a href="https://wordpress.org/support/plugin/svg-support/" target="_blank" class="button-primary"><?php esc_html_e('Get Support', 'svg-support'); ?></a></p>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
+				<p class="svgs-save-row">
+					<input class="svgs-btn svgs-btn-primary" type="submit" name="bodhi_svgs_settings_submit" value="<?php esc_attr_e( 'Save changes', 'svg-support' ); ?>" />
+				</p>
 
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'SVG Support Features', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-							<ul>
-								<li><strong><?php esc_html_e( 'Basic Use', 'svg-support' ); ?></strong></li>
-								<li><?php esc_html_e( 'SVG Support for your media library', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Restrict to Administrators only', 'svg-support' ); ?></li>
-								<hr>
-								<li><strong><?php esc_html_e( 'Advanced Mode', 'svg-support' ); ?></strong></li>
-								<li><?php esc_html_e( 'Sanitize SVG files on upload', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Style SVG elements using CSS', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Animate SVG using CSS or JS', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Include multiple URLs inside single SVG', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Use odd shapes as links', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Inline SVG featured image support', 'svg-support' ); ?></li>
-								<li><?php esc_html_e( 'Force all SVG files to be rendered inline', 'svg-support' ); ?></li>
-							</ul>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
+			</form>
 
-					<div class="postbox">
-						<h3><span><?php esc_html_e( 'About The Plugin', 'svg-support' ); ?></span></h3>
-						<div class="inside">
-							<p><?php esc_html_e( 'Learn more about SVG Support on:', 'svg-support' ); ?><br/><a target="_blank" href="http://wordpress.org/plugins/svg-support/"><?php esc_html_e( 'The WordPress Plugin Repository', 'svg-support' ); ?></a></p>
-							<p><?php esc_html_e( 'Need help?', 'svg-support' ); ?><br/><a target="_blank" href="http://wordpress.org/support/plugin/svg-support"><?php esc_html_e( 'Visit The Support Forum', 'svg-support' ); ?></a></p>
-							<p>
-								<?php esc_html_e( 'Follow', 'svg-support' ); ?>
-								<a target="_blank" href="https://twitter.com/svgsupport"><?php esc_html_e( '@SVGSupport', 'svg-support' ); ?></a>
-								<?php esc_html_e( 'on Twitter', 'svg-support' ); ?>
-							</p>
-							<p>
-								<?php esc_html_e( 'Follow Benbodhi on:', 'svg-support' ); ?><br/>
-								<a target="_blank" href="https://twitter.com/benbodhi"><?php esc_html_e( 'Twitter', 'svg-support' ); ?></a> | 
-								<a target="_blank" href="https://farcaster.xyz/benbodhi"><?php esc_html_e( 'Farcaster', 'svg-support' ); ?></a>
-							</p>
-							<p>&copy; <?php esc_html_e( 'Benbodhi', 'svg-support' ); ?> | <a target="_blank" href="https://benbodhi.com/">Benbodhi.com</a></p>
-							<p>
-								<?php esc_html_e( 'Thanks for your support, please consider donating.', 'svg-support' ); ?><br/>
-								<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Z9R7JERS82EQQ&source=url"><?php esc_html_e( 'Donate using PayPal', 'svg-support' ); ?></a>
-							</p>
-						</div> <!-- .inside -->
-					</div> <!-- .postbox -->
+		</div> <!-- .svgs-main -->
 
-				</div> <!-- .meta-box-sortables -->
+		<aside class="svgs-sidebar">
 
-			</div> <!-- #postbox-container-1 .postbox-container -->
+			<div class="svgs-card svgs-card-ink">
+				<div class="svgs-stat">1,000,000+</div>
+				<div class="svgs-stat-caption"><?php esc_html_e( 'active installs and counting', 'svg-support' ); ?></div>
+				<p><?php esc_html_e( 'Maintained by one person since 2013.', 'svg-support' ); ?><br /><?php esc_html_e( 'If it\'s useful, a donation keeps it going.', 'svg-support' ); ?></p>
+				<a class="svgs-btn svgs-btn-accent svgs-btn-sm svgs-btn-block" target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=Z9R7JERS82EQQ&amp;source=url">
+					<?php bodhi_svgs_icon( 'heart', 15 ); ?>
+					<?php esc_html_e( 'Donate via PayPal', 'svg-support' ); ?>
+				</a>
+				<div class="svgs-crypto">
+					<div class="svgs-crypto-item">
+						<details class="svgs-qr">
+							<summary title="<?php esc_attr_e( 'Show QR code', 'svg-support' ); ?>">
+								<strong>BTC</strong>
+								<?php bodhi_svgs_icon( 'qr-code', 14 ); ?>
+							</summary>
+							<span class="svgs-qr-box"><img src="<?php echo esc_url( plugins_url( 'admin/img/qr-btc.svg', BODHI_SVGS_PLUGIN_FILE ) ); ?>" width="124" height="124" alt="<?php esc_attr_e( 'Bitcoin donation address QR code', 'svg-support' ); ?>" /></span>
+						</details>
+						<span>1qF8r2HkTLifND7WLGfWmvxfXc9ze55DZ</span>
+					</div>
+					<div class="svgs-crypto-item">
+						<details class="svgs-qr">
+							<summary title="<?php esc_attr_e( 'Show QR code', 'svg-support' ); ?>">
+								<strong>ETH</strong>
+								<?php bodhi_svgs_icon( 'qr-code', 14 ); ?>
+							</summary>
+							<span class="svgs-qr-box"><img src="<?php echo esc_url( plugins_url( 'admin/img/qr-eth.svg', BODHI_SVGS_PLUGIN_FILE ) ); ?>" width="124" height="124" alt="<?php esc_attr_e( 'Ethereum donation address QR code', 'svg-support' ); ?>" /></span>
+						</details>
+						<span>0x599695Eb51aFe2e5a0DAD60aD9c89Bc8f10B54f4</span>
+					</div>
+				</div>
+			</div>
 
-		</div> <!-- #post-body .metabox-holder .columns-2 -->
+			<div class="svgs-card">
+				<h3><?php bodhi_svgs_icon( 'sparkles', 16 ); ?><?php esc_html_e( 'Tutorials & tools', 'svg-support' ); ?></h3>
+				<p><?php esc_html_e( 'Guides for inline rendering, styling and animating SVGs — plus handy tools for animating and optimizing your files — all on the new site.', 'svg-support' ); ?></p>
+				<a class="svgs-btn svgs-btn-secondary svgs-btn-sm svgs-btn-block" target="_blank" href="https://svg.support/tutorials/">
+					<?php esc_html_e( 'Visit svg.support', 'svg-support' ); ?>
+					<?php bodhi_svgs_icon( 'arrow-up-right', 14 ); ?>
+				</a>
+				<p class="svgs-card-links">
+					<a target="_blank" href="https://wordpress.org/plugins/svg-support/"><?php esc_html_e( 'WordPress.org', 'svg-support' ); ?></a> · <a target="_blank" href="https://github.com/benbodhi/svg-support"><?php esc_html_e( 'GitHub', 'svg-support' ); ?></a> · <a target="_blank" href="https://twitter.com/svgsupport">@SVGSupport</a><br />
+					&copy; <a target="_blank" href="https://benbodhi.com/">Benbodhi</a> · <a target="_blank" href="https://twitter.com/benbodhi">@benbodhi</a> · <a target="_blank" href="https://farcaster.xyz/benbodhi">Farcaster</a>
+				</p>
+			</div>
 
-		<br class="clear">
-	</div> <!-- #poststuff -->
+			<div class="svgs-card">
+				<h3><?php bodhi_svgs_icon( 'life-buoy', 16 ); ?><?php esc_html_e( 'Support & reviews', 'svg-support' ); ?></h3>
+				<p><?php esc_html_e( 'Need a hand? Support is handled personally through the WordPress.org forums. And if you\'re enjoying SVG Support, a quick five-star review means the world.', 'svg-support' ); ?></p>
+				<div class="svgs-btn-stack">
+					<a class="svgs-btn svgs-btn-secondary svgs-btn-sm svgs-btn-block" target="_blank" href="https://wordpress.org/support/plugin/svg-support/">
+						<?php esc_html_e( 'Get support', 'svg-support' ); ?>
+						<?php bodhi_svgs_icon( 'arrow-up-right', 14 ); ?>
+					</a>
+					<a class="svgs-btn svgs-btn-secondary svgs-btn-sm svgs-btn-block" target="_blank" href="https://wordpress.org/support/view/plugin-reviews/svg-support?filter=5#postform">
+						<span class="svgs-btn-stars"><?php foreach ( range( 1, 5 ) as $bodhi_svgs_star ) { bodhi_svgs_icon( 'star-filled', 12 ); } ?></span>
+						<?php esc_html_e( 'Leave a review', 'svg-support' ); ?>
+					</a>
+				</div>
+			</div>
 
-</div> <!-- .wrap -->
+			<div class="svgs-card">
+				<h3><?php esc_html_e( 'Optimize your images', 'svg-support' ); ?></h3>
+				<?php
+				printf(
+					'<a target="_blank" class="svgs-partner-logo" href="https://shortpixel.com/h/af/OLKMLXE207471"><img src="%s" alt="%s" /></a>',
+					esc_url( plugins_url( 'admin/img/shortpixel.png', BODHI_SVGS_PLUGIN_FILE ) ),
+					esc_attr__( 'ShortPixel logo', 'svg-support' )
+				);
+				?>
+				<p><?php esc_html_e( 'ShortPixel reduces the size of your JPG and PNG images with no visible quality loss — originals are kept in a backup folder. If you upgrade to a paid plan, I\'ll receive a small commission.', 'svg-support' ); ?></p>
+				<a class="svgs-btn svgs-btn-secondary svgs-btn-sm svgs-btn-block" target="_blank" href="https://shortpixel.com/h/af/OLKMLXE207471">
+					<?php esc_html_e( 'Try ShortPixel for free', 'svg-support' ); ?>
+					<?php bodhi_svgs_icon( 'external-link', 14 ); ?>
+				</a>
+			</div>
+
+		</aside>
+
+	</div> <!-- .svgs-layout -->
+
+</div> <!-- .wrap.svgs-ds -->

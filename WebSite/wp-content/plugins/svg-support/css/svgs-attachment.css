@@ -1,1 +1,8 @@
-.attachment svg,.widget_media_image svg{max-width:100%;height:auto}
+/**
+ * Attachment & media widget SVG display
+ */
+.attachment svg,
+.widget_media_image svg {
+	max-width: 100%;
+	height: auto;
+}

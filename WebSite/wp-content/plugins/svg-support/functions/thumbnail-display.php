@@ -13,13 +13,13 @@ function bodhi_svgs_display_thumbs() {
 
 		function bodhi_svgs_thumbs_filter( $content ) {
 
-			return apply_filters( 'final_output', $content );
+			return apply_filters( 'bodhi_svgs_thumbs_final_output', $content );
 
 		}
 
 		ob_start( 'bodhi_svgs_thumbs_filter' );
 
-		add_filter( 'final_output', 'bodhi_svgs_final_output' );
+		add_filter( 'bodhi_svgs_thumbs_final_output', 'bodhi_svgs_final_output' );
 		function bodhi_svgs_final_output( $content ) {
 			if ($content === null) {
 				return '';

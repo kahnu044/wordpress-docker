@@ -1,0 +1,672 @@
+/**
+ * SVG Support — settings screen styles (brand design system)
+ * Scoped under .svgs-ds so nothing leaks into the rest of wp-admin.
+ * Plain CSS source of truth — no SCSS counterpart for this file.
+ */
+
+@font-face {
+	font-family: 'Space Grotesk';
+	src: url('../admin/fonts/space-grotesk-var.woff2') format('woff2');
+	font-weight: 300 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Hanken Grotesk';
+	src: url('../admin/fonts/hanken-grotesk-var.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('../admin/fonts/jetbrains-mono-var.woff2') format('woff2');
+	font-weight: 100 800;
+	font-display: swap;
+}
+
+.svgs-ds {
+	/* Tokens (light — matches wp-admin) */
+	--svgs-blue-50: #EEF1FF;
+	--svgs-blue-200: #C2CDFF;
+	--svgs-blue-500: #2B4FF6;
+	--svgs-blue-600: #1B37C7;
+	--svgs-citron-300: #DBF25F;
+	--svgs-citron-400: #CDEA33;
+	--svgs-citron-500: #B3D400;
+	--svgs-citron-600: #8CA800;
+	--svgs-ink-900: #0B0E17;
+	--svgs-ink-800: #141824;
+	--svgs-ink-700: #1E2333;
+	--svgs-gray-600: #363D50;
+	--svgs-gray-500: #5A6274;
+	--svgs-gray-400: #858E9F;
+	--svgs-gray-300: #B7BECB;
+	--svgs-gray-200: #DCE0E8;
+	--svgs-gray-100: #EDEFF3;
+	--svgs-gray-50: #F6F7FA;
+	--svgs-green: #10B981;
+	--svgs-amber: #F5A623;
+	--svgs-red: #E5484D;
+	--svgs-red-bg: #FCEBEC;
+	--svgs-font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+	--svgs-font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--svgs-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+	--svgs-radius-sm: 8px;
+	--svgs-radius-md: 12px;
+	--svgs-radius-lg: 16px;
+	--svgs-shadow-xs: 0 1px 2px rgba(11, 14, 23, 0.06);
+	--svgs-shadow-focus: 0 0 0 3px rgba(43, 79, 246, 0.28);
+	--svgs-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	font-family: var(--svgs-font-body);
+	font-size: 14px;
+	line-height: 1.55;
+	color: var(--svgs-gray-600);
+}
+
+.svgs-ds h1,
+.svgs-ds h2,
+.svgs-ds h3,
+.svgs-ds h4 {
+	font-family: var(--svgs-font-display);
+	color: var(--svgs-ink-900);
+	letter-spacing: -0.01em;
+}
+
+.svgs-ds a {
+	color: var(--svgs-blue-600);
+	text-decoration: none;
+}
+
+.svgs-ds a:hover {
+	color: var(--svgs-blue-500);
+}
+
+.svgs-ds code {
+	font-family: var(--svgs-font-mono);
+	font-size: 12.5px;
+	background: var(--svgs-gray-100);
+	border: 1px solid var(--svgs-gray-200);
+	border-radius: 4px;
+	padding: 1px 5px;
+	color: var(--svgs-ink-900);
+}
+
+.svgs-icon {
+	flex-shrink: 0;
+	vertical-align: -0.15em;
+}
+
+/* ---------- Header ---------- */
+
+.svgs-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 0 6px;
+	flex-wrap: wrap;
+}
+
+.svgs-header img {
+	border-radius: 7px;
+}
+
+.svgs-ds .svgs-header h1 {
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+.svgs-ds .svgs-header .svgs-version {
+	font-family: var(--svgs-font-mono);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0;
+	color: var(--svgs-gray-400);
+	margin-left: 5px;
+}
+
+.svgs-savestate {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 12px;
+	border-radius: 999px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--svgs-gray-400);
+	background: transparent;
+	transition: color 0.2s var(--svgs-ease), background 0.2s var(--svgs-ease);
+}
+
+.svgs-savestate[data-state="saved"] { color: #067A56; background: rgba(16, 185, 129, 0.12); }
+.svgs-savestate[data-state="saving"] { color: var(--svgs-gray-500); background: var(--svgs-gray-100); }
+.svgs-savestate[data-state="error"] { color: var(--svgs-red); background: var(--svgs-red-bg); }
+
+.svgs-ds .wp-header-end {
+	margin: 0;
+	border: 0;
+}
+
+/* ---------- Callout ---------- */
+
+.svgs-callout {
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+	background: var(--svgs-blue-50);
+	border: 1px solid var(--svgs-blue-200);
+	border-radius: var(--svgs-radius-md);
+	padding: 14px 16px;
+	margin: 14px 0 20px;
+}
+
+.svgs-callout .svgs-icon { color: var(--svgs-blue-500); margin-top: 2px; }
+
+.svgs-callout strong {
+	display: block;
+	color: var(--svgs-ink-900);
+	font-size: 14.5px;
+	margin-bottom: 2px;
+}
+
+.svgs-callout p { margin: 0; font-size: 13.5px; color: var(--svgs-gray-600); }
+
+.svgs-callout code { background: #fff; }
+
+/* ---------- Layout ---------- */
+
+.svgs-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 320px;
+	gap: 20px;
+	align-items: start;
+}
+
+@media (max-width: 1100px) {
+	.svgs-layout { grid-template-columns: 1fr; }
+}
+
+/* ---------- Panels ---------- */
+
+.svgs-panel {
+	background: #fff;
+	border: 1px solid var(--svgs-gray-200);
+	border-radius: var(--svgs-radius-lg);
+	box-shadow: var(--svgs-shadow-xs);
+	margin-bottom: 20px;
+}
+
+.svgs-panel-head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 18px 22px;
+	border-bottom: 1px solid var(--svgs-gray-200);
+}
+
+.svgs-ds .svgs-panel-head h2 {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+	line-height: 1.3;
+}
+
+.svgs-panel-head p {
+	margin: 3px 0 0;
+	font-size: 13px;
+	color: var(--svgs-gray-500);
+}
+
+.svgs-panel-head .svgs-head-right { margin-left: auto; }
+
+.svgs-panel-body { padding: 6px 22px; }
+
+.svgs-row {
+	padding: 16px 0;
+	border-bottom: 1px solid var(--svgs-gray-100);
+}
+
+.svgs-row:last-child { border-bottom: none; }
+
+.svgs-hint {
+	font-size: 12.5px;
+	color: var(--svgs-gray-500);
+	margin: 6px 0 0;
+	line-height: 1.5;
+	max-width: 72ch;
+}
+
+.svgs-subhead {
+	font-family: var(--svgs-font-display);
+	font-size: 11.5px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--svgs-gray-400);
+	margin: 0;
+	padding: 18px 0 2px;
+}
+
+/* ---------- Switch ---------- */
+
+.svgs-toggle-row {
+	display: flex;
+	gap: 14px;
+	align-items: flex-start;
+	cursor: pointer;
+}
+
+.svgs-switch-input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.svgs-switch {
+	width: 44px;
+	height: 26px;
+	border-radius: 999px;
+	background: var(--svgs-gray-300);
+	position: relative;
+	flex-shrink: 0;
+	transition: background 0.22s var(--svgs-ease);
+}
+
+.svgs-switch::after {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 20px;
+	height: 20px;
+	border-radius: 999px;
+	background: #fff;
+	box-shadow: 0 1px 3px rgba(11, 14, 23, 0.3);
+	transition: left 0.22s var(--svgs-ease);
+}
+
+.svgs-switch-input:checked + .svgs-switch { background: var(--svgs-blue-500); }
+.svgs-switch-input:checked + .svgs-switch::after { left: 21px; }
+.svgs-switch-input:focus-visible + .svgs-switch { box-shadow: var(--svgs-shadow-focus); }
+
+.svgs-toggle-text { min-width: 0; }
+
+.svgs-toggle-label {
+	display: block;
+	font-size: 14.5px;
+	font-weight: 500;
+	color: var(--svgs-ink-900);
+	line-height: 1.4;
+}
+
+.svgs-toggle-desc {
+	display: block;
+	font-size: 13px;
+	color: var(--svgs-gray-500);
+	margin-top: 2px;
+	line-height: 1.5;
+	max-width: 72ch;
+}
+
+/* ---------- Role chips ---------- */
+
+.svgs-field-label {
+	font-size: 14.5px;
+	font-weight: 500;
+	color: var(--svgs-ink-900);
+	margin-bottom: 10px;
+}
+
+.svgs-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.svgs-chip {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	border-radius: 999px;
+	border: 1px solid var(--svgs-gray-300);
+	background: #fff;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--svgs-gray-600);
+	cursor: pointer;
+	transition: all 0.15s var(--svgs-ease);
+	user-select: none;
+}
+
+.svgs-chip:hover { border-color: var(--svgs-blue-500); color: var(--svgs-ink-900); }
+
+.svgs-chip input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.svgs-chip .svgs-chip-check { display: none; }
+
+.svgs-chip:has(input:checked) {
+	background: var(--svgs-blue-50);
+	border-color: var(--svgs-blue-500);
+	color: var(--svgs-blue-600);
+	font-weight: 600;
+}
+
+.svgs-chip:has(input:checked) .svgs-chip-check { display: inline-flex; }
+
+.svgs-chip:has(input:focus-visible) { box-shadow: var(--svgs-shadow-focus); }
+
+/* ---------- Text input + code block ---------- */
+
+.svgs-ds .svgs-input {
+	width: 100%;
+	max-width: 340px;
+	height: 42px;
+	padding: 0 14px;
+	font-family: var(--svgs-font-mono);
+	font-size: 13.5px;
+	color: var(--svgs-ink-900);
+	background: #fff;
+	border: 1px solid var(--svgs-gray-300);
+	border-radius: var(--svgs-radius-sm);
+	box-shadow: none;
+	transition: border-color 0.15s var(--svgs-ease), box-shadow 0.15s var(--svgs-ease);
+}
+
+.svgs-ds .svgs-input:focus {
+	border-color: var(--svgs-blue-500);
+	box-shadow: var(--svgs-shadow-focus);
+	outline: none;
+}
+
+.svgs-code {
+	background: var(--svgs-ink-900);
+	border: 1px solid var(--svgs-ink-700);
+	border-radius: var(--svgs-radius-md);
+	overflow: hidden;
+	margin-top: 14px;
+	max-width: 480px;
+}
+
+.svgs-code-bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+	font-size: 11px;
+	color: var(--svgs-gray-400);
+}
+
+.svgs-code-bar .svgs-code-lang {
+	font-size: 9.5px;
+	color: var(--svgs-citron-300);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.svgs-code pre {
+	margin: 0;
+	padding: 12px 14px;
+	overflow-x: auto;
+	font-family: var(--svgs-font-mono);
+	font-size: 12.5px;
+	line-height: 1.6;
+	color: #E6E9F2;
+	background: none;
+}
+
+.svgs-code pre .svgs-tok { color: var(--svgs-citron-300); }
+
+/* ---------- Advanced mode states ---------- */
+
+.svgs-locked {
+	display: none;
+	align-items: center;
+	gap: 10px;
+	color: var(--svgs-gray-500);
+	font-size: 14px;
+	padding: 16px 0;
+}
+
+/* ---------- Danger zone ---------- */
+
+.svgs-danger-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	background: var(--svgs-red-bg);
+	border: 1px solid #f3c4c6;
+	border-radius: var(--svgs-radius-md);
+	padding: 14px 16px;
+	margin: 16px 0;
+}
+
+.svgs-danger-row > .svgs-icon { color: var(--svgs-red); }
+
+.svgs-danger-row .svgs-toggle-label { font-size: 14.5px; }
+
+.svgs-danger-row .svgs-danger-text { flex: 1; min-width: 0; }
+
+.svgs-danger-row .svgs-switch-input:checked + .svgs-switch { background: var(--svgs-red); }
+
+/* ---------- Buttons ---------- */
+
+.svgs-ds .svgs-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	height: 40px;
+	padding: 0 18px;
+	font-family: var(--svgs-font-body);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+	border-radius: var(--svgs-radius-sm);
+	border: 1px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background 0.12s var(--svgs-ease), transform 0.12s;
+	box-sizing: border-box;
+}
+
+.svgs-ds .svgs-btn:hover { transform: translateY(-1px); }
+
+.svgs-btn-primary { background: var(--svgs-blue-500); color: #fff; }
+.svgs-btn-primary:hover { background: var(--svgs-blue-600); color: #fff; }
+
+.svgs-btn-accent { background: var(--svgs-citron-400); color: var(--svgs-ink-900); }
+.svgs-btn-accent:hover { background: var(--svgs-citron-500); color: var(--svgs-ink-900); }
+
+.svgs-btn-secondary {
+	background: #fff;
+	color: var(--svgs-ink-900);
+	border-color: var(--svgs-gray-300);
+}
+
+.svgs-btn-secondary:hover { background: var(--svgs-gray-50); color: var(--svgs-ink-900); }
+
+.svgs-btn-block { width: 100%; }
+.svgs-btn-sm { height: 34px; padding: 0 14px; font-size: 13px; }
+
+/* The Save button stays visible even with auto-save active — users expect
+   it, and with JS it becomes an instant explicit-save with live feedback. */
+.svgs-save-row { margin: 4px 0 0; }
+
+.svgs-save-row .svgs-btn:disabled {
+	opacity: 0.65;
+	cursor: default;
+	transform: none;
+}
+
+/* ---------- Sidebar cards ---------- */
+
+.svgs-card {
+	background: #fff;
+	border: 1px solid var(--svgs-gray-200);
+	border-radius: var(--svgs-radius-lg);
+	box-shadow: var(--svgs-shadow-xs);
+	padding: 20px;
+	margin-bottom: 18px;
+}
+
+.svgs-ds .svgs-card h3 {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 14px;
+	font-weight: 600;
+	margin: 0 0 12px;
+	padding: 0;
+}
+
+.svgs-card p {
+	font-size: 13.5px;
+	color: var(--svgs-gray-500);
+	line-height: 1.55;
+	margin: 0 0 14px;
+}
+
+.svgs-card p:last-child { margin-bottom: 0; }
+
+/* Ink donate card */
+.svgs-card-ink {
+	position: relative;
+	overflow: hidden;
+	background: var(--svgs-ink-900);
+	border: none;
+	color: #fff;
+}
+
+.svgs-card-ink::before {
+	content: "";
+	position: absolute;
+	top: -50px;
+	right: -40px;
+	width: 160px;
+	height: 160px;
+	border-radius: 999px;
+	background: radial-gradient(circle, rgba(205, 234, 51, 0.28), transparent 70%);
+	pointer-events: none;
+}
+
+.svgs-card-ink > * { position: relative; }
+
+.svgs-stat {
+	font-family: var(--svgs-font-display);
+	font-size: 30px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	color: #fff;
+	line-height: 1.1;
+}
+
+.svgs-stat-caption { color: var(--svgs-gray-300); font-size: 13px; margin-top: 2px; }
+
+.svgs-card-ink p { color: var(--svgs-gray-300); }
+
+.svgs-crypto {
+	margin: 20px 0 0;
+	padding-top: 16px;
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.svgs-crypto-item { margin-bottom: 12px; }
+.svgs-crypto-item:last-child { margin-bottom: 0; }
+
+.svgs-crypto strong {
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.07em;
+	color: var(--svgs-gray-300);
+}
+
+.svgs-crypto-item > span {
+	display: block;
+	font-family: var(--svgs-font-mono);
+	font-size: 10.5px;
+	color: var(--svgs-gray-400);
+	word-break: break-all;
+	line-height: 1.5;
+}
+
+/* QR reveal (native <details> — works without JS) */
+.svgs-qr summary {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	list-style: none;
+	margin-bottom: 3px;
+	border-radius: 4px;
+}
+
+.svgs-qr summary::-webkit-details-marker { display: none; }
+
+.svgs-qr summary .svgs-icon {
+	color: var(--svgs-gray-400);
+	transition: color 0.15s var(--svgs-ease);
+}
+
+.svgs-qr summary:hover .svgs-icon,
+.svgs-qr[open] summary .svgs-icon { color: var(--svgs-citron-300); }
+
+.svgs-qr summary:focus-visible {
+	outline: none;
+	box-shadow: var(--svgs-shadow-focus);
+}
+
+.svgs-qr-box {
+	display: inline-block;
+	background: #fff;
+	border-radius: var(--svgs-radius-sm);
+	padding: 6px;
+	margin: 4px 0 8px;
+	line-height: 0;
+}
+
+.svgs-qr-box img { display: block; }
+
+/* Stacked card buttons */
+.svgs-btn-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+/* Mini stars inside the review button */
+.svgs-btn-stars {
+	display: inline-flex;
+	gap: 2px;
+	color: var(--svgs-amber);
+}
+
+.svgs-btn-stars .svgs-icon { fill: currentColor; }
+
+/* Small link lines at the bottom of a card */
+.svgs-ds .svgs-card .svgs-card-links {
+	margin: 14px 0 0;
+	font-size: 12.5px;
+	color: var(--svgs-gray-400);
+	line-height: 1.9;
+}
+
+/* ShortPixel logo */
+.svgs-card .svgs-partner-logo { display: block; margin-bottom: 12px; }
+.svgs-card .svgs-partner-logo img { max-width: 160px; height: auto; }
