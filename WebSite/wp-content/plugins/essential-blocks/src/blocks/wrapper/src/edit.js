@@ -9,6 +9,7 @@ import {
     AlignmentToolbar,
 } from "@wordpress/block-editor";
 import { select } from "@wordpress/data";
+import { applyFilters } from "@wordpress/hooks";
 
 /*
  * Internal  Dependencies
@@ -89,6 +90,12 @@ function Edit(props) {
                         className={`eb-wrapper-outer ${blockId}${isWrapperWidth ? ` ${alignmentClass}` : ""
                             }`}
                     >
+                        {applyFilters(
+                            "eb_wrapper_pro_video_bg_edit",
+                            "",
+                            attributes,
+                            setAttributes
+                        )}
                         {attributes[`${SHAPE_DIVIDER_TOP}Type`] != "" && (
                             <ShapeDividerContent
                                 position="top"

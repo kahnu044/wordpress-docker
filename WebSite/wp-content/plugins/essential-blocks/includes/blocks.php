@@ -40,6 +40,7 @@ use EssentialBlocks\Blocks\ProductPrice;
 use EssentialBlocks\Blocks\ShapeDivider;
 use EssentialBlocks\Blocks\AdvancedImage;
 use EssentialBlocks\Blocks\AdvancedVideo;
+use EssentialBlocks\Blocks\FacebookFeed;
 use EssentialBlocks\Blocks\InstagramFeed;
 use EssentialBlocks\Blocks\NumberCounter;
 use EssentialBlocks\Blocks\ProductImages;
@@ -115,6 +116,17 @@ $free_blocks = array(
         'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/dual-button/',
         'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/dual-button/',
         'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/dual-button/icon.svg'
+    ),
+    'facebook_feed' => array(
+        'label' => __( 'Facebook Feed', 'essential-blocks' ),
+        'value' => 'facebook_feed',
+        'visibility' => 'true',
+        'category' => 'social',
+        'preferences' => array( 'advanced' ),
+        'object' => FacebookFeed::get_instance(),
+        'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/facebook-feed/',
+        'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/facebook-feed/',
+        'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/blocks/facebook-feed/icon.svg'
     ),
     'flipbox' => array(
         'label' => __( 'Flipbox', 'essential-blocks' ),
@@ -936,6 +948,18 @@ $pro_blocks = array(
         'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/phone-field/',
         'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-phone-field/',
         'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/images/blocks-icon/form-phone-field.svg'
+    ),
+    'one_page_navigation' => array(
+        'label' => __( 'One Page Navigation', 'essential-blocks' ),
+        'value' => 'one_page_navigation',
+        'visibility' => 'true',
+        'is_pro' => true,
+        'status' => 'new',
+        'name' => 'pro-one-page-navigation',
+        'category' => 'creative',
+        'demo' => ESSENTIAL_BLOCKS_SITE_URL . 'demo/one-page-navigation',
+        'doc' => ESSENTIAL_BLOCKS_SITE_URL . 'docs/eb-one-page-navigation',
+        'icon' => ESSENTIAL_BLOCKS_ADMIN_URL . 'assets/images/blocks-icon/one-page-navigation.svg'
     ),
     'animated_wrapper' => array(
         'label' => __( 'Animated Wrapper', 'essential-blocks' ),

@@ -90,6 +90,9 @@ class Scripts
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
         add_action( 'init', [ $this, 'localize_enqueue_scripts' ] );
 
+        // Keep our editor stylesheets out of the Customizer controls pane.
+        add_action( 'customize_controls_enqueue_scripts', [ $this, 'dequeue_customizer_editor_styles' ], PHP_INT_MAX );
+
         //Load Global styles
         add_action( 'wp_head', [ $this, 'print_global_styles' ] );
     }
@@ -170,9 +173,15 @@ class Scripts
          ];
 
         if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) {
-            //global-styles
+            //global-styles (EBGlobalControls sidebar, classic post editor only)
             wpdev_essential_blocks()->assets->register( 'global-styles', 'admin/global-styles/global-styles.js' );
             $editor_scripts_deps[  ] = 'essential-blocks-global-styles';
+        }
+
+        if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' || $pagenow === 'site-editor.php' ) {
+            //copy-paste-styles
+            wpdev_essential_blocks()->assets->register( 'copy-paste-styles', 'admin/global-styles/copy-paste-styles.js' );
+            $editor_scripts_deps[  ] = 'essential-blocks-copy-paste-styles';
 
             //templately-installer
 
@@ -182,8 +191,10 @@ class Scripts
             //     wpdev_essential_blocks()->assets->register( 'templately-installer', 'modules/templately-installer/index.js' );
             //     $editor_scripts_deps[  ] = 'essential-blocks-templately-installer';
             // }
+        }
 
-            //Write with AI
+        //Write with AI (post content writing — classic post editor only, not the Site Editor)
+        if ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) {
             if ( $this->writeAIPageContent === true && $this->is_allowed_post_type_for_ai() ) {
                 wpdev_essential_blocks()->assets->register( 'write-with-ai', 'modules/write-with-ai/index.js' );
                 $editor_scripts_deps[  ] = 'essential-blocks-write-with-ai';
@@ -669,6 +680,51 @@ class Scripts
 
             wp_enqueue_script( 'essential-blocks-ai-for-woo' );
             wp_enqueue_style( 'essential-blocks-ai-for-woo-style' );
+        }
+    }
+
+    /**
+     * Drop our editor stylesheets from the Customizer controls pane.
+     *
+     * `WP_Customize_Widgets::enqueue_scripts()` fires `enqueue_block_editor_assets`
+     * on `customize.php` so the block-based Widgets editor works there. That makes
+     * core enqueue every block's `editor_style` — for us, `essential-blocks-editor-css`
+     * and its whole dependency chain (see `Core\Block::register()`). Unlike the post
+     * and site editors, the Customizer controls pane is not iframed, so those styles
+     * land in the same document as the theme's own Customizer controls and can
+     * restyle them.
+     *
+     * Runs at PHP_INT_MAX so it lands after `WP_Customize_Widgets::enqueue_scripts()`
+     * (priority 10) has queued everything. Styles only — scripts stay registered so
+     * Essential Blocks blocks still work inside Customizer > Widgets.
+     *
+     * @return void
+     */
+    public function dequeue_customizer_editor_styles()
+    {
+        /**
+         * Filters whether Essential Blocks strips its editor styles in the Customizer.
+         *
+         * Return false to keep them — useful if you rely on styled block previews in
+         * Customizer > Widgets and your theme is unaffected by the shared class names.
+         *
+         * @param bool $should_dequeue Default true.
+         */
+        if ( ! apply_filters( 'essential_blocks_dequeue_customizer_editor_styles', true ) ) {
+            return;
+        }
+
+        $styles = wp_styles();
+        if ( ! $styles instanceof \WP_Styles ) {
+            return;
+        }
+
+        // Iterate a copy — wp_dequeue_style() splices the live queue.
+        $queued = (array) $styles->queue;
+        foreach ( $queued as $handle ) {
+            if ( strpos( $handle, 'essential-blocks-' ) === 0 ) {
+                wp_dequeue_style( $handle );
+            }
         }
     }
 }

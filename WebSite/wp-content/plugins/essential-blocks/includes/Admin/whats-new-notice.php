@@ -2,11 +2,11 @@
     if ( ! defined( 'ABSPATH' ) ) {
         exit;
     }
-    $title       = esc_html__( 'Introducing Image Masking & Morphing', 'essential-blocks' );
-    $description = esc_html__( 'Create stunning visual effects with creative image masks and seamless morphing animations in WordPress', 'essential-blocks' );
+    $title       = esc_html__( 'Introducing One Page Navigation & Copy/Paste Style', 'essential-blocks' );
+    $description = esc_html__( 'Create smooth one page navigation for long Gutenberg pages and instantly reuse block styles with a single click', 'essential-blocks' );
     $learn_more  = esc_html__( 'Learn More', 'essential-blocks' );
     $dismiss     = esc_html__( 'Dismiss', 'essential-blocks' );
-    $doc_url     = esc_url( 'https://essential-blocks.com/demo/image-masking-and-morphing/' );
+    $doc_url     = esc_url( 'https://essential-blocks.com/demo/one-page-navigation/' );
 ?>
 
 <script type="text/javascript">

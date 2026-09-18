@@ -20,6 +20,7 @@ use EssentialBlocks\Core\BlocksPatterns;
 use EssentialBlocks\Modules\StyleHandler;
 use EssentialBlocks\Traits\HasSingletone;
 use EssentialBlocks\Integrations\GoogleMap;
+use EssentialBlocks\Integrations\Facebook;
 use EssentialBlocks\Integrations\Instagram;
 use EssentialBlocks\Integrations\OpenVerse;
 use EssentialBlocks\Integrations\Pagination;
@@ -35,7 +36,7 @@ use EssentialBlocks\Utils\Helper;
 
 final class Plugin {
     use HasSingletone;
-                                                    public $version = '6.2.1';
+    public $version = '6.4.3';
 
     public $admin;
     /**
@@ -119,6 +120,9 @@ final class Plugin {
 
         // Instagram Access Token AJAX
         Instagram::get_instance();
+
+        // Facebook Page Access Token AJAX
+        Facebook::get_instance();
 
         //Global Style Ajax for Store
         GlobalStyles::get_instance();
@@ -234,7 +238,7 @@ final class Plugin {
         //Those flags needs to update if notice
         $this->define( 'EB_PROMOTION_FLAG', 13 );
         $this->define( 'EB_ADMIN_MENU_FLAG', 13 );
-        $this->define('EB_SHOW_WHATS_NEW_NOTICE', 0);
+        $this->define('EB_SHOW_WHATS_NEW_NOTICE', 1);
 
         //Table Name constants
         global $wpdb;
@@ -287,7 +291,10 @@ final class Plugin {
     public function eb_custom_mines_uploads( $mimes ) {
         $eb_settings          = get_option( 'eb_settings', array() );
         $enableUnfilteredFile = ! empty( $eb_settings[ 'unfilteredFile' ] ) ? $eb_settings[ 'unfilteredFile' ] : 'false';
-        if ( 'true' === $enableUnfilteredFile ) {
+        // SECURITY: SVG is active content. Gate the extension on the actor as
+        // well as the option, so a lower-role uploader never gets a .svg past
+        // WordPress' own filetype allowlist in the first place.
+        if ( 'true' === $enableUnfilteredFile && current_user_can( 'manage_options' ) ) {
             $mimes[ 'svg' ] = 'image/svg+xml';
         }
         $mimes[ 'txt' ]    = 'text/plain';
@@ -382,19 +389,24 @@ final class Plugin {
      * @return array
      */
     public function eb_handle_sanitize_svg( $file ) {
-        // Early return if not an SVG file
+        // Early return if not an SVG file. Detection is extension/content
+        // based, so a spoofed Content-Type cannot route around what follows.
         if ( ! $this->is_svg_file( $file ) ) {
             return $file;
         }
 
-        // Check if user is admin
+        // Check if user is admin. This now runs for every file detected as
+        // SVG, not only for uploads that politely declared image/svg+xml.
         if ( ! current_user_can( 'manage_options' ) ) {
             $file[ 'error' ] = __( 'You are not allowed to upload unfiltered files.', 'essential-blocks' );
             return $file;
         }
 
-        // Validate SVG file extension
-        if ( ! $this->has_valid_svg_extension( $file[ 'name' ] ) ) {
+        // Validate SVG file extension. Reaching here with a non-.svg name
+        // means SVG content was smuggled under another extension -- reject
+        // rather than guess.
+        $filename = isset( $file[ 'name' ] ) ? $file[ 'name' ] : '';
+        if ( empty( $filename ) || ! $this->has_valid_svg_extension( $filename ) ) {
             $file[ 'error' ] = __( 'File has incorrect extension for SVG type', 'essential-blocks' );
             return $file;
         }
@@ -410,7 +422,45 @@ final class Plugin {
      * @return bool
      */
     private function is_svg_file( $file ) {
-        return isset( $file[ 'type' ] ) && strtolower( $file[ 'type' ] ) === 'image/svg+xml';
+        // SECURITY: $file['type'] is the multipart Content-Type supplied by the
+        // client and is trivially spoofed. Declaring text/plain on a .svg
+        // upload previously skipped both the capability gate and the
+        // sanitizer. Decide from the normalized extension or the actual bytes.
+        $filename = isset( $file[ 'name' ] ) ? $file[ 'name' ] : '';
+
+        if ( ! empty( $filename ) && $this->has_valid_svg_extension( $filename ) ) {
+            return true;
+        }
+
+        return $this->file_contents_look_like_svg( $file );
+    }
+
+    /**
+     * Server-side content sniff: does the uploaded file actually begin an SVG
+     * document? Only a real document counts -- an XML prolog, doctype, or
+     * comment may precede <svg>, but a file that merely mentions SVG later on
+     * (a .txt note, for example) must not match.
+     *
+     * @param array $file The file being uploaded.
+     * @return bool
+     */
+    private function file_contents_look_like_svg( $file ) {
+        if ( empty( $file[ 'tmp_name' ] ) || ! is_readable( $file[ 'tmp_name' ] ) ) {
+            return false;
+        }
+
+        $head = file_get_contents( $file[ 'tmp_name' ], false, null, 0, 4096 );
+        if ( false === $head || '' === $head ) {
+            return false;
+        }
+
+        // Drop a UTF-8 BOM and leading whitespace.
+        $head = ltrim( $head, "\xEF\xBB\xBF \t\n\r\0\x0B" );
+
+        // Skip any XML prolog, doctype, or comment preamble.
+        $head = preg_replace( '/^(?:<\?xml[^>]*\?>|<!DOCTYPE[^>]*>|<!--.*?-->|\s+)+/is', '', $head );
+
+        return 0 === stripos( (string) $head, '<svg' );
     }
 
     /**

@@ -3,6 +3,7 @@
  *
  */
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import { applyFilters } from "@wordpress/hooks";
 
 /*
  * Internal  Dependencies
@@ -39,6 +40,7 @@ const save = ({ attributes }) => {
                     className={`eb-wrapper-outer ${blockId}${isWrapperWidth ? ` ${alignmentClass}` : ""
                         }`}
                 >
+                    {applyFilters("eb_wrapper_pro_video_bg_save", "", attributes)}
                     {attributes[`${SHAPE_DIVIDER_TOP}Type`] != "" && (
                         <ShapeDividerContent
                             position="top"

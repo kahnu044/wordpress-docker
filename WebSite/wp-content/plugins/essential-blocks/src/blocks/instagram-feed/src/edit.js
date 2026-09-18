@@ -16,6 +16,13 @@ import {
 import Style from "./style";
 import Inspector from "./inspector";
 import defaultAttributes from './attributes';
+import {
+    DUMMY_TOKEN,
+    MEDIA_LIMIT,
+    fetchInstagramToken,
+    fetchInstagramMedia,
+    sortByTimestamp,
+} from "./helper";
 
 import {
     BlockProps,
@@ -38,7 +45,6 @@ function Edit(props) {
         layout,
         overlayStyle,
         cardStyle,
-        thumbs,
         numberOfImages,
         hasEqualImages,
         showCaptions,
@@ -59,6 +65,16 @@ function Edit(props) {
     const [errorMessage, setErrorMessage] = useState("");
     const [isShowingDummyData, setIsShowingDummyData] = useState(false);
 
+    // Fetched feed — editor-preview state ONLY, deliberately not a block
+    // attribute. It used to be persisted via `setAttributes({ thumbs })`,
+    // which serialized the entire Instagram response (the request asks for
+    // limit=500) into post_content on every editor load. The server render
+    // never reads it — InstagramFeed::render_callback() re-fetches from the
+    // API — so it was pure weight: it dirtied the post on mount (prompting
+    // phantom "unsaved changes"), re-serialized on every edit, and multiplied
+    // by the number of feeds on the page.
+    const [thumbs, setThumbs] = useState([]);
+
     // you must declare this variable
     const enhancedProps = {
         ...props,
@@ -75,27 +91,18 @@ function Edit(props) {
         );
     }
     const [instagramToken, setInstagramToken] = useState(token ?? "");
+    // Resolve the token through the shared module-level promise in helper.js,
+    // so N feed blocks on one page share ONE AJAX call instead of N.
     const fetchAccessToken = () => {
-        //Get Instagram Access Token
-        let data = new FormData();
-        data.append("action", "get_instagram_access_token");
-        data.append("admin_nonce", EssentialBlocksLocalize.admin_nonce);
-        fetch(EssentialBlocksLocalize.ajax_url, {
-            method: "POST",
-            body: data,
-        }) // wrapped
-            .then((res) => res.text())
-            .then((data) => {
-                const response = JSON.parse(data);
-                if (response.success && response.data) {
-                    setInstagramToken(response.data);
-                } else {
-                    setInstagramToken("");
-                    setIsShowingDummyData(false);
-                    setLoading(false);
-                }
-            })
-            .catch((err) => console.log(err));
+        fetchInstagramToken().then((resolvedToken) => {
+            if (resolvedToken) {
+                setInstagramToken(resolvedToken);
+            } else {
+                setInstagramToken("");
+                setIsShowingDummyData(false);
+                setLoading(false);
+            }
+        });
     };
 
     let container = "";
@@ -234,7 +241,7 @@ function Edit(props) {
         }
 
         // Check if this is a dummy token for non-admin users
-        if (instagramToken === 'dummy_token_for_editor_preview') {
+        if (instagramToken === DUMMY_TOKEN) {
             // Provide dummy data for editor preview
             const dummyData = [
                 {
@@ -300,54 +307,30 @@ function Edit(props) {
             ];
 
             setResponseCode(200);
-            setAttributes({ thumbs: dummyData });
+            setThumbs(dummyData);
             setIsShowingDummyData(true);
             setLoading(false);
             return Promise.resolve();
         }
 
-        return fetch(
-            `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&limit=500&access_token=${instagramToken}`
-        )
-            .then((res) => res.json())
-            .then((json) => {
-                if (json.error) {
-                    setErrorMessage(json.error.message);
-                    setResponseCode(json.error.code);
-                    setIsShowingDummyData(false);
+        // Deduped across blocks by `token|limit` — identically configured
+        // feeds resolve from one shared request instead of one per block.
+        return fetchInstagramMedia(instagramToken, MEDIA_LIMIT).then(
+            ({ media, error, code }) => {
+                if (error) {
+                    setErrorMessage(error);
                 }
-                if (json.data) {
-                    setResponseCode(200);
-
-                    if (json.data.length > 0) {
-                        setAttributes({ thumbs: json.data });
-                    } else {
-                        setAttributes({ thumbs: [] });
-                        setResponseCode(500);
-                    }
-                    setIsShowingDummyData(false);
-                }
-
+                setResponseCode(code);
+                setThumbs(media);
+                setIsShowingDummyData(false);
                 setLoading(false);
-            });
+            }
+        );
     };
 
-    switch (sortBy) {
-        case "most_recent":
-            thumbs.sort((a, b) => {
-                let da = new Date(a.timestamp),
-                    db = new Date(b.timestamp);
-                return db - da;
-            });
-            break;
-        case "least_recent":
-            thumbs.sort((a, b) => {
-                let da = new Date(a.timestamp),
-                    db = new Date(b.timestamp);
-                return da - db;
-            });
-            break;
-    }
+    // Non-mutating — the previous `thumbs.sort()` reordered the block's
+    // attribute array in place during render.
+    const sortedThumbs = sortByTimestamp(thumbs, sortBy);
 
     // let container;
     let equalImage = hasEqualImages ? " has__equal__height" : "";
@@ -377,8 +360,8 @@ function Edit(props) {
         } else {
             container = (
                 <>
-                    {thumbs &&
-                        thumbs.slice(0, numberOfImages).map((photo, index) => {
+                    {sortedThumbs &&
+                        sortedThumbs.slice(0, numberOfImages).map((photo, index) => {
                             return (
                                 <div
                                     className="instagram__gallery__col"

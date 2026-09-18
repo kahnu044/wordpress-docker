@@ -16,6 +16,13 @@ class AI extends ThirdPartyIntegration
 {
 
     /**
+     * The only content-generation contexts the server will act on.
+     *
+     * Kept in sync with the settings keys read by OpenAI::generate_content().
+     */
+    const ALLOWED_CONTENT_CONTEXTS = [ 'writePageContent', 'writeRichtext', 'writeInputFields' ];
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -74,9 +81,21 @@ class AI extends ThirdPartyIntegration
                 wp_send_json_error( __( 'Prompt is required', 'essential-blocks' ) );
             }
 
+            // SECURITY: content_for selects which administrator-controlled AI
+            // context policy applies. It was previously accepted as an
+            // arbitrary string, and an unknown value matched none of the
+            // "is this context disabled?" branches downstream -- so it failed
+            // open and reached the credentialed OpenAI request regardless of
+            // settings. Allowlist it here and fail closed.
+            $content_for = isset( $_POST[ 'content_for' ] ) ? sanitize_text_field( $_POST[ 'content_for' ] ) : 'writePageContent';
+
+            if ( ! in_array( $content_for, self::ALLOWED_CONTENT_CONTEXTS, true ) ) {
+                wp_send_json_error( __( 'Invalid content context', 'essential-blocks' ) );
+            }
+
             $params = [
                 'prompt'      => sanitize_textarea_field( $_POST[ 'prompt' ] ),
-                'content_for' => isset( $_POST[ 'content_for' ] ) ? $_POST[ 'content_for' ] : 'writePageContent'
+                'content_for' => $content_for
              ];
         } elseif ( $job_type === 'image' ) {
             if ( ! isset( $_POST[ 'prompt' ] ) ) {

@@ -1,0 +1,452 @@
+.eb-flex-container-inner .wp-block-essential-blocks-facebook-feed,
+.wp-block-group .wp-block-essential-blocks-facebook-feed {
+	display: block;
+	width: 100%;
+}
+
+.eb-facebook-feed-wrapper {
+	position: relative;
+	// Isotope absolute-positions every `.eb-fb-feed__col`, which takes the
+	// items out of the wrapper's normal flow. When the block sits inside a
+	// flex parent (EB Flex Container, core/group flex), the flex item
+	// (`.wp-block-essential-blocks-facebook-feed`) inherits `flex: 0 1 auto`
+	// from the parent — without any in-flow children to measure, the wrapper
+	// collapses to 0px and every card stacks in the top-left corner. Pinning
+	// the wrapper to 100% width forces it to fill its flex slot before
+	// Isotope takes over column positioning. No-op outside flex contexts.
+	width: 100%;
+
+	// Visually-hidden but exposed to assistive tech. Self-contained so it
+	// does not depend on the active theme shipping `.screen-reader-text`.
+	.eb-fb-feed__sr-only {
+		position: absolute !important;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.eb-fb-feed__placeholder {
+		padding: 32px;
+		text-align: center;
+		background: var(--eb-global-background-color, #f5f6fa);
+		border: 1px dashed var(--eb-global-border-color, #cfd2d6);
+		border-radius: 12px;
+
+		p {
+			margin: 0;
+			color: var(--eb-global-text-color, #4a463f);
+		}
+	}
+
+	.eb-facebook-feed__dummy-notice {
+		background: #fff3cd;
+		border: 1px solid #ffeaa7;
+		border-radius: 4px;
+		padding: 12px;
+		margin-bottom: 16px;
+		font-size: 14px;
+		color: #856404;
+	}
+
+	.eb-fb-feed__loading {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 24px;
+		justify-content: center;
+		color: var(--eb-global-text-color, #65676b);
+	}
+
+	// ---- Grid / List / Masonry layouts ----
+	//
+	// The flex rules below are the editor preview AND the no-JS fallback.
+	// On the live frontend Isotope mounts shortly after DOM ready and sets
+	// every `.eb-fb-feed__col` to `position: absolute`, which takes the
+	// items out of flex flow — at that point the flex container becomes a
+	// plain `position: relative` shell that Isotope sets the height on. So
+	// flex + Isotope coexist: flex is the base layout, Isotope upgrades it.
+	.eb-fb-feed--grid,
+	.eb-fb-feed--list,
+	.eb-fb-feed--masonry {
+		position: relative;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.eb-fb-feed--grid,
+	.eb-fb-feed--masonry {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+
+	.eb-fb-feed--list {
+		display: flex;
+		flex-direction: column;
+		// max-width: 620px;
+		margin: 0 auto;
+	}
+
+	.eb-fb-feed--grid>.eb-fb-feed__col,
+	.eb-fb-feed--list>.eb-fb-feed__col,
+	.eb-fb-feed--masonry>.eb-fb-feed__col {
+		box-sizing: border-box;
+	}
+
+	// ---- Equal-height rows (grid layout) ----
+	// `frontend.js :: equalizeGridRows` walks visible cols, groups them by
+	// their Isotope-assigned Y coord, and sets each row's cols to the row's
+	// max height. That gets the COL shells uniform — but the inner
+	// `.eb-fb-feed__post` still sits at its content height inside the now-
+	// taller col, leaving empty space beneath. Pinning the post to 100% of
+	// the col makes the actual visible card fill the equalized slot, so
+	// rows look uniformly tall. List + masonry are skipped because list
+	// is single-column (no rows to equalize) and masonry is intentionally
+	// staggered.
+	.eb-fb-feed--grid>.eb-fb-feed__col>.eb-fb-feed__post {
+		height: 100%;
+	}
+
+	// Equal-height grid stretches each post to its row's max height. The base
+	// card pins actions to the bottom with `head { margin-bottom: auto }` +
+	// `actions { margin-top: auto }`; on a stretched card those auto margins
+	// pocket the slack as empty space around the image. `justify-content`
+	// alone can't fix this — it (like the auto margins) only *relocates* the
+	// slack, never removes it. The only way to close the gap is to let a child
+	// ABSORB the slack: grow the media so the image fills the card. Neutralize
+	// the auto margins first (they take priority over flex-grow and would
+	// otherwise eat the free space before the media can).
+	.eb-fb-feed--grid>.eb-fb-feed__col>.eb-fb-feed__post {
+		>.eb-fb-feed__head {
+			margin-bottom: 0;
+		}
+
+		>.eb-fb-feed__actions {
+			margin-top: 0;
+		}
+
+		// Unlinked media — grows to fill the slack. `aspect-ratio: 16/10`
+		// (base rule) stays the natural/min size, so the tallest card in a
+		// row keeps the ratio while shorter cards grow the media beyond it;
+		// the img's `object-fit: cover` fills the taller box.
+		>.eb-fb-feed__media {
+			flex: 1 1 auto;
+			min-height: 0;
+		}
+
+		// Linked media — the <a> wrapper is the flex child, so make it a
+		// growing flex column and let the media inside fill its height.
+		>.eb-fb-feed__media-link {
+			display: flex;
+			flex-direction: column;
+			flex: 1 1 auto;
+			min-height: 0;
+
+			>.eb-fb-feed__media {
+				flex: 1 1 auto;
+				min-height: 0;
+			}
+		}
+	}
+
+	// List wants single-column stacked items. style.js emits a per-block
+	// `width: calc(100% / N)` rule that wins on specificity (two classes on
+	// the wrapper); !important is the cheapest way to keep list items
+	// full-width regardless of the column control's value.
+	.eb-fb-feed--list>.eb-fb-feed__col {
+		width: 100% !important;
+	}
+
+	// FOUC mitigation: items render in flex flow first, then jump to
+	// Isotope positions a frame later. Hide the container until JS adds
+	// `.is-isotope-ready`. Edit.js inlines the class on its container so
+	// the editor preview isn't blanked.
+	.eb-fb-feed--grid:not(.is-isotope-ready),
+	.eb-fb-feed--list:not(.is-isotope-ready),
+	.eb-fb-feed--masonry:not(.is-isotope-ready) {
+		visibility: hidden;
+	}
+
+	// ---- Post card primitive ----
+	.eb-fb-feed__post {
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	.eb-fb-feed__head {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 14px 16px 10px;
+		margin-bottom: auto;
+	}
+
+	.eb-fb-feed__head-meta {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.eb-fb-feed__avatar {
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		flex-shrink: 0;
+		object-fit: cover;
+	}
+
+	.eb-fb-feed__name {
+		font-weight: 600;
+		line-height: 1.2;
+		margin: 0;
+		color: #050505;
+
+		a {
+			color: inherit;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.eb-fb-feed__time {
+		font-size: 0.75rem;
+		color: #65676b;
+		margin-top: 2px;
+	}
+
+	.eb-fb-feed__message {
+		padding: 0 16px 12px;
+		line-height: 1.5;
+		color: #050505;
+		margin: 0;
+	}
+
+	.eb-fb-feed__media {
+		position: relative;
+		aspect-ratio: 16 / 10;
+		background: linear-gradient(135deg, #e3eafd, #c9dafa);
+		overflow: hidden;
+
+		img,
+		video {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+	}
+
+	.eb-fb-feed__actions {
+		display: flex;
+		gap: 16px;
+		padding: 10px 16px;
+		border-top: 1px solid #e4e6eb;
+		font-size: 0.8rem;
+		color: #65676b;
+		margin-top: auto;
+
+		.eb-fb-feed__action {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+	}
+
+	// ---- List layout: horizontal split (image left | content right) ----
+	//
+	// In list layout the post card becomes a 2-column grid: media on the
+	// left taking 35% of the card width, author bar + caption + actions
+	// stacked in the right column. DOM stays unchanged (article children
+	// flow head → message → media → actions); CSS Grid `template-areas`
+	// reorders each child into the correct cell.
+	//
+	// The `:has(.eb-fb-feed__media)` guard means picture-less posts fall
+	// back to the default vertical stack — no empty left column. Below
+	// 767px the split is too cramped to read, so cards collapse back to
+	// the vertical card.
+	.eb-fb-feed--list .eb-fb-feed__post:has(.eb-fb-feed__media) {
+		display: grid;
+		grid-template-columns: 35% 1fr;
+		grid-template-areas:
+			"media head"
+			"media caption"
+			"media actions";
+		// column-gap: 12px;
+		align-items: stretch;
+
+		>.eb-fb-feed__head {
+			grid-area: head;
+			// padding-left: 0;
+		}
+
+		>.eb-fb-feed__message {
+			grid-area: caption;
+			// padding-left: 0;
+		}
+
+		>.eb-fb-feed__media-link,
+		>.eb-fb-feed__media {
+			grid-area: media;
+			display: block;
+			height: 100%;
+		}
+
+		>.eb-fb-feed__actions {
+			grid-area: actions;
+			// padding-left: 0;
+		}
+
+		// Image fills the full height of its grid cell — drops the default
+		// 16:10 aspect-ratio so the left column matches the stacked content
+		// height regardless of caption length.
+		.eb-fb-feed__media {
+			aspect-ratio: auto;
+			height: 100%;
+		}
+
+		@media (max-width: 767px) {
+			// Phones — fall back to the vertical card. The 35% column is
+			// too narrow to read at <768px and the caption wraps awkwardly.
+			display: flex;
+			flex-direction: column;
+			column-gap: 0;
+
+			>.eb-fb-feed__head,
+			>.eb-fb-feed__message,
+			>.eb-fb-feed__actions {
+				padding-left: 16px;
+			}
+
+			.eb-fb-feed__media {
+				aspect-ratio: 16 / 10;
+				height: auto;
+			}
+		}
+	}
+
+	.hide {
+		display: none;
+	}
+
+	// ---- Pagination & Load More ----
+	//
+	// Visual styling (color, background, typography, border, radius) comes
+	// from style.js based on the inspector's "Load More Button" panel.
+	// SCSS keeps only structural rules: layout, padding, hidden-attribute
+	// gating, and reasonable fallbacks if the dynamic stylesheet is absent.
+	.eb-fb-feed__load-more {
+		// `display: flex` (not inline-flex) + `width: fit-content` makes
+		// the button a block-level element sized to its content, so the
+		// `margin: auto` correctly centers it horizontally inside the
+		// wrapper. inline-flex would leave `margin: auto` resolving to 0.
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		margin: 24px auto 0;
+		padding: 10px 24px;
+		background: var(--eb-global-primary-color, #1877F2);
+		color: #fff;
+		border: 0;
+		cursor: pointer;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.eb-fb-feed__pagination {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-top: 24px;
+		justify-content: center;
+	}
+
+	// All three chip types share identical dimensions and typography so
+	// page numbers and the prev / next arrows line up as one visual row.
+	// `box-sizing: border-box` keeps the 1px border from pushing prev/next
+	// outward when only some chips render the dynamic border. `line-height:1`
+	// ensures the chevron glyphs don't inherit a taller line box than the
+	// digits and make the arrow chips visually grow.
+	.eb-fb-feed__page-link,
+	.eb-fb-feed__page-prev,
+	.eb-fb-feed__page-next {
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 36px;
+		height: 36px;
+		padding: 0 12px;
+		background: var(--eb-global-background-color, #f5f6fa);
+		color: var(--eb-global-text-color, #4a463f);
+		border: 1px solid var(--eb-global-border-color, #cfd2d6);
+		border-radius: 4px;
+		font-size: 0.85rem;
+		font-weight: 500;
+		line-height: 1;
+		text-decoration: none;
+		cursor: pointer;
+		transition: background 0.15s ease, color 0.15s ease;
+
+		&:hover {
+			background: var(--eb-global-primary-color, #1877F2);
+			color: #fff;
+			border-color: transparent;
+		}
+	}
+
+	.eb-fb-feed__page-link {
+		&.is-current {
+			background: var(--eb-global-primary-color, #1877F2);
+			color: #fff;
+			border-color: transparent;
+		}
+	}
+
+	// Out-of-window page numbers are hidden via inline `style.display`
+	// applied by frontend.js — not via a `[hidden]` or `.is-hidden`
+	// selector. The plugin's StyleHandler scans saved markup for
+	// selectors and prunes anything that doesn't match an element it
+	// sees, so a static-CSS hide rule wouldn't survive into the
+	// per-page generated stylesheet.
+
+	.eb-fb-feed__page-prev,
+	.eb-fb-feed__page-next {
+		&:disabled {
+			cursor: not-allowed;
+			background: var(--eb-global-background-color, #f5f6fa);
+			color: var(--eb-global-text-color, #4a463f);
+			border-color: var(--eb-global-border-color, #cfd2d6);
+			opacity: 0.45;
+		}
+	}
+
+	// Ellipsis between non-contiguous page numbers — purely visual,
+	// not interactive (frontend.js sets aria-hidden). Height matches the
+	// chips so the row stays the same height when an ellipsis is present.
+	.eb-fb-feed__page-separator {
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 24px;
+		height: 36px;
+		color: var(--eb-global-text-color, #65676b);
+		font-size: 0.85rem;
+		line-height: 1;
+		user-select: none;
+	}
+}

@@ -53,7 +53,8 @@ const Inspector = ({ attributes, setAttributes }) => {
                 paddingPrefix: WRAPPER_PADDING,
                 backgroundPrefix: WRAPPER_BACKGROUND,
                 borderPrefix: WRAPPER_BORDER,
-                hasMargin: true
+                hasMargin: true,
+                hasVideoBackground: true
             }}
         >
             <InspectorPanel.General>

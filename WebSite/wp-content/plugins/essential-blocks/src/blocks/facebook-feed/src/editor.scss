@@ -1,0 +1,18 @@
+/**
+ * Editor-only styles for Facebook Feed.
+ *
+ * Loaded via index.js so it lands in the editor bundle only — does NOT ship
+ * to the frontend (style.scss is the shared/frontend sheet). Use this file
+ * for tweaks that fix editor-canvas quirks (cropped shadows, hidden
+ * absolutely-positioned arrows, react-slick paint glitches, etc.) without
+ * leaking into the published page.
+ */
+
+// react-slick clips dot indicators / card shadows at the bottom of the
+// list because `.slick-list` defaults to `overflow: hidden` with no padding.
+// 20px of bottom padding gives the dots room to breathe in the editor preview.
+.eb-facebook-feed-wrapper {
+	.slick-list {
+		padding-bottom: 20px !important;
+	}
+}

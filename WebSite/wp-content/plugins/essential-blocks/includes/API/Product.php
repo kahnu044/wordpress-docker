@@ -109,6 +109,17 @@ class Product extends Base
         $attributes = $_is_frontend ? json_decode( $request->get_param( 'attributes' ) ) : [];
         $attributes = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [];
 
+        // sold_count (total_sales) and stock_quantity are WooCommerce store data;
+        // gate them behind manage_woocommerce. Ref: FluentBoards #83050.
+        $can_view_sales_data = current_user_can( 'manage_woocommerce' );
+
+        // The `attributes` param is unauthenticated client input that gets extracted
+        // into the frontend views. Whitelist it against the block's own attribute set
+        // before it goes anywhere near a template. Ref: FluentBoards #83914.
+        if ( $_is_frontend ) {
+            $attributes = $this->normalize_frontend_attributes( $attributes, $can_view_sales_data );
+        }
+
         $isCustomCartBtn  = isset( $attributes[ 'isCustomCartBtn' ] ) ? $attributes[ 'isCustomCartBtn' ] : false;
         $simpleCartText   = isset( $attributes[ 'simpleCartText' ] ) ? $attributes[ 'simpleCartText' ] : 'Buy Now';
         $variableCartText = isset( $attributes[ 'variableCartText' ] ) ? $attributes[ 'variableCartText' ] : 'Select Options';
@@ -163,8 +174,8 @@ class Product extends Base
                 $products[ 'add_to_cart_url' ]  = $product->add_to_cart_url();
                 $products[ 'add_to_cart_text' ] = $product->add_to_cart_text();
                 $products[ 'type' ]             = $product->get_type();
-                $products[ 'sold_count' ]       = $product->get_total_sales();
-                $products[ 'stock_quantity' ]   = $product->get_stock_quantity();
+                $products[ 'sold_count' ]       = $can_view_sales_data ? $product->get_total_sales() : '';
+                $products[ 'stock_quantity' ]   = $can_view_sales_data ? $product->get_stock_quantity() : null;
 
                 // image
                 if ( has_post_thumbnail() ) {
@@ -234,6 +245,98 @@ class Product extends Base
         } else {
             return false;
         }
+    }
+
+    /**
+     * Whitelist, default and sanitize the client-supplied `attributes` param before
+     * it is extracted into the frontend views by Helper::views().
+     *
+     * The block render path already normalizes attributes server-side in
+     * Blocks\WooProductGrid::render_callback(); this endpoint previously merged the
+     * raw json_decode'd request body straight into the view params, which meant
+     * unauthenticated callers controlled every view variable and any attribute they
+     * omitted became an undefined variable inside the template.
+     *
+     * Keys absent from the request fall back to the block defaults. Keys not listed
+     * here are dropped.
+     *
+     * @param array $attributes          Raw json_decode'd client input.
+     * @param bool  $can_view_sales_data Result of current_user_can( 'manage_woocommerce' ).
+     * @return array
+     */
+    private function normalize_frontend_attributes( $attributes, $can_view_sales_data )
+    {
+        // Defaults mirror Blocks\WooProductGrid::render_callback().
+        $defaults = [
+            'layout'                => 'grid',
+            'gridPreset'            => 'grid-preset-1',
+            'listPreset'            => 'list-preset-1',
+            'saleBadgeAlign'        => 'align-left',
+            'saleText'              => 'sale',
+            'showRating'            => true,
+            'ratingStyle'           => 'star',
+            'showSoldCount'         => false,
+            'showSoldCountBar'      => false,
+            'soldCountPrefix'       => __( "Sold ", "essential-blocks" ),
+            'soldCountSuffix'       => '+',
+            'stockPercent'          => 50,
+            'showTaxonomyFilter'    => false,
+            'selectedTaxonomy'      => '',
+            'selectedTaxonomyItems' => '[{"value":"all","label":"All"}]',
+            'showPrice'             => true,
+            'showSaleBadge'         => true,
+            'showCategory'          => false,
+            'productDescLength'     => 5,
+            'isCustomCartBtn'       => false,
+            'simpleCartText'        => __( "Buy Now", "essential-blocks" ),
+            'variableCartText'      => __( "Select Options", "essential-blocks" ),
+            'groupedCartText'       => __( "View Products", "essential-blocks" ),
+            'externalCartText'      => __( "Buy Now", "essential-blocks" ),
+            'defaultCartText'       => __( "Read More", "essential-blocks" ),
+            'showDetailBtn'         => true,
+            'detailBtnText'         => __( "Visit Product", "essential-blocks" ),
+            'titleTag'              => 'h3',
+            'imageSize'             => 'full'
+         ];
+
+        $booleans = [ 'showRating', 'showSoldCount', 'showSoldCountBar', 'showTaxonomyFilter', 'showPrice', 'showSaleBadge', 'showCategory', 'isCustomCartBtn', 'showDetailBtn' ];
+        $integers = [ 'productDescLength', 'stockPercent' ];
+        // Rendered as visible copy, so markup is allowed but scripts are not.
+        $rich_text = [ 'saleText', 'soldCountPrefix', 'soldCountSuffix', 'simpleCartText', 'variableCartText', 'groupedCartText', 'externalCartText', 'defaultCartText', 'detailBtnText' ];
+
+        $normalized = [];
+
+        foreach ( $defaults as $key => $default ) {
+            if ( ! isset( $attributes[ $key ] ) ) {
+                $normalized[ $key ] = $default;
+                continue;
+            }
+
+            $value = $attributes[ $key ];
+
+            if ( in_array( $key, $booleans, true ) ) {
+                $normalized[ $key ] = rest_sanitize_boolean( $value );
+            } elseif ( in_array( $key, $integers, true ) ) {
+                $normalized[ $key ] = (int) $value;
+            } elseif ( is_scalar( $value ) ) {
+                $normalized[ $key ] = in_array( $key, $rich_text, true )
+                    ? wp_kses_post( (string) $value )
+                    : sanitize_text_field( (string) $value );
+            } else {
+                // Arrays/objects are never valid for any key above.
+                $normalized[ $key ] = $default;
+            }
+        }
+
+        // Applied last so the request cannot re-enable it. Pro's sold-count view
+        // renders get_total_sales() and get_stock_quantity() with no check of its
+        // own, and showSoldCountBar independently gates the stock_quantity output.
+        if ( ! $can_view_sales_data ) {
+            $normalized[ 'showSoldCount' ]    = false;
+            $normalized[ 'showSoldCountBar' ] = false;
+        }
+
+        return $normalized;
     }
 
     /**

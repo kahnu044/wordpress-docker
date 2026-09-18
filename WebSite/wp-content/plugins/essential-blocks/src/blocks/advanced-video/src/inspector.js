@@ -13,7 +13,67 @@ import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
-import { useEffect, useState } from "@wordpress/element";
+import { useEffect } from "@wordpress/element";
+import { applyFilters } from "@wordpress/hooks";
+
+/**
+ * Hero Background Video — Pro upsell panel.
+ *
+ * Uses the standard `eb_ie` upgrade pattern shared across all upsells
+ * (Transform Animation, Interactive Animation, Conditional Display, etc.) so
+ * the look matches every other "Pro feature" notice the user has seen.
+ *
+ * When Pro IS active, its `addFilter("eb_advanced_video_pro_inspector_general",
+ * …)` callback replaces this with the real Hero Overlay controls.
+ */
+const HeroBgCrown = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+        <path
+            fill="#fff"
+            d="M1.419 10.489.506 4.558a.495.495 0 0 1 .786-.471l2.843 2.132a.68.68 0 0 0 .973-.167l2.366-3.55a.632.632 0 0 1 1.052 0l2.366 3.55c.217.325.661.4.973.167l2.843-2.132a.495.495 0 0 1 .786.47l-.913 5.932zM13.894 13.78H2.104a.686.686 0 0 1-.686-.687v-1.507h13.163v1.507a.686.686 0 0 1-.687.687"
+        />
+    </svg>
+);
+
+const HeroBackgroundUpgradePro = () => {
+    if (EssentialBlocksLocalize?.is_pro_active === "true") return null;
+
+    return (
+        <PanelBody
+            title={__("Background Video", "essential-blocks")}
+            initialOpen={false}
+            className="eb-pro-feature-panel"
+        >
+            <div className="eb_ie">
+                <h3>
+                    <a
+                        target="_blank"
+                        href="https://essential-blocks.com/demo/advanced-video/"
+                        rel="noopener noreferrer"
+                    >
+                        {__("Background Video", "essential-blocks")}
+                        <span className="dashicons dashicons-external"></span>
+                    </a>
+                </h3>
+                <p>
+                    {__(
+                        "Layer headlines, CTAs and a tinted overlay on top of a background video for a full marketing hero.",
+                        "essential-blocks"
+                    )}
+                </p>
+                <a
+                    className="eb_upgrade_button"
+                    target="_blank"
+                    href={EssentialBlocksLocalize?.upgrade_pro_url}
+                    rel="noopener noreferrer"
+                >
+                    <HeroBgCrown />
+                    {__("Upgrade to PRO", "essential-blocks")}
+                </a>
+            </div>
+        </PanelBody>
+    );
+};
 
 /**
  * Internal depencencies
@@ -57,6 +117,8 @@ import {
     EBDisplayIconEdit,
     EBTextControl,
 } from "@essential-blocks/controls";
+
+import { isDirectMediaUrl, isStreamingUrl } from "./media-source";
 
 function Inspector(props) {
     const { attributes, setAttributes, preview, setPreview, setVideoPlayIcon } =
@@ -128,20 +190,15 @@ function Inspector(props) {
         customPlayIconlib,
     ]);
 
-    const [selfhostVideo, setSelfhostVideo] = useState(false);
-
-    useEffect(() => {
-        if (videoURL) {
-            const extension = videoURL.split(".").pop();
-            const fileFormats = ["mp4", "webm", "ogg"];
-
-            if (fileFormats.indexOf(extension) === -1) {
-                setSelfhostVideo(false);
-            } else {
-                setSelfhostVideo(true);
-            }
-        }
-    }, [videoURL]);
+    // Is the source a file rather than an embed? Only a file has a download
+    // affordance to suppress, so this gates the Show Download toggle below.
+    //
+    // Previously read the extension as `videoURL.split(".").pop()` against a
+    // three-entry list, which failed for every URL carrying a query string or a
+    // fragment, for `.ogv` / `.mov`, and for any uppercase extension — the
+    // toggle silently disappeared for URLs the player handled fine. The shared
+    // classifier has none of those holes.
+    const selfhostVideo = isDirectMediaUrl(videoURL) || isStreamingUrl(videoURL);
 
     return (
         <InspectorPanel
@@ -184,13 +241,32 @@ function Inspector(props) {
                                     label={__("Autoplay", "essential-blocks")}
                                     checked={videoConfig.autoplay}
                                     onChange={(autoplay) => {
-                                        setAttributes({
+                                        const next = {
                                             videoConfig: {
                                                 ...videoConfig,
                                                 autoplay: autoplay,
                                                 muted: autoplay && !preview,
                                             },
-                                        });
+                                        };
+
+                                        // Switching Autoplay off while the Pro
+                                        // overlay is on leaves a video nobody
+                                        // can start, so the overlay's media
+                                        // controls come on with it. Only on this
+                                        // transition — a later manual switch off
+                                        // is never undone. `avOverlayEnabled` is
+                                        // undefined without Pro, so this never
+                                        // fires there. The Overlay toggle in
+                                        // Pro's inspector carries the mirror.
+                                        if (
+                                            !autoplay &&
+                                            attributes.avOverlayEnabled === true &&
+                                            attributes.avOverlayShowMediaControls !== true
+                                        ) {
+                                            next.avOverlayShowMediaControls = true;
+                                        }
+
+                                        setAttributes(next);
                                     }}
                                     __nextHasNoMarginBottom
                                 />
@@ -552,6 +628,12 @@ function Inspector(props) {
                             </>
                         )}
                     </PanelBody>
+                    {applyFilters(
+                        "eb_advanced_video_pro_inspector_general",
+                        <HeroBackgroundUpgradePro />,
+                        attributes,
+                        setAttributes
+                    )}
                 </>
             </InspectorPanel.General>
             <InspectorPanel.Style>
@@ -804,6 +886,7 @@ function Inspector(props) {
                             />
                         </PanelBody>
                     )}
+                    {applyFilters("eb_advanced_video_pro_inspector_style", "", attributes, setAttributes)}
                 </>
             </InspectorPanel.Style>
         </InspectorPanel>

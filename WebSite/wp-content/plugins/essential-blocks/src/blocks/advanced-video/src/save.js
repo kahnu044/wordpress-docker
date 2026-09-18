@@ -1,4 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
+import { applyFilters } from "@wordpress/hooks";
 import {
     BlockProps,
     EBDisplayIconSave
@@ -104,6 +105,7 @@ const save = ({ attributes }) => {
                             </div>
                         </>
                     )}
+                    {applyFilters("eb_advanced_video_pro_overlay_content_save", "", attributes)}
                 </div>
             </div>
         </BlockProps.Save>

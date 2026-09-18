@@ -1,6 +1,112 @@
 import { createRoot } from "@wordpress/element";
 import ReactPlayer from "react-player";
 
+/*
+ * Not branched on here — react-player classifies the URL itself at mount, so
+ * the frontend needs no test of its own. Imported so that any future branch on
+ * this file takes the same definition the editor and the Inspector use; the
+ * bug this module exists to fix was three surfaces each deciding for
+ * themselves. The patterns in ./media-source mirror react-player's, so a check
+ * added here will agree with what the player actually does.
+ */
+// eslint-disable-next-line no-unused-vars
+import { isDirectMediaUrl, isStreamingUrl } from "./media-source";
+
+/**
+ * Is the Pro overlay cropping YouTube's chrome on this player?
+ *
+ * `avOverlayEnabled` is never serialised into a data-attribute, so the overlay's
+ * own markup is the signal. Must stay in step with the identical condition in
+ * Pro's overlay/styles.js — if the two disagree, the embed parameters set here
+ * and the crop apply to different players.
+ */
+const cropsYouTubeChromeFor = (playerOption) => {
+    const wrapperEl = playerOption.closest(".eb-advanced-video-wrapper");
+
+    return (
+        !!(wrapperEl && wrapperEl.querySelector(".eb-av-overlay")) &&
+        /youtube\.com|youtu\.be/i.test(playerOption.getAttribute("data-url") || "") &&
+        playerOption.getAttribute("data-controls") !== "true"
+    );
+};
+
+/**
+ * Resolve any SVG icon placeholders a render just produced. Same delay the
+ * existing call sites use — the markup has to be in the DOM first.
+ */
+const queueSvgIcons = (playerOption) => {
+    if (!loadSvgIcons) {
+        return;
+    }
+    setTimeout(() => loadSvgIcons(playerOption), 100);
+};
+
+/**
+ * Bind the Pro overlay's media buttons.
+ *
+ * Pro emits the markup and the CSS; it ships no frontend JavaScript, so the
+ * behaviour lives here, on the side that owns react-player. Returns null when
+ * the overlay is absent or the author left the controls off, which is the same
+ * markup-as-signal approach `cropsYouTubeChromeFor` uses.
+ *
+ * State is held in this closure rather than React state: every other prop
+ * change in this file already flows through an external `root.render(...)`, and
+ * adding component state would strand the props those call sites pass.
+ */
+const createMediaControls = (playerOption, onCommand) => {
+    const wrapperEl = playerOption.closest(".eb-advanced-video-wrapper");
+    const host = wrapperEl && wrapperEl.querySelector(".eb-av-overlay-media");
+    if (!host) {
+        return null;
+    }
+
+    const playBtn = host.querySelector(".is-playpause");
+    const muteBtn = host.querySelector(".is-mute");
+
+    const state = {
+        playing: playerOption.getAttribute("data-playing") === "true",
+        muted: playerOption.getAttribute("data-muted") === "true",
+    };
+
+    const paint = () => {
+        host.classList.toggle("is-playing", state.playing);
+        host.classList.toggle("is-sound-muted", state.muted);
+    };
+
+    const controls = {
+        state,
+
+        /**
+         * Playback changed on its own — via native controls, a loop restarting,
+         * or the video ending. Repaint, do not re-render.
+         */
+        report(next) {
+            Object.assign(state, next);
+            paint();
+        },
+    };
+
+    if (playBtn) {
+        playBtn.addEventListener("click", () => {
+            state.playing = !state.playing;
+            paint();
+            onCommand(state);
+        });
+    }
+
+    if (muteBtn) {
+        muteBtn.addEventListener("click", () => {
+            state.muted = !state.muted;
+            paint();
+            onCommand(state);
+        });
+    }
+
+    paint();
+
+    return controls;
+};
+
 /**
  * Get SVG functions from global eb_frontend
  */
@@ -10,13 +116,32 @@ const {
 } = window.eb_frontend || {};
 
 const AdvancedVideo = (props) => {
-    const { wrapper, _autoplay, _muted } = props;
+    const {
+        wrapper,
+        _autoplay,
+        _muted,
+        mediaControls,
+        _ctlPlaying,
+        _ctlMuted,
+    } = props;
 
     let url = wrapper.getAttribute("data-url");
     let controls = wrapper.getAttribute("data-controls") === "true" ? true : false;
     let loop = wrapper.getAttribute("data-loop") === "true" ? true : false;
     let muted = _muted ? _muted : wrapper.getAttribute("data-muted") === "true" ? true : false;
     let autoplay = _autoplay ? _autoplay : wrapper.getAttribute("data-playing") === "true" ? true : false;
+
+    // The media buttons need to be able to set a value to `false`, which the
+    // fallbacks above cannot express — `_muted={false}` falls straight through
+    // to the data attribute. These are checked for presence instead, so they
+    // win outright, and the older props keep their existing meaning.
+    if (typeof _ctlPlaying !== "undefined") {
+        autoplay = _ctlPlaying;
+    }
+    if (typeof _ctlMuted !== "undefined") {
+        muted = _ctlMuted;
+    }
+
     let imageOverlay = wrapper.getAttribute("data-overlay") === "true" ? true : false;
     let previewImage = wrapper.getAttribute("data-light");
     let customPlayIcon = wrapper.getAttribute("data-customPlayIcon") === "true" ? true : false;
@@ -51,6 +176,8 @@ const AdvancedVideo = (props) => {
     // Check if video is in lightbox mode
     const isLightbox = wrapper.closest('.lightbox') !== null;
 
+    const cropsYouTubeChrome = cropsYouTubeChromeFor(wrapper);
+
     // Player configuration for different video providers
     const playerConfig = {
         file: {
@@ -66,6 +193,12 @@ const AdvancedVideo = (props) => {
                 playsinline: !isLightbox ? 1 : 0,
                 modestbranding: 1,
                 origin: window.location.origin,
+                // Suppresses what the crop cannot: the related-video grid and
+                // annotations render inside the video area, and keyboard
+                // control of a `pointer-events: none` player is misleading.
+                ...(cropsYouTubeChrome
+                    ? { rel: 0, iv_load_policy: 3, disablekb: 1 }
+                    : {}),
             },
         },
         vimeo: {
@@ -79,6 +212,15 @@ const AdvancedVideo = (props) => {
     return (
         <>
             <ReactPlayer
+                // react-player only reads `controls` on the initial mount — its
+                // componentDidUpdate has no live-update branch for it (unlike
+                // muted/loop). Tie the element key to `controls` so React mounts
+                // a fresh player whenever the value differs, which is how the
+                // saved data-controls value gets reflected on the frontend.
+                // `controls` is stable within a page load, so the existing
+                // autoplay/lightbox/sticky re-renders keep the same key and do
+                // not remount (playback state is preserved).
+                key={`eb-rp-controls-${controls}`}
                 className="eb-react-player"
                 width="100%"
                 height={isLightbox ? "100%" : "auto"}
@@ -92,6 +234,25 @@ const AdvancedVideo = (props) => {
                 volume={0.5}
                 config={playerConfig}
                 playsinline={!isLightbox}
+                // `onPlay` fires on every play, including the first — react-player
+                // calls it unconditionally in handlePlay — so `onStart` would be
+                // a strict subset and is not wired.
+                //
+                // Icons only — never a re-render. A re-render here would feed
+                // the same value back through `playing` and could bounce against
+                // react-player's own isPlaying guard.
+                onPlay={() => {
+                    if (mediaControls) {
+                        mediaControls.report({ playing: true });
+                    }
+                }}
+                onPause={() =>
+                    mediaControls && mediaControls.report({ playing: false })
+                }
+                onEnded={() =>
+                    mediaControls &&
+                    mediaControls.report({ playing: loop ? true : false })
+                }
                 style={{
                     aspectRatio: isLightbox ? 'unset' : '16/9',
                 }}
@@ -118,11 +279,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Create root once and store it
         const root = createRoot(playerOption);
-        root.render(<AdvancedVideo wrapper={playerOption} />);
+
+        // Declared before the controls so the click handler can reach it, and
+        // assigned straight after — the two are mutually referential.
+        let mediaControls = null;
+
+        // Tracks whether Image Overlay's poster is still up. While it is,
+        // react-player renders a preview instead of a player, so `playing` and
+        // `muted` reach nothing; the first Play click has to mount the real
+        // player the same way clicking the poster does.
+        let posterDismissed = !imageOverlay;
+
+        const renderPlayer = (extra = {}) =>
+            root.render(
+                <AdvancedVideo
+                    wrapper={playerOption}
+                    mediaControls={mediaControls}
+                    {...extra}
+                />
+            );
+
+        mediaControls = createMediaControls(playerOption, (state) => {
+            if (!posterDismissed && state.playing) {
+                // Same path as a poster click: drop `light`, mount the provider,
+                // start unmuted unless the button says otherwise.
+                posterDismissed = true;
+                renderPlayer({
+                    _autoplay: true,
+                    _muted: state.muted,
+                    _ctlPlaying: true,
+                    _ctlMuted: state.muted,
+                });
+                queueSvgIcons(playerOption);
+                return;
+            }
+
+            renderPlayer({
+                _ctlPlaying: state.playing,
+                _ctlMuted: state.muted,
+            });
+        });
+
+        renderPlayer();
 
         if (imageOverlay) {
             playerOption.addEventListener("click", () => {
-                root.render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />);
+                posterDismissed = true;
+                if (mediaControls) {
+                    mediaControls.report({ playing: true, muted: false });
+                }
+
+                renderPlayer({ _autoplay: true, _muted: false });
 
                 // Load SVG icons after render (for SVG URLs)
                 if (loadSvgIcons) {
@@ -252,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 wrapperModal.style.display = "block";
 
                 if (modalAutoplay === "true") {
-                    root.render(<AdvancedVideo wrapper={playerOption} _autoplay={true} _muted={false} />);
+                    renderPlayer({ _autoplay: true, _muted: false });
 
                     // Load SVG icons after render (for SVG URLs)
                     if (loadSvgIcons) {
@@ -272,7 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 var wrapperModal = document.querySelector(wrapperModalId);
 
                 wrapperModal.style.display = "none";
-                root.render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />);
+                renderPlayer({ _autoplay: false });
 
                 // Load SVG icons after render (for SVG URLs)
                 if (loadSvgIcons) {
@@ -287,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (event.target.classList.contains("eb-modal-player")) {
                     var wrapperModal = document.getElementById(event.target.id);
                     wrapperModal.style.display = "none";
-                    root.render(<AdvancedVideo wrapper={playerOption} _autoplay={false} />);
+                    renderPlayer({ _autoplay: false });
 
                     // Load SVG icons after render (for SVG URLs)
                     if (loadSvgIcons) {

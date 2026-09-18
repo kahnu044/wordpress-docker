@@ -23,6 +23,13 @@ class QueryHelper
         $queryData[ 'source' ]   = isset( $queryData[ 'source' ] )
             ? ( $queryData[ 'source' ] === 'posts' ? 'post' : $queryData[ 'source' ] )
             : 'post';
+
+        // Only allow publicly viewable post types so the unauth `queries`
+        // endpoint can't read non-public CPTs. Ref: FluentBoards #83051.
+        if ( ! is_post_type_viewable( $queryData[ 'source' ] ) ) {
+            $queryData[ 'source' ] = 'post';
+        }
+
         $queryData[ 'orderby' ]  = isset( $queryData[ 'orderby' ] )
             ? ( $queryData[ 'orderby' ] === 'id' ? 'ID' : $queryData[ 'orderby' ] )
             : 'date';

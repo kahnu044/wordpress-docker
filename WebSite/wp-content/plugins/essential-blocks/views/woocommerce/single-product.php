@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * Normalize against full defaults so the view is safe regardless of caller.
+ * Helper::views() injects variables via extract( $data, EXTR_SKIP ), so any key
+ * missing from $data is never defined. On PHP 8.0+ reading an undefined variable
+ * raises an E_WARNING (the REST/load-more path in API/Product.php passes raw
+ * attributes without a defaults merge). These guards prevent those warnings.
+ */
+$showSoldCount     = $showSoldCount     ?? false;
+$showSoldCountBar  = $showSoldCountBar  ?? false;
+$soldCountPrefix   = $soldCountPrefix   ?? __( 'Sold ', 'essential-blocks' );
+$soldCountSuffix   = $soldCountSuffix   ?? '+';
+$stockPercent      = $stockPercent      ?? 50;
+$showRating        = $showRating        ?? true;
+$ratingStyle       = $ratingStyle       ?? 'star';
+$showCategory      = $showCategory      ?? false;
+$showPrice         = $showPrice         ?? true;
+$showSaleBadge     = $showSaleBadge     ?? true;
+$saleBadgeAlign    = $saleBadgeAlign    ?? 'align-left';
+$saleText          = $saleText          ?? 'sale';
+$layout            = $layout            ?? 'grid';
+$gridPreset        = $gridPreset        ?? 'grid-preset-1';
+$titleTag          = $titleTag          ?? 'h3';
+$productDescLength = $productDescLength ?? 5;
+$showDetailBtn     = $showDetailBtn     ?? true;
+$detailBtnText     = $detailBtnText     ?? __( 'Visit Product', 'essential-blocks' );
+$imageSize         = !empty($imageSize) ? $imageSize : 'woocommerce_thumbnail';
+
 $otherArgs = ['showSoldCount' => $showSoldCount, 'showSoldCountBar' => $showSoldCountBar, 'soldCountPrefix' => $soldCountPrefix, 'soldCountSuffix' => $soldCountSuffix, 'stockPercent' => $stockPercent];
 
 $grid_sequence = [
@@ -110,9 +137,7 @@ $_list_sequence = apply_filters('eb_woo_product_grid_list_sequence', $list_seque
                     <?php
                 endif;
 
-                // Use imageSize if provided, otherwise fallback to 'woocommerce_thumbnail'
-                $image_size = isset($imageSize) && !empty($imageSize) ? $imageSize : 'woocommerce_thumbnail';
-                echo wp_kses_post($product->get_image($image_size));
+                echo wp_kses_post($product->get_image($imageSize));
 
                 if ($showSaleBadge && $product->is_on_sale()) {
                     echo wp_kses_post('<span class="eb-woo-product-ribbon ' . $saleBadgeAlign . '">' . $saleText . '</span>');

@@ -13,6 +13,7 @@ import {
 } from "@wordpress/blocks";
 import { useEffect, useState, useRef, memo } from "@wordpress/element";
 import { select, useSelect, useDispatch } from "@wordpress/data";
+import { applyFilters } from "@wordpress/hooks";
 import { times, merge } from "lodash";
 
 /**
@@ -426,6 +427,12 @@ function Edit(props) {
                         className={`eb-row-root-container ${blockId}`}
                         ref={rowWrap}
                     >
+                        {applyFilters(
+                            "eb_row_pro_video_bg_edit",
+                            "",
+                            attributes,
+                            setAttributes
+                        )}
                         <div className={`eb-row-wrapper for-editor-page`}>
                             <div className="eb-row-inner">
                                 {isLayoutSelected ? (

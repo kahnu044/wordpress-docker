@@ -1,10 +1,10 @@
 === Gutenberg Essential Blocks – Page Builder for Gutenberg Blocks & Patterns ===
-Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, jamilbd07, fencermonir, sumaiyasiddika
+Contributors: wpdevteam, re_enter_rupok, asif2bd, rahat89, priyomukul, RahatSheikhLeon
 Tags: Gutenberg, Block Editor, Gutenberg Templates, Gutenberg WooCommerce, Generate with AI
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.2.1
+Stable tag: 6.4.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -83,6 +83,12 @@ Secure any Gutenberg block, section, or content with password protection and con
 ##🎨 IMAGE MASKING & MORPHING (FREEMIUM)
 Transform ordinary images into captivating visual experiences with advanced masking and morphing effects. Easily apply creative shapes, seamless transitions, and dynamic image transformations to highlight products, showcase portfolios, or create engaging website sections—all directly within the Gutenberg editor without writing a single line of code.
 
+##🧭 ONE PAGE NAVIGATION (PRO)
+Guide visitors through long pages with smooth, customizable one page navigation. Create sticky section menus that let users jump between content effortlessly, improve the browsing experience and keep readers engaged, all within the Gutenberg editor without writing a line of code.
+
+##📋 COPY/PASTE STYLE (FREE)
+Build faster while keeping every page visually consistent. Copy the complete style of any Essential Blocks block and paste it onto another with a single click. Reuse your favorite designs, save time and eliminate repetitive customization, built directly into the Gutenberg editor with no coding required.
+
 ##🖼️ READY GUTENBERG PATTERNS BUILT WITH BLOCKS
 Get stunningly designed, ready-to-use Gutenberg block patterns for your WordPress website. Instantly add a block layout to Gutenberg or your site editor to make your website-building experience faster and more effective.
 
@@ -112,46 +118,46 @@ We have a very friendly support team ready to help you out. Ask your questions i
 ##70+ FREE GUTENBERG BLOCKS AND COUNTING
 Design without limits in WordPress block editor, using 70+ of the most useful Essential Blocks for Gutenberg.
 
-- **[Accordion](https://essential-blocks.com/demo/accordion/)** - Add beautiful accordions in your pages, posts, anywhere & reduce scrolling
-- **[Button](https://essential-blocks.com/demo/button/)** - Quickly add modern buttons with hover effect in your post or page
-- **[Call To Action](https://essential-blocks.com/demo/call-to-action/)** - Design call-to-action buttons quicker than a blink
-- **[Countdown](https://essential-blocks.com/demo/countdown/)** - Include a countdown timer to boost your click-through rates
-- **[Flipbox](https://essential-blocks.com/demo/flipbox/)** - Use animated Flip Boxes to highlight any content inside your page in a great way
-- **[Infobox](https://essential-blocks.com/demo/infobox/)** - Design a beautiful info box from predefined styles
-- **[Notice](https://essential-blocks.com/demo/notice/)** - Inform your users with specific Notice information and let them stay well aware of what’s important
-- **[Pricing Table](https://essential-blocks.com/demo/pricing-table/)** - Create Pricing Tables within minutes that convert
-- **[Social Icons](https://essential-blocks.com/demo/social-icons/)** - Let them share your content with different social media platforms
-- **[Team Member](https://essential-blocks.com/demo/team-member/)** - Feature your team members with a few clicks
-- **[Testimonial](https://essential-blocks.com/demo/testimonial/)** - Showcase what others said about your brand & Increase Your Credibility
-- **[Progress Bar](https://essential-blocks.com/demo/progress-bar/)** - Display how far the specific task or still is in the process
-- **[Interactive Promo](https://essential-blocks.com/demo/interactive-promo/)** - Showcase your content heading in an amazing way
-- **[Image Comparison](https://essential-blocks.com/demo/image-comparison/)** - Let your viewers compare two images interactively
-- **[Wrapper](https://essential-blocks.com/demo/wrapper/)** - Place any block within the wrapper and style the wrapper
-- **[Instagram Feed](https://essential-blocks.com/demo/instagram-feed/)** - Display your Instagram posts beautifully
-- **[Filterable Gallery](https://essential-blocks.com/demo/filterable-gallery/)** - Show your image gallery with a beautiful grid and lightbox
-- **[Advanced Heading](https://essential-blocks.com/demo/advanced-heading/)** - Advanced Heading block with lots of customization options
-- **[Dual Button](https://essential-blocks.com/demo/dual-button/)** - Show dual button with nice text or icon separator
-- **[Parallax Slider](https://essential-blocks.com/demo/parallax-slider/)** - Create a fancy slider to showcase your team or any image gallery
-- **[Typing Text](https://essential-blocks.com/demo/typing-text/)** -  Design your page using Typing text with an eye-catching typing effect
-- **[Toggle Content](https://essential-blocks.com/demo/toggle-content/)** -  Switch content or blocks with a beautiful switcher
-- **[Number Counter](https://essential-blocks.com/demo/number-counter/)** -  Put the spotlight on important statistics to attract visitors
-- **[Row](https://essential-blocks.com/demo/row/)** - Create complex Row layouts with plenty of styling controls & responsive options
-- **[Post grid](https://essential-blocks.com/demo/post-grid/)** - Create a stunning and interactive visualization for your blogs in a grid layout with Post Grid block
-- **[Table of Contents](https://essential-blocks.com/demo/table-of-content/)** - Insert Table of Contents (TOC) on your posts/pages and enhance user experience on your WordPress website
-- **[Feature List](https://essential-blocks.com/demo/feature-list/)** - Display information interactively with the feature list
-- **[Slider](https://essential-blocks.com/demo/slider/)** - Display all your beautiful images in the slider with motion effects and dazzle your audiences
-- **[Advanced Tab](https://essential-blocks.com/demo/advanced-tab/)** - Display nested tabs to display key information on an instance in an interactive manner
-- **[Fluent Forms](https://essential-blocks.com/demo/fluent-form/)** - Design your Forms container and fields and choose your preferred form layout to style Fluent Forms
-- **[Advanced Image](https://essential-blocks.com/demo/advanced-image/)** - Customize images in Gutenberg to fit your exact needs
-- **[WPForms](https://essential-blocks.com/demo/wpform/)** - Design stunning WPForms in minutes with plenty of controls & styling options
-- **[Woo Product Grid](https://essential-blocks.com/demo/woo-product-grid)** - Display WooCommerce products with stunning layouts, buttons, x, ratings, and more
-- **[Post Carousel](https://essential-blocks.com/demo/post-carousel)** - Showcase your posts creatively with an animated, dynamic carousel
-- **[Advanced Video](https://essential-blocks.com/demo/advanced-video)** -  Add extra styling and unique customization to your videos and amaze site visitors
-- **[Advanced Navigation](https://essential-blocks.com/demo/advanced-navigation)** -  Display pages & posts with easy navigation on your website with a stunning & organized appearance
-- **[Popup](https://essential-blocks.com/demo/popup)** -  Showcase your videos, images, or other content with popup & trigger actions
-- **[NFT Gallery](https://essential-blocks.com/demo/nft-gallery)** -  Display your NFT items & collections in a stunning gallery view without any coding
-- **[Social Share](https://essential-blocks.com/demo/social-share)** -  Share your posts & pages instantly on popular social platforms in one click from your website
-- **[Openverse](https://essential-blocks.com/demo/openverse)** -  Easily search & use royalty free images, stock photos, etc CC-licensed images from Openverse for your website
+- **[Accordion](https://essential-blocks.com/demo/accordion/)** - Collapsible content panels to reduce scrolling
+- **[Button](https://essential-blocks.com/demo/button/)** - Modern buttons with hover effects
+- **[Call To Action](https://essential-blocks.com/demo/call-to-action/)** - Eye-catching call-to-action sections
+- **[Countdown](https://essential-blocks.com/demo/countdown/)** - Countdown timer to boost click-through rates
+- **[Flipbox](https://essential-blocks.com/demo/flipbox/)** - Animated flip boxes to highlight content
+- **[Infobox](https://essential-blocks.com/demo/infobox/)** - Info boxes from predefined styles
+- **[Notice](https://essential-blocks.com/demo/notice/)** - Notice/alert boxes for important information
+- **[Pricing Table](https://essential-blocks.com/demo/pricing-table/)** - Pricing tables that convert
+- **[Social Icons](https://essential-blocks.com/demo/social-icons/)** - Share content across social media platforms
+- **[Team Member](https://essential-blocks.com/demo/team-member/)** - Feature your team members
+- **[Testimonial](https://essential-blocks.com/demo/testimonial/)** - Showcase reviews to build credibility
+- **[Progress Bar](https://essential-blocks.com/demo/progress-bar/)** - Display task or skill progress
+- **[Interactive Promo](https://essential-blocks.com/demo/interactive-promo/)** - Eye-catching promo headings
+- **[Image Comparison](https://essential-blocks.com/demo/image-comparison/)** - Interactive before/after image comparisons
+- **[Wrapper](https://essential-blocks.com/demo/wrapper/)** - Group and style any block together
+- **[Instagram Feed](https://essential-blocks.com/demo/instagram-feed/)** - Display Instagram posts beautifully
+- **[Filterable Gallery](https://essential-blocks.com/demo/filterable-gallery/)** - Image gallery with grid & lightbox
+- **[Advanced Heading](https://essential-blocks.com/demo/advanced-heading/)** - Headings with extra customization options
+- **[Dual Button](https://essential-blocks.com/demo/dual-button/)** - Two buttons with a text/icon separator
+- **[Parallax Slider](https://essential-blocks.com/demo/parallax-slider/)** - Fancy slider for teams or galleries
+- **[Typing Text](https://essential-blocks.com/demo/typing-text/)** - Eye-catching typing text effect
+- **[Toggle Content](https://essential-blocks.com/demo/toggle-content/)** - Switch content with a toggle switcher
+- **[Number Counter](https://essential-blocks.com/demo/number-counter/)** - Highlight key statistics
+- **[Row](https://essential-blocks.com/demo/row/)** - Row layouts with responsive styling controls
+- **[Post grid](https://essential-blocks.com/demo/post-grid/)** - Interactive grid layout for blog posts
+- **[Table of Contents](https://essential-blocks.com/demo/table-of-content/)** - TOC for posts/pages to improve UX
+- **[Feature List](https://essential-blocks.com/demo/feature-list/)** - Display information as a feature list
+- **[Slider](https://essential-blocks.com/demo/slider/)** - Image slider with motion effects
+- **[Advanced Tab](https://essential-blocks.com/demo/advanced-tab/)** - Nested tabs for key information
+- **[Fluent Forms](https://essential-blocks.com/demo/fluent-form/)** - Style Fluent Forms containers & fields
+- **[Advanced Image](https://essential-blocks.com/demo/advanced-image/)** - Customize images to your exact needs
+- **[WPForms](https://essential-blocks.com/demo/wpform/)** - Style WPForms with extra controls
+- **[Woo Product Grid](https://essential-blocks.com/demo/woo-product-grid)** - WooCommerce products in stunning layouts
+- **[Post Carousel](https://essential-blocks.com/demo/post-carousel)** - Animated, dynamic post carousel
+- **[Advanced Video](https://essential-blocks.com/demo/advanced-video)** - Extra styling for video embeds
+- **[Advanced Navigation](https://essential-blocks.com/demo/advanced-navigation)** - Organized, easy site navigation
+- **[Popup](https://essential-blocks.com/demo/popup)** - Popups that showcase content & trigger actions
+- **[NFT Gallery](https://essential-blocks.com/demo/nft-gallery)** - Display NFT items & collections
+- **[Social Share](https://essential-blocks.com/demo/social-share)** - One-click social sharing for posts & pages
+- **[Openverse](https://essential-blocks.com/demo/openverse)** - Search royalty-free, CC-licensed images
 - **[Google Maps](https://essential-blocks.com/demo/google-maps)** -  Present a fully responsive map on your website with your preferred configurations, styles, etc.
 - **[Shape Divider](https://essential-blocks.com/demo/shape-divider/)** - Make your website designs stand out by showcasing different sections with stunning shape dividers
 - **[Form](https://essential-blocks.com/demo/form-block/)** - Create responsive forms of any type - contact forms, RSVP forms, multi-step forms or subscription forms - in Gutenberg and manage them easily from your WordPress dashboard.
@@ -182,6 +188,7 @@ Design without limits in WordPress block editor, using 70+ of the most useful Es
 - **[Animated Wrapper (PRO)](https://essential-blocks.com/demo/animated-wrapper/)** - Design interactive layouts & containers in Gutenberg with dynamic animation effects.
 - **[Image Hotspots](https://essential-blocks.com/demo/image-hotspots/)** - This block enables you to pin items, products, etc into images with detailed pricing, URL, and description and make them interactive.
 - **[Timeline](https://essential-blocks.com/demo/timeline/)** - Create an interactive timeline in WordPress to showcase your story or company's history, achievements, events, and roadmaps.
+- **[One Page Navigation (PRO)](https://essential-blocks.com/demo/one-page-navigation/)** - Create smooth scrolling navigation menus for single page Gutenberg websites.
 
 More Gutenberg blocks and demos coming soon for the block visual editor (weekly update)
 
@@ -279,6 +286,37 @@ If you found the recent version of Essential Blocks isn’t working or conflicti
 
 
 == Changelog ==
+= 6.4.3 - 19/08/2026 =
+- Improved: Security enhancements
+- Few minor bug fixes & improvements
+
+
+= 6.4.2 - 16/08/2026 =
+- Fixed: Compatibility issue with Astra theme Customizer UI
+- Few minor bug fixes & improvements
+
+
+= 6.4.1 - 06/08/2026 =
+- Fixed: Facebook Feed editor and multi-feed display issues
+- Fixed: Instagram Feed content, caching, and API request issues
+- Fixed: PHP 8 undefined variable warnings in WooCommerce single product view
+- Few minor bug fixes & improvements
+
+
+= 6.4.0 - 28/07/2026 =
+- Added: New Feature | Copy/Paste EB Styles
+- Fixed: Filterable Gallery initial height issue
+- Fixed: Facebook Feed overflow inside Wrapper
+- Improved: Security enhancements
+- Improved: Minor bug fixes & enhancements
+
+
+= 6.3.0 - 24/06/2026 =
+- New Block | Facebook Feed
+- Fixed: Table of Contents block issue with the latest WordPress version
+- Few minor bug fixes & improvements
+
+
 = 6.2.1 - 18/06/2026 =
 - Improved: Liquid Glass in Individual Blocks
 - Improved: Improved Free block rendering and frontend stability (infobox)

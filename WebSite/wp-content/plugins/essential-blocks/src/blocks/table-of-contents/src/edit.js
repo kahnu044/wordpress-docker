@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from "@wordpress/i18n";
-import { renderToString, useEffect, useMemo, memo } from "@wordpress/element";
+import { renderToString, useEffect, useMemo, useState, memo } from "@wordpress/element";
 import { compose } from "@wordpress/compose";
 import {
     BlockControls,
@@ -155,6 +155,8 @@ const Edit = (props) => {
         title,
         titleTag,
         collapsible,
+        initialCollapse,
+        isSticky,
         listStyle,
         displayTitle,
         scrollToTop,
@@ -171,6 +173,14 @@ const Edit = (props) => {
         allowConfigurablePrefix,
         configurablePrefix,
     } = attributes;
+
+    // Mirror the front end's initial collapse state (see
+    // TableOfContents.php: the wrapper renders with `hide-content` when
+    // `collapsible && initialCollapse && !isSticky`). `visible` drives the
+    // same class in the editor so the preview matches the front end.
+    const [visible, setVisible] = useState(
+        !(collapsible && initialCollapse && !isSticky)
+    );
 
     const isBlockJustInserted = select(
         "core/block-editor"
@@ -427,7 +437,10 @@ const Edit = (props) => {
                             )}
                         </div>
                         {headers.length > 0 ? (
-                            <div className="eb-toc-wrapper">
+                            <div
+                                className={`eb-toc-wrapper${collapsible && !visible ? " hide-content" : ""
+                                    }`}
+                            >
                                 <List attributes={attributes} />
                             </div>
                         ) : (

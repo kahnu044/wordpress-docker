@@ -36,6 +36,10 @@
 			<xpath label="eb-toggle-primary-label">//span[@class="eb-toggle-primary-label"]</xpath>
 			<xpath label="eb-toggle-secondary-label">//span[@class="eb-toggle-secondary-label"]</xpath>
 		</gutenberg-block>
+		<gutenberg-block type="essential-blocks/facebook-feed" translate="1">
+			<key name="loadMoreText" />
+			<xpath label="eb-fb-feed-load-more">//button[@class="eb-fb-feed__load-more"]</xpath>
+		</gutenberg-block>
 		<gutenberg-block type="essential-blocks/form" translate="1">
 			<key name="buttonText" />
 		</gutenberg-block>

@@ -73,7 +73,7 @@ function ImageComparison(props) {
         swap = !swap;
         [leftImageURL, rightImageURL] = [rightImageURL, leftImageURL];
 
-        setDefaultValues({ swap, leftImageURL, rightImageURL });
+        handleBlockDefault({ swap, leftImageURL, rightImageURL });
     };
 
     return (

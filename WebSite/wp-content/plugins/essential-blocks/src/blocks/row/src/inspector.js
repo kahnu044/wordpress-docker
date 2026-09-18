@@ -59,7 +59,8 @@ function Inspector(props) {
                 paddingPrefix: rWrapPaddingConst,
                 backgroundPrefix: WrpBgConst,
                 borderPrefix: WrpBdShadowConst,
-                hasMargin: true
+                hasMargin: true,
+                hasVideoBackground: true
             }
             }
         >

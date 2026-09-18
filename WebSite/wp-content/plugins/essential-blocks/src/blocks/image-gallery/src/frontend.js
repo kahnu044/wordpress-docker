@@ -255,6 +255,44 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     }
                 });
             }
+
+            // Loader-agnostic re-layout. WP Rocket / vanilla-lazyload restores the
+            // real `src` AFTER imagesLoaded resolved (it saw 0-height images as
+            // "complete"), so Isotope locked a wrong container height. WP Rocket
+            // fires NO `lazyloaded` DOM event (it's a CSS class here, not an event
+            // — wp-media/wp-rocket#1964, wontfix), so the document `lazyloaded`
+            // listener is dead there and only a manual resize recovered layout.
+            // Listen for each image's native `load` in the CAPTURE phase on the
+            // container (`load` doesn't bubble) to catch every descendant <img>
+            // regardless of loader — WP Rocket src-swap, lazysizes, native lazy,
+            // or plain eager. rAF-debounce so a burst of loads coalesces into ONE
+            // iso.layout(). Images already loaded before this listener attached
+            // (above-fold / cached) fired `load` earlier → no spurious relayout.
+            let relayoutScheduled = false;
+            function scheduleRelayout() {
+                if (relayoutScheduled) {
+                    return;
+                }
+                relayoutScheduled = true;
+                window.requestAnimationFrame(function () {
+                    relayoutScheduled = false;
+                    iso?.layout();
+                });
+            }
+            imageGallery.addEventListener("load", function (e) {
+                if (e.target && e.target.tagName === "IMG") {
+                    scheduleRelayout();
+                }
+            }, true);
+            imageGallery.addEventListener("error", function (e) {
+                if (e.target && e.target.tagName === "IMG") {
+                    scheduleRelayout();
+                }
+            }, true);
+            // lazysizes-style plugins (NOT WP Rocket) DO dispatch a bubbling
+            // `lazyloaded` DOM event — route it through the same debounce. Kept
+            // for lazysizes compat; harmless no-op on WP Rocket sites.
+            document.addEventListener("lazyloaded", scheduleRelayout);
         });
 
         // loadmore function
@@ -315,11 +353,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 loadMore(iso, initShow);
             });
         }
-
-        // Run re-layout when images load dynamically (if lazy loading affects)
-        document.addEventListener("lazyloaded", function () {
-            iso?.layout();
-        });
 
         // Ensure layout is correct on window resize
         window.addEventListener("resize", function () {

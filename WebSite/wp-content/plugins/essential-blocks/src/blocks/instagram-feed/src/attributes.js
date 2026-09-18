@@ -58,10 +58,11 @@ const attributes = {
         type: "number",
         default: 6,
     },
-    thumbs: {
-        type: "array",
-        default: [],
-    },
+    // NOTE: the fetched feed is deliberately NOT an attribute. It used to be
+    // persisted as `thumbs`, which baked the entire Instagram API response
+    // (up to `limit=500` posts) into post_content even though the server
+    // render re-fetches it and never reads the saved copy. It now lives in
+    // edit.js component state.
     preview: {
         type: "boolean",
         default: false,

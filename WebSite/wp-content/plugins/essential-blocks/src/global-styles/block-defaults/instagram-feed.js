@@ -60,7 +60,6 @@ function InstagramFeed(props) {
         layout,
         overlayStyle,
         cardStyle,
-        thumbs,
         numberOfImages,
         captionColor,
         metaColor,
@@ -84,263 +83,259 @@ function InstagramFeed(props) {
         <>
             {isDefaultSet && (
                 <div className="eb-panel-control">
-                    {thumbs.length > 0 && (
+                    <PanelBody
+                        title={__("Feed Settings", "essential-blocks")}
+                        intialOpen={true}
+                    >
                         <>
-                            <PanelBody
-                                title={__("Feed Settings", "essential-blocks")}
-                                intialOpen={true}
-                            >
-                                <>
-                                    <SelectControl
-                                        label={__(
-                                            "Sort By",
-                                            "essential-blocks"
-                                        )}
-                                        value={sortBy}
-                                        options={SORT_OPTIONS}
-                                        onChange={(newSortBy) =>
-                                            handleBlockDefault({
-                                                sortBy: newSortBy,
-                                            })
-                                        }
-                                        __next40pxDefaultSize
-                                        __nextHasNoMarginBottom
-                                    />
-                                    <RangeControl
-                                        label={__(
-                                            "Number Of Images",
-                                            "essential-blocks"
-                                        )}
-                                        value={numberOfImages}
-                                        onChange={(numberOfImages) => {
-                                            handleBlockDefault({
-                                                numberOfImages,
-                                            });
-                                        }}
-                                        min={1}
-                                        max={100}
-                                        __nextHasNoMarginBottom
-                                        __next40pxDefaultSize
-                                    />
-                                    <ResponsiveRangeController
-                                        baseLabel={__(
-                                            "Columns",
-                                            "essential-blocks"
-                                        )}
-                                        controlName={NUMBER_OF_COLUMNS}
-                                        min={1}
-                                        max={8}
-                                        step={1}
-                                        noUnits
-                                    />
-                                    <ToggleControl
-                                        label={__(
-                                            "Square thumbnail",
-                                            "essential-blocks"
-                                        )}
-                                        checked={hasEqualImages}
-                                        onChange={(hasEqualImages) =>
-                                            handleBlockDefault({
-                                                hasEqualImages,
-                                            })
-                                        }
-                                        __nextHasNoMarginBottom
-                                    />
-                                </>
-                            </PanelBody>
-                            <PanelBody
-                                title={__(
-                                    "General Settings",
+                            <SelectControl
+                                label={__(
+                                    "Sort By",
                                     "essential-blocks"
                                 )}
-                                initialOpen={false}
-                            >
-                                <SelectControl
-                                    label={__("Layout", "essential-blocks")}
-                                    value={layout}
-                                    options={LAYOUT}
-                                    onChange={(newLayout) =>
+                                value={sortBy}
+                                options={SORT_OPTIONS}
+                                onChange={(newSortBy) =>
+                                    handleBlockDefault({
+                                        sortBy: newSortBy,
+                                    })
+                                }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                            <RangeControl
+                                label={__(
+                                    "Number Of Images",
+                                    "essential-blocks"
+                                )}
+                                value={numberOfImages}
+                                onChange={(numberOfImages) => {
+                                    handleBlockDefault({
+                                        numberOfImages,
+                                    });
+                                }}
+                                min={1}
+                                max={100}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
+                            />
+                            <ResponsiveRangeController
+                                baseLabel={__(
+                                    "Columns",
+                                    "essential-blocks"
+                                )}
+                                controlName={NUMBER_OF_COLUMNS}
+                                min={1}
+                                max={8}
+                                step={1}
+                                noUnits
+                            />
+                            <ToggleControl
+                                label={__(
+                                    "Square thumbnail",
+                                    "essential-blocks"
+                                )}
+                                checked={hasEqualImages}
+                                onChange={(hasEqualImages) =>
+                                    handleBlockDefault({
+                                        hasEqualImages,
+                                    })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        </>
+                    </PanelBody>
+                    <PanelBody
+                        title={__(
+                            "General Settings",
+                            "essential-blocks"
+                        )}
+                        initialOpen={false}
+                    >
+                        <SelectControl
+                            label={__("Layout", "essential-blocks")}
+                            value={layout}
+                            options={LAYOUT}
+                            onChange={(newLayout) =>
+                                handleBlockDefault({
+                                    layout: newLayout,
+                                })
+                            }
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        />
+                        {layout === "overlay" && (
+                            <SelectControl
+                                label={__(
+                                    "Overlay Style",
+                                    "essential-blocks"
+                                )}
+                                value={overlayStyle}
+                                options={OVERLAY_STYLE}
+                                onChange={(newOverlayStyle) =>
+                                    handleBlockDefault({
+                                        overlayStyle: newOverlayStyle,
+                                    })
+                                }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                        {layout === "card" && (
+                            <SelectControl
+                                label={__(
+                                    "Card Style",
+                                    "essential-blocks"
+                                )}
+                                value={cardStyle}
+                                options={CARD_STYLE}
+                                onChange={(newCardStyle) =>
+                                    handleBlockDefault({
+                                        cardStyle: newCardStyle,
+                                    })
+                                }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                        {layout === "card" && (
+                            <>
+                                <Divider />
+                                <BaseControl __nextHasNoMarginBottom>
+                                    <h3 className="eb-control-title">
+                                        {__(
+                                            "User info",
+                                            "essential-blocks"
+                                        )}
+                                    </h3>
+                                </BaseControl>
+                                <ToggleControl
+                                    label={__(
+                                        "Show profile image",
+                                        "essential-blocks"
+                                    )}
+                                    checked={showProfileImg}
+                                    onChange={(showProfileImg) =>
                                         handleBlockDefault({
-                                            layout: newLayout,
+                                            showProfileImg,
                                         })
                                     }
-                                    __next40pxDefaultSize
                                     __nextHasNoMarginBottom
                                 />
-                                {layout === "overlay" && (
-                                    <SelectControl
-                                        label={__(
-                                            "Overlay Style",
-                                            "essential-blocks"
-                                        )}
-                                        value={overlayStyle}
-                                        options={OVERLAY_STYLE}
-                                        onChange={(newOverlayStyle) =>
+                                {showProfileImg && !profileImg && (
+                                    <MediaUpload
+                                        onSelect={({ id, url }) =>
                                             handleBlockDefault({
-                                                overlayStyle: newOverlayStyle,
+                                                profileImg: url,
+                                                imageID: id,
                                             })
                                         }
-                                        __next40pxDefaultSize
-                                        __nextHasNoMarginBottom
+                                        type="image"
+                                        value={imageID}
+                                        render={({ open }) => {
+                                            return (
+                                                <Button
+                                                    className="eb-background-control-inspector-panel-img-btn components-button"
+                                                    label={__(
+                                                        "Upload Image",
+                                                        "essential-blocks"
+                                                    )}
+                                                    icon="format-image"
+                                                    onClick={open}
+                                                />
+                                            );
+                                        }}
                                     />
                                 )}
-                                {layout === "card" && (
-                                    <SelectControl
-                                        label={__(
-                                            "Card Style",
-                                            "essential-blocks"
-                                        )}
-                                        value={cardStyle}
-                                        options={CARD_STYLE}
-                                        onChange={(newCardStyle) =>
+                                {showProfileImg && profileImg && (
+                                    <ImageAvatar
+                                        imageUrl={profileImg}
+                                        onDeleteImage={() =>
                                             handleBlockDefault({
-                                                cardStyle: newCardStyle,
+                                                profileImg: null,
                                             })
                                         }
-                                        __next40pxDefaultSize
-                                        __nextHasNoMarginBottom
-                                    />
-                                )}
-                                {layout === "card" && (
-                                    <>
-                                        <Divider />
-                                        <BaseControl __nextHasNoMarginBottom>
-                                            <h3 className="eb-control-title">
-                                                {__(
-                                                    "User info",
-                                                    "essential-blocks"
-                                                )}
-                                            </h3>
-                                        </BaseControl>
-                                        <ToggleControl
-                                            label={__(
-                                                "Show profile image",
-                                                "essential-blocks"
-                                            )}
-                                            checked={showProfileImg}
-                                            onChange={(showProfileImg) =>
-                                                handleBlockDefault({
-                                                    showProfileImg,
-                                                })
-                                            }
-                                            __nextHasNoMarginBottom
-                                        />
-                                        {showProfileImg && !profileImg && (
-                                            <MediaUpload
-                                                onSelect={({ id, url }) =>
-                                                    handleBlockDefault({
-                                                        profileImg: url,
-                                                        imageID: id,
-                                                    })
-                                                }
-                                                type="image"
-                                                value={imageID}
-                                                render={({ open }) => {
-                                                    return (
-                                                        <Button
-                                                            className="eb-background-control-inspector-panel-img-btn components-button"
-                                                            label={__(
-                                                                "Upload Image",
-                                                                "essential-blocks"
-                                                            )}
-                                                            icon="format-image"
-                                                            onClick={open}
-                                                        />
-                                                    );
-                                                }}
-                                            />
-                                        )}
-                                        {showProfileImg && profileImg && (
-                                            <ImageAvatar
-                                                imageUrl={profileImg}
-                                                onDeleteImage={() =>
-                                                    handleBlockDefault({
-                                                        profileImg: null,
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                        <ToggleControl
-                                            label={__(
-                                                "Show profile name",
-                                                "essential-blocks"
-                                            )}
-                                            checked={showProfileName}
-                                            onChange={(showProfileName) =>
-                                                handleBlockDefault({
-                                                    showProfileName,
-                                                })
-                                            }
-                                            __nextHasNoMarginBottom
-                                        />
-                                        {showProfileName && (
-                                            <TextControl
-                                                label={__(
-                                                    "Custom Name",
-                                                    "essential-blocks"
-                                                )}
-                                                value={profileName}
-                                                onChange={(newProfileName) =>
-                                                    handleBlockDefault({
-                                                        profileName: newProfileName,
-                                                    })
-                                                }
-                                                __next40pxDefaultSize
-                                                __nextHasNoMarginBottom
-                                            />
-                                        )}
-                                    </>
-                                )}
-                                {overlayStyle !== "overlay__simple" && (
-                                    <ToggleControl
-                                        label={__(
-                                            "Show captions",
-                                            "essential-blocks"
-                                        )}
-                                        checked={showCaptions}
-                                        onChange={(showCaptions) =>
-                                            handleBlockDefault({ showCaptions })
-                                        }
-                                        __nextHasNoMarginBottom
                                     />
                                 )}
                                 <ToggleControl
-                                    label={__("Show Link?", "essential-blocks")}
-                                    checked={enableLink}
-                                    onChange={(enableLink) =>
-                                        handleBlockDefault({ enableLink })
+                                    label={__(
+                                        "Show profile name",
+                                        "essential-blocks"
+                                    )}
+                                    checked={showProfileName}
+                                    onChange={(showProfileName) =>
+                                        handleBlockDefault({
+                                            showProfileName,
+                                        })
                                     }
                                     __nextHasNoMarginBottom
                                 />
-                                {enableLink && (
-                                    <ToggleControl
+                                {showProfileName && (
+                                    <TextControl
                                         label={__(
-                                            "Open in new window?",
+                                            "Custom Name",
                                             "essential-blocks"
                                         )}
-                                        checked={openInNewTab}
-                                        onChange={(openInNewTab) =>
-                                            handleBlockDefault({ openInNewTab })
+                                        value={profileName}
+                                        onChange={(newProfileName) =>
+                                            handleBlockDefault({
+                                                profileName: newProfileName,
+                                            })
                                         }
+                                        __next40pxDefaultSize
                                         __nextHasNoMarginBottom
                                     />
                                 )}
-                                {overlayStyle !== "overlay__simple" && (
-                                    <ToggleControl
-                                        label={__(
-                                            "Show Meta?",
-                                            "instagram-block"
-                                        )}
-                                        checked={showMeta}
-                                        onChange={(showMeta) =>
-                                            handleBlockDefault({ showMeta })
-                                        }
-                                        __nextHasNoMarginBottom
-                                    />
+                            </>
+                        )}
+                        {overlayStyle !== "overlay__simple" && (
+                            <ToggleControl
+                                label={__(
+                                    "Show captions",
+                                    "essential-blocks"
                                 )}
-                            </PanelBody>
-                        </>
-                    )}
+                                checked={showCaptions}
+                                onChange={(showCaptions) =>
+                                    handleBlockDefault({ showCaptions })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                        <ToggleControl
+                            label={__("Show Link?", "essential-blocks")}
+                            checked={enableLink}
+                            onChange={(enableLink) =>
+                                handleBlockDefault({ enableLink })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        {enableLink && (
+                            <ToggleControl
+                                label={__(
+                                    "Open in new window?",
+                                    "essential-blocks"
+                                )}
+                                checked={openInNewTab}
+                                onChange={(openInNewTab) =>
+                                    handleBlockDefault({ openInNewTab })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                        {overlayStyle !== "overlay__simple" && (
+                            <ToggleControl
+                                label={__(
+                                    "Show Meta?",
+                                    "instagram-block"
+                                )}
+                                checked={showMeta}
+                                onChange={(showMeta) =>
+                                    handleBlockDefault({ showMeta })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                    </PanelBody>
                     {/* Styles */}
                     <PanelBody
                         title={__("Feed Styles", "essential-blocks")}

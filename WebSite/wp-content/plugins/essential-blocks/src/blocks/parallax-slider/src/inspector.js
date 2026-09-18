@@ -42,7 +42,8 @@ import {
     ResponsiveRangeController,
     ColorControl,
     InspectorPanel,
-    EBTextControl
+    EBTextControl,
+    ImageComponent
 } from "@essential-blocks/controls";
 
 const Inspector = ({ attributes, setAttributes }) => {
@@ -84,6 +85,29 @@ const Inspector = ({ attributes, setAttributes }) => {
     const handlePanelClick = (index) => {
         let updatedIndex = index !== current ? index : 1;
         setAttributes({ current: updatedIndex });
+    };
+
+    const handleImageReplace = (media, index) => {
+        if (!media || !media.url) return;
+        const updatedData = [...sliderData];
+        updatedData[index] = {
+            ...updatedData[index],
+            id: media.id,
+            src: media.url,
+            alt: media.alt,
+        };
+        setAttributes({ sliderData: updatedData });
+    };
+
+    const handleImageClear = (index) => {
+        const updatedData = [...sliderData];
+        updatedData[index] = {
+            ...updatedData[index],
+            id: "",
+            src: "",
+            alt: "",
+        };
+        setAttributes({ sliderData: updatedData });
     };
 
     return (
@@ -178,6 +202,17 @@ const Inspector = ({ attributes, setAttributes }) => {
                                 onToggle={() => handlePanelClick(index)}
                                 className="eb-slider-item-single-panel"
                             >
+                                <ImageComponent.GeneralTab
+                                    value={slide.src}
+                                    onSelect={(media) => handleImageReplace(media, index)}
+                                    onRemove={() => handleImageClear(index)}
+                                    showInPanel={false}
+                                    hasStyle={false}
+                                    hasTag={false}
+                                    hasCaption={false}
+                                    hasLink={false}
+                                />
+
                                 <EBTextControl
                                     label={__("Title Text", "essential-blocks")}
                                     value={slide.title}

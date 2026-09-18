@@ -207,24 +207,33 @@ class OpenAI
         // Get AI settings
         $eb_write_with_ai = (array) get_option( 'eb_write_with_ai', [  ] );
 
-        // Check if AI is enabled
-        $is_ai_enabled_for_page_content = isset( $eb_write_with_ai[ 'writePageContent' ] ) ? $eb_write_with_ai[ 'writePageContent' ] : true;
-        $is_ai_enabled_for_richtext     = isset( $eb_write_with_ai[ 'writeRichtext' ] ) ? $eb_write_with_ai[ 'writeRichtext' ] : true;
-        $is_ai_enabled_for_input_fields = isset( $eb_write_with_ai[ 'writeInputFields' ] ) ? $eb_write_with_ai[ 'writeInputFields' ] : true;
-        if ( $writePageContent === 'writePageContent' && ! $is_ai_enabled_for_page_content ) {
+        // SECURITY: this used to be an if/elseif chain that rejected only the
+        // three exact known context strings when their setting was disabled.
+        // Any other value matched no branch and fell through to the
+        // credentialed request below, so an unknown content_for bypassed
+        // administrator-disabled AI contexts entirely. The context must now be
+        // known *and* enabled; anything else fails closed.
+        $context_messages = [
+            'writePageContent' => __( 'AI page content generation is disabled. Please enable it in the settings.', 'essential-blocks' ),
+            'writeRichtext'    => __( 'AI richtext content generation is disabled. Please enable it in the settings.', 'essential-blocks' ),
+            'writeInputFields' => __( 'AI input fieldcontent generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+         ];
+
+        if ( ! is_string( $writePageContent ) || ! isset( $context_messages[ $writePageContent ] ) ) {
             return [
                 'success' => false,
-                'message' => __( 'AI page content generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+                'message' => __( 'Invalid content context.', 'essential-blocks' )
              ];
-        } elseif ( $writePageContent === 'writeRichtext' && ! $is_ai_enabled_for_richtext ) {
+        }
+
+        $is_context_enabled = isset( $eb_write_with_ai[ $writePageContent ] )
+            ? $eb_write_with_ai[ $writePageContent ]
+            : true;
+
+        if ( ! $is_context_enabled ) {
             return [
                 'success' => false,
-                'message' => __( 'AI richtext content generation is disabled. Please enable it in the settings.', 'essential-blocks' )
-             ];
-        } elseif ( $writePageContent === 'writeInputFields' && ! $is_ai_enabled_for_input_fields ) {
-            return [
-                'success' => false,
-                'message' => __( 'AI input fieldcontent generation is disabled. Please enable it in the settings.', 'essential-blocks' )
+                'message' => $context_messages[ $writePageContent ]
              ];
         }
 
