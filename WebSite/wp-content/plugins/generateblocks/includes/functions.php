@@ -659,7 +659,34 @@ function generateblocks_get_background_image_css( $type, $settings ) {
  * @return bool True when the attribute should be treated as a URL.
  */
 function generateblocks_is_url_attribute( $name ) {
-	$url_attributes = array( 'href', 'src', 'action' );
+	/*
+	 * Attributes whose value the browser resolves as a URL and that can carry a
+	 * javascript:/data: scheme that EXECUTES — esc_url() must neutralize these. This list
+	 * also drives static htmlAttributes escaping (generateblocks_attr(),
+	 * generateblocks_get_escaped_html_attribute()), not just dynamic tags, so every entry
+	 * changes how existing stored values render — keep it tight:
+	 *   - href/src/action: original set.
+	 *   - formaction/xlink:href: javascript:-capable navigation sinks whose names are
+	 *     unambiguous on any element.
+	 * Deliberately excluded:
+	 *   - `data`: only a URL on <object>; the bare name is generic and a custom `data`
+	 *     attribute holding plain text would be rewritten ("plain value" →
+	 *     "http://plain%20value"). Core's WP_HTML_Tag_Processor::set_attribute() already
+	 *     esc_url()'s every wp_kses_uri_attributes() name (data included) on the paths
+	 *     that write attributes through it, so the <object data> sink keeps core's
+	 *     treatment there without this list matching it name-only.
+	 *   - fetch-only URL attributes (poster, cite, background): not execution sinks, and
+	 *     esc_url() would rewrite scheme-less values (a misused cite="Author Name" becomes
+	 *     http://Author%20Name) — a back-compat regression for no security gain.
+	 *   - list-valued attributes (ping, srcset): single-URL esc_url() corrupts the list.
+	 */
+	$url_attributes = array(
+		'href',
+		'src',
+		'action',
+		'formaction',
+		'xlink:href',
+	);
 
 	return in_array( strtolower( (string) $name ), $url_attributes, true );
 }
@@ -2035,6 +2062,37 @@ function generateblocks_use_v1_blocks() {
 		'generateblocks_use_v1_blocks',
 		$option
 	);
+}
+
+/**
+ * Declare which extension points this version of GenerateBlocks supports.
+ *
+ * Companion plugins (GenerateBlocks Pro, GenerateCloud) should call this with
+ * function_exists() to detect features rather than checking GENERATEBLOCKS_VERSION,
+ * so version skew between plugins degrades gracefully.
+ *
+ * Known features:
+ *  - 'block-inspector-slot': v2 blocks render their inspector via the
+ *    `<BlockInspectorControls>` wrapper, which exposes the
+ *    `generateblocks.editor.inspectorControls` and
+ *    `generateblocks.editor.areInspectorControlsDisabled` filters.
+ *
+ * @param string $feature Feature key.
+ * @return bool
+ */
+function generateblocks_supports( $feature ) {
+	$features = [
+		'block-inspector-slot' => true,
+	];
+
+	/**
+	 * Filter the map of supported GenerateBlocks features.
+	 *
+	 * @param array $features Map of feature key => bool.
+	 */
+	$features = apply_filters( 'generateblocks_supported_features', $features );
+
+	return ! empty( $features[ $feature ] );
 }
 
 /**

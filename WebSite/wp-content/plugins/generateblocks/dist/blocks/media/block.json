@@ -42,7 +42,8 @@
     },
     "mediaId": {
       "type": "number",
-      "default": 0
+      "default": 0,
+      "role": "content"
     },
     "linkHtmlAttributes": {
       "type": "object",

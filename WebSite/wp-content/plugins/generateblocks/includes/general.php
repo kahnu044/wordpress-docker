@@ -119,6 +119,7 @@ function generateblocks_do_block_editor_assets() {
 			'disableGoogleFonts' => generateblocks_get_option( 'disable_google_fonts' ),
 			'typographyFontFamilyList' => generateblocks_get_font_family_list(),
 			'useV1Blocks' => generateblocks_use_v1_blocks(),
+			'hasBlockInspectorControlsSlot' => generateblocks_supports( 'block-inspector-slot' ),
 		)
 	);
 
@@ -261,6 +262,10 @@ function generateblocks_do_block_editor_assets() {
 	$tags = GenerateBlocks_Register_Dynamic_Tag::get_tags();
 	$tag_list = [];
 
+	$can_author_dynamic_data = class_exists( 'GenerateBlocks_Dynamic_Tag_Security' ) &&
+		method_exists( 'GenerateBlocks_Dynamic_Tag_Security', 'user_can_author_dynamic_data' ) &&
+		GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data();
+
 	foreach ( $tags as $tag => $data ) {
 		$relevant_data = $data;
 		unset( $relevant_data['return'] );
@@ -291,7 +296,10 @@ function generateblocks_do_block_editor_assets() {
 			'dateFormat' => get_option( 'date_format' ),
 			'wpContentUrl' => content_url(),
 			'typographyFontFamilyList' => generateblocks_get_font_family_list(),
-			'dynamicTagsPreview' => apply_filters( 'generateblocks_dynamic_tags_preview', true ) ? 'enabled' : 'disabled',
+			'dynamicTagsPreview' => $can_author_dynamic_data && apply_filters( 'generateblocks_dynamic_tags_preview', true ) ? 'enabled' : 'disabled',
+			// Editor UI gate only — the save gate and render-time taint model enforce
+			// this server-side regardless of what the client does with the flag.
+			'canAuthorDynamicData' => $can_author_dynamic_data,
 		]
 	);
 

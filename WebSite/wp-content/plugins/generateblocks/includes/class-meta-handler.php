@@ -44,7 +44,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_post_meta_rest' ],
 				'permission_callback' => function() {
-					return current_user_can( 'edit_posts' );
+					return GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data();
 				},
 			]
 		);
@@ -56,7 +56,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_user_meta_rest' ],
 				'permission_callback' => function() {
-					return current_user_can( 'edit_posts' );
+					return GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data();
 				},
 			]
 		);
@@ -68,7 +68,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_term_meta_rest' ],
 				'permission_callback' => function() {
-					return current_user_can( 'edit_posts' );
+					return GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data();
 				},
 			]
 		);
@@ -80,6 +80,10 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_option_rest' ],
 				'permission_callback' => function( $request ) {
+					if ( ! GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data() ) {
+						return false;
+					}
+
 					// Only allow users who can edit posts to access options.
 					if ( ! current_user_can( 'edit_posts' ) ) {
 						return false;
@@ -139,24 +143,176 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 	 * @param mixed $value The value to check the property against.
 	 * @param mixed $property The property to retrieve from the value if it exists.
 	 * @param bool  $single_only If true, only return value if it's a string-like value.
+	 * @param bool  $gate_objects If true, block reads off non-public dereferenced WP_Post objects.
 	 * @return mixed The $property value if it exists, otherwise the $value.
 	 */
-	public static function maybe_get_property( $value, $property, $single_only = true ) {
+	public static function maybe_get_property( $value, $property, $single_only = true, $gate_objects = false ) {
 		if ( ! $property
 			&& ! $single_only
 			&& ( is_array( $value ) || is_object( $value ) )
 		) {
-			return $value;
+			return $gate_objects ? self::scrub_dereferenced_value( $value ) : $value;
+		}
+
+		// Never surface a field that is already forbidden as a direct meta key through a
+		// dot-path walk. A relational field can return full WP_Post/WP_User objects, so
+		// `related_posts.0.post_password` or `team_member.data.user_pass` must fail the same
+		// way `post_password` / `user_pass` fail as top-level reads.
+		if ( is_string( $property ) && in_array( $property, self::DISALLOWED_KEYS, true ) ) {
+			return '';
+		}
+
+		// Gate reads off a dereferenced post object (only when the caller opts in — see
+		// get_meta()). A dynamic-tag dot-path can land on a WP_Post an ACF relational field
+		// returned; unlike a loop item (already query-gated), that pointer lives in mutable
+		// post meta the save-time validator never sees, while the rendered output is
+		// public/cacheable. Do not expose draft/private/password-protected/non-viewable posts.
+		if ( $gate_objects ) {
+			if ( $value instanceof WP_Post && ! self::dereferenced_post_is_public( $value ) ) {
+				return '';
+			}
 		}
 
 		if ( is_array( $value ) ) {
 			return $value[ $property ] ?? $value;
 		} elseif ( is_object( $value ) ) {
+			// WP_User resolves a lowercase `id` through a deprecated ->id path; normalize to the
+			// canonical ID so a byline read gets the same value without emitting the deprecation.
+			if ( 'id' === $property && $value instanceof WP_User ) {
+				$property = 'ID';
+			}
+
 			return $value->$property ?? $value;
 		}
 
 		// Return the value if it's not an array or object.
 		return $value;
+	}
+
+	/**
+	 * Whether a WP_Post reached by dereferencing a dynamic-tag pointer may be exposed on the
+	 * public frontend.
+	 *
+	 * It must be published, not password-protected, and of a publicly viewable post type.
+	 * Viewer caps are deliberately NOT consulted: the pointer (an ACF field value) is mutable
+	 * independently of the validated content string, and the rendered output is public and
+	 * cacheable, so readability cannot depend on who is viewing.
+	 *
+	 * @param mixed $post The dereferenced value (expected WP_Post).
+	 * @return bool
+	 */
+	protected static function dereferenced_post_is_public( $post ) {
+		if ( ! $post instanceof WP_Post ) {
+			return false;
+		}
+
+		if ( 'publish' !== $post->post_status ) {
+			return false;
+		}
+
+		if ( '' !== (string) $post->post_password ) {
+			return false;
+		}
+
+		if ( function_exists( 'is_post_type_viewable' ) ) {
+			return (bool) is_post_type_viewable( $post->post_type );
+		}
+
+		$post_type = function_exists( 'get_post_type_object' ) ? get_post_type_object( $post->post_type ) : null;
+
+		return ! empty( $post_type->public );
+	}
+
+	/**
+	 * Recursively strip a dereferenced structure down to data we can render publicly.
+	 *
+	 * The reader (get_value()) returns a whole array/object when single_only is false and the
+	 * sub-key resolves to empty — e.g. a Query Loop reading an ACF relationship field, or the REST
+	 * meta endpoint called with singleOnly=false. Keep existing public/user/plain data intact,
+	 * but drop non-public WP_Post objects and blank keys that are forbidden as direct meta reads.
+	 *
+	 * @param mixed $value The dereferenced value to sanitize.
+	 * @return mixed The sanitized value.
+	 */
+	protected static function scrub_dereferenced_value( $value ) {
+		if ( $value instanceof WP_Post ) {
+			return self::dereferenced_post_is_public( $value ) ? $value : '';
+		}
+
+		if ( is_object( $value ) ) {
+			if ( ! self::is_scrubbable_object( $value ) ) {
+				return $value;
+			}
+
+			return self::scrub_disallowed_properties( $value );
+		}
+
+		$sanitized = [];
+
+		foreach ( $value as $key => $item ) {
+			if ( is_string( $key ) && in_array( $key, self::DISALLOWED_KEYS, true ) ) {
+				$sanitized[ $key ] = '';
+				continue;
+			}
+
+			if ( $item instanceof WP_Post ) {
+				if ( self::dereferenced_post_is_public( $item ) ) {
+					$sanitized[ $key ] = $item;
+				}
+
+				continue;
+			}
+
+			$sanitized[ $key ] = self::is_array_or_object( $item ) ? self::scrub_dereferenced_value( $item ) : $item;
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Whether an object can be safely copied into a sanitized structural return value.
+	 *
+	 * @param object $value Object to check.
+	 * @return bool Whether the object can be scrubbed.
+	 */
+	protected static function is_scrubbable_object( $value ) {
+		return $value instanceof stdClass || ( $value instanceof WP_User && 'WP_User' === get_class( $value ) );
+	}
+
+	/**
+	 * Blank disallowed property names while preserving the original object shape.
+	 *
+	 * Only plain objects and WP_User objects are sanitized here. Other plugin/service objects
+	 * are left untouched by scrub_dereferenced_value() to avoid invoking unknown object behavior.
+	 *
+	 * @param WP_User|stdClass $value Object to sanitize.
+	 * @return WP_User|stdClass Sanitized object.
+	 */
+	protected static function scrub_disallowed_properties( $value ) {
+		$sanitized = $value instanceof WP_User ? clone $value : new stdClass();
+
+		foreach ( get_object_vars( $value ) as $key => $item ) {
+			if ( in_array( $key, self::DISALLOWED_KEYS, true ) ) {
+				$sanitized->$key = '';
+				continue;
+			}
+
+			if ( $item instanceof WP_Post ) {
+				$sanitized->$key = self::dereferenced_post_is_public( $item )
+					? $item
+					: '';
+				continue;
+			}
+
+			if ( self::is_array_or_object( $item ) ) {
+				$sanitized->$key = self::scrub_dereferenced_value( $item );
+				continue;
+			}
+
+			$sanitized->$key = $item;
+		}
+
+		return $sanitized;
 	}
 
 	/**
@@ -176,9 +332,10 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 	 * @param string|int $parent_value The parent value to check the key against.
 	 * @param bool       $single_only If true, only return value if it's a string-like value.
 	 * @param string     $fallback The fallback value if the return value is empty.
+	 * @param bool       $gate_objects If true, block reads off non-public dereferenced WP_Post objects.
 	 * @return string
 	 */
-	public static function get_value( $key, $parent_value, $single_only = true, $fallback = '' ) {
+	public static function get_value( $key, $parent_value, $single_only = true, $fallback = '', $gate_objects = false ) {
 		// Stop here if the key is empty, and not "0".
 		if ( empty( $key ) && ! is_numeric( $key ) ) {
 			if ( $single_only ) {
@@ -187,18 +344,28 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 				return '' !== $parent_value ? $parent_value : $fallback;
 			}
 
-			return self::is_array_or_object( $parent_value ) ? $parent_value : $fallback;
+			if ( ! self::is_array_or_object( $parent_value ) ) {
+				return $fallback;
+			}
+
+			// single_only=false returns the whole structure. When the caller opted into object
+			// gating (get_meta), an ACF relational pre-value may have made this a WP_Post or a
+			// list of them — sanitize so a Query Loop or REST meta read (singleOnly=false)
+			// can't surface a private post's content. Ungated callers (loop items, already
+			// query-gated) keep the raw value.
+			return $gate_objects ? self::scrub_dereferenced_value( $parent_value ) : $parent_value;
 		}
 
 		$parts     = explode( '.', $key );
-		$sub_value = self::maybe_get_property( $parent_value, $parts[0], $single_only );
+		$sub_value = self::maybe_get_property( $parent_value, $parts[0], $single_only, $gate_objects );
 
 		if ( self::is_array_or_object( $sub_value ) ) {
 			return self::get_value(
 				implode( '.', array_slice( $parts, 1 ) ),
 				$sub_value,
 				$single_only,
-				$fallback
+				$fallback,
+				$gate_objects
 			);
 		}
 
@@ -206,6 +373,31 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 		$value = (string) $sub_value;
 
 		return '' !== $value ? $value : $fallback;
+	}
+
+	/**
+	 * Resolve a meta key to the exact parent key get_meta() reads.
+	 *
+	 * The reader splits on ".", trims each segment, and reads the first one, so every
+	 * protected-meta decision — here and in the save-time validators — must be made
+	 * against this same resolved value. Centralising it keeps the validators and the
+	 * reader from drifting: a raw check let "{{post_meta key: _secret}}" pass validation
+	 * (is_protected_meta() sees the leading space and returns false) while get_meta()
+	 * trimmed the key back to the protected "_secret" before reading it.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param mixed $key The raw meta key, optionally dot-notated.
+	 * @return string The trimmed first segment actually read.
+	 */
+	public static function resolve_meta_key_parent( $key ) {
+		if ( ! is_string( $key ) ) {
+			return '';
+		}
+
+		$parts = array_map( 'trim', explode( '.', $key ) );
+
+		return $parts[0];
 	}
 
 	/**
@@ -223,8 +415,8 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 			return '';
 		}
 
-		$key_parts = array_map( 'trim', explode( '.', $key ) );
-		$parent_name = $key_parts[0];
+		$key_parts   = array_map( 'trim', explode( '.', $key ) );
+		$parent_name = self::resolve_meta_key_parent( $key );
 
 		if ( empty( $key ) || in_array( $parent_name, self::DISALLOWED_KEYS, true ) ) {
 			return '';
@@ -270,13 +462,13 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 					return '';
 				}
 
-				if ( is_protected_meta( $key, 'post' ) ) {
+				if ( is_protected_meta( $parent_name, 'post' ) ) {
 					return '';
 				}
 			}
 
 			if ( 'get_term_meta' === $callable ) {
-				if ( is_protected_meta( $key, 'term' ) ) {
+				if ( is_protected_meta( $parent_name, 'term' ) ) {
 					return '';
 				}
 			}
@@ -299,7 +491,12 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 		// Only send the sub key(s) through. If they're empty this will return the value of $meta.
 		array_shift( $key_parts );
 		$sub_key = implode( '.', $key_parts );
-		$value = self::get_value( $sub_key, $meta, $single_only, $fallback );
+		// Gate post-object dereferences: a pre-value filter (ACF) may have turned this meta value
+		// into a WP_Post (relationship/post-object field). Walking a dot-path sub-key into it can
+		// disclose a private post's content, and the pointer is mutable independently of the
+		// validated content string — so gate post objects to publicly renderable posts here.
+		// Plain scalar/array/user meta is unaffected except for explicitly disallowed keys.
+		$value = self::get_value( $sub_key, $meta, $single_only, $fallback, true );
 
 		/**
 		 * Filter the result of get_value for entity meta.
@@ -362,7 +559,9 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 		$key = $request->get_param( 'key' );
 
 		// Block protected meta keys (WordPress convention for private/internal meta).
-		if ( is_string( $key ) && is_protected_meta( $key, 'post' ) ) {
+		// Resolve the key exactly as get_meta() will read it, so a leading-space key
+		// (" _secret") cannot slip past this check and then resolve to "_secret".
+		if ( is_string( $key ) && is_protected_meta( self::resolve_meta_key_parent( $key ), 'post' ) ) {
 			return new WP_Error(
 				'rest_forbidden',
 				__( 'Sorry, you are not allowed to access protected meta fields.', 'generateblocks' ),
@@ -492,7 +691,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 		$single_only = true;
 
 		// Block protected meta keys (WordPress convention for private/internal meta).
-		if ( is_string( $key ) && is_protected_meta( $key, 'user' ) ) {
+		if ( is_string( $key ) && is_protected_meta( self::resolve_meta_key_parent( $key ), 'user' ) ) {
 			return rest_ensure_response(
 				new WP_Error(
 					'rest_forbidden',
@@ -578,7 +777,7 @@ class GenerateBlocks_Meta_Handler extends GenerateBlocks_Singleton {
 			);
 		}
 
-		if ( is_string( $key ) && is_protected_meta( $key, 'term' ) ) {
+		if ( is_string( $key ) && is_protected_meta( self::resolve_meta_key_parent( $key ), 'term' ) ) {
 			return rest_ensure_response(
 				new WP_Error(
 					'rest_forbidden',

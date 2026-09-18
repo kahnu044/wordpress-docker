@@ -78,18 +78,27 @@ class GenerateBlocks_Query_Utils extends GenerateBlocks_Singleton {
 		$can_list_users     = current_user_can( 'list_users' );
 		$can_manage_options = current_user_can( 'manage_options' );
 
-		// Sanitize dangerous query args for users without list_users capability.
+		// Tightly allowlist the query args for users without list_users.
+		//
+		// The only caller of this route is the editor's SelectUser control (the
+		// Query Loop author filter and the dynamic-tag user picker). It sends just
+		// number/paged and filters the returned list client-side — it never sends
+		// search/search_columns/include. Left ungated, those args flow straight
+		// into WP_User_Query and turn the count/returned IDs into a private-column
+		// oracle: a Contributor could set search_columns => ['user_email'] (or
+		// 'user_login') with a wildcard search + include => [ target ] and read
+		// back total/matched IDs to reconstruct another user's email or login,
+		// even though those fields are stripped from the response body. An empty
+		// search_columns is not safe either — core defaults an "@"-containing
+		// search to user_email. Allowlisting to the args the feature actually uses
+		// removes all attacker-controlled search/targeting before the query runs
+		// (this also drops meta_query/role/capability, so the explicit unsets are
+		// no longer needed).
 		if ( ! $can_list_users ) {
-			unset( $args['meta_query'] );
-			unset( $args['meta_key'] );
-			unset( $args['meta_value'] );
-			unset( $args['meta_compare'] );
-			unset( $args['role'] );
-			unset( $args['role__in'] );
-			unset( $args['role__not_in'] );
-			unset( $args['capability'] );
-			unset( $args['capability__in'] );
-			unset( $args['capability__not_in'] );
+			$args = array_intersect_key(
+				$args,
+				array_flip( [ 'number', 'paged', 'fields' ] )
+			);
 
 			$args['has_published_posts'] = true;
 		}

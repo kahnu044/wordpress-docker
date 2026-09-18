@@ -416,6 +416,8 @@ class GenerateBlocks_Enqueue_CSS {
 
 		if ( isset( $post->post_content ) ) {
 			if ( strpos( $post->post_content, 'wp:generateblocks' ) !== false ) {
+				// Load-bearing for GenerateBlocks_Dynamic_Tag_Security::post_saved_before_event_handler_gate().
+				// Do not rename, repurpose, or change these write/delete conditions without updating that gate.
 				update_post_meta( $post_id, '_generateblocks_dynamic_css_version', sanitize_text_field( GENERATEBLOCKS_VERSION ) );
 			} else {
 				delete_post_meta( $post_id, '_generateblocks_dynamic_css_version' );

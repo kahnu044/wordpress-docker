@@ -53,7 +53,8 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 			'generateblocks-pattern-library',
 			'generateBlocksPatternLibrary',
 			array(
-				'patternPreviewUrl' => site_url() . '?gb-template-viewer=1',
+				'patternPreviewUrl'         => site_url() . '?gb-template-viewer=1',
+				'isolatedPatternPreviewUrl' => site_url() . '?gb-template-viewer=isolated',
 				'defaultOpenLibrary' => apply_filters(
 					'generateblocks_default_open_pattern_library',
 					'gb_default_pro_library'
@@ -507,7 +508,14 @@ class GenerateBlocks_Libraries extends GenerateBlocks_Singleton {
 	 * @return string
 	 */
 	public function template_viewer( string $template ): string {
-		if ( false !== get_query_var( 'gb-template-viewer', false ) ) {
+		$template_viewer = get_query_var( 'gb-template-viewer', false );
+
+		if ( false !== $template_viewer ) {
+			// Match the WordPress 7.1 editor's isolation policy so the parent can access this document.
+			if ( 'isolated' === $template_viewer && function_exists( 'wp_start_cross_origin_isolation_output_buffer' ) ) {
+				wp_start_cross_origin_isolation_output_buffer();
+			}
+
 			return GENERATEBLOCKS_DIR . 'includes/pattern-library/templates/gb-template-viewer.php';
 		}
 

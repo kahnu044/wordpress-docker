@@ -219,7 +219,19 @@ class GenerateBlocks_Render_Block {
 		$attributes = isset( $block['attrs'] ) ? $block['attrs'] : null;
 
 		// Don't output if no dynamic link exists.
-		if ( isset( $attributes ) && ! empty( $attributes['dynamicLinkType'] ) && ! empty( $attributes['dynamicLinkRemoveIfEmpty'] ) ) {
+		//
+		// Intentionally NOT gated on useDynamicData: this check has always run whenever
+		// dynamicLinkType + dynamicLinkRemoveIfEmpty are set, so existing sites rely on it
+		// (blocks with these attributes are removed when the URL resolves empty, even with
+		// dynamic data toggled off). Because this is the one render path that reads the
+		// linked object without useDynamicData, the save-time validator mirrors this exact
+		// condition — see GenerateBlocks_Dynamic_Content::get_attribute_referenced_post_ids().
+		// Keep the two in sync: any attribute read added here must also be validated there.
+		if (
+			isset( $attributes ) &&
+			! empty( $attributes['dynamicLinkType'] ) &&
+			! empty( $attributes['dynamicLinkRemoveIfEmpty'] )
+		) {
 			$dynamic_link = GenerateBlocks_Dynamic_Content::get_dynamic_url( $attributes, $instance );
 
 			if ( ! $dynamic_link ) {

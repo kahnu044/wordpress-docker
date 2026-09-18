@@ -172,6 +172,10 @@ function generateblocks_enqueue_global_dashboard_scripts() {
 
 /**
  * Build our Dashboard menu.
+ *
+ * Retained for backwards compatibility and the `generateblocks_dashboard_tabs`
+ * filter. The dashboard header no longer renders in-header page navigation —
+ * those links live in the WordPress admin sidebar.
  */
 function generateblocks_dashboard_navigation() {
 	$screen = get_current_screen();
@@ -216,21 +220,150 @@ function generateblocks_dashboard_navigation() {
 }
 
 /**
+ * Get the HTML tags and attributes allowed in the dashboard header icon.
+ *
+ * @since 2.4.0
+ *
+ * @return array Allowed HTML for wp_kses().
+ */
+function generateblocks_get_dashboard_header_icon_allowed_html() {
+	// Shared stroke attributes so outline icons (matching the React studio icons)
+	// survive sanitization alongside filled glyphs like the GenerateBlocks logo.
+	$stroke = array(
+		'stroke'           => true,
+		'stroke-width'     => true,
+		'stroke-linecap'   => true,
+		'stroke-linejoin'  => true,
+		'stroke-dasharray' => true,
+	);
+
+	return array(
+		'svg'      => array_merge(
+			array(
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'fill'        => true,
+				'role'        => true,
+				'aria-hidden' => true,
+				'focusable'   => true,
+				'class'       => true,
+			),
+			$stroke
+		),
+		'g'        => array_merge(
+			array(
+				'fill'      => true,
+				'class'     => true,
+				'transform' => true,
+			),
+			$stroke
+		),
+		'path'     => array_merge(
+			array(
+				'd'         => true,
+				'fill'      => true,
+				'fill-rule' => true,
+				'clip-rule' => true,
+				'class'     => true,
+			),
+			$stroke
+		),
+		'rect'     => array_merge(
+			array(
+				'x'      => true,
+				'y'      => true,
+				'width'  => true,
+				'height' => true,
+				'rx'     => true,
+				'ry'     => true,
+				'fill'   => true,
+				'class'  => true,
+			),
+			$stroke
+		),
+		'circle'   => array_merge(
+			array(
+				'cx'    => true,
+				'cy'    => true,
+				'r'     => true,
+				'fill'  => true,
+				'class' => true,
+			),
+			$stroke
+		),
+		'line'     => array_merge(
+			array(
+				'x1'    => true,
+				'y1'    => true,
+				'x2'    => true,
+				'y2'    => true,
+				'class' => true,
+			),
+			$stroke
+		),
+		'polyline' => array_merge(
+			array(
+				'points' => true,
+				'fill'   => true,
+				'class'  => true,
+			),
+			$stroke
+		),
+		'polygon'  => array_merge(
+			array(
+				'points' => true,
+				'fill'   => true,
+				'class'  => true,
+			),
+			$stroke
+		),
+	);
+}
+
+/**
  * Build our Dashboard header.
  *
  * @since 1.2.0
  */
 function generateblocks_do_dashboard_header() {
+	$screen    = get_current_screen();
+	$screen_id = $screen ? $screen->id : '';
+
+	// The GenerateBlocks logo is the default icon. Plugins can swap in their own
+	// SVG for a given screen via the filter below (e.g. GenerateCloud uses a
+	// cloud glyph on its page). The header CSS renders it white on an accent tile.
+	$default_icon = '<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 50 60.12" xml:space="preserve"><path class="st0" d="M6.686 31.622V18.918a.077.077 0 01.05-.072l6.5-2.313 6.5-2.313 9.682-3.445L39.1 7.33a.067.067 0 00.036-.028.074.074 0 00.014-.044V.076a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-13 4.625-13 4.625-6.5 2.313-6.5 2.313a.067.067 0 00-.036.028.097.097 0 00-.013.046V52.067c0 .026.013.048.032.062s.044.018.069.009l3.267-1.163 3.267-1.163c.015-.005.028-.015.036-.028s.014-.028.014-.044V37.999l.001-6.377c-.001 0 0 0 0 0z"/><path class="st0" d="M23.949 29.976l13-4.625 13-4.625c.015-.005.028-.015.036-.028s.015-.028.015-.044V8.056a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-13 4.625-13 4.625-6.5 2.313-6.5 2.313a.067.067 0 00-.036.028.074.074 0 00-.014.044V60.045c0 .026.013.048.032.062a.076.076 0 00.069.009l6.475-2.304 6.475-2.304 6.525-2.322 6.525-2.322 6.5-2.313 6.5-2.313c.015-.005.028-.015.036-.028s.014-.025.014-.041V27.193a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-6.45 2.295L37 31.711a.067.067 0 00-.036.028.074.074 0 00-.014.044v6.272a.077.077 0 01-.05.072l-6.45 2.295L24 42.715a.075.075 0 01-.101-.071V30.046c0-.016.005-.031.014-.044a.08.08 0 01.036-.026z"/></svg>';
+
+	/**
+	 * Filters the icon shown in the dashboard header tile for the current screen.
+	 *
+	 * Return SVG markup; it is sanitized with
+	 * generateblocks_get_dashboard_header_icon_allowed_html().
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $default_icon Default SVG markup (the GenerateBlocks logo).
+	 * @param string $screen_id    Current admin screen id.
+	 */
+	$icon = (string) apply_filters( 'generateblocks_dashboard_header_icon', $default_icon, $screen_id );
 	?>
 	<div class="gblocks-dashboard-header">
 		<div class="gblocks-dashboard-header-title">
 			<h1>
-				<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 50 60.12" xml:space="preserve"><path class="st0" d="M6.686 31.622V18.918a.077.077 0 01.05-.072l6.5-2.313 6.5-2.313 9.682-3.445L39.1 7.33a.067.067 0 00.036-.028.074.074 0 00.014-.044V.076a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-13 4.625-13 4.625-6.5 2.313-6.5 2.313a.067.067 0 00-.036.028.097.097 0 00-.013.046V52.067c0 .026.013.048.032.062s.044.018.069.009l3.267-1.163 3.267-1.163c.015-.005.028-.015.036-.028s.014-.028.014-.044V37.999l.001-6.377c-.001 0 0 0 0 0z"/><path class="st0" d="M23.949 29.976l13-4.625 13-4.625c.015-.005.028-.015.036-.028s.015-.028.015-.044V8.056a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-13 4.625-13 4.625-6.5 2.313-6.5 2.313a.067.067 0 00-.036.028.074.074 0 00-.014.044V60.045c0 .026.013.048.032.062a.076.076 0 00.069.009l6.475-2.304 6.475-2.304 6.525-2.322 6.525-2.322 6.5-2.313 6.5-2.313c.015-.005.028-.015.036-.028s.014-.025.014-.041V27.193a.077.077 0 00-.032-.062.076.076 0 00-.069-.009l-6.45 2.295L37 31.711a.067.067 0 00-.036.028.074.074 0 00-.014.044v6.272a.077.077 0 01-.05.072l-6.45 2.295L24 42.715a.075.075 0 01-.101-.071V30.046c0-.016.005-.031.014-.044a.08.08 0 01.036-.026z"/></svg>
+				<?php echo wp_kses( $icon, generateblocks_get_dashboard_header_icon_allowed_html() ); ?>
 				<?php echo esc_html( get_admin_page_title() ); ?>
 			</h1>
 		</div>
 
-		<?php generateblocks_dashboard_navigation(); ?>
+		<?php if ( ! defined( 'GENERATEBLOCKS_PRO_VERSION' ) ) : ?>
+			<div class="gblocks-dashboard-header-actions">
+				<a class="button button-primary gblocks-get-pro" href="https://generatepress.com/blocks/">
+					<?php esc_html_e( 'Get Pro', 'generateblocks' ); ?>
+				</a>
+			</div>
+		<?php endif; ?>
 	</div>
 	<?php
 }

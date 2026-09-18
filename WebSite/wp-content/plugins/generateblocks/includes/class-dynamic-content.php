@@ -56,6 +56,10 @@ class GenerateBlocks_Dynamic_Content {
 	public static function get_content( $attributes, $block ) {
 		$content = '';
 
+		if ( self::should_block_block_renderer_attribute_resolution( $attributes ) ) {
+			return '';
+		}
+
 		switch ( $attributes['dynamicContentType'] ) {
 			case 'post-title':
 				$content = self::get_post_title( $attributes );
@@ -280,12 +284,24 @@ class GenerateBlocks_Dynamic_Content {
 			$value = wp_kses_post( $value );
 			remove_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
 
-			return apply_filters(
+			$filtered = apply_filters(
 				'generateblocks_dynamic_content_post_meta',
 				$value,
 				self::get_source_id( $attributes ),
 				$attributes
 			);
+
+			// A filter (e.g. the ACF integration in Pro) can replace the sanitized value with
+			// raw field output, so sanitize again when the value changed. Non-string results
+			// (ACF image IDs consumed by get_dynamic_image_id()) pass through untouched, and
+			// an unchanged value skips the second pass entirely.
+			if ( is_string( $filtered ) && $filtered !== $value ) {
+				add_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+				$filtered = wp_kses_post( $filtered );
+				remove_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+			}
+
+			return $filtered;
 		}
 	}
 
@@ -310,12 +326,31 @@ class GenerateBlocks_Dynamic_Content {
 
 			$value = self::get_user_data( $author_id, $attributes['metaFieldName'] );
 
-			return apply_filters(
+			// Author meta is rendered into the page body unescaped by the consumer, so sanitize
+			// it here. Mirror get_post_meta(): allow the same iframe embeds, strip scripts/handlers.
+			if ( is_string( $value ) ) {
+				add_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+				$value = wp_kses_post( $value );
+				remove_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+			}
+
+			$filtered = apply_filters(
 				'generateblocks_dynamic_content_author_meta',
 				$value,
 				$author_id,
 				$attributes
 			);
+
+			// Same re-sanitize as get_post_meta(): a filter (e.g. the ACF integration in Pro)
+			// can replace the sanitized value with raw field output. Unchanged or non-string
+			// values pass through untouched.
+			if ( is_string( $filtered ) && $filtered !== $value ) {
+				add_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+				$filtered = wp_kses_post( $filtered );
+				remove_filter( 'wp_kses_allowed_html', [ 'GenerateBlocks_Dynamic_Content', 'expand_allowed_html' ], 10, 2 );
+			}
+
+			return $filtered;
 		}
 	}
 
@@ -382,7 +417,7 @@ class GenerateBlocks_Dynamic_Content {
 
 			if ( $is_button ) {
 				$term_items[ $index ] = array(
-					'content' => $term->name,
+					'content' => wp_kses_post( $term->name ),
 					'attributes' => array(
 						'class' => 'post-term-item post-term-' . $term->slug,
 					),
@@ -390,8 +425,8 @@ class GenerateBlocks_Dynamic_Content {
 			} else {
 				$term_items[ $index ] = sprintf(
 					'<span class="post-term-item term-%2$s">%1$s</span>',
-					$term->name,
-					$term->slug
+					wp_kses_post( $term->name ),
+					esc_attr( $term->slug )
 				);
 			}
 
@@ -405,8 +440,8 @@ class GenerateBlocks_Dynamic_Content {
 						$term_items[ $index ] = sprintf(
 							'<span class="post-term-item term-%3$s"><a href="%1$s">%2$s</a></span>',
 							esc_url( get_term_link( $term, $taxonomy ) ),
-							$term->name,
-							$term->slug
+							wp_kses_post( $term->name ),
+							esc_attr( $term->slug )
 						);
 					}
 				}
@@ -697,6 +732,10 @@ class GenerateBlocks_Dynamic_Content {
 	 * @param array $attributes The block attributes.
 	 */
 	public static function get_dynamic_image_id( $attributes ) {
+		if ( self::should_block_block_renderer_attribute_resolution( $attributes ) ) {
+			return '';
+		}
+
 		$id = self::get_source_id( $attributes );
 
 		if ( ! $id ) {
@@ -758,6 +797,10 @@ class GenerateBlocks_Dynamic_Content {
 	 * @param object $block The block object.
 	 */
 	public static function get_dynamic_url( $attributes, $block ) {
+		if ( self::should_block_block_renderer_attribute_resolution( $attributes ) ) {
+			return '';
+		}
+
 		$id = self::get_source_id( $attributes );
 		$author_id = get_post_field( 'post_author', $id );
 		$link_type = isset( $attributes['dynamicLinkType'] ) ? $attributes['dynamicLinkType'] : '';
@@ -1215,168 +1258,250 @@ class GenerateBlocks_Dynamic_Content {
 			}
 		}
 
+		/**
+		 * The literal markers above are formatting-sensitive: block-comment JSON submitted via
+		 * the REST API (e.g. `"useDynamicData" : true`) is not re-serialized until after the
+		 * rest_pre_insert validation runs, so a reformatted attribute can slip past the substring
+		 * scan. Fall back to inspecting the parsed block attributes so JSON whitespace or key
+		 * order cannot evade detection.
+		 */
+		if (
+			function_exists( 'has_blocks' ) && has_blocks( $content ) &&
+			function_exists( 'parse_blocks' )
+		) {
+			return self::blocks_have_dynamic_attribute_markers( parse_blocks( $content ) );
+		}
+
 		return false;
 	}
 
 	/**
-	 * Validate dynamic content block attributes (metaFieldName/linkMetaFieldName) for legacy v1 blocks.
+	 * Recursively determine whether any parsed block carries legacy dynamic content attributes.
 	 *
-	 * @since 2.2.0
+	 * Mirrors the markers in content_has_dynamic_attribute_markers() but works on decoded
+	 * attributes, so it is immune to the JSON formatting of the serialized block comment.
 	 *
-	 * @param string $content Serialized post content.
-	 * @return true|WP_Error
+	 * @since 2.4.0
+	 *
+	 * @param array $blocks Parsed block list.
+	 * @return bool
 	 */
-	public static function validate_dynamic_content_attributes( $content ) {
-		$violations = self::get_dynamic_attribute_violation_items( $content );
+	protected static function blocks_have_dynamic_attribute_markers( $blocks ) {
+		foreach ( (array) $blocks as $block ) {
+			$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : [];
 
-		if ( empty( $violations ) ) {
+			if ( ! empty( $attrs['useDynamicData'] ) ) {
+				return true;
+			}
+
+			if (
+				! empty( $attrs['dynamicLinkType'] ) &&
+				in_array( $attrs['dynamicLinkType'], [ 'post-meta', 'author-meta', 'author-email' ], true )
+			) {
+				return true;
+			}
+
+			if ( isset( $attrs['dynamicContentType'] ) && 'author-email' === $attrs['dynamicContentType'] ) {
+				return true;
+			}
+
+			// A block that points dynamic data or a dynamic link at an explicitly chosen post or
+			// attachment is a dynamic-data marker too, even when no other marker is present
+			// (e.g. a caption sourced from an attachment postId, a dynamicImage, a single-image
+			// mediaId, or dynamicLinkType:single-post). Uses the same resolver the renderer
+			// mirrors so marker detection and rendering never drift apart.
+			if ( ! empty( self::get_attribute_referenced_post_ids( $attrs ) ) ) {
+				return true;
+			}
+
+			if (
+				! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) &&
+				self::blocks_have_dynamic_attribute_markers( $block['innerBlocks'] )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Resolve the explicit post/attachment IDs a block's dynamic data and links would read.
+	 *
+	 * Mirrors get_source_id() and get_dynamic_url() source selection so marker detection
+	 * sees the SAME referenced object the renderer does. The current-post fallback (get_the_ID)
+	 * is intentionally not collected — the visitor is already authorized to see the post being
+	 * rendered; only an explicitly chosen post/attachment can cross to data the author can't read.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $attrs Block attributes.
+	 * @return array<int, int> Unique, non-zero referenced IDs.
+	 */
+	protected static function get_attribute_referenced_post_ids( $attrs ) {
+		if ( ! is_array( $attrs ) ) {
+			return [];
+		}
+
+		$content_type     = isset( $attrs['dynamicContentType'] ) ? (string) $attrs['dynamicContentType'] : '';
+		$link_type        = isset( $attrs['dynamicLinkType'] ) ? (string) $attrs['dynamicLinkType'] : '';
+		$has_dynamic_data = ! empty( $attrs['useDynamicData'] );
+
+		// Legacy dynamic attributes are mostly inert without useDynamicData: the block render
+		// callbacks return static content before calling get_content()/get_dynamic_url(). The
+		// one exception is the remove-if-empty guard in
+		// GenerateBlocks_Render_Block::filter_rendered_blocks(), which calls get_dynamic_url()
+		// whenever dynamicLinkType + dynamicLinkRemoveIfEmpty are set — even with dynamic data
+		// off — because existing sites rely on that hiding behavior. That read path must be
+		// validated too, or a block saved with useDynamicData off could probe an unreadable
+		// post via the rendered/hidden result. Keep this condition in sync with
+		// filter_rendered_blocks().
+		$reads_link_without_dynamic_data = '' !== $link_type && ! empty( $attrs['dynamicLinkRemoveIfEmpty'] );
+
+		if ( ! $has_dynamic_data && ! $reads_link_without_dynamic_data ) {
+			return [];
+		}
+
+		// Nothing dynamic renders (and no source id is read) unless a content or link type is set.
+		if ( '' === $content_type && '' === $link_type ) {
+			return [];
+		}
+
+		$source          = isset( $attrs['dynamicSource'] ) ? (string) $attrs['dynamicSource'] : '';
+		$explicit_source = '' !== $source && 'current-post' !== $source;
+		$post_type       = isset( $attrs['postType'] ) ? (string) $attrs['postType'] : '';
+		$image_types     = [ 'caption', 'post-title', 'alt-text', 'image-description' ];
+		$ids             = [];
+
+		// Pagination content/link types build their URL from query/page state and ignore the
+		// source post, so a stale postId on them is not a reference. Every other source-aware
+		// content/link type resolves through get_source_id(); keep this list in sync with the
+		// pagination branches of get_content()/get_dynamic_url().
+		$query_derived_types = [ 'pagination-numbers', 'pagination-next', 'pagination-prev' ];
+
+		// Mirror get_source_id(): the explicit object the content path reads. For image content
+		// types a dynamicImage (or a saved attachment postId) overrides the source REGARDLESS of
+		// dynamicSource, which is why a current-post source still reaches another object's data.
+		// Content paths are only reachable with useDynamicData on — every block render callback
+		// returns static content before get_content() otherwise.
+		if ( $has_dynamic_data && '' !== $content_type ) {
+			if ( in_array( $content_type, $image_types, true ) ) {
+				if ( isset( $attrs['dynamicImage'] ) ) {
+					$ids[] = $attrs['dynamicImage'];
+				} elseif ( isset( $attrs['postId'] ) && 'attachment' === $post_type ) {
+					$ids[] = $attrs['postId'];
+				} elseif ( $explicit_source && isset( $attrs['postId'] ) ) {
+					$ids[] = $attrs['postId'];
+				}
+			} elseif (
+				$explicit_source &&
+				isset( $attrs['postId'] ) &&
+				! in_array( $content_type, $query_derived_types, true )
+			) {
+				$ids[] = $attrs['postId'];
+			}
+		}
+
+		// Mirror get_dynamic_url(): the explicit object a dynamic link reads. Reached either
+		// with useDynamicData on (block render callbacks) or via the remove-if-empty guard in
+		// filter_rendered_blocks(), which reads the link with dynamic data off.
+		if ( '' !== $link_type ) {
+			if ( 'single-image' === $link_type ) {
+				if ( '' !== $content_type && isset( $attrs['dynamicImage'] ) ) {
+					$ids[] = $attrs['dynamicImage'];
+				} elseif ( '' === $content_type && isset( $attrs['mediaId'] ) ) {
+					$ids[] = $attrs['mediaId'];
+				}
+			} elseif (
+				$explicit_source &&
+				isset( $attrs['postId'] ) &&
+				! in_array( $link_type, $query_derived_types, true )
+			) {
+				// single-post / post-meta / author-* / comments-area resolve via get_source_id();
+				// pagination links are excluded above because they ignore postId.
+				$ids[] = $attrs['postId'];
+			}
+		}
+
+		$normalized = [];
+
+		foreach ( $ids as $id ) {
+			$id = absint( $id );
+
+			if ( $id ) {
+				$normalized[ $id ] = $id;
+			}
+		}
+
+		return array_values( $normalized );
+	}
+
+	/**
+	 * Whether legacy attributes should be blanked for the current render source.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $attributes Block attributes.
+	 * @return bool
+	 */
+	protected static function should_block_block_renderer_attribute_resolution( $attributes ) {
+		unset( $attributes );
+
+		if (
+			class_exists( 'GenerateBlocks_Dynamic_Tag_Security' ) &&
+			method_exists( 'GenerateBlocks_Dynamic_Tag_Security', 'should_suppress_dynamic_data' ) &&
+			GenerateBlocks_Dynamic_Tag_Security::should_suppress_dynamic_data()
+		) {
 			return true;
 		}
 
-		$first = reset( $violations );
+		if (
+			class_exists( 'GenerateBlocks_Dynamic_Tag_Security' ) &&
+			method_exists( 'GenerateBlocks_Dynamic_Tag_Security', 'is_non_trusted_block_renderer_rest_request' ) &&
+			GenerateBlocks_Dynamic_Tag_Security::is_non_trusted_block_renderer_rest_request()
+		) {
+			return true;
+		}
 
-		return $first['error'];
+		return false;
 	}
 
-	/**
-	 * Retrieve dynamic attribute violation items.
+	/*
+	 * -------------------------------------------------------------------------
+	 * Removed 2.2.x validation API — fatal-prevention stubs.
 	 *
-	 * @since 2.2.0
+	 * These public methods shipped in stable releases; no-op stubs remain so an
+	 * external caller can never fatal on update. See the matching section in
+	 * GenerateBlocks_Dynamic_Tag_Security.
+	 * -------------------------------------------------------------------------
+	 */
+
+	/**
+	 * Stub for the removed 2.2.x legacy-attribute validator.
+	 *
+	 * @deprecated 2.4.0 No-op stub; see the save gate (save_is_restricted()).
 	 *
 	 * @param string $content Serialized post content.
-	 * @return array<int, array{type:string,field:string,error:WP_Error}>
+	 * @return true
+	 */
+	public static function validate_dynamic_content_attributes( $content ) {
+		unset( $content );
+
+		return true;
+	}
+
+	/**
+	 * Stub for the removed 2.2.x violation collector.
+	 *
+	 * @deprecated 2.4.0 No-op stub; the violation model no longer exists.
+	 *
+	 * @param string $content Serialized post content.
+	 * @return array Always empty.
 	 */
 	public static function get_dynamic_attribute_violation_items( $content ) {
-		$content = GenerateBlocks_Dynamic_Tag_Security::normalize_serialized_content( $content );
+		unset( $content );
 
-		if ( ! self::content_has_dynamic_attribute_markers( $content ) ) {
-			return [];
-		}
-
-		if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $content ) ) {
-			return [];
-		}
-
-		if ( ! function_exists( 'parse_blocks' ) ) {
-			return [];
-		}
-
-		$blocks = parse_blocks( $content );
-
-		if ( empty( $blocks ) || ! is_array( $blocks ) ) {
-			return [];
-		}
-
-		return self::collect_dynamic_attribute_block_violations( $blocks );
-	}
-
-	/**
-	 * Recursively collect parsed block violations for unsafe meta usage.
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param array $blocks Parsed block list.
-	 * @return array<int, array{type:string,field:string,error:WP_Error}>
-	 */
-	protected static function collect_dynamic_attribute_block_violations( $blocks ) {
-		$violations = [];
-
-		foreach ( $blocks as $block ) {
-			$violations = array_merge(
-				$violations,
-				self::collect_single_block_dynamic_attribute_violations( $block )
-			);
-
-			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
-				$violations = array_merge(
-					$violations,
-					self::collect_dynamic_attribute_block_violations( $block['innerBlocks'] )
-				);
-			}
-		}
-
-		return $violations;
-	}
-
-	/**
-	 * Validate a single block's dynamic attributes.
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param array $block Parsed block data.
-	 * @return array<int, array{type:string,field:string,error:WP_Error}>
-	 */
-	protected static function collect_single_block_dynamic_attribute_violations( $block ) {
-		$violations = [];
-
-		if ( empty( $block['attrs'] ) || ! is_array( $block['attrs'] ) ) {
-			return $violations;
-		}
-
-		$attrs = $block['attrs'];
-		$should_validate_user_meta = GenerateBlocks_Dynamic_Tag_Security::should_validate_user_meta_fields();
-
-		if ( ! empty( $attrs['useDynamicData'] ) ) {
-			$field_name = isset( $attrs['metaFieldName'] ) ? trim( (string) $attrs['metaFieldName'] ) : '';
-			$type       = isset( $attrs['dynamicContentType'] ) ? (string) $attrs['dynamicContentType'] : '';
-
-			if ( 'author-email' === $type ) {
-				$field_name = 'user_email';
-			}
-
-			if ( $field_name ) {
-				if ( in_array( $type, [ 'author-meta', 'author-email' ], true ) ) {
-					$result   = $should_validate_user_meta ? GenerateBlocks_Dynamic_Tag_Security::validate_user_meta_field_name( $field_name ) : true;
-					$type_key = 'user_meta';
-				} elseif ( 'post-meta' === $type ) {
-					$result   = GenerateBlocks_Dynamic_Tag_Security::validate_post_meta_field_name( $field_name );
-					$type_key = 'post_meta';
-				} else {
-					$result   = true;
-					$type_key = '';
-				}
-
-				if ( isset( $result ) && is_wp_error( $result ) && $type_key ) {
-					$violations[] = [
-						'type'  => $type_key,
-						'field' => $field_name,
-						'error' => $result,
-					];
-				}
-			}
-		}
-
-		if ( isset( $attrs['linkMetaFieldName'] ) || ! empty( $attrs['dynamicLinkType'] ) ) {
-			$link_field = isset( $attrs['linkMetaFieldName'] ) ? trim( (string) $attrs['linkMetaFieldName'] ) : '';
-			$link_type  = isset( $attrs['dynamicLinkType'] ) ? (string) $attrs['dynamicLinkType'] : '';
-
-			if ( 'author-email' === $link_type ) {
-				$link_field = 'user_email';
-			}
-
-			if ( $link_field ) {
-				if ( in_array( $link_type, [ 'author-meta', 'author-email' ], true ) ) {
-					$result   = $should_validate_user_meta ? GenerateBlocks_Dynamic_Tag_Security::validate_user_meta_field_name( $link_field ) : true;
-					$type_key = 'user_meta';
-				} elseif ( 'post-meta' === $link_type ) {
-					$result   = GenerateBlocks_Dynamic_Tag_Security::validate_post_meta_field_name( $link_field );
-					$type_key = 'post_meta';
-				} else {
-					$result   = true;
-					$type_key = '';
-				}
-
-				if ( isset( $result ) && is_wp_error( $result ) && $type_key ) {
-					$violations[] = [
-						'type'  => $type_key,
-						'field' => $link_field,
-						'error' => $result,
-					];
-				}
-			}
-		}
-
-		return $violations;
+		return [];
 	}
 }
 

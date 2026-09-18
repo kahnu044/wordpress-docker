@@ -605,11 +605,11 @@ class GenerateBlocks_Dynamic_Tag_Callbacks extends GenerateBlocks_Singleton {
 					continue;
 				}
 
-				$list_items[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a>';
+				$list_items[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . wp_kses_post( $term->name ) . '</a>';
 
 				$list_items = apply_filters( "term_links-{$taxonomy}", $list_items ); // phpcs:ignore
 			} else {
-				$list_items[] = "<span>{$term->name}</span>";
+				$list_items[] = '<span>' . wp_kses_post( $term->name ) . '</span>';
 			}
 		}
 
