@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 add_action(
 	'rest_api_init',
 	static function () {
@@ -28,7 +30,7 @@ class WPCF7_REST_Controller {
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
 								__( 'You are not allowed to access contact forms.', 'contact-form-7' ),
-								array( 'status' => 403 )
+								array( 'status' => $this->authreq_code() )
 							);
 						}
 					},
@@ -42,7 +44,7 @@ class WPCF7_REST_Controller {
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
 								__( 'You are not allowed to create a contact form.', 'contact-form-7' ),
-								array( 'status' => 403 )
+								array( 'status' => $this->authreq_code() )
 							);
 						}
 					},
@@ -64,7 +66,7 @@ class WPCF7_REST_Controller {
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
 								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
-								array( 'status' => 403 )
+								array( 'status' => $this->authreq_code() )
 							);
 						}
 					},
@@ -80,7 +82,7 @@ class WPCF7_REST_Controller {
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
 								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
-								array( 'status' => 403 )
+								array( 'status' => $this->authreq_code() )
 							);
 						}
 					},
@@ -96,7 +98,7 @@ class WPCF7_REST_Controller {
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
 								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
-								array( 'status' => 403 )
+								array( 'status' => $this->authreq_code() )
 							);
 						}
 					},
@@ -519,6 +521,10 @@ class WPCF7_REST_Controller {
 				'required' => true,
 			),
 		);
+	}
+
+	private function authreq_code() {
+		return rest_authorization_required_code();
 	}
 
 }

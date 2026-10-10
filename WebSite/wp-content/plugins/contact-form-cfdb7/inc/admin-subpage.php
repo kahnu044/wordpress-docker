@@ -295,15 +295,12 @@ class CFDB7_List_Table extends WP_List_Table
         $table_name = $cfdb->prefix.'db7_forms';
         $action     = $this->current_action();
 
+        if ( ! current_user_can( 'cfdb7_access' ) && ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'You are not allowed to perform this action.', 'contact-form-cfdb7' ) );
+        }
+
         if ( !empty( $action ) ) {
-
-            $nonce        = isset( $_REQUEST['_wpnonce'] ) ? $_REQUEST['_wpnonce'] : '';
-            $nonce_action = 'bulk-' . $this->_args['plural'];
-
-            if ( !wp_verify_nonce( $nonce, $nonce_action ) ){
-
-                wp_die( 'Not valid..!!' );
-            }
+            check_admin_referer( 'bulk-' . $this->_args['plural'] );
         }
 
         $form_ids = isset( $_POST['contact_form'] ) ? $_POST['contact_form'] : array();
@@ -311,22 +308,45 @@ class CFDB7_List_Table extends WP_List_Table
 
         if( 'delete' === $action ) {
 
+            $upload_dir    = wp_upload_dir();
+            $cfdb7_dirname = $upload_dir['basedir'] . '/cfdb7_uploads';
+            $cfdb7_dirname = trailingslashit( $cfdb7_dirname );
+            $upload_path   = realpath( $cfdb7_dirname );
+
             foreach ($form_ids as $form_id):
                 
                 $form_id       = (int) $form_id;
                 $results       = $cfdb->get_results( "SELECT * FROM $table_name WHERE form_id = '$form_id' LIMIT 1", OBJECT );
                 $result_value  = $results[0]->form_value;
                 $result_values = unserialize($result_value, ['allowed_classes' => false]);
-                $upload_dir    = wp_upload_dir();
-                $cfdb7_dirname = $upload_dir['basedir'].'/cfdb7_uploads';
 
                 foreach ($result_values as $key => $result) {
 
-                    if ( ( strpos($key, 'cfdb7_file') !== false ) &&
-                        ! empty( $result ) && 
-                        file_exists($cfdb7_dirname.'/'.$result) ) {
+                    if (
+                        is_string( $key ) &&
+                        substr( $key, -strlen( 'cfdb7_file' ) ) === 'cfdb7_file' &&
+                        is_string( $result ) &&
+                        $result !== '' &&
+                        basename( $result ) === $result
+                    ) {
+                        $file_path   = realpath( $cfdb7_dirname . '/' . $result );
 
-                        unlink($cfdb7_dirname.'/'.$result);
+                        if (
+                            $file_path === false ||
+                            $upload_path === false ||
+                            ! is_file( $file_path ) ||
+                            strpos( $file_path, trailingslashit( $upload_path ) ) !== 0
+                        ) {
+                            continue;
+                        }
+
+                        $extension = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+
+                        if ( $extension === 'php' ) {
+                            continue;
+                        }
+
+                        unlink( $file_path );
                     }
 
                 }

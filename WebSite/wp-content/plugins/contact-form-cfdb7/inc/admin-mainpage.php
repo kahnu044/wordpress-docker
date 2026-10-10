@@ -37,7 +37,8 @@ class CFDB7_Wp_Main_Page
      */
     public function admin_list_table_page()
     {
-        wp_enqueue_style( 'cfdb7-admin-style', plugin_dir_url(dirname(__FILE__)).'css/admin-style.css' );
+
+        wp_enqueue_style( 'cfdb7-admin-style', plugin_dir_url(dirname(__FILE__)).'css/admin-style.css', [], '1.4.1' );
 
 		// Fallback: Make sure admin always has access
 		$cfdb7_cap = ( current_user_can( 'cfdb7_access') ) ? 'cfdb7_access' : 'manage_options';

@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [textarea] and [textarea*]
-**/
+ * Textarea
+ *
+ * @link https://contactform7.com/text-fields/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -149,7 +153,11 @@ function wpcf7_tag_generator_textarea( $contact_form, $options ) {
 		'textarea' => array(
 			'display_name' => __( 'Text area', 'contact-form-7' ),
 			'heading' => __( 'Text area form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/text-fields/">multi-line plain text input area</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to text input area doc */
+				__( 'Generates a form-tag for a <a href="%s">multi-line plain text input area</a>.', 'contact-form-7' ),
+				'https://contactform7.com/text-fields/'
+			),
 		),
 	);
 

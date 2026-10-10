@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Validates uploaded files and moves them to the temporary directory.
  *
@@ -32,19 +34,6 @@ function wpcf7_unship_uploaded_file( $file, $options = '' ) {
 			return new WP_Error( 'wpcf7_upload_failed_php_error',
 				wpcf7_get_message( 'upload_failed_php_error' )
 			);
-		}
-	}
-
-	if ( isset( $options['schema'] ) and isset( $options['name'] ) ) {
-		$context = array(
-			'file' => true,
-			'field' => $options['name'],
-		);
-
-		foreach ( $options['schema']->validate( $context ) as $result ) {
-			if ( is_wp_error( $result ) ) {
-				return $result;
-			}
 		}
 	}
 
@@ -211,7 +200,7 @@ function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
 	if ( 'attr' === $format or 'attribute' === $format ) {
 		$types = array_map(
 			static function ( $type ) {
-				if ( false === strpos( $type, '/' ) ) {
+				if ( ! str_contains( $type, '/' ) ) {
 					return sprintf( '.%s', trim( $type, '.' ) );
 				} elseif ( preg_match( '%^([a-z]+)/[*]$%i', $type, $matches ) ) {
 					if (
@@ -235,7 +224,7 @@ function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
 	} elseif ( 'regex' === $format ) {
 		$types = array_map(
 			static function ( $type ) {
-				if ( false === strpos( $type, '/' ) ) {
+				if ( ! str_contains( $type, '/' ) ) {
 					return preg_quote( trim( $type, '.' ) );
 				} elseif ( $type = wpcf7_convert_mime_to_ext( $type ) ) {
 					return $type;

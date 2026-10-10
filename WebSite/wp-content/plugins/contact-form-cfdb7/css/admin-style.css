@@ -32,11 +32,129 @@
     margin-top: 0;
 }
 
-
 @media (max-width: 767.98px) { 
     .cfdb7 .extension{
         width:93%;
     }
 }
 
+#cfdb7-upgrade-banner {
+    position: relative;
+    margin-right: 20px;
+    margin-top: 8px;
+    padding: 13px 45px 13px 20px;
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    border: 1px solid #374151;
+    border-radius: 6px;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+#cfdb7-upgrade-banner .cfdb7-discount {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: #f59e0b;
+    color: #111827;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    white-space: nowrap;
+}
+
+#cfdb7-upgrade-banner .cfdb7-title {
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+#cfdb7-upgrade-banner .cfdb7-description {
+    color: #d1d5db;
+    text-align: center;
+}
+
+#cfdb7-upgrade-banner .cfdb7-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background .2s ease;
+}
+
+#cfdb7-upgrade-banner .cfdb7-button:hover {
+    background: #16a34a;
+    color: #fff;
+}
+
+#cfdb7-upgrade-banner .cfdb7-close {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    color: #9ca3af;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+
+#cfdb7-upgrade-banner .cfdb7-close:hover {
+    color: #fff;
+}
+
+@media screen and (max-width: 782px) {
+    #cfdb7-upgrade-banner {
+        transform: translateY(50px);
+        margin-right: 10px;
+        padding: 16px 40px 16px 16px;
+        flex-wrap: wrap;
+        gap: 7px;
+        text-align: center;
+        z-index: 9999;
+    }
+
+    #cfdb7-upgrade-banner .cfdb7-title {
+        width: 100%;
+        font-size: 15px;
+    }
+
+    #cfdb7-upgrade-banner .cfdb7-description {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    #cfdb7-upgrade-banner .cfdb7-button {
+        margin-top: 3px;
+        padding: 7px 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #cfdb7-upgrade-banner {
+        flex-direction: column;
+        padding: 16px 35px 16px 16px;
+    }
+
+    #cfdb7-upgrade-banner .cfdb7-description {
+        line-height: 1.4;
+    }
+
+    #cfdb7-upgrade-banner .cfdb7-button {
+        width: 100%;
+    }
+}
 

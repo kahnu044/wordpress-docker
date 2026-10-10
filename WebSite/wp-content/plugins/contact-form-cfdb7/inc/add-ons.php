@@ -2,9 +2,60 @@
 
 if (!defined( 'ABSPATH')) exit;
 
-add_action('admin_menu', 'register_addon_submenu', 99);
+add_action('admin_menu', 'cfdb7_register_addon_submenu', 99);
+add_action('wp_after_admin_bar_render', 'cfdb7_upgrade_extensions');
 
-function register_addon_submenu(){
+function cfdb7_upgrade_extensions() {
+
+	if( isset($_GET['cfdb7_upgrade']) && $_GET['cfdb7_upgrade'] === 'hide' ){
+		update_option('cfdb7_upgrade_hide', true);
+		return;
+	}
+
+	if ( ! isset($_GET['page']) || $_GET['page'] !== 'cfdb7-list.php' ) {
+		return;
+	}
+
+	$hide = get_option('cfdb7_upgrade_hide', false);
+	if( $hide ) return; 
+	?>
+
+	<div id="cfdb7-upgrade-banner">
+
+		<span class="cfdb7-discount">
+			<?php esc_html_e('76% OFF', 'contact-form-cfdb7' ); ?> 
+		</span>
+
+		<strong class="cfdb7-title">
+			<?php esc_html_e('CFDB7 Pro Extension Bundle', 'contact-form-cfdb7' ); ?> 
+		</strong>
+
+		<span class="cfdb7-description">
+			<?php esc_html_e('Unlock the full power of CFDB7 with all Pro extensions.', 'contact-form-cfdb7' ); ?> 
+		</span>
+
+		<a
+			class="cfdb7-button"
+			href="https://ciphercoin.com/downloads/cf7-addon-bundle/"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<?php esc_html_e('Get Offer →',  'contact-form-cfdb7' ); ?>
+		</a>
+
+		<a
+			class="cfdb7-close"
+			href="<?php echo esc_url( add_query_arg( 'cfdb7_upgrade', 'hide' ) ); ?>"
+			aria-label="Dismiss offer"
+		>
+			&times;
+		</a>
+
+	</div>
+	<?php
+}
+
+function cfdb7_register_addon_submenu(){
 
 	add_submenu_page(
 		'cfdb7-list.php', 
@@ -13,6 +64,7 @@ function register_addon_submenu(){
 		'manage_options', 'cfdb7-extensions',  
 		'cfdb7_extensions',
 	);
+
 
 }
 
@@ -39,7 +91,7 @@ function cfdb7_extensions(){
  * Gets the add-ons page feed.
  *
  * @since 1.0
- * @return void
+ * @return string
  */
 function cfdb7_add_ons_get_feed(){
 	$cache = get_transient( 'cfdb7_add_ons_feed' );

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=H5F3Z6S3
 Tags: cf7, contact form 7, contact form 7 db, cf7 database, wpcf7
 Requires at least: 4.8
 Tested up to: 7.1
-Stable tag: 1.4.0
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.0
@@ -27,6 +27,13 @@ By simply installing the plugin, it will automatically begin to capture form sub
 * Developer friendly & easy to customize
 * Display all created contact form 7 form list.
 * Export CF7 DB (CF7 Database - cf7db) data in CSV file
+
+## 🤝 Real Human Support
+
+Need help? Contact us anytime.
+
+* 📧 **Email:** [support@ciphercoin.com](mailto:support@ciphercoin.com)
+* 💬 **Live Chat:** [ciphercoin.com](https://ciphercoin.com)
 
 = Form Email Testing Tool =
 * [MailMug - SMTP Sandbox](https://mailmug.net) 

@@ -85,11 +85,12 @@ class CFDB7_Export_CSV{
 
         if( isset($_REQUEST['csv']) && isset( $_REQUEST['nonce'] ) ){
 
-            $nonce =  $_REQUEST['nonce'];
-            if ( ! wp_verify_nonce( $nonce, 'dnonce')) {
-
-                wp_die( 'Not Valid.. Download nonce..!! ' );
+            if ( ! current_user_can( 'cfdb7_access' ) && ! current_user_can( 'manage_options' ) ) {
+                wp_die( esc_html__( 'You are not allowed to perform this action.', 'contact-form-cfdb7' ) );
             }
+
+            check_admin_referer( 'dnonce', 'nonce' );
+            
             $fid         = (int)$_REQUEST['fid'];
             $heading_row = $cfdb->get_results("SELECT form_id, form_value, form_date FROM $table_name
                 WHERE form_post_id = '$fid' ORDER BY form_id DESC LIMIT 1",OBJECT);
@@ -139,11 +140,13 @@ class CFDB7_Export_CSV{
 
                         if (strpos($key, 'cfdb7_file') !== false ){
                             $data[$key][$i] = empty( $value ) ? '' : $cfdb7_dir_url.'/'.$value;
+                            $this->escape_data( $data[$key][$i] );
                             continue;
                         }
                         if ( is_array($value) ){
 
                             $data[$key][$i] = implode(', ', $value);
+                            $this->escape_data( $data[$key][$i] );
                             continue;
                         }
                         $data[$key][$i] = $value;
