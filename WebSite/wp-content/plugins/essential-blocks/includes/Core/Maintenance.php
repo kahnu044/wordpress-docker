@@ -33,20 +33,6 @@ class Maintenance
                 update_option( 'essential_blocks_user_type', 'old' );
             }
 
-            $checkPro = class_exists( 'EssentialBlocks\Pro\Plugin' ) ? 1 : 0;
-
-            //Redirect to quick setup page
-            $is_quick_setup_shown = get_option( 'essential_blocks_quick_setup_shown' );
-            if ( ! $is_quick_setup_shown && $checkPro === 0 ) {
-                // Do not redirect AJAX requests
-                if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-                    //Nothing to do
-                } else {
-                    wp_safe_redirect( admin_url( 'admin.php?page=eb-quick-setup' ) );
-                    exit;
-                }
-            }
-
             // Update Related Works
             if ( ESSENTIAL_BLOCKS_WHATSNEW_REDIRECT !== 'none' ) {
                 set_transient( 'essential_block_maybe_whatsnew_redirect', true, MINUTE_IN_SECONDS * 10 );
@@ -61,8 +47,25 @@ class Maintenance
             update_option( 'essential_all_blocks', Blocks::all() );
             update_option( 'essential_quick_toolbar_allowed_blocks', Blocks::quick_toolbar_blocks() );
 
-            //Regenerate Assets
-            StyleHandler::init()->remove_frontend_assets();
+            // Regenerate Assets. Until 6.4.7 this called remove_frontend_assets()
+            // with no arguments, which resolves to non-existent filenames and
+            // deleted nothing — so fixes to CSS generation never reached pages
+            // that already had a generated file. Every generated file is now
+            // marked stale and rewritten lazily on its next render; files are
+            // kept so page-cached HTML never links a missing stylesheet.
+            StyleHandler::init()->regenerate_all_assets();
+
+            // Redirect to the quick setup page last. The version is already
+            // saved, so this request is the only one that runs the update
+            // work above; redirecting before it skipped the table, block
+            // options and asset regeneration for good on free-only sites
+            // that never finished the quick setup.
+            $checkPro             = class_exists( 'EssentialBlocks\Pro\Plugin' ) ? 1 : 0;
+            $is_quick_setup_shown = get_option( 'essential_blocks_quick_setup_shown' );
+            if ( ! $is_quick_setup_shown && $checkPro === 0 && ! wp_doing_ajax() ) {
+                wp_safe_redirect( admin_url( 'admin.php?page=eb-quick-setup' ) );
+                exit;
+            }
         }
     }
 

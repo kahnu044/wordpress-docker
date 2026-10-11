@@ -19,6 +19,10 @@
         $_form_classes[] = 'eb-multistep-form';
     }
 
+    // Button alignment as a class so the stylesheet can apply it with the
+    // `safe` keyword in the inline layout (see style.scss).
+    $_submit_align = isset( $buttonAlign ) && in_array( $buttonAlign, [ 'left', 'center', 'right' ], true ) ? $buttonAlign : 'left';
+
     $extra_keys = ['essentialAttr', 'classHook', 'submit_button_html', 'confirmation_div_html', 'content', 'nonce'];
     $attributes_only = array_diff_key($data, array_flip($extra_keys));
 ?>
@@ -43,7 +47,7 @@
                     <?php echo wp_kses($content, 'post'); ?>
                 </div>
                 <input class="form-nonce" type="hidden" name="form-nonce" value="<?php echo esc_attr( $nonce );?>" />
-                <div class="eb-form-submit">
+                <div class="eb-form-submit eb-form-submit-align-<?php echo esc_attr( $_submit_align ); ?>">
                     <?php
                     if ($formType === 'multistep_form' && $enableMultistepForm) {
                         // Just call do_action without echoing its result

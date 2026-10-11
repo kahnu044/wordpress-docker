@@ -9,7 +9,8 @@ $contentHTML .= $showContent || $showReadMore ? '<div class="ebpg-entry-content"
 if ( $showContent ) {
     $_content = ! empty( $result->post_excerpt ) ? $result->post_excerpt : $result->post_content;
     $_content = Helper::removeHtmlTagWithInnerContents( $_content, [ 'figure' ] );
-    $content  = $block_object->truncate( wp_kses_post( wp_strip_all_tags( $_content ) ), $contentLength );
+    // Excerpt Words below 1 (0 or -1) shows the whole excerpt, the same as the editor preview.
+    $content  = $block_object->truncate( wp_kses_post( wp_strip_all_tags( $_content ) ), (int) $contentLength > 0 ? $contentLength : -1 );
 
     if ( post_password_required( $result->ID ) ) {
         $content = __( 'This content is password protected.', 'essential-blocks' );

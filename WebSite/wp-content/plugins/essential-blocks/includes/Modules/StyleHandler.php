@@ -126,7 +126,7 @@ final class StyleHandler {
 
         // 2. Generate & Enqueue Instance CSS
         $css_filepath = $this->style_dir . $this->get_eb_filename($id);
-        if (! file_exists($css_filepath)) {
+        if ($this->needs_regeneration($css_filepath)) {
             $this->write_css_from_content($parsed_content, $id, $element->post_type);
         }
 
@@ -135,7 +135,7 @@ final class StyleHandler {
                 'eb-block-style-' . $id,
                 $this->style_url . $this->get_eb_filename($id),
                 $deps,
-                substr(md5(microtime(true)), 0, 10)
+                $this->file_version($css_filepath)
             );
         }
     }
@@ -164,7 +164,7 @@ final class StyleHandler {
 
             //Page/Post Generated Style Enqueue
             if (file_exists($this->style_dir . $this->prefix . '-' . $post->ID . '.min.css')) {
-                wp_enqueue_style('eb-block-style-' . $post->ID, $this->style_url . $this->prefix . '-' . $post->ID . '.min.css', $deps, substr(md5(microtime(true)), 0, 10));
+                wp_enqueue_style('eb-block-style-' . $post->ID, $this->style_url . $this->prefix . '-' . $post->ID . '.min.css', $deps, $this->file_version($this->style_dir . $this->prefix . '-' . $post->ID . '.min.css'));
             }
 
             // Reusable block Style Enqueues
@@ -175,7 +175,7 @@ final class StyleHandler {
             if (! empty($reusableIds)) {
                 foreach ($reusableIds as $reusableId) {
                     if (file_exists($this->style_dir . 'reusable-blocks/eb-reusable-' . $reusableId . '.min.css')) {
-                        wp_enqueue_style('eb-reusable-block-style-' . $reusableId, $this->style_url . 'reusable-blocks/eb-reusable-' . $reusableId . '.min.css', $deps, substr(md5(microtime(true)), 0, 10));
+                        wp_enqueue_style('eb-reusable-block-style-' . $reusableId, $this->style_url . 'reusable-blocks/eb-reusable-' . $reusableId . '.min.css', $deps, $this->file_version($this->style_dir . 'reusable-blocks/eb-reusable-' . $reusableId . '.min.css'));
                     }
                 }
             }
@@ -196,7 +196,7 @@ final class StyleHandler {
             if (is_array($gp_elements) && ! empty($gp_elements)) {
                 foreach ($gp_elements as $element) {
                     if (file_exists($this->style_dir . $this->get_eb_filename($element->ID))) {
-                        wp_enqueue_style('eb-block-style-' . $element->ID, $this->style_url . $this->get_eb_filename($element->ID), $deps, substr(md5(microtime(true)), 0, 10));
+                        wp_enqueue_style('eb-block-style-' . $element->ID, $this->style_url . $this->get_eb_filename($element->ID), $deps, $this->file_version($this->style_dir . $this->get_eb_filename($element->ID)));
                     }
                 }
             }
@@ -211,7 +211,7 @@ final class StyleHandler {
                         'eb-block-style-' . $template,
                         $this->style_url . $this->get_eb_filename($template),
                         $deps,
-                        substr(md5(microtime(true)), 0, 10)
+                        $this->file_version($this->style_dir . $this->get_eb_filename($template))
                     );
                 }
             }
@@ -227,7 +227,7 @@ final class StyleHandler {
                             'frontend' . $element,
                             $this->frontend_style_url . $this->get_frontend_filename($element),
                             $deps,
-                            substr(md5(microtime(true)), 0, 10)
+                            $this->file_version($this->frontend_style_dir . $this->get_frontend_filename($element))
                         );
                     }
                 }
@@ -238,7 +238,7 @@ final class StyleHandler {
         if (in_array('astra-addon/astra-addon.php', apply_filters('active_plugins', get_option('active_plugins'))) && defined('ASTRA_ADVANCED_HOOKS_POST_TYPE')) {
             foreach ($this->astra_hook_ids as $element_id) {
                 if (file_exists($this->style_dir . $this->get_eb_filename($element_id))) {
-                    wp_enqueue_style('eb-block-style-' . $element_id, $this->style_url . $this->get_eb_filename($element_id), $deps, substr(md5(microtime(true)), 0, 10));
+                    wp_enqueue_style('eb-block-style-' . $element_id, $this->style_url . $this->get_eb_filename($element_id), $deps, $this->file_version($this->style_dir . $this->get_eb_filename($element_id)));
                 }
             }
         }
@@ -251,7 +251,7 @@ final class StyleHandler {
             $templates = array_unique($this->fse_template_ids);
             foreach ($templates as $template) {
                 if (is_integer($template) && file_exists($this->fse_style_dir . $this->get_fse_filename($template))) {
-                    wp_enqueue_style('eb-fse-style-' . $template, $this->fse_style_url . $this->get_fse_filename($template), array(), substr(md5(microtime(true)), 0, 10));
+                    wp_enqueue_style('eb-fse-style-' . $template, $this->fse_style_url . $this->get_fse_filename($template), array(), $this->file_version($this->fse_style_dir . $this->get_fse_filename($template)));
                 }
             }
         }
@@ -293,7 +293,7 @@ final class StyleHandler {
         $css_file = $this->frontend_style_dir . $this->get_frontend_filename($post_id);
         $css_url  = $this->frontend_style_url . $this->get_frontend_filename($post_id);
 
-        if (file_exists($css_file)) {
+        if (! $this->needs_regeneration($css_file)) {
             wp_enqueue_style($handle_name, $css_url, array(), filemtime($css_file));
         } else {
             $handle_name = $this->generate_frontend_css_file($block_names, $handle_name, $css_file, $css_url);
@@ -314,19 +314,26 @@ final class StyleHandler {
             foreach ($all_blocks as $block) {
                 $blockname = '';
                 $dir       = '';
+                $base_url  = '';
                 if (defined('ESSENTIAL_BLOCKS_PRO_DIR_PATH') && str_starts_with($block, 'essential-blocks/pro-')) {
                     $split_name = explode('/', $block);
                     $blockname  = str_replace('pro-', '', $split_name[1]);
                     $dir        = ESSENTIAL_BLOCKS_PRO_DIR_PATH . 'assets' . DIRECTORY_SEPARATOR . 'blocks' . DIRECTORY_SEPARATOR . $blockname . DIRECTORY_SEPARATOR . 'style.css';
+                    $base_url   = ESSENTIAL_BLOCKS_PRO_URL . 'assets/blocks/' . $blockname . '/';
                 } elseif (str_starts_with($block, 'essential-blocks/')) {
                     $split_name = explode('/', $block);
                     $blockname  = $split_name[1];
                     $dir        = ESSENTIAL_BLOCKS_DIR_PATH . 'assets' . DIRECTORY_SEPARATOR . 'blocks' . DIRECTORY_SEPARATOR . $split_name[1] . DIRECTORY_SEPARATOR . 'style.css';
+                    $base_url   = ESSENTIAL_BLOCKS_URL . 'assets/blocks/' . $split_name[1] . '/';
                 } else {
                     continue;
                 }
                 if (file_exists($dir) && strlen($blockname) > 0) {
-                    $css .= apply_filters("eb_fixed_frontend_styles/{$blockname}", file_get_contents($dir), $blockname,);
+                    // The combined file lives in uploads/eb-style/frontend/, so a
+                    // relative url() in a block stylesheet must be made absolute
+                    // against the block's own asset folder first.
+                    $block_css = self::rebase_relative_urls(file_get_contents($dir), $base_url);
+                    $css      .= apply_filters("eb_fixed_frontend_styles/{$blockname}", $block_css, $blockname,);
                 }
             }
         }
@@ -355,11 +362,60 @@ final class StyleHandler {
                 $css = preg_replace("/(@media[^{]+)width:\s*" . preg_quote($old) . "px/", "$1width:" . $new . "px", $css, -1, $count);
             }
             file_put_contents($filename, $css);
+            clearstatcache(true, $filename);
             //Enqueue
             wp_enqueue_style($handle, $fileurl, array(), filemtime($filename));
             return $handle;
         }
+        // Nothing to write: drop a stale file left from before a regeneration
+        // so it is neither served nor regenerated on every request.
+        AssetGeneration::remove_file($filename);
         return '';
+    }
+
+    /**
+     * Make relative url() references in a stylesheet absolute.
+     *
+     * Block stylesheets are concatenated into a per-page file under
+     * uploads/eb-style/frontend/, where a path such as
+     * `url(../../images/ajax-loader.gif)` would resolve against the uploads
+     * directory instead of the plugin. Absolute URLs, root-relative paths,
+     * protocol-relative URLs, data URIs and fragment references are left as-is.
+     *
+     * @param string $css      Stylesheet contents.
+     * @param string $base_url URL of the folder the stylesheet was built into, with a trailing slash.
+     * @return string
+     */
+    public static function rebase_relative_urls($css, $base_url) {
+        if ('' === $base_url || false === strpos($css, 'url(')) {
+            return $css;
+        }
+
+        return preg_replace_callback(
+            '/url\(\s*([\'"]?)([^\'")]+)\1\s*\)/i',
+            function ($matches) use ($base_url) {
+                $path = trim($matches[2]);
+                if (preg_match('#^([a-z][a-z0-9+.-]*:|/|\#|%23)#i', $path)) {
+                    return $matches[0];
+                }
+
+                $url      = $base_url . $path;
+                $parts    = wp_parse_url($url);
+                $segments = [];
+                foreach (explode('/', isset($parts['path']) ? $parts['path'] : '') as $segment) {
+                    if ('..' === $segment) {
+                        array_pop($segments);
+                    } elseif ('.' !== $segment) {
+                        $segments[] = $segment;
+                    }
+                }
+                $origin = isset($parts['host']) ? (isset($parts['scheme']) ? $parts['scheme'] . ':' : '') . '//' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '') : '';
+                $url    = $origin . implode('/', $segments) . (isset($parts['query']) ? '?' . $parts['query'] : '') . (isset($parts['fragment']) ? '#' . $parts['fragment'] : '');
+
+                return 'url(' . $matches[1] . $url . $matches[1] . ')';
+            },
+            $css
+        );
     }
 
     /**
@@ -435,8 +491,8 @@ final class StyleHandler {
             $recursive_response = CSSParser::eb_block_style_recursive($parsed_content, $eb_blocks, $this->block_names);
         }
 
-        //Check if file exists, return
-        if (file_exists($filename)) {
+        //Return if the file exists and is not stale
+        if (! $this->needs_regeneration($filename)) {
             return;
         }
 
@@ -453,8 +509,22 @@ final class StyleHandler {
         }
 
         $reusableIds = $reusable_Blocks ? array_keys($reusable_Blocks) : array();
-        if (! empty($reusableIds)) {
-            update_option('_eb_reusable_block_ids', $reusableIds);
+
+        // The site-wide option exists for content that has no post context on
+        // the frontend — FSE templates / template parts and printed Templately
+        // templates — whose reusable-block CSS must be enqueued on every page
+        // that renders them. enqueue_frontend_assets() merges it into EVERY
+        // post's enqueue, so it must only ever hold template-level IDs.
+        //
+        // Until 6.4.7 it was overwritten by whichever post generated CSS last,
+        // regardless of type: a synced pattern used on one page had its
+        // stylesheet enqueued site-wide until the next generation replaced it.
+        // Template-level IDs are now merged in (a header part and a footer
+        // part each contribute), and ordinary posts only touch their own meta.
+        if (! empty($reusableIds) && self::is_template_level_type($type)) {
+            $existing = get_option('_eb_reusable_block_ids', array());
+            $existing = is_array($existing) ? $existing : array();
+            update_option('_eb_reusable_block_ids', array_values(array_unique(array_merge($existing, $reusableIds))));
         }
         update_post_meta($post_id, '_eb_reusable_block_ids', $reusableIds);
 
@@ -466,25 +536,49 @@ final class StyleHandler {
         }
     }
 
+
+    /**
+     * Post types whose reusable-block IDs belong in the site-wide
+     * `_eb_reusable_block_ids` option rather than a single post's meta.
+     *
+     * @param string $type Post type passed to write_css_from_content().
+     * @return bool
+     */
+    private static function is_template_level_type($type) {
+        // Everything StyleHandler renders site-wide rather than as a single
+        // post: block-theme templates/parts, printed Templately templates, and
+        // the header/footer/hook containers of the builder integrations below.
+        // Leaving any of them out means a synced pattern inside it loses its
+        // CSS on every page, because the enqueue path only reads the CURRENT
+        // post's meta plus this option.
+        $types = array('wp_template', 'wp_template_part', 'templately_library', 'ct_content_block', 'gp_elements');
+        if (defined('ASTRA_ADVANCED_HOOKS_POST_TYPE')) {
+            $types[] = ASTRA_ADVANCED_HOOKS_POST_TYPE;
+        }
+        $types = apply_filters('eb_reusable_block_template_types', $types);
+        return in_array($type, (array) $types, true);
+    }
     /**
      * Write block css in upload directory
      * @retun void
      * @since 1.0.2
      */
     private function write_block_css($block_styles, $post_id, $post_type) {
+        $is_fse   = 'wp_template' === $post_type || 'wp_template_part' === $post_type;
+        $dir      = $is_fse ? $this->fse_style_dir : $this->style_dir;
+        $filepath = $dir . ($is_fse ? $this->get_fse_filename($post_id) : $this->get_eb_filename($post_id));
+
         // Write CSS for Page/Posts
         if (! empty($css = CSSParser::build_css($block_styles))) {
-            if ('wp_template' === $post_type || 'wp_template_part' === $post_type) {
-                if (! file_exists($this->fse_style_dir)) {
-                    mkdir($this->fse_style_dir, 0755, true);
-                }
-                file_put_contents($this->fse_style_dir . $this->get_fse_filename($post_id), $css);
-            } else {
-                if (! file_exists($this->style_dir)) {
-                    mkdir($this->style_dir, 0755, true);
-                }
-                file_put_contents($this->style_dir . $this->get_eb_filename($post_id), $css);
+            if (! file_exists($dir)) {
+                mkdir($dir, 0755, true);
             }
+            file_put_contents($filepath, $css);
+            clearstatcache(true, $filepath);
+        } else {
+            // Nothing to write: drop a stale file left from before a
+            // regeneration so it is not enqueued with outdated CSS.
+            AssetGeneration::remove_file($filepath);
         }
     }
 
@@ -501,6 +595,7 @@ final class StyleHandler {
                     mkdir($upload_dir, 0755, true);
                 }
                 file_put_contents($upload_dir . DIRECTORY_SEPARATOR . 'eb-reusable-' . abs($id) . '.min.css', $css);
+                clearstatcache(true, $upload_dir . DIRECTORY_SEPARATOR . 'eb-reusable-' . abs($id) . '.min.css');
             }
         }
     }
@@ -651,7 +746,7 @@ final class StyleHandler {
         if ($post_id) {
             $css_filepath          = $this->style_dir . $this->prefix . '-' . $post_id . '.min.css';
             $frontend_css_filepath = $this->frontend_style_dir . $this->frontend_prefix . '-' . $post_id . '.min.css';
-            if (! file_exists($css_filepath) || ! file_exists($frontend_css_filepath)) {
+            if ($this->needs_regeneration($css_filepath) || $this->needs_regeneration($frontend_css_filepath)) {
                 $post_type = get_post_type($post_id);
                 $post      = get_post($post_id);
                 //If This page is draft, return
@@ -680,6 +775,47 @@ final class StyleHandler {
         $sql = $wpdb->prepare("SELECT ID FROM {$wpdb->prefix}posts WHERE post_name = %s", $post_name);
 
         return $wpdb->get_results($sql, ARRAY_A);
+    }
+
+    /**
+     * Mark every generated stylesheet stale and reset the derived
+     * reusable-block state, so each file is rewritten with the current code
+     * the next time its content renders.
+     *
+     * Files are NOT deleted. A full-page cache (host cache, Varnish, CDN, or
+     * a cache plugin that does not purge on plugin update) keeps serving HTML
+     * that links the old files; deleting them would 404 that CSS until the
+     * cache is purged, because nothing regenerates a file without a PHP
+     * render. Instead the generation paths compare each file's mtime against
+     * this timestamp (needs_regeneration()) and overwrite stale files in
+     * place. Cached HTML keeps loading the old CSS, and fresh HTML gets the
+     * new file with a new mtime-based ?ver=.
+     *
+     * The `_eb_reusable_block_ids` option is reset in the same step: its
+     * template-level entries are re-merged as the (now stale) templates
+     * regenerate, and page-level IDs leaked by older versions are dropped.
+     *
+     * @since 6.4.7
+     * @return void
+     */
+    public function regenerate_all_assets() {
+        update_option('eb_assets_regenerate_since', time());
+        delete_option('_eb_reusable_block_ids');
+    }
+
+    /**
+     * Whether a generated file must be (re)written: it is missing, or it was
+     * written at or before the last regenerate_all_assets() call.
+     *
+     * @param string $path Absolute path to the generated file.
+     * @return bool
+     */
+    private function needs_regeneration($path) {
+        if (! file_exists($path)) {
+            return true;
+        }
+        $since = (int) get_option('eb_assets_regenerate_since', 0);
+        return $since > 0 && filemtime($path) <= $since;
     }
 
     /**
@@ -843,7 +979,7 @@ final class StyleHandler {
             $css_url  = $this->frontend_style_url . $this->get_widget_frontend_filename($post->ID);
 
             $frontend_handle = 'essential-blocks-widgte-frontend-style';
-            if (file_exists($css_file)) {
+            if (! $this->needs_regeneration($css_file)) {
                 wp_enqueue_style($frontend_handle, $css_url, array(), filemtime($css_file));
                 $deps[] = $frontend_handle;
             } else {
@@ -851,9 +987,32 @@ final class StyleHandler {
             }
 
             if (file_exists($this->style_dir . $this->prefix . '-widget.min.css')) {
-                wp_enqueue_style('eb-widget-style', $this->style_url . $this->prefix . '-widget.min.css', $deps, substr(md5(microtime(true)), 0, 10), 'all');
+                wp_enqueue_style('eb-widget-style', $this->style_url . $this->prefix . '-widget.min.css', $deps, $this->file_version($this->style_dir . $this->prefix . '-widget.min.css'), 'all');
             }
         }
+    }
+
+    /**
+     * Version string for a generated stylesheet: the file's mtime.
+     *
+     * These files used to be versioned with a random 10-char hash on EVERY
+     * request (`substr(md5(microtime(true)), 0, 10)`). That defeated the
+     * browser cache (a new query string on each pageview), made every cached
+     * copy of a page reference a different URL, and stopped optimisation
+     * plugins from fingerprinting the file at all. It also never actually
+     * solved stale-CSS-after-edit: a page-cached HTML document carries whatever
+     * random version it was rendered with, so it is no fresher than mtime.
+     *
+     * mtime changes exactly when the file is rewritten (save_post wipes it;
+     * the next visit regenerates it), which is the real invalidation event.
+     * The static-CSS path (load_frontend_css_file) already versions this way.
+     *
+     * @param string $path Absolute path to the generated file.
+     * @return string
+     */
+    private function file_version($path) {
+        $mtime = file_exists($path) ? filemtime($path) : false;
+        return false !== $mtime ? (string) $mtime : ESSENTIAL_BLOCKS_VERSION;
     }
 
     public function get_fse_filename($post_id) {

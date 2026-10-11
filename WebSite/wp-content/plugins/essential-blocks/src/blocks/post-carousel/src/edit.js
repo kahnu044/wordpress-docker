@@ -222,7 +222,7 @@ const Edit = (props) => {
                                                 //Generate Title
                                                 const title = post?.title?.rendered;
                                                 const titleWithLimitWords =
-                                                    titleLength >= 0 ? title.trim().split(" ", titleLength).join(" ") : title;
+                                                    titleLength > 0 ? title.trim().split(" ", titleLength).join(" ") : title;
                                                 const titleHTML = safeHTML(`
 						<${titleTag} class="ebpg-entry-title">
 							<a class="ebpg-carousel-post-link" href="#" title="${titleWithLimitWords}">
@@ -238,7 +238,7 @@ const Edit = (props) => {
                                                 excerptElement.innerHTML = excerpt ? excerpt : "";
                                                 excerpt = excerptElement.textContent || excerptElement.innerText || "";
                                                 const excerptWithLimitWords =
-                                                    contentLength >= 0
+                                                    contentLength > 0
                                                         ? excerpt.trim().split(" ", contentLength).join(" ")
                                                         : excerpt;
 

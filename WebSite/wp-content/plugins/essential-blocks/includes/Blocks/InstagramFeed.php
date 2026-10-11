@@ -208,7 +208,9 @@ class InstagramFeed extends Block
         // only in that count share one payload instead of fetching it twice.
         $key = 'eb-main-instagram-api_' . md5( $token . '|' . self::MEDIA_LIMIT );
 
-        $results = $this->settings->get_transient( $key );
+        // No token means nothing to ask Instagram for — skip the request (it
+        // can only fail) and tell editors why the feed is empty.
+        $results = empty( $token ) ? null : $this->settings->get_transient( $key );
 
         if ( false === $results ) {
             $response = HttpRequest::get_instance()->get(
@@ -223,7 +225,12 @@ class InstagramFeed extends Block
                 // Cache the failure too, on a much shorter clock — otherwise an
                 // expired token or a throttled endpoint means a blocking API
                 // request on every single page view.
-                $results = self::FAILURE_SENTINEL;
+                //
+                // Keep the actual failure payload (Instagram's error envelope or
+                // HttpRequest's WP_Error array) so the editor notice can say
+                // what went wrong. Only an empty body needs the sentinel, since
+                // a falsy transient is indistinguishable from a cache miss.
+                $results = empty( $response ) ? self::FAILURE_SENTINEL : $response;
                 $this->settings->set_transient( $key, $results, self::FAILURE_CACHE_TTL );
             }
         }
@@ -233,6 +240,13 @@ class InstagramFeed extends Block
         }
 
         $images = isset( $results->data ) && is_array( $results->data ) ? $results->data : [  ];
+
+        // Visitors still get an empty gallery, but anyone who can edit posts
+        // sees why — otherwise an expired token leaves the block silently blank.
+        $notice = '';
+        if ( empty( $images ) && current_user_can( 'edit_posts' ) ) {
+            $notice = self::get_editor_notice( $token, $results );
+        }
 
         // Spaceship comparator. The previous version returned `(int) ( a < b )`,
         // i.e. only ever 0 or 1 and never a negative — an invalid comparator that
@@ -266,11 +280,47 @@ class InstagramFeed extends Block
                     'classHook'    => '',
                     'profileImg'   => '',
                     'profileName'  => '',
-                    'images'       => $images
+                    'images'       => $images,
+                    'notice'       => $notice
                  ]
             )
         );
         return ob_get_clean();
+    }
+
+    /**
+     * Explain an empty feed to a logged-in editor.
+     *
+     * @param  string $token   Resolved access token.
+     * @param  mixed  $results Cached/decoded API response (null on empty body).
+     * @return string Plain-text notice; escape on output.
+     */
+    private static function get_editor_notice( $token, $results )
+    {
+        if ( empty( $token ) ) {
+            $message = __( 'Instagram Feed: no Instagram access token is set. Add one under Essential Blocks → Integrations → Instagram.', 'essential-blocks' );
+        } else {
+            $reason = '';
+            if ( is_object( $results ) && isset( $results->error->message ) ) {
+                // Instagram's error envelope, e.g. an expired or revoked token.
+                $reason = $results->error->message;
+            } elseif ( is_array( $results ) && ! empty( $results[ 'message' ] ) ) {
+                // HttpRequest's WP_Error wrapper (DNS failure, timeout, ...).
+                $reason = $results[ 'message' ];
+            }
+
+            if ( '' === $reason && is_object( $results ) && isset( $results->data ) ) {
+                $message = __( 'Instagram Feed: the connected Instagram account has no media to show.', 'essential-blocks' );
+            } else {
+                $message = sprintf(
+                    /* translators: %s: error message returned by the Instagram API. */
+                    __( 'Instagram Feed: could not load posts (%s). Check the access token under Essential Blocks → Integrations → Instagram.', 'essential-blocks' ),
+                    '' !== $reason ? $reason : __( 'empty response from Instagram', 'essential-blocks' )
+                );
+            }
+        }
+
+        return $message . ' ' . __( 'This notice is only visible to logged-in editors.', 'essential-blocks' );
     }
 
     /**

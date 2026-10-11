@@ -42,7 +42,13 @@ class TemplatelyPatterns
     public function init()
     {
         $this->set_api_url();
-        $this->schedule_cron_job();
+
+        // Patterns are fetched on demand by get_patterns(), so no background
+        // request to app.templately.com runs on sites that never use them
+        // (WP.org Guideline 7). Clear the daily event older versions scheduled.
+        if ( wp_next_scheduled( 'eb_pattern_update_cron' ) ) {
+            wp_clear_scheduled_hook( 'eb_pattern_update_cron' );
+        }
     }
 
     /**

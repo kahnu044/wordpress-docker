@@ -655,6 +655,109 @@
     }
 
     /**
+     * Load-more / pagination buttons for the post grid and product grid.
+     *
+     * Shared by views/common/pagination.php and the post grid pagination AJAX
+     * handler, so the page math is guarded once: the divisor is never 0, and
+     * `max_pages` caps the page-button loop when the total comes from the client.
+     *
+     * @param mixed $total    Total number of posts.
+     * @param mixed $per_page Posts per page as stored in the query data.
+     * @param array $opts {
+     *     @type mixed  $enableMorePosts   Output nothing unless truthy.
+     *     @type mixed  $loadMoreType      '1' load-more button, '2' numbered pages, '3' prev/next. Null outputs nothing.
+     *     @type mixed  $loadMoreButtonTxt Load-more button text.
+     *     @type mixed  $prevTxt           Previous button text. Null means "<".
+     *     @type mixed  $nextTxt           Next button text. Null means ">".
+     *     @type bool   $wrap              Wrap the buttons in the `.ebpg-pagination` container.
+     *     @type string $parent_class      Extra container class.
+     *     @type int    $max_pages         Page-button cap, 0 for none. Set it whenever $total is client-supplied.
+     * }
+     * @return string HTML. Callers still pass it through wp_kses.
+     */
+    public static function pagination_markup( $total, $per_page, $opts = array() ) {
+        $opts           = is_array( $opts ) ? $opts : array();
+        $load_more_type = isset( $opts[ 'loadMoreType' ] ) && is_scalar( $opts[ 'loadMoreType' ] ) ? $opts[ 'loadMoreType' ] : null;
+        $enabled        = isset( $opts[ 'enableMorePosts' ] ) && is_scalar( $opts[ 'enableMorePosts' ] ) && $opts[ 'enableMorePosts' ];
+
+        if ( ! is_scalar( $total ) || ! is_numeric( $total ) || ! $enabled || null === $load_more_type ) {
+            return '';
+        }
+
+        $total    = max( 0, (int) $total );
+        $per_page = is_scalar( $per_page ) ? (int) $per_page : 0;
+
+        // TODO(decision): Q1 — per_page -1 means "show all". Its markup is kept as shipped (a load-more
+        // button, or prev/next without page buttons) until it's decided whether -1 is a supported setting.
+        $show_all = -1 === $per_page;
+
+        // Page with the size WP_Query uses (0/"" = Reading setting, negatives made positive); never 0.
+        $page_size = $show_all ? 0 : QueryHelper::effective_per_page( $per_page );
+
+        if ( ! $show_all && $total <= $page_size ) {
+            return '';
+        }
+
+        $html = '';
+
+        if ( $load_more_type === '1' ) {
+            $html .= sprintf(
+                '<button class="btn ebpg-pagination-button" data-pagenumber="1">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'loadMoreButtonTxt', '' ) )
+            );
+        }
+
+        if ( $load_more_type === '2' || $load_more_type === '3' ) {
+            $total_pages = $show_all ? 0 : (int) ceil( $total / $page_size );
+            $max_pages   = isset( $opts[ 'max_pages' ] ) && is_numeric( $opts[ 'max_pages' ] ) ? (int) $opts[ 'max_pages' ] : 0;
+            if ( $max_pages > 0 ) {
+                $total_pages = min( $total_pages, $max_pages );
+            }
+
+            $html .= sprintf(
+                '<button class="ebpg-pagination-item-previous">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'prevTxt', '<' ) )
+            );
+            for ( $i = 1; $i <= $total_pages; $i++ ) {
+                $active = $i == 1 ? "active" : "";
+
+                $html .= sprintf(
+                    '<button class="ebpg-pagination-item %2$s" data-pagenumber="%1$s">
+                        %1$s
+                    </button>',
+                    $i,
+                    $active
+                );
+            }
+            $html .= sprintf(
+                '<button class="ebpg-pagination-item-next">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'nextTxt', '>' ) )
+            );
+        }
+
+        if ( ! empty( $opts[ 'wrap' ] ) ) {
+            $parent_class = isset( $opts[ 'parent_class' ] ) && is_string( $opts[ 'parent_class' ] ) ? $opts[ 'parent_class' ] : '';
+            $html         = sprintf(
+                '<div class="%1$s ebpg-pagination %2$s">',
+                esc_attr( $parent_class ),
+                $load_more_type === '3' ? "prev-next-btn" : ""
+            ) . $html . '</div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param array  $opts
+     * @param string $key
+     * @param string $default Used when the option is missing or not a scalar.
+     * @return string
+     */
+    private static function pagination_text( $opts, $key, $default ) {
+        return isset( $opts[ $key ] ) && is_scalar( $opts[ $key ] ) ? (string) $opts[ $key ] : $default;
+    }
+
+    /**
      * Convert Recursive Array to String
      *
      * @param array   $array

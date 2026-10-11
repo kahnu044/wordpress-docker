@@ -1594,9 +1594,6 @@ export default function Style(props) {
 	`;
 
     const featuredPostStylesDesktop = `
-        .eb-post-grid-wrapper.pro-style-7.has-featured-post .ebpg-featured-post-wrapper .ebpg-grid-post-holder {
-            ${featuredPostMinHeightDesktop}
-        }
         .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper {
             margin-bottom: ${featuredPostBottomSpacing}px;
             ${featuredPostMinHeightDesktop}
@@ -1635,9 +1632,6 @@ export default function Style(props) {
 
         .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img {
             ${featuredPostMinHeightDesktop}
-        }
-        .eb-post-grid-wrapper.${blockId}.pro-style-7 .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img {
-            height: calc(${postMinHeightRange}px / 1.5);
         }
         .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail img,
         .eb-post-grid-wrapper.${blockId} .ebpg-featured-post-wrapper .ebpg-entry-thumbnail:after {

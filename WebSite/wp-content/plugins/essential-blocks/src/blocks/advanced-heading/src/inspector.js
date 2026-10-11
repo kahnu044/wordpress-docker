@@ -136,7 +136,7 @@ function Inspector(props) {
                     wrpPaddingBottom: "0",
                     wrpPaddingLeft: "0",
                     wrpPaddingRight: "0",
-                    wrprBgbackgroundColor: "rgba(255,255,255,1)",
+                    wrprBgbackgroundColor: undefined,
                     wrprBgbackgroundType: "classic",
                 });
                 break;

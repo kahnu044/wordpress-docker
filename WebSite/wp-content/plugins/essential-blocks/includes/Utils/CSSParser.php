@@ -43,6 +43,80 @@ class CSSParser
     }
 
     /**
+     * Does this parsed block belong to a namespace whose generated CSS
+     * Essential Blocks should write?
+     *
+     * Defaults to `essential-blocks/` (which covers Pro's `essential-blocks/pro-*`
+     * blocks). Other plugins that store `blockId` + `blockMeta` and want EB's
+     * StyleHandler to own their CSS can add their prefix via the filter.
+     *
+     * @param array $item Parsed block (from parse_blocks()).
+     * @return bool
+     */
+    public static function is_eb_block( $item )
+    {
+        $name = isset( $item[ 'blockName' ] ) ? (string) $item[ 'blockName' ] : '';
+        if ( '' === $name ) {
+            return false;
+        }
+        $namespaces = apply_filters( 'eb_style_handler_block_namespaces', [ 'essential-blocks/' ] );
+        foreach ( (array) $namespaces as $prefix ) {
+            if ( '' !== $prefix && 0 === strpos( $name, $prefix ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Whether any Liquid Glass attribute on the block is enabled
+     * (`liquidGlass`, `btnLiquidGlass`, …). Absent means the saved default: off.
+     *
+     * @param array $attributes Block attributes.
+     * @return bool
+     */
+    public static function has_liquid_glass( $attributes )
+    {
+        foreach ( (array) $attributes as $name => $value ) {
+            if ( is_array( $value ) && ! empty( $value[ 'enable' ] ) && false !== stripos( (string) $name, 'liquidglass' ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove rules that only target Liquid Glass classes. A selector list
+     * mixing them with other selectors keeps the other selectors.
+     *
+     * @param string $css CSS.
+     * @return string
+     */
+    public static function strip_liquid_glass_css( $css )
+    {
+        if ( ! is_string( $css ) || false === strpos( $css, 'eb_liquid_glass' ) ) {
+            return $css;
+        }
+
+        $css = preg_replace_callback(
+            '/([^{}]*eb_liquid_glass[^{}]*)\{([^{}]*)\}/',
+            function ( $m ) {
+                $kept = array_filter(
+                    array_map( 'trim', explode( ',', $m[ 1 ] ) ),
+                    function ( $selector ) {
+                        return '' !== $selector && false === strpos( $selector, 'eb_liquid_glass' );
+                    }
+                );
+                return $kept ? implode( ',', $kept ) . '{' . $m[ 2 ] . '}' : '';
+            },
+            $css
+        );
+
+        // Media queries left empty.
+        return preg_replace( '/@media[^{}]*\{\s*\}/', '', $css );
+    }
+
+    /**
      * Recursive function for parsing blocks
      */
     public static function eb_block_style_recursive( $block, &$eb_blocks, &$blocknames )
@@ -53,8 +127,15 @@ class CSSParser
 
                 $isCustomCssError = isset( $attributes[ 'isCustomCssError' ] ) ? $attributes[ 'isCustomCssError' ] : false;
 
+                // Only claim blocks from our own namespace. `blockId` + `blockMeta`
+                // is a convention other WPDeveloper plugins share (BetterDocs uses
+                // the same attribute names), and until 6.4.7 this collector took
+                // any block carrying them — so EB wrote BetterDocs' block CSS into
+                // eb-style-{id}.min.css while BetterDocs wrote it into its own
+                // file too, and pages loaded the same CSS twice. Third parties
+                // that want EB to own their CSS can opt in via the filter.
                 $blockId = "";
-                if ( isset( $attributes[ 'blockId' ] ) && ! empty( $attributes[ 'blockId' ] ) ) {
+                if ( isset( $attributes[ 'blockId' ] ) && ! empty( $attributes[ 'blockId' ] ) && self::is_eb_block( $item ) ) {
                     $blockId = $attributes[ 'blockId' ];
                     if ( isset( $item[ 'blockName' ] ) ) {
                         $blocknames[  ] = $item[ 'blockName' ];
@@ -79,6 +160,17 @@ class CSSParser
                             return html_entity_decode( $style, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                         }, $attributes[ 'commonStyles' ] )
                         : $attributes[ 'commonStyles' ];
+
+                    // commonStyles carries the Liquid Glass rules for every
+                    // block, effect on or off; the classes they target are only
+                    // added when it's on (LiquidGlassRenderer). Drop them for
+                    // blocks without the effect: 162 KB of 888 KB on the
+                    // essential-blocks.com homepage.
+                    if ( ! self::has_liquid_glass( $attributes ) ) {
+                        $commonStyles = is_array( $commonStyles )
+                            ? array_map( [ __CLASS__, 'strip_liquid_glass_css' ], $commonStyles )
+                            : self::strip_liquid_glass_css( $commonStyles );
+                    }
                 }
                 $customCss = "";
                 if ( ! $isCustomCssError && isset( $attributes[ 'customCss' ] ) && ! empty( $attributes[ 'customCss' ] ) ) {
@@ -94,14 +186,14 @@ class CSSParser
                 } else {
                     if ( isset( $item[ "innerBlocks" ] ) && count( $item[ "innerBlocks" ] ) > 0 ) {
                         self::eb_block_style_recursive( $item[ 'innerBlocks' ], $eb_blocks, $blocknames );
-                        if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
+                        if ( '' !== $blockId && isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
                             $eb_blocks[ $blockId ] = [
                                 'blockMeta'    => $blockMeta,
                                 'commonStyles' => $commonStyles,
                                 'customCss'    => $customCss
                              ];
                         }
-                    } else if ( isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
+                    } else if ( '' !== $blockId && isset( $attributes[ 'blockMeta' ] ) && ! empty( $attributes[ 'blockMeta' ] ) ) {
                         $eb_blocks[ $blockId ] = [
                             'blockMeta'    => $blockMeta,
                             'commonStyles' => $commonStyles,

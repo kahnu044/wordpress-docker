@@ -35,7 +35,7 @@ class NFT extends ThirdPartyIntegration {
      * API Call to Get NFT Data
      */
     public function collections() {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST['nft_nonce'] ), 'eb-nft-nonce' ) ) {
+        if ( ! isset( $_POST['nft_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nft_nonce'] ), 'eb-nft-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
@@ -100,7 +100,7 @@ class NFT extends ThirdPartyIntegration {
      * Only admins get real API key, editors get dummy data for preview
      */
     public function get_api() {
-        if ( ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
@@ -124,7 +124,7 @@ class NFT extends ThirdPartyIntegration {
         }
     }
     public function save_api() {
-        if ( ! wp_verify_nonce( $_POST['admin_nonce'], 'admin-nonce' ) ) {
+        if ( ! isset( $_POST['admin_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['admin_nonce'] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
         if ( ! current_user_can( 'activate_plugins' ) ) {

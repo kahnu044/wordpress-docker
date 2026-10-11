@@ -11,6 +11,9 @@ import { ReactComponent as CloseIcon } from "../icons/close.svg";
  */
 export default function GetStartedContent({ handleTabChange, setTracking, ebUserType }) {
     const [collectModal, setCollectModal] = useState(false);
+    // Usage tracking is opt-in only (WP.org Guideline 7): unchecked by default,
+    // and continuing the wizard never implies consent.
+    const [shareUsageData, setShareUsageData] = useState(false);
 
     const nextTab = ebUserType === "new" ? 'configuration' : 'blocks';
 
@@ -70,7 +73,7 @@ export default function GetStartedContent({ handleTabChange, setTracking, ebUser
                         <button
                             className="eb-setup-btn eb-setup-btn-next eael-user-email-address eb-flex-row-center"
                             type="button"
-                            onClick={() => acceptTracking()}
+                            onClick={() => (shareUsageData ? acceptTracking() : handleTracking(false))}
                         >
                             {__(
                                 "Proceed To Next Step",
@@ -90,10 +93,18 @@ export default function GetStartedContent({ handleTabChange, setTracking, ebUser
                     <p className="get-started-footer eb-flex-row-center">
                         <InfoIcon />
 
-                        {__(
-                            "By proceeding, you grant permission for this plugin to collect your information. ",
-                            "essential-blocks"
-                        )}
+                        <label className="get-started-consent" htmlFor="eb-quick-setup-share-usage">
+                            <input
+                                id="eb-quick-setup-share-usage"
+                                type="checkbox"
+                                checked={shareUsageData}
+                                onChange={(event) => setShareUsageData(event.target.checked)}
+                            />
+                            {__(
+                                "Share non-sensitive usage data with Essential Blocks (optional).",
+                                "essential-blocks"
+                            )}
+                        </label>
                         <span className="get-started-collect-info" onClick={handleCollectModal} >
                             {__("Find out what we collect?", "essential-blocks")}
                         </span>
@@ -113,7 +124,7 @@ export default function GetStartedContent({ handleTabChange, setTracking, ebUser
                             </h5>
                             <p className="option-modal__content">
                                 {__(
-                                    "We collect non-sensitive diagnostic data and plugin usage information. Your site URL, WordPress & PHP version, plugins & themes, and email address to send you the discount coupon. This data lets us make sure this plugin always stays compatible with the most popular plugins and themes. No spam, we promise.",
+                                    "Only if you tick the box: we collect non-sensitive diagnostic data and plugin usage information — your site URL, WordPress & PHP version, plugins & themes, and the admin email address. This data lets us make sure this plugin always stays compatible with the most popular plugins and themes. Nothing is sent if the box is unticked.",
                                     "essential-blocks"
                                 )}
                             </p>

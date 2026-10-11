@@ -27,9 +27,21 @@ const autoRecoverEssentialProBlocks = () => {
         );
     };
 
+    // A pro block saved with Pro active carries real markup and attributes the
+    // placeholder (save: () => null, only `cover`) cannot hold. Recreating it would
+    // wipe the user's content on the next save, so leave such blocks invalid:
+    // Gutenberg serializes invalid blocks from their raw source, and they render
+    // normally again once Pro is active.
+    const hasSavedContent = (block) => {
+        return (
+            (block.originalContent && block.originalContent.trim() !== '') ||
+            (block.innerBlocks && block.innerBlocks.length > 0)
+        );
+    };
+
     // Function to check if a pro block is invalid
     const isProBlockInvalid = (block) => {
-        return isProBlock(block) && (
+        return isProBlock(block) && !hasSavedContent(block) && (
             !block.isValid ||
             block.name === 'core/missing'
         );

@@ -20,4 +20,62 @@ const PostGridIcon = () => {
     )
 }
 
+export const SearchIcon = () => (
+    <svg
+        width="73"
+        height="72"
+        viewBox="0 0 73 72"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <rect
+            x="1.02941"
+            y="0.529412"
+            width="70.9412"
+            height="70.9412"
+            rx="15.4706"
+            fill="url(#eb_pg_search_paint0)"
+        />
+        <rect
+            x="1.02941"
+            y="0.529412"
+            width="70.9412"
+            height="70.9412"
+            rx="15.4706"
+            stroke="url(#eb_pg_search_paint1)"
+            strokeWidth="1.05882"
+        />
+        <path
+            d="M43.5 43.5L50 50M47 34.5C47 41.404 41.404 47 34.5 47C27.596 47 22 41.404 22 34.5C22 27.596 27.596 22 34.5 22C41.404 22 47 27.596 47 34.5Z"
+            stroke="#6C3BFF"
+            strokeWidth="1.66667"
+            strokeLinecap="round"
+        />
+        <defs>
+            <linearGradient
+                id="eb_pg_search_paint0"
+                x1="36.5"
+                y1="0"
+                x2="36.5"
+                y2="72"
+                gradientUnits="userSpaceOnUse"
+            >
+                <stop stopColor="#FFF0E4" />
+                <stop offset="1" stopColor="#FFF0E4" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient
+                id="eb_pg_search_paint1"
+                x1="36.5"
+                y1="0"
+                x2="29"
+                y2="36"
+                gradientUnits="userSpaceOnUse"
+            >
+                <stop stopColor="#FFDDC2" />
+                <stop offset="1" stopColor="#FFDDC2" stopOpacity="0" />
+            </linearGradient>
+        </defs>
+    </svg>
+);
+
 export default PostGridIcon;

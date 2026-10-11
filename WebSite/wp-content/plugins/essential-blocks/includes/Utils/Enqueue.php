@@ -106,7 +106,39 @@ class Enqueue
             'dependencies' => $dependencies,
             'version'      => $version,
             'type'         => $is_js ? 'script' : 'style',
-            'args'         => null !== $args ? $args : ( $is_js ? true : 'all' )
+            'args'         => null !== $args ? $args : ( $is_js ? self::default_script_args() : 'all' )
+         ];
+    }
+
+    /**
+     * Registration args for a script when the caller passes none.
+     *
+     * Frontend scripts default to `strategy => 'defer'` (WordPress 6.3+).
+     * Every asset the helper registers already goes to the footer with its
+     * dependencies declared, and no EB script relies on an inline `<script>`
+     * that calls into it, so deferring is behaviour-preserving while letting
+     * the parser continue past the tag. Optimisation plugins that special-case
+     * "essential-blocks" handles no longer need to.
+     *
+     * Safety net is WordPress's own: a script with an inline "after" script,
+     * or one that a blocking script depends on, is automatically downgraded
+     * to blocking. On WordPress < 6.3 the array is simply a truthy
+     * `$in_footer`, i.e. identical to the previous `true`.
+     *
+     * Admin scripts keep the plain footer flag; editor bundles depend on
+     * core's wp-* packages and gain nothing from a delayed strategy.
+     *
+     * @return bool|array
+     */
+    private static function default_script_args()
+    {
+        if ( is_admin() ) {
+            return true;
+        }
+
+        return [
+            'in_footer' => true,
+            'strategy'  => 'defer'
          ];
     }
 

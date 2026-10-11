@@ -18,19 +18,19 @@ class GlobalStyles extends ThirdPartyIntegration
             [
                 'global_styles_get'     => [
                     'callback' => 'global_styles_get_callback',
-                    'public'   => true
+                    'public'   => false
                  ],
                 'global_styles_update'  => [
                     'callback' => 'global_styles_update_callback',
-                    'public'   => true
+                    'public'   => false
                  ],
                 'block_defaults_get'    => [
                     'callback' => 'block_defaults_get_callback',
-                    'public'   => true
+                    'public'   => false
                  ],
                 'block_defaults_update' => [
                     'callback' => 'block_defaults_update_callback',
-                    'public'   => true
+                    'public'   => false
                  ]
              ]
         );
@@ -41,9 +41,12 @@ class GlobalStyles extends ThirdPartyIntegration
      */
     public function global_styles_get_callback()
     {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce did not match!', 'essential-blocks' ) );
             wp_die();
+        }
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
         }
 
         $settings = wp_unslash( get_option( self::$global_style_options_key ) );
@@ -61,7 +64,7 @@ class GlobalStyles extends ThirdPartyIntegration
      */
     public function global_styles_update_callback()
     {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce did not match!', 'essential-blocks' ) );
             wp_die();
         }
@@ -116,9 +119,12 @@ class GlobalStyles extends ThirdPartyIntegration
      */
     public function block_defaults_get_callback()
     {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce did not match!', 'essential-blocks' ) );
             wp_die();
+        }
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
         }
 
         $settings = wp_unslash( get_option( self::$block_defaults_options_key ) );
@@ -136,7 +142,7 @@ class GlobalStyles extends ThirdPartyIntegration
      */
     public function block_defaults_update_callback()
     {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             wp_send_json_error( __( 'Nonce did not match!', 'essential-blocks' ) );
             wp_die();
         }

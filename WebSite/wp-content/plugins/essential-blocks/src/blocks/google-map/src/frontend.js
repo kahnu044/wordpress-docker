@@ -1,4 +1,5 @@
 import { GOOGLE_MAP_STYLES, SNAZZY_MAP_STYLES } from "./constants";
+import { buildInfoWindowContent } from "./infowindow";
 document.addEventListener("DOMContentLoaded", function (event) {
     let mapContainers = document.querySelectorAll(".eb-google-map-wrapper");
 
@@ -130,13 +131,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 }
 
                 if (marker.title || marker.content) {
-                    const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${marker.title
-                        }</h6><div class="eb-google-map-overview-content">${marker.content ? `<p>${marker.content}</p>` : ""
-                        }</div></div>`;
-
                     bounds.extend(position);
                     const infowindow = new window.google.maps.InfoWindow({
-                        content: contentString,
+                        content: buildInfoWindowContent(marker),
                     });
 
                     if (index == 0) {

@@ -3,11 +3,17 @@
 namespace EssentialBlocks\API;
 
 use EssentialBlocks\Utils\Helper;
+use EssentialBlocks\Utils\QueryHelper;
 use EssentialBlocks\Blocks\PostGrid as PostGridBlock;
 use EssentialBlocks\Blocks\PostCarousel as PostCarouselBlock;
 
 class PostBlock extends Base
 {
+    /**
+     * Template variables read by the post partials that aren't block defaults.
+     */
+    const EXTRA_TEMPLATE_ATTRIBUTES = [ 'fallbackImgAlt' => '' ];
+
     /**
      * Register REST Routes
      * Supports both GET (backward compatibility) and POST (firewall-friendly) methods
@@ -38,10 +44,9 @@ class PostBlock extends Base
         $block_type = $request->has_param( 'block_type' ) ? $request->get_param( 'block_type' ) : 'post-grid';
 
         // Handle both GET and POST requests
-        $query_data = '';
-        $attributes_data = '';
-        $page_number = 0;
-        $query_filter = '';
+        $query_data         = '';
+        $attributes_data    = '';
+        $page_number        = 0;
         $query_param_string = '';
 
         if ( $request->get_method() === 'POST' ) {
@@ -49,20 +54,19 @@ class PostBlock extends Base
             $body = $request->get_body();
             $post_data = json_decode( $body, true );
 
-            if ( ! $post_data ) {
+            if ( ! is_array( $post_data ) ) {
                 $post_data = $request->get_params();
             }
 
-            $query_data = isset( $post_data['query_data'] ) ? sanitize_text_field( $post_data['query_data'] ) : '';
-            $attributes_data = isset( $post_data['attributes'] ) ? sanitize_text_field( $post_data['attributes'] ) : '';
-            $page_number = isset( $post_data['pageNumber'] ) ? (int) sanitize_text_field( $post_data['pageNumber'] ) - 1 : 0;
-            $query_filter = isset( $post_data['query_filter'] ) ? sanitize_text_field( $post_data['query_filter'] ) : '';
+            $query_data         = isset( $post_data['query_data'] ) ? sanitize_text_field( $post_data['query_data'] ) : '';
+            $attributes_data    = isset( $post_data['attributes'] ) ? sanitize_text_field( $post_data['attributes'] ) : '';
+            $page_number        = isset( $post_data['pageNumber'] ) ? (int) sanitize_text_field( $post_data['pageNumber'] ) - 1 : 0;
             $query_param_string = isset( $post_data['query_param_string'] ) ? sanitize_text_field( $post_data['query_param_string'] ) : '';
         } else {
             // Handle GET request (backward compatibility)
-            $query_data = sanitize_text_field( $request->get_param( 'query_data' ) );
+            $query_data      = sanitize_text_field( $request->get_param( 'query_data' ) );
             $attributes_data = sanitize_text_field( $request->get_param( 'attributes' ) );
-            $page_number = isset( $request[ 'pageNumber' ] ) ? (int) sanitize_text_field( $request[ 'pageNumber' ] ) - 1 : 0;
+            $page_number     = isset( $request[ 'pageNumber' ] ) ? (int) sanitize_text_field( $request[ 'pageNumber' ] ) - 1 : 0;
         }
 
         if ( empty( $query_data ) || empty( $attributes_data ) ) {
@@ -77,24 +81,24 @@ class PostBlock extends Base
             return new \WP_Error( 'invalid_json', 'Invalid JSON data provided', array( 'status' => 400 ) );
         }
 
-        $query      = ( is_object( $query ) || is_array( $query ) ) ? (array) $query : [  ];
-        $attributes = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [  ];
-        $pageNumber = $page_number;
-        //Check if param is empty
-        if ( ! is_array( $query ) || ! is_array( $attributes ) ) {
-            wp_send_json_error( "Invalid request param" );
-        }
+        // Request input: every value is type-checked and the request bounds apply.
+        $query      = QueryHelper::normalize_query_data( $query, true );
+        $attributes = is_array( $attributes ) ? $attributes : [  ];
+        $pageNumber = max( 0, min( $page_number, QueryHelper::max_pages() - 1 ) );
 
-        if ( isset( $query[ 'per_page' ] ) && isset( $query[ 'offset' ] ) ) {
-            $query[ 'offset' ] = (int) $query[ 'offset' ] + ( (int) $query[ 'per_page' ] * (int) $pageNumber );
+        // Same page size WP_Query uses, so page N starts where page N-1 ended.
+        $page_size = QueryHelper::effective_per_page( $query[ 'per_page' ] );
+        // per_page -1 (only when eb_query_allow_unbounded_per_page allows it) has no page size, so the saved offset is kept.
+        if ( $page_size > 0 ) {
+            $query[ 'offset' ] = min( $query[ 'offset' ] + ( $page_size * $pageNumber ), QueryHelper::max_offset() );
         }
 
         $_template_name = 'carousel-markup';
         $block_object   = PostCarouselBlock::get_instance();
         if ( $block_type === 'post-grid' ) {
             // Handle taxonomy and category filtering for both GET and POST
-            $taxonomy = '';
-            $category = '';
+            $taxonomy   = '';
+            $category   = '';
             $query_type = '';
             $search_key = '';
 
@@ -102,45 +106,38 @@ class PostBlock extends Base
                 // Parse query_param_string for POST requests
                 if ( ! empty( $query_param_string ) ) {
                     parse_str( ltrim( $query_param_string, '&' ), $parsed_params );
-                    $taxonomy = isset( $parsed_params['taxonomy'] ) ? sanitize_text_field( $parsed_params['taxonomy'] ) : '';
-                    $category = isset( $parsed_params['category'] ) ? sanitize_text_field( $parsed_params['category'] ) : '';
-                    $query_type = isset( $parsed_params['query_type'] ) ? sanitize_text_field( $parsed_params['query_type'] ) : '';
-                    $search_key = isset( $parsed_params['s'] ) ? sanitize_text_field( $parsed_params['s'] ) : '';
+                    $taxonomy   = self::string_param( $parsed_params, 'taxonomy' );
+                    $category   = self::string_param( $parsed_params, 'category' );
+                    $query_type = self::string_param( $parsed_params, 'query_type' );
+                    $search_key = self::string_param( $parsed_params, 's' );
                 }
             } else {
                 // Handle GET request parameters
-                $taxonomy = $request->get_param( 'taxonomy' );
-                $category = $request->get_param( 'category' );
-                $query_type = $request->get_param( 'query_type' );
-                $search_key = $request->get_param( 's' );
+                $get_params = $request->get_params();
+                $taxonomy   = self::string_param( $get_params, 'taxonomy' );
+                $category   = self::string_param( $get_params, 'category' );
+                $query_type = self::string_param( $get_params, 'query_type' );
+                $search_key = self::string_param( $get_params, 's' );
             }
 
-            if ( ! empty( $taxonomy ) && ! empty( $category ) ) {
-                $category_term  = get_term_by( 'slug', $category, $taxonomy );
-                if ( $category_term ) {
-                    $catString = wp_json_encode( [ [
-                        "label" => $category_term->name,
-                        "value" => $category_term->term_id
-                     ] ] );
-                    $filterQuery = [
-                        $taxonomy => [
-                            "name"  => $category,
-                            "slug"  => $category,
-                            "value" => $catString
-                         ]
-                     ];
-                    $query[ "taxonomies" ] = array_merge( $query[ 'taxonomies' ] ?? [  ], $filterQuery );
+            if ( '' !== $taxonomy && '' !== $category ) {
+                $category_term = get_term_by( 'slug', $category, $taxonomy );
+                if ( $category_term instanceof \WP_Term ) {
+                    $query = QueryHelper::merge_taxonomy_filter( $query, $taxonomy, $category_term->term_id );
                 }
             }
 
-            if ( $query_type === 'search' && ! empty( $search_key ) ) {
+            if ( $query_type === 'search' && '' !== $search_key ) {
                 $query[ "s" ] = $search_key;
             }
 
             $_template_name = 'grid-markup';
             $block_object   = PostGridBlock::get_instance();
-            $attributes     = wp_parse_args( $attributes, $block_object->get_default_attributes() );
         }
+
+        // Request attributes become template variables, so only known keys are
+        // passed on (with their block defaults as fallback), each type-checked.
+        $attributes = self::normalize_template_attributes( $attributes, $block_object->get_default_attributes() );
 
         $result = $block_object->get_posts( $query, true );
         $posts  = [  ];
@@ -153,16 +150,18 @@ class PostBlock extends Base
         }
 
         if ( empty( $posts ) ) {
-            return false;
+            // A REST response with a `false` body: the post grid frontends read it as "no (more)
+            // posts" for load more, filter and search.
+            return rest_ensure_response( false );
         }
 
         ob_start();
         Helper::views( 'post-partials/' . $_template_name, array_merge( $attributes, [
             'posts'        => $posts,
             'block_object' => $block_object,
-            'source'       => isset( $query[ 'source' ] ) ? $query[ 'source' ] : 'post',
-            'headerMeta'   => ! empty( $attributes[ 'headerMeta' ] ) ? json_decode( $attributes[ 'headerMeta' ] ) : [  ],
-            'footerMeta'   => ! empty( $attributes[ 'footerMeta' ] ) ? json_decode( $attributes[ 'footerMeta' ] ) : [  ]
+            'source'       => $query[ 'source' ],
+            'headerMeta'   => self::decode_meta_list( $attributes[ 'headerMeta' ] ),
+            'footerMeta'   => self::decode_meta_list( $attributes[ 'footerMeta' ] )
          ] ) );
 
         $response = rest_ensure_response( ob_get_clean() );
@@ -171,5 +170,61 @@ class PostBlock extends Base
          ] );
 
         return $response;
+    }
+
+    /**
+     * Keep only the attributes the post partials read, each coerced to the type
+     * of its default. Mirrors API\Product::normalize_frontend_attributes().
+     *
+     * @param array $attributes Raw json_decode'd client input.
+     * @param array $defaults   Block default attributes.
+     * @return array
+     */
+    private static function normalize_template_attributes( $attributes, $defaults )
+    {
+        $defaults   = array_merge( self::EXTRA_TEMPLATE_ATTRIBUTES, $defaults );
+        $normalized = [  ];
+
+        foreach ( $defaults as $key => $default ) {
+            if ( ! array_key_exists( $key, $attributes ) ) {
+                $normalized[ $key ] = $default;
+                continue;
+            }
+
+            $value = $attributes[ $key ];
+
+            if ( is_bool( $default ) ) {
+                $normalized[ $key ] = is_scalar( $value ) ? rest_sanitize_boolean( $value ) : $default;
+            } elseif ( is_int( $default ) ) {
+                $normalized[ $key ] = is_scalar( $value ) && is_numeric( $value ) ? (int) $value : $default;
+            } elseif ( is_string( $default ) ) {
+                // Numbers are kept as-is: e.g. titleLength defaults to '' but is saved as a number.
+                $normalized[ $key ] = is_scalar( $value ) && ! is_bool( $value ) ? $value : $default;
+            } else {
+                // loadMoreOptions (default false); the partials don't read it.
+                $normalized[ $key ] = is_array( $value ) ? $value : $default;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array  $params
+     * @param string $key
+     * @return string
+     */
+    private static function string_param( $params, $key )
+    {
+        return is_array( $params ) && isset( $params[ $key ] ) && is_string( $params[ $key ] ) ? sanitize_text_field( $params[ $key ] ) : '';
+    }
+
+    /**
+     * @param mixed $meta JSON string of `[{value,label}]`.
+     * @return mixed Decoded list; the partials cast it to an array.
+     */
+    private static function decode_meta_list( $meta )
+    {
+        return is_string( $meta ) && '' !== $meta ? json_decode( $meta ) : [  ];
     }
 }

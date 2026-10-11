@@ -149,6 +149,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
             }
 
             // Set up the search functionality
+            // The search box is plain text: escape it, or input such as
+            // "abc(" throws "Invalid regular expression" on every keystroke.
+            const searchRegex = (value) => new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), 'gi');
             if (showSearch) {
                 quicksearch.addEventListener('keyup', function () {
                     searchClose.style.display = quicksearch.value.length > 0 ? "block" : "none";
@@ -169,22 +172,27 @@ window.addEventListener("DOMContentLoaded", (event) => {
                             return matchesSearch && matchesFilter;
                         }
                     })
-                    qsRegex = new RegExp(quicksearch.value, 'gi');
+                    qsRegex = searchRegex(quicksearch.value);
 
                     // Trigger Isotope rearrange based on new qsRegex
                     iso.arrange();
 
-                    // Update Load More button state based on remaining items
-                    const filteredCount = iso.filteredItems.length;
+                    // Update Load More button state based on remaining items.
+                    // The button is only rendered when Load More is enabled —
+                    // without this guard every keystroke threw a TypeError and
+                    // skipped the lightbox refresh below.
+                    if (loadMoreBtn) {
+                        const filteredCount = iso.filteredItems.length;
 
-                    if (filteredCount > initShow) {
-                        loadMoreBtn.style.display = "block";
-                    } else {
-                        loadMoreBtn.style.display = "none";
+                        if (filteredCount > initShow) {
+                            loadMoreBtn.style.display = "block";
+                        } else {
+                            loadMoreBtn.style.display = "none";
+                        }
                     }
 
                     // Update lightbox sources after search filtering
-                    qsRegex = new RegExp(quicksearch.value, 'gi');
+                    qsRegex = searchRegex(quicksearch.value);
                     iso.arrange();
                     updateLightboxSources();
                 });

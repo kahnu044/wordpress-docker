@@ -155,54 +155,16 @@ window.addEventListener("DOMContentLoaded", () => {
                                     button.classList.remove("success");
                                 }, 5000);
 
-                                // Check if this is a multi-step form
-                                const multistepForm = formWrapper.querySelector('.eb-multistep-form');
-                                if (multistepForm) {
-                                    // Find the steps
-                                    const steps = multistepForm.querySelectorAll('.wp-block-essential-blocks-pro-form-multistep-wrapper:not(.wp-block-essential-blocks-pro-form-multistep-wrapper .wp-block-essential-blocks-pro-form-multistep-wrapper)');
-                                    if (steps.length > 0) {
-                                        // Reset to first step
-                                        let currentStep = 0;
+                                // Multi-step forms are a Pro feature: Pro listens for this
+                                // event and resets its steps (WP.org compliance, #647).
+                                if (formWrapper.querySelector('.eb-multistep-form')) {
+                                    document.dispatchEvent(new CustomEvent('eb-multistep-form-reset', {
+                                        detail: { formWrapper: formWrapper }
+                                    }));
 
-                                        // Hide all steps
-                                        steps.forEach(step => {
-                                            step.style.display = "none";
-                                        });
-
-                                        // Show first step
-                                        steps[0].style.display = "block";
-
-                                        // Get UI elements
-                                        const prevButton = multistepForm.querySelector("#ebFormPrevBtn");
-                                        const nextButton = multistepForm.querySelector("#ebFormNextBtn");
-                                        const submitButton = multistepForm.querySelector(".eb-form-submit-button");
-                                        const stepIndicators = multistepForm.querySelectorAll(".step-nav-item");
-
-                                        // Update step indicators
-                                        stepIndicators.forEach((indicator, index) => {
-                                            if (index === 0) {
-                                                indicator.classList.add("active");
-                                            } else {
-                                                indicator.classList.remove("active");
-                                            }
-                                        });
-
-                                        // Update button visibility
-                                        if (prevButton) prevButton.style.display = "none";
-                                        if (nextButton) nextButton.style.display = "inline-flex";
-                                        if (submitButton) submitButton.style.display = "none";
-
-                                        // Trigger a custom event that the pro plugin can listen for
-                                        const resetEvent = new CustomEvent('eb-multistep-form-reset', {
-                                            detail: { formWrapper: formWrapper }
-                                        });
-                                        document.dispatchEvent(resetEvent);
-
-                                        // Scroll to the first step after reset
-                                        setTimeout(() => {
-                                            scrollToElementIfNeeded(formWrapper, 50);
-                                        }, 100);
-                                    }
+                                    setTimeout(() => {
+                                        scrollToElementIfNeeded(formWrapper, 50);
+                                    }, 100);
                                 }
                             }
                             if (!res.success && res.data) {

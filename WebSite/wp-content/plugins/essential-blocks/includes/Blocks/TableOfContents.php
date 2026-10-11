@@ -7,7 +7,10 @@ use EssentialBlocks\Core\Block;
 class TableOfContents extends Block
 {
     protected $frontend_scripts = [ 'essential-blocks-table-of-contents-block-frontend' ];
-    protected $frontend_styles  = [ 'essential-blocks-fontawesome' ];
+    // `dashicons` is declared explicitly: the copy-link tooltip builds a
+    // `dashicons dashicons-clipboard` element from frontend.js at runtime, so
+    // Block::maybe_enqueue_dashicons() can't see it in the rendered HTML.
+    protected $frontend_styles  = [ 'essential-blocks-fontawesome', 'dashicons' ];
 
     /**
      * headings that are used, prevent duplicates.

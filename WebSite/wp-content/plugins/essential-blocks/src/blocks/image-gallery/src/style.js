@@ -556,13 +556,6 @@ export default function Style(props) {
 		.eb-gallery-img-wrapper.${blockId}:not(.pro-preset-5) .eb-gallery-img-content:hover img {
 			${imageBDShadowHoverDesktop}
 		}
-        .eb-gallery-img-wrapper.${blockId}.pro-preset-5 .eb-gallery-img-content .eb-gallery-link-wrapper {
-			${imageBDShadowDesktop}
-			transition:${imageBDShadowTransitionStyle};
-		}
-		.eb-gallery-img-wrapper.${blockId}.pro-preset-5 .eb-gallery-img-content:hover .eb-gallery-link-wrapper {
-			${imageBDShadowHoverDesktop}
-		}
 		.eb-gallery-img-wrapper.${blockId} .eb-gallery-img-content .eb-gallery-img-caption {
 			color: ${captionColor};
 			background-color: ${captionBGColor};
@@ -637,10 +630,6 @@ export default function Style(props) {
 		}
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-link-wrapper .eb-img-gallery-overlay {
 			${overlayPaddingDesktop};
-		}
-        .eb-gallery-img-wrapper.${blockId}.pro-preset-4 .eb-gallery-link-wrapper::before {
-			background: linear-gradient(to bottom, transparent 0, ${overlayColor} 100%);
-            border-radius: ${imgBorderShadowRds_Top}${imgBorderShadowRds_Unit} ${imgBorderShadowRds_Left}${imgBorderShadowRds_Unit} ${imgBorderShadowRds_Bottom}${imgBorderShadowRds_Unit} ${imgBorderShadowRds_Right}${imgBorderShadowRds_Unit};
 		}
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-overlay,
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-gallery-img-container {
@@ -724,9 +713,6 @@ export default function Style(props) {
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-link-wrapper .eb-img-gallery-overlay {
 			${overlayPaddingTab};
 		}
-        .eb-gallery-img-wrapper.${blockId}.pro-preset-4 .eb-gallery-link-wrapper::before {
-            border-radius: ${TABimgBorderShadowRds_Top}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Left}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Bottom}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Right}${TABimgBorderShadowRds_Unit};
-		}
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-overlay,
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-gallery-img-container {
             border-radius: ${TABimgBorderShadowRds_Top}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Left}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Bottom}${TABimgBorderShadowRds_Unit} ${TABimgBorderShadowRds_Right}${TABimgBorderShadowRds_Unit};
@@ -808,9 +794,6 @@ export default function Style(props) {
 		}
         .eb-gallery-img-wrapper.${blockId} .eb-gallery-link-wrapper .eb-img-gallery-overlay {
 			${overlayPaddingMobile};
-		}
-        .eb-gallery-img-wrapper.${blockId}.pro-preset-4 .eb-gallery-link-wrapper::before {
-            border-radius: ${MOBimgBorderShadowRds_Top}${MOBimgBorderShadowRds_Unit} ${MOBimgBorderShadowRds_Left}${MOBimgBorderShadowRds_Unit} ${MOBimgBorderShadowRds_Bottom}${MOBimgBorderShadowRds_Unit} ${MOBimgBorderShadowRds_Right}${MOBimgBorderShadowRds_Unit};
 		}
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-img-gallery-overlay,
         .eb-gallery-img-wrapper.${blockId}.preset-3 .eb-gallery-link-wrapper .eb-gallery-img-container {

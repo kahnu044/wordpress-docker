@@ -320,3 +320,14 @@
 .instagram__gallery__col:before {
 	display: block;
 }
+
+// Editor-only explanation for an empty feed (missing/expired token, API error).
+.eb-instagram-feed__notice {
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	border-left: 4px solid #d63638;
+	background: #fcf0f1;
+	color: #1e1e1e;
+	font-size: 14px;
+	line-height: 1.5;
+}

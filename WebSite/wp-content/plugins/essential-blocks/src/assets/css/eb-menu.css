@@ -1,0 +1,133 @@
+#toplevel_page_essential-blocks .wp-menu-image img {
+	width: 21px;
+	margin-top: -2px;
+}
+
+#toplevel_page_essential-blocks.current .wp-menu-image img {
+	opacity: 1;
+}
+
+.eb-menu-notice {
+	background: red;
+	position: absolute;
+	bottom: 24px;
+	right: 0px;
+	display: inline-block;
+	vertical-align: top;
+	box-sizing: border-box;
+	margin: 1px 0 -1px 2px;
+	padding: 0 5px;
+	min-width: 18px;
+	height: 18px;
+	border-radius: 9px;
+	background-color: #D63638;
+	color: #fff;
+	font-size: 11px;
+	line-height: 1.6;
+	text-align: center;
+	z-index: 26;
+	display: none;
+}
+
+.eb-whats-new {
+	position: absolute;
+	left: 100%;
+	top: 15px;
+	transform: translateY(-50%);
+	background: rgb(255 255 255);
+	text-align: left;
+	padding: 0px;
+	margin: 0;
+	min-width: 300px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+	border-radius: 4px;
+	z-index: 99999;
+}
+
+.eb-whats-new:before {
+	content: "";
+	width: 10px;
+	position: absolute;
+	left: -10px;
+	top: 50%;
+	transform: translateY(-50%);
+	aspect-ratio: 1 / 2;
+	clip-path: polygon(100% 0, 0 50%, 100% 100%);
+	background: #fff;
+}
+
+.eb-whats-new .eb-hn-title {
+	background-color: #3A6FAC;
+	color: #fff;
+	padding: 10px 10px 10px 15px;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.eb-whats-new .eb-hn-title .dashicons {
+	background-color: #fff;
+	color: #3A6FAC;
+	padding: 5px;
+	border-radius: 50%;
+}
+
+.eb-whats-new .eb-hn-content {
+	padding: 10px 10px 10px 15px;
+}
+
+.eb-whats-new .eb-hn-content p {
+	font-size: 13px;
+	font-weight: 400;
+	color: #222;
+	margin: 0;
+}
+
+.eb-whats-new .eb-hn-content .eb-hn-buttons {
+	margin: 15px 0 5px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.eb-whats-new .eb-hn-content button {
+	display: block;
+	padding: 0;
+}
+
+.eb-whats-new .eb-hn-content button a {
+	padding: 6px 12px !important;
+	line-height: 1 !important;
+}
+
+.eb-whats-new .eb-hn-content button a:hover {
+	box-shadow: none !important;
+	background-color: transparent !important;
+}
+
+.eb-whats-new .eb-hn-content button.button-dismiss {
+	border: 0px;
+	box-shadow: unset;
+	margin: 0 0 0 auto;
+	background-color: transparent;
+	display: flex;
+	align-items: center;
+	gap: 3px;
+}
+
+.eb-whats-new .eb-hn-content button.button-dismiss .dashicons {
+	color: #7F8386;
+	line-height: 1;
+}
+
+/* HTML: <div class="triangle"></div> */
+.triangle {
+	width: 100px;
+	aspect-ratio: 1/2;
+	clip-path: polygon(100% 0, 0 50%, 100% 100%);
+	background: linear-gradient(45deg, #FA6900, #C02942);
+}

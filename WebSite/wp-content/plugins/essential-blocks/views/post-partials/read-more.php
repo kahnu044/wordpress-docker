@@ -15,7 +15,7 @@ if ( $showReadMore ) {
         '<div class="ebpg-readmore-btn">
             <a href="%1$s">%3$s %2$s %4$s</a>
         </div>',
-        get_permalink( $result->ID ),
+        esc_url( get_permalink( $result->ID ) ),
         $readmoreText,
         $addIcon && $iconPosition == 'left' ? $read_more_icon : '',
         $addIcon && $iconPosition == 'right' ? $read_more_icon : '',

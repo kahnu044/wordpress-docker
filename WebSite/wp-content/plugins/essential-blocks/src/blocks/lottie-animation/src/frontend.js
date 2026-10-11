@@ -2,6 +2,12 @@
 import lottie from 'lottie-web';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 
+// Load the dotLottie WASM from the plugin, never from a CDN (WP.org Guideline 8).
+// webpack.config.js copies it to assets/vendors/dotlottie/.
+if (window.EssentialBlocksLocalize?.eb_plugins_url) {
+    DotLottie.setWasmUrl(`${window.EssentialBlocksLocalize.eb_plugins_url}assets/vendors/dotlottie/dotlottie-player.wasm`);
+}
+
 // Simple implementation for Lottie animations
 window.addEventListener("DOMContentLoaded", (event) => {
     const lottieElements = document.querySelectorAll(`.eb-lottie-animation-wrapper`);

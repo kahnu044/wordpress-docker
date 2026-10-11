@@ -38,6 +38,9 @@ $is_featured = isset( $_is_featured ) && $_is_featured === true;
 if ( $is_featured ) {
     $showTitle      = isset( $showFeaturedPostTitle ) ? $showFeaturedPostTitle : true;
     $showContent    = isset( $showFeaturedPostContent ) ? $showFeaturedPostContent : false;
+    // The featured post has its own "Excerpt Words"; without this it would fall back to the
+    // grid's contentLength. Default matches PostBlock::$default_attributes.
+    $contentLength  = isset( $featuredExcerptLength ) ? $featuredExcerptLength : 10;
 }
 
 foreach ( $posts as $result ) {
@@ -76,7 +79,7 @@ foreach ( $posts as $result ) {
     }
     $html .= sprintf( '<article class="%1$s" data-id="%2$s">', esc_attr( $article_classes ), $result->ID );
     $html .= '<div class="ebpg-grid-post-holder">';
-    $wrapper_link_html = $is_featured ? '' : sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', get_permalink( $result->ID ), wp_kses( $result->post_title, 'post' ) );
+    $wrapper_link_html = $is_featured ? '' : sprintf( '<a class="ebpg-post-link-wrapper eb-sr-only" href="%1$s">%2$s</a>', esc_url( get_permalink( $result->ID ) ), wp_kses( $result->post_title, 'post' ) );
     if ( $preset === 'style-5' || $preset === 'style-6' ) {
         $html .= $wrapper_link_html;
         $wrapper_link_html = '';

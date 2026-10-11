@@ -2,6 +2,9 @@
 
 namespace EssentialBlocks\Integrations;
 
+use EssentialBlocks\Utils\Helper;
+use EssentialBlocks\Utils\QueryHelper;
+
 class Pagination extends ThirdPartyIntegration {
     public function __construct() {
         $this->add_ajax( [
@@ -14,68 +17,58 @@ class Pagination extends ThirdPartyIntegration {
 
     /**
      * Get Post Grid Pagination
+     *
+     * Rebuilds the pagination buttons after a taxonomy filter click (free) or a
+     * post grid search (Pro). The action is public and its nonce is printed on
+     * every page, so every request value is type-checked, and the page count is
+     * capped because totalPosts is client-supplied.
      */
     public function post_grid_block_pagination_callback() {
-        if ( ! wp_verify_nonce( sanitize_key($_POST['post_grid_pagination_nonce']), 'eb-pagination-nonce' ) ) {
+        $nonce = isset( $_POST['post_grid_pagination_nonce'] ) && is_string( $_POST['post_grid_pagination_nonce'] ) ? sanitize_key( $_POST['post_grid_pagination_nonce'] ) : '';
+        if ( ! wp_verify_nonce( $nonce, 'eb-pagination-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
-        $html = '';
+        $query           = self::decode_request_json( 'querydata' );
+        $attributes      = self::decode_request_json( 'attributes' );
+        $loadMoreOptions = isset( $attributes['loadMoreOptions'] ) && ( is_object( $attributes['loadMoreOptions'] ) || is_array( $attributes['loadMoreOptions'] ) ) ? (array) $attributes['loadMoreOptions'] : [];
 
-        $query           = isset( $_POST['querydata'] ) ? json_decode( wp_unslash( wp_kses_post( $_POST['querydata'] ) ) ) : [];
-        $attributes      = isset( $_POST['attributes'] ) ? json_decode( wp_unslash( wp_kses_post( $_POST['attributes'] ) ) ) : [];
-        $query           = ( is_object( $query ) || is_array( $query ) ) ? (array) $query : [];
-        $attributes      = ( is_object( $attributes ) || is_array( $attributes ) ) ? (array) $attributes : [];
-        $loadMoreOptions = isset( $attributes['loadMoreOptions'] ) ? (array) $attributes['loadMoreOptions'] : [];
+        $totalPosts = isset( $_POST['totalPosts'] ) && is_scalar( $_POST['totalPosts'] ) ? sanitize_text_field( $_POST['totalPosts'] ) : 0;
+        $per_page   = isset( $query['per_page'] ) ? $query['per_page'] : 0;
 
-        $totalPosts = isset( $_POST['totalPosts'] ) ? sanitize_text_field( $_POST['totalPosts'] ) : 0;
-        $per_page   = isset( $query['per_page'] ) ? sanitize_text_field( $query['per_page'] ) : 0;
+        $prevTxt = isset( $loadMoreOptions['prevTxt'] ) && is_scalar( $loadMoreOptions['prevTxt'] ) && ! empty( $loadMoreOptions['prevTxt'] ) ? $loadMoreOptions['prevTxt'] : "<";
+        $nextTxt = isset( $loadMoreOptions['nextTxt'] ) && is_scalar( $loadMoreOptions['nextTxt'] ) && ! empty( $loadMoreOptions['nextTxt'] ) ? $loadMoreOptions['nextTxt'] : ">";
 
-        $enableMorePosts   = $loadMoreOptions['enableMorePosts'] ?? false;
-        $loadMoreType      = $loadMoreOptions['loadMoreType'] ?? '1';
-        $loadMoreButtonTxt = $loadMoreOptions['loadMoreButtonTxt'] ?? "Load More";
-        $prevTxt           = isset( $loadMoreOptions['prevTxt'] ) && ! empty( $loadMoreOptions['prevTxt'] ) ? $loadMoreOptions['prevTxt'] : "<";
-        $nextTxt           = isset( $loadMoreOptions['nextTxt'] ) && ! empty( $loadMoreOptions['nextTxt'] ) ? $loadMoreOptions['nextTxt'] : ">";
-
-        $html = "";
-        if ( isset( $totalPosts ) && (int) $totalPosts > (int) $per_page ) {
-            if ( isset( $enableMorePosts ) && $enableMorePosts ) {
-                if ( $loadMoreType === '1' ) {
-                    $html .= sprintf(
-                        '<button class="btn ebpg-pagination-button" data-pagenumber="1">%1$s</button>',
-                        $loadMoreButtonTxt
-                    );
-                }
-
-                if ( isset( $totalPosts ) && ( $loadMoreType === '2' || $loadMoreType === '3' ) ) {
-                    $totalPages = ceil( (int) $totalPosts / (int) $per_page );
-                    $html .= sprintf(
-                        '<button class="ebpg-pagination-item-previous">
-                    %1$s
-                </button>',
-                        esc_html( $prevTxt )
-                    );
-                    for ( $i = 1; $i <= $totalPages; $i++ ) {
-                        $active = $i == 1 ? "active" : "";
-
-                        $html .= sprintf(
-                            '<button class="ebpg-pagination-item %2$s" data-pagenumber="%1$s">
-                        %1$s
-                    </button>',
-                            $i, $active
-                        );
-                    }
-                    $html .= sprintf(
-                        '<button class="ebpg-pagination-item-next">
-                    %1$s
-                </button>',
-                        esc_html( $nextTxt )
-                    );
-                }
-            }
-        }
+        $html = Helper::pagination_markup(
+            $totalPosts,
+            $per_page,
+            [
+                'enableMorePosts'   => $loadMoreOptions['enableMorePosts'] ?? false,
+                'loadMoreType'      => $loadMoreOptions['loadMoreType'] ?? '1',
+                'loadMoreButtonTxt' => $loadMoreOptions['loadMoreButtonTxt'] ?? "Load More",
+                'prevTxt'           => $prevTxt,
+                'nextTxt'           => $nextTxt,
+                'max_pages'         => QueryHelper::max_pages()
+            ]
+        );
 
         echo wp_kses_post( $html );
         wp_die();
+    }
+
+    /**
+     * Decode a POST field holding a JSON object into a (top-level) array.
+     *
+     * @param string $key
+     * @return array
+     */
+    private static function decode_request_json( $key ) {
+        if ( ! isset( $_POST[ $key ] ) || ! is_string( $_POST[ $key ] ) ) {
+            return [];
+        }
+
+        $decoded = json_decode( wp_unslash( wp_kses_post( $_POST[ $key ] ) ) );
+
+        return ( is_object( $decoded ) || is_array( $decoded ) ) ? (array) $decoded : [];
     }
 }

@@ -19,6 +19,7 @@ import {
     GOOGLE_MAP_STYLES,
     SNAZZY_MAP_STYLES,
 } from "./constants";
+import { buildInfoWindowContent } from "./infowindow";
 
 import Style from "./style";
 import defaultAttributes from './attributes';
@@ -201,12 +202,10 @@ function Edit(props) {
                     });
                 }
 
-                const contentString = `<div class="eb-google-map-overview"><h6 class="eb-google-map-overview-title">${locations[i].title
-                    }</h6><div class="eb-google-map-overview-content">${locations[i].content ? `<p>${locations[i].content}</p>` : ""
-                    }</div></div>`;
+                const infoWindowContent = buildInfoWindowContent(locations[i]);
                 bounds.extend(position);
                 if (i == 0) {
-                    infowindow.setContent(contentString);
+                    infowindow.setContent(infoWindowContent);
                     if (useAdvancedMarker) {
                         infowindow.open({ anchor: marker, map: mapRef.current });
                     } else {
@@ -219,7 +218,7 @@ function Edit(props) {
                     clickEvent,
                     (function (marker) {
                         return function () {
-                            infowindow.setContent(contentString);
+                            infowindow.setContent(infoWindowContent);
                             if (useAdvancedMarker) {
                                 infowindow.open({
                                     anchor: marker,

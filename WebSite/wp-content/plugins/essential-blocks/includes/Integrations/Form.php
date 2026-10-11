@@ -32,7 +32,7 @@ class Form extends ThirdPartyIntegration
         if ( ! isset( $_POST[ 'form_id' ] ) || ! isset( $_POST[ 'nonce' ] ) ) {
             die( esc_html__( 'Invalid Data', 'essential-blocks' ) );
         }
-        if ( ! wp_verify_nonce( $_POST[ 'nonce' ], $_POST[ 'form_id' ] . '-nonce' ) ) {
+        if ( ! isset( $_POST[ 'nonce' ], $_POST[ 'form_id' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'nonce' ] ), sanitize_text_field( wp_unslash( $_POST[ 'form_id' ] ) ) . '-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
         if ( ! isset( $_POST[ 'form_data' ] ) || ! is_object( json_decode( wp_unslash( $_POST[ 'form_data' ] ) ) ) ) {
@@ -176,7 +176,7 @@ class Form extends ThirdPartyIntegration
         if ( ! isset( $_POST[ 'id' ] ) || ! isset( $_POST[ 'nonce' ] ) ) {
             die( esc_html__( 'Invalid Data', 'essential-blocks' ) );
         }
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'nonce' ] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
@@ -225,7 +225,7 @@ class Form extends ThirdPartyIntegration
         if ( ! isset( $_POST[ 'id' ] ) || ! isset( $_POST[ 'nonce' ] ) ) {
             die( esc_html__( 'Invalid Data', 'essential-blocks' ) );
         }
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'nonce' ] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 

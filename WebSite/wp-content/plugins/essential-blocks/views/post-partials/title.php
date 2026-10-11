@@ -20,9 +20,9 @@ if ( $showTitle ) {
                 <a class="%5$s" href="%2$s" title="%3$s">%4$s</a>
             </%1$s>
         </header>',
-        $titleTag,
-        get_permalink( $result->ID ),
-        tag_escape( $ebpg_title ),
+        tag_escape( $titleTag ),
+        esc_url( get_permalink( $result->ID ) ),
+        esc_attr( wp_strip_all_tags( $ebpg_title ) ),
         $ebpg_title,
         $title_link_classes
     );

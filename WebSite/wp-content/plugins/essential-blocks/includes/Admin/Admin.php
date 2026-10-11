@@ -19,6 +19,12 @@ class Admin {
     use HasSingletone;
 
     /**
+     * Notice queue refresh key for upsell notices. Changing it resets their
+     * start/expire once; it must not follow the plugin version.
+     */
+    const UPSELL_NOTICE_REFRESH = 'wporg-2026-10';
+
+    /**
      * Plugin Usage Insight
      *
      * @var Insights|null
@@ -211,13 +217,11 @@ class Admin {
                 array(
                     'notice' => __( 'Congratulations, you’ve successfully installed <strong>Essential Blocks for Gutenberg</strong>. We got <strong>2500+ FREE Gutenberg ready Templates</strong> waiting for you <span class="gift-icon">&#127873;</span>', 'essential-blocks' ),
                     'extra_notice' => __(
-                        'We collect non-sensitive diagnostic data and plugin usage information.
-                Your site URL, WordPress & PHP version, plugins & themes and email address to send you exciting deals. This data lets us make sure this plugin always stays compatible with the most
-                popular plugins and themes.',
+                        'We collect non-sensitive diagnostic data and plugin usage information: your site URL, WordPress & PHP version, plugins & themes and the admin email address. This data lets us make sure this plugin always stays compatible with the most popular plugins and themes. Nothing is sent unless you opt in, and you can opt out any time by deactivating the plugin.',
                         'essential-blocks'
                     ),
-                    'yes' => __( 'Send me FREE Templates', 'wpinsight' ),
-                    'no' => __( 'I don\'t want FREE Templates', 'wpinsight' )
+                    'yes' => __( 'Send me FREE Templates', 'essential-blocks' ),
+                    'no' => __( 'I don\'t want FREE Templates', 'essential-blocks' )
                 )
             );
         } );
@@ -248,12 +252,19 @@ class Admin {
         );
 
         /**
+         * Upsell notices stay on our own screens plus Dashboard / Plugins,
+         * for admins only, and expire instead of returning on every update.
+         * Bump self::UPSELL_NOTICE_REFRESH to reset the queue on purpose.
+         */
+        $upsell_screens = array( 'dashboard', 'plugins', 'toplevel_page_essential-blocks' );
+
+        /**
          * Summer Campaign 2026 Notice
          */
         $summer_campaign2026_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;text-transform: capitalize;">🏖️ <strong>Summer Savings:</strong> Get 70+ AI-powered blocks and features to unlock design flexibility on Gutenberg – now <strong>up to $150 OFF!</strong></p>
         <a class="button button-primary" href="https://essential-blocks.com/summer2026-admin-notice" target="_blank" style="background-color: #5252DC; border-color: #5252DC; border-radius: 6px; font-size: 14px; font-weight: 500;" >Upgrade To Pro Now</a>
         <a class="button button-secondary" href="https://essential-blocks.com/summer2026-admin-notice-ltd" target="_blank" style="color: #171717; background-color: #EFEFEF; border-color: #D1D1D1; border-radius: 6px; font-size: 14px; font-weight: 500;">Give Me LIFETIME Access</a>
-        <button data-dismiss="true" class="dismiss-btn button button-link" style="color: #424242; font-size: 14px;">I Don’t Want Any Discount</button>';
+        <button data-dismiss="true" class="dismiss-btn button button-link" style="color: #424242; font-size: 14px;">' . esc_html__( 'Dismiss', 'essential-blocks' ) . '</button>';
         $summer_campaign2026_notice = array(
             'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
             'html' => $summer_campaign2026_message
@@ -268,7 +279,9 @@ class Admin {
                 'expire' => strtotime( '11:59:59pm 25th June, 2026' ),
                 'classes' => 'eb-notice put-dismiss-notice',
                 'dismissible' => true,
-                'refresh' => ESSENTIAL_BLOCKS_VERSION,
+                'refresh' => self::UPSELL_NOTICE_REFRESH,
+                'screens' => $upsell_screens,
+                'capability' => 'manage_options',
                 'do_action' => 'eb_summer2026_campaign',
                 'display_if' => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
             )
@@ -279,7 +292,7 @@ class Admin {
          */
         $early_bird_message = '<p class="eb_notice_content" style="margin-top: 0; margin-bottom: 10px;">🔥 Essential Blocks PRO: Get access to premium Gutenberg blocks, features & website templates</p>
         <a class="button button-primary" href="https://essential-blocks.com/eb-pro-upgrade" target="_blank">Upgrade to PRO Now</a>
-        <button data-dismiss="true" class="dismiss-btn button button-secondary">I Don\'t Want To Save Money</button>';
+        <button data-dismiss="true" class="dismiss-btn button button-secondary">' . esc_html__( 'Dismiss', 'essential-blocks' ) . '</button>';
         $early_bird_notice = array(
             'thumbnail' => ESSENTIAL_BLOCKS_URL . 'assets/images/eb-logo-full.svg',
             'html' => $early_bird_message
@@ -291,9 +304,12 @@ class Admin {
             $early_bird_notice,
             array(
                 'start' => $notices->strtotime( '+1 days' ),
+                'expire' => $notices->strtotime( '+31 days' ),
                 'classes' => 'eb-notice put-dismiss-notice',
                 'dismissible' => true,
-                'refresh' => ESSENTIAL_BLOCKS_VERSION,
+                'refresh' => self::UPSELL_NOTICE_REFRESH,
+                'screens' => $upsell_screens,
+                'capability' => 'manage_options',
                 'do_action' => 'eb_early_bird_campaign',
                 'display_if' => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
             )
@@ -392,8 +408,11 @@ class Admin {
                     'classes' => 'updated put-dismiss-notice',
                     'start' => $notices->strtotime( '+2 days' ),
                     // 'start'       => $notices->time(),
+                    'expire' => $notices->strtotime( '+32 days' ),
                     'dismissible' => true,
-                    'refresh' => ESSENTIAL_BLOCKS_VERSION,
+                    'refresh' => self::UPSELL_NOTICE_REFRESH,
+                    'screens' => $upsell_screens,
+                    'capability' => 'manage_options',
                     'do_action' => 'wpdeveloper_notice_clicked_for_essential-blocks',
                     'display_if' => ! ESSENTIAL_BLOCKS_IS_PRO_ACTIVE
                 )

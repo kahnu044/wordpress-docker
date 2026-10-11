@@ -104,6 +104,8 @@ import {
     FEATURED_META_TYPO,
     FEATURED_READMORE_TYPO,
 } from "./constants/typographyPrefixConstants";
+import defaultAttributes from "./attributes";
+import { parseJsonList, parseJsonObject, normalizeSource } from "./helpers";
 
 import {
     ColorControl,
@@ -121,9 +123,41 @@ import {
     InspectorPanel,
     ButtonGroupControl,
     ImageAvatar,
+    ResetControl,
+    getLatest5Posts,
     getPostsBySearchString,
+    EB_SELECT_MENU_Z,
+    ProBadge,
+    Crown,
 } from "@essential-blocks/controls";
 import { use } from "react";
+import { SearchIcon } from "./icon";
+
+const SearchUpgradeProContent = () => {
+    return (
+        <div className="eb_ie">
+            <SearchIcon />
+            <h3>
+                <a
+                    target="_blank"
+                    href="https://essential-blocks.com/demo/post-grid/"
+                >
+                    {__("Post Grid Search", "essential-blocks")}
+                    <span className="dashicons dashicons-external"></span>
+                </a>
+            </h3>
+            <p>{__("Let visitors search posts right inside the grid, with instant Ajax results.", "essential-blocks")}</p>
+            <a
+                className="eb_upgrade_button"
+                target="_blank"
+                href={EssentialBlocksLocalize?.upgrade_pro_url}
+            >
+                <Crown />
+                {__("Upgrade to PRO", "essential-blocks")}
+            </a>
+        </div>
+    );
+};
 
 function Inspector(props) {
     const { attributes, setAttributes, taxonomyData, setQueryResults } = props;
@@ -303,52 +337,90 @@ function Inspector(props) {
     }, [postTerms]);
 
     /**
-     * Update HeaderMeta, FooterMeta on change postTerms
+     * Source switch: drop the state that belonged to the previous source.
+     *
+     * CustomQuery updates queryData.source (after its posts request) and postTerms (after its
+     * taxonomy request) in no fixed order, so this runs on both. Once the source has changed:
+     * - Header/Footer Meta lose the taxonomies seen for an earlier source that the current source
+     *   doesn't have. Removing only those slugs is safe to repeat while postTerms catches up, and
+     *   never touches date/author/avatar/read time or dynamic meta.
+     * - The taxonomy filter resets when its taxonomy isn't one of the current source's.
+     * - The featured post (a post of the previous post type) is cleared.
      */
-    const prevSource = useRef(queryData?.source);
-    const prevterms = useRef(postTerms);
+    const currentSource = useRef(normalizeSource(queryData?.source));
+    const sourceChanged = useRef(false);
+    const seenTermSlugs = useRef(new Set());
     const selectedTaxonomyRef = useRef(selectedTaxonomy);
 
-
     useEffect(() => {
-        if (!queryData || !queryData.source) {
-            return;
+        const source = normalizeSource(queryData?.source);
+        const termSlugs = postTerms && typeof postTerms === "object" ? Object.keys(postTerms) : [];
+        termSlugs.forEach((slug) => seenTermSlugs.current.add(slug));
+
+        const updates = {};
+
+        if (source && currentSource.current && source !== currentSource.current) {
+            sourceChanged.current = true;
+            if (featuredPostId) {
+                updates.featuredPostId = "";
+            }
+        }
+        if (source) {
+            currentSource.current = source;
         }
 
-        if (queryData.source != prevSource.current) {
-            const terms =
-                prevterms.current && typeof prevterms.current === "object" ? Object.keys(prevterms.current) : [];
+        if (sourceChanged.current) {
+            const staleSlugs = [...seenTermSlugs.current].filter((slug) => !termSlugs.includes(slug));
 
-            let headerMetaVal = headerMeta.length > 0 ? JSON.parse(headerMeta) : [];
-            headerMetaVal = headerMetaVal.length > 0 && headerMetaVal.filter((item) => !terms.includes(item.value));
+            // Always a JSON list, so a saved "false" is repaired as well.
+            const pruneMeta = (metaJson) =>
+                JSON.stringify(parseJsonList(metaJson).filter((item) => !staleSlugs.includes(item?.value)));
 
-            let footerMetaVal = footerMeta.length > 0 ? JSON.parse(footerMeta) : [];
-            footerMetaVal = footerMetaVal.length > 0 && footerMetaVal.filter((item) => !terms.includes(item.value));
+            const nextHeaderMeta = pruneMeta(headerMeta);
+            if (nextHeaderMeta !== headerMeta) {
+                updates.headerMeta = nextHeaderMeta;
+            }
+            const nextFooterMeta = pruneMeta(footerMeta);
+            if (nextFooterMeta !== footerMeta) {
+                updates.footerMeta = nextFooterMeta;
+            }
 
-            setAttributes({
-                headerMeta: JSON.stringify(headerMetaVal),
-                footerMeta: JSON.stringify(footerMetaVal),
-            });
-            prevSource.current = queryData.source;
+            const taxonomy = parseJsonObject(selectedTaxonomy);
+            if (taxonomy && !termSlugs.includes(taxonomy.value)) {
+                updates.selectedTaxonomy = undefined;
+                updates.selectedTaxonomyItems = '[{"value":"all","label":"All"}]';
+                updates.defaultFilter = "all";
+            }
         }
-    }, [queryData?.source]);
+
+        if (Object.keys(updates).length > 0) {
+            setAttributes(updates);
+        }
+    }, [queryData?.source, postTerms]);
 
     const makeEnableContent = (showItem, itemName) => {
         let newEnableContents = [...enableContents];
+        // "meta" toggles two sortable entries; enableContents never stores the literal "meta".
+        const metaItems = ["headerMeta", "footerMeta"];
         if (showItem == true) {
-            if (!newEnableContents.includes(itemName)) {
-                if (itemName == "meta") {
-                    headerMeta.length > 0 ? newEnableContents.push("headerMeta") : null;
-                    footerMeta.length > 0 ? newEnableContents.push("footerMeta") : null;
-                } else {
-                    newEnableContents.push(itemName);
-                }
+            if (itemName == "meta") {
+                metaItems.forEach((metaItem) => {
+                    if (!newEnableContents.includes(metaItem)) {
+                        newEnableContents.push(metaItem);
+                    }
+                });
+            } else if (!newEnableContents.includes(itemName)) {
+                newEnableContents.push(itemName);
             }
         } else {
-            if (newEnableContents.includes(itemName)) {
+            if (itemName == "meta") {
+                newEnableContents = newEnableContents.filter((item) => !metaItems.includes(item));
+            } else if (newEnableContents.includes(itemName)) {
                 newEnableContents = newEnableContents.filter((item) => item !== itemName);
             }
         }
+        // Collapse duplicates left behind by the old meta toggle.
+        newEnableContents = [...new Set(newEnableContents)];
         setAttributes({
             enableContents: newEnableContents,
         });
@@ -368,6 +440,7 @@ function Inspector(props) {
                 setAttributes({
                     featuredPostBorderRadius: 5,
                 });
+                break;
             case "style-3":
                 setAttributes({
                     featuredPostBorderRadius: 5,
@@ -408,10 +481,26 @@ function Inspector(props) {
         }
     }, [selectedTaxonomy])
 
+    // Preload the current source's latest posts so the dropdown isn't empty before typing.
+    useEffect(() => {
+        if (!queryData?.source) {
+            return;
+        }
+
+        getLatest5Posts(queryData).then((postData) => {
+            setFeaturedPostOptions(
+                (postData || []).map((item) => ({
+                    value: item.id,
+                    label: item?.title?.rendered ?? item?.title,
+                }))
+            );
+        });
+    }, [queryData?.source]);
+
     // Function to load featured posts by search
     const loadFeaturedPosts = (value) => {
         if (!value || value.length < 2) {
-            return featuredPostOptions;
+            return Promise.resolve(featuredPostOptions);
         }
 
         return getPostsBySearchString(value, queryData).then((postData) => {
@@ -442,10 +531,15 @@ function Inspector(props) {
                 backgroundPrefix: WRAPPER_BG,
             }}>
                 <InspectorPanel.General>
-                    <CustomQuery attributes={attributes} setAttributes={setAttributes} setQueryResults={setQueryResults} />
+                    <CustomQuery attributes={attributes} setAttributes={setAttributes} setQueryResults={setQueryResults} stableTaxonomyFilters />
                     <InspectorPanel.PanelBody title={__("Layout Style", "essential-blocks")} initialOpen={false}>
                         <ToggleControl
                             label={__("Show Featured Post?")}
+                            help={
+                                EssentialBlocksLocalize?.is_pro_active === "true"
+                                    ? __("Turning this on turns off Show Search.", "essential-blocks")
+                                    : undefined
+                            }
                             checked={showFeaturedPost}
                             onChange={() => {
                                 setAttributes({
@@ -619,20 +713,28 @@ function Inspector(props) {
                                     ))}
                                 </ToggleGroupControl>
 
-                                <RangeControl
-                                    label="Title Words"
-                                    value={titleLength}
-                                    onChange={(value) =>
+                                <ResetControl
+                                    onReset={() =>
                                         setAttributes({
-                                            titleLength: value,
+                                            titleLength: defaultAttributes.titleLength.default,
                                         })
                                     }
-                                    min={-1}
-                                    max={100}
-                                    allowReset={true}
-                                    __nextHasNoMarginBottom
-                                    __next40pxDefaultSize
-                                />
+                                >
+                                    <RangeControl
+                                        label={__("Title Words", "essential-blocks")}
+                                        help={__("0 or -1 shows the full title.", "essential-blocks")}
+                                        value={titleLength}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                titleLength: value,
+                                            })
+                                        }
+                                        min={-1}
+                                        max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+                                </ResetControl>
                             </>
                         )}
 
@@ -650,20 +752,28 @@ function Inspector(props) {
 
                         {showContent && (
                             <>
-                                <RangeControl
-                                    label="Excerpt Words"
-                                    value={contentLength}
-                                    onChange={(value) =>
+                                <ResetControl
+                                    onReset={() =>
                                         setAttributes({
-                                            contentLength: value,
+                                            contentLength: defaultAttributes.contentLength.default,
                                         })
                                     }
-                                    min={-1}
-                                    max={100}
-                                    allowReset={true}
-                                    __nextHasNoMarginBottom
-                                    __next40pxDefaultSize
-                                />
+                                >
+                                    <RangeControl
+                                        label={__("Excerpt Words", "essential-blocks")}
+                                        help={__("0 or -1 shows the full excerpt.", "essential-blocks")}
+                                        value={contentLength}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                contentLength: value,
+                                            })
+                                        }
+                                        min={-1}
+                                        max={100}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+                                </ResetControl>
 
                                 <TextControl
                                     label="Expansion Indicator"
@@ -777,7 +887,7 @@ function Inspector(props) {
                                     <PanelRow>Header Meta</PanelRow>
                                     <Select2
                                         name="select-header-meta"
-                                        value={headerMeta.length > 0 ? JSON.parse(headerMeta) : ""}
+                                        value={parseJsonList(headerMeta)}
                                         onChange={(selected) =>
                                             setAttributes({
                                                 headerMeta: JSON.stringify(selected),
@@ -792,7 +902,7 @@ function Inspector(props) {
                                     <PanelRow>Footer Meta</PanelRow>
                                     <Select2
                                         name="select-footer-meta"
-                                        value={footerMeta.length > 0 ? JSON.parse(footerMeta) : ""}
+                                        value={parseJsonList(footerMeta)}
                                         onChange={(selected) =>
                                             setAttributes({
                                                 footerMeta: JSON.stringify(selected),
@@ -894,7 +1004,7 @@ function Inspector(props) {
                                     styles={{
                                         menuPortal: (base) => ({
                                             ...base,
-                                            zIndex: 9999
+                                            zIndex: EB_SELECT_MENU_Z
                                         }),
                                     }}
                                 />
@@ -953,19 +1063,27 @@ function Inspector(props) {
                                 }}
                             />
                             {showFeaturedPostContent && (
-                                <RangeControl
-                                    label={__("Excerpt Words", "essential-blocks")}
-                                    value={featuredExcerptLength}
-                                    onChange={(value) =>
+                                <ResetControl
+                                    onReset={() =>
                                         setAttributes({
-                                            featuredExcerptLength: value,
+                                            featuredExcerptLength: defaultAttributes.featuredExcerptLength.default,
                                         })
                                     }
-                                    min={1}
-                                    max={1000}
-                                    allowReset={true}
-                                    resetFallbackValue={10}
-                                />
+                                >
+                                    <RangeControl
+                                        label={__("Excerpt Words", "essential-blocks")}
+                                        value={featuredExcerptLength}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                featuredExcerptLength: value,
+                                            })
+                                        }
+                                        min={1}
+                                        max={1000}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+                                </ResetControl>
                             )}
 
                             <ToggleControl
@@ -991,7 +1109,7 @@ function Inspector(props) {
                                     />
                                     {showFeaturedHeaderMeta && headerMeta && headerMeta.length > 0 && (
                                         <>
-                                            {JSON.parse(headerMeta).map((item, index) => {
+                                            {parseJsonList(headerMeta).map((item, index) => {
                                                 const metaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
                                                 const isChecked = metaItemsObj[item.value] !== undefined ? metaItemsObj[item.value] : true;
                                                 return (
@@ -1022,7 +1140,7 @@ function Inspector(props) {
                                     />
                                     {showFeaturedFooterMeta && footerMeta && footerMeta.length > 0 && (
                                         <>
-                                            {JSON.parse(footerMeta).map((item, index) => {
+                                            {parseJsonList(footerMeta).map((item, index) => {
                                                 const metaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
                                                 const isChecked = metaItemsObj[item.value] !== undefined ? metaItemsObj[item.value] : true;
                                                 return (
@@ -1070,9 +1188,7 @@ function Inspector(props) {
                                     <Select2
                                         name="select-header-meta"
                                         value={
-                                            selectedTaxonomy && selectedTaxonomy.length > 0
-                                                ? JSON.parse(selectedTaxonomy)
-                                                : ""
+                                            parseJsonObject(selectedTaxonomy) || ""
                                         }
                                         onChange={(selected) =>
                                             setAttributes({
@@ -1089,10 +1205,7 @@ function Inspector(props) {
                                             <Select2
                                                 name="select-header-meta"
                                                 value={
-                                                    selectedTaxonomyItems &&
-                                                        selectedTaxonomyItems.length > 0
-                                                        ? JSON.parse(selectedTaxonomyItems)
-                                                        : ""
+                                                    parseJsonList(selectedTaxonomyItems)
                                                 }
                                                 onChange={(selected) =>
                                                     setAttributes({
@@ -1108,12 +1221,21 @@ function Inspector(props) {
                             </>
                         )}
                     </InspectorPanel.PanelBody>
-                    {applyFilters(
-                        "eb_post_grid_pro_general_tab",
-                        "",
-                        attributes,
-                        setAttributes,
-                    )}
+                    <InspectorPanel.PanelBody
+                        title={__("Search", "essential-blocks")}
+                        initialOpen={false}
+                        className={"eb-post-grid-search eb-group-control-panelbody"}
+                        {...(EssentialBlocksLocalize?.is_pro_active === "false" && {
+                            icon: <ProBadge />,
+                        })}
+                    >
+                        {applyFilters(
+                            "eb_post_grid_pro_general_tab",
+                            <SearchUpgradeProContent />,
+                            attributes,
+                            setAttributes,
+                        )}
+                    </InspectorPanel.PanelBody>
                 </InspectorPanel.General>
                 <InspectorPanel.Style>
                     {showFeaturedPost && (
@@ -2099,7 +2221,7 @@ export default withSelect((select, ownProps) => {
         const postTypes = select("core").getPostTypes({ per_page: -1 });
 
         //Get Terms
-        const selectedTax = selectedTaxonomy ? JSON.parse(selectedTaxonomy).value : "category";
+        const selectedTax = parseJsonObject(selectedTaxonomy)?.value || "category";
         const terms = select("core").getEntityRecords("taxonomy", selectedTax, {
             per_page: -1,
         });

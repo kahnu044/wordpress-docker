@@ -30,9 +30,9 @@ export const STYLE_PRESETS = [
     // { label: __("Preset 4 (hover overlay)"), value: "preset4" }, // this was preset 8
     // { label: __("Preset 5", "essential-blocks"), value: "preset5" }, // this was preset 9
     // { label: __("Preset 6", "essential-blocks"), value: "preset6" }, // this was preset 15
-    { label: __("Preset 3", "essential-blocks"), value: "new-preset1", isPro: true },
-    { label: __("Preset 4", "essential-blocks"), value: "new-preset2", isPro: true },
-    { label: __("Preset 5", "essential-blocks"), value: "new-preset3", isPro: true },
+    { label: __("Preset 3", "essential-blocks"), value: "new-preset1" },
+    { label: __("Preset 4", "essential-blocks"), value: "new-preset2" },
+    { label: __("Preset 5", "essential-blocks"), value: "new-preset3" },
 ];
 export const HOVER_ALIGN = [
     { label: __("Left", "essential-blocks"), value: "hover-left" },

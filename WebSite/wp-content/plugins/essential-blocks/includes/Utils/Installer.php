@@ -27,10 +27,21 @@ class Installer {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
+		self::raise_limits();
+
 		$response = array( 'success' => false );
 
 		$_plugins     = Helper::get_plugins();
 		$is_installed = isset( $_plugins[ $plugin['plugin_file'] ] );
+
+		// Match by plugin folder too, so a plugin installed under another main file isn't downloaded again.
+		if ( ! $is_installed && ! empty( $plugin['slug'] ) ) {
+			$installed_file = $this->find_plugin_file( $_plugins, $plugin['slug'] );
+			if ( $installed_file ) {
+				$plugin['plugin_file'] = $installed_file;
+				$is_installed          = true;
+			}
+		}
 
 		if ( isset( $plugin['is_pro'] ) && $plugin['is_pro'] == true ) {
 			if ( ! $is_installed ) {
@@ -40,6 +51,12 @@ class Installer {
 		}
 
 		if ( ! $is_installed ) {
+			if ( ! current_user_can( 'install_plugins' ) ) {
+				$response['code']    = 'no_install_permission';
+				$response['message'] = __( 'You do not have permission to install plugins on this site.', 'essential-blocks' );
+				return $response;
+			}
+
 			/**
 			 * @var array|object $api
 			 */
@@ -92,13 +109,45 @@ class Installer {
 			$plugin['plugin_file'] = $install_status['file'];
 		}
 
-		$activate_status = $this->activate_plugin( $plugin['plugin_file'] );
-		if ( $activate_status && ! is_wp_error( $activate_status ) ) {
+		$response['slug'] = $plugin['slug'];
+
+		if ( is_plugin_active( $plugin['plugin_file'] ) ) {
 			$response['success'] = true;
+			$response['code']    = 'already_active';
+			return $response;
 		}
 
-		$response['slug'] = $plugin['slug'];
+		$activate_status = $this->activate_plugin( $plugin['plugin_file'] );
+		if ( is_wp_error( $activate_status ) ) {
+			$response['code']    = $activate_status->get_error_code();
+			$response['message'] = $activate_status->get_error_message();
+		} elseif ( $activate_status ) {
+			$response['success'] = true;
+		} else {
+			$response['code']    = 'no_activate_permission';
+			$response['message'] = __( 'You do not have permission to activate this plugin.', 'essential-blocks' );
+		}
+
 		return $response;
+	}
+
+	/**
+	 * Find an installed plugin's main file by its folder name.
+	 *
+	 * @param array  $plugins Installed plugins from get_plugins().
+	 * @param string $slug    Plugin folder slug.
+	 * @return string Plugin file, or empty string when not installed.
+	 */
+	private function find_plugin_file( $plugins, $slug ) {
+		$prefix = sanitize_key( $slug ) . '/';
+
+		foreach ( array_keys( (array) $plugins ) as $file ) {
+			if ( 0 === strpos( $file, $prefix ) ) {
+				return $file;
+			}
+		}
+
+		return '';
 	}
 
 	private function activate_plugin( $file ) {

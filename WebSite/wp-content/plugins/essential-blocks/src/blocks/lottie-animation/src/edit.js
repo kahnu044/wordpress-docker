@@ -21,6 +21,12 @@ import {
 } from "@essential-blocks/controls";
 import { ReactComponent as Icon } from "./icon.svg";
 
+// Load the dotLottie WASM from the plugin, never from a CDN (WP.org Guideline 8).
+// webpack.config.js copies it to assets/vendors/dotlottie/.
+if (window.EssentialBlocksLocalize?.eb_plugins_url) {
+    DotLottie.setWasmUrl(`${window.EssentialBlocksLocalize.eb_plugins_url}assets/vendors/dotlottie/dotlottie-player.wasm`);
+}
+
 function Edit(props) {
     const {
         attributes,

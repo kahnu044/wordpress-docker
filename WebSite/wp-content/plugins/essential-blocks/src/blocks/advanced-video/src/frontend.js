@@ -1,5 +1,6 @@
 import { createRoot } from "@wordpress/element";
 import ReactPlayer from "react-player";
+import { initStickyPlayer } from "./sticky";
 
 /*
  * Not branched on here — react-player classifies the URL itself at mount, so
@@ -272,6 +273,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!playerOption) {
             continue;
         }
+        // Already rendered as a native <video> by AdvancedVideo::render_callback()
+        // and driven by native.js. This script only loads for such a player when
+        // another Advanced Video on the same page needs react-player.
+        if (playerOption.hasAttribute("data-eb-native")) {
+            continue;
+        }
         let imageOverlay = playerOption.getAttribute("data-overlay") === "true" ? true : false;
 
         // sticky
@@ -348,91 +355,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (option === "eb-sticky") {
-            var $video = document.querySelector(".eb-player-option.eb-sticky");
-
-            // Wait for React component to render before getting height
-            setTimeout(() => {
-                var reactPlayer = document.querySelector(".eb-react-player");
-                if (!reactPlayer) {
-                    console.warn("React player element not found");
-                    return;
-                }
-                var height = reactPlayer.offsetHeight;
-                var parent = playerOption.closest(".eb-sticky").closest(".wp-block-essential-blocks-advanced-video")
-                    .offsetTop;
-
-                // close button
-                var closeBtnEl = playerOption.querySelector(".eb-sticky-video-close");
-                var closeSpan = document.createElement("span");
-                closeSpan.innerHTML = "&times;";
-                closeSpan.setAttribute("class", "eb-sticky-video-close");
-
-                let lastScroll = 0;
-                // let isSticky = false;
-                let stickyState = 'none'; // 'none', 'stuck', 'stuck-out'
-
-                const stickyVisibility = playerOption.getAttribute("data-stickyVisibility");
-                const stickyVisibilityTAB = playerOption.getAttribute("data-stickyVisibilityTAB");
-                const stickyVisibilityMOB = playerOption.getAttribute("data-stickyVisibilityMOB");
-
-                // Determine which device we're on and if sticky should be enabled
-                let shouldEnableSticky = false;
-                if (window.matchMedia("(min-width: 1025px)").matches && stickyVisibility != "hidden") {
-                    shouldEnableSticky = true;
-                } else if (window.matchMedia("(min-width: 768px) and (max-width: 1024px)").matches && stickyVisibilityTAB != "hidden") {
-                    shouldEnableSticky = true;
-                } else if (window.matchMedia("(max-width: 767px)").matches && stickyVisibilityMOB != "hidden") {
-                    shouldEnableSticky = true;
-                }
-
-                if (shouldEnableSticky) {
-                    // Single scroll event listener with unified logic
-                    const handleScroll = function () {
-                        const videoThreshold = height + parent + 320;
-                        const currentScroll = window.pageYOffset;
-
-                        // Reset sticky state when scrolled back to top
-                        if (currentScroll < height + parent + 200) {
-
-                            if (stickyState !== 'none') {
-                                $video.classList.remove("stuck", "stuck-out");
-                                stickyState = 'none';
-                                // isSticky = false;
-                                closeSpan.style.display = "none";
-                            }
-
-                            return;
-                        }
-
-                        // Make video sticky when scrolled past threshold
-                        if (currentScroll > videoThreshold && stickyState !== 'stuck') {
-                            $video.classList.remove("stuck-out");
-                            $video.classList.add("stuck");
-                            stickyState = 'stuck';
-                            // isSticky = true;
-
-                            if (closeBtnEl == null) {
-                                $video.prepend(closeSpan);
-                            }
-                            closeSpan.style.display = "inline";
-
-                            // Add close button click handler once
-                            if (!closeSpan.hasAttribute('data-listener-added')) {
-                                closeSpan.addEventListener("click", function () {
-                                    $video.classList.remove("eb-sticky");
-                                    stickyState = 'none';
-                                    // isSticky = false;
-                                });
-                                closeSpan.setAttribute('data-listener-added', 'true');
-                            }
-                        }
-
-                        lastScroll = currentScroll;
-                    };
-
-                    document.addEventListener("scroll", handleScroll);
-                }
-            }, 100); // Close setTimeout with 100ms delay
+            // Shared with native.js — see ./sticky.
+            initStickyPlayer(playerOption);
         }
 
         if (advVideoWrapper.classList.contains("lightbox")) {

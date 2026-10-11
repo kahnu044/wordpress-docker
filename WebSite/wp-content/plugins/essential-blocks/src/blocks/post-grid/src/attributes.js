@@ -32,12 +32,15 @@ import {
     FILTER_ITEM_BORDER_SHADOW,
     FILTER_ITEM_GAP,
     INPUT_HEIGHT,
+    SEARCH_BAR_WIDTH,
+    SEARCH_BAR_ALIGNMENT,
     INPUT_PADDING,
     INPUT_BORDER,
     ICON_WIDTH,
     SEARCH_RESULT_WIDTH,
     SEARCH_RESULT_BORDER,
     SEARCH_RESULT_PADDING,
+    SEARCH_RESULT_MARGIN,
     SEARCH_CONTENT_PADDING,
     SEARCH_CONTENT_MARGIN,
     SEARCH_CONTENT_BORDER,
@@ -371,7 +374,7 @@ const attributes = {
         default: '[{"value":"all","label":"All"}]',
     },
     filterColorStyle: {
-        type: "stroing",
+        type: "string",
         default: "normal",
     },
     filterBgColor: {
@@ -741,6 +744,8 @@ const attributes = {
         left: 30,
         isLinked: false,
     }),
+    // no defaults: the results box keeps its current position until a margin is set
+    ...generateDimensionsAttributes(SEARCH_RESULT_MARGIN),
     ...generateResponsiveRangeAttributes(SEARCH_RESULT_WIDTH, {
         defaultRange: 100,
         defaultUnit: "%",
@@ -749,6 +754,9 @@ const attributes = {
     ...generateResponsiveRangeAttributes(INPUT_HEIGHT, {
         // defaultRange: 300,
     }),
+    // no defaults: search bars stay full width with no side margins until these are set
+    ...generateResponsiveRangeAttributes(SEARCH_BAR_WIDTH),
+    ...generateResponsiveAlignAttributes(SEARCH_BAR_ALIGNMENT),
     ...generateResponsiveRangeAttributes(ICON_WIDTH, {
         defaultRange: 30,
     }),
@@ -877,6 +885,11 @@ const attributes = {
     ...generateTypographyAttributes(FILTER_ITEM_TYPOGRAPHY, {
         fontSize: 16,
     }),
+    // search typography: controls live in the Pro post-grid extension, but the attributes must be declared here or they are stripped on save
+    ...generateTypographyAttributes(INPUT_TYPOGRAPHY),
+    ...generateTypographyAttributes(TITLE_TYPOGRAPHY),
+    ...generateTypographyAttributes(NOT_FOUND_TYPOGRAPHY),
+    ...generateTypographyAttributes(CONTENT_TYPOGRAPHY),
 
     // margin padding attributes ⬇
     ...generateDimensionsAttributes(WRAPPER_MARGIN),

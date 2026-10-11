@@ -49,6 +49,9 @@ class OpenVerse extends ThirdPartyIntegration
      */
     public function generate_token()
     {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+            die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
+        }
         if ( ! current_user_can( 'activate_plugins' ) ) {
             wp_send_json_error( __( 'You are not authorized!', 'essential-blocks' ) );
         }
@@ -194,12 +197,13 @@ class OpenVerse extends ThirdPartyIntegration
      */
     public function get_item()
     {
-        if ( ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
+        if ( ! isset( $_POST[ 'admin_nonce' ] ) || ! wp_verify_nonce( sanitize_key( $_POST[ 'admin_nonce' ] ), 'admin-nonce' ) ) {
             die( esc_html__( 'Nonce did not match', 'essential-blocks' ) );
         }
 
-        if ( isset( $_POST[ 'image_url' ] ) ) {
-            $mediaUrl = sanitize_url( $_POST[ 'image_url' ] );
+        $mediaUrl = isset( $_POST[ 'image_url' ] ) ? sanitize_url( wp_unslash( $_POST[ 'image_url' ] ) ) : '';
+        if ( '' === $mediaUrl ) {
+            wp_die();
         }
 
         if ( current_user_can( 'upload_files' ) ) {

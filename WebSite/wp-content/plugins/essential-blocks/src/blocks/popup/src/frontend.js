@@ -159,11 +159,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
             let displayedCookie = false;
 
+            const useCookiesEnabled =
+                "false" !== eb_popups[x].getAttribute("data-use-cookie");
+
+            // One blockId can end up with two cookies (a "yes" saved without a path and a "no"
+            // saved with path=/), so ask for the value that belongs to the current setting
             let cookiesValue = eb_get_popup_cookie(
-                eb_popups[x].getAttribute("data-block-id")
+                eb_popups[x].getAttribute("data-block-id"),
+                useCookiesEnabled ? "yes" : "no"
             );
 
-            if ("yes" == cookiesValue) {
+            // With "Use Cookies" off, ignore a "yes" cookie saved while it was on
+            if (useCookiesEnabled && "yes" == cookiesValue) {
                 eb_popups[x]
                     .querySelector(".eb-popup-overlay")
                     .classList.remove("active");
@@ -178,45 +185,80 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     .classList.add("inactive");
                 document.body.classList.remove("eb-popup-block-overflow");
             } else {
-                // Cross-browser exit intent detection
-                // Use mouseout on document.documentElement for better browser support
-                const exitIntentHandler = function (e) {
-                    // Check if mouse is leaving from the top of the viewport
-                    if (e.clientY <= 0 || e.pageY - window.pageYOffset <= 0) {
-                        // Additional check to ensure we're actually leaving the document
-                        if (e.relatedTarget === null || e.relatedTarget.nodeName === "HTML") {
-                            if (!displayedCookie) {
-                                eb_popups[x]
-                                    .querySelector(".eb-popup-overlay")
-                                    .classList.remove("inactive");
-                                eb_popups[x]
-                                    .querySelector(".modal-main-wrap")
-                                    .classList.remove("inactive");
-                                eb_popups[x]
-                                    .querySelector(".eb-popup-overlay")
-                                    .classList.add("active");
-                                eb_popups[x]
-                                    .querySelector(".modal-main-wrap")
-                                    .classList.add("active");
-                                eb_popups[x].getAttribute("data-page-scroll") ===
-                                    "true"
-                                    ? null
-                                    : document.body.classList.add(
-                                        "eb-popup-block-overflow",
-                                    );
-                                auto_exit(eb_popups[x]);
+                // Cross-browser exit intent detection.
+                // Browsers disagree about what they report when the pointer leaves the window: the
+                // exit event's clientY can be negative, 0, or the last position seen inside the page,
+                // and relatedTarget can be null or the <html> element. So accept either the event's
+                // own position or the last tracked position, and require both to be near the top
+                // edge so exits through the sides or the bottom are still ignored.
+                const exitIntentTopThreshold = 20;
 
-                                //Set Cookies
-                                eb_set_popup_cookie(
-                                    eb_popups[x].getAttribute("data-use-cookie"),
-                                    eb_popups[x].getAttribute("data-block-id"),
-                                    eb_popups[x].getAttribute(
-                                        "data-cookie-expire-time",
-                                    ),
+                // Last pointer position seen inside the page; -1 until the first mousemove
+                let mouseY = -1;
+                const mouseMoveHandler = function (e) {
+                    mouseY = e.clientY;
+                };
+
+                // Is the pointer leaving from the top of the viewport?
+                const isNearTopEdge = function (e) {
+                    if (e.clientY <= exitIntentTopThreshold) {
+                        return true;
+                    }
+
+                    // Event coordinates can be stale on a fast exit, so fall back to the last
+                    // tracked position, but only while the event itself stays in the upper half of
+                    // the viewport — a side or bottom exit must not count as exit intent
+                    return (
+                        mouseY >= 0 &&
+                        mouseY <= exitIntentTopThreshold &&
+                        e.clientY <= window.innerHeight / 2
+                    );
+                };
+
+                // Did the pointer really leave the page? Either there is no element to enter, or it
+                // is the <html> element itself, or the document reported a mouseleave (some
+                // browsers report only that one, with a relatedTarget we can't rely on)
+                const isLeavingDocument = function (e) {
+                    return (
+                        e.relatedTarget === null ||
+                        e.relatedTarget.nodeName === "HTML" ||
+                        ("mouseleave" === e.type && e.currentTarget === document)
+                    );
+                };
+
+                const exitIntentHandler = function (e) {
+                    if (isNearTopEdge(e) && isLeavingDocument(e)) {
+                        if (!displayedCookie) {
+                            eb_popups[x]
+                                .querySelector(".eb-popup-overlay")
+                                .classList.remove("inactive");
+                            eb_popups[x]
+                                .querySelector(".modal-main-wrap")
+                                .classList.remove("inactive");
+                            eb_popups[x]
+                                .querySelector(".eb-popup-overlay")
+                                .classList.add("active");
+                            eb_popups[x]
+                                .querySelector(".modal-main-wrap")
+                                .classList.add("active");
+                            eb_popups[x].getAttribute("data-page-scroll") ===
+                                "true"
+                                ? null
+                                : document.body.classList.add(
+                                    "eb-popup-block-overflow",
                                 );
-                            }
-                            displayedCookie = true;
+                            auto_exit(eb_popups[x]);
+
+                            //Set Cookies
+                            eb_set_popup_cookie(
+                                eb_popups[x].getAttribute("data-use-cookie"),
+                                eb_popups[x].getAttribute("data-block-id"),
+                                eb_popups[x].getAttribute(
+                                    "data-cookie-expire-time",
+                                ),
+                            );
                         }
+                        displayedCookie = true;
                     }
                 };
 
@@ -228,20 +270,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     document.addEventListener("mouseleave", exitIntentHandler);
                 }
 
-                // Additional fallback for older browsers using mousemove tracking
-                let mouseY = 0;
-                const mouseMoveHandler = function (e) {
-                    mouseY = e.clientY;
-                };
-
+                // Additional fallback: a document-level mouseout while the pointer was last tracked
+                // near the top edge, for browsers whose exit event coordinates can't be trusted
                 const mouseOutFallback = function (e) {
-                    if (mouseY <= 0 && !displayedCookie) {
+                    if (mouseY >= 0 && mouseY <= exitIntentTopThreshold && !displayedCookie) {
                         exitIntentHandler(e);
                     }
                 };
 
                 document.addEventListener("mousemove", mouseMoveHandler);
                 document.addEventListener("mouseout", mouseOutFallback);
+
+                // "Use Cookies" off: let the popup open again once it has been closed. Every close
+                // path (close button, Esc, outside click, auto exit) removes the "active" class.
+                if (!useCookiesEnabled) {
+                    const exitIntentModal = eb_popups[x].querySelector(".modal-main-wrap");
+                    new MutationObserver(function () {
+                        if (!exitIntentModal.classList.contains("active")) {
+                            displayedCookie = false;
+                        }
+                    }).observe(exitIntentModal, { attributes: true, attributeFilter: ["class"] });
+                }
             }
         }
 
@@ -573,19 +622,31 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
 
-    function eb_get_popup_cookie(popup_id) {
+    // A popup can have two cookies with the same name (a "yes" saved without a path and a "no"
+    // saved with path=/). Pass `preferred` to get that value whenever it exists; without it the
+    // first match is returned, as before.
+    function eb_get_popup_cookie(popup_id, preferred) {
         let name = popup_id + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
+        let decodedCookie = document.cookie;
+        try {
+            decodedCookie = decodeURIComponent(document.cookie);
+        } catch (e) {
+            // A malformed cookie from anywhere on the site must not stop the popups; read it raw
+        }
         let ca = decodedCookie.split(";");
+        let values = [];
         for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
             while (c.charAt(0) == " ") {
                 c = c.substring(1);
             }
             if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
+                values.push(c.substring(name.length, c.length));
             }
         }
-        return "";
+        if (preferred && values.indexOf(preferred) !== -1) {
+            return preferred;
+        }
+        return values.length ? values[0] : "";
     }
 });

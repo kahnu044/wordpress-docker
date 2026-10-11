@@ -68,6 +68,38 @@ function hideButtonSpinner(button) {
     button.disabled = false;
 }
 
+/**
+ * Latest request per grid. Filter clicks and pagination on one grid share the counter, so the
+ * response of an older click can't replace the posts of a newer one.
+ */
+const gridRequestIds = new WeakMap();
+
+function startGridRequest(gridWrapper) {
+    const requestId = (gridRequestIds.get(gridWrapper) || 0) + 1;
+    gridRequestIds.set(gridWrapper, requestId);
+    return requestId;
+}
+
+function isLatestGridRequest(gridWrapper, requestId) {
+    return gridRequestIds.get(gridWrapper) === requestId;
+}
+
+/**
+ * Before showing new filter results: remove the "No Posts Found" messages (direct <p> children of
+ * the grid wrapper) and hide the load-more "No more posts" message. Excerpt paragraphs inside
+ * posts and the featured post are left alone.
+ */
+function resetNoPostsMessages(gridWrapper) {
+    gridWrapper
+        .querySelectorAll(":scope > p:not(.eb-loadmore-no-post)")
+        .forEach((message) => message.remove());
+
+    const loadMoreNoPost = gridWrapper.querySelector(".eb-loadmore-no-post");
+    if (loadMoreNoPost) {
+        loadMoreNoPost.style.display = "none";
+    }
+}
+
 window.addEventListener("DOMContentLoaded", function () {
     ebPaginationFunc("");
 });
@@ -125,6 +157,7 @@ function ebPaginationFunc(queryParamString) {
                     );
                     if (queryStringSelector) {
                         const queryString = queryStringSelector.dataset;
+                        const requestId = startGridRequest(queryStringSelector);
 
                         // Get current filter state from the wrapper element
                         const currentFilter = queryStringSelector.dataset.currentFilter || "";
@@ -165,19 +198,21 @@ function ebPaginationFunc(queryParamString) {
                                 // Hide spinners after successful response
                                 if (isLoadMore) {
                                     hideButtonSpinner(this);
+                                }
+                                // A newer filter or page request on this grid owns the content now.
+                                if (!isLatestGridRequest(queryStringSelector, requestId)) {
+                                    return;
+                                }
+                                if (isLoadMore) {
                                     if (!result) {
-                                        // const noPostsMarkup = `<p class="eb-no-posts">${noPostText}</p>`;
-                                        // this.closest(
-                                        //     ".ebpostgrid-pagination",
-                                        // ).insertAdjacentHTML(
-                                        //     "beforebegin",
-                                        //     noPostsMarkup,
-                                        // );
                                         const noPost = queryStringSelector.querySelector(".eb-loadmore-no-post");
-                                        noPost.style.display = "block";
-                                        this.closest(
-                                            ".ebpostgrid-pagination",
-                                        ).innerHTML = "";
+                                        if (noPost) {
+                                            noPost.style.display = "block";
+                                        }
+                                        const pagination = this.closest(".ebpostgrid-pagination");
+                                        if (pagination) {
+                                            pagination.innerHTML = "";
+                                        }
                                     } else {
                                         if ("v2" === version) {
                                             const selector = this.closest(
@@ -264,7 +299,7 @@ function ebPaginationFunc(queryParamString) {
                                 // Hide spinners on error
                                 if (isLoadMore) {
                                     hideButtonSpinner(this);
-                                } else {
+                                } else if (isLatestGridRequest(queryStringSelector, requestId)) {
                                     const postsContainer =
                                         version === "v2"
                                             ? queryStringSelector.querySelector(
@@ -445,6 +480,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 const gridWrapper = this.closest(".eb-post-grid-wrapper");
                 const queryString = gridWrapper.dataset;
+                const requestId = startGridRequest(gridWrapper);
                 const attributes = JSON.parse(queryString.attributes);
                 const version = attributes?.version ? attributes?.version : "";
 
@@ -478,6 +514,10 @@ window.addEventListener("DOMContentLoaded", () => {
                     parse: false,
                 }).then(
                     (result) => {
+                        // A newer filter or page request on this grid owns the content now.
+                        if (!isLatestGridRequest(gridWrapper, requestId)) {
+                            return;
+                        }
                         let totalPosts = result.headers.get("X-WP-Total");
                         if (totalPosts) {
                             // pagination initiate
@@ -497,6 +537,9 @@ window.addEventListener("DOMContentLoaded", () => {
                             }) // wrapped
                                 .then((res) => res.text())
                                 .then((data) => {
+                                    if (!isLatestGridRequest(gridWrapper, requestId)) {
+                                        return;
+                                    }
                                     const paginationSelector = gridWrapper.querySelector(".ebpostgrid-pagination");
                                     if (paginationSelector) {
                                         paginationSelector.innerHTML = data;
@@ -527,6 +570,9 @@ window.addEventListener("DOMContentLoaded", () => {
                                 },
                             })
                                 .then((result) => {
+                                    if (!isLatestGridRequest(gridWrapper, requestId)) {
+                                        return;
+                                    }
                                     // Hide spinner after successful filter operation
                                     const postsContainer =
                                         version === "v2"
@@ -547,15 +593,7 @@ window.addEventListener("DOMContentLoaded", () => {
                                         .forEach((post) => {
                                             post.remove();
                                         });
-                                    if (
-                                        this.closest(
-                                            ".eb-post-grid-wrapper",
-                                        ).querySelector("p")
-                                    ) {
-                                        this.closest(".eb-post-grid-wrapper")
-                                            .querySelector("p")
-                                            .remove();
-                                    }
+                                    resetNoPostsMessages(gridWrapper);
                                     // need to change for v2
                                     if ("v2" === version) {
                                         const selector = this.closest(
@@ -599,6 +637,9 @@ window.addEventListener("DOMContentLoaded", () => {
                                     this.classList.add("active");
                                 })
                                 .catch((error) => {
+                                    if (!isLatestGridRequest(gridWrapper, requestId)) {
+                                        return;
+                                    }
                                     // Hide spinner on error
                                     const postsContainer =
                                         version === "v2"
@@ -657,15 +698,7 @@ window.addEventListener("DOMContentLoaded", () => {
                                     ".ebpostgrid-pagination",
                                 ).innerHTML = "";
                             }
-                            if (
-                                noPostsGridWrapper.querySelector("p")
-                            ) {
-                                noPostsGridWrapper
-                                    .querySelectorAll("p")
-                                    .forEach((item) => {
-                                        item.remove();
-                                    });
-                            }
+                            resetNoPostsMessages(noPostsGridWrapper);
 
                             noPostsGridWrapper.insertAdjacentHTML(
                                 "beforeend",
@@ -677,6 +710,9 @@ window.addEventListener("DOMContentLoaded", () => {
                         }
                     },
                     (error) => {
+                        if (!isLatestGridRequest(gridWrapper, requestId)) {
+                            return;
+                        }
                         // Hide spinner on error
                         const postsContainer =
                             version === "v2"

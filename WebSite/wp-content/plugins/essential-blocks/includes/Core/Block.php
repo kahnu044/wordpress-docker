@@ -88,7 +88,8 @@ abstract class Block
     {
         // Enqueue Animation
         wp_enqueue_style($this->animation_style);
-        wp_enqueue_style($this->liquid_glass_style);
+        // Liquid Glass CSS is enqueued by Utils\LiquidGlassRenderer, only
+        // for blocks that render the effect.
 
         $frontend_styles = $this->frontend_styles;
 
@@ -208,6 +209,26 @@ abstract class Block
     /**
      * Function to handle conditional display logic for the block.
      */
+    /**
+     * Enqueue core's `dashicons` stylesheet when a block's rendered HTML uses it.
+     *
+     * The icon picker can emit `dashicon dashicons-*` classes for any
+     * icon-bearing block (see controls helpers `renderIcon`), so a per-block
+     * allowlist would be wrong. Scanning the output is exact and cheap. Until
+     * 6.4.7 the stylesheet loaded on every frontend page instead.
+     *
+     * Blocks that create Dashicons markup from JS at runtime (Table of
+     * Contents' copy tooltip) can't be detected here and must list
+     * `dashicons` in $frontend_styles explicitly.
+     */
+    private function maybe_enqueue_dashicons($html)
+    {
+        if (is_admin() || empty($html) || strpos($html, 'dashicons') === false) {
+            return;
+        }
+        wp_enqueue_style('dashicons');
+    }
+
     private function should_display_block($attributes)
     {
         // Skip logic check in admin area
@@ -239,6 +260,7 @@ abstract class Block
 
             // Inline SVG placeholders before returning content
             $content = $this->inline_svg_icons_via_regex($content);
+            $this->maybe_enqueue_dashicons($content);
 
             return $content;
         };
@@ -267,7 +289,10 @@ abstract class Block
 
                 // Also inline SVGs in the render_callback output (dynamic blocks
                 // generate HTML with SVG placeholders that aren't in $content).
-                return $this->inline_svg_icons_via_regex($output);
+                $output = $this->inline_svg_icons_via_regex($output);
+                $this->maybe_enqueue_dashicons($output);
+
+                return $output;
             };
         }
 
@@ -288,6 +313,7 @@ abstract class Block
 
                 // Inline SVG placeholders before returning content
                 $content = $this->inline_svg_icons_via_regex($content);
+                $this->maybe_enqueue_dashicons($content);
                 return $content;
             };
         }

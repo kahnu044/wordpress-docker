@@ -45,10 +45,10 @@ abstract class PostBlock extends Block
         return strip_shortcodes( $phrase );
     }
 
-    public static function get_posts( $queryData, $isAjax = false )
+    public static function get_posts( $queryData, $isAjax = false, $context = [] )
     {
         // Since > 4.2.5 took the functionality to QueryHelper Class
-        $posts = QueryHelper::get_posts( $queryData, $isAjax );
+        $posts = QueryHelper::get_posts( $queryData, $isAjax, $context );
         return $posts;
     }
 }

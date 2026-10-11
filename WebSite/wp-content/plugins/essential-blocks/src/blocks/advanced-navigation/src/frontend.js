@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () => {
+function ebAdvancedNavigationInit() {
     const advNavs = document.querySelectorAll(
         ".eb-advanced-navigation-wrapper"
     );
@@ -81,24 +81,35 @@ window.addEventListener("DOMContentLoaded", () => {
             ".wp-block-navigation-item__content"
         );
 
+        // Close the mobile drawer through core's own close control, never by
+        // stripping `is-menu-open` / `has-modal-open` off the DOM. Those classes
+        // mirror core/navigation's Interactivity state
+        // (`data-wp-class--is-menu-open="state.isMenuOpen"`). Removing them by hand
+        // leaves `state.menuOpenedBy.click` true; a same-page #hash jump doesn't
+        // reload, so the next hamburger tap re-sets an already-true value, nothing
+        // re-renders and the menu never reopens. Clicking the close control runs
+        // `actions.closeMenuOnClick` synchronously, so state is reset before the
+        // browser performs the native anchor jump (no preventDefault/window.open).
         anchors.forEach((anchor) => {
-            anchor?.addEventListener("click", function (e) {
-                const href = this.getAttribute("href");
-                if (
-                    anchor.hash !== "" &&
-                    href &&
-                    href !== "#" &&
-                    !href.startsWith("javascript:")
-                ) {
-                    e.preventDefault();
-                    advNav
-                        .querySelector(
-                            ".wp-block-navigation__responsive-container"
-                        )
-                        ?.classList.remove("is-menu-open", "has-modal-open");
-
-                    window.open(href, "_self");
+            anchor.addEventListener("click", function () {
+                if (anchor.hash === "") {
+                    return;
                 }
+
+                const container = anchor.closest(
+                    ".wp-block-navigation__responsive-container"
+                );
+                if (!container?.classList.contains("is-menu-open")) {
+                    return;
+                }
+
+                // Second selector: a custom overlay template part (WP 7.1+) can
+                // replace the default close button with its own close block.
+                container
+                    .querySelector(
+                        '.wp-block-navigation__responsive-container-close, [data-wp-on--click="actions.closeMenuOnClick"]'
+                    )
+                    ?.click();
             });
         });
 
@@ -150,7 +161,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Single window.load listener for all wrappers (instead of one per wrapper)
     // positions each indicator vertically against its sibling anchor.
-    window.addEventListener('load', function () {
+    function bindIndicatorPosition() {
         document
             .querySelectorAll('.eb-advanced-navigation-wrapper .eb-menu-indicator')
             .forEach(function (indicator) {
@@ -165,5 +176,23 @@ window.addEventListener("DOMContentLoaded", () => {
                     this.style.top = elementTop / 2 + 'px';
                 });
             });
-    });
-});
+    }
+
+    // This init can itself run after `load` has fired (see the readiness guard
+    // below); a `load` listener added then would never fire, so bind right away.
+    if (document.readyState === "complete") {
+        bindIndicatorPosition();
+    } else {
+        window.addEventListener("load", bindIndicatorPosition);
+    }
+}
+
+// Optimization plugins/CDNs can defer, async-load or delay this script until after
+// DOMContentLoaded has fired. A bare DOMContentLoaded listener would then never run,
+// silently leaving the submenu indicators (display:none by default) missing.
+// Same guard as src/blocks/facebook-feed/src/frontend.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", ebAdvancedNavigationInit);
+} else {
+    ebAdvancedNavigationInit();
+}

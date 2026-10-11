@@ -40,6 +40,8 @@ export const FILTER_ITEM_BORDER_SHADOW = "filterItmBdrShdw";
 export const FILTER_ITEM_GAP = "filterItemGap";
 
 export const INPUT_HEIGHT = "inputHeight";
+export const SEARCH_BAR_WIDTH = "searchBarWidth";
+export const SEARCH_BAR_ALIGNMENT = "searchBarAlignment";
 export const INPUT_PADDING = "inputPadding";
 export const INPUT_BORDER = "inputBrd";
 export const ICON_WIDTH = "iconWidth";

@@ -5,6 +5,7 @@ namespace EssentialBlocks\Admin;
 use EssentialBlocks\Traits\HasSingletone;
 use EssentialBlocks\Utils\Helper;
 use EssentialBlocks\Utils\Settings;
+use EssentialBlocks\Utils\XSpeedOffer;
 use EssentialBlocks\Dependencies\Insights;
 
 class QuickSetup {
@@ -85,6 +86,19 @@ class QuickSetup {
                 'regenerator-runtime',
                 'essential-blocks-vendor-bundle',
                 'essential-blocks-admin-controls-util'
+            )
+        );
+
+        // Localized here rather than on the shared bridge: only this screen offers a
+        // third-party plugin, and the gate costs a file_exists plus an option read.
+        wpdev_essential_blocks()->assets->localize(
+            'quick-setup',
+            'EBQuickSetup',
+            array(
+                'xspeed_offer' => array(
+                    'may_ask' => XSpeedOffer::may_ask(),
+                    'outcome' => XSpeedOffer::outcome()
+                )
             )
         );
     }

@@ -48,12 +48,7 @@ class LiquidGlassRenderer
             return $block_content;
         }
 
-        // Check if block has liquid glass attributes
-        if (!isset($block['attrs']['liquidGlass'])) {
-            return $block_content;
-        }
-
-        $liquid_glass = $block['attrs']['liquidGlass'];
+        $liquid_glass = isset($block['attrs']['liquidGlass']) ? $block['attrs']['liquidGlass'] : [];
 
         // Check if liquid glass is enabled
         if (!empty($liquid_glass['enable'])) {
@@ -74,6 +69,14 @@ class LiquidGlassRenderer
             if ($svg_was_rendered) {
                 self::$svg_rendered = true;
             }
+        }
+
+        // The stylesheet only styles the effect classes, which are on the
+        // markup only when an effect is on (`liquidGlass` above, or a saved
+        // variant such as Feature List's `iconLiquidGlass`). Until 6.4.7
+        // Core\Block enqueued it for every block with frontend assets.
+        if (is_string($block_content) && false !== strpos($block_content, 'eb_liquid_glass')) {
+            wp_enqueue_style('essential-blocks-liquid-glass');
         }
 
         return $block_content;

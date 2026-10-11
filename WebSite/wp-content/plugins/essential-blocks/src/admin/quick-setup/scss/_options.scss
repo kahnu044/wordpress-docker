@@ -6,6 +6,76 @@
 		line-height: 120%;
 		color: #475467;
 	}
+
+	.eb-setup-option-card .option-block-footer {
+		flex-wrap: wrap;
+
+		// Always reserve 2 label lines so footer dividers line up across a row
+		h5 {
+			flex: 1 1 0;
+			min-height: 2.4em;
+			display: flex;
+			align-items: center;
+		}
+
+		// Plugin install error, full width under the toggle row
+		.integration-error {
+			flex-basis: 100%;
+			color: red;
+			font-size: 14px;
+		}
+
+		// Post-install report: the plugin is in, this says how it came up
+		.integration-notice {
+			flex-basis: 100%;
+			margin-top: 8px;
+			font-size: 13px;
+			line-height: 150%;
+			color: #475467;
+
+			p {
+				margin: 0 0 6px;
+				font-size: 13px;
+			}
+
+			code {
+				display: block;
+				padding: 8px;
+				background: #f2f4f7;
+				border-radius: 4px;
+				font-size: 12px;
+				word-break: break-all;
+				white-space: pre-wrap;
+			}
+		}
+	}
+
+	// 4 cards per row: tighter spacing so titles, descriptions and labels fit ~225–267px cards
+	@media all and (min-width: 1200px) {
+		.eb-setup-option-card {
+			.option-block-header {
+				padding: 16px;
+				min-height: 65px; // room for a 2-line title, keeps header dividers aligned
+
+				h5 {
+					font-size: 15px;
+				}
+			}
+
+			.option-block-content {
+				padding: 16px;
+
+				p {
+					font-size: 14px;
+					line-height: 1.5;
+				}
+			}
+
+			.option-block-footer {
+				margin: auto 16px 16px;
+			}
+		}
+	}
 }
 
 .eb-optimaization-content-wrap {
@@ -22,7 +92,17 @@
 	}
 
 	.eb-setup-option-card-wrap {
+		grid-template-columns: repeat(4, 1fr);
 		margin-bottom: 30px;
+
+		@media all and (max-width: 1199px) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		// This selector outranks the base 1-column mobile rule, so re-declare it
+		@media all and (max-width: 768px) {
+			grid-template-columns: repeat(1, 1fr);
+		}
 	}
 
 }

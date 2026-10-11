@@ -1,4 +1,19 @@
 <?php
+    /**
+     * Featured post, resolved once: published, publicly viewable and not
+     * password protected. See PostGrid::get_featured_post().
+     */
+    $featured_post = $block_object->get_featured_post(
+        isset( $showFeaturedPost ) ? $showFeaturedPost : false,
+        isset( $featuredPostId ) ? $featuredPostId : ''
+    );
+
+    // Only the v2 markup renders the featured post. Older blocks (no version) would otherwise drop
+    // it from the grid and never show it, so they keep it as a regular post.
+    if ( ! isset( $version ) || 'v2' !== $version ) {
+        $featured_post = null;
+    }
+
     $_parent_classes = [
         'eb-parent-wrapper',
         'eb-parent-' . $blockId,
@@ -7,7 +22,7 @@
     $_wrapper_classes = [
         $blockId,
         $preset,
-        $showFeaturedPost && !empty($featuredPostId) ? 'has-featured-post' : ''
+        $featured_post ? 'has-featured-post' : ''
      ];
 
     $wrapper_attributes = get_block_wrapper_attributes(
@@ -29,17 +44,25 @@
                  * Category Filter Views
                  */
                 if ( $showTaxonomyFilter && ! empty( $selectedTaxonomy ) && ! empty( $selectedTaxonomyItems ) ) {
-                    $selectedTaxonomy = json_decode( $selectedTaxonomy );
-                    $categories       = json_decode( $selectedTaxonomyItems );
-                    $helper::views(
-                        'post-partials/category-filter',
-                        [
-                            'taxonomy'      => $selectedTaxonomy->value,
-                            'categories'    => $categories,
-                            'essentialAttr' => $essentialAttr,
-                            'showSearch'    => $showSearch
-                        ]
-                    );
+                    $_selected_taxonomy = is_string( $selectedTaxonomy ) ? json_decode( $selectedTaxonomy ) : null;
+                    $_categories        = is_string( $selectedTaxonomyItems ) ? json_decode( $selectedTaxonomyItems ) : null;
+
+                    // Invalid saved JSON would otherwise reach array_map()/->value in the partial.
+                    if ( is_object( $_selected_taxonomy ) && isset( $_selected_taxonomy->value ) && is_scalar( $_selected_taxonomy->value ) && is_array( $_categories ) ) {
+                        $_categories = array_values( array_filter( $_categories, function ( $item ) {
+                            return is_object( $item ) && isset( $item->value, $item->label ) && is_scalar( $item->value ) && is_scalar( $item->label );
+                        } ) );
+
+                        $helper::views(
+                            'post-partials/category-filter',
+                            [
+                                'taxonomy'      => (string) $_selected_taxonomy->value,
+                                'categories'    => $_categories,
+                                'essentialAttr' => $essentialAttr,
+                                'showSearch'    => $showSearch
+                            ]
+                        );
+                    }
                 }
             ?>
 
@@ -63,38 +86,28 @@
             $_params = array_merge(
                 $_params,
                 [
-                    'posts'      => $posts,
-                    'queryData'  => isset( $queryData ) ? $queryData : [],
-                    'source'     => isset( $queryData['source'] ) ? $queryData['source'] : 'post',
-                    'headerMeta' => ! empty( $headerMeta ) ? json_decode( $headerMeta ) : [],
-                    'footerMeta' => ! empty( $footerMeta ) ? json_decode( $footerMeta ) : []
+                    'posts'             => $posts,
+                    'queryData'         => isset( $queryData ) ? $queryData : [],
+                    'source'            => isset( $queryData['source'] ) ? $queryData['source'] : 'post',
+                    'headerMeta'        => ! empty( $headerMeta ) && is_string( $headerMeta ) ? json_decode( $headerMeta ) : [],
+                    'footerMeta'        => ! empty( $footerMeta ) && is_string( $footerMeta ) ? json_decode( $footerMeta ) : [],
+                    // The meta partials json_decode() this.
+                    'featuredMetaItems' => isset( $featuredMetaItems ) && is_string( $featuredMetaItems ) ? $featuredMetaItems : '{}'
                 ]
             );
 
             /**
              * Featured Post Rendering
              */
-            $featured_post = null;
             $filtered_posts = $posts;
 
-            if ( isset( $showFeaturedPost ) && $showFeaturedPost && ! empty( $featuredPostId ) ) {
-                try {
-                    $featured_post_data = json_decode( $featuredPostId, true );
-                    if ( isset( $featured_post_data['value'] ) ) {
-                        $featured_post_id = intval( $featured_post_data['value'] );
-                        $featured_post = get_post( $featured_post_id );
+            if ( $featured_post ) {
+                $featured_post_id = $featured_post->ID;
 
-                        // Filter out the featured post from regular posts to avoid duplication
-                        if ( $featured_post && ! is_wp_error( $featured_post ) ) {
-                            $filtered_posts = array_filter( $posts, function( $post ) use ( $featured_post_id ) {
-                                return $post->ID !== $featured_post_id;
-                            } );
-                        }
-                    }
-                } catch ( Exception $e ) {
-                    // Silently fail if JSON parsing fails
-                    $featured_post = null;
-                }
+                // Filter out the featured post from regular posts to avoid duplication
+                $filtered_posts = array_filter( $posts, function( $post ) use ( $featured_post_id ) {
+                    return $post->ID !== $featured_post_id;
+                } );
             }
 
             // Update $_params with filtered posts
@@ -102,14 +115,14 @@
 
             // When featured post is shown separately in v2, limit regular posts so
             // total displayed stays equal to per_page (not per_page + 1).
-            if ( $version === 'v2' && $featured_post && ! is_wp_error( $featured_post ) ) {
-                $per_page = isset( $queryData['per_page'] ) ? max( 0, (int) $queryData['per_page'] - 1 ) : count( $filtered_posts );
+            if ( $version === 'v2' && $featured_post ) {
+                $per_page = isset( $queryData['per_page'] ) && is_scalar( $queryData['per_page'] ) ? max( 0, (int) $queryData['per_page'] - 1 ) : count( $filtered_posts );
                 $_params['posts'] = array_slice( array_values( $filtered_posts ), 0, $per_page );
             }
 
             if ( $version === 'v2' ) {
                 // Display featured post before the regular posts wrapper
-                if ( $featured_post && ! is_wp_error( $featured_post ) ) {
+                if ( $featured_post ) {
                     echo '<div class="ebpg-featured-post-wrapper">';
 
                     // Create params for featured post with single post array
@@ -117,7 +130,7 @@
                     $_featured_params['posts'] = [ $featured_post ];
                     $_featured_params['_is_featured'] = true;
 
-                    // Render featured post using featured-post-markup partial
+                    // Render the featured post with the grid-markup partial
                     $helper::views( 'post-partials/grid-markup', $_featured_params );
 
                     echo '</div>';
@@ -159,7 +172,9 @@
             $helper::views( 'common/pagination', array_merge(
                 $loadMoreOptions, $queryData, [
                     'posts'        => $posts,
-                    'parent_class' => 'ebpostgrid-pagination'
+                    'parent_class' => 'ebpostgrid-pagination',
+                    // Same page cap as the queries endpoint, which serves no page past it.
+                    'max_pages'    => \EssentialBlocks\Utils\QueryHelper::max_pages()
                 ]
             ) );
         }

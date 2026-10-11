@@ -12,4 +12,18 @@
 		margin: 0;
 		padding: 0;
 	}
+
+	// Block themes add `:where(.wp-site-blocks :focus) { outline: 2px solid }`,
+	// so a mouse click leaves an outline on Google's control buttons. In the
+	// stacked zoom control the divider and the next button paint over it, and
+	// the ring shows up broken. Hide it for mouse focus and draw the keyboard
+	// focus ring inside the button so nothing can cover it.
+	.gm-style button:focus {
+		outline: none;
+	}
+
+	.gm-style button:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
 }

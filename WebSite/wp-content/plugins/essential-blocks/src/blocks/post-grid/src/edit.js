@@ -23,7 +23,6 @@ import PostGridIcon from "./icon";
 import Templates from '../../../../patterns/post-grid.json'
 import defaultAttributes from "./attributes";
 import {
-    ebJsonStringCheck,
     CustomQuery,
     DynamicInputValueHandler,
     EBDisplayIconEdit,
@@ -31,6 +30,10 @@ import {
     BlockProps,
     withBlockContext,
 } from "@essential-blocks/controls";
+import { parseJsonList, limitWords } from "./helpers";
+
+// Delay before the editor search preview sends the typed text.
+const SEARCH_DEBOUNCE_MS = 500;
 
 const Edit = (props) => {
     const { attributes, setAttributes, isSelected } = props;
@@ -123,6 +126,10 @@ const Edit = (props) => {
 
     // Fetch featured post when featuredPostId changes
     useEffect(() => {
+        // Set when the selection changes again (or the block unmounts) before this request
+        // finishes, so a slower response can't replace the newer featured post.
+        let isStale = false;
+
         if (showFeaturedPost && featuredPostId && featuredPostId.length > 0) {
             try {
                 const selectedPost = JSON.parse(featuredPostId);
@@ -135,10 +142,16 @@ const Edit = (props) => {
                         path: `/${namespace}/${restBase}/${selectedPost.value}?_embed`,
                     })
                         .then((post) => {
+                            if (isStale) {
+                                return;
+                            }
                             setFeaturedPost(post);
                             setLoadingFeaturedPost(false);
                         })
                         .catch((error) => {
+                            if (isStale) {
+                                return;
+                            }
                             console.error("Error fetching featured post:", error);
                             setFeaturedPost(null);
                             setLoadingFeaturedPost(false);
@@ -151,10 +164,17 @@ const Edit = (props) => {
         } else {
             setFeaturedPost(null);
         }
+
+        return () => {
+            isStale = true;
+        };
     }, [showFeaturedPost, featuredPostId, queryData?.rest_namespace, queryData?.rest_base]);
 
     const paginationLinks = (options, perPage) => {
-        const totalPages = Math.floor(options.totalPosts / perPage);
+        // Same page count as Helper::pagination_markup(): a partial last page gets its button. No page
+        // buttons without a positive page size (dividing by 0 or "" made this loop run forever).
+        const pageSize = parseInt(perPage, 10);
+        const totalPages = pageSize > 0 ? Math.ceil((parseInt(options.totalPosts, 10) || 0) / pageSize) : 0;
         let html = "";
         html += `<button class="ebpg-pagination-item-previous">${options.prevTxt}</button>`;
         for (let i = 1; i <= totalPages; i++) {
@@ -204,10 +224,17 @@ const Edit = (props) => {
             setShowSearchResultsWrapper(false);
         }
 
-        if (!isEmpty(searchText)) {
-            setLoadingSearch(true);
-            setShowSearchResultsWrapper(true);
+        if (isEmpty(searchText)) {
+            return;
+        }
 
+        setLoadingSearch(true);
+        setShowSearchResultsWrapper(true);
+
+        // Debounced: only the last text typed within SEARCH_DEBOUNCE_MS is sent, and the response
+        // for older text (the effect ran again) is ignored.
+        let isStale = false;
+        const searchTimer = setTimeout(() => {
             let data = new FormData();
             data.append("action", "post_grid_search_result_content");
             data.append(
@@ -225,6 +252,9 @@ const Edit = (props) => {
             }) // wrapped
                 .then((res) => res.text())
                 .then((data) => {
+                    if (isStale) {
+                        return;
+                    }
                     const response = JSON.parse(data);
 
                     if (response.success && response.data) {
@@ -237,8 +267,18 @@ const Edit = (props) => {
                         setLoadingSearch(false);
                     }
                 })
-                .catch((err) => console.log(err));
-        }
+                .catch((err) => {
+                    if (!isStale) {
+                        setLoadingSearch(false);
+                    }
+                    console.log(err);
+                });
+        }, SEARCH_DEBOUNCE_MS);
+
+        return () => {
+            isStale = true;
+            clearTimeout(searchTimer);
+        };
     }, [searchText, enableAjaxSearch]);
 
     // Filter out featured post from query results to avoid duplication
@@ -338,8 +378,7 @@ const Edit = (props) => {
                                                     }`}
                                             >
                                                 <ul className="ebpg-category-filter-list">
-                                                    {JSON.parse(selectedTaxonomyItems).length > 0 &&
-                                                        JSON.parse(selectedTaxonomyItems).map(
+                                                    {parseJsonList(selectedTaxonomyItems).map(
                                                             (catItem, catIndex) => (
                                                                 <li
                                                                     key={catIndex}
@@ -397,10 +436,7 @@ const Edit = (props) => {
 
                                                     //Generate Title
                                                     const title = post?.title?.rendered;
-                                                    const titleWithLimitWords =
-                                                        titleLength >= 0
-                                                            ? title.trim().split(" ", titleLength).join(" ")
-                                                            : title;
+                                                    const titleWithLimitWords = limitWords(title, titleLength);
                                                     const titleHTML = safeHTML(`
                                                         <${titleTag} class="ebpg-entry-title">
                                                             <a class="ebpg-grid-post-link" href="#" title="">
@@ -594,9 +630,7 @@ const Edit = (props) => {
                                                         readtime,
                                                     };
 
-                                                    const headerMetaItems = ebJsonStringCheck(headerMeta)
-                                                        ? JSON.parse(headerMeta).map((item) => item.value)
-                                                        : [];
+                                                    const headerMetaItems = parseJsonList(headerMeta).map((item) => item?.value);
 
                                                     const featuredMetaItemsObj = featuredMetaItems ? JSON.parse(featuredMetaItems) : {};
 
@@ -630,9 +664,7 @@ const Edit = (props) => {
                                                         ""
                                                     );
 
-                                                    const footerMetaItems = ebJsonStringCheck(footerMeta)
-                                                        ? JSON.parse(footerMeta).map((item) => item.value)
-                                                        : [];
+                                                    const footerMetaItems = parseJsonList(footerMeta).map((item) => item?.value);
                                                     const filteredFooterMetaItems = footerMetaItems.filter((item) => {
                                                         return featuredMetaItemsObj[item] !== undefined ? featuredMetaItemsObj[item] : true;
                                                     });
@@ -801,10 +833,7 @@ const Edit = (props) => {
 
                                                     //Generate Title
                                                     const title = post?.title?.rendered;
-                                                    const titleWithLimitWords =
-                                                        titleLength >= 0
-                                                            ? title.trim().split(" ", titleLength).join(" ")
-                                                            : title;
+                                                    const titleWithLimitWords = limitWords(title, titleLength);
                                                     const titleHTML = safeHTML(`
 								<${titleTag} class="ebpg-entry-title">
 									<a class="ebpg-grid-post-link" href="#" title="">
@@ -821,10 +850,7 @@ const Edit = (props) => {
                                                         excerptElement.textContent ||
                                                         excerptElement.innerText ||
                                                         "";
-                                                    const excerptWithLimitWords =
-                                                        contentLength >= 0
-                                                            ? excerpt.trim().split(" ", contentLength).join(" ")
-                                                            : excerpt;
+                                                    const excerptWithLimitWords = limitWords(excerpt, contentLength);
 
                                                     const avatarUrl = (author) => {
                                                         if (author.avatar_urls && author.avatar_urls[96]) {
@@ -998,9 +1024,7 @@ const Edit = (props) => {
                                                         readtime,
                                                     };
 
-                                                    const headerMetaItems = ebJsonStringCheck(headerMeta)
-                                                        ? JSON.parse(headerMeta).map((item) => item.value)
-                                                        : [];
+                                                    const headerMetaItems = parseJsonList(headerMeta).map((item) => item?.value);
 
                                                     const headerMetaHtml = showMeta ? (
                                                         <div className="ebpg-entry-meta ebpg-header-meta">
@@ -1028,9 +1052,7 @@ const Edit = (props) => {
                                                         ""
                                                     );
 
-                                                    const footerMetaItems = ebJsonStringCheck(footerMeta)
-                                                        ? JSON.parse(footerMeta).map((item) => item.value)
-                                                        : [];
+                                                    const footerMetaItems = parseJsonList(footerMeta).map((item) => item?.value);
                                                     const footerMetaHtml = showMeta ? (
                                                         <div className="ebpg-entry-meta ebpg-footer-meta">
                                                             {footerMetaItems.includes("avatar") && avatar}
@@ -1269,10 +1291,7 @@ const Edit = (props) => {
 
                                         //Generate Title
                                         const title = post?.title?.rendered;
-                                        const titleWithLimitWords =
-                                            titleLength >= 0
-                                                ? title.trim().split(" ", titleLength).join(" ")
-                                                : title;
+                                        const titleWithLimitWords = limitWords(title, titleLength);
                                         const titleHTML = `
 								<${titleTag} class="ebpg-entry-title">
 									<a class="ebpg-grid-post-link" href="#" title="">
@@ -1289,10 +1308,7 @@ const Edit = (props) => {
                                             excerptElement.textContent ||
                                             excerptElement.innerText ||
                                             "";
-                                        const excerptWithLimitWords =
-                                            contentLength >= 0
-                                                ? excerpt.trim().split(" ", contentLength).join(" ")
-                                                : excerpt;
+                                        const excerptWithLimitWords = limitWords(excerpt, contentLength);
 
                                         const avatarUrl = (author) => {
                                             if (author.avatar_urls && author.avatar_urls[96]) {
@@ -1464,9 +1480,7 @@ const Edit = (props) => {
                                             readtime,
                                         };
 
-                                        const headerMetaItems = ebJsonStringCheck(headerMeta)
-                                            ? JSON.parse(headerMeta).map((item) => item.value)
-                                            : [];
+                                        const headerMetaItems = parseJsonList(headerMeta).map((item) => item?.value);
 
                                         const headerMetaHtml = showMeta ? (
                                             <div className="ebpg-entry-meta ebpg-header-meta">
@@ -1494,9 +1508,7 @@ const Edit = (props) => {
                                             ""
                                         );
 
-                                        const footerMetaItems = ebJsonStringCheck(footerMeta)
-                                            ? JSON.parse(footerMeta).map((item) => item.value)
-                                            : [];
+                                        const footerMetaItems = parseJsonList(footerMeta).map((item) => item?.value);
                                         const footerMetaHtml = showMeta ? (
                                             <div className="ebpg-entry-meta ebpg-footer-meta">
                                                 {footerMetaItems.includes("avatar") && avatar}

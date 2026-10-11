@@ -33,6 +33,17 @@ p.get-started-footer {
 		height: 20px;
 	}
 
+	.get-started-consent {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		cursor: pointer;
+
+		input[type="checkbox"] {
+			margin: 0;
+		}
+	}
+
 	.get-started-collect-info {
 		text-decoration-line: underline;
 		color: #707E95;

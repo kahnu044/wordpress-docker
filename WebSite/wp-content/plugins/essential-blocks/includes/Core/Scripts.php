@@ -257,6 +257,19 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'image-loaded', 'js/images-loaded.min.js' );
         wpdev_essential_blocks()->assets->register( 'isotope', 'js/isotope.pkgd.min.js' );
         wpdev_essential_blocks()->assets->register( 'eb-animation', 'js/eb-animation-load.js' );
+        if ( ! is_admin() ) {
+            // Animated blocks are saved hidden until eb-animation-load.js
+            // reveals them, and that file's own safety net can't help when the
+            // file never runs (blocked, 404, stripped by an optimizer). This
+            // inline script is printed even then: if the loader hasn't flagged
+            // itself 1.5s after load, show every animated block unanimated.
+            // A "before" script keeps the handle's defer strategy.
+            wp_add_inline_script(
+                'essential-blocks-eb-animation',
+                'window.addEventListener("load",function(){setTimeout(function(){if(window.ebAnimationLoaded){return;}document.querySelectorAll(".eb_animation").forEach(function(e){e.style.visibility="visible";e.style.opacity="1";});},1500);});',
+                'before'
+            );
+        }
         wpdev_essential_blocks()->assets->register( 'animation', 'css/animate.min.css' );
         // Liquid Glass
         wpdev_essential_blocks()->assets->register( 'liquid-glass', 'css/liquid-glass.css' );
@@ -290,8 +303,14 @@ class Scripts
         wpdev_essential_blocks()->assets->register( 'dash', 'js/react-player/dash.all.min.js' );
         wpdev_essential_blocks()->assets->register( 'hls', 'js/react-player/hls.min.js' );
         wpdev_essential_blocks()->assets->register( 'fslightbox-js', 'js/fslightbox.min.js' );
-        // dashicon
-        wp_enqueue_style( 'dashicons' );
+        // Dashicons: admin already ships it with every screen, so keep the
+        // editor surface unchanged. On the frontend it used to load on EVERY
+        // page (59 KB CSS + a webfont, even with zero EB blocks). It is now
+        // enqueued on demand by Core\Block::maybe_enqueue_dashicons() whenever a
+        // rendered block's HTML actually contains a Dashicons class.
+        if ( is_admin() ) {
+            wp_enqueue_style( 'dashicons' );
+        }
         wpdev_essential_blocks()->assets->register( 'controls-frontend', 'admin/controls/frontend-controls.js', [ 'regenerator-runtime','essential-blocks-babel-bundle' ] );
     }
 

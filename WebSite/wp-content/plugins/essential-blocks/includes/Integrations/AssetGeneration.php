@@ -39,9 +39,10 @@ class AssetGeneration extends ThirdPartyIntegration
             wp_send_json_error( $response_data );
         }
 
-        $upload_dir = wp_upload_dir();
-        $base_path  = $upload_dir[ 'basedir' ];
-        self::remove_directory_files( $base_path . '/eb-style' );
+        // Same routine the plugin-update path uses: marks every generated file
+        // stale (rewritten on its next render) AND resets the reusable-block
+        // option derived from them.
+        \EssentialBlocks\Modules\StyleHandler::init()->regenerate_all_assets();
         $response_data = [
             'messsage' => __( 'Successfully saved data!', 'essential-blocks' )
          ];
