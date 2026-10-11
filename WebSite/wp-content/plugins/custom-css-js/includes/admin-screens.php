@@ -345,10 +345,9 @@ class CustomCSSandJS_Admin {
 		}
 		?>
 	<div class="updated buttons">
-	<a href="post-new.php?post_type=custom-css-js&language=css" class="custom-btn custom-css-btn"><?php _e( 'Add CSS code', 'custom-css-js' ); ?></a>
-	<a href="post-new.php?post_type=custom-css-js&language=js" class="custom-btn custom-js-btn"><?php _e( 'Add JS code', 'custom-css-js' ); ?></a>
-	<a href="post-new.php?post_type=custom-css-js&language=html" class="custom-btn custom-js-btn"><?php _e( 'Add HTML code', 'custom-css-js' ); ?></a>
-		<!-- a href="post-new.php?post_type=custom-css-js&language=php" class="custom-btn custom-php-btn">Add PHP code</a -->
+	<a href="post-new.php?post_type=custom-css-js&language=css" class="custom-btn custom-css-btn"><?php esc_html_e( 'Add CSS code', 'custom-css-js' ); ?></a>
+	<a href="post-new.php?post_type=custom-css-js&language=js" class="custom-btn custom-js-btn"><?php esc_html_e( 'Add JS code', 'custom-css-js' ); ?></a>
+	<a href="post-new.php?post_type=custom-css-js&language=html" class="custom-btn custom-js-btn"><?php esc_html_e( 'Add HTML code', 'custom-css-js' ); ?></a>
 	</div>
 		<?php
 	}
@@ -363,9 +362,9 @@ class CustomCSSandJS_Admin {
 			'cb'        => '<input type="checkbox" />',
 			'active'    => '<span class="ccj-dashicons dashicons dashicons-star-empty" title="' . __( 'Active', 'custom-css-js' ) . '"></span>',
 			'type'      => __( 'Type', 'custom-css-js' ),
-			'name'      => __( 'Title' ),
-			'author'    => __( 'Author' ),
-			'published' => __( 'Published' ),
+			'name'      => __( 'Title', 'custom-css-js' ),
+			'author'    => __( 'Author', 'custom-css-js' ),
+			'published' => __( 'Published', 'custom-css-js' ),
 			'modified'  => __( 'Modified', 'custom-css-js' ),
 		);
 	}
@@ -388,21 +387,25 @@ class CustomCSSandJS_Admin {
 			$post      = get_post( $post_id );
 			$edit_link = get_edit_post_link( $post_id );
 			$title     = _draft_or_post_title( $post_id );
-			echo '<strong><a class="row-title" href="' . esc_url( $edit_link ) . '">' . esc_html( $title ) . '</a>';
-				_post_states( $post );
-			echo '</strong>';
+			?>
+			<strong>
+				<a class="row-title" href="<?php echo esc_url( $edit_link ); ?>"><?php echo esc_html( $title ); ?></a>
+				<?php _post_states( $post ); ?>
+			</strong>
+			<?php
 		}
 
-		if ( 'type' === $column ) {
+		if ( 'type' === $column ) :
 			$options = $this->get_options( $post_id );
-			echo '<span class="language language-' . $options['language'] . '">' . $options['language'] . '</span>';
-		}
+			?>
+			<span class="language language-<?php echo esc_attr( $options['language'] ); ?>"><?php echo esc_attr( $options['language'] ); ?></span>
+		<?php endif;
 
 		if ( 'modified' === $column || 'published' === $column ) {
 			$post = get_post( $post_id );
 
 			if ( '0000-00-00 00:00:00' === $post->post_date ) {
-				$t_time    = __( 'Unpublished' );
+				$t_time    = __( 'Unpublished', 'custom-css-js' );
 				$h_time    = $t_time;
 				$time_diff = 0;
 			} else {
@@ -411,13 +414,13 @@ class CustomCSSandJS_Admin {
 
 				if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
 					/* translators: %s: Human-readable time difference. */
-					$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
+					$h_time = sprintf( __( '%s ago', 'custom-css-js' ), human_time_diff( $time ) );
 				} else {
 					$h_time = ( 'published' === $column ) ? get_the_time( __( 'Y/m/d' ), $post ) : get_the_modified_time( __( 'Y/m/d' ), $post );
 				}
 			}
 
-			 echo $h_time;
+			 echo esc_html( $h_time );
 		}
 
 		if ( 'active' === $column ) {
@@ -429,9 +432,11 @@ class CustomCSSandJS_Admin {
 				$active_title = __( 'The code is inactive. Click to activate it', 'custom-css-js' );
 				$active_icon  = 'dashicons-star-empty ccj_row';
 			}
-			echo '<a href="' . esc_url( $url ) . '" class="ccj_activate_deactivate" data-code-id="' . $post_id . '" title="' . $active_title . '">' .
-				'<span class="dashicons ' . $active_icon . '"></span>' .
-				'</a>';
+			?>	
+			<a href="<?php echo esc_url( $url ); ?>" class="ccj_activate_deactivate" data-code-id="<?php echo esc_attr( $post_id ); ?>" title="<?php echo esc_html( $active_title ); ?>">
+				<span class="dashicons <?php echo esc_attr( $active_icon ); ?>"></span>
+			</a>
+			<?php
 		}
 	}
 
@@ -506,14 +511,15 @@ class CustomCSSandJS_Admin {
 			'html' => __( 'HTML Codes', 'custom-css-js' ),
 		);
 
-		echo '<label class="screen-reader-text" for="custom-css-js-filter">' . esc_html__( 'Filter Code Type', 'custom-css-js' ) . '</label>';
-		echo '<select name="language_filter" id="custom-css-js-filter">';
-		echo '<option  value="">' . __( 'All Custom Codes', 'custom-css-js' ) . '</option>';
-		foreach ( $languages as $_lang => $_label ) {
-			$selected = selected( filter_input( INPUT_GET, 'language_filter' ), $_lang, false );
-			echo '<option ' . $selected . ' value="' . $_lang . '">' . $_label . '</option>';
-		}
-		echo '</select>';
+		?>
+		<label class="screen-reader-text" for="custom-css-js-filter"><?php esc_html_e( 'Filter Code Type', 'custom-css-js' ); ?></label>
+		<select name="language_filter" id="custom-css-js-filter">
+		<option  value=""><?php esc_html_e( 'All Custom Codes', 'custom-css-js' ); ?></option>
+		<?php foreach ( $languages as $_lang => $_label ) : ?>
+		<option <?php echo esc_attr( selected( filter_input( INPUT_GET, 'language_filter' ), $_lang, false ) ); ?>  value="<?php echo esc_attr( $_lang ); ?>"><?php echo esc_html( $_label ); ?></option>
+		<?php endforeach; ?>
+		</select>
+		<?php
 	}
 
 
@@ -582,6 +588,10 @@ class CustomCSSandJS_Admin {
 			die();
 		}
 
+		if ( ! ( current_user_can('edit_custom_css') || current_user_can('edit_custom_csss') || current_user_can('edit_others_custom_csss') ) ) {
+			die();
+		}
+
 		$code_id = absint( $_GET['code_id'] );
 
 		$response = 'error';
@@ -595,7 +605,7 @@ class CustomCSSandJS_Admin {
 				$this->build_search_tree();
 			}
 		}
-		echo $active;
+		echo esc_html( $active );
 
 		die();
 	}
@@ -617,10 +627,10 @@ class CustomCSSandJS_Admin {
 		<script type="text/javascript">
 			 /* <![CDATA[ */
 			jQuery(window).ready(function($){
-				var h1 = '<?php _e( 'Custom Code', 'custom-css-js' ); ?> ';
-				h1 += '<a href="post-new.php?post_type=custom-css-js&language=css" class="page-title-action"><?php _e( 'Add CSS Code', 'custom-css-js' ); ?></a>';
-				h1 += '<a href="post-new.php?post_type=custom-css-js&language=js" class="page-title-action"><?php _e( 'Add JS Code', 'custom-css-js' ); ?></a>';
-				h1 += '<a href="post-new.php?post_type=custom-css-js&language=html" class="page-title-action"><?php _e( 'Add HTML Code', 'custom-css-js' ); ?></a>';
+				var h1 = '<?php esc_html_e( 'Custom Code', 'custom-css-js' ); ?> ';
+				h1 += '<a href="post-new.php?post_type=custom-css-js&language=css" class="page-title-action"><?php esc_html_e( 'Add CSS Code', 'custom-css-js' ); ?></a> ';
+				h1 += '<a href="post-new.php?post_type=custom-css-js&language=js" class="page-title-action"><?php esc_html_e( 'Add JS Code', 'custom-css-js' ); ?></a> ';
+				h1 += '<a href="post-new.php?post_type=custom-css-js&language=html" class="page-title-action"><?php esc_html_e( 'Add HTML Code', 'custom-css-js' ); ?></a>';
 				$("#wpbody-content h1").html(h1);
 			});
 
@@ -636,32 +646,9 @@ class CustomCSSandJS_Admin {
 
 		$this->remove_unallowed_metaboxes();
 
-		$strings = array(
-			'Add CSS Code'   => __( 'Add CSS Code', 'custom-css-js' ),
-			'Add JS Code'    => __( 'Add JS Code', 'custom-css-js' ),
-			'Add HTML Code'  => __( 'Add HTML Code', 'custom-css-js' ),
-			'Edit CSS Code'  => __( 'Edit CSS Code', 'custom-css-js' ),
-			'Edit JS Code'   => __( 'Edit JS Code', 'custom-css-js' ),
-			'Edit HTML Code' => __( 'Edit HTML Code', 'custom-css-js' ),
-		);
-
-		if ( isset( $_GET['post'] ) ) {
-			$action  = 'Edit';
-			$post_id = esc_attr( $_GET['post'] );
-		} else {
-			$action  = 'Add';
-			$post_id = false;
-		}
+		$post_id  = ( isset( $_GET['post'] ) ) ? esc_attr( $_GET['post'] ) : false;
+		$action   = ( isset( $_GET['post'] ) ) ? __( 'Edit %s code', 'custom-css-js' ) : __( 'Add %s code', 'custom-css-js' ); 
 		$language = $this->get_language( $post_id );
-
-		$title = $action . ' ' . strtoupper( $language ) . ' Code';
-		$title = ( isset( $strings[ $title ] ) ) ? $strings[ $title ] : $strings['Add CSS Code'];
-
-		if ( $action == 'Edit' ) {
-			$title .= ' <a href="post-new.php?post_type=custom-css-js&language=css" class="page-title-action">' . __( 'Add CSS Code', 'custom-css-js' ) . '</a> ';
-			$title .= '<a href="post-new.php?post_type=custom-css-js&language=js" class="page-title-action">' . __( 'Add JS Code', 'custom-css-js' ) . '</a>';
-			$title .= '<a href="post-new.php?post_type=custom-css-js&language=html" class="page-title-action">' . __( 'Add HTML Code', 'custom-css-js' ) . '</a>';
-		}
 
 		?>
 		<style type="text/css">
@@ -672,8 +659,14 @@ class CustomCSSandJS_Admin {
 		<script type="text/javascript">
 			 /* <![CDATA[ */
 			jQuery(window).ready(function($){
-				$("#wpbody-content h1").html('<?php echo $title; ?>');
-				$("#message.updated.notice").html('<p><?php _e( 'Code updated', 'custom-css-js' ); ?></p>');
+				$("#wpbody-content h1").html(
+					'<?php echo esc_html( sprintf( $action, strtoupper( $language ) ) ); ?>'
+					<?php if ( $post_id != false ) : ?>
+					+ '<a href="post-new.php?post_type=custom-css-js&language=css" class="page-title-action"><?php esc_html_e( 'Add CSS Code', 'custom-css-js' ); ?></a>'
+					+ '<a href="post-new.php?post_type=custom-css-js&language=js" class="page-title-action"><?php esc_html_e( 'Add JS Code', 'custom-css-js' ); ?></a>'
+					+ '<a href="post-new.php?post_type=custom-css-js&language=html" class="page-title-action"><?php esc_html_e( 'Add HTML Code', 'custom-css-js' ); ?></a>'
+					<?php endif; ?>);
+				$("#message.updated.notice").html('<p><?php esc_html_e( 'Code updated', 'custom-css-js' ); ?></p>');
 
 				var from_top = -$("#normal-sortables").height();
 				if ( from_top != 0 ) {
@@ -856,48 +849,50 @@ End of comment */ ',
 		?>
 
 				<div class="code-mirror-buttons">
-				<div class="button-left"><span rel="tipsy" original-title="<?php _e( 'Beautify Code', 'custom-css-js' ); ?>"><button type="button" tabindex="-1" id="ccj-beautifier"><i class="ccj-i-beautifier"></i></button></span></div>
-				<!--div class="button-left"><span rel="tipsy" original-title="<?php _e( 'Editor Settings', 'custom-css-js' ); ?>"><button type="button" tabindex="-1" id="ccj-settings"><i class="ccj-i-settings"></i></button></span></div -->
-				<div class="button-right" id="ccj-fullscreen-button" alt="<?php _e( 'Distraction-free writing mode', 'custom-css-js' ); ?>"><span rel="tipsy" original-title="<?php _e( 'Fullscreen', 'custom-css-js' ); ?>"><button role="presentation" type="button" tabindex="-1"><i class="ccj-i-fullscreen"></i></button></span></div>
+				<div class="button-left"><span rel="tipsy" original-title="<?php esc_html_e( 'Beautify Code', 'custom-css-js' ); ?>"><button type="button" tabindex="-1" id="ccj-beautifier"><i class="ccj-i-beautifier"></i></button></span></div>
+				<!--div class="button-left"><span rel="tipsy" original-title="<?php esc_html_e( 'Editor Settings', 'custom-css-js' ); ?>"><button type="button" tabindex="-1" id="ccj-settings"><i class="ccj-i-settings"></i></button></span></div -->
+				<div class="button-right" id="ccj-fullscreen-button" alt="<?php esc_html_e( 'Distraction-free writing mode', 'custom-css-js' ); ?>"><span rel="tipsy" original-title="<?php esc_html_e( 'Fullscreen', 'custom-css-js' ); ?>"><button role="presentation" type="button" tabindex="-1"><i class="ccj-i-fullscreen"></i></button></span></div>
 <input type="hidden" name="fullscreen" id="ccj-fullscreen-hidden" value="false" />
-<!-- div class="button-right" id="ccj-search-button" alt="Search"><button role="presentation" type="button" tabindex="-1"><i class="ccj-i-find"></i></button></div -->
-
 				</div>
 
-				<div class="code-mirror-before"><div class="code-mirror-before-<?php echo esc_attr($language); ?>"><?php echo htmlentities( $code_mirror_before ); ?></div></div>
-				<textarea class="wp-editor-area" id="ccj_content" mode="<?php echo htmlentities( $code_mirror_mode ); ?>" name="content" autofocus><?php echo $post->post_content; ?></textarea>
-				<div class="code-mirror-after"><div class="code-mirror-after-<?php echo esc_attr($language); ?>"><?php echo htmlentities( $code_mirror_after ); ?></div></div>
+				<div class="code-mirror-before">
+					<div class="code-mirror-before-<?php echo esc_attr($language); ?>"><?php echo esc_html( $code_mirror_before ); ?></div>
+				</div>
+				<textarea class="wp-editor-area" id="ccj_content" mode="<?php echo esc_attr( $code_mirror_mode ); ?>" name="content" autofocus><?php echo esc_html($post->post_content); ?></textarea>
+				<div class="code-mirror-after">
+					<div class="code-mirror-after-<?php echo esc_attr($language); ?>"><?php echo esc_html( $code_mirror_after ); ?></div>
+				</div>
 
 				<table id="post-status-info"><tbody><tr>
 					<td class="autosave-info">
 					<span class="autosave-message">&nbsp;</span>
-				<?php
-				if ( 'auto-draft' != $post->post_status ) {
-					echo '<span id="last-edit">';
+				<?php if ( 'auto-draft' != $post->post_status ) : ?>
+					<span id="last-edit">
+					<?php
 					if ( $last_user = get_userdata( get_post_meta( $post->ID, '_edit_last', true ) ) ) {
 						printf(
 							/* translators: 1: display_name of the curren user, 2: date, 3: time. */
-							__( 'Last edited by %1$s on %2$s at %3$s', 'custom-css-js' ),
+							esc_html( 'Last edited by %1$s on %2$s at %3$s', 'custom-css-js' ),
 							esc_html( $last_user->display_name ),
-							mysql2date( get_option( 'date_format' ), $post->post_modified ),
-							mysql2date( get_option( 'time_format' ), $post->post_modified )
+							esc_html( mysql2date( get_option( 'date_format' ), $post->post_modified ) ),
+							esc_html( mysql2date( get_option( 'time_format' ), $post->post_modified ) )
 						);
 					} else {
 						printf(
 							/* translators: 1: display_name of the curren user, 2: time. */
-							__( 'Last edited on %1$s at %2$s', 'custom-css-js' ),
-							mysql2date( get_option( 'date_format' ), $post->post_modified ),
-							mysql2date( get_option( 'time_format' ), $post->post_modified )
+							esc_html( 'Last edited on %1$s at %2$s', 'custom-css-js' ),
+							esc_html( mysql2date( get_option( 'date_format' ), $post->post_modified ) ),
+							esc_html( mysql2date( get_option( 'time_format' ), $post->post_modified ) )
 						);
 					}
-					echo '</span>';
-				}
-				?>
+					?>
+					</span>
+					<?php endif; ?>
 					</td>
 				</tr></tbody></table>
 
 
-				<input type="hidden" id="update-post_<?php echo $post->ID; ?>" value="<?php echo wp_create_nonce( 'update-post_' . $post->ID ); ?>" />
+				<input type="hidden" id="update-post_<?php echo esc_attr( $post->ID ); ?>" value="<?php echo esc_attr( wp_create_nonce( 'update-post_' . $post->ID ) ); ?>">
 		<?php
 
 	}
@@ -929,39 +924,33 @@ End of comment */ ',
 
 		?>
 			<div class="options_meta_box">
-			<?php
-
-			$output = '';
-
-			foreach ( $meta as $_key => $a ) {
+			<?php foreach ( $meta as $_key => $a ) :
 				$close_div = false;
 
 				if ( ( $_key == 'preprocessor' && $options['language'] == 'css' ) ||
 					( $_key == 'linking' && $options['language'] == 'html' ) ||
 					in_array( $_key, ['priority', 'minify', 'multisite' ] ) ) {
 					$close_div = true;
-					$output   .= '<div class="ccj_opaque">';
+					?>
+					<div class="ccj_opaque">
+					<?php
 				}
 
-				// Don't show Pre-processors for JavaScript Codes
 				if ( $options['language'] == 'js' && $_key == 'preprocessor' ) {
 					continue;
 				}
+				?>
 
-				$output .= '<h3>' . esc_attr( $a['title'] ) . '</h3>' . PHP_EOL;
+				<h3><?php echo esc_html( $a['title'] ); ?></h3>
 
-				$output .= $this->render_input( $_key, $a, $options );
+				<?php $this->render_input( $_key, $a, $options );
 
-				if ( $close_div ) {
-					$output .= '</div>';
-				}
-			}
+				if ( $close_div ) { ?>
+					</div>
+				<?php }
+			endforeach; ?>
 
-			echo $output;
-
-			?>
-
-			<input type="hidden" name="custom_code_language" value="<?php echo $options['language']; ?>" />
+			<input type="hidden" name="custom_code_language" value="<?php echo esc_attr( $options['language'] ); ?>">
 
 			<div style="clear: both;"></div>
 
@@ -969,7 +958,7 @@ End of comment */ ',
 
 			<div class="ccj_only_premium ccj_only_premium-right">
 				<div>
-				<a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e( 'This section is available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js' ); ?></a>
+				<a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e( 'This section is available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js' ); // phpcs:ignore  WordPress.Security.EscapeOutput.UnsafePrintingFunction ?></a>
 				</div>
 			</div>
 
@@ -1358,11 +1347,11 @@ End of comment */ ',
 			 <p><?php
 					printf(
 						/* translators: %s: folder name. */
-						__( 'The %s directory could not be created', 'custom-css-js' ),
+						esc_html( 'The %s directory could not be created', 'custom-css-js' ),
 						'<b>custom-css-js</b>'
 					);
 				?></p>
-			 <p><?php _e( 'Please run the following commands in order to make the directory', 'custom-css-js' ); ?>: <br /><strong>mkdir <?php echo $dir; ?>; </strong><br /><strong>chmod 777 <?php echo $dir; ?>;</strong></p>
+			 <p><?php esc_html_e( 'Please run the following commands in order to make the directory', 'custom-css-js' ); ?>: <br /><strong>mkdir <?php echo esc_html( $dir ); ?>; </strong><br /><strong>chmod 777 <?php echo esc_html( $dir ); ?>;</strong></p>
 			</div>
 			<?php
 			return;
@@ -1375,11 +1364,11 @@ endif;
 			 <p><?php
 					printf(
 						/* translators: %s: folder name. */
-						__( 'The %s directory is not writable, therefore the CSS and JS files cannot be saved.', 'custom-css-js' ),
-						'<b>' . $dir . '</b>'
+						esc_html( 'The %s directory is not writable, therefore the CSS and JS files cannot be saved.', 'custom-css-js' ),
+						'<b>' . esc_html( $dir ) . '</b>'
 					);
 				?></p>
-			 <p><?php _e( 'Please run the following command to make the directory writable', 'custom-css-js' ); ?>:<br /><strong>chmod 777 <?php echo $dir; ?> </strong></p>
+			 <p><?php esc_html_e( 'Please run the following command to make the directory writable', 'custom-css-js' ); ?>:<br /><strong>chmod 777 <?php echo esc_html( $dir ); ?> </strong></p>
 			</div>
 			<?php
 			return;
@@ -1500,59 +1489,56 @@ endif;
 	 */
 	function render_input( $_key, $a, $options ) {
 		$name   = 'custom_code_' . $_key;
-		$output = '';
 
 		// Show radio type options
 		if ( $a['type'] === 'radio' ) {
-			$output .= '<div class="radio-group">' . PHP_EOL;
-			foreach ( $a['values'] as $__key => $__value ) {
+			?>
+			<div class="radio-group">
+			<?php foreach ( $a['values'] as $__key => $__value ) : 
 				$id        = $name . '-' . $__key;
 				$dashicons = isset( $__value['dashicon'] ) ? 'dashicons-before dashicons-' . $__value['dashicon'] : '';
-				$selected  = ( isset( $a['disabled'] ) && $a['disabled'] ) ? ' disabled="disabled"' : '';
-				$selected .= ( $__key == $options[ $_key ] ) ? ' checked="checked" ' : '';
-				$output   .= '<input type="radio" ' . $selected . 'value="' . $__key . '" name="' . $name . '" id="' . $id . '">' . PHP_EOL;
-				$output   .= '<label class="' . $dashicons . '" for="' . $id . '"> ' . esc_attr( $__value['title'] ) . '</label><br />' . PHP_EOL;
-			}
-			$output .= '</div>' . PHP_EOL;
+				?>
+				<input type="radio"<?php checked( $__key == $options[ $_key ] ); disabled( isset( $a['disabled'] ) && $a['disabled'] ); ?> value="<?php echo esc_attr( $__key ); ?>" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>">
+				<label class="<?php echo esc_attr( $dashicons ); ?>" for="<?php echo esc_attr( $id ); ?>">
+					<?php echo esc_attr( $__value['title'] ) ; ?>
+				</label><br />
+			<?php endforeach; ?>
+			</div>
+			<?php
 		}
 
 		// Show checkbox type options
 		if ( $a['type'] == 'checkbox' ) {
-			$output .= '<div class="radio-group">' . PHP_EOL;
-			if ( isset( $a['values'] ) && count( $a['values'] ) > 0 ) {
+			?>
+			<div class="radio-group">
+			<?php if ( isset( $a['values'] ) && count( $a['values'] ) > 0 ) :
 				$current_values = explode(',', $options[ $_key ] );
 				foreach ( $a['values'] as $__key => $__value ) {
 					$id        = $name . '-' . $__key;
 					$dashicons = isset( $__value['dashicon'] ) ? 'dashicons-before dashicons-' . $__value['dashicon'] : '';
-					$selected  = ( isset( $a['disabled'] ) && $a['disabled'] ) ? ' disabled="disabled"' : '';
-					$selected .= ( in_array( $__key, $current_values ) ) ? ' checked="checked" ' : '';
-					$output   .= '<input type="checkbox" ' . $selected . ' value="1" name="' . $id . '" id="' . $id . '">' . PHP_EOL;
-					$output   .= '<label class="' . $dashicons . '" for="' . $id . '"> ' . $__value['title'] . '</label><br />' . PHP_EOL;
-				}
-			} else {
+					?>
+					<input type="checkbox" <?php checked( in_array( $__key, $current_values ) ); disabled( isset( $a['disabled'] ) && $a['disabled'] );  ?> value="1" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>">
+					<label class="<?php echo esc_attr( $dashicons ); ?>" for="<?php echo esc_attr( $id ); ?>"> <?php echo esc_html( $__value['title'] ); ?></label><br />
+				<?php }
+			else :
 				$dashicons = isset( $a['dashicon'] ) ? 'dashicons-before dashicons-' . $a['dashicon'] : '';
-				$selected  = ( isset( $options[ $_key ] ) && $options[ $_key ] == '1' ) ? ' checked="checked" ' : '';
-				$selected .= ( isset( $a['disabled'] ) && $a['disabled'] ) ? ' disabled="disabled"' : '';
-				$output   .= '<input type="checkbox" ' . $selected . ' value="1" name="' . $name . '" id="' . $name . '">' . PHP_EOL;
-				$output   .= '<label class="' . $dashicons . '" for="' . $name . '"> ' . $a['title'] . '</label>' . PHP_EOL;
-			}
-			$output .= '</div>' . PHP_EOL;
-		}
+				?>
+				<input type="checkbox" <?php checked( isset( $options[ $_key ] ) && $options[ $_key ] == '1' ); disabled( isset( $a['disabled'] ) && $a['disabled'] ); ?> value="1" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>">
+				<label class="<?php echo esc_attr( $dashicons ); ?>" for="<?php echo esc_attr( $name ); ?>"> <?php echo esc_html( $a['title'] ); ?></label>
+			<?php endif; ?>
+			</div>
+		<?php }
 
 		// Show select type options
-		if ( $a['type'] == 'select' ) {
-			$output .= '<div class="radio-group">' . PHP_EOL;
-			$output .= '<select name="' . $name . '" id="' . $name . '">' . PHP_EOL;
-			foreach ( $a['values'] as $__key => $__value ) {
-				$selected = ( isset( $options[ $_key ] ) && $options[ $_key ] == $__key ) ? ' selected="selected"' : '';
-				$output  .= '<option value="' . $__key . '"' . $selected . '>' . esc_attr( $__value ) . '</option>' . PHP_EOL;
-			}
-			$output .= '</select>' . PHP_EOL;
-			$output .= '</div>' . PHP_EOL;
-		}
-
-		return $output;
-
+		if ( $a['type'] == 'select' ) { ?>
+			<div class="radio-group">
+			<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>">
+			<?php foreach ( $a['values'] as $__key => $__value ) { ?>
+				<option value="<?php echo esc_attr( $__key ); ?>"<?php selected( isset( $options[ $_key ] ) && $options[ $_key ] == $__key ); ?>><?php echo esc_html( $__value ); ?></option>
+			<?php } ?>
+			</select>
+			</div>
+		<?php }
 	}
 
 
@@ -1590,7 +1576,7 @@ endif;
 			$active_title = __( 'The code is inactive. Click to activate it', 'custom-css-js' );
 			$active_text  = __( 'Activate', 'custom-css-js' );
 		}
-		$actions['activate'] = '<a href="' . esc_url( $url ) . '" title="' . $active_title . '" class="ccj_activate_deactivate" data-code-id="' . $post->ID . '">' . $active_text . '</a>';
+		$actions['activate'] = '<a href="' . esc_url( $url ) . '" title="' . esc_html( $active_title ) . '" class="ccj_activate_deactivate" data-code-id="' . esc_attr( $post->ID ) . '">' . esc_html( $active_text ) . '</a>';
 
 		return $actions;
 	}
@@ -1624,8 +1610,8 @@ endif;
 			$action = __( 'Activate', 'custom-css-js' );
 		}
 		?>
-		<div id="activate-action"><span style="font-weight: bold;"><?php echo $text; ?></span>
-		(<a class="ccj_activate_deactivate" data-code-id="<?php echo $post->ID; ?>" href="<?php echo esc_url( $url ); ?>"><?php echo $action; ?></a>)
+		<div id="activate-action"><span style="font-weight: bold;"><?php echo esc_html( $text ); ?></span>
+		(<a class="ccj_activate_deactivate" data-code-id="<?php echo esc_attr( $post->ID ); ?>" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $action ); ?></a>)
 		</div>
 		<?php
 	}
@@ -1678,7 +1664,7 @@ endif;
 				<strong>Permalink:</strong>
 				<span id="sample-permalink"><a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( CCJ_UPLOAD_URL ) . '/'; ?><span id="editable-post-name"><?php echo esc_html( $filename ); ?></span>.<?php echo esc_html( $filetype ); ?></a></span>
 				&lrm;<span id="ccj-edit-slug-buttons"><button type="button" class="ccj-edit-slug button button-small hide-if-no-js" aria-label="Edit permalink">Edit</button></span>
-				<span id="editable-post-name-full" data-filetype="<?php echo $filetype; ?>"><?php echo esc_html( $filename ); ?></span>
+				<span id="editable-post-name-full" data-filetype="<?php echo esc_attr( $filetype ); ?>"><?php echo esc_html( $filename ); ?></span>
 			</div>
 			<?php wp_nonce_field( 'ccj-permalink', 'ccj-permalink-nonce' ); ?>
 		</div>
@@ -1697,6 +1683,10 @@ endif;
 
 		if ( ! wp_verify_nonce( $_POST['ccj_permalink_nonce'], 'ccj-permalink' ) ) {
 			return;
+		}
+
+		if ( ! ( current_user_can('edit_custom_css') || current_user_can('edit_custom_csss') || current_user_can('edit_others_custom_csss') ) ) {
+			die();
 		}
 
 		$code_id   = isset( $_POST['code_id'] ) ? intval( $_POST['code_id'] ) : 0;

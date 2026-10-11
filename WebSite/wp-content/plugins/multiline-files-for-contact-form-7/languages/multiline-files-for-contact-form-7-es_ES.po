@@ -257,3 +257,67 @@ msgstr "La compresión de los archivos falla por alguna razón"
 #. Author of the plugin
 msgid "Zluck Solutions"
 msgstr "Soluciones Zluck "
+
+#: multiline-admin.php
+msgid "MFCF7 Feedback"
+msgstr "Comentarios de MFCF7"
+
+#: multiline-admin.php
+msgid "If you have a moment, please let us know why you are deactivating:"
+msgstr "Si tienes un momento, cuéntanos por qué lo desactivas:"
+
+#: multiline-admin.php
+msgid "I found a better plugin"
+msgstr "Encontré un plugin mejor"
+
+#: multiline-admin.php
+msgid "This plugin does not work on my site"
+msgstr "Este plugin no funciona en mi sitio"
+
+#: multiline-admin.php
+msgid "Design is outdated, difficult to navigate"
+msgstr "El diseño está anticuado y es difícil de usar"
+
+#: multiline-admin.php
+msgid "It's just temporary. I will be back soon"
+msgstr "Es solo temporal. Volveré pronto"
+
+#: multiline-admin.php
+msgid "It is not what I am looking for"
+msgstr "No es lo que estoy buscando"
+
+#: multiline-admin.php
+msgid "I am finding it difficult to configure it as per my needs"
+msgstr "Me resulta difícil configurarlo según mis necesidades"
+
+#: multiline-admin.php
+msgid "Other"
+msgstr "Otro"
+
+#: multiline-admin.php
+msgid "Enter your reason(please specify)"
+msgstr "Escribe tu motivo (por favor, especifica)"
+
+#: multiline-admin.php
+msgid "You can contact me by email about my feedback (this also shares my email and website address)."
+msgstr "Podéis contactarme por correo electrónico sobre mis comentarios (esto también comparte mi correo electrónico y la dirección de mi sitio web)."
+
+#: multiline-admin.php
+msgid "When you click \"Submit & Deactivate\", the reason you chose is sent to Zluck Solutions (through Google Forms) to help us improve the plugin. Your email and website address are sent only if you tick the box above. Nothing is sent if you click \"Cancel & Deactivate\" or close this window."
+msgstr "Al hacer clic en \"Enviar y desactivar\", el motivo que elegiste se envía a Zluck Solutions (a través de Google Forms) para ayudarnos a mejorar el plugin. Tu correo electrónico y la dirección de tu sitio web solo se envían si marcas la casilla de arriba. No se envía nada si haces clic en \"Cancelar y desactivar\" o cierras esta ventana."
+
+#: multiline-admin.php
+msgid "Plugin privacy details"
+msgstr "Detalles de privacidad del plugin"
+
+#: multiline-admin.php
+msgid "Google Privacy Policy"
+msgstr "Política de privacidad de Google"
+
+#: multiline-admin.php
+msgid "Submit & Deactivate"
+msgstr "Enviar y desactivar"
+
+#: multiline-admin.php
+msgid "Cancel & Deactivate"
+msgstr "Cancelar y desactivar"

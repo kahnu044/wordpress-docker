@@ -1,14 +1,16 @@
 <?php
 
 /**
- * Plugin Name: MultiLine files for Contact Form 7
+ * Plugin Name: MultiLine Files for Contact Form 7
  * Description: Upload unlimited files one by one to contact form 7
  * Plugin URI: https://wordpress.org/plugins/multiline-files-for-contact-form-7/
- * Version: 3.1.0
+ * Version: 3.1.1
  * Author: Zluck Solutions
  * Author URI: https://profiles.wordpress.org/zluck
- * Text Domain: zl-mfcf7
+ * Text Domain: multiline-files-for-contact-form-7
  * Domain Path: /languages
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 /**
  ** base class for [multilinefile] and [multilinefile*]
@@ -19,6 +21,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+define('MFCF7_ZL_VERSION', '3.1.1');
+
 // Include the deactivation handler
 require_once plugin_dir_path(__FILE__) . 'multiline-admin.php';
 
@@ -28,13 +32,13 @@ if (!function_exists('is_plugin_active')) {
 
 //check contact form installation 
 if (is_plugin_active('contact-form-7/wp-contact-form-7.php')) {
-	$latest_contact_form_7new = false;
+	$mfcf7_zl_latest_contact_form_7new = false;
 	if ((float)WPCF7_VERSION >= 5.6) {
-		$latest_contact_form_7new  = true;
+		$mfcf7_zl_latest_contact_form_7new  = true;
 	}
 } else {
 	add_action('admin_notices', 'mfcf7_zl_warning_if_cf7_deactivated');
-	$latest_contact_form_7new = true;
+	$mfcf7_zl_latest_contact_form_7new = true;
 }
 
 // This code display warning when user active plugin without contact form 7
@@ -45,14 +49,15 @@ function mfcf7_zl_warning_if_cf7_deactivated()
 		  </div>';
 	deactivate_plugins(plugin_basename(__FILE__));
 	//print_r($_GET);
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only checks/clears the default "activate" query var to suppress WordPress's own activation notice; nothing is read as data or stored.
 	if (isset($_GET['activate'])) {
 		unset($_GET['activate']);
 	}
 }
 
-$latest_contact_form_7 = false;
+$mfcf7_zl_latest_contact_form_7 = false;
 if (function_exists('wpcf7_add_form_tag')) {
-	$latest_contact_form_7 = true;
+	$mfcf7_zl_latest_contact_form_7 = true;
 }
 $mfcf7_btn_tag_name = 'zl-mfcf7-upld-btn';
 /* Register activation hook. */
@@ -84,7 +89,7 @@ function mfcf7_zl_plugin_deactivation_notice()
 {
 ?>
 	<div class="notice notice-success is-dismissible">
-		<p><?php echo esc_html__('Plugin deactivated successfully.', 'zl-mfcf7'); ?></p>
+		<p><?php echo esc_html__('Plugin deactivated successfully.', 'multiline-files-for-contact-form-7'); ?></p>
 	</div>
 <?php
 }
@@ -109,20 +114,20 @@ function mfcf7_zl_admin_notice_activation_hook()
 add_action('wp_enqueue_scripts', 'mfcf7_zl_multiline_files_enqueue_script');
 function mfcf7_zl_multiline_files_enqueue_script()
 {
-	wp_enqueue_script('mfcf7_zl_multiline_files_script', plugin_dir_url(__FILE__) . 'js/zl-multine-files.js', array('jquery'));
+	wp_enqueue_script('mfcf7_zl_multiline_files_script', plugin_dir_url(__FILE__) . 'js/zl-multine-files.js', array('jquery'), MFCF7_ZL_VERSION, true);
 }
 add_action('wp_enqueue_scripts', 'mfcf7_zl_plugin_button_style');
 function mfcf7_zl_plugin_button_style()
 {
-	wp_enqueue_style('mfcf7_zl_button_style', plugin_dir_url(__FILE__) . 'css/style.css?12');
+	wp_enqueue_style('mfcf7_zl_button_style', plugin_dir_url(__FILE__) . 'css/style.css', array(), MFCF7_ZL_VERSION);
 }
 
 /* Define Shortcode handler */
 add_action('wpcf7_init', 'mfcf7_zl_add_shortcode_multilinefile');
 function mfcf7_zl_add_shortcode_multilinefile()
 {
-	// global $latest_contact_form_7;
-	// if ($latest_contact_form_7)
+	// global $mfcf7_zl_latest_contact_form_7;
+	// if ($mfcf7_zl_latest_contact_form_7)
 	wpcf7_add_form_tag(
 		array('multilinefile', 'multilinefile*'),
 		'mfcf7_zl_multilinefile_shortcode_handler',
@@ -141,8 +146,8 @@ function mfcf7_zl_add_shortcode_multilinefile()
 function mfcf7_zl_multilinefile_shortcode_handler($tag)
 {
 	$html = '';
-	// global $latest_contact_form_7;
-	// if ($latest_contact_form_7)
+	// global $mfcf7_zl_latest_contact_form_7;
+	// if ($mfcf7_zl_latest_contact_form_7)
 	$tag = new WPCF7_FormTag($tag);
 	// else
 	// 	$tag = new WPCF7_Shortcode($tag);
@@ -168,7 +173,7 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	$values = isset($tag->values[0]) ? $tag->values[0] : '';
 
 	if (empty($values)) {
-		$values = __('Upload', 'zl-mfcf7');
+		$values = __('Upload', 'multiline-files-for-contact-form-7');
 	}
 
 	$upload_label = $atts['value'] = $values;
@@ -188,10 +193,12 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	$atts['type'] = 'file';
 	$atts['name'] = $tag->name . '[]';
 
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- documented public filter (see wordpress-plugin.md); renaming would break sites already hooked into it.
 	$atts = apply_filters('cf7_multilinefile_atts', $atts);
 	$atts = wpcf7_format_atts($atts);
 
 	$html .= sprintf(
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- documented public filter (see wordpress-plugin.md); renaming would break sites already hooked into it.
 		apply_filters('cf7_multilinefile_input', '<span class="mfcf7-zl-multiline-sample" style="display:none"><p class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s <span class="mfcf7-zl-multifile-name"></span><a href="javascript:void(0);" class="mfcf7_zl_delete_file"><span class="delete-file" aria-hidden="true">&#x274C;</span></a></p></span>', $atts),
 		sanitize_html_class($tag->name),
 		$atts,
@@ -211,6 +218,7 @@ function mfcf7_zl_multilinefile_shortcode_handler($tag)
 	$html .= sprintf(
 		// apply_filters('cf7_multilinefile_input', '<p class="wpcf7-form-control-wrap zl-form-control-wrap %1$s"><input %2$s />%3$s <span class="mfcf7-zl-multifile-name"></span></p>', $atts),
 		//old // apply_filters('cf7_multilinefile_input', '<p class="wpcf7-form-control-wrap zl-form-control-wrap %1$s"><input %2$s />%3$s <span class="mfcf7-zl-multifile-name"></span><a href="javascript:void(0);" class="mfcf7_zl_delete_file"><span class="delete-file" aria-hidden="true">&#x274C;</span></a></p>', $atts),
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- documented public filter (see wordpress-plugin.md); renaming would break sites already hooked into it.
 		apply_filters('cf7_multilinefile_input', '<span class="wpcf7-form-control-wrap zl-form-control-wrap %1$s"><input %2$s />%3$s <span class="mfcf7-zl-multifile-name"></span><a href="javascript:void(0);" class="mfcf7_zl_delete_file"><span class="delete-file" aria-hidden="true">&#x274C;</span></a></span>', $atts),
 		sanitize_html_class($tag->name),
 		$atts,
@@ -228,8 +236,8 @@ add_filter('wpcf7_form_enctype', 'mfcf7_zl_multilinefile_form_enctype_filter');
 function mfcf7_zl_multilinefile_form_enctype_filter($enctype)
 {
 
-	// global $latest_contact_form_7;
-	// if ($latest_contact_form_7)
+	// global $mfcf7_zl_latest_contact_form_7;
+	// if ($mfcf7_zl_latest_contact_form_7)
 	$multipart = (bool) wpcf7_scan_form_tags(array('type' => array('multilinefile', 'multilinefile*')));
 	// else
 	// $multipart = (bool) wpcf7_scan_shortcode(array('type' => array('multilinefile', 'multilinefile*')));
@@ -239,8 +247,8 @@ function mfcf7_zl_multilinefile_form_enctype_filter($enctype)
 	return $enctype;
 }
 
-global $latest_contact_form_7new;
-if ($latest_contact_form_7new) {
+global $mfcf7_zl_latest_contact_form_7new;
+if ($mfcf7_zl_latest_contact_form_7new) {
 	add_action('wpcf7_before_send_mail', 'mfcf7_zlchange_attachments', 10, 3);
 }
 function mfcf7_zlchange_attachments($cf7, &$abort, $object)
@@ -285,7 +293,14 @@ function mfcf7_zlchange_attachments($cf7, &$abort, $object)
 
 				$zipping = mfcf7_zl_multilinefile_create_zip($getuploadfiles[$multitag['name']], $zipped_files);
 
-				@chmod($zipped_files, 0440);
+				global $wp_filesystem;
+				if (empty($wp_filesystem)) {
+					require_once ABSPATH . 'wp-admin/includes/file.php';
+					WP_Filesystem();
+				}
+				if ($wp_filesystem) {
+					$wp_filesystem->chmod($zipped_files, 0440);
+				}
 
 				$attachments = ($attachments != '') ? $attachments . PHP_EOL . $zipped_files : $zipped_files;
 
@@ -315,7 +330,7 @@ function mfcf7_zlchange_attachments($cf7, &$abort, $object)
 }
 
 /* Validation + upload handling filter */
-if ($latest_contact_form_7new) {
+if ($mfcf7_zl_latest_contact_form_7new) {
 	add_filter('wpcf7_validate_multilinefile', 'mfcf7_zl_multilinefile_validation_filter', 10, 3);
 	add_filter('wpcf7_validate_multilinefile*', 'mfcf7_zl_multilinefile_validation_filter', 10, 3);
 } else {
@@ -353,8 +368,8 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 	// return $result;
 	// die();
 
-	global $latest_contact_form_7;
-	if ($latest_contact_form_7)
+	global $mfcf7_zl_latest_contact_form_7;
+	if ($mfcf7_zl_latest_contact_form_7)
 		$tag = new WPCF7_FormTag($tag);
 	else
 		$tag = new WPCF7_Shortcode($tag);
@@ -362,6 +377,7 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 	$name = $tag->name;
 	$id = $tag->get_id_option();
 	$uniqid = uniqid();
+	// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- runs inside a wpcf7_validate_* filter; Contact Form 7 core verifies the submission before calling it, and $_FILES entries are only read here (validated by type/size below, never written or output raw).
 	$original_files_array = isset($_FILES[$name]) ? $_FILES[$name] : null;
 	if ($original_files_array === null) {
 		$original_files_array['tmp_name'] = array();
@@ -370,6 +386,7 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 		$total = count($_FILES[$name]['name']);
 	else
 		$total = 0;
+	// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$files = array();
 	$new_files = array();
 	for ($i = 0; $i < $total; $i++) {
@@ -438,6 +455,7 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 		$allowed_file_types = array_unique($allowed_file_types);
 		$file_type_pattern = implode('|', $allowed_file_types);
 
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- documented public filter (see wordpress-plugin.md); renaming would break sites already hooked into it.
 		$allowed_size = apply_filters('cf7_multilinefile_max_size', 10048576); // default size 1 MB
 
 		if ($file_size_a = $tag->get_option('limit')) {
@@ -483,27 +501,7 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 			return $result;
 		}
 		continue;
-
-		wpcf7_init_uploads(); // Confirm upload dir
-		$uploads_dir = wpcf7_upload_tmp_dir();
-		$uploads_dir = wpcf7_maybe_add_random_dir($uploads_dir);
-		$filename = $file['name'];
-		$filename = wpcf7_canonicalize($filename);
-		$filename = sanitize_file_name($filename);
-		$filename = wpcf7_antiscript_file_name($filename);
-		$filename = wp_unique_filename($uploads_dir, $filename);
-		$new_file = trailingslashit($uploads_dir) . $filename;
-
-		if (false === @move_uploaded_file($file['tmp_name'], $new_file)) {
-			$result->invalidate($tag, wpcf7_get_message('upload_failed'));
-			mfcf7_zl_multilinefile_remove($new_files);
-			return $result;
-		}
-		$new_files[] = $new_file;
-		// Make sure the uploaded file is only readable for the owner process
-		@chmod($new_file, 0400);
 	}
-	//return $result;
 	if (count($files) == 0) {
 		if ($tag->is_required()) {
 			$result->invalidate($tag, wpcf7_get_message('invalid_required'));
@@ -511,33 +509,11 @@ function mfcf7_zl_multilinefile_validation_filter($result, $tag, $args)
 		return $result;
 	}
 	return $result;
-	// file loop end
-	if ($new_files  && count($new_files) !== 1) {
-		$zipped_files = trailingslashit($uploads_dir) . $uniqid . '.zip';
-		$zipping = mfcf7_zl_multilinefile_create_zip($new_files, $zipped_files);
-		@chmod($zipped_files, 0440);
-	} else {
-		// when only 1 file is uploaded, don't zip it
-		$zipped_files = $new_files[0];
-		$zipping = 0;
-	}
-	if ($zipping === false) {
-		$result->invalidate($tag, wpcf7_get_message('zipping_failed'));
-		mfcf7_zl_multilinefile_remove($new_files);
-		return $result;
-	}
-	if ($new_files  && count($new_files) !== 1) {
-		mfcf7_zl_multilinefile_remove($new_files);
-	}
-	if ($submission = WPCF7_Submission::get_instance()) {
-		$submission->add_uploaded_file($name, $zipped_files);
-	}
-	return $result;
 }
 function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 {
-	global $latest_contact_form_7;
-	if ($latest_contact_form_7)
+	global $mfcf7_zl_latest_contact_form_7;
+	if ($mfcf7_zl_latest_contact_form_7)
 		$tag = new WPCF7_FormTag($tag);
 	else
 		$tag = new WPCF7_Shortcode($tag);
@@ -547,6 +523,7 @@ function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 	$name = $tag->name;
 	$id = $tag->get_id_option();
 	// $uniqid = uniqid();
+	// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- runs inside a wpcf7_validate_* filter; Contact Form 7 core verifies the submission before calling it, and $_FILES entries are only read here (validated by type/size below, never written or output raw).
 	$original_files_array = isset($_FILES[$name]) ? $_FILES[$name] : null;
 	if ($original_files_array === null) {
 		$original_files_array['tmp_name'] = array();
@@ -556,6 +533,7 @@ function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 	} else {
 		$total = 0;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$files = array();
 	$new_files = array();
 	for ($i = 0; $i < $total; $i++) {
@@ -601,6 +579,7 @@ function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 		}
 		$allowed_file_types = array_unique($allowed_file_types);
 		$file_type_pattern = implode('|', $allowed_file_types);
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- documented public filter (see wordpress-plugin.md); renaming would break sites already hooked into it.
 		$allowed_size = apply_filters('cf7_multilinefile_max_size', 10048576); // default size 1 MB
 		if ($file_size_a = $tag->get_option('limit')) {
 			$limit_pattern = '/^([1-9][0-9]*)([kKmM]?[bB])?$/';
@@ -639,23 +618,6 @@ function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 			return $result;
 		}
 		continue;
-		wpcf7_init_uploads(); // Confirm upload dir
-		$uploads_dir = wpcf7_upload_tmp_dir();
-		$uploads_dir = wpcf7_maybe_add_random_dir($uploads_dir);
-		$filename = $file['name'];
-		$filename = wpcf7_canonicalize($filename);
-		$filename = sanitize_file_name($filename);
-		$filename = wpcf7_antiscript_file_name($filename);
-		$filename = wp_unique_filename($uploads_dir, $filename);
-		$new_file = trailingslashit($uploads_dir) . $filename;
-		if (false === @move_uploaded_file($file['tmp_name'], $new_file)) {
-			$result->invalidate($tag, wpcf7_get_message('upload_failed'));
-			mfcf7_zl_multilinefile_remove($new_files);
-			return $result;
-		}
-		$new_files[] = $new_file;
-		// Make sure the uploaded file is only readable for the owner process
-		@chmod($new_file, 0400);
 	}
 	//return $result;
 	if (count($files) == 0) {
@@ -663,28 +625,6 @@ function mfcf7_zl_multilinefile_validation_filtero($result, $tag)
 			$result->invalidate($tag, wpcf7_get_message('invalid_required'));
 		}
 		return $result;
-	}
-	return $result;
-	// file loop end
-	if ($new_files && count($new_files) !== 1) {
-		$zipped_files = trailingslashit($uploads_dir) . $uniqid . '.zip';
-		$zipping = mfcf7_zl_multilinefile_create_zip($new_files, $zipped_files);
-		@chmod($zipped_files, 0440);
-	} else {
-		//when only 1 file is uploaded, don't zip it
-		$zipped_files = $new_files[0];
-		$zipping = 0;
-	}
-	if ($zipping === false) {
-		$result->invalidate($tag, wpcf7_get_message('zipping_failed'));
-		mfcf7_zl_multilinefile_remove($new_files);
-		return $result;
-	}
-	if ($new_files && count($new_files) !== 1) {
-		mfcf7_zl_multilinefile_remove($new_files);
-	}
-	if ($submission = WPCF7_Submission::get_instance()) {
-		$submission->add_uploaded_file($name, $zipped_files);
 	}
 	return $result;
 }
@@ -696,32 +636,32 @@ function mfcf7_zl_multilinefile_messages($messages)
 {
 	return array_merge($messages, array(
 		'upload_failed' => array(
-			'description' => __("Uploading a file fails for any reason", 'zl-mfcf7'),
-			'default' => __("There was an error uploading the file to the server.", 'zl-mfcf7')
+			'description' => __("Uploading a file fails for any reason", 'multiline-files-for-contact-form-7'),
+			'default' => __("There was an error uploading the file to the server.", 'multiline-files-for-contact-form-7')
 		),
 		'zipping_failed' => array(
-			'description' => __("Zipping files fails for any reason", 'zl-mfcf7'),
-			'default' => __("There was an error in zippng the files.", 'zl-mfcf7')
+			'description' => __("Zipping files fails for any reason", 'multiline-files-for-contact-form-7'),
+			'default' => __("There was an error in zippng the files.", 'multiline-files-for-contact-form-7')
 		),
 		'upload_file_type_invalid' => array(
-			'description' => __("Uploaded file is not allowed for file type", 'zl-mfcf7'),
-			'default' => __("You are not allowed to upload files of this type.", 'zl-mfcf7')
+			'description' => __("Uploaded file is not allowed for file type", 'multiline-files-for-contact-form-7'),
+			'default' => __("You are not allowed to upload files of this type.", 'multiline-files-for-contact-form-7')
 		),
 		'upload_file_too_large' => array(
-			'description' => __("Uploaded file is too large", 'zl-mfcf7'),
-			'default' => __("Uploaded file is too big.", 'zl-mfcf7')
+			'description' => __("Uploaded file is too large", 'multiline-files-for-contact-form-7'),
+			'default' => __("Uploaded file is too big.", 'multiline-files-for-contact-form-7')
 		),
 		'upload_failed_php_error' => array(
-			'description' => __("Uploading a file fails for PHP error", 'zl-mfcf7'),
-			'default' => __("There was an error uploading the file.", 'zl-mfcf7')
+			'description' => __("Uploading a file fails for PHP error", 'multiline-files-for-contact-form-7'),
+			'default' => __("There was an error uploading the file.", 'multiline-files-for-contact-form-7')
 		),
 		'zl_min_file_count_validation_msg' => array(
-			'description' => __("You need to upload atleast __min_file_limit__ files.", 'zl-mfcf7'),
-			'default' => __("You need to upload atleast __min_file_limit__ files.", 'zl-mfcf7')
+			'description' => __("You need to upload atleast __min_file_limit__ files.", 'multiline-files-for-contact-form-7'),
+			'default' => __("You need to upload atleast __min_file_limit__ files.", 'multiline-files-for-contact-form-7')
 		),
 		'zl_max_file_count_validation_msg' => array(
-			'description' => __("You can not upload more than __max_file_limit__ files per request", 'zl-mfcf7'),
-			'default' => __("You can not upload more than __max_file_limit__ files per request.", 'zl-mfcf7')
+			'description' => __("You can not upload more than __max_file_limit__ files per request", 'multiline-files-for-contact-form-7'),
+			'default' => __("You can not upload more than __max_file_limit__ files per request.", 'multiline-files-for-contact-form-7')
 		)
 	));
 }
@@ -768,9 +708,17 @@ function mfcf7_zl_multilinefile_create_zip($files = array(), $destination = '', 
 function mfcf7_zl_multilinefile_remove($new_files)
 {
 	if (!empty($new_files)) {
+		global $wp_filesystem;
+		if (empty($wp_filesystem)) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
 		foreach ($new_files as $to_delete) {
-			@unlink($to_delete);
-			@rmdir(dirname($to_delete)); // remove parent dir if it's removable (empty).
+			wp_delete_file($to_delete);
+			if ($wp_filesystem) {
+				// remove parent dir if it's removable (empty).
+				$wp_filesystem->rmdir(dirname($to_delete));
+			}
 		}
 	}
 }
@@ -778,14 +726,8 @@ function mfcf7_zl_multilinefile_remove($new_files)
 function mfcf7_plugin_meta_links($links, $file)
 {
 	if (plugin_basename(__FILE__) == $file) {
-		$links[] = '<a href="https://1.envato.market/9W6qL4" target="_blank" title="' . __('Upgrade multiline file upload plugin into pro version') . '"><strong>' . __('Upgrade to Pro') . '</strong></a>';
+		$links[] = '<a href="https://1.envato.market/9W6qL4" target="_blank" title="' . __('Upgrade multiline file upload plugin into pro version', 'multiline-files-for-contact-form-7') . '"><strong>' . __('Upgrade to Pro', 'multiline-files-for-contact-form-7') . '</strong></a>';
 	}
 	return $links;
 }
 add_filter('plugin_row_meta', 'mfcf7_plugin_meta_links', 10, 2);
-// Load languages file 
-add_action('plugins_loaded', 'mfcf7_plugin_init');
-function mfcf7_plugin_init()
-{
-	load_plugin_textdomain('zl-mfcf7', false, dirname(plugin_basename(__FILE__)) . '/languages/');
-}

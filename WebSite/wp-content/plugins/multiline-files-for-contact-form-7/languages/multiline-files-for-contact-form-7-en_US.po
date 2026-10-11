@@ -149,3 +149,67 @@ msgstr ""
 #: multiline-files-upload-for-contact-form-7.php:583
 msgid "Upgrade to Pro"
 msgstr ""
+
+#: multiline-admin.php
+msgid "MFCF7 Feedback"
+msgstr ""
+
+#: multiline-admin.php
+msgid "If you have a moment, please let us know why you are deactivating:"
+msgstr ""
+
+#: multiline-admin.php
+msgid "I found a better plugin"
+msgstr ""
+
+#: multiline-admin.php
+msgid "This plugin does not work on my site"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Design is outdated, difficult to navigate"
+msgstr ""
+
+#: multiline-admin.php
+msgid "It's just temporary. I will be back soon"
+msgstr ""
+
+#: multiline-admin.php
+msgid "It is not what I am looking for"
+msgstr ""
+
+#: multiline-admin.php
+msgid "I am finding it difficult to configure it as per my needs"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Other"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Enter your reason(please specify)"
+msgstr ""
+
+#: multiline-admin.php
+msgid "You can contact me by email about my feedback (this also shares my email and website address)."
+msgstr ""
+
+#: multiline-admin.php
+msgid "When you click \"Submit & Deactivate\", the reason you chose is sent to Zluck Solutions (through Google Forms) to help us improve the plugin. Your email and website address are sent only if you tick the box above. Nothing is sent if you click \"Cancel & Deactivate\" or close this window."
+msgstr ""
+
+#: multiline-admin.php
+msgid "Plugin privacy details"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Google Privacy Policy"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Submit & Deactivate"
+msgstr ""
+
+#: multiline-admin.php
+msgid "Cancel & Deactivate"
+msgstr ""

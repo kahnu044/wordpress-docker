@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CustomCSSandJS_Notices {
 
     var $prefix = 'ccj_';
-    var $activation_time = '';
+    var $activation_time = 0;
     var $version = '';
     var $dismiss_notice = '';
     var $expiration_days = 2;
@@ -64,7 +64,7 @@ class CustomCSSandJS_Notices {
         $now = time();
         $p = $this->prefix;
 
-        $this->activation_time = get_option( $p . '_activation_time', '' );
+        $this->activation_time = (int)get_option( $p . '_activation_time', '' );
         $this->version = get_option( $p.'_version', '' );
         $this->dismiss_notice = get_option( $p.'_dismiss_notice', false );
 
@@ -112,9 +112,9 @@ class CustomCSSandJS_Notices {
         $product_name = 'Simple Custom CSS and JS PRO';
 
         $expiration_date = $this->activation_time + ( $this->expiration_days * 86400 ); 
-        $expiration_date = date( get_option( 'date_format') , $expiration_date );
+        $expiration_date = gmdate( get_option( 'date_format') , $expiration_date );
 
-        $expiration_period = date('j M', $this->activation_time - 3*86400 ) . ' - ' . date('j M', $this->activation_time + 2*86400 );
+        $expiration_period = gmdate('j M', $this->activation_time - 3*86400 ) . ' - ' . gmdate('j M', $this->activation_time + 2*86400 );
 
 
         if ( $notice == '12_days' ) {
@@ -163,33 +163,35 @@ class CustomCSSandJS_Notices {
 
             ?>
             <style type="text/css">
-                .<?php echo $p; ?>_note{ color: #bc1117; }
-                #<?php echo $p; ?>_notice { display: block; padding:  }
-                #<?php echo $p; ?>_notice b { color: #bc1117; }
-                #<?php echo $p; ?>_notice a { text-decoration: none; font-weight: bold; }
-                #<?php echo $p; ?>_notice a.dismiss_notice { font-weight: normal; }
+                .<?php echo esc_attr( $p ); ?>_note{ color: #bc1117; }
+                #<?php echo esc_attr( $p ); ?>_notice { display: block; padding:  }
+                #<?php echo esc_attr( $p ); ?>_notice b { color: #bc1117; }
+                #<?php echo esc_attr( $p ); ?>_notice a { text-decoration: none; font-weight: bold; }
+                #<?php echo esc_attr( $p ); ?>_notice a.dismiss_notice { font-weight: normal; }
             </style>
 
             <script type='text/javascript'>
                 jQuery(function($){
-                    $(document).on( 'click', '.<?php echo $p; ?>_notice .dismiss_notice', function() {
+                    $(document).on( 'click', '.<?php echo esc_attr( $p ); ?>_notice .dismiss_notice', function() {
                         var data = {
-                            action: '<?php echo $p; ?>_notice_dismiss',
-                            option: '<?php echo $option_name; ?>',
+                            action: '<?php echo esc_attr( $p ); ?>_notice_dismiss',
+                            option: '<?php echo esc_attr( $option_name ); ?>',
                             nonce: $(this).parent().parent().data('nonce'),
                         };
                         $.post(ajaxurl, data, function(response ) {
-                            $('#<?php echo $p; ?>_notice').fadeOut('slow');
+                            $('#<?php echo esc_attr( $p ); ?>_notice').fadeOut('slow');
                         });
                     });
                 });
             </script>
 
-                <div id="<?php echo $p; ?>_notice" class="updated notice <?php echo $p; ?>_notice is-dismissible" data-nonce="<?php echo wp_create_nonce( $this->prefix .'_notice'); ?>">
-            <p><?php echo $message ?></p>
-            <button type="button" class="notice-dismiss">
-            <span class="screen-reader-text"><?php _e('Dismiss this notice', 'custom-css-js'); ?></span>
+                <div id="<?php echo esc_attr( $p ); ?>_notice" class="updated notice <?php echo esc_attr( $p ); ?>_notice is-dismissible" data-nonce="<?php echo  esc_attr( wp_create_nonce( $this->prefix .'_notice') ); ?>">
+            <p><?php echo $message // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ; ?></p>
+			<span>
+            <button type="button" class="notice-dismiss dismiss_notice">
+            <span class="screen-reader-text"><?php esc_html_e('Dismiss this notice', 'custom-css-js'); ?></span>
             </button>
+			</span>
             </div>
 <?php
 

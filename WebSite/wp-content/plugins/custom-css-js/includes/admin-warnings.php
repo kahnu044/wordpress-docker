@@ -30,14 +30,14 @@ class CustomCSSandJS_Warnings {
     ?>
         <script type='text/javascript'>
         jQuery(function($){
-            $(document).on( 'click', '#<?php echo $slug; ?> .notice-dismiss', function() {
+            $(document).on( 'click', '#<?php echo esc_attr( $slug ); ?> .notice-dismiss', function() {
             var data = {
                 action: 'ccj_dismiss',
-                option: '<?php echo $slug; ?>',
+                option: '<?php echo esc_attr( $slug ); ?>',
                 nonce: $(this).parent().data('nonce'),
             };
             $.post(ajaxurl, data, function(response ) {
-                $('#<?php echo $slug; ?>').fadeOut('slow');
+                $('#<?php echo esc_attr( $slug ); ?>').fadeOut('slow');
             });
             });
         });

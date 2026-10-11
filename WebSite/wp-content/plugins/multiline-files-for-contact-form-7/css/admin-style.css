@@ -62,6 +62,11 @@ span.mfcf7-notice-image a img {
 a#cancel-btn {
   padding: 4px 24px;
 }
+.mfcf7-zl-consent {
+  border-top: #eee 1px solid;
+  padding-top: 10px;
+  overflow-wrap: anywhere;
+}
 label textarea[name="other_reason"] {
   margin-top: 10px; /* Adjust the value as needed */
 }

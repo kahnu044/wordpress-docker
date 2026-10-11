@@ -1,9 +1,13 @@
 <?php
 
+if (!defined('ABSPATH')) {
+	exit;
+}
+
 // enqueue admin style
 function mfcf7_enqueue_plugin_style()
 {
-	wp_register_style('mfcf7_admin_css', plugin_dir_url(__FILE__) . '/css/admin-style.css');
+	wp_register_style('mfcf7_admin_css', plugin_dir_url(__FILE__) . '/css/admin-style.css', array(), MFCF7_ZL_VERSION);
 	wp_enqueue_style('mfcf7_admin_css');
 }
 add_action('admin_enqueue_scripts', 'mfcf7_enqueue_plugin_style');
@@ -19,13 +23,7 @@ function mfcf7_zl_multiline_admin_files_enqueue_script()
 
 	wp_enqueue_script('jquery');
 
-	// Get the current time as version
-
-	$version = time();
-
-	// Enqueue your custom JavaScript file with dynamic version
-
-	wp_enqueue_script('mfcf7_zl_multiline_files_script', plugin_dir_url(__FILE__) . 'js/zl-multine-admin-files.js', array('jquery'), $version, true);
+	wp_enqueue_script('mfcf7_zl_multiline_files_script', plugin_dir_url(__FILE__) . 'js/zl-multine-admin-files.js', array('jquery'), MFCF7_ZL_VERSION, true);
 
 	$ajax_url = admin_url('admin-ajax.php');
 
@@ -45,7 +43,7 @@ function mfcf7_zl_add_tag_for_multilinefile()
 
 	$tag_generator->add(
 		'multilinefile',
-		__('multilinefile', 'zl-mfcf7'),
+		__('multilinefile', 'multiline-files-for-contact-form-7'),
 		'mfcf7_zl_tag_multilinefile',
 		array('version' => '2')
 	);
@@ -56,16 +54,17 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 	$args = wp_parse_args($args, array());
 
 	$type = 'multilinefile';
-	$description = __("Generate a form-tag for a multiple file uploading field. For more details, see %s.", 'zl-mfcf7');
+	/* translators: %s: link to the Contact Form 7 file-uploading documentation */
+	$description = __("Generate a form-tag for a multiple file uploading field. For more details, see %s.", 'multiline-files-for-contact-form-7');
 	$desc_link = wpcf7_link(
-		__('https://contactform7.com/file-uploading-and-attachment/', 'zl-mfcf7'),
-		__('File Uploading and Attachment', 'zl-mfcf7'),
+		__('https://contactform7.com/file-uploading-and-attachment/', 'multiline-files-for-contact-form-7'),
+		__('File Uploading and Attachment', 'multiline-files-for-contact-form-7'),
 		array('target' => '_blank')
 	);
 ?>
 	<header class="description-box">
-		<h3><?php esc_html_e('Multiline File Upload Tag Generator', 'zl-mfcf7'); ?></h3>
-		<p><?php echo sprintf(esc_html($description), $desc_link); ?></p>
+		<h3><?php esc_html_e('Multiline File Upload Tag Generator', 'multiline-files-for-contact-form-7'); ?></h3>
+		<p><?php echo wp_kses_post(sprintf($description, $desc_link)); ?></p>
 	</header>
 
 	<div class="control-box">
@@ -84,7 +83,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Name', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Name', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				data-tag-part="name"
@@ -94,7 +93,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Button Label', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Button Label', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				data-tag-part="value"
@@ -102,7 +101,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('File size limit (bytes)', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('File size limit (bytes)', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				placeholder="e.g., 1048576, 1024kb, 1mb"
@@ -112,7 +111,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Allowed file types', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Allowed file types', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				placeholder="e.g., gif|png|jpg|jpeg"
@@ -123,7 +122,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Accept attribute', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Accept attribute', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				data-tag-part="option" 
@@ -132,17 +131,17 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Accept Wildcard', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Accept Wildcard', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				data-tag-part="option" 
     			data-tag-option="accept_wildcard:"
 			/>
-			<small><?php esc_html_e('Type "yes" to add wildcard', 'zl-mfcf7'); ?></small>
+			<small><?php esc_html_e('Type "yes" to add wildcard', 'multiline-files-for-contact-form-7'); ?></small>
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('ID attribute', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('ID attribute', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				name="id"
@@ -152,7 +151,7 @@ function mfcf7_zl_tag_multilinefile($contact_form, $args)
 		</fieldset>
 
 		<fieldset>
-			<legend><?php esc_html_e('Class attribute', 'zl-mfcf7'); ?></legend>
+			<legend><?php esc_html_e('Class attribute', 'multiline-files-for-contact-form-7'); ?></legend>
 			<input
 				type="text"
 				data-tag-part="option"
@@ -203,7 +202,8 @@ function mfcf7_zl_multilinefile_display_warning_message()
 	wpcf7_init_uploads();
 
 	if (!wp_is_writable($file_upload_dir) || !is_dir($file_upload_dir)) {
-		$message = sprintf(__('This contact form contains file uploading fields, but the temporary folder for the files (%s) does not exist or is not writable by wordpress. You can create the folder or change its permission manually.', 'zl-mfcf7'), $file_upload_dir);
+		/* translators: %s: path to the temporary upload folder */
+		$message = sprintf(__('This contact form contains file uploading fields, but the temporary folder for the files (%s) does not exist or is not writable by wordpress. You can create the folder or change its permission manually.', 'multiline-files-for-contact-form-7'), $file_upload_dir);
 		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html($message) . '</p></div>';
 	}
 }
@@ -222,15 +222,18 @@ function mfcf7_zl_notice_ignor_temp()
 		delete_transient('mfcf7-zl-admin-do-not-show-rating-tip');
 	}
 
-	if (isset($_GET['mfcf7_zl_pro_ver_notice_ignor']) && 0 == intval($_GET['mfcf7_zl_pro_ver_notice_ignor'])) {
+	$notice_nonce_valid = isset($_GET['_wpnonce'])
+		&& wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'mfcf7_zl_notice_ignor');
+
+	if ($notice_nonce_valid && isset($_GET['mfcf7_zl_pro_ver_notice_ignor']) && 0 == intval($_GET['mfcf7_zl_pro_ver_notice_ignor'])) {
 		update_option('mfcf7-zl-admin-do-not-show-pro-tip', strtotime('+1 year'));
 	}
 
-	if (isset($_GET['mfcf7_zl_rating_notice_ignor']) && 0 == intval($_GET['mfcf7_zl_rating_notice_ignor'])) {
+	if ($notice_nonce_valid && isset($_GET['mfcf7_zl_rating_notice_ignor']) && 0 == intval($_GET['mfcf7_zl_rating_notice_ignor'])) {
 		update_option('mfcf7-zl-admin-do-not-show-rating-tip', strtotime('+5 years'));
 	}
 
-	if (isset($_GET['mfcf7_zl_rating_notice_ignor']) && 7 == intval($_GET['mfcf7_zl_rating_notice_ignor'])) {
+	if ($notice_nonce_valid && isset($_GET['mfcf7_zl_rating_notice_ignor']) && 7 == intval($_GET['mfcf7_zl_rating_notice_ignor'])) {
 		update_option('mfcf7-zl-admin-do-not-show-rating-tip', strtotime('+7 days'));
 	}
 }
@@ -244,14 +247,14 @@ function mfcf7_zl_admin_premium_ver_notice()
 	if (!$pro_tip_option || ($pro_tip_option && time() > get_option('mfcf7-zl-admin-do-not-show-pro-tip'))) {
 	?>
 		<div class="notice notice-info">
-			<p><?php _e('Thank you for choosing', 'zl-mfcf7'); ?> <strong><a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/" target="_blank"><?php _e('Multiline files upload for contact form 7', 'zl-mfcf7'); ?></a></strong> <?php _e('plugin.', 'zl-mfcf7'); ?></p>
-			<p><?php _e('For more advanced feature, please try our premium plugin.', 'zl-mfcf7'); ?></p><span class="mfcf7-notice-image"><a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>images/multiline_file_plugin_icon.png"></a></span>
-			<p><?php _e('Premium plugin includes:', 'zl-mfcf7'); ?></p>
+			<p><?php esc_html_e('Thank you for choosing', 'multiline-files-for-contact-form-7'); ?> <strong><a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/" target="_blank"><?php esc_html_e('Multiline files upload for contact form 7', 'multiline-files-for-contact-form-7'); ?></a></strong> <?php esc_html_e('plugin.', 'multiline-files-for-contact-form-7'); ?></p>
+			<p><?php esc_html_e('For more advanced feature, please try our premium plugin.', 'multiline-files-for-contact-form-7'); ?></p><span class="mfcf7-notice-image"><a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/" target="_blank"><img src="<?php echo esc_url(plugin_dir_url(__FILE__)); ?>images/multiline_file_plugin_icon.png"></a></span>
+			<p><?php esc_html_e('Premium plugin includes:', 'multiline-files-for-contact-form-7'); ?></p>
 			<ul class="mfcf7-premium-notice-features-list">
-				<li><?php _e('Remove files one by one even if selected together', 'zl-mfcf7'); ?></li>
-				<li><?php _e('Change placement of selected files list', 'zl-mfcf7'); ?></li>
-				<li><?php _e('Ability to add more than one upload button in same form or page', 'zl-mfcf7'); ?></li>
-				<li><?php _e('Priority Support', 'zl-mfcf7'); ?></li>
+				<li><?php esc_html_e('Remove files one by one even if selected together', 'multiline-files-for-contact-form-7'); ?></li>
+				<li><?php esc_html_e('Change placement of selected files list', 'multiline-files-for-contact-form-7'); ?></li>
+				<li><?php esc_html_e('Ability to add more than one upload button in same form or page', 'multiline-files-for-contact-form-7'); ?></li>
+				<li><?php esc_html_e('Priority Support', 'multiline-files-for-contact-form-7'); ?></li>
 			</ul>
 			<?php
 			$current_url = get_admin_url();
@@ -261,7 +264,7 @@ function mfcf7_zl_admin_premium_ver_notice()
 				$query_string = $current_url . '?';
 			}
 			?>
-			<p class="mfcf7-premium-notice-btn"><a href="https://1.envato.market/9W6qL4" target="_blank"><?php _e('Get Pro version', 'zl-mfcf7'); ?></a>&nbsp;<a href="<?php echo $query_string; ?>mfcf7_zl_pro_ver_notice_ignor=0"><?php _e('No Thanks', 'zl-mfcf7'); ?></a></p>
+			<p class="mfcf7-premium-notice-btn"><a href="https://1.envato.market/9W6qL4" target="_blank"><?php esc_html_e('Get Pro version', 'multiline-files-for-contact-form-7'); ?></a>&nbsp;<a href="<?php echo esc_url(wp_nonce_url($query_string . 'mfcf7_zl_pro_ver_notice_ignor=0', 'mfcf7_zl_notice_ignor')); ?>"><?php esc_html_e('No Thanks', 'multiline-files-for-contact-form-7'); ?></a></p>
 		</div>
 	<?php
 	}
@@ -275,12 +278,12 @@ function mfcf7_zl_admin_rating_notice()
 	if (!$rating_tip_option || ($rating_tip_option && time() > $rating_tip_option)) {
 	?>
 		<div class="notice notice-info 1">
-			<p><?php _e('Love using <strong>Multiline files upload for contact form 7</strong> plugin, why don’t appreciate us?', 'zl-mfcf7'); ?></p>
-			<p><?php _e('We love and care about you. Our team is putting our maximum efforts to provide you the best functionalities.<br> We would really appreciate if you could spend a couple of seconds to give a Nice Review to the plugin for motivating us!', 'zl-mfcf7'); ?></p>
-			<p><?php _e('We also offer WordPress Website Development and Customization services:', 'zl-mfcf7'); ?> <a href="https://zluck.com/contact-us/?utm_source=MFCF7%20Pro%20Plugin&utm_medium=MFCF7%20Pro&utm_campaign=Contact&utm_content=Contact-for%20-development" target="_blank"><?php _e('Request a Quote', 'zl-mfcf7'); ?></a></p>
+			<p><?php echo wp_kses_post(__('Love using <strong>Multiline files upload for contact form 7</strong> plugin, why don’t appreciate us?', 'multiline-files-for-contact-form-7')); ?></p>
+			<p><?php echo wp_kses_post(__('We love and care about you. Our team is putting our maximum efforts to provide you the best functionalities.<br> We would really appreciate if you could spend a couple of seconds to give a Nice Review to the plugin for motivating us!', 'multiline-files-for-contact-form-7')); ?></p>
+			<p><?php esc_html_e('We also offer WordPress Website Development and Customization services:', 'multiline-files-for-contact-form-7'); ?> <a href="https://zluck.com/contact-us/?utm_source=MFCF7%20Pro%20Plugin&utm_medium=MFCF7%20Pro&utm_campaign=Contact&utm_content=Contact-for%20-development" target="_blank"><?php esc_html_e('Request a Quote', 'multiline-files-for-contact-form-7'); ?></a></p>
 			<p style="margin: 15px 0px;">
 				<span class="mfcf7-premium-notice-btn">
-					<a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/#reviews" target="_blank"><?php _e('Rate it Now', 'zl-mfcf7'); ?></a>
+					<a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/#reviews" target="_blank"><?php esc_html_e('Rate it Now', 'multiline-files-for-contact-form-7'); ?></a>
 				</span>
 				<?php
 				$current_url = get_admin_url();
@@ -290,8 +293,8 @@ function mfcf7_zl_admin_rating_notice()
 					$query_string = $current_url . '?';
 				}
 				?>
-				<span class="mfcf7-premium-notice-btn"><a href="<?php echo $query_string; ?>mfcf7_zl_rating_notice_ignor=7"><?php _e('Maybe Later', 'zl-mfcf7'); ?></a></span>
-				<span class="mfcf7-premium-notice-btn"><a href="<?php echo $query_string; ?>mfcf7_zl_rating_notice_ignor=0"><?php _e('Already Rated', 'zl-mfcf7'); ?></a></span>
+				<span class="mfcf7-premium-notice-btn"><a href="<?php echo esc_url(wp_nonce_url($query_string . 'mfcf7_zl_rating_notice_ignor=7', 'mfcf7_zl_notice_ignor')); ?>"><?php esc_html_e('Maybe Later', 'multiline-files-for-contact-form-7'); ?></a></span>
+				<span class="mfcf7-premium-notice-btn"><a href="<?php echo esc_url(wp_nonce_url($query_string . 'mfcf7_zl_rating_notice_ignor=0', 'mfcf7_zl_notice_ignor')); ?>"><?php esc_html_e('Already Rated', 'multiline-files-for-contact-form-7'); ?></a></span>
 			</p>
 		</div>
 	<?php
@@ -305,7 +308,7 @@ if (!class_exists('ZipArchive')) {
 	{
 
 		echo '<div class="notice notice-warning">
-      <p>' . __('It seems ZIPArchived extension is not installed or not enabled. We need ZIPArchive extension available for multline file upload plugin to work.', 'zl-mfcf7') . ' <a href="https://documentation.cpanel.net/display/EA/PHP+Module%3A+Zip" target="_blank">' . __('How to install/enable ZIPArchive?', 'zl-mfcf7') . '</a></p>
+      <p>' . esc_html__('It seems ZIPArchived extension is not installed or not enabled. We need ZIPArchive extension available for multline file upload plugin to work.', 'multiline-files-for-contact-form-7') . ' <a href="https://documentation.cpanel.net/display/EA/PHP+Module%3A+Zip" target="_blank">' . esc_html__('How to install/enable ZIPArchive?', 'multiline-files-for-contact-form-7') . '</a></p>
     </div>';
 	}
 }
@@ -314,9 +317,15 @@ if (!class_exists('ZipArchive')) {
 
 function mfcf7_zl_deactivation_popup()
 {
-
-	echo get_option('mfcf7_zl_plugin_deactivate_request');
-
+	// Values are sent to our feedback form in English, so the labels can be translated without changing the feedback sheet.
+	$reasons = array(
+		'I found a better plugin.'                                   => __('I found a better plugin', 'multiline-files-for-contact-form-7'),
+		'This plugin does not work on my site'                       => __('This plugin does not work on my site', 'multiline-files-for-contact-form-7'),
+		'Design is outdated, difficult to navigate'                  => __('Design is outdated, difficult to navigate', 'multiline-files-for-contact-form-7'),
+		"It's just temporary. I will be back soon."                  => __("It's just temporary. I will be back soon", 'multiline-files-for-contact-form-7'),
+		'It is not what I am looking for.'                           => __('It is not what I am looking for', 'multiline-files-for-contact-form-7'),
+		' I am finding it difficult to configure it as per my needs' => __('I am finding it difficult to configure it as per my needs', 'multiline-files-for-contact-form-7'),
+	);
 	?>
 
 	<!-- Popup HTML Structure -->
@@ -337,7 +346,7 @@ function mfcf7_zl_deactivation_popup()
 
 					<div class="mfcf7-modal-header">
 
-						<h2>MFCF7 Feedback</h2>
+						<h2><?php esc_html_e('MFCF7 Feedback', 'multiline-files-for-contact-form-7'); ?></h2>
 
 					</div>
 
@@ -345,97 +354,41 @@ function mfcf7_zl_deactivation_popup()
 
 						<div class="mfcf7-modal-body">
 
-							<h3><strong>If you have a moment, please let us know why you are deactivating:</strong></h3>
+							<h3><strong><?php esc_html_e('If you have a moment, please let us know why you are deactivating:', 'multiline-files-for-contact-form-7'); ?></strong></h3>
 
 							<ul id="cf7-any-api-list">
 
-								<li class="reason">
-
-									<label>
-
-										<input type="radio" name="selected-reason" value="I found a better plugin.">
-
-										<span for="rad">I found a better plugin</span>
-
-									</label>
-
-								</li>
+								<?php foreach ($reasons as $value => $label) : ?>
+									<li class="reason">
+										<label>
+											<input type="radio" name="selected-reason" value="<?php echo esc_attr($value); ?>">
+											<span><?php echo esc_html($label); ?></span>
+										</label>
+									</li>
+								<?php endforeach; ?>
 
 								<li class="reason">
-
 									<label>
-
-										<input type="radio" name="selected-reason" value="This plugin does not work on my site">
-
-										<span for="rad">This plugin does not work on my site</span>
-
-									</label>
-
-								</li>
-
-								<li class="reason">
-
-									<label>
-
-										<input type="radio" name="selected-reason" value="Design is outdated, difficult to navigate">
-
-										<span for="rad">Design is outdated, difficult to navigate</span>
-
-									</label>
-
-								</li>
-
-								<li class="reason">
-
-									<label>
-
-										<input type="radio" name="selected-reason" value="It's just temporary. I will be back soon.">
-
-										<span for="rad">It's just temporary. I will be back soon</span>
-
-									</label>
-
-								</li>
-
-								<li class="reason">
-
-									<label>
-
-										<input type="radio" name="selected-reason" value="It is not what I am looking for.">
-
-										<span for="rad">It is not what I am looking for</span>
-
-									</label>
-
-								</li>
-
-								<li class="reason">
-
-									<label>
-
-										<input type="radio" name="selected-reason" value=" I am finding it difficult to configure it as per my needs">
-
-										<span for="rad"> I am finding it difficult to configure it as per my needs</span>
-
-									</label>
-
-								</li>
-
-								<li class="reason">
-
-									<label>
-
 										<input type="radio" name="selected-reason" value="Other">
-
-										<span for="rad">Other</span>
-
-										<textarea name="other_reason" placeholder="Enter your reason(please specify)"></textarea>
-
+										<span><?php esc_html_e('Other', 'multiline-files-for-contact-form-7'); ?></span>
+										<textarea name="other_reason" placeholder="<?php esc_attr_e('Enter your reason(please specify)', 'multiline-files-for-contact-form-7'); ?>"></textarea>
 									</label>
-
 								</li>
 
 							</ul>
+
+							<div class="mfcf7-zl-consent">
+								<label>
+									<input type="checkbox" name="mfcf7_zl_consent" value="1" autocomplete="off">
+									<?php esc_html_e('You can contact me by email about my feedback (this also shares my email and website address).', 'multiline-files-for-contact-form-7'); ?>
+								</label>
+								<p class="description">
+									<?php esc_html_e('When you click "Submit & Deactivate", the reason you chose is sent to Zluck Solutions (through Google Forms) to help us improve the plugin. Your email and website address are sent only if you tick the box above. Nothing is sent if you click "Cancel & Deactivate" or close this window.', 'multiline-files-for-contact-form-7'); ?>
+									<a href="https://wordpress.org/plugins/multiline-files-for-contact-form-7/" target="_blank"><?php esc_html_e('Plugin privacy details', 'multiline-files-for-contact-form-7'); ?></a>
+									|
+									<a href="https://policies.google.com/privacy" target="_blank"><?php esc_html_e('Google Privacy Policy', 'multiline-files-for-contact-form-7'); ?></a>
+								</p>
+							</div>
 
 						</div>
 
@@ -449,9 +402,9 @@ function mfcf7_zl_deactivation_popup()
 
 							</div>
 
-							<input type="submit" class="button button-secondary zl_mfcf_btn " id="deactivate-custom-post-type-filter" value="Submit &amp; Deactivate">
+							<input type="submit" class="button button-secondary zl_mfcf_btn " id="deactivate-custom-post-type-filter" value="<?php esc_attr_e('Submit & Deactivate', 'multiline-files-for-contact-form-7'); ?>">
 
-							<input type="button" class="button button-secondary zl_mfcf_btn cancel-deactivate-button" value="Cancel &amp; Deactivate">
+							<input type="button" class="button button-secondary zl_mfcf_btn cancel-deactivate-button" value="<?php esc_attr_e('Cancel & Deactivate', 'multiline-files-for-contact-form-7'); ?>">
 
 						</div>
 
@@ -478,67 +431,45 @@ add_action('admin_footer', 'mfcf7_zl_deactivation_popup');
 function mfcf7_zl_custom_handle_deactivation_plugin_form_submission()
 {
 
-	if (! isset($_POST['_wpnonce']) || ! wp_verify_nonce($_POST['_wpnonce'], 'custom_plugin_deactivate_nonce')) {
-		wp_send_json_error(array('message' => esc_html__('Nonce verification failed. Please refresh the page and try again.', 'zl-mfcf7')));
+	if (! isset($_POST['_wpnonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'custom_plugin_deactivate_nonce')) {
+		wp_send_json_error(array('message' => esc_html__('Nonce verification failed. Please refresh the page and try again.', 'multiline-files-for-contact-form-7')));
 		return;
 	}
 
-	// Log the start of the function
-	if (! current_user_can('administrator')) {
+	if (! current_user_can('activate_plugins')) {
 		// Set a transient or option to show the admin notice
-		set_transient('mfcf7_zl_deactivation_error', esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7'), 30);
+		set_transient('mfcf7_zl_deactivation_error', esc_html__('You do not have permission to deactivate this plugin.', 'multiline-files-for-contact-form-7'), 30);
 
-		wp_send_json_error(array('message' => esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7')));
+		wp_send_json_error(array('message' => esc_html__('You do not have permission to deactivate this plugin.', 'multiline-files-for-contact-form-7')));
 	}
 
-	if (isset($_POST['reason'])) {
+	update_option('mfcf7_zl_plugin_deactivate_request', true);
 
-		// Get the selected reason
+	$reason = isset($_POST['reason']) ? sanitize_text_field(wp_unslash($_POST['reason'])) : '';
+	if ('Other' === $reason) {
+		$reason = isset($_POST['other_reason']) ? sanitize_text_field(wp_unslash($_POST['other_reason'])) : '';
+	}
 
-		$reason = sanitize_text_field($_POST['reason']);
-
-		$otherReason = isset($_POST['other_reason']) ? sanitize_text_field($_POST['other_reason']) : '';
-
-		// Log the form data
-
-		update_option('mfcf7_zl_plugin_deactivate_request', true);
-
-
-
-		// Get current site URL
-
-		$site_url = get_site_url();
-
-		// Get current user's email
-
-		$current_user = wp_get_current_user();
-
-		$user_email = $current_user->user_email;
-
-		// Prepare data to send to Google Form
-
+	if ('' !== $reason) {
 		$form_data = array(
-
-			'entry.1315009358' => $site_url,
-
-			'entry.144564863' => $user_email,
-
-			'entry.1682553995' => $reason === 'Other' ? $otherReason : $reason
-
+			'entry.1682553995' => $reason,
 		);
 
-		// Send data to Google Form endpoint via AJAX
+		// Email and site address leave the site only when the admin ticks the consent box.
+		if (isset($_POST['consent']) && '1' === $_POST['consent']) {
+			$form_data['entry.1315009358'] = get_site_url();
+			$form_data['entry.144564863']  = wp_get_current_user()->user_email;
+		}
 
-		$response = wp_remote_post('https://docs.google.com/forms/u/0/d/e/1FAIpQLSeKd-6b__62G4gZ1UNkY90q4Ws0SbSUiDVuRSPkLNaIYK43nQ/formResponse', array(
-
-			'body' => $form_data
-
+		wp_remote_post('https://docs.google.com/forms/u/0/d/e/1FAIpQLSeKd-6b__62G4gZ1UNkY90q4Ws0SbSUiDVuRSPkLNaIYK43nQ/formResponse', array(
+			'body'       => $form_data,
+			'timeout'    => 5,
+			// The default user-agent contains the site URL, which must not be sent without consent.
+			'user-agent' => 'WordPress',
 		));
-
-		// Attempt to deactivate the plugin
-
-		wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
 	}
+
+	wp_send_json_success(array('message' => 'Plugin deactivation requested successfully.'));
 }
 
 add_action('wp_ajax_custom_plugin_deactivate', 'mfcf7_zl_custom_handle_deactivation_plugin_form_submission');
@@ -561,9 +492,14 @@ add_action('admin_notices', 'mfcf7_zl_show_admin_notice');
 
 function mfcf7_zl_handle_deactivation_plugin_without_feedback()
 {
-	if (! current_user_can('administrator')) {
+	if (! isset($_POST['_wpnonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'custom_plugin_deactivate_nonce')) {
+		wp_send_json_error(array('message' => esc_html__('Nonce verification failed. Please refresh the page and try again.', 'multiline-files-for-contact-form-7')));
+		return;
+	}
+
+	if (! current_user_can('activate_plugins')) {
 		// Send a JSON response indicating the lack of permission
-		wp_send_json_error(array('message' => esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7')));
+		wp_send_json_error(array('message' => esc_html__('You do not have permission to deactivate this plugin.', 'multiline-files-for-contact-form-7')));
 		add_action('admin_notices', 'mfcf7_zl_permission_error_notice');
 		return;
 	}
@@ -578,7 +514,7 @@ function mfcf7_zl_permission_error_notice()
 {
 ?>
 	<div class="notice notice-error is-dismissible">
-		<p><?php echo esc_html__('You do not have permission to deactivate this plugin.', 'zl-mfcf7'); ?></p>
+		<p><?php echo esc_html__('You do not have permission to deactivate this plugin.', 'multiline-files-for-contact-form-7'); ?></p>
 	</div>
 <?php
 }

@@ -2,6 +2,8 @@ jQuery(document).ready(function($) {
     //trigger popup on click deactive plugin
     $('a#deactivate-multiline-files-for-contact-form-7').on('click', function (e) {
         e.preventDefault(); // Prevent default action (deactivating the plugin)
+        // Consent must be a fresh choice every time the pop-up opens.
+        $('input[name="mfcf7_zl_consent"]').prop('checked', false);
         $('.admin-popup-container').show();
         $('#custom-plugin-modal-overlay').show();
         $('#custom-plugin-modal').show();
@@ -42,6 +44,7 @@ jQuery(document).ready(function($) {
             action: 'custom_plugin_deactivate',
             reason: selectedReason,
             other_reason: otherReason,
+            consent: $('input[name="mfcf7_zl_consent"]').is(':checked') ? '1' : '0',
             _wpnonce: $('#custom-plugin-deactivate-form input[name="_wpnonce"]').val()
         };
         $.ajax({
@@ -75,6 +78,7 @@ jQuery(document).ready(function($) {
         $('#custom-plugin-modal').hide();
         var data = {
             action: 'deactive_plugin_without_feedback',
+            _wpnonce: $('#custom-plugin-deactivate-form input[name="_wpnonce"]').val()
         };
         $.ajax({
             url: custom_plugin_ajax_object.ajax_url,

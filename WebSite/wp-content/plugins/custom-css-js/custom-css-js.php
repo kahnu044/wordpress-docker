@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI:  https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version:     3.54
+ * Version:     3.54.3
  * Author:      SilkyPress.com
  * Author URI:  https://www.silkypress.com
  * License:     GPLv3
@@ -48,14 +48,14 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		 * Cloning is forbidden.
 		 */
 		public function __clone() {
-			_doing_it_wrong( __FUNCTION__, __( 'An error has occurred. Please reload the page and try again.' ), '1.0' );
+			_doing_it_wrong( __FUNCTION__, esc_html( 'An error has occurred. Please reload the page and try again.' ), '1.0' );
 		}
 
 		/**
 		 * Unserializing instances of this class is forbidden.
 		 */
 		public function __wakeup() {
-			_doing_it_wrong( __FUNCTION__, __( 'An error has occurred. Please reload the page and try again.' ), '1.0' );
+			_doing_it_wrong( __FUNCTION__, esc_html( 'An error has occurred. Please reload the page and try again.' ), '1.0' );
 		}
 
 		/**
@@ -193,24 +193,26 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 						if ( empty( $type_attr ) ) {
 							$custom_code = str_replace( array( ' type="text/javascript"', ' type="text/css"' ), '', $custom_code );
 						}
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo $custom_code;
 					} else {
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo @file_get_contents( CCJ_UPLOAD_DIR . '/' . $_filename );
 					}
 				}
 
-				if ( 'external' === $where && 'js' === $type ) {
-					echo PHP_EOL . "<script{$type_attr} src='{$upload_url}{$_filename}'></script>" . PHP_EOL;
-				}
+				if ( 'external' === $where && 'js' === $type ) : ?><script<?php echo $type_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> src="<?php echo esc_url( $upload_url . $_filename ); ?>"></script>
+<?php endif;
 
-				if ( 'external' === $where && 'css' === $type ) {
+				if ( 'external' === $where && 'css' === $type ) :
 					$shortfilename = preg_replace( '@\.css\?v=.*$@', '', $_filename );
-					echo PHP_EOL . "<link rel='stylesheet' id='{$shortfilename}-css' href='{$upload_url}{$_filename}'{$type_attr} media='all' />" . PHP_EOL;
-				}
+					?><link rel="stylesheet" id="<?php echo esc_attr( $shortfilename ); ?>-css" href="<?php echo esc_url( $upload_url . $_filename ); ?>"<?php echo $type_attr // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped; ?> media="all" />
+<?php endif;
 
 				if ( 'html' === $type ) {
 					$post = get_post( intval( $_filename ) );
 					if ( isset( $post->post_content ) && ! empty( $post->post_content ) ) {
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo $post->post_content;
 					}
 				}
@@ -281,7 +283,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.54',
+				'CCJ_VERSION'     => '3.54.3',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,

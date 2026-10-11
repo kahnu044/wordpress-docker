@@ -1,5 +1,23 @@
 == Changelog ==
 
+= 3.54.3 =
+* 10/08/2026
+* Fix: check for user capabilities on two AJAX handlers.
+
+= 3.54.2 =
+* 10/04/2026
+* Fix: the external custom codes weren't correctly loaded on themes that don't declare support for HTML5 markup
+
+= 3.54.1 =
+* 10/03/2026
+* Tweak: add translators' notes to translatable strings
+* Fix: escape outputs as per the WordPress documentation.
+
+= 3.54 =
+* 08/20/2026
+* Compatibility with WP 7.1 (solved bug https://wordpress.org/support/topic/bug-fix-for-wordpress-7-1-html-snippets-returning-empty-in-__call/ )
+* Change: update the minimum WP requirement to 4.2
+
 = 3.53 =
 * 05/20/2026
 * Fix: the "list_table_primary_column" filter should affect only the Custom Code table 

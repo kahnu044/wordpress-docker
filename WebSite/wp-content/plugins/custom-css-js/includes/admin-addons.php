@@ -39,7 +39,7 @@ class CustomCSSandJS_Addons {
 ?>
     <div class="ccj_only_premium ccj_only_premium-first">
         <div> 
-        <a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e('This section is available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js'); ?></a>
+        <a href="https://www.silkypress.com/simple-custom-css-js-pro/?utm_source=wordpress&utm_campaign=ccj_free&utm_medium=banner" target="_blank"><?php _e('This section is available only in <br />Simple Custom CSS and JS Pro', 'custom-css-js'); // phpcs:ignore  WordPress.Security.EscapeOutput.UnsafePrintingFunction ?></a>
         </div>
     </div>
     <?php
@@ -64,8 +64,8 @@ class CustomCSSandJS_Addons {
 ?>
 <div id="preview-action">
     <div>
-    <input type="text" name="preview_url" id="ccj-preview_url" placeholder="<?php _e('Full URL on which to preview the changes ...', 'custom-css-js'); ?>" disabled="disabled" />
-    <a class="preview button button-primary button-large" id="ccj-preview"><?php _e('Preview Changes', 'custom-css-js'); ?></a>
+    <input type="text" name="preview_url" id="ccj-preview_url" placeholder="<?php esc_html_e('Full URL on which to preview the changes ...', 'custom-css-js'); ?>" disabled="disabled" />
+    <a class="preview button button-primary button-large" id="ccj-preview"><?php esc_html_e('Preview Changes', 'custom-css-js'); ?></a>
     </div>
 </div>
 <?php
@@ -79,28 +79,29 @@ class CustomCSSandJS_Addons {
     function url_rules_meta_box_callback( $post ) {
 
         $filters = array(
-            'all'           => __('All Website', 'custom-css-js'),
-            'first-page'    => __('Homepage', 'custom-css-js'),
-            'contains'      => __('Contains', 'custom-css-js'),
-            'not-contains'  => __('Not contains', 'custom-css-js'),
-            'equal-to'      => __('Is equal to', 'custom-css-js'),
-            'not-equal-to'  => __('Not equal to', 'custom-css-js'),
-            'begins-with'   => __('Starts with', 'custom-css-js'),
-            'ends-by'       => __('Ends by', 'custom-css-js'),
+            'all'           => 'All Website',
+            'first-page'    => 'Homepage',
+            'contains'      => 'Contains',
+            'not-contains'  => 'Not contains',
+            'equal-to'      => 'Is equal to',
+            'not-equal-to'  => 'Not equal to',
+            'begins-with'   => 'Starts with',
+            'ends-by'       => 'Ends by',
         );
-        $filters_html = '';
-        foreach( $filters as $_key => $_value ) {
-            $filters_html .= '<option value="'.$_key.'">' . $_value . '</option>';
-        }
 
         $applied_filters = '[{"value":"","type":"all","index":1}]';
 
 ?>
-        <input type="hidden" name="scan_anchor_filters" id="wplnst-scan-anchor-filters" value='<?php echo $applied_filters; ?>' />
-    <table id="wplnst-elist-anchor-filters" class="wplnst-elist" cellspacing="0" cellpadding="0" border="0" data-editable="true" data-label="<?php _e('URL', 'custom-css-js'); ?>"></table>
-        <?php _e('URL', 'custom-css-js'); ?> <select id="wplnst-af-new-type"><?php echo $filters_html ?></select>&nbsp;
-        <input id="wplnst-af-new" type="text" class="regular-text" value="" placeholder="<?php _e('Text filter', 'custom-css-js'); ?>" />&nbsp;
-        <input class="button button-primary" type="button" id="wplnst-af-new-add" value="<?php _e('Add', 'custom-css-js'); ?>" /></td>
+        <input type="hidden" name="scan_anchor_filters" id="wplnst-scan-anchor-filters" value='<?php echo esc_js( $applied_filters); ?>' />
+    <table id="wplnst-elist-anchor-filters" class="wplnst-elist" cellspacing="0" cellpadding="0" border="0" data-editable="true" data-label="<?php echo esc_attr('URL', 'custom-css-js'); ?>"></table>
+		<?php esc_html_e('URL', 'custom-css-js'); ?>
+		<select id="wplnst-af-new-type">
+			<?php foreach( $filters as $_key => $_value ) : ?>
+				<option value="<?php echo esc_attr( $_key ); ?>"><?php echo esc_html( $_value, 'custom-css-js' ); ?></option>
+			<?php endforeach; ?>
+		</select>&nbsp;
+        <input id="wplnst-af-new" type="text" class="regular-text" value="" placeholder="<?php echo esc_attr('Text filter', 'custom-css-js'); ?>" />&nbsp;
+        <input class="button button-primary" type="button" id="wplnst-af-new-add" value="<?php echo esc_attr('Add', 'custom-css-js'); ?>" /></td>
 
 <?php
     }
@@ -133,11 +134,11 @@ class CustomCSSandJS_Addons {
 ?>
     <table class="revisions">
         <thead><tr>
-        <th class="revisions-compare"><?php _e('Compare', 'custom-css-js'); ?></th>
-        <th><?php _e('Revision', 'custom-css-js'); ?></th>
-        <th><?php _e('Author', 'custom-css-js'); ?></th>
-        <th><input type="checkbox" name="delete[]" value="all" id="ccj-delete-checkbox" /> <?php _e('Delete', 'custom-css-js'); ?></th>
-        <th><?php _e('Restore', 'custom-css-js'); ?></th>
+        <th class="revisions-compare"><?php esc_html_e('Compare', 'custom-css-js'); ?></th>
+        <th><?php esc_html_e('Revision', 'custom-css-js'); ?></th>
+        <th><?php esc_html_e('Author', 'custom-css-js'); ?></th>
+        <th><input type="checkbox" name="delete[]" value="all" id="ccj-delete-checkbox" /> <?php esc_html_e('Delete', 'custom-css-js'); ?></th>
+        <th><?php esc_html_e('Restore', 'custom-css-js'); ?></th>
         </tr></thead>
         <tbody>
         <?php foreach( $revisions as $revision ) : ?>
@@ -145,22 +146,20 @@ class CustomCSSandJS_Addons {
 
         $restore_url = '#';
 
-        $delete_disabled = '';
-        $delete_tooltip = '';
         $class = '';
         ?>
-        <tr class="<?php echo $class; ?>" id="<?php echo 'revision-row-' . $revision['ID']; ?>">
+        <tr class="<?php echo esc_attr( $class ); ?>" id="<?php echo esc_attr( 'revision-row-' . $revision['ID'] ); ?>">
             <td class="revisions-compare">
-            <input type="radio" name="compare_left" value="<?php echo $revision['ID']; ?>" />
-            <input type="radio" name="compare_right" value="<?php echo $revision['ID']; ?>" />
+            <input type="radio" name="compare_left" value="<?php echo esc_attr( $revision['ID'] ); ?>" />
+            <input type="radio" name="compare_right" value="<?php echo esc_attr( $revision['ID'] ); ?>" />
             </td>
-            <td><?php echo $revision['title']; ?></td>
-            <td><?php echo $revision['post_author']; ?></td>
+            <td><?php echo esc_html( $revision['title'] ); ?></td>
+            <td><?php echo esc_html( $revision['post_author'] ); ?></td>
             <td class="revisions-delete">
-            <input type="checkbox" name="delete[]" value="<?php echo $revision['ID']; ?>" <?php echo $delete_disabled . $delete_tooltip; ?>/>
+            <input type="checkbox" name="delete[]" value="<?php echo esc_attr( $revision['ID'] ); ?>">
             </td>
             <td class="revisions-restore">
-                <a href="<?php echo $restore_url; ?>"><?php _e('Restore', 'custom-css-js'); ?></a>
+                <a href="<?php echo esc_url( $restore_url ); ?>"><?php esc_html_e('Restore', 'custom-css-js'); ?></a>
             </td>
         </tr>
         <?php endforeach; ?>

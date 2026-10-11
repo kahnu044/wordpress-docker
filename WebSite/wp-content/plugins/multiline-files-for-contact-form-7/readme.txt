@@ -3,9 +3,9 @@ Contributors: zluck, divyeshk71
 Donate link: https://www.buymeacoffee.com/zluck
 Tags: contact form 7, multiple file upload, file attachment, form plugin, file uploader
 Requires at least: 5.6
-Tested up to: 6.8.2
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,20 @@ Yes! The plugin is licensed under GPL, so you can use it on as many sites as you
 
 == Changelog ==
 
+= 3.1.1 =
+* Privacy: the deactivation feedback pop-up no longer sends your email address or website address unless you tick the new, unticked "you can contact me" box.
+* Privacy: the pop-up now explains what is sent. Nothing is sent with "Cancel & Deactivate" or when you close the pop-up.
+* Privacy: updated the Privacy Policy section to describe the feedback data accurately.
+* Security: added a nonce check to "Cancel & Deactivate" and switched the deactivation handlers to the `activate_plugins` capability.
+* Security: escaped remaining unescaped output in the admin notices and pop-up.
+* Fix: removed a stray value printed in the admin footer.
+* Fix: added a version number to enqueued scripts and styles so browsers pick up updates reliably.
+* Fix: the plugin's text domain now matches its WordPress.org slug, so official translations load correctly.
+* Fix: removed unused legacy upload code and switched remaining file operations to WordPress's recommended filesystem functions.
+* Fix: added the missing License field to the plugin header.
+* Security: added a nonce check to the "No Thanks" / "Maybe Later" / "Already Rated" admin notice links.
+* Fix: removed the redundant load_plugin_textdomain() call and prefixed internal global variables.
+
 = 3.1.0 =
 * ✅ **MAJOR UPDATE** - Full compatibility with WordPress 6.8.2
 * ✅ **MAJOR UPDATE** - Tested and compatible with Contact Form 7 5.9+
@@ -241,6 +255,9 @@ Yes! The plugin is licensed under GPL, so you can use it on as many sites as you
 
 == Upgrade Notice ==
 
+= 3.1.1 =
+Privacy update: the deactivation feedback form now asks for your consent before sending your email address or website address. Recommended for all users.
+
 = 3.1.0 =
 **IMPORTANT UPDATE** - This version includes full compatibility with WordPress 6.8.2, Contact Form 7 5.9+, and PHP 8.3. We strongly recommend updating to this version for optimal performance, security, and compatibility with the latest WordPress ecosystem.
 
@@ -273,7 +290,15 @@ Major update with Tag Generator v2 support and enhanced features. Recommended fo
 
 == Privacy Policy ==
 
-This plugin does not collect, store, or transmit any personal data. All file uploads are handled locally on your server and are not sent to any third-party services. Files are temporarily stored during form submission and are automatically cleaned up after processing.
+**Uploaded files:** All file uploads are handled on your own server and are never sent to us or to any third-party service. Files are stored temporarily during form submission and are cleaned up automatically after processing.
+
+**Deactivation feedback:** When an administrator deactivates the plugin, a pop-up asks (optionally) why. Data leaves your site only if the administrator clicks "Submit & Deactivate":
+
+* The reason they chose (or typed under "Other") is sent to a Google Form owned by Zluck Solutions, to help us improve the plugin.
+* The administrator's email address and your website address are sent **only if** they tick the "You can contact me by email" box, which is unticked by default. They are used only to reply about that feedback.
+* Nothing is sent if they click "Cancel & Deactivate" or close the pop-up.
+
+Google processes this data under the [Google Privacy Policy](https://policies.google.com/privacy). To have your feedback data removed, please [contact Zluck Solutions](https://zluck.com/contact-us/).
 
 == Credits ==
 

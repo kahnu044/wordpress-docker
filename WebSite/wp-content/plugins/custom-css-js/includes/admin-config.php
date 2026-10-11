@@ -123,7 +123,7 @@ class CustomCSSandJS_AdminConfig {
 
         <?php $this->config_page_header('editor'); ?>
 
-        <form action="<?php echo admin_url('edit.php'); ?>?post_type=custom-css-js&page=custom-css-js-config" id="ccj_settings" method="post">
+        <form action="<?php echo esc_url( admin_url('edit.php') ); ?>?post_type=custom-css-js&page=custom-css-js-config" id="ccj_settings" method="post">
 
         <?php do_action( 'ccj_settings_form' ); ?>
         
@@ -138,18 +138,23 @@ class CustomCSSandJS_AdminConfig {
      */
     function config_page_header( $tab = 'editor' ) {
   
-        $url = '?post_type=custom-css-js&page=custom-css-js-config';
-
-        $active = array('editor' => '', 'general' => '', 'debug' => '');
-        $active[$tab] = 'nav-tab-active';
+		$logo           = plugins_url( '/', CCJ_PLUGIN_FILE ) . 'assets/images/silkypress_logo.png';
+		$silkypress_url = 'https://www.silkypress.com/?utm_source=wordpress&amp;utm_campaign=iz_free&amp;utm_medium=banner';
 
         ?>
         <style type="text/css">
-            .custom-css-js_page_custom-css-js-config h1 { margin-bottom: 40px; }
+            .custom-css-js_page_custom-css-js-config h1 { margin-bottom: 2em; margin-top: 1em; }
+            .custom-css-js_page_custom-css-js-config h1 img { vertical-align: middle; }
+            .custom-css-js_page_custom-css-js-config h1 a { text-decoration: none; }
+            .custom-css-js_page_custom-css-js-config h1 a:hover { text-decoration: underline; }
             .form-table { margin-left: 2%; width: 98%;}
             .form-table th { width: 500px; } 
         </style>
-        <h1><?php _e('Custom CSS & JS Settings'); ?></h1>
+
+		<h1>
+			<?php esc_html_e( 'Settings for the "Custom CSS & JS" plugin by ', 'custom-css-js' );  ?>
+			<img src="<?php echo esc_url( $logo ); ?>"> <a href="<?php echo esc_url( $silkypress_url ); ?>" target="_blank">SilkyPress.com</a>
+		</h1>
 
         <?php     
     }
@@ -210,77 +215,80 @@ class CustomCSSandJS_AdminConfig {
             update_option( 'ccj_settings', $settings );
         }
 
-        $ccj_htmlentities_help = __('If you want to use an HTML entity in your code (for example '. htmlentities('&gt; or &quot;').'), but the editor keeps on changing them to its equivalent character (&gt; and &quot; for the previous example), then you might want to enable this option.', 'custom-css-js');
-
-        $ccj_htmlentities2_help = __('If you use HTML tags in your code (for example '.htmlentities('<input> or <textarea>').') and you notice that they disappear and the editor looks weird, then you need to enable this option.', 'custom-css-js');
-
-        $remove_comments_help = __('In your page\'s HTML there is a comment added before and after the internal CSS or JS in order to help you locate your custom code. Enable this option in order to remove that comment.', 'custom-css-js');
-
-        $remove_file_comments_help = __('Every externally linked custom code will have a 3-lines comment added at the beginning of the file. Enable this option in order to stop adding that comment to the externaly linked custom codes', 'custom-css-js');
-
         ?>
 
-        <h2><?php echo __('Editor Settings', 'custom-css-js'); ?></h2>
-        <table class="form-table">
-        <tr>
-        <th scope="row"><label for="ccj_htmlentities"><?php _e('Keep the HTML entities, don\'t convert to its character', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help tipsy-no-html" rel="tipsy" title="<?php echo $ccj_htmlentities_help; ?>"></span>
-        </label></th>
-        <td><input type="checkbox" name="ccj_htmlentities" id="ccj_htmlentities" value="1" <?php checked($settings['ccj_htmlentities'], true); ?> />
+	<h2><?php echo esc_html('Editor Settings', 'custom-css-js'); ?></h2>
+	<table class="form-table">
+	<tr>
+		<th scope="row">
+			<label for="ccj_htmlentities">
+				<?php esc_html_e('Keep the HTML entities, don\'t convert to its character', 'custom-css-js'); ?>
+				<span class="dashicons dashicons-editor-help tipsy-no-html" rel="tipsy" title="<?php esc_html_e('If you want to use an HTML entity in your code (for example &amp;gt; or &amp;quot;), but the editor keeps on changing them to its equivalent character (&gt; and &quot; for the previous example), then you might want to enable this option.', 'custom-css-js'); ?>"></span>
+	        </label>
+		</th><td>
+			<input type="checkbox" name="ccj_htmlentities" id="ccj_htmlentities" value="1" <?php checked($settings['ccj_htmlentities'], true); ?>>
         </td>
-        </tr>
-        <tr>
-        <th scope="row"><label for="ccj_htmlentities2"><?php _e('Encode the HTML entities', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help tipsy-no-html" rel="tipsy" title="<?php echo $ccj_htmlentities2_help; ?>"></span></label></th>
-        <td><input type="checkbox" name="ccj_htmlentities2" id="ccj_htmlentities2" value="1" <?php checked($settings['ccj_htmlentities2'], true); ?> />
+	</tr><tr>
+		<th scope="row">
+			<label for="ccj_htmlentities2">
+				<?php esc_html_e('Encode the HTML entities', 'custom-css-js') ?>
+				<span class="dashicons dashicons-editor-help tipsy-no-html" rel="tipsy" title="<?php esc_html_e('If you use HTML tags in your code (for example &lt;input&gt; or &lt;textarea&gt;) and you notice that they disappear and the editor looks weird, then you need to enable this option.', 'custom-css-js'); ?>"></span>
+			</label>
+		</th><td>
+			<input type="checkbox" name="ccj_htmlentities2" id="ccj_htmlentities2" value="1" <?php checked($settings['ccj_htmlentities2'], true); ?>>
         </td>
-        </tr>
-        <tr>
-        <th scope="row"><label for="ccj_autocomplete"><?php _e('Autocomplete in the editor', 'custom-css-js') ?></label></th>
-        <td><input type="checkbox" name="ccj_autocomplete" id="ccj_autocomplete" value="1" <?php checked($settings['ccj_autocomplete'], true); ?> />
+	</tr><tr>
+		<th scope="row">
+			<label for="ccj_autocomplete">
+				<?php esc_html_e('Autocomplete in the editor', 'custom-css-js') ?>
+			</label>
+		</th><td>
+			<input type="checkbox" name="ccj_autocomplete" id="ccj_autocomplete" value="1" <?php checked($settings['ccj_autocomplete'], true); ?>>
         </td>
-        </tr>
-
-
-
-        </table>
-
-
-        
-        <?php if ( current_user_can('update_plugins') ) : ?> 
-            <?php $add_role_help = esc_html__('By default only the Administrator will be able to publish/edit/delete Custom Codes. By enabling this option there is also a "Web Designer" role created which can be assigned to a non-admin user in order to publish/edit/delete Custom Codes.', 'custom-css-js'); ?>
-            <h2><?php echo __('General Settings', 'custom-css-js'); ?></h2>
-            <table class="form-table">
-            <tr>
-            <th scope="row"><label for="add_role"><?php _e('Add the "Web Designer" role', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $add_role_help; ?>"></span></label></th>
-            <td><input type="checkbox" name="add_role" id = "add_role" value="1" <?php checked($settings['add_role'], true); ?> />
+	</tr>
+	</table>
+	<h2><?php esc_html_e('General Settings', 'custom-css-js'); ?></h2>
+	<table class="form-table">
+	<?php if ( current_user_can('update_plugins') ) : ?> 
+		<tr>
+			<th scope="row">
+				<label for="add_role">
+					<?php esc_html_e('Add the "Web Designer" role', 'custom-css-js') ?>
+					<span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php esc_html__('By default only the Administrator will be able to publish/edit/delete Custom Codes. By enabling this option there is also a "Web Designer" role created which can be assigned to a non-admin user in order to publish/edit/delete Custom Codes.', 'custom-css-js'); ?>"></span>
+				</label>
+			</th><td>
+				<input type="checkbox" name="add_role" id = "add_role" value="1" <?php checked($settings['add_role'], true); ?>>
             </td>
-            </tr>
-            </table>
-        <?php endif; ?>
-        <table class="form-table">
-        <tr>
-        <th scope="row"><label for="remove_comments"><?php _e('Remove comments for internal custom codes', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $remove_comments_help; ?>"></span></label></th>
-        <td><input type="checkbox" name="remove_comments" id = "remove_comments" value="1" <?php checked($settings['remove_comments'], true); ?> />
-        </td>
-        </tr>
-        <tr>
-        <th scope="row"><label for="remove_file_comments"><?php _e('Remove comments from externally linked custom codes', 'custom-css-js') ?> <span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php echo $remove_file_comments_help; ?>"></span></label></th>
-        <td><input type="checkbox" name="remove_file_comments" id = "remove_file_comments" value="1" <?php checked($settings['remove_file_comments'], true); ?> />
-        </td>
-        </tr>
-        </table>
-
-        <table class="form-table">
-        <tr>
-        <th>&nbsp;</th>
-        <td>
-        <input type="submit" name="Submit" class="button-primary" value="<?php _e('Save'); ?>" />
-        <?php wp_nonce_field('ccj_settings', 'ccj_settings-nonce', false); ?>
-        </td>
-        </tr>
-        </table>
-
-        <?php
-    }
+		</tr>
+	<?php endif; ?>
+	<tr>
+		<th scope="row">
+			<label for="remove_comments">
+				<?php esc_html_e('Remove comments for internal custom codes', 'custom-css-js') ?>
+				<span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php esc_html_e('In your page\'s HTML there is a comment added before and after the internal CSS or JS in order to help you locate your custom code. Enable this option in order to remove that comment.', 'custom-css-js'); ?>"></span>
+			</label>
+		</th><td>
+			<input type="checkbox" name="remove_comments" id = "remove_comments" value="1" <?php checked($settings['remove_comments'], true); ?>>
+		</td>
+	</tr><tr>
+		<th scope="row">
+			<label for="remove_file_comments">
+				<?php esc_html_e('Remove comments from externally linked custom codes', 'custom-css-js') ?>
+				<span class="dashicons dashicons-editor-help" rel="tipsy" title="<?php esc_html_e('Every externally linked custom code will have a 3-lines comment added at the beginning of the file. Enable this option in order to stop adding that comment to the externaly linked custom codes', 'custom-css-js'); ?>"></span>
+			</label>
+		</th><td>
+			<input type="checkbox" name="remove_file_comments" id = "remove_file_comments" value="1" <?php checked($settings['remove_file_comments'], true); ?>>
+		</td>
+	</tr><tr>
+		<th>&nbsp;</th>
+		<td>
+			<input type="submit" name="Submit" class="button-primary" value="<?php esc_html_e( 'Save', 'custom-css-js' ); ?>">
+			<?php wp_nonce_field('ccj_settings', 'ccj_settings-nonce', false); ?>
+		</td>
+	</tr>
+	</table>
+	<?php
+	}
 }
 
 return new CustomCSSandJS_AdminConfig();
