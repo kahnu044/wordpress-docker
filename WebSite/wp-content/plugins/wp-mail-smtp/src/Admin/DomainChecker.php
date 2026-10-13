@@ -2,6 +2,8 @@
 
 namespace WPMailSMTP\Admin;
 
+use WPMailSMTP\ConnectionInterface;
+use WPMailSMTP\DomainCheckState;
 use WPMailSMTP\Helpers\Helpers;
 
 /**
@@ -37,17 +39,50 @@ class DomainChecker {
 	protected $mailer;
 
 	/**
+	 * The From email address that was checked.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @var string
+	 */
+	protected $from_email;
+
+	/**
+	 * The optional sending domain that was checked.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @var string
+	 */
+	protected $sending_domain;
+
+	/**
+	 * The connection the check was run for.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @var ConnectionInterface
+	 */
+	protected $connection;
+
+	/**
 	 * Verify the domain for the provided mailer and email address and save the API results.
 	 *
 	 * @since 2.6.0
+	 * @since 4.10.0 Added the $connection parameter.
 	 *
-	 * @param string $mailer         The plugin mailer.
-	 * @param string $email          The email address from which the domain will be extracted.
-	 * @param string $sending_domain The optional sending domain to check the domain records for.
+	 * @param string                   $mailer         The plugin mailer.
+	 * @param string                   $email          The email address from which the domain will be extracted.
+	 * @param string                   $sending_domain The optional sending domain to check the domain records for.
+	 * @param ConnectionInterface|null $connection     The connection being checked. Defaults to the primary one.
 	 */
-	public function __construct( $mailer, $email, $sending_domain = '' ) {
+	public function __construct( $mailer, $email, $sending_domain = '', ?ConnectionInterface $connection = null ) {
 
-		$this->mailer = $mailer;
+		$this->mailer         = $mailer;
+		$this->from_email     = $email;
+		$this->sending_domain = $sending_domain;
+
+		$this->connection = $connection ?? wp_mail_smtp()->get_connections_manager()->get_primary_connection();
 
 		$params = [
 			'mailer' => $mailer,
@@ -73,6 +108,8 @@ class DomainChecker {
 		} else {
 			$this->results = json_decode( wp_remote_retrieve_body( $response ), true );
 		}
+
+		DomainCheckState::record( $this, $this->connection );
 	}
 
 	/**
@@ -84,6 +121,54 @@ class DomainChecker {
 	 */
 	public function get_results() {
 		return $this->results;
+	}
+
+	/**
+	 * Simple getter for the checked mailer.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @return string
+	 */
+	public function get_mailer() {
+
+		return $this->mailer;
+	}
+
+	/**
+	 * Simple getter for the checked From email address.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @return string
+	 */
+	public function get_from_email() {
+
+		return $this->from_email;
+	}
+
+	/**
+	 * Simple getter for the checked sending domain.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @return string
+	 */
+	public function get_sending_domain() {
+
+		return $this->sending_domain;
+	}
+
+	/**
+	 * Simple getter for the checked connection.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @return ConnectionInterface
+	 */
+	public function get_connection() {
+
+		return $this->connection;
 	}
 
 	/**
@@ -149,7 +234,21 @@ class DomainChecker {
 	 */
 	public function is_supported_mailer() {
 
-		return ! in_array( $this->mailer, [ 'mail', 'pepipostapi' ], true );
+		return self::is_mailer_supported( $this->mailer );
+	}
+
+	/**
+	 * Check if the domain checker supports a mailer.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @param string $mailer The plugin mailer slug.
+	 *
+	 * @return bool
+	 */
+	private static function is_mailer_supported( $mailer ) {
+
+		return ! in_array( $mailer, [ 'mail', 'pepipostapi' ], true );
 	}
 
 	/**
@@ -161,7 +260,21 @@ class DomainChecker {
 	 */
 	public function get_results_html() {
 
-		$results      = $this->get_results();
+		return self::render_results( $this->get_results(), $this->mailer );
+	}
+
+	/**
+	 * Get the HTML for domain check results.
+	 *
+	 * @since 4.10.1
+	 *
+	 * @param array  $results Domain check API results.
+	 * @param string $mailer  The plugin mailer slug the check ran for.
+	 *
+	 * @return string
+	 */
+	public static function render_results( $results, $mailer ) {
+
 		$allowed_html = [
 			'b' => [],
 			'i' => [],
@@ -178,7 +291,7 @@ class DomainChecker {
 			<h2><?php esc_html_e( 'Domain Check Results', 'wp-mail-smtp' ); ?></h2>
 
 			<?php if ( empty( $results['success'] ) ) : ?>
-				<div class="notice-inline <?php echo $this->is_supported_mailer() ? 'notice-error' : 'notice-warning'; ?>">
+				<div class="notice-inline <?php echo self::is_mailer_supported( $mailer ) ? 'notice-error' : 'notice-warning'; ?>">
 					<p><?php echo wp_kses( $results['message'], $allowed_html ); ?></p>
 				</div>
 			<?php endif; ?>

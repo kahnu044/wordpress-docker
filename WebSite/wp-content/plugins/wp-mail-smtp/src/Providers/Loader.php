@@ -6,6 +6,7 @@ use WPMailSMTP\Admin\DebugEvents\DebugEvents;
 use WPMailSMTP\ConnectionInterface;
 use WPMailSMTP\MailCatcherInterface;
 use WPMailSMTP\Options;
+use WPMailSMTP\Providers\Preflight\PreflightInterface; // phpcs:ignore WPForms.PHP.UseStatement.UnusedUseStatement
 
 /**
  * Class Loader.
@@ -173,6 +174,41 @@ class Loader {
 	}
 
 	/**
+	 * Get the provider pre-send check, if exists.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @param string $provider The provider name.
+	 *
+	 * @return PreflightInterface|null Null when the mailer has nothing to check.
+	 */
+	public function get_preflight( $provider ) {
+
+		if ( ! $this->has_preflight( $provider ) ) {
+			return null;
+		}
+
+		return $this->get_entity( $provider, 'Preflight' );
+	}
+
+	/**
+	 * Whether the provider ships a pre-send check.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @param string $provider The provider name.
+	 *
+	 * @return bool
+	 */
+	public function has_preflight( $provider ) {
+
+		$path = $this->get_provider_path( $provider );
+
+		// The shared resolver records a debug error for a class most mailers omit by design.
+		return ! empty( $path ) && class_exists( $path . 'Preflight' );
+	}
+
+	/**
 	 * Get a generic entity based on the request.
 	 *
 	 * @since 1.0.0
@@ -204,7 +240,14 @@ class Loader {
 				$entity = new $class( ...$args );
 			}
 		} catch ( \Exception $e ) {
-			DebugEvents::add( "There was a problem while retrieving {$request} for {$provider}: {$e->getMessage()}" );
+			DebugEvents::add(
+				sprintf( /* translators: %1$s - requested entity, %2$s - provider slug, %3$s - error message. */
+					__( 'There was a problem while retrieving %1$s for %2$s: %3$s', 'wp-mail-smtp' ),
+					$request,
+					$provider,
+					$e->getMessage()
+				)
+			);
 			$entity = null;
 		}
 

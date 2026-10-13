@@ -3,6 +3,8 @@
 namespace WPMailSMTP\Admin\Pages;
 
 use WPMailSMTP\Admin\PageAbstract;
+use WPMailSMTP\PartnerPlugins\PartnerPlugin;
+use WPMailSMTP\PartnerPlugins\Plugins\WPVibe;
 use WPMailSMTP\WP;
 
 /**
@@ -13,29 +15,32 @@ use WPMailSMTP\WP;
 class AiMcpTab extends PageAbstract {
 
 	/**
+	 * The partner plugin this tab is about.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @var PartnerPlugin|null
+	 */
+	private $plugin;
+
+	/**
 	 * WPVibe plugin basename on wp.org.
 	 *
 	 * @since 4.9.0
-	 *
-	 * @var string
 	 */
-	const WPVIBE_BASENAME = 'vibe-ai/vibe-ai.php';
+	const WPVIBE_BASENAME = WPVibe::BASENAME;
 
 	/**
 	 * WPVibe wp.org download URL.
 	 *
 	 * @since 4.9.0
-	 *
-	 * @var string
 	 */
-	const WPVIBE_DOWNLOAD_URL = 'https://downloads.wordpress.org/plugin/vibe-ai.zip';
+	const WPVIBE_DOWNLOAD_URL = WPVibe::DOWNLOAD_URL;
 
 	/**
 	 * WPVibe top-level admin page slug.
 	 *
 	 * @since 4.9.0
-	 *
-	 * @var string
 	 */
 	const WPVIBE_PAGE_SLUG = 'vibe-ai';
 
@@ -92,7 +97,7 @@ class AiMcpTab extends PageAbstract {
 	}
 
 	/**
-	 * Enqueue the tab's install/activate script and localized strings.
+	 * Enqueue the tab's install/activate script.
 	 *
 	 * @since 4.9.0
 	 */
@@ -105,14 +110,22 @@ class AiMcpTab extends PageAbstract {
 			WPMS_PLUGIN_VER,
 			true
 		);
+	}
 
-		wp_localize_script(
-			'wp-mail-smtp-ai-mcp',
-			'wp_mail_smtp_ai_mcp',
-			[
-				'error_text' => esc_html__( 'Something went wrong. Please try again.', 'wp-mail-smtp' ),
-			]
-		);
+	/**
+	 * The WPVibe plugin.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @return WPVibe
+	 */
+	private function get_plugin() {
+
+		if ( $this->plugin === null ) {
+			$this->plugin = new WPVibe();
+		}
+
+		return $this->plugin;
 	}
 
 	/**
@@ -120,25 +133,11 @@ class AiMcpTab extends PageAbstract {
 	 *
 	 * @since 4.9.0
 	 *
-	 * @return string One of 'not_installed', 'installed_inactive', 'active'.
+	 * @return string One of the PartnerPlugin::STATE_* constants.
 	 */
 	private function get_wpvibe_state() {
 
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$plugins = get_plugins();
-
-		if ( ! array_key_exists( self::WPVIBE_BASENAME, $plugins ) ) {
-			return 'not_installed';
-		}
-
-		if ( ! is_plugin_active( self::WPVIBE_BASENAME ) ) {
-			return 'installed_inactive';
-		}
-
-		return 'active';
+		return $this->get_plugin()->get_install_state();
 	}
 
 	/**
@@ -146,58 +145,46 @@ class AiMcpTab extends PageAbstract {
 	 *
 	 * @since 4.9.0
 	 *
-	 * @param string $state        WPVibe state.
-	 * @param bool   $can_install  Whether the user can install plugins.
-	 * @param bool   $can_activate Whether the user can activate plugins.
-	 * @param string $setup_url    WPVibe admin page URL for the active state.
+	 * @param string $state     WPVibe state.
+	 * @param string $setup_url WPVibe admin page URL for the active state.
 	 */
-	private function render_cta_button( $state, $can_install, $can_activate, $setup_url ) {
+	private function render_cta_button( $state, $setup_url ) {
 
-		if ( $state === 'active' ) {
+		if ( $state === PartnerPlugin::STATE_ACTIVE ) {
+			$label = $this->get_plugin()->is_configured()
+				? esc_html__( 'Go To WPVibe', 'wp-mail-smtp' )
+				: esc_html__( 'Set Up WPVibe', 'wp-mail-smtp' );
 			?>
 			<a
 				class="wp-mail-smtp-btn wp-mail-smtp-btn-lg wp-mail-smtp-btn-blueish wp-mail-smtp-ai-mcp-wpvibe-button"
 				href="<?php echo esc_url( $setup_url ); ?>"
-			><?php esc_html_e( 'Set Up WPVibe', 'wp-mail-smtp' ); ?></a>
+			><?php echo esc_html( $label ); ?></a>
 			<?php
 
 			return;
 		}
 
-		if ( $state === 'installed_inactive' && $can_activate ) {
+		if ( $state === PartnerPlugin::STATE_INACTIVE ) {
 			?>
 			<button
 				type="button"
 				class="wp-mail-smtp-btn wp-mail-smtp-btn-lg wp-mail-smtp-btn-orange wp-mail-smtp-ai-mcp-wpvibe-button"
 				data-action="activate"
-				data-plugin="<?php echo esc_attr( self::WPVIBE_BASENAME ); ?>"
+				data-plugin="<?php echo esc_attr( $this->get_plugin()->get_basename() ); ?>"
 			><?php esc_html_e( 'Activate WPVibe', 'wp-mail-smtp' ); ?></button>
 			<?php
 
 			return;
 		}
 
-		if ( $state === 'not_installed' && $can_install ) {
+		if ( $state === PartnerPlugin::STATE_NOT_INSTALLED ) {
 			?>
 			<button
 				type="button"
 				class="wp-mail-smtp-btn wp-mail-smtp-btn-lg wp-mail-smtp-btn-orange wp-mail-smtp-ai-mcp-wpvibe-button"
 				data-action="install"
-				data-plugin="<?php echo esc_attr( self::WPVIBE_DOWNLOAD_URL ); ?>"
+				data-plugin="<?php echo esc_attr( $this->get_plugin()->get_download_url() ); ?>"
 			><?php esc_html_e( 'Install & Activate WPVibe', 'wp-mail-smtp' ); ?></button>
-			<?php
-
-			return;
-		}
-
-		if ( $state === 'not_installed' ) {
-			?>
-			<a
-				href="https://wordpress.org/plugins/vibe-ai/"
-				class="wp-mail-smtp-btn wp-mail-smtp-btn-lg wp-mail-smtp-btn-orange wp-mail-smtp-ai-mcp-wpvibe-button"
-				target="_blank"
-				rel="noopener noreferrer"
-			><?php esc_html_e( 'Install from WordPress.org', 'wp-mail-smtp' ); ?></a>
 			<?php
 		}
 	}
@@ -211,9 +198,7 @@ class AiMcpTab extends PageAbstract {
 
 		$state         = $this->get_wpvibe_state();
 		$is_pro        = wp_mail_smtp()->is_pro();
-		$can_install   = current_user_can( 'install_plugins' );
-		$can_activate  = current_user_can( 'activate_plugins' );
-		$wpvibe_setup  = admin_url( 'admin.php?page=' . self::WPVIBE_PAGE_SLUG );
+		$wpvibe_setup  = $this->get_plugin()->get_setup_url();
 		$pro_badge_url = wp_mail_smtp()->assets_url . '/images/pro-badge-small.svg';
 
 		$docs_url = wp_mail_smtp()->get_utm_url(
@@ -287,14 +272,8 @@ class AiMcpTab extends PageAbstract {
 					</p>
 
 					<div class="wp-mail-smtp-ai-mcp-cta-row">
-						<?php $this->render_cta_button( $state, $can_install, $can_activate, $wpvibe_setup ); ?>
+						<?php $this->render_cta_button( $state, $wpvibe_setup ); ?>
 					</div>
-
-					<?php if ( $state === 'not_installed' && ! $can_install ) : ?>
-						<p class="wp-mail-smtp-ai-mcp-install-note">
-							<?php esc_html_e( 'Your site is configured to disallow plugin installation from the dashboard.', 'wp-mail-smtp' ); ?>
-						</p>
-					<?php endif; ?>
 
 				</div>
 

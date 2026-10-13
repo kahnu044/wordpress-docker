@@ -4,7 +4,7 @@ Tags: GraphQL, Headless, REST API, Decoupled, React
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.23.0
+Stable tag: 2.24.0
 License: GPL-3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Author: WPGraphQL, WordPress.org
@@ -77,6 +77,20 @@ Learn more about how [Appsero collects and uses this data](https://appsero.com/p
 2. WPGraphQL settings — configure the GraphQL endpoint, batch queries, query depth limiting, debug mode, and more.
 
 == Upgrade Notice ==
+
+= 2.24.0 =
+
+**New: a settings review.** Administrators see a dismissable notice inviting them to review the WPGraphQL settings that affect who can use the API, how much work one request can ask for, and what debugging information responses include. It changes nothing on its own: every setting starts at your current value, "Skip for now" saves nothing, and only settings you actually change are written. To suppress the invitation, filter `graphql_settings_review_show_invitation` to false. You can also handle the review from the command line, which is easier across many sites: `wp graphql settings-review status` reports what is left, and `wp graphql settings-review skip` records it as skipped without changing any settings.
+
+**Query depth limiting is now on for new installs.** Existing sites are unchanged. A new install starts with the limit enabled and a maximum depth of 15, and operations that only request introspection are exempt. Change the effective maximum with the `graphql_query_depth_max` filter, or the setting under GraphQL > Settings.
+
+**Non-public taxonomies are now described in the Schema.** A taxonomy registered `public => false` with `show_in_graphql => true` previously returned null from the `taxonomy` field, while the terms inside it were served to everyone. The taxonomy is now returned, so the Schema describes what it already serves. Its configuration fields still require `edit_terms`, so an anonymous caller sees a limited set and null for the rest. To hide a taxonomy again, filter `graphql_data_is_private`.
+
+**`public` reports false instead of null.** Content types and taxonomies registered `public => false` previously reported `public: null` and now report `public: false`. If a client treats null as "unknown" and false as "not public", that branch now behaves differently.
+
+= 2.23.1 =
+
+**Security release.** Fixes an authorization issue in the `updateMediaItem` mutation that let users with the Author or Contributor role take over, and then delete, media items owned by other users. Updating is recommended. See GHSA-4h2c-85f8-g3jh.
 
 = 2.15.1 =
 
@@ -309,6 +323,28 @@ The `uri` field was non-null on some Types in the Schema but has been changed to
 Composer dependencies are no longer versioned in Github. Recommended install source is WordPress.org or using Composer to get the code from Packagist.org or WPackagist.org.
 
 == Changelog ==
+
+= 2.24.0 =
+
+**New Features**
+
+* add a settings review for security-related settings ([#4342](https://github.com/wp-graphql/wp-graphql/issues/4342))
+* add publiclyQueryable to Taxonomy, and correct the public description ([#4425](https://github.com/wp-graphql/wp-graphql/issues/4425))
+* turn on query depth limiting for new installs and add a max depth filter ([#4341](https://github.com/wp-graphql/wp-graphql/issues/4341))
+
+**Bug Fixes**
+
+* **ide:** show WPGraphQL admin notices above the IDE instead of over it ([#4340](https://github.com/wp-graphql/wp-graphql/issues/4340))
+* report public: false for non-public post types ([#4430](https://github.com/wp-graphql/wp-graphql/issues/4430))
+* report public: false for non-public taxonomies ([#4414](https://github.com/wp-graphql/wp-graphql/issues/4414))
+* show admin notices above the legacy GraphiQL IDE and on the Extensions screen ([#4339](https://github.com/wp-graphql/wp-graphql/issues/4339))
+* stop hiding a taxonomy while serving every term inside it ([#4426](https://github.com/wp-graphql/wp-graphql/issues/4426))
+
+= 2.23.1 =
+
+**Security**
+
+* tighten media item update authorization: `updateMediaItem` now verifies that the requesting user can edit the targeted media item, and its new parent, before applying changes. Previously, users with the Author or Contributor role could reassign, and then delete, media items owned by other users. See [GHSA-4h2c-85f8-g3jh](https://github.com/wp-graphql/wp-graphql/security/advisories/GHSA-4h2c-85f8-g3jh) ([#4353](https://github.com/wp-graphql/wp-graphql/issues/4353))
 
 = 2.23.0 =
 
@@ -665,7 +701,7 @@ Composer dependencies are no longer versioned in Github. Recommended install sou
 * **deps:** bump webonyx/graphql-php from 15.29.4 to 15.30.0 in /plugins/wp-graphql in the composer-minor-patch group across 1 directory ([#3521](https://github.com/wp-graphql/wp-graphql/issues/3521))
 * nodeByUri returns null for REST API endpoints and static file paths ([#3530](https://github.com/wp-graphql/wp-graphql/issues/3530))
 * Prevent password from being changed when updating user without password field ([#3532](https://github.com/wp-graphql/wp-graphql/issues/3532))
-* replace x-release-please-version placeholders with 2.23.0
+* replace x-release-please-version placeholders with 2.24.0
 * use clean build directory for WordPress.org deployment ([#3502](https://github.com/wp-graphql/wp-graphql/issues/3502))
 
 = 2.7.0 =

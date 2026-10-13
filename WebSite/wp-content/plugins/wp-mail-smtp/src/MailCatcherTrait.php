@@ -98,6 +98,7 @@ trait MailCatcherTrait {
 	 * @since 1.0.0
 	 * @since 1.4.0 Process "Do Not Send" option, but always allow test email.
 	 * @since 4.5.0 Add support for logging blocked emails.
+	 * @since 4.10.0 Allow the Setup Wizard test email when sending is blocked.
 	 *
 	 * @throws Exception When sending via PhpMailer fails for some reason.
 	 *
@@ -128,6 +129,7 @@ trait MailCatcherTrait {
 					$this->is_emailing_blocked = false;
 					$this->is_test_email       = true;
 				} elseif ( trim( $header[1] ) === 'WPMailSMTP/Admin/SetupWizard/Test' ) {
+					$this->is_emailing_blocked        = false;
 					$this->is_setup_wizard_test_email = true;
 				}
 			}
@@ -323,7 +325,10 @@ trait MailCatcherTrait {
 			// We need this to append SMTP error to the `PHPMailer::ErrorInfo` property.
 			$this->setError( $e->getMessage() );
 
-			$error_message = 'Mailer: ' . esc_html( wp_mail_smtp()->get_providers()->get_options( $mailer_slug )->get_title() ) . "\r\n" . $this->ErrorInfo;
+			$error_message = sprintf( /* translators: %s - mailer name. */
+				esc_html__( 'Mailer: %s', 'wp-mail-smtp' ),
+				esc_html( wp_mail_smtp()->get_providers()->get_options( $mailer_slug )->get_title() )
+			) . "\r\n" . $this->ErrorInfo;
 			$error_code    = $this->get_smtp_error_code();
 			$error_key     = $this->build_error_key( '', $error_code, $this->ErrorInfo ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
@@ -407,6 +412,7 @@ trait MailCatcherTrait {
 
 			$mailer = wp_mail_smtp()->get_providers()->get_mailer( $mailer_slug, $this, $connection );
 
+			// Not translated: the error key behind the sending error stats is built from these messages.
 			if ( ! $mailer ) {
 				$this->throw_exception( 'The selected mailer not found.' );
 			}
@@ -453,7 +459,10 @@ trait MailCatcherTrait {
 			return true;
 		} catch ( Exception $e ) {
 			// Add mailer to the beginning and save to display later.
-			$message = 'Mailer: ' . esc_html( wp_mail_smtp()->get_providers()->get_options( $mailer_slug )->get_title() ) . "\r\n";
+			$message = sprintf( /* translators: %s - mailer name. */
+				esc_html__( 'Mailer: %s', 'wp-mail-smtp' ),
+				esc_html( wp_mail_smtp()->get_providers()->get_options( $mailer_slug )->get_title() )
+			) . "\r\n";
 
 			$error_code           = ! empty( $mailer ) ? $mailer->get_response_error_code() : '';
 			$response_code        = ! empty( $mailer ) ? $mailer->get_response_code() : 0;
@@ -871,10 +880,10 @@ trait MailCatcherTrait {
 				$this->clearAttachments();
 
 				foreach ( $state['attachment'] as $attachment ) {
-					[ $path, , $name ] = $attachment;
+					[ $path, , $name, $encoding, $type, , $disposition ] = $attachment;
 
 					try {
-						$this->addAttachment( $path, $name );
+						$this->addAttachment( $path, $name, $encoding, $type, $disposition );
 					} catch ( Exception $e ) {
 						continue;
 					}

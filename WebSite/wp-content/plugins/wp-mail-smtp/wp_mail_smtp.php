@@ -1,14 +1,15 @@
 <?php
 /**
  * Plugin Name: WP Mail SMTP
- * Version: 4.9.0
+ * Version: 4.10.2
  * Requires at least: 5.5
  * Requires PHP: 7.4
  * Plugin URI: https://wpmailsmtp.com/
  * Description: Send WordPress emails reliably via SMTP or API using SendLayer, Brevo, SMTP.com, Gmail, Outlook, or another email service of your choice.
  * Author: WP Mail SMTP
  * Author URI: https://wpmailsmtp.com/
- * Network: false
+ * License: GNU General Public License v3.0 or later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: wp-mail-smtp
  * Domain Path: /assets/languages
  */
@@ -20,6 +21,10 @@
  * https://www.gnu.org/licenses/gpl.txt
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Setting options in wp-config.php
  *
@@ -29,6 +34,9 @@
  *
  * When enabled, make sure to comment out (at the beginning of the line using //) those constants that you do not need,
  * or remove them completely, so they won't interfere with plugin settings.
+ *
+ * The example below covers SendLayer and Other SMTP. Every mailer has its own constants, all of
+ * them listed at https://wpmailsmtp.com/docs/how-to-secure-smtp-settings-by-using-constants/.
  */
 
 /*
@@ -40,39 +48,20 @@ define( 'WPMS_MAIL_FROM', 'mail@example.com' );
 define( 'WPMS_MAIL_FROM_FORCE', true ); // True turns it on, false turns it off.
 define( 'WPMS_MAIL_FROM_NAME', 'From Name' );
 define( 'WPMS_MAIL_FROM_NAME_FORCE', true ); // True turns it on, false turns it off.
-define( 'WPMS_MAILER', 'sendinblue' ); // Possible values: 'mail', 'smtpcom', 'sendinblue', 'mailgun', 'sendgrid', 'gmail', 'smtp'.
+define( 'WPMS_MAILER', 'sendlayer' ); // The mailer to send with, see the docs link above for every supported value.
 define( 'WPMS_SET_RETURN_PATH', true ); // Sets $phpmailer->Sender if true, relevant only for Other SMTP mailer.
 
-// Recommended mailers.
-define( 'WPMS_SMTPCOM_API_KEY', '' );
-define( 'WPMS_SMTPCOM_CHANNEL', '' );
-define( 'WPMS_SENDINBLUE_API_KEY', '' );
-define( 'WPMS_SENDINBLUE_DOMAIN', '' );
+// SendLayer.
+define( 'WPMS_SENDLAYER_API_KEY', '' );
 
-define( 'WPMS_ZOHO_DOMAIN', '' );
-define( 'WPMS_ZOHO_CLIENT_ID', '' );
-define( 'WPMS_ZOHO_CLIENT_SECRET', '' );
-
-define( 'WPMS_PEPIPOST_API_KEY', '' );
-
-define( 'WPMS_SENDINBLUE_API_KEY', '' );
-
-define( 'WPMS_MAILGUN_API_KEY', '' );
-define( 'WPMS_MAILGUN_DOMAIN', '' );
-define( 'WPMS_MAILGUN_REGION', 'US' ); // or 'EU' for Europe.
-
-define( 'WPMS_SENDGRID_API_KEY', '' );
-
-define( 'WPMS_GMAIL_CLIENT_ID', '' );
-define( 'WPMS_GMAIL_CLIENT_SECRET', '' );
-
+// Other SMTP.
 define( 'WPMS_SMTP_HOST', 'localhost' ); // The SMTP mail host.
 define( 'WPMS_SMTP_PORT', 25 ); // The SMTP server port number.
-define( 'WPMS_SSL', '' ); // Possible values '', 'ssl', 'tls' - note TLS is not STARTTLS.
+define( 'WPMS_SSL', '' ); // Possible values '', 'ssl', 'tls'. 'ssl' is implicit TLS, 'tls' is STARTTLS.
 define( 'WPMS_SMTP_AUTH', true ); // True turns it on, false turns it off.
 define( 'WPMS_SMTP_USER', 'username' ); // SMTP authentication username, only used if WPMS_SMTP_AUTH is true.
 define( 'WPMS_SMTP_PASS', 'password' ); // SMTP authentication password, only used if WPMS_SMTP_AUTH is true.
-define( 'WPMS_SMTP_AUTOTLS', true ); // True turns it on, false turns it off.
+define( 'WPMS_SMTP_AUTOTLS', true ); // Use STARTTLS when the server advertises it and WPMS_SSL is not 'ssl'. True turns it on, false turns it off.
 */
 
 /**
@@ -121,7 +110,7 @@ if ( ! function_exists( 'wp_mail_smtp_check_pro_loading_allowed' ) ) {
 		}
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
 		$lite_plugin_slug = 'wp-mail-smtp/wp_mail_smtp.php';
@@ -253,7 +242,7 @@ if ( ! defined( 'WPMS_PLUGIN_VER' ) ) {
 	 *
 	 * @since 0.11.1
 	 */
-	define( 'WPMS_PLUGIN_VER', '4.9.0' );
+	define( 'WPMS_PLUGIN_VER', '4.10.2' );
 }
 if ( ! defined( 'WPMS_PHP_VER' ) ) {
 	/**
@@ -278,6 +267,14 @@ if ( ! defined( 'WPMS_PLUGIN_FILE' ) ) {
 	 * @since 2.1.2
 	 */
 	define( 'WPMS_PLUGIN_FILE', __FILE__ );
+}
+if ( ! defined( 'WPMS_PLUGIN_DIR' ) ) {
+	/**
+	 * Plugin directory path, with a trailing slash.
+	 *
+	 * @since 4.10.0
+	 */
+	define( 'WPMS_PLUGIN_DIR', plugin_dir_path( WPMS_PLUGIN_FILE ) );
 }
 
 if ( ! function_exists( 'wp_mail_smtp_unsupported_wp_version_notice' ) ) {

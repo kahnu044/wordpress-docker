@@ -2,6 +2,8 @@
 
 namespace WPMailSMTP\Integrations\WPCode;
 
+use WPMailSMTP\Helpers\Helpers;
+
 /**
  * Provides the plugin's WPCode library snippets as a single, normalized
  * view-model, whether or not the WPCode plugin is active.
@@ -180,7 +182,7 @@ class SnippetsProvider {
 			return $cached;
 		}
 
-		$response = wp_remote_get( self::API_BASE . sanitize_key( $this->username ) );
+		$response = wp_remote_get( self::API_BASE . sanitize_key( $this->username ), [ 'user-agent' => Helpers::get_default_user_agent() ] );
 
 		if ( ! is_wp_error( $response ) && (int) wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$mapped = $this->map_response( json_decode( wp_remote_retrieve_body( $response ), true ) );
@@ -265,18 +267,18 @@ class SnippetsProvider {
 	private function get_placeholder_snippets() {
 
 		$titles = [
-			'Adding a Custom Filter when using Other SMTP Setting',
-			'Change the redirect URI when using Google App\'s OAuth',
-			'Set a Custom Reply-To Email',
-			'Using an Office 365 GCC or DoD email address',
-			'Change the Email Summary Email Address',
-			'Block URLs Inside Text Fields',
-			'Set a Custom Email Header',
-			'Defining Amazon SES Constants',
-			'Use Single Tenant With the Outlook Mailer',
-			'Defining Google Mailer Constants',
-			'Define the Mailgun Signing Key Constant',
-			'Defining Outlook Mailer Constants',
+			esc_html__( 'Adding a Custom Filter when using Other SMTP Setting', 'wp-mail-smtp' ),
+			__( 'Change the redirect URI when using Google App\'s OAuth', 'wp-mail-smtp' ),
+			esc_html__( 'Set a Custom Reply-To Email', 'wp-mail-smtp' ),
+			esc_html__( 'Using an Office 365 GCC or DoD email address', 'wp-mail-smtp' ),
+			esc_html__( 'Change the Email Summary Email Address', 'wp-mail-smtp' ),
+			esc_html__( 'Block URLs Inside Text Fields', 'wp-mail-smtp' ),
+			esc_html__( 'Set a Custom Email Header', 'wp-mail-smtp' ),
+			esc_html__( 'Defining Amazon SES Constants', 'wp-mail-smtp' ),
+			esc_html__( 'Use Single Tenant With the Outlook Mailer', 'wp-mail-smtp' ),
+			esc_html__( 'Defining Google Mailer Constants', 'wp-mail-smtp' ),
+			esc_html__( 'Define the Mailgun Signing Key Constant', 'wp-mail-smtp' ),
+			esc_html__( 'Defining Outlook Mailer Constants', 'wp-mail-smtp' ),
 		];
 
 		$snippets = [];
